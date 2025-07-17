@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
+
+:root {
+    --primary-font: 'Gloock', serif;
+    --secondary-font: 'Montserrat', sans-serif;
+    --primary-color: #f6f5f0;
+    --primary-text-color: #404040;
+    --primary-card-color: #edebe7;
+    --primary-hover-color: #cd865c;
+    --secondary-card-color: #cfdcdd;
+    --white-color: #ffffff;
+    --header-height: 80px;
+    --mobile-header-height: 60px;
+    --green-color: #024908;
+    --grey-color: #A9A9A9;
+}
+
+.category1-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+    padding: 60px 20px;
+    background-color: var(--primary-color);
+    font-family: var(--secondary-font);
+}
+
+.category1-card {
+    flex: 0 0 48%;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    background-color: var(--white-color);
+}
+
+
+
+.category1-img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    display: block;
+}
+
+.category1-content {
+    position: absolute;
+    top: 40%;
+    left: 10%;
+    color: var(--primary-text-color);
+    max-width: 100%;
+    font-family: var(--primary-font);
+}
+
+.category1-label {
+    font-size: 14px;
+    color: var(--primary-text-color);
+    margin-bottom: 8px;
+    font-family: var(--secondary-font);
+}
+
+.category1-title {
+    font-size: 36px;
+    font-weight: 500;
+    color: var(--primary-hover-color);
+    margin: 0 0 10px;
+    font-family: var(--primary-font);
+}
+
+.category1-title.dark {
+    color: var(--primary-text-color);
+}
+
+.category1-subtitle {
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-family: var(--secondary-font);
+    color: #555;
+}
+
+.category1-btn {
+    display: inline-block;
+    padding: 10px 24px;
+    background-color: #111;
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    font-family: var(--secondary-font);
+}
+
+.category1-btn:hover {
+    background-color: var(--primary-hover-color);
+}
+
+.discount-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #111;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    padding: 10px;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    line-height: 1.2;
+    font-weight: bold;
+    font-family: var(--secondary-font);
+}
+
+.discount-badge span {
+    font-weight: normal;
+    font-size: 12px;
+    display: block;
+}
+
+/* ✅ Responsive for screens below 768px */
+@media screen and (max-width: 768px) {
+    .category1-card {
+        flex: 0 0 100%;
+    }
+
+    .category1-content {
+        top: 10%;
+        left: 8%;
+        max-width: 90%;
+    }
+
+    .category1-title {
+        font-size: 22px;
+    }
+
+    .category1-subtitle {
+        font-size: 16px;
+    }
+
+    .category1-btn {
+        padding: 8px 20px;
+        font-size: 13px;
+    }
+
+    .discount-badge {
+        top: 12px;
+        right: 12px;
+        width: 50px;
+        height: 50px;
+        font-size: 12px;
+    }
+
+    .discount-badge span {
+        font-size: 10px;
+    }
+}

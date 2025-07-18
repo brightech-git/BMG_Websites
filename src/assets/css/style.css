@@ -10142,16 +10142,6 @@ font-size: 16px;
 
 /* === Restaurant Tabs === */
 .restaurant-tab-area .restaurant-rood-list .nav-link {
-<<<<<<< Updated upstream
-  display: block;
-  padding: 35px 25px;
-  margin-bottom: 30px;
-  background-color: var(--primary-card-color);
-  border-radius: 0;
-  text-align: center;
-  font-family: var(--secondary-font);
-  transition: all 0.3s ease;
-=======
   
     border-radius: 0;
     -webkit-transition: all 0.3s ease-out 0s;
@@ -10168,7 +10158,6 @@ font-size: 16px;
     .restaurant-tab-area .restaurant-rood-list .nav-link {
         padding: 25px;
     }
->>>>>>> Stashed changes
 }
 
 .restaurant-tab-area .restaurant-rood-list .nav-link .title {
@@ -10215,17 +10204,6 @@ font-size: 16px;
 }
 
 .restaurant-tab-area .food-box .thumb .price {
-<<<<<<< Updated upstream
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: var(--primary-hover-color);
-  color: var(--white-color);
-  font-size: 16px;
-  font-weight: 700;
-  padding: 8px 15px;
-  border-radius: 5px;
-=======
     position: absolute;
     right: 10px;
     top: 10px;
@@ -10234,7 +10212,6 @@ font-size: 16px;
     font-weight: 700;
     color: var(--white-color);
     padding: 8px 15px;
->>>>>>> Stashed changes
 }
 
 .restaurant-tab-area .food-box .desc {
@@ -10250,15 +10227,6 @@ font-size: 16px;
 }
 
 .restaurant-tab-area .food-box .desc a.cat {
-<<<<<<< Updated upstream
-  font-size: 12px;
-  color: var(--grey-color);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  display: inline-block;
-  margin-bottom: 10px;
-=======
     font-size: 12px;
     color: var(--primary-text-color);
     font-weight: 700;
@@ -10277,7 +10245,6 @@ font-size: 16px;
     .restaurant-tab-area .food-box .desc a.cat {
         letter-spacing: 0;
     }
->>>>>>> Stashed changes
 }
 
 .restaurant-tab-area .food-box .desc h4 {
@@ -12385,19 +12352,11 @@ footer .footer-widget-area::after,
   z-index: -1;
 }
 
-<<<<<<< Updated upstream
-@media (min-width: 1600px) {
-  .sigma-footer .container-fluid {
-    padding-left: 65px;
-    padding-right: 65px;
-  }
-=======
 @media(min-width: 1600px) {
     .sigma-footer .container-fluid {
         padding-left: 15px;
         padding-right: 65px;
     }
->>>>>>> Stashed changes
 }
 
 footer .footer-widget-area .widget,
@@ -12998,11 +12957,7 @@ footer .copyright-area.light-theme .footer-menu ul li::before {
 }
 
 .sigma-footer .nice-select .list {
-<<<<<<< Updated upstream
-  background-color: var(--primary-card-color);
-=======
     background-color: var(--primary-card-color);
->>>>>>> Stashed changes
 }
 
 .sigma-footer .sigma-footer-nav .ft-nav > .menu-item > a:before {
@@ -13274,11 +13229,6 @@ footer .copyright-area.light-theme .footer-menu ul li::before {
   display: block !important;
 }
 
-<<<<<<< Updated upstream
-/*---------Font styles and colors--------*/
-
-/*# sourceMappingURL=style.css.map */
-=======
 /*# sourceMappingURL=style.css.map */
 
 .Shop-section{
@@ -13334,4 +13284,3 @@ footer .copyright-area.light-theme .footer-menu ul li::before {
     max-width: 100%;
   }
 }
->>>>>>> Stashed changes

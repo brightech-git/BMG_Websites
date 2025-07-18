@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import loginbg from '../../../assets/img/bg/sign.webp';
 
 class Content extends Component {
+
+    
     render() {
         return (
             <section className="login-sec pt-120 pb-120">

@@ -54,8 +54,8 @@ class Latestproducts extends Component {
             ],
         }
         return (
-            <section className="restaurant-tab-area bg-black pt-85 pb-75">
-                <div className="container">
+            <section className="restaurant-tab-area bg-black ">
+                <div style={{ paddingLeft: '100px', paddingRight: '100px' }}>
                     <div className="row align-items-center">
                         <div className="col-lg-6 col-md-8 col-sm-7">
                             <div className="section-title">
@@ -70,7 +70,7 @@ class Latestproducts extends Component {
                             </div>
                         </div>
                     </div>
-                    <Slider className="row shop-post-slider mt-80" ref={c => (this.slider = c)} {...settings}>
+                    <Slider className="row shop-post-slider " ref={c => (this.slider = c)} {...settings}>
                         {shoplatestposts.map((item, i) => (
                             <div key={i} className="col-12">
                                 <div className="food-box shop-box">

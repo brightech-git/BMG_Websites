@@ -11,7 +11,7 @@ class Onsale extends Component {
     render() {
         return (
             <section className="pt-55 pb-55 bg-white room-type-section style-2">
-                <div className="container">
+                <div>
                     <div className="section-title text-center mb-50">
                         <div className="section-title-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" width={45} height={45} x={0} y={0} viewBox="0 0 512 512" xmlSpace="preserve">

@@ -44,9 +44,9 @@ class Bestselling extends Component {
             ],
         }
         return (
-            <section className="pt-115 pb-115 container-wide restaurant-tab-area position-relative">
+            <section className="pt-85 pb-85 container-wide restaurant-tab-area position-relative">
                 {/* <img src={texture} alt="texture" className="texture-1" /> */}
-                <div className="container">
+                <div>
                     <div className="row">
                         <div className="col-lg-5">
                             <div className="block-text">

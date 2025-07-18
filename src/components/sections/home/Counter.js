@@ -12,7 +12,7 @@ export default function Counter() {
     const [focus, setFocus] = React.useState(false);
     return (
         <section className="counter-section">
-            <div className="container">
+            <div >
                 <div className="counter-inner pt-100 pb-60">
                     <div className="row justify-content-center">
                         <div className="col-xl-10 col-11">

@@ -15,8 +15,8 @@ const featureposts = [
 class Ourproducts extends Component {
     render() {
         return (
-            <section className="restaurant-tab-area pt-115 pb-85">
-                <div className="container">
+            <section className="restaurant-tab-area  pb-85">
+                <div>
                     <div className="section-title text-center mb-50">
                         <div className="section-title-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xmlSpace="preserve">

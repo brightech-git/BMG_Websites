@@ -47,7 +47,7 @@ class Ourcategory extends Component {
     render() {
         return (
             <section className="restaurant-tab-area pb-90">
-                <div className="container">
+                <div >
                     <div className="section-title mb-50">
                         <span className="title-tag"> Categories </span>
                         <h2>Our Categories</h2>

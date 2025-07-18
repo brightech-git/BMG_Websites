@@ -67,7 +67,7 @@ class Blog extends Component {
                         </div>
                     </div>
                     {/* Blog post loop */}
-                    <Slider className="row no-gutters latest-post-slider mt-80" ref={c => (this.slider = c)} {...settings}>
+                    <Slider className="row no-gutters latest-post-slider " ref={c => (this.slider = c)} {...settings}>
                         {blogposts.map((item, i) => (
                             <div key={i}>
                                 <article className="blog-post" style={{ backgroundImage: "url(" + item.img + ")" }}>

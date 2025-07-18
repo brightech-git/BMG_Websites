@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-
+import '../../assets/css/pagination.css'
 class Pagination extends Component {
     render() {
         return (

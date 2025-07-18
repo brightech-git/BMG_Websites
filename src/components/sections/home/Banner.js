@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import ReactWOW from 'react-wow';
-import Cursor from '../../layouts/Cursor';
+import '../../../assets/css/banner.css';
 
 import img1 from '../../../assets/img/banner/Tritiya_Slider_3.webp';
 import img2 from '../../../assets/img/banner/Tritiya_Slider_2.webp';

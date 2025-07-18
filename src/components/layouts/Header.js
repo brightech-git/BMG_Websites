@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import $ from 'jquery'
 
 import { ShoppingCart, Menu, User } from 'lucide-react';
+import '../../assets/css/header.css';
 
 import Canvas from './Canvas';
 import Mobilemenu from './Mobilemenu';
@@ -115,22 +116,7 @@ class Header extends Component {
                                                             <Link to="/">
                                                                 Home
                                                             </Link>
-                                                            {/* Commented out other home variants
-                                                            <ul className="sub-menu">
-                                                                <li className="menu-item">
-                                                                    <Link to="/">Home 1</Link>
-                                                                </li>
-                                                                <li className="menu-item">
-                                                                    <Link to="/home-two">Home 2</Link>
-                                                                </li>
-                                                                <li className="menu-item">
-                                                                    <Link to="/home-three">Home 3</Link>
-                                                                </li>
-                                                                <li className="menu-item">
-                                                                    <Link to="/home-four">Home 4</Link>
-                                                                </li>
-                                                            </ul>
-                                                            */}
+                                                           
                                                         </li>
                                                         <li className="menu-item menu-item-has-children menu-item-has-megamenu">
                                                             <Link to="#">
@@ -650,20 +636,7 @@ class Header extends Component {
                                     <div className="login-btn">
                                         <Link to="/login" id="loginBtn"><User size={20} strokeWidth={1.8} /></Link>
                                     </div>
-                                    {/* search btton */}
-                                    {/* <div className="search">
-                                        <Link to="#" className="search-icon" id="searchBtn">
-                                            <i className="fal fa-search open-icon" />
-                                            <i className="fal fa-times close-icon" />
-                                        </Link>
-                                        <div className="search-form">
-                                            <form action="#">
-                                                <input type="text" placeholder="Search your keyword..." />
-                                                <button type="submit"><i className="far fa-search" /></button>
-                                            </form>
-                                        </div>
-                                    </div> */}
-                                    {/* Off canvas Toggle */}
+                                   
                                     
                                     <div className="toggle dropdown-btn">
                                         <span className="sigma-notification">0</span>

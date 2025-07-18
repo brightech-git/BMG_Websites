@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import image1 from '../../../assets/img/category/grid2_-1.webp';
 import image2 from '../../../assets/img/category/Group_129625.webp';
+
 import '../../../assets/css/Category1.css';
 
 class Category1 extends Component {

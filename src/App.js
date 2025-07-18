@@ -42,9 +42,9 @@ function App() {
       <Preloader />
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/home-two" component={Hometwo} />
+        {/* <Route exact path="/home-two" component={Hometwo} />
         <Route exact path="/home-three" component={Homethree} />
-        <Route exact path="/home-four" component={Homefour} />
+        <Route exact path="/home-four" component={Homefour} /> */}
         <Route exact path="/about" component={About} />
         <Route exact path="/account" component={Account} />
         <Route exact path="/blog-detail" component={Blogdetail} />
@@ -64,9 +64,9 @@ function App() {
         <Route exact path="/register" component={Register} />
         <Route exact path="/shop-detail" component={Shopdetail} />
         <Route exact path="/shop-left" component={Shopleft} />
-        <Route exact path="/shop-left-two" component={Shoplefttwo} />
+        {/* <Route exact path="/shop-left-two" component={Shoplefttwo} />
         <Route exact path="/shop-right" component={Shopright} />
-        <Route exact path="/shop-right-two" component={Shoprighttwo} />
+        <Route exact path="/shop-right-two" component={Shoprighttwo} /> */}
         <Route exact path="/team" component={Team} />
         <Route exact path="/typography" component={Typography} />
         <Route exact path="/wishlist" component={Wishlist} />

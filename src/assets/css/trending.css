@@ -1,0 +1,571 @@
+/*-----------------------------------------------------------------------------------
+    TRENDING CSS
+    ===================
+    Trending Collection Grid
+-----------------------------------------------------------------------------------*/
+
+@import './base.css';
+
+/*======= Additional CSS Variables =======*/
+
+/*======= Trending Section =======*/
+.trending-sec {
+    position: relative;
+    z-index: 1;
+    margin-top: 100px;
+    /* Accounts for sticky header height (~80px) */
+    padding: 115px 0;
+    background-color: var(--white-color);
+}
+
+.trending-sec .container {
+    padding: 0 0px;
+}
+
+/*======= Section Title =======*/
+.trending-sec .section-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.trending-sec .section-title .section-title-icon {
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.trending-sec .section-title .section-title-icon svg {
+    width: 45px;
+    height: 45px;
+}
+
+.trending-sec .section-title .title-tag {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--primary-text-color);
+    margin-bottom: 10px;
+}
+/*-----------------------------------------------------------------------------------
+    TRENDING CSS
+    ===================
+    Trending Collection Grid
+-----------------------------------------------------------------------------------*/
+
+@import './base.css';
+
+/*======= Additional CSS Variables =======*/
+:root {
+    --yellow-color: #fcd462;
+    /* Used for price, consistent with handpicked.css */
+}
+
+/*======= Trending Section =======*/
+.trending-sec {
+    position: relative;
+    z-index: 1;
+    margin-top: 100px;
+    /* Accounts for sticky header height (~80px) */
+    padding: 115px 0;
+    background-color: var(--white-color);
+}
+
+.trending-sec .container {
+    padding: 0 100px;
+}
+
+/*======= Section Title =======*/
+.trending-sec .section-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.trending-sec .section-title .section-title-icon {
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.trending-sec .section-title .section-title-icon svg {
+    width: 45px;
+    height: 45px;
+}
+
+.trending-sec .section-title .title-tag {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--primary-text-color);
+    margin-bottom: 10px;
+}
+
+.trending-sec .section-title h2 {
+    font-size: 36px;
+    font-family: var(--primary-font);
+    color: var(--primary-text-color);
+}
+
+/*======= View More Link =======*/
+.trending-sec .view-more {
+    display: inline-block;
+    font-size: 16px;
+    font-family: var(--secondary-font);
+    color: var(--primary-text-color);
+    text-decoration: none;
+    margin-bottom: 20px;
+    transition: all 0.3s ease-out 0s;
+}
+
+.trending-sec .view-more:hover {
+    color: var(--primary-hover-color);
+}
+
+.trending-sec .view-more i {
+    margin-left: 8px;
+    font-size: 14px;
+}
+
+/*======= Apartment Box Grid =======*/
+.trending-sec .apartment-box {
+    margin-bottom: 30px;
+}
+
+.trending-sec .apartment-box .image-box {
+    overflow: hidden;
+    position: relative;
+}
+
+.trending-sec .apartment-box .image-box img {
+    width: 100%;
+    height: auto;
+    transition: all 0.3s ease-out 0s;
+}
+
+.trending-sec .apartment-box:hover .image-box img {
+    transform: scale(1.1);
+}
+
+.trending-sec .apartment-box .content-box-2 {
+    padding: 20px 0;
+    text-align: center;
+}
+
+.trending-sec .apartment-box .content-box-2 .tren-title {
+    font-size: 24px;
+    font-family: var(--primary-font);
+    color: var(--primary-text-color);
+    margin-bottom: 10px;
+    text-decoration: none;
+    display: block;
+    transition: all 0.3s ease-out 0s;
+}
+
+.trending-sec .apartment-box .content-box-2 .tren-title:hover {
+    color: var(--primary-hover-color);
+}
+
+.trending-sec .apartment-box .content-box-2 .price {
+    font-size: 18px;
+    font-family: var(--primary-font);
+    color: var(--yellow-color);
+}
+
+/*======= Responsive Styles =======*/
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+    .trending-sec .container {
+        padding: 0 50px;
+    }
+
+    .trending-sec .section-title h2 {
+        font-size: 32px;
+    }
+
+    .trending-sec .apartment-box .content-box-2 .tren-title {
+        font-size: 22px;
+    }
+
+    .trending-sec .apartment-box .content-box-2 .price {
+        font-size: 16px;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .trending-sec .container {
+        padding: 0 30px;
+    }
+
+    .trending-sec .section-title h2 {
+        font-size: 28px;
+    }
+
+    .trending-sec .apartment-box .content-box-2 .tren-title {
+        font-size: 20px;
+    }
+
+    .trending-sec .apartment-box .content-box-2 .price {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 767px) {
+    .trending-sec .container {
+        padding: 0 20px;
+    }
+
+    .trending-sec .section-title h2 {
+        font-size: 24px;
+    }
+
+    .trending-sec .apartment-box .content-box-2 .tren-title {
+        font-size: 18px;
+    }
+
+    .trending-sec .apartment-box .content-box-2 .price {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 575px) {
+    .trending-sec .container {
+        padding: 0 15px;
+    }
+
+    .trending-sec .section-title .title-tag {
+        font-size: 12px;
+    }
+
+    .trending-sec .view-more {
+        font-size: 14px;
+    }
+}/*-----------------------------------------------------------------------------------
+    TRENDING CSS
+    ===================
+    Trending Collection Grid
+-----------------------------------------------------------------------------------*/
+
+@import './base.css';
+
+/*======= Additional CSS Variables =======*/
+:root {
+    --yellow-color: #fcd462;
+    /* Used for price, consistent with handpicked.css */
+}
+
+/*======= Trending Section =======*/
+.trending-sec {
+    position: relative;
+    z-index: 1;
+    margin-top: 100px;
+    /* Accounts for sticky header height (~80px) */
+    padding: 115px 0;
+    background-color: var(--white-color);
+}
+
+
+
+/*======= Section Title =======*/
+.trending-sec .section-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.trending-sec .section-title .section-title-icon {
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.trending-sec .section-title .section-title-icon svg {
+    width: 45px;
+    height: 45px;
+}
+
+.trending-sec .section-title .title-tag {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--primary-text-color);
+    margin-bottom: 10px;
+}
+
+.trending-sec .section-title h2 {
+    font-size: 36px;
+    font-family: var(--primary-font);
+    color: var(--primary-text-color);
+}
+
+/*======= View More Link =======*/
+.trending-sec .view-more {
+    display: inline-block;
+    font-size: 16px;
+    font-family: var(--secondary-font);
+    color: var(--primary-text-color);
+    text-decoration: none;
+    margin-bottom: 20px;
+    transition: all 0.3s ease-out 0s;
+}
+
+.trending-sec .view-more:hover {
+    color: var(--primary-hover-color);
+}
+
+.trending-sec .view-more i {
+    margin-left: 8px;
+    font-size: 14px;
+}
+
+/*======= Apartment Box Grid =======*/
+.trending-sec .apartment-box {
+    margin-bottom: 30px;
+}
+
+.trending-sec .apartment-box .image-box {
+    overflow: hidden;
+    position: relative;
+}
+
+.trending-sec .apartment-box .image-box img {
+    width: 100%;
+    height: auto;
+    transition: all 0.3s ease-out 0s;
+}
+
+.trending-sec .apartment-box:hover .image-box img {
+    transform: scale(1.1);
+}
+
+.trending-sec .apartment-box .content-box-2 {
+    padding: 20px 0;
+    text-align: center;
+}
+
+.trending-sec .apartment-box .content-box-2 .tren-title {
+    font-size: 24px;
+    font-family: var(--primary-font);
+    color: var(--primary-text-color);
+    margin-bottom: 10px;
+    text-decoration: none;
+    display: block;
+    transition: all 0.3s ease-out 0s;
+}
+
+.trending-sec .apartment-box .content-box-2 .tren-title:hover {
+    color: var(--primary-hover-color);
+}
+
+.trending-sec .apartment-box .content-box-2 .price {
+    font-size: 18px;
+    font-family: var(--primary-font);
+    color: var(--yellow-color);
+}
+
+/*======= Responsive Styles =======*/
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+    .trending-sec .container {
+        padding: 0 50px;
+    }
+
+    .trending-sec .section-title h2 {
+        font-size: 32px;
+    }
+
+    .trending-sec .apartment-box .content-box-2 .tren-title {
+        font-size: 22px;
+    }
+
+    .trending-sec .apartment-box .content-box-2 .price {
+        font-size: 16px;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .trending-sec .container {
+        padding: 0 30px;
+    }
+
+    .trending-sec .section-title h2 {
+        font-size: 28px;
+    }
+
+    .trending-sec .apartment-box .content-box-2 .tren-title {
+        font-size: 20px;
+    }
+
+    .trending-sec .apartment-box .content-box-2 .price {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 767px) {
+    .trending-sec .container {
+        padding: 0 20px;
+    }
+
+    .trending-sec .section-title h2 {
+        font-size: 24px;
+    }
+
+    .trending-sec .apartment-box .content-box-2 .tren-title {
+        font-size: 18px;
+    }
+
+    .trending-sec .apartment-box .content-box-2 .price {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 575px) {
+    .trending-sec .container {
+        padding: 0 15px;
+    }
+
+    .trending-sec .section-title .title-tag {
+        font-size: 12px;
+    }
+
+    .trending-sec .view-more {
+        font-size: 14px;
+    }
+}
+.trending-sec .section-title h2 {
+    font-size: 34px;
+    font-family: var(--se);
+    color: var(--primary-text-color);
+}
+
+/*======= View More Link =======*/
+.trending-sec .view-more {
+    display: inline-block;
+    font-size: 16px;
+    font-family: var(--secondary-font);
+    color: var(--primary-text-color);
+    text-decoration: none;
+    margin-bottom: 20px;
+    transition: all 0.3s ease-out 0s;
+}
+
+.trending-sec .view-more:hover {
+    color: var(--primary-hover-color);
+}
+
+.trending-sec .view-more i {
+    margin-left: 8px;
+    font-size: 14px;
+}
+
+/*======= Apartment Box Grid =======*/
+.trending-sec .apartment-box {
+    margin-bottom: 30px;
+}
+
+.trending-sec .apartment-box .image-box {
+    overflow: hidden;
+    position: relative;
+}
+
+.trending-sec .apartment-box .image-box img {
+    width: 100%;
+    height: auto;
+    transition: all 0.3s ease-out 0s;
+}
+
+.trending-sec .apartment-box:hover .image-box img {
+    transform: scale(1.1);
+}
+
+.trending-sec .apartment-box .content-box-2 {
+    padding: 20px 0;
+    text-align: center;
+}
+
+.trending-sec .apartment-box .content-box-2 .tren-title {
+    font-size: 24px;
+    font-family: var(--primary-font);
+    color: var(--primary-text-color);
+    margin-bottom: 10px;
+    text-decoration: none;
+    display: block;
+    transition: all 0.3s ease-out 0s;
+}
+
+.trending-sec .apartment-box .content-box-2 .tren-title:hover {
+    color: var(--primary-hover-color);
+}
+
+.trending-sec .apartment-box .content-box-2 .price {
+    font-size: 18px;
+    font-family: var(--primary-font);
+    color: var(--primary-hover-color);
+}
+
+/*======= Responsive Styles =======*/
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+    .trending-sec .container {
+        padding: 0 50px;
+    }
+
+    .trending-sec .section-title h2 {
+        font-size: 32px;
+    }
+
+    .trending-sec .apartment-box .content-box-2 .tren-title {
+        font-size: 22px;
+    }
+
+    .trending-sec .apartment-box .content-box-2 .price {
+        font-size: 16px;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .trending-sec .container {
+        padding: 0 30px;
+    }
+
+    .trending-sec .section-title h2 {
+        font-size: 28px;
+    }
+
+    .trending-sec .apartment-box .content-box-2 .tren-title {
+        font-size: 20px;
+    }
+
+    .trending-sec .apartment-box .content-box-2 .price {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 767px) {
+    .trending-sec .container {
+        padding: 0 20px;
+    }
+
+    .trending-sec .section-title h2 {
+        font-size: 24px;
+    }
+
+    .trending-sec .apartment-box .content-box-2 .tren-title {
+        font-size: 18px;
+    }
+
+    .trending-sec .apartment-box .content-box-2 .price {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 575px) {
+    .trending-sec .container {
+        padding: 0 15px;
+    }
+
+    .trending-sec .section-title .title-tag {
+        font-size: 12px;
+    }
+
+    .trending-sec .view-more {
+        font-size: 14px;
+    }
+}

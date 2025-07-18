@@ -131,28 +131,28 @@ class Shopinfo extends Component {
                                     <span className="text-yellow"><i className="far fa-star" /></span>
                                     <span className="text-dark-white"><i className="far fa-star" /></span>
                                     <span className="text-dark-white"><i className="far fa-star" /></span>
-                                    <span className="pro-review"> <span>1 Reviews</span>
+                                    <span className="pro-review"> <span>10 Reviews</span>
                                     </span>
                                 </span>
                                 <div className="desc mb-20 pb-20 border-bottom">
-                                    <span className="price">$390 <span>$480</span></span>
+                                    <span className="price">₹390 <span>₹480</span></span>
                                 </div>
                                 <div className="mt-20 mb-20">
                                     <div className="d-inline-block other-info">
-                                        <h6>Availability:
+                                        {/* <h6>Availability:
                 <span className="text-success ml-2">In Stock</span>
-                                        </h6>
+                                        </h6> */}
                                     </div>
                                     <div className="ml-2 d-inline-block other-info">
-                                        <h6>SKU:
-                <span className="grey ml-2">006-bhg</span>
+                                        <h6>SKU :
+                                    <span className="grey ml-2">006-bhg</span>
                                         </h6>
                                     </div>
                                 </div>
-                                <div className="short-descr mb-20">
+                                <div className="short-desc mb-20">
                                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip</p>
                                 </div>
-                                <div className="color-sec mb-20">
+                                {/* <div className="color-sec mb-20">
                                     <label>Color</label>
                                     <div className="color-box">
                                         <label className="m-0">
@@ -172,7 +172,7 @@ class Shopinfo extends Component {
                                             <span className="choose-color green" />
                                         </label>
                                     </div>
-                                </div>
+                                </div> */}
                                 <div className="color-sec mb-20">
                                     <label>Material</label>
                                     <div className="color-box">
@@ -182,7 +182,7 @@ class Shopinfo extends Component {
                                         </label>
                                         <label className="m-0">
                                             <input type="radio" name="material" />
-                                            <span className="choose-material">Diamond</span>
+                                            <span className="choose-material">Gold Polsihed Silver</span>
                                         </label>
                                         <label className="m-0">
                                             <input type="radio" name="material" />
@@ -195,7 +195,7 @@ class Shopinfo extends Component {
                                     </div>
                                 </div>
                                 <div className="quantity-cart d-block d-sm-flex">
-                                    <div className="quantity-box">
+                                    {/* <div className="quantity-box">
                                         <button type="button" className="minus-btn" onClick={this.DecreaseItem}>
                                             <i className="fal fa-minus" />
                                         </button>
@@ -203,13 +203,16 @@ class Shopinfo extends Component {
                                         <button type="button" className="plus-btn" onClick={this.IncrementItem}>
                                             <i className="fal fa-plus" />
                                         </button>
+                                    </div> */}
+                                    <div className="cart-btn pl-40">
+                                        <Link to="#" className="main-btns btn-filled">Add to Cart</Link>
                                     </div>
                                     <div className="cart-btn pl-40">
-                                        <Link to="#" className="main-btn btn-border">Add to Cart</Link>
+                                        <Link to="#" className="main-btns btn-filled">Buy it Now</Link>
                                     </div>
                                 </div>
                                 <div className="other-info flex mt-20">
-                                    <h6>Category:</h6>
+                                    <h6>Category :</h6>
                                     <ul>
                                         <li className="list-inline-item mr-2">
                                             <Link to="#" className="grey">Bracelets</Link>
@@ -344,7 +347,7 @@ class Shopinfo extends Component {
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="addinfo" className="additional-info">
                                                 <div>
-                                                    <h3 className="text-white mb-20">Additional Information</h3>
+                                                    <h3 className=" mb-20">Additional Information</h3>
                                                     <table className="table">
                                                         <thead>
                                                             <tr>

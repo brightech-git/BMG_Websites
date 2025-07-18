@@ -56,11 +56,10 @@
     --primary-text-color: #404040;
     --primary-card-color: #edebe7;
     --primary-hover-color: #cd865c;
-    --secondary-card-color: #cfdcdd;
+    --secondary-card-color: #dae5e8;
     --white-color: #ffffff;
     --header-height: 80px;
     --mobile-header-height: 60px;
-    --green-color: #024908;
     --grey-color: #A9A9A9;
     --black-color:#000000;
 }
@@ -211,7 +210,7 @@ select {
     border: none;
     width: 100%;
     height: 70px;
-    background-color: #1c1b19;
+    background-color: var(--primary-card-color);
     padding: 0 40px;
 }
 
@@ -224,32 +223,32 @@ textarea {
 input,
 textarea,
 select {
-    font-family: "Montserrat", sans-serif;
-    color: #a3a3a3;
+font-family: var(--secondary-font);
+    color: var(--primary-text-color);
 }
 
 :-ms-input-placeholder,
 input,
 textarea,
 select {
-    font-family: "Montserrat", sans-serif;
-    color: #a3a3a3;
+font-family: var(--secondary-font);
+    color: var(--primary-text-color);
 }
 
 ::-ms-input-placeholder,
 input,
 textarea,
 select {
-    font-family: "Montserrat", sans-serif;
-    color: #a3a3a3;
+    font-family:var(--secondary-font);
+    color: var(--primary-text-color);
 }
 
 ::placeholder,
 input,
 textarea,
 select {
-    font-family: "Montserrat", sans-serif;
-    color: #a3a3a3;
+    font-family: var(--secondary-font);
+    color: var(--primary-text-color);
 }
 
 .nice-select {
@@ -258,32 +257,32 @@ select {
     border-radius: 0;
     position: relative;
     border: none;
-    height: 70px;
-    padding-left: 50px;
-    line-height: 70px;
+    height: 50px;
+    padding-left: 30px;
+    line-height: 50px;
 }
 
 .nice-select .list {
     width: 100%;
     border-radius: 0;
-    background-color: #353530;
+    background-color: var(--primary-card-color);
 }
 
 .nice-select .option:hover,
 .nice-select .option.focus,
 .nice-select .option.selected.focus {
-    background-color: #272626;
+    background-color: var(--primary-card-color);
 }
 
 .nice-select .list li {
     line-height: 35px;
-    color: #a3a3a3;
+    color: var(--primary-text-color);
 }
 
 .nice-select .list li:hover,
 .nice-select .list li.option:hover {
-    background-color: #fcd462;
-    color: #fff;
+    background-color: var(--primary-hover-color);
+    color: var(--white-color);
 }
 
 .nice-select::after {
@@ -292,12 +291,12 @@ select {
 
 .nice-select::before {
     content: '\f063';
-    font-family: 'Montserrat';
+    font-family: var(--secondary-font);
     font-weight: 300;
     position: absolute;
     left: 30px;
     top: 50%;
-    color: #fcd462;
+    color: var(--primary-hover-color);
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
 }
@@ -388,6 +387,7 @@ select {
     left: auto;
     right: 30px;
 }
+
 
 
 /*=======  COMMON CLASS  =======*/
@@ -1354,7 +1354,7 @@ header.header-absolute {
 
 header .nav-container {
     position: relative;
-    background-color: #fff;
+    background-color: var(--primary-color);
 }
 
 header .nav-container .toggle {
@@ -1605,7 +1605,7 @@ header .nav-container .menu-items ul li {
 header .nav-container .menu-items ul li a {
     font-size: 16px;
     font-weight: 600;
-    color: #404040;
+    color: var(--primary-text-color);
     text-transform: capitalize;
     line-height: 80px;
     padding: 0px 20px;
@@ -1652,7 +1652,7 @@ header .nav-container .menu-items ul li .submenu li a {
     margin: 0 0;
     line-height: 30px !important;
     border-bottom: 1px solid rgb(117 117 117 / 70%);
-    color: #404040;
+    color: var(--primary-text-color);
 }
 
 header .nav-container .menu-items ul li .submenu li:last-child a {
@@ -1660,9 +1660,8 @@ header .nav-container .menu-items ul li .submenu li:last-child a {
 }
 
 header .nav-container .menu-items ul li .submenu li a.active {
-    background-color: #fcd462;
-    color: #fff !important;
-    border-color: #fcd462;
+    background-color: var(--grey-color);
+    color: var(--primary-hover-color) !important;
 }
 
 header .nav-container .menu-items ul li .submenu li a:hover {
@@ -1771,7 +1770,7 @@ header .nav-container .navbar-close .cross-wrap span.bottom {
 }
 
 header .nav-container.breakpoint-on .nav-menu {
-    background-color: #f6f5f0;
+    background-color: var(--primary-color);
     position: fixed;
     top: 0;
     left: -300px;
@@ -1780,7 +1779,6 @@ header .nav-container.breakpoint-on .nav-menu {
     height: 100%;
     -webkit-transition-duration: 500ms;
     transition-duration: 500ms;
-    padding: 0;
     -webkit-box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     display: block;
@@ -1796,7 +1794,7 @@ header .nav-container.breakpoint-on .nav-menu .menu-items ul li {
 header .nav-container.breakpoint-on .nav-menu .menu-items ul li a {
     display: block;
     border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-    color: #fff !important;
+    color: var(--primary-text-color) !important;
     line-height: 45px !important;
 }
 
@@ -1903,7 +1901,7 @@ header.header-three .main-menu-area {
     width: 100%;
     z-index: 99;
     height: auto;
-    bottom: -60px;
+    bottom: -50px;
 }
 
 @media (max-width: 399px) {
@@ -1938,7 +1936,8 @@ header.header-three .main-menu-area.sticky-header.sticky-active .nav-container .
 header.header-three .header-top {
     padding-top: 15px;
     padding-bottom: 75px;
-    font-family:var(--secondary-font)
+    font-family:var(--secondary-font);
+    
 }
 
 @media (max-width: 992px) {
@@ -2252,11 +2251,10 @@ header.sticky-header.sticky-active {
     top: 0;
     left: 0;
     right: 0;
-    background-color: #f6f5f0 !important;
+    background-color: var(--primary-color);
     z-index: 999;
     -webkit-animation: sticky 1.2s;
     animation: sticky 1.2s;
-    box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.04);
 }
 
 header.sticky-header.sticky-active .lr-topbar {
@@ -2275,7 +2273,10 @@ header.sticky-header.header-three.sticky-active .main-menu-area {
     header.sticky-header.sticky-active .nav-container {
         padding: 10px 0;
     }
+        header.sticky-header.sticky-active .header-top{
+            display: none ;
 
+        }
     header.sticky-header.sticky-active .nav-container .site-logo img {
         max-width: 200px;
     }
@@ -2341,7 +2342,7 @@ header.sticky-header.sticky-active.header-two .header-info .item .title {
 
 .sigma-header .sigma-notification {
 
-    color: #404040;
+    color: var(--primary-text-color);
     width: 15px;
     height: 15px;
     display: inline-flex;
@@ -2370,7 +2371,7 @@ header.sticky-header.sticky-active.header-two .header-info .item .title {
     box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.1);
     right: 0;
     left: auto;
-    background-color: #f6f5f0;
+    background-color: var(--primary-color);
 }
 
 .sigma-header .cart-dropdown-menu .cart-items-box {
@@ -6871,7 +6872,7 @@ font-size: 16px;
 .room-details .room-booking-form input,
 .room-details .room-booking-form .nice-select,
 .room-details .room-booking-form select {
-    background-color: #1c1b19;
+    background-color: var(--primary-card-color);
 }
 
 .room-details .room-booking-form .main-btn {
@@ -8252,8 +8253,9 @@ font-size: 16px;
 
 .news-details-box {
     padding: 40px;
-    background-color: #353530;
-    font-family: "Roboto", sans-serif;
+    background-color: var(--primary-card-color);
+    font-family: var(--secondary-font);
+    font-size: 16px;
     /*=======  Comment Template  =======*/
 }
 
@@ -8746,8 +8748,9 @@ font-size: 16px;
 
 .news-details-box .comment-template h3.box-title {
     margin-bottom: 30px;
-    letter-spacing: -1px;
     font-size: 26px;
+    color: var(--primary-text-color);
+    font-family: var(--primary-font);
 }
 
 @media (max-width: 767px) {
@@ -8809,6 +8812,7 @@ font-size: 16px;
     font-size: 18px;
     letter-spacing: -1px;
     margin-bottom: 10px;
+    color: var(--primary-text-color);
 }
 
 .news-details-box .comment-template .comments-list li .comment-desc .desc-top span.date {
@@ -8858,7 +8862,7 @@ font-size: 16px;
 
 .news-details-box .comment-template .comment-form {
     padding: 45px;
-    background-color: #1c1b19;
+    background-color: var(--secondary-card-color);
 }
 
 @media (max-width: 575px) {
@@ -8891,7 +8895,7 @@ font-size: 16px;
 
 
 /*=======  Paginations  =======*/
-
+/* 
 .pagination-wrap {
     text-align: center;
     padding-top: 20px;
@@ -8934,10 +8938,10 @@ font-size: 16px;
     background-color: #fcd462;
     color: #fff;
 }
-
+ */
 
 /*=======  Sidebars  =======*/
-
+/* 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
     .sidebar {
         margin-bottom: 80px;
@@ -9277,7 +9281,7 @@ font-size: 16px;
     height: 1px;
     margin: 12px 0;
     border-top: 0;
-}
+} */
 
 
 /*=======  BOOKING FORM  =======*/
@@ -10138,6 +10142,7 @@ font-size: 16px;
 
 /* === Restaurant Tabs === */
 .restaurant-tab-area .restaurant-rood-list .nav-link {
+<<<<<<< Updated upstream
   display: block;
   padding: 35px 25px;
   margin-bottom: 30px;
@@ -10146,6 +10151,24 @@ font-size: 16px;
   text-align: center;
   font-family: var(--secondary-font);
   transition: all 0.3s ease;
+=======
+  
+    border-radius: 0;
+    -webkit-transition: all 0.3s ease-out 0s;
+    transition: all 0.3s ease-out 0s;
+    background-color: var(--primary-card-color);
+    text-align: center;
+    display: block;
+    padding: 35px 25px;
+    margin-bottom: 30px;
+    font-family: var(--secondary-font);
+}
+
+@media (max-width: 575px) {
+    .restaurant-tab-area .restaurant-rood-list .nav-link {
+        padding: 25px;
+    }
+>>>>>>> Stashed changes
 }
 
 .restaurant-tab-area .restaurant-rood-list .nav-link .title {
@@ -10192,6 +10215,7 @@ font-size: 16px;
 }
 
 .restaurant-tab-area .food-box .thumb .price {
+<<<<<<< Updated upstream
   position: absolute;
   top: 10px;
   right: 10px;
@@ -10201,6 +10225,16 @@ font-size: 16px;
   font-weight: 700;
   padding: 8px 15px;
   border-radius: 5px;
+=======
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background-color: var(--primary-hover-color);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white-color);
+    padding: 8px 15px;
+>>>>>>> Stashed changes
 }
 
 .restaurant-tab-area .food-box .desc {
@@ -10216,6 +10250,7 @@ font-size: 16px;
 }
 
 .restaurant-tab-area .food-box .desc a.cat {
+<<<<<<< Updated upstream
   font-size: 12px;
   color: var(--grey-color);
   font-weight: 700;
@@ -10223,6 +10258,26 @@ font-size: 16px;
   letter-spacing: 2px;
   display: inline-block;
   margin-bottom: 10px;
+=======
+    font-size: 12px;
+    color: var(--primary-text-color);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 575px) {
+    .restaurant-tab-area .food-box .desc a.cat {
+        letter-spacing: 1px;
+    }
+}
+
+@media (max-width: 399px) {
+    .restaurant-tab-area .food-box .desc a.cat {
+        letter-spacing: 0;
+    }
+>>>>>>> Stashed changes
 }
 
 .restaurant-tab-area .food-box .desc h4 {
@@ -10806,9 +10861,11 @@ font-size: 16px;
 /*=======  Shop Section  =======*/
 
 .food-box.shop-box {
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
+  
 }
-
 .food-box.shop-box:hover .thumb img {
     transform: scale(1.1);
 }
@@ -11218,6 +11275,12 @@ font-size: 16px;
 .shop-detail-image .detail-slider-2 .slick-list .slick-slide {
     margin: 0 5px;
 }
+.shop-detail-content .product-title{
+    font-family: var(--primary-font);
+    color: var(--primary-text-color);
+    font-size: 34px;
+    letter-spacing: 1px;
+}
 
 .shop-detail-content .rating {
     display: flex;
@@ -11230,12 +11293,17 @@ font-size: 16px;
 
 .shop-detail-content .rating .pro-review span {
     font-size: 12px;
-    color: #fff;
+    color: var(--primary-text-color);
+    font-family: var(--primary-font);
 }
-
+.shop-detail-content .short-desc{
+    font-size: 16px;
+    font-family: var(--secondary-font);
+    color: var(--primary-text-color);
+}
 .shop-detail-content .desc .price {
     font-size: 24px;
-    font-family: var(--primary-font);
+    font-family: var(--secondary-font);
 }
 
 .shop-detail-content .desc .price span {
@@ -11244,8 +11312,8 @@ font-size: 16px;
 
 .color-sec label {
     margin-bottom: 8px;
-    color: #fff;
-    font-weight: 500;
+    color: var(--primary-text-color);
+font-family: var(--secondary-font);
     font-weight: 600;
 }
 
@@ -11302,7 +11370,7 @@ font-size: 16px;
 .color-sec .color-box label .choose-material {
     border-radius: 0;
     display: block;
-    background-color: #272626;
+    background-color: var(--primary-card-color);
     cursor: pointer;
     transition: .3s;
     margin: 0 5px 5px 0;
@@ -11310,30 +11378,21 @@ font-size: 16px;
     font-size: 12px;
     position: relative;
     padding: 10px 20px;
-    color: #ffffff;
+    color: var(--primary-text-color);
+    font-family: var(--secondary-font);
 }
 
 .color-sec .color-box label .choose-material:hover {
-    background-color: #fcd462;
-    color: #fff;
+    background-color: var(--primary-hover-color);
+    color: var(--white-color);
 }
 
 .color-sec .color-box label input:checked+span {
-    background-color: #fcd462;
-    color: #fff;
+    background-color: var(--primary-hover-color);
+    color: var(--white-color);
 }
 
-.shop-detail-content .quantity-cart .main-btn {
-    border-color: #a3a3a3;
-    color: #a3a3a3;
-    border-width: 1px;
-}
 
-.shop-detail-content .quantity-cart .main-btn:hover {
-    border-color: #fcd462;
-    color: #fcd462;
-    background-color: transparent;
-}
 
 .shop-detail-content .quantity-cart .cart-btn {
     padding-left: 40px;
@@ -11373,16 +11432,22 @@ font-size: 16px;
 
 .shop-detail-content .other-info h6 {
     font-size: 14px;
+    font-family: var(--primary-font);
+    font-weight: 600;
+    color: var(--primary-text-color);
+    letter-spacing: 1px;
+
 }
 
 .shop-detail-content .other-info .grey {
-    color: #a3a3a3;
+    color: var(--primary-text-color);
     font-weight: 400;
     font-size: 14px;
+    font-family: var(--secondary-font);
 }
 
-.shop-detail-content .other-info a.grey:hover {
-    color: #fff;
+.shop-detail-content .other-info .grey:hover {
+    color: var(--primary-hover-color);
 }
 
 .shop-detail-content .other-info.flex {
@@ -11409,15 +11474,18 @@ font-size: 16px;
 }
 
 .product-description .nav-tabs .nav-link.active {
-    color: #fcd462;
+    color: var(--primary-hover-color);
 }
 
 .product-description .nav-tabs .nav-link {
-    color: #a3a3a3;
+    color: var(--primary-text-color);
+    font-family: var(--primary-font);
+    letter-spacing: 1px;
+
 }
 
 .product-description .nav-tabs .nav-link:hover {
-    color: #fff;
+    color: var(--primary-hover-color);
 }
 
 .product-description .tabs .tab-content {
@@ -11428,36 +11496,49 @@ font-size: 16px;
 .input-group.input-group-two input,
 .input-group.input-group-two select,
 .input-group.input-group-two textarea {
-    background-color: #f6f5f0;
+    background-color: var(--primary-color);
     border: 0;
 }
-
+.product-description .additional-info div h3{
+    color: var(--primary-text-color);
+}
 .product-description .additional-info table th {
-    color: #fff;
+    color: var(--primary-text-color);
     font-weight: 600;
+}
+.product-description .tab-content .tab-pane p{
+     font-family: var(--secondary-font);
+     font-size: 16px;
 }
 
 .product-description .additional-info table th,
 .product-description .additional-info table td {
-    border: 1px solid #40403b;
+    border: 1px solid var(--primary-text-color);
     vertical-align: middle;
-    color: #fff;
+    color: var(--primary-text-color);
 }
 
 .product-description .additional-info table td.value {
-    color: #a3a3a3;
+    color: var(--primary-text-color);
+    font-family: var(--secondary-font);
 }
 
 @media (max-width: 991px) {
     .shop-detail-content {
         margin-top: 60px;
     }
+        .shop-detail-content .product-title{
+            font-size: 28px;
+        }
 }
 
 @media (max-width: 576px) {
     .shop-detail-content .quantity-box {
         height: 58px;
     }
+         .shop-detail-content .product-title {
+             font-size: 24px;
+         }
 
     .shop-detail-content .quantity-cart .cart-btn {
         padding-left: 0;
@@ -11499,7 +11580,7 @@ font-size: 16px;
 }
 
 .product-remove a i {
-    color: #fff;
+    color: var(--primary-text-color);
     text-align: center;
 }
 
@@ -11702,7 +11783,7 @@ td.has-title {
 }
 
 .checkout-form .nice-select .list {
-    background-color: #353530;
+    background-color: var(--primary-card-color);
 }
 
 .checkout-form .input-group.input-group-two textarea {
@@ -12304,11 +12385,19 @@ footer .footer-widget-area::after,
   z-index: -1;
 }
 
+<<<<<<< Updated upstream
 @media (min-width: 1600px) {
   .sigma-footer .container-fluid {
     padding-left: 65px;
     padding-right: 65px;
   }
+=======
+@media(min-width: 1600px) {
+    .sigma-footer .container-fluid {
+        padding-left: 15px;
+        padding-right: 65px;
+    }
+>>>>>>> Stashed changes
 }
 
 footer .footer-widget-area .widget,
@@ -12909,7 +12998,11 @@ footer .copyright-area.light-theme .footer-menu ul li::before {
 }
 
 .sigma-footer .nice-select .list {
+<<<<<<< Updated upstream
   background-color: var(--primary-card-color);
+=======
+    background-color: var(--primary-card-color);
+>>>>>>> Stashed changes
 }
 
 .sigma-footer .sigma-footer-nav .ft-nav > .menu-item > a:before {
@@ -13181,6 +13274,64 @@ footer .copyright-area.light-theme .footer-menu ul li::before {
   display: block !important;
 }
 
+<<<<<<< Updated upstream
 /*---------Font styles and colors--------*/
 
 /*# sourceMappingURL=style.css.map */
+=======
+/*# sourceMappingURL=style.css.map */
+
+.Shop-section{
+    padding: 50px 50px  ;
+   
+}
+
+@media(max-width:992px) {
+    .Shop-section {
+        padding: 50px 30px;
+
+    }
+}
+@media(max-width:568px) {
+    .Shop-section {
+        padding: 50px 20px;
+
+    }
+}
+@media(max-width:568px){
+    .Shop-section {
+            padding: 50px 20px;
+    
+        }
+}
+
+
+.custom-shop-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.sidebar-area {
+  flex: 0 0 40%;
+  max-width: 40%;
+}
+
+.product-area {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Responsive: stack sidebar below 768px */
+@media (max-width: 767px) {
+  .sidebar-area {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .product-area {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+>>>>>>> Stashed changes

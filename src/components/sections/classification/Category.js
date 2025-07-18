@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Tab, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom'
 
-import img1 from '../../../assets/img/shop/01.jpg';
-import img2 from '../../../assets/img/shop/02.jpg';
-import img3 from '../../../assets/img/shop/03.jpg';
+import img1 from '../../../assets/img/shop/create a image with jeweler wearer by women maximum use the silver jewels with different categories (1).jpg';
+import img2 from '../../../assets/img/shop/create a image with jewellery weared by women maximum use the silver jewels before you gived more jeweles minimal jewels.jpg';
+import img3 from '../../../assets/img/shop/crate a image wearing a women with more images.jpg';
 
 const ringsposts = [
     { img: img3, tag2: '-10%', title: 'Diamond Ring.', price1: '$890', price2: '$900' },

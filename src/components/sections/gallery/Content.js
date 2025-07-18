@@ -5,14 +5,14 @@ import $ from 'jquery';
 import 'magnific-popup';
 
 
-import img1 from '../../../assets/img/gallery/01.jpg';
-import img2 from '../../../assets/img/gallery/02.jpg';
-import img3 from '../../../assets/img/gallery/03.jpg';
-import img4 from '../../../assets/img/gallery/04.jpg';
-import img5 from '../../../assets/img/gallery/05.jpg';
-import img6 from '../../../assets/img/gallery/06.jpg';
-import img7 from '../../../assets/img/gallery/07.jpg';
-import img8 from '../../../assets/img/gallery/08.jpg';
+import img1 from '../../../assets/img/gallery/5.jpg';
+import img2 from '../../../assets/img/gallery/5.jpg';
+import img3 from '../../../assets/img/gallery/3.jpg';
+import img4 from '../../../assets/img/gallery/4.jpg';
+import img5 from '../../../assets/img/gallery/5.jpg';
+import img6 from '../../../assets/img/gallery/3.jpg';
+import img7 from '../../../assets/img/gallery/5.jpg';
+import img8 from '../../../assets/img/gallery/5.jpg';
 
 const galleryposts = [
     { img: img1, animationtime: '.3s' },

@@ -1,119 +1,85 @@
 import React from 'react';
-import Contacthelper from '../../../helper/Contacthelper';
-import ReCAPTCHA from "react-google-recaptcha";
 import { Alert } from 'react-bootstrap';
-import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
+import ReCAPTCHA from "react-google-recaptcha";
+import Contacthelper from '../../../helper/Contacthelper';
 
 class Content extends Contacthelper {
     render() {
-        const Map = ReactMapboxGl({
-            accessToken:
-                'pk.eyJ1IjoiYWJlZHNoIiwiYSI6ImNrNnRyZ3d4aDAyMzkzZXBoc3RsYnM0aGwifQ.yhr3W_OOI6xXElmSY8cyPg'
-        });
         return (
-            <section className="contact-part pt-115 pb-115">
+            <section className="about-contact-section">
                 <div className="container">
-                    {/* Contact Info */}
-                    <div className="contact-info">
-                        <div className="row justify-content-center">
-                            <div className="col-lg-4 col-sm-6 col-10">
-                                <div className="info-box">
-                                    <div className="icon">
-                                        <i className="flaticon-home" />
-                                    </div>
-                                    <div className="desc">
-                                        <h4>Office Address</h4>
-                                        <p>19/A, Cirikon City hall Tower New York, NYC</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-4 col-sm-6 col-10">
-                                <div className="info-box">
-                                    <div className="icon">
-                                        <i className="flaticon-phone" />
-                                    </div>
-                                    <div className="desc">
-                                        <h4>Phone Number</h4>
-                                        <p>+ 97656 8675 7864 7 <br /> + 876 766 8675 765 6</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-4 col-sm-6 col-10">
-                                <div className="info-box">
-                                    <div className="icon">
-                                        <i className="flaticon-message" />
-                                    </div>
-                                    <div className="desc">
-                                        <h4>Email Address</h4>
-                                        <p>info@webmail.com <br /> jobs.webmail@mail.com</p>
-                                    </div>
+                    <div className="row">
+                        {/* Left Info Column */}
+                        <div className="col-lg-5">
+                            <div className="contact-info-box">
+                                <h3>Address</h3>
+                                <p>M/s. BMG Jewellers Pvt Ltd, 160,<br /> Melamasi St, Madurai-625001</p>
+
+                                <h3>Phone</h3>
+                                <p>Mobile: +91-95143 33601<br />Landline: 95143 33609</p>
+
+                                <h3>Email</h3>
+                                <p>Contact@bmgjewellers.in<br />Contact@bmgjewellers.in</p>
+
+                                <h3>Social</h3>
+                                <div className="social-icons">
+                                    <a href="#"><i className="fab fa-facebook-f" /></a>
+                                    <a href="#"><i className="fab fa-twitter" /></a>
+                                    <a href="#"><i className="fab fa-instagram" /></a>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    {/* Contact Mapts */}
-                    <Map
-                        // eslint-disable-next-line react/style-prop-object
-                        style="mapbox://styles/mapbox/light-v10"
-                        className="contact-maps mb-30"
-                    >
-                        <Layer type="symbol" id="marker" layout={{ 'icon-image': 'marker-15' }}>
-                            <Feature coordinates={[-77.04, 38.907]} zoom={11.5} />
-                        </Layer>
-                    </Map>
-                    {/* Contact Form */}
-                    <div className="contact-form">
-                        <form onSubmit={this.handleSubmit} method="GET">
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <div className="input-group mb-30">
-                                        <span className="icon"><i className="far fa-user" /></span>
-                                        <input type="text" placeholder="Your full name" name="name" value={this.state.name} onChange={this.onNameChange} required />
+
+                        {/* Right Form Column */}
+                        <div className="col-lg-7">
+                            <div className="message-form">
+                                <h2>Tell Us Your Message</h2>
+                                <form onSubmit={this.handleSubmit} method="GET">
+                                    <div className="form-group">
+                                        <input type="text" placeholder="Name" name="name" value={this.state.name} onChange={this.onNameChange} required />
                                     </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="input-group mb-30">
-                                        <span className="icon"><i className="far fa-envelope" /></span>
-                                        <input type="email" placeholder="Enter email address" name="email" value={this.state.email} onChange={this.onEmailChange} required />
+                                    <div className="form-group">
+                                        <input type="email" placeholder="Email" name="email" value={this.state.email} onChange={this.onEmailChange} required />
                                     </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="input-group mb-30">
-                                        <span className="icon"><i className="far fa-phone" /></span>
-                                        <input type="text" placeholder="Add phone number" name="phone" value={this.state.phone} onChange={this.onPhoneChange} required />
+                                    <div className="form-group">
+                                        <textarea placeholder="Comment" name="message" value={this.state.message} onChange={this.onMessageChange} required />
                                     </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="input-group mb-30">
-                                        <span className="icon"><i className="far fa-book" /></span>
-                                        <input type="text" placeholder="Select Subject" name="subject" value={this.state.subject} onChange={this.onSubjectChange} required />
-                                    </div>
-                                </div>
-                                <div className="col-12">
-                                    <div className="input-group textarea mb-30">
-                                        <span className="icon"><i className="far fa-pen" /></span>
-                                        <textarea placeholder="Enter messages" name="message" value={this.state.message} onChange={this.onMessageChange} required />
-                                    </div>
-                                </div>
-                                <div className="col-12 text-center">
+                                    {/* <div className="form-group form-check">
+                                        <input type="checkbox" className="form-check-input" />
+                                        <label>Save my name, email, and website in this browser.</label>
+                                    </div> */}
                                     <ReCAPTCHA
                                         sitekey="6LdxUhMaAAAAAIrQt-_6Gz7F_58S4FlPWaxOh5ib"
                                         onChange={this.reCaptchaLoaded.bind(this)}
                                         size="invisible"
                                     />
-                                    <button type="submit" className="main-btn btn-filled">Get Free Quote</button>
-                                    {/* Form Messages */}
-                                    <Alert variant="success" className="d-none mt-3 mb-0" id="server_response_success">
-                                        <strong>Success!</strong> Contact form has been successfully submitted.
+                                    <button type="submit" className="main-btn btn-filleds">Send</button>
+
+                                    {/* Success/Error Alert */}
+                                    <Alert variant="success" className="d-none mt-3" id="server_response_success">
+                                        <strong>Success!</strong> Message submitted successfully.
                                     </Alert>
-                                    <Alert variant="danger" className="d-none mt-3 mb-0" id="server_response_danger">
-                                        <strong>Oops!</strong> Something bad happened. Please try again later.
+                                    <Alert variant="danger" className="d-none mt-3" id="server_response_danger">
+                                        <strong>Error!</strong> Please try again later.
                                     </Alert>
-                                    {/* Form Messages */}
-                                </div>
+                                </form>
                             </div>
-                        </form>
+                        </div>
                     </div>
+                </div>
+
+                {/* Google Map Embed */}
+                <div className="google-map-container mt-5">
+                    <iframe
+                        title="BMG Location"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3930.026453413985!2d78.10065249999995!3d9.931754800000014!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00cfab0d83a629%3A0x1f9b7f8a8f891494!2sBMG%20JEWELLERS%20-%20The%20Best%20Jewelry%20Shop%20in%20Madurai!5e0!3m2!1sen!2sin!4v1752745983063!5m2!1sen!2sin"
+                        width="100%"
+                        height="450"
+                        style={{ border: 0 }}
+                        allowFullScreen=""
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                    />
                 </div>
             </section>
         );

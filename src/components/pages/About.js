@@ -3,7 +3,7 @@ import MetaTags from "react-meta-tags";
 import Header from '../layouts/Header';
 import Breadcrumb from '../layouts/Breadcrumbs';
 import Instafeeds from '../layouts/Instafeeds';
-import Footer from '../layouts/Footerthree';
+import Footer from '../layouts/Footertwo';
 import Content from '../sections/about/Content';
 
 class About extends Component {
@@ -11,7 +11,7 @@ class About extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Bmg | AboutUs</title>
+                    <title>About Us</title>
                     <meta
                         name="description"
                         content="#"

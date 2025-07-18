@@ -38,7 +38,7 @@ import Wishlist from './components/pages/Wishlist';
 
 function App() {
   return (
-    <Router basename={'/themes/themeforest/react/laramiss'}>
+    <Router basename={'/bmgjewellers/'}>
       <Preloader />
       <Switch>
         <Route exact path="/" component={Home} />

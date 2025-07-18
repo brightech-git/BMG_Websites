@@ -9,9 +9,9 @@ class Content extends Component {
         return (
             <Fragment>
                 <About/>
-                <Core/>
-                <Counter/>
-                <News/>
+                {/* <Core/> */}
+                {/* <Counter/> */}
+                {/* <News/> */}
             </Fragment>
         );
     }

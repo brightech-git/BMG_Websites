@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import loginbg from '../../../assets/img/bg/loginImage1.jpg';
+import loginbg from '../../../assets/img/bg/sign.webp';
 
 class Content extends Component {
     render() {

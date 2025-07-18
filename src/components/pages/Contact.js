@@ -11,7 +11,7 @@ class Contact extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Laramiss | Contact Us</title>
+                    <title> Contact Us</title>
                     <meta
                         name="description"
                         content="#"

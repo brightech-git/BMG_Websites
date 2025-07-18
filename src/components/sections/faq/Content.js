@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { Accordion, Card, Button  } from 'react-bootstrap';
 
 
-import img1 from '../../../assets/img/recent-post-wid/04.png';
-import img2 from '../../../assets/img/recent-post-wid/05.png';
-import img3 from '../../../assets/img/recent-post-wid/06.png';
+import img1 from '../../../assets/img/recent-post-wid/4.webp';
+import img2 from '../../../assets/img/recent-post-wid/5.webp';
+import img3 from '../../../assets/img/recent-post-wid/6.jpg';
 
 const popularfeeds = [
     { img: img1, title: 'How Are Colored Diamonds Formed?', postdate: '24th March 2022' },
@@ -34,7 +34,7 @@ class Content extends Component {
                                         </Accordion.Collapse>
                                         <Card.Header>
                                             <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                                                Collapsible Group Item #1
+                                                How Will My Order Be Delivered To Me?
                                             </Accordion.Toggle>
                                         </Card.Header>
                                     </Card>
@@ -48,7 +48,7 @@ class Content extends Component {
                                         </Accordion.Collapse>
                                         <Card.Header>
                                             <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                                                Collapsible Group Item #2
+                                            What Should I Know Before Buying Jewelry?
                                             </Accordion.Toggle>
                                         </Card.Header>
                                     </Card>
@@ -62,7 +62,7 @@ class Content extends Component {
                                         </Accordion.Collapse>
                                         <Card.Header>
                                             <Accordion.Toggle as={Button} variant="link" eventKey="2">
-                                                Collapsible Group Item #3
+                                               How Will I Know If Order Is Placed Successfully?
                                             </Accordion.Toggle>
                                         </Card.Header>
                                     </Card>
@@ -81,7 +81,7 @@ class Content extends Component {
                                         </Accordion.Collapse>
                                         <Card.Header>
                                             <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                                                Collapsible Group Item #1
+                                              How Do I Check The Status Of My Order?
                                             </Accordion.Toggle>
                                         </Card.Header>
                                     </Card>
@@ -95,7 +95,7 @@ class Content extends Component {
                                         </Accordion.Collapse>
                                         <Card.Header>
                                             <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                                                Collapsible Group Item #2
+                                               What Kind Of Payment Methods Do You Have?
                                             </Accordion.Toggle>
                                         </Card.Header>
                                     </Card>
@@ -109,7 +109,7 @@ class Content extends Component {
                                         </Accordion.Collapse>
                                         <Card.Header>
                                             <Accordion.Toggle as={Button} variant="link" eventKey="2">
-                                                Collapsible Group Item #3
+                                               Can I Pay Online?
                                             </Accordion.Toggle>
                                         </Card.Header>
                                     </Card>
@@ -119,13 +119,13 @@ class Content extends Component {
                         <div className="col-lg-4">
                             <div className="sidebar mb-0">
                                 {/* Search Widget */}
-                                <div className="widget search-widget mb-40">
+                                {/* <div className="widget search-widget mb-40">
                                     <h5 className="widget-title">Search Objects</h5>
                                     <form action="#">
                                         <input type="text" placeholder="Search your keyword..." />
                                         <button type="submit"><i className="far fa-search" /></button>
                                     </form>
-                                </div>
+                                </div> */}
                                 {/* Popular Post Widget */}
                                 <div className="widget popular-feeds mb-40">
                                     <h5 className="widget-title">Popular Feeds</h5>

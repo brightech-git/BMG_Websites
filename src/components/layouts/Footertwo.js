@@ -61,12 +61,12 @@ class Footertwo extends Component {
                       <li>
                         <Link to="#">Refund Policy</Link>
                       </li>
-                      {/* <li>
+                      <li>
                         <Link to="#">Terms & Conditions</Link>
                       </li>
                       <li>
-                        <Link to="#">Privacy Policy</Link>
-                      </li> */}
+                        <Link to="faq">FAQ</Link>
+                      </li>
                     </ul>
 
                     {/* ✅ PAYMENT ICONS BELOW LINKS */}

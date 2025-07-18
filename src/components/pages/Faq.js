@@ -11,7 +11,7 @@ class Faq extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Laramiss | FAQ's</title>
+                    <title> FAQ's</title>
                     <meta
                         name="description"
                         content="#"

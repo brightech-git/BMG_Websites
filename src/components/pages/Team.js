@@ -11,7 +11,7 @@ class Team extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Laramiss | Team</title>
+                    <title> Team</title>
                     <meta
                         name="description"
                         content="#"

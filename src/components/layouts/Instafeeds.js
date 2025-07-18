@@ -57,7 +57,7 @@ class Instafeeds extends Component {
         };
         return (
             <div className="instagram-feed-section">
-                <div className="container-fluid p-0">
+                {/* <div className="container-fluid p-0">
                     <Slider className="instagram-slider" {...settings}>
                         {instapost.map((item, i) => (
                             <Link key={i} to={item.photo} className="insta-popup">
@@ -65,7 +65,7 @@ class Instafeeds extends Component {
                             </Link>
                         ))}
                     </Slider>
-                </div>
+                </div> */}
             </div >
         );
     }

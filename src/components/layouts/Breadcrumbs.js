@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import breadcrumbimg from '../../assets/img/bg/bglogin.jpg'
+import breadcrumbimg from '../../assets/img/banner/footer.webp'
 
 class Breadcrumbs extends Component {
     render() {
@@ -9,8 +9,8 @@ class Breadcrumbs extends Component {
             <section className="breadcrumb-area" style={{ backgroundImage: "url(" + breadcrumbimg + ")",  objectFit:'contain'}}>
                 <div className="container">
                     <div className="breadcrumb-text">
-                        {/* <span>BMG JEWELLERS pvt ltd</span>
-                        <h2 className="page-title">{this.props.breadcrumb.pagename}</h2> */}
+                        <span>BMG JEWELLERS pvt ltd</span>
+                        <h2 className="page-title">{this.props.breadcrumb.pagename}</h2>
                         <ul className="breadcrumb-nav">
                             <li><Link to="/">Home</Link></li>
                             <li className="active">{this.props.breadcrumb.pagename}</li>

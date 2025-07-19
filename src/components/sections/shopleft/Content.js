@@ -81,10 +81,10 @@ const Content = () => {
                                 })}
                             </div>
                         </div>
-                    </div>
-
-                    <div className="pagination-wrap">
-                        <Pagination />
+{/* 
+                        <div className="pagination-wrap">
+                            <Pagination />
+                        </div> */}
                     </div>
                 </div>
             </div>

@@ -11,7 +11,7 @@ class Wishlist extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Laramiss | Wishlist</title>
+                    <title>BMG | Wishlist</title>
                     <meta
                         name="description"
                         content="#"

@@ -2,8 +2,9 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames'
 import $ from 'jquery'
+import { ChevronDown } from 'lucide-react';
 
-import { ShoppingCart, Menu, User } from 'lucide-react';
+import { ShoppingCart, Menu, User,Heart } from 'lucide-react';
 import '../../assets/css/header.css';
 
 import Canvas from './Canvas';
@@ -14,9 +15,10 @@ import img2 from '../../assets/img/cart/2.jpg';
 import img3 from '../../assets/img/cart/3.jpg';
 import img4 from '../../assets/img/cart/4.jpg';
 // Cart loop
-import Logo from '../../assets/img/banner/logo.png';
 
 const contact = localStorage.getItem('userMobileNumber');
+import Logo from '../../assets/img/banner/logo.png';
+import Wishlist from '../pages/Wishlist';
 const cartposts = [
     { img: img1, title: 'Oak Wood Cutting Board', price: '2x 10,000$' },
     { img: img2, title: 'Oak Wood Cutting Board', price: '2x 10,000$' },
@@ -131,7 +133,7 @@ class Header extends Component {
                                                         </li>
                                                         <li className="menu-item menu-item-has-children menu-item-has-megamenu">
                                                             <Link to="#">
-                                                                Categories
+                                                                Shop <ChevronDown size={16} className="dropdown-icon" />
                                                             </Link>
                                                             <div className="sub-menu">
                                                                 <div className="container">
@@ -532,83 +534,21 @@ class Header extends Component {
                                                             </div>
                                                         </li>
                                                         <li className="menu-item">
-                                                            <Link to="/shop-left">
-                                                                Diamond
+                                                            <Link to="/about">
+                                                                About
                                                             </Link>
-                                                        </li>
-                                                        <li className="menu-item menu-item-has-children">
-                                                            <Link to="#">
-                                                                Blog
-                                                            </Link>
-                                                            <ul className="sub-menu">
-                                                                <li className="menu-item"> <Link to="/blog-grid-sidebar">Blog Grid Sidebar</Link>
-                                                                </li>
-                                                                <li className="menu-item"> <Link to="/blog-detail">Blog Details</Link>
-                                                                </li>
-                                                                <li className="menu-item"> <Link to="/blog-grid">Blog Grid</Link>
-                                                                </li>
-                                                                <li className="menu-item"> <Link to="/blog-list">Blog List</Link>
-                                                                </li>
-                                                            </ul>
-                                                        </li>
-                                                        <li className="menu-item menu-item-has-children">
-                                                            <Link to="#">
-                                                                Pages
-                                                            </Link>
-                                                            <ul className="sub-menu">
-                                                                <li className="menu-item">
-                                                                    <Link to="/about">About</Link>
-                                                                </li>
-                                                                <li className="menu-item">
-                                                                    <Link to="/classification">Classification</Link>
-                                                                </li>
-                                                                <li className="menu-item">
-                                                                    <Link to="/account">Account</Link>
-                                                                </li>
-                                                                <li className="menu-item menu-item-has-children">
-                                                                    <Link to="/gallery">Gallery</Link>
-                                                                    <ul className="sub-menu">
-                                                                        <li className="menu-item">
-                                                                            <Link to="/gallery">Gallery 2 Columns</Link>
-                                                                        </li>
-                                                                        <li className="menu-item">
-                                                                            <Link to="/gallery-two">Gallery 3 Columns</Link>
-                                                                        </li>
-                                                                    </ul>
-                                                                </li>
-                                                                <li className="menu-item">
-                                                                    <Link to="/team">Team</Link>
-                                                                </li>
-                                                                <li className="menu-item">
-                                                                    <Link to="/typography">Typography</Link>
-                                                                </li>
-                                                                <li className="menu-item">
-                                                                    <Link to="/error">Error 404</Link>
-                                                                </li>
-                                                                <li className="menu-item">
-                                                                    <Link to="/coming-soon">Coming Soon</Link>
-                                                                </li>
-                                                            </ul>
                                                         </li>
                                                         <li className="menu-item menu-item-has-children">
                                                             <Link to="/about">
-                                                                Shop
+                                                                Pages <ChevronDown size={16} className="dropdown-icon" />
                                                             </Link>
+                                                            
                                                             <ul className="sub-menu">
                                                                 <li className="menu-item">
-                                                                    <Link to="/shop-left">Shop Left Sidebar</Link>
+                                                                    <Link to="/faq">FAQ</Link>
                                                                 </li>
                                                                 <li className="menu-item">
-                                                                    <Link to="/shop-left-two">Shop Left Sidebar v2</Link>
-                                                                </li>
-                                                                <li className="menu-item">
-                                                                    <Link to="/shop-right">Shop Right Sidebar</Link>
-                                                                </li>
-                                                                <li className="menu-item">
-                                                                    <Link to="/shop-right-two">Shop Right Sidebar v2</Link>
-                                                                </li>
-                                                                <li className="menu-item">
-                                                                    <Link to="/shop-detail">Product Details</Link>
+                                                                    <Link to="/blog-grid">Blog</Link>
                                                                 </li>
                                                             </ul>
                                                         </li>
@@ -625,7 +565,7 @@ class Header extends Component {
                                     {/* Site Logo */}
                                     <div className="site-logo site-logo-text">
                                         <Link to="/">
-                                            <img
+                                            {/* <img
                                                 src={Logo}
                                                 alt="Diamond Icon"
                                                 style={{
@@ -633,7 +573,7 @@ class Header extends Component {
                                                     height: 'auto',
                                                     marginRight: '10px',
                                                 }}
-                                            />
+                                            /> */}
                                             <div className="site-logo-text">
                                                 <h3>Bmg Jewellers</h3>
                                                 <h6>Private Limited</h6>
@@ -654,6 +594,9 @@ class Header extends Component {
                                                 <User size={20} strokeWidth={1.8} />
                                             </Link>
                                         )}
+                                    </div>
+                                    <div className="login-btn">
+                                        <Link to="/wishlist" id="loginBtn"><Heart size={20} strokeWidth={1.8} /></Link>
                                     </div>
                                    
                                     

@@ -1419,12 +1419,13 @@ header .nav-container .site-logo img {
 
 .site-logo.site-logo-text .site-logo-text h3,
 .site-logo.site-logo-text .site-logo-text h6 {
-    color: #404040;
+    color: var(--primary-text-color);
+    font-family: var(--primary-font);
 }
 
 .site-logo.site-logo-text .site-logo-text h6 {
     text-transform: lowercase;
-    font-family: "Montserrat", sans-serif;
+    font-family: var(--primary-font);
     letter-spacing: 2px;
 }
 
@@ -1902,6 +1903,7 @@ header.header-three .main-menu-area {
     z-index: 99;
     height: auto;
     bottom: -50px;
+    
 }
 
 @media (max-width: 399px) {
@@ -2332,6 +2334,18 @@ header.sticky-header.sticky-active.header-two .header-info .item .title {
         color: #fff;
     }
 }
+
+/*Additionally added ------*/
+.dropdown-icon {
+  margin-left: 5px;
+  vertical-align: middle;
+  transition: transform 0.3s ease;
+}
+
+.menu-item-has-children:hover .dropdown-icon {
+  transform: rotate(180deg);
+}
+
 
 
 /*=====sigma-header======*/
@@ -7533,29 +7547,6 @@ font-size: 16px;
   font-family: var(--secondary-font);
 }
 
-/* Button Styles */
-.main-btn {
-  display: inline-block;
-  padding: 12px 30px;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: center;
-  border: none;
-  font-family: var(--secondary-font);
-}
-
-.btn-filleds {
-  background: var(--primary-hover-color);
-  color: var(--primary-text-color);
-}
-
-.btn-filleds:hover {
-  background: var(--secondary-card-color);
-  transform: translateY(-2px);
-}
 
 /* Alert Styles */
 .alert {
@@ -10189,8 +10180,11 @@ font-size: 16px;
 }
 
 /* === Food Box === */
+
+/* === Base Styles === */
 .restaurant-tab-area .food-box {
   margin-bottom: 30px;
+  transition: all 0.3s ease;
 }
 
 .restaurant-tab-area .food-box .thumb {
@@ -10200,25 +10194,27 @@ font-size: 16px;
 .restaurant-tab-area .food-box .thumb img {
   width: 100%;
   display: block;
-  border-radius: 6px;
+  border-radius: 10px;
+  object-fit: cover;
 }
 
 .restaurant-tab-area .food-box .thumb .price {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    background-color: var(--primary-hover-color);
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--white-color);
-    padding: 8px 15px;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: var(--primary-hover-color);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white-color);
+  padding: 8px 15px;
+  border-radius: 6px;
 }
 
 .restaurant-tab-area .food-box .desc {
   background-color: var(--primary-card-color);
   padding: 30px;
   position: relative;
-  border-radius: 6px;
+  border-radius: 10px;
   font-family: var(--secondary-font);
 }
 
@@ -10227,31 +10223,20 @@ font-size: 16px;
 }
 
 .restaurant-tab-area .food-box .desc a.cat {
-    font-size: 12px;
-    color: var(--primary-text-color);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
-}
-
-@media (max-width: 575px) {
-    .restaurant-tab-area .food-box .desc a.cat {
-        letter-spacing: 1px;
-    }
-}
-
-@media (max-width: 399px) {
-    .restaurant-tab-area .food-box .desc a.cat {
-        letter-spacing: 0;
-    }
+  font-size: 12px;
+  color: var(--primary-text-color);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  display: block;
 }
 
 .restaurant-tab-area .food-box .desc h4 {
   font-family: var(--primary-font);
   font-size: 24px;
   color: var(--primary-text-color);
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .restaurant-tab-area .food-box .desc .link {
@@ -10272,7 +10257,7 @@ font-size: 16px;
   right: 30px;
 }
 
-/* === Feature Room Section Background Overlay === */
+/* === Feature Room Section Overlay === */
 .feature-room-section.with-bg {
   background-size: cover;
   background-position: center;
@@ -10289,14 +10274,40 @@ font-size: 16px;
   z-index: -1;
 }
 
-/* === Responsive Adjustments === */
-@media (max-width: 575px) {
+/* === Responsive Styles === */
+
+/* Tablets (768px and down) */
+@media (max-width: 768px) {
+  .restaurant-tab-area .food-box .desc {
+    padding: 20px;
+  }
+
+  .restaurant-tab-area .food-box .desc h4 {
+    font-size: 20px;
+  }
+
+  .restaurant-tab-area .food-box .thumb .price {
+    font-size: 16px;
+    padding: 6px 12px;
+  }
+
+  .restaurant-tab-area .food-box .desc .link {
+    font-size: 16px;
+  }
+
   .restaurant-tab-area .restaurant-rood-list .nav-link {
-    padding: 25px;
+    padding: 20px;
   }
 
   .restaurant-tab-area .restaurant-rood-list .nav-link i {
-    font-size: 40px;
+    font-size: 36px;
+  }
+}
+
+/* Mobile Devices (max-width: 575px) */
+@media (max-width: 575px) {
+  .restaurant-tab-area .food-box {
+    margin-bottom: 24px;
   }
 
   .restaurant-tab-area .food-box .desc {
@@ -10304,30 +10315,116 @@ font-size: 16px;
   }
 
   .restaurant-tab-area .food-box .desc h4 {
-    font-size: 20px;
+    font-size: 18px;
+    margin-bottom: 8px;
   }
 
   .restaurant-tab-area .food-box .desc a.cat {
     letter-spacing: 1px;
+    font-size: 11px;
   }
 
   .restaurant-tab-area .food-box:hover .desc .link {
     right: 10px;
   }
+
+  .restaurant-tab-area .restaurant-rood-list .nav-link {
+    padding: 15px;
+  }
+
+  .restaurant-tab-area .restaurant-rood-list .nav-link i {
+    font-size: 30px;
+  }
 }
 
+/* Extra Small Devices (max-width: 399px) */
 @media (max-width: 399px) {
   .restaurant-tab-area .food-box {
     margin-left: -5px;
     margin-right: -5px;
   }
 
-  .restaurant-tab-area .food-box .desc a.cat {
-    letter-spacing: 0;
+  .restaurant-tab-area .food-box .desc h4 {
+    font-size: 16px;
   }
 
-  .restaurant-tab-area .food-box .desc h4 {
-    font-size: 18px;
+  .restaurant-tab-area .food-box .desc a.cat {
+    letter-spacing: 0;
+    font-size: 10px;
+  }
+
+  .restaurant-tab-area .food-box .thumb .price {
+    font-size: 14px;
+    padding: 5px 10px;
+  }
+}
+
+
+
+/* Ensure the parent container is properly constrained */
+.custom-shop-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+/* Sidebar should be full-width on mobile, 25% on desktop */
+.sidebar-area {
+  flex: 1 1 100%;
+  max-width: 100%;
+}
+
+@media (min-width: 992px) {
+  .sidebar-area {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+}
+
+/* Product Area should take remaining space */
+.product-area {
+  flex: 1 1 100%;
+  max-width: 100%;
+}
+
+@media (min-width: 992px) {
+  .product-area {
+    flex: 0 0 75%;
+    max-width: 75%;
+  }
+}
+
+/* Product Grid Layout */
+.product-wrapper .row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -15px;
+}
+
+.product-wrapper .col-6,
+.product-wrapper .col-sm-6,
+.product-wrapper .col-md-6,
+.product-wrapper .col-lg-4 {
+  padding: 15px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+@media (min-width: 576px) {
+  .product-wrapper .col-sm-6 {
+    width: 50%;
+  }
+}
+
+@media (min-width: 768px) {
+  .product-wrapper .col-md-6 {
+    width: 50%;
+  }
+}
+
+@media (min-width: 992px) {
+  .product-wrapper .col-lg-4 {
+    width: 33.3333%;
   }
 }
 
@@ -11115,8 +11212,16 @@ font-size: 16px;
 
 .shop-product-top .sorting-box .nice-select {
     border: solid 1px #40403b;
-    height: 60px;
+    height: 40px;
     line-height: 58px;
+    width: 200px;
+}
+
+.shop-product-top .sorting-box .nice-select {
+    border: solid 1px #40403b;
+    height: 40px;
+    line-height: 58px;
+    width: 270px;
 }
 
 .sidebar .widget.popular-feeds .single-popular-feed .feed-desc .cart-flex {
@@ -11741,6 +11846,8 @@ td.has-title {
 }
 
 
+
+
 /*------ Checkout  ------*/
 
 .checkout-form h4 {
@@ -12244,19 +12351,7 @@ td.has-title {
 
 
 /*=======  FOOTER  =======*/
-:root {
-  --primary-font: "Gloock", serif;
-  --secondary-font: "Montserrat", sans-serif;
-  --primary-color: #f6f5f0;
-  --primary-text-color: #404040;
-  --primary-card-color: #edebe7;
-  --primary-hover-color: #cd865c;
-  --secondary-card-color: #cfdcdd;
-  --white-color: #ffffff;
-  --secondary-text-color: #a9a9a9;
-  --header-height: 80px;
-  --mobile-header-height: 60px;
-}
+
 
 footer .footer-subscibe-area {
   background-color: var(--primary-text-color);
@@ -13228,6 +13323,8 @@ footer .copyright-area.light-theme .footer-menu ul li::before {
   display: block !important;
 }
 
+
+
 /*# sourceMappingURL=style.css.map */
 
 .Shop-section{
@@ -13266,7 +13363,7 @@ footer .copyright-area.light-theme .footer-menu ul li::before {
 
 .sidebar-area {
   flex: 0 0 40%;
-  max-width: 40%;
+  max-width: 30%;
 }
 
 .product-area {

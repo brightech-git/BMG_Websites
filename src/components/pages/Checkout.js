@@ -11,7 +11,7 @@ class Checkout extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Laramiss | Checkout</title>
+                    <title> Checkout</title>
                     <meta
                         name="description"
                         content="#"

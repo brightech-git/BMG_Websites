@@ -1,84 +1,105 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
+import { Heart, Trash2 } from "lucide-react";
+import "./Wishlist.css";
 
-import img1 from '../../../assets/img/shop/cart-1.png';
-import img2 from '../../../assets/img/shop/cart-2.png';
-import img3 from '../../../assets/img/shop/cart-3.png';
-import img4 from '../../../assets/img/shop/cart-4.png';
-import img5 from '../../../assets/img/shop/cart-5.png';
+import img1 from "../../../assets/img/shop/shop1.webp";
+import img2 from "../../../assets/img/shop/shop2.webp";
+import img3 from "../../../assets/img/shop/shop3.webp";
+import img4 from "../../../assets/img/shop/shop4.webp";
+import img5 from "../../../assets/img/shop/shop5.webp";
 
 const wishlistposts = [
-    { img: img1, name: 'Product1', price: '109', instock: 'In Stock', total: '320' },
-    { img: img2, name: 'Product2', price: '109', outstock: 'Out Of Stock', total: '320' },
-    { img: img3, name: 'Product3', price: '109', outstock: 'Out Of Stock', total: '320' },
-    { img: img4, name: 'Product4', price: '109', instock: 'In Stock', total: '320' },
-    { img: img5, name: 'Product5', price: '109', instock: 'In Stock', total: '320' },
+  {
+    img: img1,
+    name: "Silver Infinity Heart Ring",
+    price: "2,099",
+    originalPrice: "2,499",
+    rating: 4.8,
+    reviews: 27,
+  },
+  {
+    img: img2,
+    name: "Silver Infinite Grace Ring",
+    price: "1,499",
+    originalPrice: "2,199",
+    rating: 4.9,
+    reviews: 48,
+  },
+  {
+    img: img3,
+    name: "Silver Stay With Me Ring",
+    price: "1,699",
+    originalPrice: "2,199",
+    rating: 4.8,
+    reviews: 49,
+  },
+  {
+    img: img4,
+    name: "Silver Stay With Me Ring",
+    price: "1,699",
+    originalPrice: "2,199",
+    rating: 4.8,
+    reviews: 49,
+  },
+  {
+    img: img5,
+    name: "Silver Stay With Me Ring",
+    price: "1,699",
+    originalPrice: "2,199",
+    rating: 4.8,
+    reviews: 49,
+  },
 ];
-class Content extends Component {
-    render() {
-        return (
-            <section className="cart-section wishlist pt-120 pb-120">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-12">
-                            <div className="w-100 table-responsive mb-60">
-                                <table className="table cw-cart-table mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th />
-                                            <th scope="col" className="product-name">Product</th>
-                                            <th scope="col" className="product-qty">Price</th>
-                                            <th scope="col" className="product-price">Availability</th>
-                                            <th scope="col" className="product-price">Total</th>
-                                            <th scope="col" className="product-price">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {wishlistposts.map((item, i) => (
-                                            <tr key={i}>
-                                                <td className="product-remove text-center cw-align">
-                                                    <Link to="#"><i className="fas fa-times" /></Link>
-                                                </td>
-                                                <td data-title="Product" className="has-title">
-                                                    <div className="product-thumbnail">
-                                                        <img src={item.img} alt="" />
-                                                    </div>
-                                                    <Link to="/shop-detail">{item.name}</Link>
-                                                </td>
-                                                <td className="product-price text-white cw-align has-title" data-title="Price">
-                                                    <span className="product-currency"><b>$</b></span> <span className="product-amount"><b>{item.price}</b></span>
-                                                </td>
-                                                <td data-title="Availability" className="has-title">
-                                                    <span className="text-success fw-600">{item.instock}</span>
-                                                    <span className="text-danger fw-600">{item.outstock}</span>
-                                                </td>
-                                                <td className="product-price text-white cw-align has-title" data-title="Total">
-                                                    <span className="product-currency"><b>$</b></span> <span className="product-amount"><b>{item.total}</b></span>
-                                                </td>
-                                                <td data-title="Actions" className="has-title">
-                                                    <Link to="#" className="main-btn btn-filled">Add to Cart</Link>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div className="share-wishlist text-center">
-                                <h4>Share Your Wishlist</h4>
-                                <div className="social-media">
-                                    <Link to="#"><i className="fab fa-facebook-f" /></Link>
-                                    <Link to="#"><i className="fab fa-twitter" /></Link>
-                                    <Link to="#"><i className="fab fa-behance" /></Link>
-                                    <Link to="#"><i className="fab fa-linkedin" /></Link>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
-        );
-    }
-}
+const Content = () => {
+  const wishlistEmpty = wishlistposts.length === 0;
+
+  return (
+    <section className="wishlist-section">
+      <div className="container">
+        <div className="text-center mb-5">
+          <h3>My Wishlist</h3>
+        </div>
+
+        {wishlistEmpty ? (
+          <div className="wishlist-empty">
+            <Heart size={80} strokeWidth={1} />
+            <h4>It feels so empty in here</h4>
+            <p>Make a wish!</p>
+            <Link to="/shop-left" className="btn-pink">
+              Start Shopping
+            </Link>
+          </div>
+        ) : (
+          <div className="wishlist-grid">
+            {wishlistposts.map((item, i) => (
+              <div key={i} className="wishlist-card">
+                <img
+                  src={item.img}
+                  alt={item.name}
+                  className="wishlist-card-img"
+                />
+                <div className="wishlist-card-body">
+                  <h5 className="wishlist-card-title">{item.name}</h5>
+                  <div className="wishlist-card-price">
+                    <strong>₹{item.price}</strong>
+                    <del>₹{item.originalPrice}</del>
+                  </div>
+                  <div className="wishlist-card-actions">
+                    <button className="btn-move-to-cart">Move to cart</button>
+                    <button className="btn-remove">
+                      <Trash2 size={18} /> Remove
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+};
 
 export default Content;

@@ -88,10 +88,10 @@ class Content extends Component {
                                 </div>
                             </div>
                         </div>
-
+{/* 
                         <div className="pagination-wrap">
                             <Pagination />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </section>

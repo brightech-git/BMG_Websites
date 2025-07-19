@@ -27,7 +27,7 @@ ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <UserAuthProvider>
-        <BrowserRouter basename="/themes/themeforest/react/laramiss">
+        <BrowserRouter >
           <App />
         </BrowserRouter>
       </UserAuthProvider>

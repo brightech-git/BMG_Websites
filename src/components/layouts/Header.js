@@ -15,10 +15,9 @@ import img2 from '../../assets/img/cart/2.jpg';
 import img3 from '../../assets/img/cart/3.jpg';
 import img4 from '../../assets/img/cart/4.jpg';
 // Cart loop
+import Logo from '../../assets/img/banner/logo.png';
 
 const contact = localStorage.getItem('userMobileNumber');
-import Logo from '../../assets/img/banner/logo.png';
-import Wishlist from '../pages/Wishlist';
 const cartposts = [
     { img: img1, title: 'Oak Wood Cutting Board', price: '2x 10,000$' },
     { img: img2, title: 'Oak Wood Cutting Board', price: '2x 10,000$' },

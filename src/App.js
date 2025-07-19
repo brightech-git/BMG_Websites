@@ -34,6 +34,7 @@ import Shoprighttwo from './components/pages/Shoprighttwo';
 import Team from './components/pages/Team';
 import Typography from './components/pages/Typography';
 import Wishlist from './components/pages/Wishlist';
+import PrivacyPolicy from './components/pages/Policies/Privacy';
 
 
 function App() {
@@ -71,6 +72,7 @@ function App() {
         <Route exact path="/typography" component={Typography} />
         <Route exact path="/wishlist" component={Wishlist} />
         <Route exact path="/error" component={Error} />
+        <Route exact path="/PrivacyPolicy" component={PrivacyPolicy} />
         <Route exact component={Error} />
       </Switch>
     </Router>

@@ -1,0 +1,118 @@
+.privacy-policy-container {
+  background: #f9fafb;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+}
+
+.privacy-policy-content {
+  max-width: 730px;
+  margin: 42px auto 0 auto;
+  background: #fff;
+  padding: 34px 32px 38px 32px;
+  border-radius: 14px;
+  box-shadow: 0 1px 8px #0001;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  color: #212529;
+}
+
+.privacy-title {
+  text-align: center;
+  font-size: 2.25rem;
+  margin-bottom: 40px;
+  font-weight: 700;
+  color: #18191f;
+  letter-spacing: -1px;
+}
+
+.privacy-section {
+  margin-bottom: 36px;
+}
+
+.privacy-subheading {
+  font-size: 1.23rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #581c87;
+}
+
+.privacy-list {
+  list-style: disc;
+  padding-left: 1.5em;
+  margin-bottom: 10px;
+}
+
+.privacy-tick-list {
+  list-style: none;
+  padding-left: 0;
+}
+.privacy-tick-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tick {
+  color: #059669;
+  font-weight: bold;
+  margin-right: 6px;
+}
+.cross {
+  color: #dc2626;
+  font-weight: bold;
+  margin-right: 7px;
+}
+
+.privacy-sharing {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.privacy-noshare,
+.privacy-may-share {
+  flex: 1 1 260px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  padding: 14px 15px 10px 15px;
+  border-radius: 7px;
+  margin-bottom: 10px;
+}
+
+.privacy-noshare ul, .privacy-may-share ul {
+  margin-top: 5px;
+  padding-left: 20px;
+  font-size: 15px;
+}
+.privacy-noshare ul li, .privacy-may-share ul li {
+  margin-bottom: 3px;
+}
+
+/* Informative note */
+.privacy-note {
+  color: #7c2d12;
+  font-size: 1rem;
+  background: #fef3c7;
+  padding: 8px 12px;
+  border-radius: 5px;
+  margin-top: 13px;
+  border-left: 3px solid #fbbf24;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .privacy-policy-content {
+    padding: 16px 2vw 18px 2vw;
+    margin-top: 16px;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .privacy-title {
+    font-size: 1.55rem;
+    margin-bottom: 25px;
+  }
+  .privacy-sharing {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

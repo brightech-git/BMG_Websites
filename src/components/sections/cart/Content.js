@@ -1,138 +1,138 @@
-import React, { Component } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { useCart } from '../../../hook/cart/useCartQuery';
+import fallbackImage from '../../../assets/img/shop/shop1.webp';
 
-import img1 from '../../../assets/img/shop/cart-1.png';
-import img2 from '../../../assets/img/shop/cart-2.png';
+const Cart = () => {
+    const { cartItems, isLoading, error, updateCart, deleteCart } = useCart();
+    const [imageErrors, setImageErrors] = useState({});
 
-const cartlistpost = [
-    { img: img1, title: 'Blue Blast', total: 109, qty: 1 },
-    { img: img2, title: "Florida's Finest", total: 44, qty: 1 },
-];
-class Content extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            clicks: 1,
-            show: true,
-        };
-    }
-    IncrementItem = () => {
-        this.setState({ clicks: this.state.clicks + 1 });
+    const items = useMemo(() => {
+        if (!cartItems?.data) return [];
+        if (typeof cartItems.data === 'string') return [];
+        return Array.isArray(cartItems.data) ? cartItems.data : Object.values(cartItems.data);
+    }, [cartItems]);
+
+    const { subtotal, shipping, total } = useMemo(() => {
+        const defaultTotals = { subtotal: 0, shipping: 0, total: 0 };
+        if (items.length === 0) return defaultTotals;
+        const subtotal = items.reduce(
+            (sum, item) => sum + (Number(item.amount) * Number(item.quantity)), 0
+        );
+        return { subtotal, shipping: 0, total: subtotal };
+    }, [items]);
+
+    const handleRemoveItem = (itemId) => {
+        deleteCart(itemId);
     };
 
-    DecreaseItem = () => {
-        if (this.state.clicks < 1) {
-            this.setState({
-                clicks: 0,
-            });
-        } else {
-            this.setState({
-                clicks: this.state.clicks - 1,
-            });
-        }
+    const handleImageError = (itemId) => {
+        setImageErrors(prev => ({ ...prev, [itemId]: true }));
     };
-    handleChange(event) {
-        this.setState({ clicks: event.target.value });
-    }
-    render() {
+
+    if (isLoading && !cartItems) {
         return (
-            <section className="cart-section pt-120 pb-120">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-12">
-                            <div className="w-100 table-responsive mb-60">
-                                <table className="table cw-cart-table mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th />
-                                            <th scope="col" className="product-name">Product</th>
-                                            <th scope="col" className="product-qty">Quantity</th>
-                                            <th scope="col" className="product-price">Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {cartlistpost.map((item, i) => (
-                                            <tr key={i}>
-                                                <td className="product-remove text-center cw-align">
-                                                    <Link to="#"><i className="fas fa-times" /></Link>
-                                                </td>
-                                                <td data-title="Product" className="has-title">
-                                                    <div className="product-thumbnail">
-                                                        <img src={item.img} alt="product_thumbnail" />
-                                                    </div>
-                                                    <Link to="/shop-detail">{item.title}</Link>
-                                                </td>
-                                                <td className="quantity shop-detail-content cw-qty-sec cw-align has-title" data-title="Quantity">
-                                                    <div className="quantity-box">
-                                                        <button type="button" className="minus-btn" onClick={this.DecreaseItem}>
-                                                            <i className="fal fa-minus" />
-                                                        </button>
-                                                        <input type="text" className="input-qty" name="name" value={this.state.clicks} onChange={this.handleChange.bind(this)} readOnly />
-                                                        <button type="button" className="plus-btn" onClick={this.IncrementItem}>
-                                                            <i className="fal fa-plus" />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                                <td className="product-price text-white cw-align has-title" data-title="Price">
-                                                    <span className="product-currency"><b>$</b></span> <span className="product-amount"><b>{item.total}</b></span>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colSpan={4}>
-                                                <button className="main-btn btn-filled float-left">Continue Shoping</button>
-                                                <button className="main-btn btn-filled float-right">Update Cart</button>
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                            <div className="row">
-                                <div className="col-lg-12 mb-60">
-                                    <div className="cw-product-promo">
-                                        <div className="cw-title">
-                                            <h5>Discount Code</h5>
-                                        </div>
-                                        <form>
-                                            <div className="form-group mb-0">
-                                                <label htmlFor="couponCode">Enter coupon code</label>
-                                                <input type="text" className="form-control" placeholder="Coupon Code" id="couponCode" />
-                                                <button type="submit" className="main-btn btn-filled mt-4">Apply</button>
-                                            </div>
-                                        </form>
+            <div className="cart-loading-container">
+                <div className="spinner-border text-primary" role="status">
+                    <span className="sr-only">Loading...</span>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="cart-error-container">
+                <div className="cart-error-message">
+                    Failed to load cart. Please try again later.
+                </div>
+                <Link to="/" className="cart-empty-button">
+                    Return Home
+                </Link>
+            </div>
+        );
+    }
+
+    return (
+        <div className="cart-page">
+            {items.length === 0 ? (
+                <div className="cart-empty">
+                    <h3>Your cart is empty</h3>
+                    <Link to="/shop-left" className="cart-empty-button">
+                        Continue Shopping
+                    </Link>
+                </div>
+            ) : (
+                <div className="cart-wrapper">
+                    {/* Left: Cart Items */}
+                    <div className="cart-left">
+                        {items.map((item) => (
+                            <div key={item.sno} className="cart-item-row">
+                                <img
+                                    src={imageErrors[item.sno] ? fallbackImage : (item.imageUrl || fallbackImage)}
+                                    alt={item.itemTagSno}
+                                    className="cart-item-image"
+                                    onError={() => handleImageError(item.sno)}
+                                />
+                                <div className="cart-item-main">
+                                    <div className="cart-item-title">{item.itemTagSno}</div>
+                                    <div className="cart-item-sku">
+                                        (SKU ID : <span style={{ color: "#B0B0B0" }}>{item.itemId}-{item.tagNo}</span>)
+                                    </div>
+                                    <div className="cart-item-price">₹{Number(item.amount).toLocaleString()}</div>
+                                    <div className="cart-item-qty">
+                                        Quantity: <span className="cart-item-qty-count">{item.quantity}</span>
                                     </div>
                                 </div>
-                                <div className="offset-lg-6 col-lg-6 col-md-12">
-                                    <div className="cw-product-promo">
-                                        <table className="table cw-table-borderless">
-                                            <tbody>
-                                                <tr>
-                                                    <td> <b>Subtotal</b> </td>
-                                                    <td className="text-right">$ 99.99</td>
-                                                </tr>
-                                                <tr>
-                                                    <td> <b>Shipping</b> </td>
-                                                    <td className="text-right">$ 2.99</td>
-                                                </tr>
-                                                <tr>
-                                                    <td> <b>Total</b> </td>
-                                                    <td className="text-right">$ 103.99</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <Link to="/checkout" className="main-btn btn-filled w-100">Proceed to Checkout</Link>
-                                    </div>
+                                <button
+                                    className="cart-remove-btn"
+                                    title="Remove item"
+                                    onClick={() => handleRemoveItem(item.sno)}
+                                >
+                                    &#10005;
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Right: Summary and Coupons */}
+                    <div className="cart-right">
+                        <div className="cart-coupon-panel">
+                            <div className="coupon-row">
+                                <div className="coupon-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#B71C1C">
+                                        <path d="M20.59 13.41l- 8 -8a2 2 0 0 0 -2.83 0l-5.17 5.17a2 2 0 0 0 0 2.83l8 8a2 2 0 0 0 2.83 0l5.17 -5.17a2 2 0 0 0 0 -2.83z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span className="coupon-title">Discount Coupons</span>
+                                </div>
+                                <div className="coupon-viewall">
+                                    <a href="#">View all</a>
                                 </div>
                             </div>
                         </div>
+                        <div className="cart-summary-card">
+                            <div className="price-title">Price Details</div>
+                            <div className="summary-row">
+                                <span>Cart MRP ({items.length} Item{items.length !== 1 ? 's' : ''})</span>
+                                <span>₹{subtotal.toLocaleString()}</span>
+                            </div>
+                            <div className="summary-row">
+                                <span>Shipping</span>
+                                <span className="free-text">Free</span>
+                            </div>
+                            <div className="summary-row summary-total">
+                                <span>Total</span>
+                                <span className="total-amount">₹{total.toLocaleString()}</span>
+                            </div>
+                        </div>
+                        <button className="place-order-btn-full">Place Order</button>
                     </div>
                 </div>
-            </section>
+            )}
+        </div>
+    );
+};
 
-        );
-    }
-}
-
-export default Content;
+export default Cart;

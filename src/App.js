@@ -62,7 +62,7 @@ function App() {
         <Route exact path="/legal" component={Legal} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/register" component={Register} />
-        <Route exact path="/shop-detail" component={Shopdetail} />
+        <Route exact path="/shop-detail/:sno" component={Shopdetail} />
         <Route exact path="/shop-left" component={Shopleft} />
         {/* <Route exact path="/shop-left-two" component={Shoplefttwo} />
         <Route exact path="/shop-right" component={Shopright} />

@@ -1,69 +1,63 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from '../../layouts/Pagination';
 import Sidebar from '../../layouts/Shopsidebar';
+import { useProductsQuery } from '../../../hook/product/useProductsQuery';
 
-import img1 from '../../../assets/img/shop/01.jpg';
-import img2 from '../../../assets/img/shop/02.jpg';
-import img3 from '../../../assets/img/shop/03.jpg';
+const baseUrl = "https://app.bmgjewellers.com";
 
-const shopgridpost = [
-    { img: img1, title: 'Ankle Bracelet', discount: 15, price: 390 },
-    { img: img2, title: 'Stud Earrings', discount: '', price: 290 },
-    { img: img3, title: 'Crumpled Ring', discount: 10, price: 450 },
-    { img: img1, title: 'Golden Pendant', discount: 15, price: 780 },
-    { img: img2, title: 'Silver Pendant.', discount: '', price: 290 },
-    { img: img3, title: 'Diamond Ring.', discount: 10, price: 890 },
-    { img: img1, title: 'Stud Earrings', discount: 15, price: 580 },
-    { img: img2, title: 'Ankle Bracelet', discount: 40, price: 290 },
-    { img: img3, title: 'Diamond Ring.', discount: 10, price: 800 },
-    { img: img1, title: 'Ankle Bracelet', discount: 15, price: 390 },
-    { img: img2, title: 'Stud Earrings', discount: '', price: 290 },
-    { img: img3, title: 'Crumpled Ring', discount: 10, price: 450 },
-];
+const Content = () => {
+    const { data, isLoading, isError } = useProductsQuery('', 1, 10);
+    console.log(data);
 
-class Content extends Component {
-    render() {
-        return (
-            <section className="Shop-section pt-80 pb-80">
-                <div className="custom-shop-layout ">
-                    {/* Sidebar */}
-                    <div className="sidebar-area">
-                        <Sidebar />
-                    </div>
+    if (isLoading) return <p>Loading products...</p>;
+    if (isError) return <p>Failed to load products. Please try again.</p>;
 
-                    {/* Product Grid */}
-                    <div className="product-area">
-                        <div className="shop-products-wrapper">
-                            <div className="shop-product-top">
-                                <p>Showing 1 To 9 Of 60 results</p>
-                                <div className="sorting-box">
-                                    <select name="guests" id="guests" className="nice-select">
-                                        <option value={0}>Default Sorting</option>
-                                        <option value={1}>Sort By Popularity</option>
-                                        <option value={2}>Sort By Latest</option>
-                                        <option value={4}>Sort By Rating</option>
-                                        <option value={8}>Sort By Price:Low to High</option>
-                                        <option value={8}>Sort By Price:High to Low</option>
-                                    </select>
-                                </div>
+    const products = data || [];
+
+    return (
+        <section className="Shop-section pt-80 pb-80">
+            <div className="custom-shop-layout">
+                {/* Sidebar */}
+                <div className="sidebar-area">
+                    <Sidebar />
+                </div>
+
+                {/* Product Grid */}
+                <div className="product-area">
+                    <div className="shop-products-wrapper">
+                        <div className="shop-product-top">
+                            <p>Showing 1 To {products.length} of {products.length} results</p>
+                            <div className="sorting-box">
+                                <select className="nice-select">
+                                    <option>Default Sorting</option>
+                                    <option>Sort By Popularity</option>
+                                    <option>Sort By Latest</option>
+                                    <option>Sort By Rating</option>
+                                    <option>Sort By Price: Low to High</option>
+                                    <option>Sort By Price: High to Low</option>
+                                </select>
                             </div>
+                        </div>
 
-                            <div className="product-wrapper restaurant-tab-area">
-                                <div className="row">
-                                    {shopgridpost.map((item, i) => (
+                        <div className="product-wrapper restaurant-tab-area">
+                            <div className="row">
+                                {products.map((item, i) => {
+                                    // Parse image array safely
+                                    let images = [];
+                                    try {
+                                        images = JSON.parse(item.ImagePath || '[]');
+                                    } catch (error) {
+                                        console.warn('Invalid image JSON for item', item.ITEMID);
+                                    }
+                                    const firstImage = images.length > 0 ? `${baseUrl}${images[0]}` : 'https://via.placeholder.com/245x331';
+
+                                    return (
                                         <div key={i} className="col-6 col-sm-6 col-md-6 col-lg-4">
                                             <div className="food-box shop-box">
                                                 <div className="thumb">
-                                                    <img src={item.img} alt="" />
-                                                    <div className="badges">
-                                                        {item.discount > 0 || item.discount !== '' ? (
-                                                            <span className="price">Sale</span>
-                                                        ) : ''}
-                                                        {item.discount > 0 || item.discount !== '' ? (
-                                                            <span className="price discounted">-{item.discount}%</span>
-                                                        ) : ''}
-                                                    </div>
+                                                    <img src={firstImage} alt={item.ITEMNAME} />
+                                                    {/* Optional: discount or badges */}
                                                     <div className="button-group">
                                                         <Link to="#"><i className="far fa-heart" /></Link>
                                                         <Link to="#"><i className="far fa-sync-alt" /></Link>
@@ -72,31 +66,30 @@ class Content extends Component {
                                                 </div>
                                                 <div className="desc">
                                                     <h4>
-                                                        <Link to="/shop-detail" className='title'>{item.title}</Link>
+                                                        <Link to="/shop-detail" className="title">{item.ITEMNAME}</Link>
                                                     </h4>
                                                     <span className="price">
-                                                        ₹{item.price}
-                                                        {item.discount > 0 || item.discount !== '' ? (
-                                                            <span> ₹{Math.ceil(item.price * (item.discount / 100))} </span>
-                                                        ) : ''}
+                                                        ₹{parseFloat(item.GrandTotal).toFixed(2)}
                                                     </span>
-                                                    <Link to="/shop-detail" className="link"><i className="fal fa-arrow-right" /></Link>
+                                                    <Link to={`/shop-detail/${item.SNO}`} className="link">
+                                                        <i className="fal fa-arrow-right" />
+                                                    </Link>
                                                 </div>
                                             </div>
                                         </div>
-                                    ))}
-                                </div>
+                                    );
+                                })}
                             </div>
                         </div>
+                    </div>
 
-                        <div className="pagination-wrap">
-                            <Pagination />
-                        </div>
+                    <div className="pagination-wrap">
+                        <Pagination />
                     </div>
                 </div>
-            </section>
-        );
-    }
-}
+            </div>
+        </section>
+    );
+};
 
 export default Content;

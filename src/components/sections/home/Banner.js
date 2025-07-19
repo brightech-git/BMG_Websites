@@ -1,110 +1,72 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import Slider from 'react-slick';
-import ReactWOW from 'react-wow';
 import '../../../assets/css/Banner.css';
+import { useBanners } from '../../../hook/banner/useBannerQueries';
 
-import img1 from '../../../assets/img/banner/Tritiya_Slider_3.webp';
-import img2 from '../../../assets/img/banner/Tritiya_Slider_2.webp';
-import img3 from '../../../assets/img/banner/Tritiya_Slider_1.webp';
+const Banner = () => {
+    const { data: images = [], isLoading } = useBanners();
 
-const bannerSlides = [
-    {
-        img: img1,
-        title: "High-End Jewelry Items",
-        description: "Discover our exquisite collection of handcrafted jewelry pieces that embody elegance and timeless beauty.",
-    },
-    {
-        img: img2,
-        title: "Luxury Silver Collections",
-        description: "Experience the brilliance of our premium silver selections, perfect for special occasions.",
-    },
-    {
-        img: img3,
-        title: "Handmade Silver Masterpieces",
-        description: "Explore our unique silver jewelry designs that combine traditional craftsmanship with modern aesthetics.",
-    },
-];
+    const baseUrl = "https://app.bmgjewellers.com";
 
-class Banner extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isMobile: false,
-        };
-    }
-    
-    componentDidMount() {
-        this.handleResize();
-        window.addEventListener("resize", this.handleResize);
-    }
+    const bannerContent = [
+        {
+            title: "Fine Craftsmanship",
+            description: "Elegance in every detail. Discover timeless treasures with BMG Jewellers."
+        },
+        {
+            title: "Celebrate with Gold",
+            description: "Make every moment precious. Shop exclusive gold jewellery now!"
+        },
+        {
+            title: "Shine Brighter Today",
+            description: "Unveil your inner glow with our handcrafted collections."
+        }
+    ];
 
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.handleResize);
-    }
-
-    handleResize = () => {
-        this.setState({ isMobile: window.innerWidth < 992 });
+    const settings = {
+        dots: true,
+        infinite: true,
+        autoplay: true,
+        arrows: false,
+        speed: 1000,
+        autoplaySpeed: 4000,
+        slidesToShow: 1,
+        slidesToScroll: 1
     };
 
-    render() {
-        const { isMobile } = this.state;
+    if (isLoading) {
+        return <div>Loading banners...</div>;
+    }
 
-        const settings = {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            infinite: true,
-            autoplay: true,
-            autoplaySpeed: 5000,
-            arrows: false,
-            dots: true,
-            draggable: true,
-            speed: 800,
-            fade: true,
-            cssEase: "ease-in-out",
-            pauseOnHover: true,
-            pauseOnFocus: true,
-        };
+    return (
+        <section className="banner-area">
+            <Slider {...settings}>
+                {images?.data?.map((img, index) => {
+                    const imgSrc = img?.image_path ? `${baseUrl}${img.image_path}` : img?.image || img;
+                    const content = bannerContent[index % bannerContent.length];
 
-        return (
-            <section className="banner-area">
-                {/* <Cursor /> */}
-                <Slider {...settings} className="combined-slider">
-                    {bannerSlides.map((slide, index) => (
-                        <div key={index} className="single-slide">
+                    return (
+                        <div className="single-slide" key={img.id}>
                             <div className="slide-image-wrapper">
-                                <img src={slide.img} alt={slide.title} className="slide-image" />
+                                <img src={imgSrc} alt={`banner-${index}`} className="slide-image" />
                                 <div className="image-overlay" />
                             </div>
                             <div className="content-overlay">
-                                <div className="container container-custom-two">
-                                    <div className={`row align-items-center ${isMobile ? 'justify-content-center' : ''}`}>
-                                        <div className={`${isMobile ? 'col-12' : 'col-lg-6 col-md-8'}`}>
-                                            <div className={`banner-content ${isMobile ? 'mobile-content' : ''}`}>
-                                                <ReactWOW animation="fadeInLeft" delay="0.5s">
-                                                    <h1 className="title">{slide.title}</h1>
-                                                </ReactWOW>
-                                                <ReactWOW animation="fadeInLeft" delay="0.7s">
-                                                    <p className="description">{slide.description}</p>
-                                                </ReactWOW>
-                                                <div className="button-groups">
-                                                    <ReactWOW animation="fadeInUp" delay="0.9s">
-                                                        <Link className="main-btn btn-filled mt-20" to="/about" aria-label="Shop Now">
-                                                            Shop Now
-                                                        </Link>
-                                                    </ReactWOW>
-                                                </div>
-                                            </div>
-                                        </div>
+                                <div className="container">
+                                    <div className="banner-content">
+                                        <h1 className="title">{content.title}</h1>
+                                        <p className="description">{content.description}</p>
+                                        <a className="main-btn btn-filled" href="/shop-left">Shop Now</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    ))}
-                </Slider>
-            </section>
-        );
-    }
-}
+                    );
+                })}
+            </Slider>
+
+        </section>
+    );
+};
 
 export default Banner;

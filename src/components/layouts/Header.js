@@ -14,14 +14,19 @@ import img2 from '../../assets/img/cart/2.jpg';
 import img3 from '../../assets/img/cart/3.jpg';
 import img4 from '../../assets/img/cart/4.jpg';
 // Cart loop
-import Logo from '../../assets/img/banner/logo.png'
+import Logo from '../../assets/img/banner/logo.png';
+
+const contact = localStorage.getItem('userMobileNumber');
 const cartposts = [
     { img: img1, title: 'Oak Wood Cutting Board', price: '2x 10,000$' },
     { img: img2, title: 'Oak Wood Cutting Board', price: '2x 10,000$' },
     { img: img3, title: 'Oak Wood Cutting Board', price: '2x 10,000$' },
     { img: img4, title: 'Oak Wood Cutting Board', price: '2x 10,000$' },
 ];
+
+
 class Header extends Component {
+    
     constructor(props) {
         super(props);
         this.state = {
@@ -73,7 +78,10 @@ class Header extends Component {
             });
         }, false);
     }
+    
     render() {
+        const { isAuthenticated } = this.props;
+        console.log('auth',isAuthenticated)
         const stickyheader = this.state.isTop ? 'sticky-active' : '';
         return (
             <Fragment>
@@ -91,6 +99,9 @@ class Header extends Component {
                                     </li>
                                     <li>
                                         Gift Vouchers
+                                    </li>
+                                    <li>
+                                       {contact}
                                     </li>
                                 </ul>
                             </div>
@@ -634,7 +645,15 @@ class Header extends Component {
                                 <div className="menu-right-buttons">
                                     {/* Log in icon */}
                                     <div className="login-btn">
-                                        <Link to="/login" id="loginBtn"><User size={20} strokeWidth={1.8} /></Link>
+                                        {isAuthenticated ? (
+                                            <Link to="/profile">
+                                                <User size={20} strokeWidth={1.8} />
+                                            </Link>
+                                        ) : (
+                                            <Link to="/login" id="loginBtn">
+                                                <User size={20} strokeWidth={1.8} />
+                                            </Link>
+                                        )}
                                     </div>
                                    
                                     

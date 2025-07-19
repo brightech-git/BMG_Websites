@@ -11213,8 +11213,7 @@ font-size: 16px;
 }
 
 .detail-slider-1 .image-box a,
-.detail-slider-1 .image-box a img,
-.detail-slider-2 .image-box img {
+.detail-slider-1 .image-box a img{
     width: 100%;
     height: 100%;
 }
@@ -11222,8 +11221,8 @@ font-size: 16px;
 .detail-slider-1 .image-box .price {
     position: absolute;
     top: 10px;
-    background-color: #fcd462;
-    color: #fff;
+    background-color: var(--primary-card-color);
+    color: var(--primary-text-color);
     font-weight: 500;
     padding: 2px 15px;
     font-size: 16px;
@@ -13256,6 +13255,9 @@ footer .copyright-area.light-theme .footer-menu ul li::before {
 }
 
 
+
+
+
 .custom-shop-layout {
   display: flex;
   flex-wrap: wrap;
@@ -13283,4 +13285,48 @@ footer .copyright-area.light-theme .footer-menu ul li::before {
     flex: 0 0 100%;
     max-width: 100%;
   }
+}
+
+
+/* Add to your CSS file */
+.slick-slider {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.slick-list {
+    overflow: hidden;
+}
+
+.slick-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+.detail-slider-2 .image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+
+.custom-horizontal-padding {
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+/* Medium screens (tablets) */
+@media (max-width: 992px) {
+    .custom-horizontal-padding {
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+}
+
+/* Small screens (phones) */
+@media (max-width: 576px) {
+    .custom-horizontal-padding {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
 }

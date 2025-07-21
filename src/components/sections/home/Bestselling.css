@@ -65,7 +65,6 @@
     color: var(--primary-text-color);
     font-family: var(--primary-font);
     text-transform: capitalize;
-    margin-left: -140px ;
 }
 
 .section-description {

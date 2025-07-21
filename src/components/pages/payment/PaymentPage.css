@@ -1,0 +1,122 @@
+/* PaymentPage.css */
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
+
+:root {
+    --primary-font: 'Gloock', 'serif';
+    --secondary-font: 'Montserrat', 'sans-serif';
+    --primary-color: #f6f5f0;
+    --primary-text-color: #404040;
+    --primary-card-color: #edebe7;
+    --primary-hover-color: #cd865c;
+    --secondary-card-color: #cfdcdd;
+    --white-color: #ffffff;
+    --header-height: 80px;
+    --mobile-header-height: 60px;
+    --green-color: #024908;
+    --grey-color: #A9A9A9;
+    --black-color: #000000;
+}/* PaymentPage.css */
+.payment-loading-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    text-align: center;
+    background-color: var(--primary-color);
+    font-family: var(--secondary-font);
+}
+
+.payment-loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: var(--primary-hover-color);
+    animation: spin 1s ease-in-out infinite;
+    margin-bottom: 2rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+h2 {
+    color: var(--primary-text-color);
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    font-family: var(--primary-font);
+}
+
+p {
+    color: var(--primary-text-color);
+    font-size: 1.1rem;
+    max-width: 500px;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    opacity: 0.8;
+}
+
+.retry-message {
+    color: var(--grey-color);
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .payment-loading-page {
+        padding: 1.5rem;
+    }
+
+    .payment-loading-spinner {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .payment-loading-page {
+        padding: 1rem;
+    }
+
+    .payment-loading-spinner {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 1rem;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+
+    p {
+        font-size: 0.9rem;
+    }
+
+    .retry-message {
+        font-size: 0.8rem;
+    }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .payment-loading-spinner {
+        animation: none;
+        border-top-color: var(--primary-hover-color);
+        border-right-color: var(--primary-hover-color);
+    }
+}

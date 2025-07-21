@@ -183,29 +183,18 @@ const Shopinfo = ({ sno }) => {
                         <div className="product-meta">
                             <div className="meta-item">
                                 <span className="meta-label">SKU:</span>
-                                <span className="meta-value">{product.SNO || 'N/A'}</span>
+                                <span className="meta-value">{product?.ITEMID}-{product?.TAGNO}</span>
                             </div>
                         </div>
 
                         <div className="product-description">
                             <p>{product.Description || 'No description available'}</p>
-                            <button className="main-btns btn-filled" onClick={handleAddToCart}>add to cart</button>
+                            <div className="button-row">
+                                <button className="main-btns btn-filled" onClick={handleAddToCart}>add to cart</button>
+                                <button className="main-btns btn-filled" onClick={handleAddToCart}>Buy It Now</button>
+                            </div>
                         </div>
-                        <div className="product-actions">
-                          
-                              
-                                    <button
-                                        className="btn btn-add-cart"
-                                        
-                                    >
-                                       
-                                    </button>
-                                    <button className="btn btn-buy-now">
-                                        Buy it Now
-                                    </button>
-                                
-                            
-                        </div>
+                       
 
                         <div className="product-variants">
                             <label>Material</label>

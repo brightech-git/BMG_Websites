@@ -65,7 +65,7 @@ const Content = () => {
                 <div className="product-area">
                     <div className="product-header">
                         <p>Showing 1 To {products.length} of {products.length} results</p>
-                        <div className="sorting-box">
+                        {/* <div className="sorting-box">
                             <select>
                                 <option>DEFAULT Sorting</option>
                                 <option>Sort By Popularity</option>
@@ -74,7 +74,7 @@ const Content = () => {
                                 <option>Sort By Price: Low to High</option>
                                 <option>Sort By Price: High to Low</option>
                             </select>
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="product-grid">

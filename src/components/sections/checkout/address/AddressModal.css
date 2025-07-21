@@ -1,0 +1,98 @@
+.address-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.address-modal {
+    background: var(--white-color);
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.address-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid var(--grey-color);
+}
+
+.address-modal-header h3 {
+    margin: 0;
+    font-size: 20px;
+    color: var(--primary-text-color);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--grey-color);
+    padding: 0 10px;
+}
+
+.address-list {
+    padding: 0 20px;
+}
+
+.address-item {
+    padding: 15px 0;
+    border-bottom: 1px solid var(--grey-color);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.address-item:hover {
+    background-color: var(--primary-card-color);
+}
+
+.address-item.selected {
+    background-color: var(--secondary-card-color);
+}
+
+.address-details {
+    margin-bottom: 8px;
+}
+
+.address-details p {
+    margin: 4px 0;
+    font-size: 15px;
+    color: var(--primary-text-color);
+}
+
+.default-badge {
+    background: var(--green-color);
+    color: var(--white-color);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-block;
+    margin-top: 8px;
+}
+
+.address-modal-footer {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid var(--grey-color);
+}
+
+@media (max-width: 600px) {
+    .address-modal {
+        width: 95%;
+    }
+}

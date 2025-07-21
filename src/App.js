@@ -35,6 +35,7 @@ import Team from './components/pages/Team';
 import Typography from './components/pages/Typography';
 import Wishlist from './components/pages/Wishlist';
 import PrivacyPolicy from './components/pages/Policies/Privacy';
+import PaymentPage from './components/pages/payment/Payment';
 
 
 function App() {
@@ -73,6 +74,7 @@ function App() {
         <Route exact path="/wishlist" component={Wishlist} />
         <Route exact path="/error" component={Error} />
         <Route exact path="/PrivacyPolicy" component={PrivacyPolicy} />
+        <Route exact path="/payment/:orderId" component={PaymentPage} />
         <Route exact component={Error} />
       </Switch>
     </Router>

@@ -94,9 +94,7 @@ body {
     overflow: hidden;
     font-size: 14px;
     line-height: 1.6;
-    background-color: var(--primary-color) !important;
-    
-
+    background-color: var(--primary-color)!important;
 }
 
 * {

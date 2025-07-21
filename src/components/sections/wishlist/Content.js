@@ -1,105 +1,146 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Heart, Trash2 } from "lucide-react";
+import { Heart, Trash2, Loader2, ShoppingCart } from "lucide-react";
+import { useFavorites, useRemoveFavorite } from "../../../hook/favorites/useFavoritesQuery";
+import { useSingleProductQuery } from "../../../hook/product/useSingleProductQuery";
 import "./Wishlist.css";
 
-import img1 from "../../../assets/img/shop/shop1.webp";
-import img2 from "../../../assets/img/shop/shop2.webp";
-import img3 from "../../../assets/img/shop/shop3.webp";
-import img4 from "../../../assets/img/shop/shop4.webp";
-import img5 from "../../../assets/img/shop/shop5.webp";
+const Wishlist = () => {
+  const { data: favorites, isLoading, isError } = useFavorites();
+  const removeFavorite = useRemoveFavorite();
 
-const wishlistposts = [
-  {
-    img: img1,
-    name: "Silver Infinity Heart Ring",
-    price: "2,099",
-    originalPrice: "2,499",
-    rating: 4.8,
-    reviews: 27,
-  },
-  {
-    img: img2,
-    name: "Silver Infinite Grace Ring",
-    price: "1,499",
-    originalPrice: "2,199",
-    rating: 4.9,
-    reviews: 48,
-  },
-  {
-    img: img3,
-    name: "Silver Stay With Me Ring",
-    price: "1,699",
-    originalPrice: "2,199",
-    rating: 4.8,
-    reviews: 49,
-  },
-  {
-    img: img4,
-    name: "Silver Stay With Me Ring",
-    price: "1,699",
-    originalPrice: "2,199",
-    rating: 4.8,
-    reviews: 49,
-  },
-  {
-    img: img5,
-    name: "Silver Stay With Me Ring",
-    price: "1,699",
-    originalPrice: "2,199",
-    rating: 4.8,
-    reviews: 49,
-  },
-];
+  const favoriteSnoList = favorites?.data || [];
 
-const Content = () => {
-  const wishlistEmpty = wishlistposts.length === 0;
+  const handleRemove = (sno) => {
+    if (window.confirm("Are you sure you want to remove this item from your wishlist?")) {
+      removeFavorite.mutate(sno);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <section className="wishlist-container">
+        <div className="wishlist-loading">
+          <Loader2 className="loading-spinner" size={48} strokeWidth={1.5} />
+          <p>Loading your wishlist...</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (isError) {
+    return (
+      <section className="wishlist-container">
+        <div className="wishlist-error">
+          <div className="error-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3>Unable to load wishlist</h3>
+          <p>Please refresh the page or try again later</p>
+          <button
+            className="wishlist-retry-btn"
+            onClick={() => window.location.reload()}
+          >
+            Retry
+          </button>
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section className="wishlist-section">
-      <div className="container">
-        <div className="text-center mb-5">
-          <h3>My Wishlist</h3>
-        </div>
-
-        {wishlistEmpty ? (
-          <div className="wishlist-empty">
-            <Heart size={80} strokeWidth={1} />
-            <h4>It feels so empty in here</h4>
-            <p>Make a wish!</p>
-            <Link to="/shop-left" className="btn-pink">
-              Start Shopping
-            </Link>
-          </div>
-        ) : (
-          <div className="wishlist-grid">
-            {wishlistposts.map((item, i) => (
-              <div key={i} className="wishlist-card">
-                <img
-                  src={item.img}
-                  alt={item.name}
-                  className="wishlist-card-img"
-                />
-                <div className="wishlist-card-body">
-                  <h5 className="wishlist-card-title">{item.name}</h5>
-                  <div className="wishlist-card-price">
-                    <strong>₹{item.price}</strong>
-                    <del>₹{item.originalPrice}</del>
-                  </div>
-                  <div className="wishlist-card-actions">
-                    <button className="btn-move-to-cart">Move to cart</button>
-                    <button className="btn-remove">
-                      <Trash2 size={18} /> Remove
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+    <section className="wishlist-container">
+      <div className="wishlist-header">
+        <h1 className="wishlist-title">My Wishlist</h1>
+        {favoriteSnoList.length > 0 && (
+          <div className="wishlist-count">{favoriteSnoList.length} {favoriteSnoList.length === 1 ? 'Item' : 'Items'}</div>
         )}
       </div>
+
+      {favoriteSnoList.length === 0 ? (
+        <div className="wishlist-empty">
+          <Heart className="empty-icon" size={80} strokeWidth={1.2} />
+          <h2>Your wishlist is empty</h2>
+          <p>Save your favorite items to view them here</p>
+          <Link to="/shop-left" className="wishlist-shop-btn">
+            Explore Our Collection
+          </Link>
+        </div>
+      ) : (
+        <div className="wishlist-grid">
+          {favoriteSnoList.map((sno) => (
+            <WishlistItem
+              key={sno}
+              sno={sno}
+              onRemove={handleRemove}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 };
 
-export default Content;
+const WishlistItem = ({ sno, onRemove }) => {
+  const { data: product, isLoading } = useSingleProductQuery(sno);
+
+  let imageUrls = [];
+  try {
+    imageUrls = JSON.parse(product?.ImagePath || "[]");
+  } catch (err) {
+    console.error("Error parsing ImagePath", err);
+  }
+
+  const baseUrl = "https://app.bmgjewellers.com";
+  const firstImage = imageUrls.length > 0 ? baseUrl + imageUrls[0] : "/images/placeholder.png";
+
+  if (isLoading) {
+    return (
+      <div className="wishlist-item loading">
+        <div className="item-loading-spinner">
+          <Loader2 size={24} strokeWidth={1.5} />
+        </div>
+      </div>
+    );
+  }
+
+  if (!product) return null;
+
+  return (
+    <div className="wishlist-item">
+      <Link to={`/product/${sno}`} className="item-image-link">
+        <img
+          src={firstImage}
+          alt={product.SUBITEMNAME}
+          className="item-image"
+          loading="lazy"
+        />
+      </Link>
+
+      <div className="item-details">
+        <h3 className="item-title">
+          <Link to={`/product/${sno}`}>{product.SUBITEMNAME}</Link>
+        </h3>
+
+        <div className="item-price">₹{product.GrandTotal}</div>
+
+        <div className="item-actions">
+          <button className="main-btn btn-filled">
+            Add to Cart
+          </button>
+          <button
+            className="remove-item-btn"
+            onClick={() => onRemove(sno)}
+            aria-label="Remove item"
+          >
+            <Trash2 size={18} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Wishlist;

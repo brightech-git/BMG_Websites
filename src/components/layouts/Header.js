@@ -82,7 +82,6 @@ class Header extends Component {
     
     render() {
         const { isAuthenticated } = this.props;
-        console.log('auth',isAuthenticated)
         const stickyheader = this.state.isTop ? 'sticky-active' : '';
         return (
             <Fragment>

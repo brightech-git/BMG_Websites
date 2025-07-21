@@ -79,7 +79,7 @@ class Handpicked extends Component {
             ],
         }
         return (
-            <section className="room-slider bg-white pb-50 pt-55">
+            <section className="room-slider  pb-50 pt-55">
                 <div className="container-fluid p-0">
                     <div className="section-title mb-80 text-center">
                         {/* <div className="section-title-icon">

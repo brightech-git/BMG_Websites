@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import { Tab, Nav } from 'react-bootstrap';
 import { useSingleProductQuery } from '../../../hook/product/useSingleProductQuery';
+import { useCart } from '../../../hook/cart/useCartQuery';
+import { useAuth } from '../../../context/authContext/UserAuthContext';
+import './ShopInfoCart.css';
 
 // Static comment images
 import comment1 from '../../../assets/img/blog-details/avatar-1.jpg';
@@ -10,38 +13,63 @@ import comment2 from '../../../assets/img/blog-details/avatar-2.jpg';
 import comment3 from '../../../assets/img/blog-details/avatar-3.jpg';
 
 const Shopinfo = ({ sno }) => {
-    console.log(sno , 'sno')
+    const { user } = useAuth();
     const [nav1, setNav1] = useState(null);
     const [nav2, setNav2] = useState(null);
-    const [clicks, setClicks] = useState(1);
+    const [quantity, setQuantity] = useState(1);
+    const [selectedMaterial, setSelectedMaterial] = useState('Gold');
     const slider1 = useRef(null);
     const slider2 = useRef(null);
 
-    const { data, isLoading, error } = useSingleProductQuery(sno);
-    console.log(data);
-    const baseUrl = "https://app.bmgjewellers.com";
+    const { data: product, isLoading, error } = useSingleProductQuery(sno);
+    console.log(product, 'cart');
+    const {
+        cartItems,
+        addToCartHandler,
+        deleteCart,
+        isLoading: isCartLoading
+    } = useCart();
 
     useEffect(() => {
         setNav1(slider1.current);
         setNav2(slider2.current);
     }, []);
 
-    const IncrementItem = () => {
-        setClicks(prev => prev + 1);
+    const incrementQuantity = () => setQuantity(prev => prev + 1);
+    const decrementQuantity = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
+
+    const handleAddToCart = () => {
+        if (!user) {
+            alert('Please login to add items to cart');
+            return;
+        }
+
+        if (!product?.SNO) return;
+
+        const cartItem = {
+            itemSno: product.SNO,
+            itemTagSno: product.SNO,
+            itemName: product.ITEMNAME,
+            price: product.GrandTotal,
+            image: product.ImagePath ? JSON.parse(product.ImagePath)[0] : '',
+            material: selectedMaterial,
+            quantity
+        };
+
+        addToCartHandler(cartItem);
     };
 
-    const DecreaseItem = () => {
-        setClicks(prev => (prev < 1 ? 0 : prev - 1));
-    };
+    const isInCart = Array.isArray(cartItems?.data) &&
+        cartItems.data.some(item =>
+            item.itemSno === product?.SNO && item.material === selectedMaterial
+        );
 
-    const handleChange = (event) => {
-        setClicks(event.target.value);
-    };
 
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error loading product details</div>;
+    if (isLoading) return <div className="loading-spinner">Loading...</div>;
+    if (error) return <div className="error-message">Error loading product details</div>;
+    if (!product) return <div className="error-message">Product not found</div>;
 
-    const product = data || {};
+    const baseUrl = "https://app.bmgjewellers.com";
     const images = product.ImagePath
         ? JSON.parse(product.ImagePath).map(path => `${baseUrl}${path}`)
         : [];
@@ -71,7 +99,7 @@ const Shopinfo = ({ sno }) => {
         dots: false,
         focusOnSelect: true,
         centerMode: false,
-        variableWidth: true, // This allows each slide to have its own width
+        variableWidth: true,
         responsive: [
             {
                 breakpoint: 992,
@@ -89,20 +117,28 @@ const Shopinfo = ({ sno }) => {
             }
         ]
     };
+
     return (
-        <section className="Shop-section pt-120 pb-120">
-            <div className="custom-horizontal-padding">
-                <div className="row justify-content-center">
-                    <div className="col-lg-5">
+        <section className="shop-info-section">
+            <div className="container">
+                <div className="row product-detail-row">
+                    <div className="col-lg-5 product-gallery">
                         <div className="shop-detail-image">
                             <Slider className="detail-slider-1" {...settings} asNavFor={nav2} ref={slider1}>
                                 {bigsliderpost.map((item, i) => (
                                     <div key={i} className="slide-item">
                                         <div className="image-box">
                                             <Link to="#">
-                                                <img src={item.img} className="img-fluid" alt="img" />
+                                                <img
+                                                    src={item.img}
+                                                    className="img-fluid"
+                                                    alt="Product"
+                                                    onError={(e) => {
+                                                        e.target.src = 'https://via.placeholder.com/500x500';
+                                                    }}
+                                                />
                                             </Link>
-                                            {item.tag && <span className="price">{item.tag}</span>}
+                                            {item.tag && <span className="price-tag">{item.tag}</span>}
                                         </div>
                                     </div>
                                 ))}
@@ -114,9 +150,9 @@ const Shopinfo = ({ sno }) => {
                                             <img
                                                 src={item.img}
                                                 className="img-fluid"
-                                                alt={`Product thumbnail ${i + 1}`}
+                                                alt={`Thumbnail ${i + 1}`}
                                                 onError={(e) => {
-                                                    e.target.src = '/path/to/placeholder-image.jpg';
+                                                    e.target.src = 'https://via.placeholder.com/100x100';
                                                 }}
                                             />
                                         </div>
@@ -125,87 +161,101 @@ const Shopinfo = ({ sno }) => {
                             </Slider>
                         </div>
                     </div>
-                    <div className="col-lg-7">
-                        <div className="shop-detail-content">
-                            <h3 className="product-title mb-20">{product.ITEMNAME || 'Product Name'}</h3>
-                            <span className="rating mb-20">
-                                <span className="text-yellow"><i className="far fa-star" /></span>
-                                <span className="text-yellow"><i className="far fa-star" /></span>
-                                <span className="text-yellow"><i className="far fa-star" /></span>
-                                <span className="text-dark-white"><i className="far fa-star" /></span>
-                                <span className="text-dark-white"><i className="far fa-star" /></span>
-                                <span className="pro-review"> <span>10 Reviews</span></span>
-                            </span>
-                            <div className="desc mb-20 pb-20 border-bottom">
-                                <span className="price">₹{product.GrandTotal?.toFixed(2) || '0.00'} <span>₹{((product.GrandTotal || 0) * 1.25).toFixed(2)}</span></span>
+
+                    <div className="col-lg-7 product-info">
+                        <h1 className="product-title">{product.ITEMNAME || 'Product Name'}</h1>
+
+                        <div className="product-rating">
+                            <span className="text-yellow"><i className="far fa-star" /></span>
+                            <span className="text-yellow"><i className="far fa-star" /></span>
+                            <span className="text-yellow"><i className="far fa-star" /></span>
+                            <span className="text-dark-white"><i className="far fa-star" /></span>
+                            <span className="text-dark-white"><i className="far fa-star" /></span>
+                            <span className="reviews-count">10 Reviews</span>
+                        </div>
+
+                        <div className="product-price">
+                            <span className="current-price">₹{product.GrandTotal?.toFixed(2) || '0.00'}</span>
+                            <span className="original-price">₹{((product.GrandTotal || 0) * 1.25).toFixed(2)}</span>
+                            <span className="discount-badge">20% OFF</span>
+                        </div>
+
+                        <div className="product-meta">
+                            <div className="meta-item">
+                                <span className="meta-label">SKU:</span>
+                                <span className="meta-value">{product.SNO || 'N/A'}</span>
                             </div>
-                            <div className="mt-20 mb-20">
-                                <div className="ml-2 d-inline-block other-info">
-                                    <h6>SKU :
-                                        <span className="grey ml-2">{product.SNO || 'N/A'}</span>
-                                    </h6>
-                                </div>
+                        </div>
+
+                        <div className="product-description">
+                            <p>{product.Description || 'No description available'}</p>
+                            <button className="main-btns btn-filled" onClick={handleAddToCart}>add to cart</button>
+                        </div>
+                        <div className="product-actions">
+                          
+                              
+                                    <button
+                                        className="btn btn-add-cart"
+                                        
+                                    >
+                                       
+                                    </button>
+                                    <button className="btn btn-buy-now">
+                                        Buy it Now
+                                    </button>
+                                
+                            
+                        </div>
+
+                        <div className="product-variants">
+                            <label>Material</label>
+                            <div className="variant-options">
+                                {['Gold', 'Gold Polished Silver', 'Silver', 'Stone'].map((material) => (
+                                    <button
+                                        key={material}
+                                        className={`variant-btn ${selectedMaterial === material ? 'active' : ''}`}
+                                        onClick={() => setSelectedMaterial(material)}
+                                    >
+                                        {material}
+                                    </button>
+                                ))}
                             </div>
-                            <div className="short-desc mb-20">
-                                <p>{product.Description || 'No description available'}</p>
+                        </div>
+
+                        <div className="product-quantity">
+                            <label>Quantity</label>
+                            <div className="quantity-selector">
+                                <button onClick={decrementQuantity}>-</button>
+                                <input
+                                    type="number"
+                                    value={quantity}
+                                    min="1"
+                                    onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                                />
+                                <button onClick={incrementQuantity}>+</button>
                             </div>
-                            <div className="color-sec mb-20">
-                                <label>Material</label>
-                                <div className="color-box">
-                                    <label className="m-0">
-                                        <input type="radio" name="material" defaultChecked />
-                                        <span className="choose-material">Gold</span>
-                                    </label>
-                                    <label className="m-0">
-                                        <input type="radio" name="material" />
-                                        <span className="choose-material">Gold Polished Silver</span>
-                                    </label>
-                                    <label className="m-0">
-                                        <input type="radio" name="material" />
-                                        <span className="choose-material">Silver</span>
-                                    </label>
-                                    <label className="m-0">
-                                        <input type="radio" name="material" />
-                                        <span className="choose-material">Stone</span>
-                                    </label>
-                                </div>
+                        </div>
+
+                       
+
+                        <div className="product-meta-footer">
+                            <div className="meta-category">
+                                <span>Category:</span>
+                                <Link to="#">{product.CATNAME || 'N/A'}</Link>
+                                {product.SUBITEMNAME && (
+                                    <Link to="#">{product.SUBITEMNAME}</Link>
+                                )}
                             </div>
-                            <div className="quantity-cart d-block d-sm-flex">
-                                <div className="cart-btn pl-40">
-                                    <Link to="#" className="main-btns btn-filled">Add to Cart</Link>
-                                </div>
-                                <div className="cart-btn pl-40">
-                                    <Link to="#" className="main-btns btn-filled">Buy it Now</Link>
-                                </div>
-                            </div>
-                            <div className="other-info flex mt-20">
-                                <h6>Category :</h6>
-                                <ul>
-                                    <li className="list-inline-item mr-2">
-                                        <Link to="#" className="grey">{product.CATNAME || 'N/A'}</Link>
-                                    </li>
-                                    {product.SUBITEMNAME && (
-                                        <li className="list-inline-item mr-2">
-                                            <Link to="#" className="grey">{product.SUBITEMNAME}</Link>
-                                        </li>
-                                    )}
-                                </ul>
-                            </div>
-                            <div className="other-info flex mt-20">
-                                <h6>Tags:</h6>
-                                <ul>
-                                    {product.SUBITEMNAME && (
-                                        <li className="list-inline-item mr-2">
-                                            <Link to="#" className="grey">{product.SUBITEMNAME.toLowerCase()}</Link>
-                                        </li>
-                                    )}
-                                    <li className="list-inline-item">
-                                        <Link to="#" className="grey">{product.ITEMNAME?.toLowerCase() || 'product'}</Link>
-                                    </li>
-                                </ul>
+                            <div className="meta-tags">
+                                <span>Tags:</span>
+                                {product.SUBITEMNAME && (
+                                    <Link to="#">{product.SUBITEMNAME.toLowerCase()}</Link>
+                                )}
+                                <Link to="#">{product.ITEMNAME?.toLowerCase() || 'product'}</Link>
                             </div>
                         </div>
                     </div>
+               
                     <div className="col-12">
                         <div className="product-description mt-100">
                             <Tab.Container defaultActiveKey="description">

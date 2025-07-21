@@ -1,3 +1,5 @@
+@import '../../assets/css/style.css';
+
 /* ===== Banner Area ===== */
 .banner-area {
     position: relative;
@@ -5,6 +7,7 @@
     height: 100vh;
     overflow: hidden;
     margin-top: 160px;
+    background-color: var(--primary-color);
 }
 
 /* Slider Wrapper */

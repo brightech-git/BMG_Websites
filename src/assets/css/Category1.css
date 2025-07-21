@@ -20,7 +20,7 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 24px;
-    padding: 60px 20px;
+    padding: 0px 20px;
     background-color: var(--primary-color);
     font-family: var(--secondary-font);
 }

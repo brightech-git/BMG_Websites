@@ -18,7 +18,7 @@ class Video extends Component {
     render() {
         return (
             <section className="text-block  with-pattern pt-85 pb-85">
-                <div >
+                <div className='container'>
                     <div className="row align-items-center justify-content-center">
                         <div className="col-lg-6 col-md-10 order-2 order-lg-1">
                             <div className="block-text">

@@ -1,27 +1,25 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
+import './Bestselling.css';
 
-// import texture from '../../../assets/img/';
 import img1 from '../../../assets/img/shop/menu-gallery-2.b8300c96.jpg';
 import img2 from '../../../assets/img/shop/image-33.jpg';
 import img3 from '../../../assets/img/shop/image-4 (2).jpg';
 import img4 from '../../../assets/img/shop/image-33.jpg';
+import ProductCard from '../productCard/ProductCard';
 
 const shopposts = [
-    { img: img1, discount: 15, title: 'Ankle Bracelet', price: 390 },
+    { img: img1, discount: 15, title: 'Ankle Bracelet', price: 390, discountedPrice: 331.5 },
     { img: img2, discount: '', title: 'Stud Earrings', price: 290 },
-    { img: img3, discount: 10, title: 'Crumpled Ring', price: 450 },
-    { img: img4, discount: 25, title: 'Moon Necklace', price: 500 },
-    { img: img1, discount: 15, title: 'Ankle Bracelet', price: 390 },
-    { img: img2, discount: '', title: 'Stud Earrings', price: 290 },
-    { img: img3, discount: 10, title: 'Crumpled Ring', price: 450 },
-    { img: img4, discount: 25, title: 'Moon Necklace', price: 500 },
+    { img: img3, discount: 10, title: 'Crumpled Ring', price: 450, discountedPrice: 405 },
+    { img: img4, discount: 25, title: 'Moon Necklace', price: 500, discountedPrice: 375 },
 ];
+
 class Bestselling extends Component {
     render() {
         const settings = {
-            slidesToShow: 4,
+            slidesToShow: 3,
             slidesToScroll: 1,
             fade: false,
             infinite: true,
@@ -29,67 +27,62 @@ class Bestselling extends Component {
             autoplaySpeed: 4000,
             arrows: false,
             dots: false,
-            responsive: [{
-                breakpoint: 992,
-                settings: {
-                    slidesToShow: 3,
+            responsive: [
+                {
+                    breakpoint: 1200,
+                    settings: {
+                        slidesToShow: 3,
+                    },
                 },
-            },
-            {
-                breakpoint: 767,
-                settings: {
-                    slidesToShow: 1,
+                {
+                    breakpoint: 992,
+                    settings: {
+                        slidesToShow: 2,
+                    },
                 },
-            },
+                {
+                    breakpoint: 768,
+                    settings: {
+                        slidesToShow: 2,
+                        centerMode: true,
+                        centerPadding: '100px',
+                    },
+                },
+                {
+                    breakpoint: 576,
+                    settings: {
+                        slidesToShow: 2,
+                        centerMode: true,
+                        centerPadding: '30px',
+                    },
+                },
             ],
-        }
+        };
+
         return (
-            <section className="pt-85 pb-85 container-wide restaurant-tab-area position-relative">
-                {/* <img src={texture} alt="texture" className="texture-1" /> */}
-                <div>
-                    <div className="row">
-                        <div className="col-lg-5">
-                            <div className="block-text">
-                                <div className="section-title mb-20">
-                                    <span className="title-tag">Buy Now</span>
-                                    <h2>Bestselling Products </h2>
-                                </div>
-                                <p className="pr-50">
-                                    Shop our latest silver jewelry – from elegant anklets to minimal rings – all crafted with premium polish and timeless style.
-                                </p>
-                                <Link to="/shop-left" className="main-btns btn-filled mt-40">Shop now</Link>
-                            </div>
+            <section className="bestselling-section">
+                <div className="best-selling-container">
+                    <div className="bestselling-wrapper">
+                        <div className="bestselling-content">
+                            <span className="section-subtitle">BUY NOW</span>
+                            <h2 className="section-title">Bestselling Products</h2>
+                            <p className="section-description">
+                                Shop our latest silver jewelry - from elegant anklets to minimal rings - all crafted with
+                                premium polish and timeless style.
+                            </p>
+                            <Link to="/shop-left" className="main-btn btn-filled">Shop Now</Link>
                         </div>
-                        <div className="px-2 w-100">
-                            <Slider className="row wide-shop-post-slider mt-80" {...settings}>
+
+                        <div className="bestselling-slider-wrapper">
+                            <Slider className="bestselling-slider" {...settings}>
                                 {shopposts.map((item, i) => (
-                                    <div key={i} className="col-12">
-                                        <div className="food-box shop-box">
-                                            <div className="thumb">
-                                                <img src={item.img} alt="images" />
-                                                <div className="badges">
-                                                    {
-                                                        item.discount > 0 || item.discount !== '' ? <span className="price">Sale</span> : ''
-                                                    }
-                                                    {
-                                                        item.discount > 0 || item.discount !== '' ? <span className="price discounted">-{item.discount}%</span> : ''
-                                                    }
-                                                </div>
-                                                <div className="button-group">
-                                                    <Link to="#"><i className="far fa-heart" /></Link>
-                                                    <Link to="#"><i className="far fa-sync-alt" /></Link>
-                                                    <Link to="#"><i className="far fa-eye" /></Link>
-                                                </div>
-                                            </div>
-                                            <div className="desc">
-                                                <h4 >
-                                                    <Link to="/shop-detail" className='title'>{item.title}</Link>
-                                                </h4>
-                                                <span className="price"> ₹{item.price}
-                                                    {item.discount > 0 || item.discount !== '' ? <span> ₹{Math.ceil(item.price * (item.discount / 100))} </span> : ''}</span>
-                                                <Link to="/shop-detail" className="link"><i className="fal fa-arrow-right" /></Link>
-                                            </div>
-                                        </div>
+                                    <div key={i} className="slider-item">
+                                        <ProductCard
+                                            item={item}
+                                            showDiscount={true}
+                                            currency="¥"
+                                            discountPosition="top-right"
+                                        />
                                     </div>
                                 ))}
                             </Slider>
@@ -97,7 +90,6 @@ class Bestselling extends Component {
                     </div>
                 </div>
             </section>
-
         );
     }
 }

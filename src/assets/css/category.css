@@ -2,10 +2,11 @@
 @import './categorybox.css';
 
 .categories-box-layout {
-    margin-top: 80px;
+    margin-top: 0px;
     z-index: 2;
     width: 100%;
-    padding: 10px 30px;
+    padding: 100px 30px;
+    background-color: var(--primary-color);
 }
 
 .categories-box-layout .custom-category-row {
@@ -73,11 +74,16 @@
 @media (max-width: 991px) {
    
 .categories-box-layout {
-      
-        padding: 10px 20px;
+
+        padding: 40px 20px;
     }
+                .categories-box-layout .category-col {
+                    flex: 0 0 33.333%;
+                    max-width: 100.333%;
+                }
+          
     .categories-box-layout .categories-box {
-        height: 250px;
+        height: 320px;
     }
 
     .categories-box-layout .categories-box .title {
@@ -92,7 +98,7 @@
 
 @media (max-width: 767px) {
     .categories-box-layout {
-        padding: 10px 20px;
+        padding: 30px 20px;
         
     
     }

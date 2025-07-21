@@ -16,8 +16,8 @@ const trendingposts = [
 class Trending extends Component {
     render() {
         return (
-            <section className="trending-sec bg-white ">
-                <div >
+            <section className="trending-sec ">
+                <div className='container'>
                     <div className="section-title text-center mb-30">
                        
                         <span className="title-tag">avail our offer</span>

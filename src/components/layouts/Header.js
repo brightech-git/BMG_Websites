@@ -10,10 +10,10 @@ import '../../assets/css/header.css';
 import Canvas from './Canvas';
 import Mobilemenu from './Mobilemenu';
 
-import img1 from '../../assets/img/cart/1.jpg';
-import img2 from '../../assets/img/cart/2.jpg';
-import img3 from '../../assets/img/cart/3.jpg';
-import img4 from '../../assets/img/cart/4.jpg';
+import img1 from '../../assets/img/room-suite/Product_7.webp';
+import img2 from '../../assets/img/room-suite/Product_7.webp';
+import img3 from '../../assets/img/room-suite/Product_7.webp';
+import img4 from '../../assets/img/room-suite/Product_7.webp';
 // Cart loop
 import Logo from '../../assets/img/banner/logo.png';
 
@@ -206,7 +206,7 @@ class Header extends Component {
                                                                                         <div className="col-lg-4">
                                                                                             <div className="sigma-megamenu-img">
                                                                                                 <Link to="#">
-                                                                                                    <img src="assets/img/others/01.png" alt="img" />
+                                                                                                    <img src={img1} alt="img" />
                                                                                                 </Link>
                                                                                             </div>
                                                                                         </div>
@@ -301,7 +301,7 @@ class Header extends Component {
                                                                                         <div className="col-lg-4">
                                                                                             <div className="sigma-megamenu-img">
                                                                                                 <Link to="#">
-                                                                                                    <img src="assets/img/others/02.png" alt="img" />
+                                                                                                    <img src={img1} alt="img" />
                                                                                                 </Link>
                                                                                             </div>
                                                                                         </div>
@@ -316,7 +316,7 @@ class Header extends Component {
                                                                                                     <div className="col-md-3">
                                                                                                         <div className="sigma-megamenu-image">
                                                                                                             <Link to="/shop-left">
-                                                                                                                <img src="assets/img/others/b-1.png" alt="img" />
+                                                                                                                <img src={img1} alt="img" />
                                                                                                                 <span>Ruby</span>
                                                                                                             </Link>
                                                                                                         </div>
@@ -324,7 +324,7 @@ class Header extends Component {
                                                                                                     <div className="col-md-3">
                                                                                                         <div className="sigma-megamenu-image">
                                                                                                             <Link to="/shop-left">
-                                                                                                                <img src="assets/img/others/b-2.png" alt="img" />
+                                                                                                                <img src={img1} alt="img" />
                                                                                                                 <span>Emarald</span>
                                                                                                             </Link>
                                                                                                         </div>
@@ -332,7 +332,7 @@ class Header extends Component {
                                                                                                     <div className="col-md-3">
                                                                                                         <div className="sigma-megamenu-image">
                                                                                                             <Link to="/shop-left-two">
-                                                                                                                <img src="assets/img/others/b-3.png" alt="img" />
+                                                                                                                <img src={img1} alt="img" />
                                                                                                                 <span>Saphire</span>
                                                                                                             </Link>
                                                                                                         </div>
@@ -340,7 +340,7 @@ class Header extends Component {
                                                                                                     <div className="col-md-3">
                                                                                                         <div className="sigma-megamenu-image">
                                                                                                             <Link to="/shop-left">
-                                                                                                                <img src="assets/img/others/b-4.png" alt="img" />
+                                                                                                                <img src={img1} alt="img" />
                                                                                                                 <span>Diamond</span>
                                                                                                             </Link>
                                                                                                         </div>
@@ -348,7 +348,7 @@ class Header extends Component {
                                                                                                     <div className="col-md-3">
                                                                                                         <div className="sigma-megamenu-image">
                                                                                                             <Link to="/shop-left-two">
-                                                                                                                <img src="assets/img/others/b-5.png" alt="img" />
+                                                                                                                <img src={img1} alt="img" />
                                                                                                                 <span>Topaz</span>
                                                                                                             </Link>
                                                                                                         </div>
@@ -356,7 +356,7 @@ class Header extends Component {
                                                                                                     <div className="col-md-3">
                                                                                                         <div className="sigma-megamenu-image">
                                                                                                             <Link to="/shop-left">
-                                                                                                                <img src="assets/img/others/b-6.png" alt="img" />
+                                                                                                                <img src={img1} alt="img" />
                                                                                                                 <span>Amber</span>
                                                                                                             </Link>
                                                                                                         </div>
@@ -364,7 +364,7 @@ class Header extends Component {
                                                                                                     <div className="col-md-3">
                                                                                                         <div className="sigma-megamenu-image">
                                                                                                             <Link to="/shop-left-two">
-                                                                                                                <img src="assets/img/others/b-7.png" alt="img" />
+                                                                                                                <img src={img1} alt="img" />
                                                                                                                 <span>Gold</span>
                                                                                                             </Link>
                                                                                                         </div>
@@ -372,7 +372,7 @@ class Header extends Component {
                                                                                                     <div className="col-md-3">
                                                                                                         <div className="sigma-megamenu-image">
                                                                                                             <Link to="/shop-left">
-                                                                                                                <img src="assets/img/others/b-8.png" alt="img" />
+                                                                                                                <img src={img1} alt="img" />
                                                                                                                 <span>Silver</span>
                                                                                                             </Link>
                                                                                                         </div>
@@ -436,28 +436,28 @@ class Header extends Component {
                                                                                                 <div className="row">
                                                                                                     <div className="col-md-3">
                                                                                                         <div className="sigma-blog-block">
-                                                                                                            <img src="assets/img/others/news-1.png" alt="img" />
+                                                                                                            <img src={img1} alt="img" />
                                                                                                             <p>Gold Pendants </p>
                                                                                                             <Link to="/blog-detail">View Post</Link>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                     <div className="col-md-3">
                                                                                                         <div className="sigma-blog-block">
-                                                                                                            <img src="assets/img/others/news-2.png" alt="img" />
+                                                                                                            <img src={img1} alt="img" />
                                                                                                             <p>Gold Pendants </p>
                                                                                                             <Link to="/blog-detail">View Post</Link>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                     <div className="col-md-3">
                                                                                                         <div className="sigma-blog-block">
-                                                                                                            <img src="assets/img/others/news-3.png" alt="img" />
+                                                                                                            <img src={img1} alt="img" />
                                                                                                             <p>Gold Pendants </p>
                                                                                                             <Link to="/blog-detail">View Post</Link>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                     <div className="col-md-3">
                                                                                                         <div className="sigma-blog-block">
-                                                                                                            <img src="assets/img/others/news-4.png" alt="img" />
+                                                                                                            <img src={img1} alt="img" />
                                                                                                             <p>Gold Pendants </p>
                                                                                                             <Link to="/blog-detail">View Post</Link>
                                                                                                         </div>
@@ -491,35 +491,35 @@ class Header extends Component {
                                                                                         <div className="col">
                                                                                             <div className="sigma-megamenu-img">
                                                                                                 <Link to="#">
-                                                                                                    <img src="assets/img/others/a-1.png" alt="img" />
+                                                                                                    <img src={img1} alt="img" />
                                                                                                 </Link>
                                                                                             </div>
                                                                                         </div>
                                                                                         <div className="col">
                                                                                             <div className="sigma-megamenu-img">
                                                                                                 <Link to="#">
-                                                                                                    <img src="assets/img/others/a-2.png" alt="img" />
+                                                                                                    <img src={img1} alt="img" />
                                                                                                 </Link>
                                                                                             </div>
                                                                                         </div>
                                                                                         <div className="col">
                                                                                             <div className="sigma-megamenu-img">
                                                                                                 <Link to="#">
-                                                                                                    <img src="assets/img/others/a-3.png" alt="img" />
+                                                                                                    <img src={img1} alt="img" />
                                                                                                 </Link>
                                                                                             </div>
                                                                                         </div>
                                                                                         <div className="col">
                                                                                             <div className="sigma-megamenu-img">
                                                                                                 <Link to="#">
-                                                                                                    <img src="assets/img/others/a-4.png" alt="img" />
+                                                                                                    <img src={img1} alt="img" />
                                                                                                 </Link>
                                                                                             </div>
                                                                                         </div>
                                                                                         <div className="col">
                                                                                             <div className="sigma-megamenu-img">
                                                                                                 <Link to="#">
-                                                                                                    <img src="assets/img/others/a-5.png" alt="img" />
+                                                                                                    <img src={img1} alt="img" />
                                                                                                 </Link>
                                                                                             </div>
                                                                                         </div>
@@ -596,9 +596,12 @@ class Header extends Component {
                                     <div className="login-btn">
                                         <Link to="/wishlist" id="loginBtn"><Heart size={20} strokeWidth={1.8} /></Link>
                                     </div>
+                                    <div className="login-btn">
+                                        <Link to="/cart" id="loginBtn"><ShoppingCart size={20} strokeWidth={1.8} /></Link>
+                                    </div>
                                    
                                     
-                                    <div className="toggle dropdown-btn">
+                                    {/* <div className="toggle dropdown-btn">
                                         <span className="sigma-notification">0</span>
                                         <Link to="#" onClick={this.toggleCartm}><ShoppingCart size={20}strokeWidth={1.8} /></Link>
                                         <div className={classNames("dropdown-menu cart-dropdown-menu", { "show": this.state.togglecart })}>
@@ -626,10 +629,10 @@ class Header extends Component {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="toggle">
+                                    </div> */}
+                                    {/* <div className="toggle">
                                         <Link to="#" id="offCanvasBtn" onClick={this.addClass}> <Menu size={20} strokeWidth={1.8} /></Link>
-                                    </div>
+                                    </div> */}
                                     {/* Navbar Toggler */}
                                     <div className="navbar-toggler">
                                         <span /><span /><span />

@@ -2,6 +2,7 @@ import React from 'react';
 import { Alert } from 'react-bootstrap';
 import ReCAPTCHA from "react-google-recaptcha";
 import Contacthelper from '../../../helper/Contacthelper';
+import './Contact.css'
 
 class Content extends Contacthelper {
     render() {

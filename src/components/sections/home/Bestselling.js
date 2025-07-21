@@ -64,13 +64,13 @@ class Bestselling extends Component {
                 <div className="best-selling-container">
                     <div className="bestselling-wrapper">
                         <div className="bestselling-content">
-                            <span className="section-subtitle">BUY NOW</span>
+                            {/* <span className="section-subtitle">BUY NOW</span> */}
                             <h2 className="section-title">Bestselling Products</h2>
                             <p className="section-description">
                                 Shop our latest silver jewelry - from elegant anklets to minimal rings - all crafted with
                                 premium polish and timeless style.
                             </p>
-                            <Link to="/shop-left" className="main-btn btn-filled">Shop Now</Link>
+                            <Link to="/shop-left" className="main-btns btn-filled">Shop Now</Link>
                         </div>
 
                         <div className="bestselling-slider-wrapper">

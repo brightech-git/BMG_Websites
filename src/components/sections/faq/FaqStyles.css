@@ -1,0 +1,232 @@
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
+
+:root {
+    --primary-font: 'Gloock', serif;
+    --secondary-font: 'Montserrat', sans-serif;
+    --primary-color: #f6f5f0;
+    --primary-text-color: #404040;
+    --primary-card-color: #edebe7;
+    --primary-hover-color: #cd865c;
+    --secondary-card-color: #cfdcdd;
+    --white-color: #ffffff;
+    --header-height: 80px;
+    --mobile-header-height: 60px;
+    --green-color: #024908;
+    --grey-color: #A9A9A9;
+    --black-color: #000000;
+}
+
+.faq-section {
+    background-color: var(--primary-color);
+    padding: 115px 0;
+}
+
+.faq-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.faq-wrapper {
+    padding-right: 30px;
+}
+
+.faq-title {
+    margin-bottom: 30px;
+}
+
+.faq-title h3 {
+    font-family: var(--primary-font);
+    font-size: 2.5rem;
+    color: var(--primary-text-color);
+    font-weight: 400;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.accordion {
+    margin-bottom: 60px;
+}
+
+.card {
+    background-color: var(--primary-card-color);
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.card-header {
+    background-color: transparent;
+    border-bottom: none;
+    padding: 0;
+}
+
+.card-header button {
+    font-family: var(--secondary-font);
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--primary-text-color);
+    text-align: left;
+    width: 100%;
+    padding: 20px 25px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.card-header button:hover,
+.card-header button:focus {
+    color: var(--primary-hover-color);
+    text-decoration: none;
+}
+
+.card-header button:not(.collapsed) {
+    color: var(--primary-hover-color);
+}
+
+.card-header button::after {
+    content: '\f078';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    float: right;
+    transition: transform 0.3s ease;
+}
+
+.card-header button:not(.collapsed)::after {
+    transform: rotate(180deg);
+}
+
+.card-body {
+    font-family: var(--secondary-font);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--primary-text-color);
+    padding: 20px 25px;
+    background-color: var(--white-color);
+    border-radius: 0 0 8px 8px;
+}
+
+.sidebar {
+    padding-left: 15px;
+}
+
+.widget.popular-feeds {
+    margin-bottom: 40px;
+}
+
+.widget-title {
+    font-family: var(--primary-font);
+    font-size: 1.75rem;
+    color: var(--primary-text-color);
+    margin-bottom: 20px;
+    font-weight: 400;
+}
+
+.single-popular-feed {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.feed-img {
+    flex: 0 0 80px;
+    margin-right: 15px;
+}
+
+.feed-img img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.feed-img img:hover {
+    transform: scale(1.05);
+}
+
+.feed-desc {
+    flex: 1;
+}
+
+.feed-desc h6 {
+    font-family: var(--secondary-font);
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 5px;
+}
+
+.feed-desc h6 a {
+    color: var(--primary-text-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.feed-desc h6 a:hover {
+    color: var(--primary-hover-color);
+}
+
+.feed-desc .time {
+    font-family: var(--secondary-font);
+    font-size: 0.875rem;
+    color: var(--grey-color);
+    display: flex;
+    align-items: center;
+}
+
+.feed-desc .time i {
+    margin-right: 5px;
+}
+
+/* Responsive Styles */
+@media (max-width: 991px) {
+    .faq-wrapper {
+        padding-right: 0;
+        margin-bottom: 40px;
+    }
+
+    .sidebar {
+        padding-left: 0;
+    }
+
+    .faq-title h3 {
+        font-size: 2rem;
+    }
+
+    .widget-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .faq-section {
+        padding: 60px 0;
+    }
+
+    .card-header button {
+        font-size: 1rem;
+        padding: 15px 20px;
+    }
+
+    .card-body {
+        font-size: 0.875rem;
+        padding: 15px 20px;
+    }
+
+    .feed-img img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .feed-desc h6 {
+        font-size: 0.875rem;
+    }
+
+    .feed-desc .time {
+        font-size: 0.75rem;
+    }
+}

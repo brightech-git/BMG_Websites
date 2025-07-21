@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
+import './Cta.css'
 
 import ctabg from '../../../assets/img/category/grid-3.webp';
 import '../../../assets/css/cta.css';
@@ -19,7 +20,7 @@ class Cta extends Component {
                                 <p className="pr-50">
                                     Discover our handpicked collection of premium silver jewelry — from intricately crafted necklaces to elegant rings and statement earrings. Each piece is made with high-quality silver and polished to perfection.
                                 </p>
-                                <Link to="/shop-left" className="main-btn btn-filled mt-40">Shop now</Link>
+                                <Link to="/shop-left" className="main-btns btn-filled">Shop now</Link>
                             </div>
                         </div>
              </div>

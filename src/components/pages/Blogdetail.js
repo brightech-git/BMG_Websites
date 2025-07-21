@@ -11,7 +11,7 @@ class Blogdetail extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Laramiss | Blog Detail</title>
+                    <title>BMG | Blog Detail</title>
                     <meta
                         name="description"
                         content="#"

@@ -2,19 +2,19 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Sidebar from '../../layouts/Blogsidebar';
 
-import authorimg from "../../../assets/img/blog-details/author.jpg";
+import authorimg from "../../../assets/img/blog-details/blog6.jpg";
 
-import commentuser1 from '../../../assets/img/blog-details/avatar-1.jpg';
-import commentuser2 from '../../../assets/img/blog-details/avatar-2.jpg';
-import commentuser3 from '../../../assets/img/blog-details/avatar-3.jpg';
+import commentuser1 from '../../../assets/img/blog-details/blog5.jpg';
+import commentuser2 from '../../../assets/img/blog-details/blog5.jpg';
+import commentuser3 from '../../../assets/img/blog-details/blog5.jpg';
 
-import blogimg from '../../../assets/img/blog-details/01.jpg';
-import blogauthor from '../../../assets/img/blog-details/02.jpg';
+import blogimg from '../../../assets/img/blog-details/blog5.jpg';
+import blogauthor from '../../../assets/img/blog-details/blog6.jpg';
 import blogicon from '../../../assets/img/blog-details/icon.png';
 
 
-import img1 from '../../../assets/img/blog-details/03.jpg';
-import img2 from '../../../assets/img/blog-details/04.jpg';
+import img1 from '../../../assets/img/blog-details/blog6.jpg';
+import img2 from '../../../assets/img/blog-details/blog5.jpg';
 
 
 const relatedtags = [
@@ -142,7 +142,7 @@ class Content extends Component {
                                         </div>
                                     </div>
                                     <div className="related-post mt-50">
-                                        <h3 className="mb-30">Releted Post</h3>
+                                        <h3 className="mb-30">Related Post</h3>
                                         <div className="row">
                                             {relatedposts.map((item, i) => (
                                                 <div key={i} className="col-md-6">

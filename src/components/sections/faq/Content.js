@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Accordion, Card, Button  } from 'react-bootstrap';
+import './FaqStyles.css'
 
 
 import img1 from '../../../assets/img/recent-post-wid/4.webp';

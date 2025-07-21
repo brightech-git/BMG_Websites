@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import './BreadStyles.css'
 
 import breadcrumbimg from '../../assets/img/banner/footer.webp'
 

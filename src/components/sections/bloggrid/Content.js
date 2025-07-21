@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from '../../layouts/Pagination';
 
-import img1 from '../../../assets/img/latest-post/01.jpg';
-import img2 from '../../../assets/img/latest-post/02.jpg';
-import img3 from '../../../assets/img/latest-post/03.jpg';
-import img4 from '../../../assets/img/latest-post/04.jpg';
-import img5 from '../../../assets/img/latest-post/05.jpg';
-import img6 from '../../../assets/img/latest-post/06.jpg';
+import img1 from '../../../assets/img/latest-post/post1.jpg';
+import img2 from '../../../assets/img/latest-post/post1.jpg';
+import img3 from '../../../assets/img/latest-post/post1.jpg';
+import img4 from '../../../assets/img/latest-post/post1.jpg';
+import img5 from '../../../assets/img/latest-post/post1.jpg';
+import img6 from '../../../assets/img/latest-post/post1.jpg';
 
 const bloggridposts = [
     { img: img1, title: 'We provide you with top notch Jewelry Products', postdate: '28th Aug 2022', text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.', author: 'Admin' },

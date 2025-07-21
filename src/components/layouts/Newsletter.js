@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Modal } from "react-bootstrap";
+import './NewsletterStyles.css'
 
-import popupimg from '../../assets/img/popup.jpg';
+import popupimg from '../../assets/img/popup1.jpg';
 
 class Newsletter extends Component {
     constructor(props, context) {

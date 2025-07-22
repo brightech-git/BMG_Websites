@@ -23,7 +23,7 @@ class Video extends Component {
                         <div className="col-lg-6 col-md-10 order-2 order-lg-1">
                             <div className="block-text">
                                 <div className="section-title mb-20">
-                                    <span className="title-tag">design video</span>
+                                    {/* <span className="title-tag">design video</span> */}
                                     <h2>Make Your Day Brighter .</h2>
                                 </div>
                                 <p className="pr-50">

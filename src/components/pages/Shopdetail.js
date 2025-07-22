@@ -11,7 +11,7 @@ class Shopdetail extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Laramiss | Shop Detail</title>
+                    <title>BMG | Shop Detail</title>
                     <meta
                         name="description"
                         content="#"

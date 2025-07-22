@@ -50,19 +50,19 @@ class Footertwo extends Component {
                     <h4 className="widget-title">Useful Links</h4>
                     <ul className="useful-links">
                       <li>
-                        <Link to="#">Contact Us</Link>
+                        <Link to="/contact">Contact Us</Link>
                       </li>
                       <li>
-                        <Link to="#">About Us</Link>
+                        <Link to="about">About Us</Link>
                       </li>
                       <li>
-                        <Link to="#">Shipping & Returns</Link>
+                        <Link to="privacypolicy">Shipping & Returns</Link>
                       </li>
                       <li>
-                        <Link to="PrivacyPolicy">Refund Policy</Link>
+                        <Link to="privacypolicy">Refund Policy</Link>
                       </li>
                       <li>
-                        <Link to="#">Terms & Conditions</Link>
+                        <Link to="privacypolicy">Terms & Conditions</Link>
                       </li>
                       <li>
                         <Link to="faq">FAQ</Link>

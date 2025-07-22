@@ -3087,10 +3087,10 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     color: #fff;
 }
 
-.breadcrumb-area .breadcrumb-text h2.page-title {
+/* .breadcrumb-area .breadcrumb-text h2.page-title {
     font-size: 72px;
     letter-spacing: -1px;
-}
+} */
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
     .breadcrumb-area .breadcrumb-text h2.page-title {
@@ -3933,7 +3933,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
   font-size: 36px;
   font-weight: 600;
   margin-bottom: 20px;
-  color: var(--primary-text-color);
+  color: var(--white-color);
   font-family: var(--primary-font);
 }
 
@@ -4179,12 +4179,20 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 }
 
 
-/*---------Testimonals---------*/
+/*--------- Testimonials Section ---------*/
 .testimonial-section {
   background-color: var(--primary-color);
-  padding: 70px 20px;
-  text-align: center;
+  padding: 80px 20px;
   font-family: var(--primary-font);
+  text-align: center; /* Ensures all child elements are centered */
+}
+
+.testimonial-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* This centers all content horizontally */
 }
 
 .testimonial-title {
@@ -4192,18 +4200,38 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
   font-weight: 600;
   color: var(--primary-text-color);
   margin-bottom: 50px;
-  font-family: var(--primary-font);
+  position: relative;
+  text-align: center; /* Explicit center alignment */
+  width: 100%; /* Ensures full width for proper centering */
 }
 
+.testimonial-title::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background-color: var(--primary-hover-color);
+}
+
+/* Rest of your existing CSS remains the same */
 .testimonial-slider {
   position: relative;
+  padding: 0 50px;
+  width: 100%; /* Ensures slider takes full width */
 }
+
 
 .testimonial-item {
   max-width: 820px;
   margin: 0 auto;
   color: var(--primary-text-color);
   padding: 0 20px;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
 }
 
 .testimonial-quote {
@@ -4211,33 +4239,38 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
   color: var(--primary-hover-color);
   margin-bottom: 20px;
   line-height: 1;
+  font-family: var(--primary-font);
 }
 
 .testimonial-text {
   font-size: 18px;
-  color: var(--primary-hover-color);
+  color: var(--primary-text-color);
   margin-bottom: 30px;
   line-height: 1.8;
   font-family: var(--secondary-font);
+  font-weight: 300;
+  position: relative;
+  padding: 0 20px;
 }
 
 .testimonial-profile {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 20px;
 }
 
 .testimonial-profile img.testimonial-img {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   border: 2px solid var(--primary-hover-color);
 }
 
 .testimonial-profile h5 {
-  margin: 0;
+  margin: 0 0 5px 0;
   font-weight: 600;
   font-size: 18px;
   color: var(--primary-text-color);
@@ -4248,54 +4281,69 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
   font-size: 14px;
   color: var(--secondary-text-color);
   font-family: var(--secondary-font);
-  margin-bottom: 30px;
+  font-weight: 300;
+  margin-bottom: 40px;
 }
 
+/* Slider Navigation */
 .testimonial-slider .slick-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   background: transparent;
   border: none;
-  font-size: 22px;
+  font-size: 24px;
   color: var(--primary-hover-color);
   cursor: pointer;
   z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.testimonial-slider .slick-arrow:hover {
+  color: var(--primary-text-color);
 }
 
 .testimonial-slider .slick-prev {
-  left: -45px;
+  left: 0;
 }
 
 .testimonial-slider .slick-next {
-  right: -45px;
+  right: 0;
+}
+
+.testimonial-slider .slick-dots {
+  bottom: -40px;
 }
 
 .testimonial-slider .slick-dots li button:before {
-  font-size: 12px;
+  font-size: 10px;
   color: var(--primary-hover-color);
   opacity: 0.5;
 }
 
 .testimonial-slider .slick-dots li.slick-active button:before {
   opacity: 1;
-  color: var(--primary-hover-color);
 }
 
 /* Responsive Styles */
 @media (max-width: 992px) {
   .testimonial-title {
-    font-size: 30px;
+    font-size: 32px;
     margin-bottom: 40px;
+  }
+  
+  .testimonial-title::after {
+    bottom: -12px;
+    width: 60px;
   }
 
   .testimonial-text {
     font-size: 17px;
+    padding: 0 15px;
   }
 
-  .testimonial-profile h5 {
-    font-size: 16px;
-  }
-
-  .testimonial-profile span {
-    font-size: 13px;
+  .testimonial-quote {
+    font-size: 60px;
   }
 }
 
@@ -4304,32 +4352,35 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     padding: 60px 15px;
   }
 
-  .testimonial-quote {
-    font-size: 60px;
-  }
-
   .testimonial-title {
-    font-size: 26px;
+    font-size: 28px;
   }
 
   .testimonial-text {
     font-size: 16px;
     line-height: 1.6;
+    padding: 0 10px;
   }
 
-  .testimonial-slider .slick-prev,
-  .testimonial-slider .slick-next {
-    display: none !important;
+  .testimonial-slider {
+    padding: 0 30px;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
+  .testimonial-title {
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
+
   .testimonial-quote {
     font-size: 48px;
+    margin-bottom: 15px;
   }
 
   .testimonial-text {
     font-size: 15px;
+    margin-bottom: 20px;
   }
 
   .testimonial-profile img.testimonial-img {
@@ -4337,8 +4388,8 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     height: 60px;
   }
 
-  .testimonial-title {
-    font-size: 22px;
+  .testimonial-slider {
+    padding: 0 20px;
   }
 }
 
@@ -5014,117 +5065,157 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 
 
 /*=======  TEXT BLOCK  =======*/
+/* Text Block Base Styles */
+.text-block {
+  position: relative;
+  z-index: 1;
+}
 
+/* Background Variant */
 .text-block.with-bg {
-    background-size: cover;
-    background-position: center;
-    position: relative;
-    z-index: 1;
+  background-size: cover;
+  background-position: center;
 }
 
 .text-block.with-bg::after {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    content: '';
-    background-color: #353530;
-    z-index: -1;
-    opacity: 0.94;
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #353530;
+  z-index: -1;
+  opacity: 0.94;
 }
 
+/* Black Background Variant */
 .text-block.bg-black p,
 .text-block.bg-black .section-title h2 {
-    color: #fff;
+  color: #fff;
 }
 
 .text-block.bg-black .section-title .title-tag {
-    color: var(--primary-text-color);
+  color: var(--primary-text-color);
 }
 
+/* Button Styles */
 .text-block.bg-black .main-btn.btn-filled {
-    -webkit-box-shadow: none;
-    box-shadow: none;
+  box-shadow: none;
 }
 
 .text-block.bg-black .main-btn.btn-filled:hover {
-    color: #fff;
+  color: #fff;
 }
 
-.text-block.with-pattern {
-    position: relative;
-    z-index: 1;
-}
-
+/* Pattern Background Variant */
 .text-block.with-pattern .pattern-wrap {
-    position: absolute;
-    background: var(--primary-color);
-    right: 0;
-    height: 100%;
-    z-index: -1;
-    width: 30%;
-    top: 0;
-}
-
-@media only screen and (min-width: 768px) and (max-width: 991px) {
-    .text-block.with-pattern .pattern-wrap {
-        width: 100%;
-        height: 320px;
-    }
-}
-
-@media (max-width: 767px) {
-    .text-block.with-pattern .pattern-wrap {
-        width: 100%;
-        height: 320px;
-    }
+  position: absolute;
+  background: var(--primary-color);
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 30%;
+  z-index: -1;
 }
 
 .text-block.with-pattern .pattern-wrap .pattern {
-    position: relative;
-    width: 100%;
-    height: 100%;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .text-block.with-pattern .pattern-wrap .pattern::before {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    background-image: url(../img/icon/pattern-03.png);
-    content: '';
-    background-size: cover;
-    background-position: right;
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background-image: url(../img/icon/pattern-03.png);
+  background-size: cover;
+  background-position: right;
+}
+
+/* Text Content Alignment */
+.block-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .block-text p {
-    font-family: var(--secondary-font);
-    font-size: 16px;
-    color: var(--primary-text-color);
+  font-family: var(--secondary-font);
+  font-size: 16px;
+  color: var(--primary-text-color);
+  text-align: left;
+  margin-bottom: 20px;
+  align-self: flex-start;
 }
 
-@media (max-width: 575px) {
-    .block-text p {
-        padding-right: 0;
-        font-size: 14px;
-    }
+.section-title {
+  align-self: flex-start;
 }
 
+.section-title .title-tag {
+  display: block;
+  margin-bottom: 10px;
+  align-self: flex-start;
+}
+
+/* Spacing Utility */
+.text-block .mb-small {
+  margin-bottom: 30px;
+}
+
+/* ---------------------------- */
+/*      RESPONSIVE STYLES       */
+/* ---------------------------- */
+
+/* Tablets (768px - 991px) */
 @media only screen and (min-width: 768px) and (max-width: 991px) {
-    .text-block .mb-small {
-        margin-bottom: 50px;
-    }
+  .text-block.with-pattern .pattern-wrap {
+    width: 100%;
+    height: 320px;
+  }
+  
+  .text-block .mb-small {
+    margin-bottom: 50px;
+  }
 }
 
+/* Small Devices (max 767px) */
 @media (max-width: 767px) {
-    .text-block .mb-small {
-        margin-bottom: 50px;
-    }
+  .text-block.with-pattern .pattern-wrap {
+    width: 100%;
+    height: 320px;
+  }
+  
+  .text-block .mb-small {
+    margin-bottom: 50px;
+  }
+  
+  .block-text {
+    align-items: center;
+    text-align: center;
+  }
+  
+  .block-text p,
+  .section-title,
+  .section-title .title-tag {
+    align-self: center;
+    text-align: center;
+  }
 }
 
+/* Extra Small Devices (max 575px) */
+@media (max-width: 575px) {
+  .block-text p {
+    padding-right: 0;
+    font-size: 14px;
+  }
+}
 
 /*=======  Video  =======*/
 

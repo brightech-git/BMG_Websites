@@ -36,6 +36,7 @@ import Typography from './components/pages/Typography';
 import Wishlist from './components/pages/Wishlist';
 import PrivacyPolicy from './components/pages/Policies/Privacy';
 import PaymentPage from './components/pages/payment/Payment';
+import ProductFilters from './components/sections/Filter/Filter'
 
 
 function App() {
@@ -73,7 +74,8 @@ function App() {
         <Route exact path="/typography" component={Typography} />
         <Route exact path="/wishlist" component={Wishlist} />
         <Route exact path="/error" component={Error} />
-        <Route exact path="/PrivacyPolicy" component={PrivacyPolicy} />
+        <Route exact path="/ProductFilters" component={ProductFilters} />
+        <Route exact path="/privacypolicy" component={PrivacyPolicy} />
         <Route exact path="/payment/:orderId" component={PaymentPage} />
         <Route exact component={Error} />
       </Switch>

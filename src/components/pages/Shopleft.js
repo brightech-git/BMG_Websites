@@ -5,6 +5,7 @@ import Breadcrumb from '../layouts/Breadcrumbs';
 import Instafeeds from '../layouts/Instafeeds';
 import Footer from '../layouts/Footerthree';
 import Content from '../sections/shopleft/Content';
+import Filter from '../sections/Filter/Filter';
 
 class Shopleft extends Component {
     render() {
@@ -19,6 +20,7 @@ class Shopleft extends Component {
                 </MetaTags>
                 <Header/>
                 <Breadcrumb breadcrumb={{pagename:'Shop Left'}}/>
+                <Filter />
                 <Content/>
                 <Instafeeds/>
                 <Footer/>

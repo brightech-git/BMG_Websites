@@ -5,9 +5,9 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Preloader from './components/layouts/Preloader';
 // Pages
 import Home from './components/pages/Home';
-import Hometwo from './components/pages/Hometwo';
-import Homethree from './components/pages/Homethree';
-import Homefour from './components/pages/Homefour';
+// import Hometwo from './components/pages/Hometwo';
+// import Homethree from './components/pages/Homethree';
+// import Homefour from './components/pages/Homefour';
 import About from './components/pages/About';
 import Account from './components/pages/Account';
 import Blogdetail from './components/pages/Blogdetail';

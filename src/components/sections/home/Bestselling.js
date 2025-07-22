@@ -65,7 +65,7 @@ class Bestselling extends Component {
                     <div className="bestselling-wrapper">
                         <div className="bestselling-content">
                             {/* <span className="section-subtitle">BUY NOW</span> */}
-                            <h2 className="section-title">Bestselling Products</h2>
+                            <h2 className="section-title">Trending Products</h2>
                             <p className="section-description">
                                 Shop our latest silver jewelry - from elegant anklets to minimal rings - all crafted with
                                 premium polish and timeless style.
@@ -79,9 +79,7 @@ class Bestselling extends Component {
                                     <div key={i} className="slider-item">
                                         <ProductCard
                                             item={item}
-                                            showDiscount={true}
-                                            currency="¥"
-                                            discountPosition="top-right"
+                                          
                                         />
                                     </div>
                                 ))}

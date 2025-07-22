@@ -152,7 +152,7 @@ const Shopinfo = ({ sno }) => {
                                                 className="img-fluid"
                                                 alt={`Thumbnail ${i + 1}`}
                                                 onError={(e) => {
-                                                    e.target.src = 'https://via.placeholder.com/100x100';
+                                                    e.target.src = 'fallback.jpg';
                                                 }}
                                             />
                                         </div>

@@ -24,7 +24,16 @@ export const getProductBySno = async (sno) => {
     throw new Error(`No product found for SNO: ${sno}`);
 };
 
-
+export const filterProducts = async (filters) => {
+    try {
+        const response = await PublicUrl.post('/product/items/filter', null, {
+            params: filters,
+        });
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || error;
+    }
+};
 export const getProductsByMetalId = async (metalId) => {
     const response = await PublicUrl.get("/product/getAllPurityWise", {
         params: { metalId },

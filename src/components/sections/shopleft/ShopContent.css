@@ -43,18 +43,7 @@
     padding: 0;
 }
 
-/* Product Card - Ensure consistent height */
-.product-card {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    /* Make all cards equal height */
-    background-color: var(--primary-card-color);
-    border-radius: 8px;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
+
 
 /* Product Thumb - Fixed aspect ratio */
 .product-thumb {

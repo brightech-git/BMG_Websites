@@ -14,7 +14,7 @@ import Saleproducts from './Saleproducts';
 import Counter from './Counter';
 import Onsale from './Onsale';
 import Video from './Video';
-import Latestproducts from '../../layouts/Latestproducts';
+import RecentlyViewed from '../../layouts/RecentlyViewed';
 import Blog from './Blog';
 import Handpicked from '../homethree/Handpicked';
 class Content extends Component {
@@ -25,8 +25,8 @@ class Content extends Component {
                 <Category/>
                 <Category1/>
                 <Handpicked />
-                <Cta />
-                <Trending/>
+                <Cta />     
+                {/* <Trending/> */}
                 <Condos/>
                 <Bestselling/>
                 <Ourcategory/>
@@ -36,7 +36,7 @@ class Content extends Component {
                 <Counter/>
                 <Onsale/>
                 <Video/>
-                <Latestproducts/>
+                <RecentlyViewed />
                 {/* <Habout /> */}
                 <Blog/>
             </Fragment>

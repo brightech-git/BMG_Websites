@@ -7,7 +7,7 @@ import Counter from './Counter';
 import Video from './Video';
 import Bestfeature from './Bestfeature';
 import Gallery from './Gallery';
-import Latestproducts from '../../layouts/Latestproducts';
+import RecentlyViewed from '../../layouts/RecentlyViewed';
 import Newsletter from './Newsletter';
 import Cta from './Cta';
 import About from './About';
@@ -25,7 +25,7 @@ class Content extends Component {
                 <Video/>
                 <Bestfeature/>
                 <Gallery/>
-                <Latestproducts/>
+                <RecentlyViewed />
                 <Newsletter/>
                 <Cta/>
                 <About/>

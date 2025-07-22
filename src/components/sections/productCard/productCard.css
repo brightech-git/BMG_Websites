@@ -157,7 +157,7 @@
 
 .product-desc .title {
     font-family: var(--secondary-font);
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     color: var(--primary-text-color);
     text-decoration: none;
@@ -177,7 +177,7 @@
 }
 
 .price {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
     color: var(--primary-hover-color);
     font-family: var(--secondary-font);
@@ -217,11 +217,11 @@
     }
 
     .product-desc .title {
-        font-size: 16px;
+        font-size: 14px;
     }
 
     .price {
-        font-size: 16px;
+        font-size: 14px;
     }
 
     .original-price {
@@ -246,7 +246,7 @@
     }
 
     .product-desc .title {
-        font-size: 15px;
+        font-size: 12px;
     }
 
     .original-price {
@@ -268,12 +268,12 @@
     }
 
     .product-desc .title {
-        font-size: 14px;
+        font-size: 12px;
         margin-bottom: 8px;
     }
 
     .price {
-        font-size: 15px;
+        font-size: 12px;
     }
 
     .badges {

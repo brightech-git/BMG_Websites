@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
+
+:root {
+    --primary-font: 'Gloock', serif;
+    --secondary-font: 'Montserrat', sans-serif;
+    --primary-color: #f6f5f0;
+    --primary-text-color: #404040;
+    --primary-card-color: #edebe7;
+    --primary-hover-color: #cd865c;
+    --secondary-card-color: #cfdcdd;
+    --white-color: #ffffff;
+    --gold-color: #cd865c;
+    --gold-light: #d4a762;
+    --gold-dark: #b38b4a;
+    --green-color: #024908;
+    --red-color: #d9534f;
+    --blue-color: #0275d8;
+}
+
+/* Trending Section Styles */
+.trending-sec {
+    padding: 5rem 0;
+    background-color: var(--primary-color);
+    font-family: var(--secondary-font);
+}
+
+.trending-sec .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.trending-sec .section-title {
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.trending-sec .title-tag {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--gold-color);
+    text-transform: uppercase;
+    letter-spacing: 0.125rem;
+    margin-bottom: 1rem;
+}
+
+.trending-sec h2 {
+    font-size: 2.25rem;
+    font-weight: 400;
+    color: var(--primary-text-color);
+    margin-bottom: 1.5rem;
+    position: relative;
+    font-family: var(--primary-font);
+}
+
+.trending-sec .view-more {
+    color: var(--gold-color);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.0625rem;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 2.5rem;
+}
+
+.trending-sec .view-more:hover {
+    color: var(--gold-dark);
+}
+
+.trending-sec .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -15px;
+}
+
+.trending-sec .col-lg-3 {
+    padding: 0 15px;
+    flex: 0 0 25%;
+    max-width: 25%;
+}
+
+.trending-sec .apartment-box {
+    background: var(--white-color);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 0.3125rem 0.9375rem rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    margin-bottom: 1.875rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.trending-sec .image-box {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    /* Set a fixed height */
+    background: var(--primary-card-color);
+}
+
+.trending-sec .image-box img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Use cover to fill the container */
+    padding: 0;
+    /* Remove padding to avoid extra space */
+    transition: transform 0.5s ease;
+}
+
+.trending-sec .content-box-2 {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.trending-sec .tren-title {
+    color: var(--primary-text-color);
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.trending-sec .price {
+    color: var(--gold-color);
+    font-size: 1.25rem;
+    font-weight: 700;
+    display: block;
+}
+
+/* Product Badges */
+.product-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: var(--white-color);
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 0.25rem;
+    z-index: 2;
+    text-transform: uppercase;
+}
+
+.product-badge[data-badge="New"] {
+    background: var(--green-color);
+}
+
+.product-badge[data-badge="Limited"] {
+    background: var(--red-color);
+}
+
+.product-badge[data-badge="Bestseller"] {
+    background: var(--blue-color);
+}
+
+/* Responsive Styles */
+@media (max-width: 991px) {
+    .trending-sec .col-lg-3 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+@media (max-width: 767px) {
+    .trending-sec {
+        padding: 3rem 0;
+    }
+
+    .trending-sec h2 {
+        font-size: 1.75rem;
+    }
+}
+
+@media (max-width: 575px) {
+    .trending-sec .col-lg-3 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .trending-sec h2 {
+        font-size: 1.5rem;
+    }
+
+    .trending-sec .image-box {
+        padding-top: 100%;
+    }
+}

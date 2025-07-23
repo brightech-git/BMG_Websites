@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
+
+:root {
+    --primary-font: 'Gloock', serif;
+    --secondary-font: 'Montserrat', sans-serif;
+    --primary-color: #f6f5f0;
+    --primary-text-color: #404040;
+    --primary-card-color: #edebe7;
+    --primary-hover-color: #cd865c;
+    --secondary-card-color: #cfdcdd;
+    --white-color: #ffffff;
+    --green-color: #024908;
+    --grey-color: #A9A9A9;
+    --black-color: #000000;
+}
+
+/* Related Products Section */
+.related-products-section {
+    padding: 5rem 0;
+    background-color: var(--primary-color);
+    font-family: var(--secondary-font);
+}
+
+.related-products-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.related-products-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+.related-products-title .title-tag {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--primary-text-color);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+    font-family: var(--primary-font);
+}
+
+.related-products-title h2 {
+    font-size: 2rem;
+    color: var(--primary-text-color);
+    margin: 0;
+    font-family: var(--primary-font);
+    font-weight: 400;
+}
+
+.related-products-nav {
+    display: flex;
+    gap: 1rem;
+}
+
+.related-products-nav-arrow {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(19, 19, 19, 0.1);
+    color: var(--primary-text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.related-products-nav-arrow:hover {
+    background: var(--primary-hover-color);
+    transform: scale(1.05);
+}
+
+.related-products-slider {
+    position: relative;
+}
+
+.related-products-slider .slick-list {
+    padding: 10px 0;
+    margin: 0 -10px;
+}
+
+.related-products-slider .slick-slide {
+    padding: 0 10px;
+}
+
+
+
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+    .related-products-section {
+        padding: 4rem 0;
+    }
+
+    .related-products-title h2 {
+        font-size: 1.55rem;
+    }
+
+    .related-products-nav-arrow {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+@media (max-width: 768px) {
+ 
+    .related-products-nav {
+        align-self: flex-end;
+    }
+
+    .related-products-title h2 {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .related-products-section {
+        padding: 3rem 0;
+    }
+
+    .related-products-nav-arrow {
+        width: 32px;
+        height: 32px;
+    }
+
+    .related-products-slider .slick-list {
+        margin: 0 -5px;
+    }
+
+    .related-products-slider .slick-slide {
+        padding: 0 5px;
+    }
+}

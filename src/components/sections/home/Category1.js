@@ -16,7 +16,7 @@ class Category1 extends Component {
                         <p className="category1-label">Big Deal</p>
                         <h2 className="category1-title">Get 20% Flat Offer</h2>
                         <h3 className="category1-subtitle">on Earrings</h3>
-                        <Link to="/shop-left" className="main-btn btn-filled">Shop Now</Link>
+                        <Link to="/shop-left" className="cat-shop-btn cat-shop-filled">Shop Now</Link>
                     </div>
                 </section>
 
@@ -26,7 +26,7 @@ class Category1 extends Component {
                     <div className="category1-content">
                         <h2 className="category1-title dark">Well Designed Pendant</h2>
                         <p className="category1-subtitle light">Nascetur ridiculus mus mauris vitae</p>
-                        <Link to="/shop-left" className="main-btn btn-filled">Shop Now</Link>
+                        <Link to="/shop-left" className="cat-shop-btn cat-shop-filled">Shop Now</Link>
                        
                     </div>
                 </section>

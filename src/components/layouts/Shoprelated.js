@@ -1,32 +1,39 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
+import ProductCard from '../sections/productCard/ProductCard';
+import './ShopRelated.css';
 
 import img1 from '../../assets/img/shop/01.jpg';
 import img2 from '../../assets/img/shop/02.jpg';
 import img3 from '../../assets/img/shop/03.jpg';
 import img4 from '../../assets/img/shop/04.jpg';
+
 const relatedshopposts = [
     { img: img1, discount: 15, title: 'Ankle Bracelet', price: 390 },
     { img: img2, discount: '', title: 'Stud Earrings', price: 290 },
     { img: img3, discount: 10, title: 'Crumpled Ring', price: 450 },
     { img: img4, discount: 25, title: 'Moon Necklace', price: 500 },
 ];
-class Shoprelated extends Component {
+
+class ShopRelated extends Component {
     constructor(props) {
         super(props);
         this.next = this.next.bind(this);
         this.previous = this.previous.bind(this);
     }
+
     next() {
         this.slider.slickNext();
     }
+
     previous() {
         this.slider.slickPrev();
     }
+
     render() {
         const settings = {
-            slidesToShow: 3,
+            slidesToShow: 4,
             slidesToScroll: 1,
             fade: false,
             infinite: true,
@@ -34,80 +41,71 @@ class Shoprelated extends Component {
             autoplaySpeed: 4000,
             arrows: false,
             dots: false,
-            responsive: [{
-                breakpoint: 992,
-                settings: {
-                    slidesToShow: 3,
+            responsive: [
+                {
+                    breakpoint: 992,
+                    settings: {
+                        slidesToShow: 4,
+                    },
                 },
-            },
-            {
-                breakpoint: 767,
-                settings: {
-                    slidesToShow: 2,
+                {
+                    breakpoint: 768,
+                    settings: {
+                        slidesToShow: 4,
+                    },
                 },
-            },
-            {
-                breakpoint: 576,
-                settings: {
-                    slidesToShow: 1,
+                {
+                    breakpoint: 576,
+                    settings: {
+                        slidesToShow: 3,
+                    },
                 },
-            },
             ],
-        }
+        };
+
         return (
-            <section className="restaurant-tab-area bg-black pt-115 pb-115">
-                <div className="container">
-                    <div className="row align-items-center">
-                        <div className="col-md-8 col-sm-7">
-                            <div className="section-title">
-                                <span className="title-tag">Shop</span>
-                                <h2>Related Products</h2>
-                            </div>
+            <section className="related-products-section">
+                <div className="related-products-container">
+                    <div className="related-products-header">
+                        <div className="related-products-title">
+                            <span className="title-tag">Shop</span>
+                            <h2>Related Products</h2>
                         </div>
-                        <div className="col-md-4 col-sm-5 d-none d-sm-block">
-                            <div className="shop-post-arrow arrow-style text-right">
-                                <div className="slick-arrow prev-arrow" onClick={this.previous}><i className="fal fa-arrow-left" /></div>
-                                <div className="slick-arrow next-arrow" onClick={this.next}><i className="fal fa-arrow-right" /></div>
-                            </div>
+                        <div className="related-products-nav">
+                            <button
+                                className="related-products-nav-arrow"
+                                onClick={this.previous}
+                                aria-label="Previous products"
+                            >
+                                <i className="fal fa-arrow-left" />
+                            </button>
+                            <button
+                                className="related-products-nav-arrow"
+                                onClick={this.next}
+                                aria-label="Next products"
+                            >
+                                <i className="fal fa-arrow-right" />
+                            </button>
                         </div>
                     </div>
-                    <Slider className="row related-product-slider mt-80" ref={c => (this.slider = c)} {...settings}>
+
+                    <Slider
+                        className="related-products-slider"
+                        ref={c => (this.slider = c)}
+                        {...settings}
+                    >
                         {relatedshopposts.map((item, i) => (
-                            <div key={i} className="col-12">
-                                <div className="food-box shop-box">
-                                    <div className="thumb">
-                                        <img src={item.img} alt="" />
-                                        <div className="badges">
-                                            {
-                                                item.discount > 0 || item.discount !== '' ? <span className="price">Sale</span> : ''
-                                            }
-                                            {
-                                                item.discount > 0 || item.discount !== '' ? <span className="price discounted">-{item.discount}%</span> : ''
-                                            }
-                                            
-                                        </div>
-                                        <div className="button-group">
-                                            <Link to="#"><i className="far fa-heart" /></Link>
-                                            <Link to="#"><i className="far fa-sync-alt" /></Link>
-                                            <Link to="#"><i className="far fa-eye" /></Link>
-                                        </div>
-                                    </div>
-                                    <div className="desc">
-                                        <h4>
-                                            <Link to="/shop-detail" className='title'>{item.title}</Link>
-                                        </h4>
-                                        <span className="price">₹{item.price} 
-                                            {item.discount > 0 || item.discount !== '' ? <span> ₹{Math.ceil(item.price * (item.discount / 100))} </span> : '' }</span>
-                                        <Link to="/shop-detail" className="link"><i className="fal fa-arrow-right" /></Link>
-                                    </div>
+                            <div key={i}>
+                                <div >
+                                    <ProductCard item={item} />
                                 </div>
                             </div>
                         ))}
                     </Slider>
                 </div>
-            </section >
+            </section>
         );
     }
 }
 
-export default Shoprelated;
+export default ShopRelated;

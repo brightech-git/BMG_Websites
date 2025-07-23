@@ -20,11 +20,16 @@ import './assets/fonts/flaticon/flaticon-2.css';
 import './assets/css/default.css';
 import './assets/css/style.css';
 
+
+
+import { Provider } from 'react-redux';
+import { store } from './store/index'; // adjust path
 // Create react-query client
 const queryClient = new QueryClient();
 
 ReactDOM.render(
   <React.StrictMode>
+    <Provider store={store}>
     <QueryClientProvider client={queryClient}>
       <UserAuthProvider>
         <BrowserRouter >
@@ -32,6 +37,7 @@ ReactDOM.render(
         </BrowserRouter>
       </UserAuthProvider>
     </QueryClientProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('laramiss')
 );

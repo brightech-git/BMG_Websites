@@ -28,15 +28,11 @@ import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import Shopdetail from './components/pages/Shopdetail';
 import Shopleft from './components/pages/Shopleft';
-import Shoplefttwo from './components/pages/Shoplefttwo';
-import Shopright from './components/pages/Shopright';
-import Shoprighttwo from './components/pages/Shoprighttwo';
 import Team from './components/pages/Team';
 import Typography from './components/pages/Typography';
 import Wishlist from './components/pages/Wishlist';
 import PrivacyPolicy from './components/pages/Policies/Privacy';
 import PaymentPage from './components/pages/payment/Payment';
-import ProductFilters from './components/sections/Filter/Filter'
 
 
 function App() {
@@ -67,14 +63,10 @@ function App() {
         <Route exact path="/register" component={Register} />
         <Route exact path="/shop-detail/:sno" component={Shopdetail} />
         <Route exact path="/shop-left" component={Shopleft} />
-        {/* <Route exact path="/shop-left-two" component={Shoplefttwo} />
-        <Route exact path="/shop-right" component={Shopright} />
-        <Route exact path="/shop-right-two" component={Shoprighttwo} /> */}
         <Route exact path="/team" component={Team} />
         <Route exact path="/typography" component={Typography} />
         <Route exact path="/wishlist" component={Wishlist} />
         <Route exact path="/error" component={Error} />
-        <Route exact path="/ProductFilters" component={ProductFilters} />
         <Route exact path="/privacypolicy" component={PrivacyPolicy} />
         <Route exact path="/payment/:orderId" component={PaymentPage} />
         <Route exact component={Error} />

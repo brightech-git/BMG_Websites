@@ -161,6 +161,7 @@
     font-weight: 600;
     color: var(--primary-text-color);
     text-decoration: none;
+    text-transform: capitalize;
     display: block;
     margin-bottom: 12px;
     transition: var(--transition);
@@ -218,6 +219,7 @@
 
     .product-desc .title {
         font-size: 14px;
+        margin-bottom: 8px;
     }
 
     .price {
@@ -247,6 +249,7 @@
 
     .product-desc .title {
         font-size: 12px;
+        margin-bottom: 6px;
     }
 
     .original-price {
@@ -269,7 +272,7 @@
 
     .product-desc .title {
         font-size: 12px;
-        margin-bottom: 8px;
+        margin-bottom: 4px;
     }
 
     .price {

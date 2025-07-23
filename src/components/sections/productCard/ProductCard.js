@@ -88,6 +88,13 @@ const ProductCard = ({ item }) => {
         setIsWishlisted(!isWishlisted);
         setTimeout(() => setAnimateHeart(false), 800);
     };
+    const handleOnClick = (e, sno) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Here you can also track analytics or fire other logic if needed
+        window.location.href = `/shop-detail/${sno}`;
+    };
 
     if (!item) {
         return (
@@ -109,7 +116,7 @@ const ProductCard = ({ item }) => {
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            <div className="product-thumb">
+            <div className="product-thumb" >
                 <img
                     src={images[currentImageIndex]}
                     alt={displayName}
@@ -118,6 +125,7 @@ const ProductCard = ({ item }) => {
                         e.target.onerror = null;
                         e.target.src = '/fallback.jpg';
                     }}
+                    onClick={(e) => handleOnClick(e,item.SNO)}
                 />
 
                 {/* Show discount badge if there's a price difference */}
@@ -156,11 +164,7 @@ const ProductCard = ({ item }) => {
                 <div className="price-container">
                     <span className="price">
                         ₹{price.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                        {showDiscount && (
-                            <span className="original-price">
-                                ₹{originalPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                            </span>
-                        )}
+                       
                     </span>
                     <Link
                         to={`/shop-detail/${item.SNO}`}

@@ -32,7 +32,7 @@ class Content extends Component {
                 <Ourcategory/>
                 <Handpick/>
                 <Ourproducts/>
-                {/* <Saleproducts/> */}
+                 {/* <Saleproducts/> */}
                 <Counter/>
                 <Onsale/>
                 <Video/>

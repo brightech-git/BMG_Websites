@@ -3,9 +3,7 @@ import { Link } from 'react-router-dom';
 import image1 from '../../../assets/img/category/grid.png';
 import image2 from '../../../assets/img/category/grid_2.webp';
 import image3 from '../../../assets/img/category/grid-3.webp';
-
 import '../../../assets/css/category.css';
-
 
 const categoryposts = [
     { icon: image1, title: 'Golden Pendants', name: 'Traditional', action: 'Shop Now' },
@@ -26,7 +24,13 @@ class Category extends Component {
                                         <p className="title-name">{item.name}</p>
                                     </div>
                                     <h5 className="title">{item.title}</h5>
-                                    <Link to="/shop-left" className="main-btn btn-filled">{item.action}</Link>
+                                    <Link
+                                        to="/shop-left"
+                                        className="cat-shop-btn cat-shop-filled"
+                                        aria-label={`Shop ${item.title}`}
+                                    >
+                                        {item.action}
+                                    </Link>
                                 </div>
                             </section>
                         </div>

@@ -56,7 +56,7 @@ const Banner = () => {
                                     <div className="banner-content">
                                         <h1 className="title">{content.title}</h1>
                                         <p className="description">{content.description}</p>
-                                        <a className="main-btn btn-filled" href="/shop-left">Shop Now</a>
+                                        <a className="cat-shop-btn cat-shop-filled" href="/shop-left">Shop Now</a>
                                     </div>
                                 </div>
                             </div>

@@ -1,5 +1,18 @@
-@import '../../assets/css/style.css';
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
 
+:root {
+    --primary-font: 'Gloock', 'serif';
+    --secondary-font: 'Montserrat', 'sans-serif';
+    --primary-color: #f6f5f0;
+    --primary-text-color: #404040;
+    --primary-card-color: #edebe7;
+    --primary-hover-color: #cd865c;
+    --secondary-card-color: #cfdcdd;
+    --white-color: #ffffff;
+    --green-color: #024908;
+    --grey-color: #A9A9A9;
+    --black-color: #000000;
+}
 /* ===== Banner Area ===== */
 .banner-area {
     position: relative;
@@ -82,9 +95,56 @@
     line-height: 2;
     margin-bottom: 30px;
 }
+/* Shop Button Styles */
+.cat-shop-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    padding: 0 20px;
+    font-size: 14px;
+    line-height: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    text-transform: capitalize;
+    letter-spacing: 1px;
+    border: none;
+    font-family: var(--secondary-font);
+    position: relative;
+    overflow: hidden;
+}
 
+.cat-shop-btn.cat-shop-filled {
+    background-color: var(--white-color);
+    color: var(--primary-text-color);
+}
 
+.cat-shop-btn.cat-shop-filled:hover {
+    background-color: var(--primary-hover-color);
+    color: var(--white-color);
+    transform: translateY(-2px);
+}
 
+.cat-shop-btn.cat-shop-filled::after {
+    content: "";
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background-color: var(--white-color);
+    transition: width 0.3s ease;
+}
+
+.cat-shop-btn.cat-shop-filled:hover::after {
+    width: 60%;
+}
 /* === Responsive Breakpoints === */
 @media (min-width: 1300px) {
     .banner-content {

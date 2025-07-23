@@ -11,6 +11,7 @@ import './ShopInfoCart.css';
 import comment1 from '../../../assets/img/blog-details/avatar-1.jpg';
 import comment2 from '../../../assets/img/blog-details/avatar-2.jpg';
 import comment3 from '../../../assets/img/blog-details/avatar-3.jpg';
+import ImageGallery from './ImageGallery';
 
 const Shopinfo = ({ sno }) => {
     const { user } = useAuth();
@@ -104,14 +105,14 @@ const Shopinfo = ({ sno }) => {
             {
                 breakpoint: 992,
                 settings: {
-                    slidesToShow: 4,
+                    slidesToShow: 5,
                     variableWidth: true
                 }
             },
             {
                 breakpoint: 768,
                 settings: {
-                    slidesToShow: 3,
+                    slidesToShow: 5,
                     variableWidth: true
                 }
             }
@@ -124,41 +125,8 @@ const Shopinfo = ({ sno }) => {
                 <div className="row product-detail-row">
                     <div className="col-lg-5 product-gallery">
                         <div className="shop-detail-image">
-                            <Slider className="detail-slider-1" {...settings} asNavFor={nav2} ref={slider1}>
-                                {bigsliderpost.map((item, i) => (
-                                    <div key={i} className="slide-item">
-                                        <div className="image-box">
-                                            <Link to="#">
-                                                <img
-                                                    src={item.img}
-                                                    className="img-fluid"
-                                                    alt="Product"
-                                                    onError={(e) => {
-                                                        e.target.src = 'https://via.placeholder.com/500x500';
-                                                    }}
-                                                />
-                                            </Link>
-                                            {item.tag && <span className="price-tag">{item.tag}</span>}
-                                        </div>
-                                    </div>
-                                ))}
-                            </Slider>
-                            <Slider className="detail-slider-2" {...settings2} asNavFor={nav1} ref={slider2}>
-                                {smallsliderpost.map((item, i) => (
-                                    <div key={i} className="slide-item">
-                                        <div className="image-box">
-                                            <img
-                                                src={item.img}
-                                                className="img-fluid"
-                                                alt={`Thumbnail ${i + 1}`}
-                                                onError={(e) => {
-                                                    e.target.src = 'fallback.jpg';
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                ))}
-                            </Slider>
+                                                       
+                            <ImageGallery images={smallsliderpost} />
                         </div>
                     </div>
 
@@ -171,7 +139,7 @@ const Shopinfo = ({ sno }) => {
                             <span className="text-yellow"><i className="far fa-star" /></span>
                             <span className="text-dark-white"><i className="far fa-star" /></span>
                             <span className="text-dark-white"><i className="far fa-star" /></span>
-                            <span className="reviews-count">10 Reviews</span>
+                            <span className="reviews-count">50 Reviews</span>
                         </div>
 
                         <div className="product-price">
@@ -211,19 +179,7 @@ const Shopinfo = ({ sno }) => {
                             </div>
                         </div>
 
-                        <div className="product-quantity">
-                            <label>Quantity</label>
-                            <div className="quantity-selector">
-                                <button onClick={decrementQuantity}>-</button>
-                                <input
-                                    type="number"
-                                    value={quantity}
-                                    min="1"
-                                    onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                                />
-                                <button onClick={incrementQuantity}>+</button>
-                            </div>
-                        </div>
+                     
 
                        
 

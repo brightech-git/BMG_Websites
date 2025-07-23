@@ -102,10 +102,10 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
                             <span className="spec-value">{product?.PURITY || item.purity}</span>
                         </div>
                     )}
-                    <div className="cart-item-spec">
+                    {/* <div className="cart-item-spec">
                         <span className="spec-label">Quantity:</span>
                         <span className="spec-value">{item.quantity}</span>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <button
@@ -267,7 +267,7 @@ const Cart = ({ history }) => {
                         </svg>
                     </div>
                     <h2>Your cart is empty</h2>
-                    <p>Looks like you haven't added anything to your cart yet</p>
+                    {/* <p>Looks like you haven't added anything to your cart yet</p> */}
                     <Link to="/shop-left" className="btn-primary">
                         Continue Shopping
                     </Link>

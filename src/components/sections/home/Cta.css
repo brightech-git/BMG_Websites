@@ -1,190 +1,87 @@
 /* CTA Section */
 .cta-sec {
-  position: relative;
-  padding: 80px 20px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  color: var(--primary-text-color);
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: left;
+  background-size: cover;
+  background-position: right center;
+  background-repeat: no-repeat;
+  padding: 80px 0;
+  position: relative;
+  z-index: 1;
+  color: var(--primary-text-color);
+
 }
 
-/* Content Wrapper */
+/* Row Layout */
 .cta-sec .row {
+  display: flex;
+  align-items: center;
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  padding: 0 100px;
+  padding: 0 80px;
 }
 
-/* Text Content */
-.cta-sec .block-text {
+/* Text Block */
+.block-text {
   max-width: 600px;
-  margin: 0;
+  padding-right: 40px;
 }
 
-.cta-sec .section-title span.title-tag {
-  display: inline-block;
-  font-size: 16px;
-  color: var(--primary-color);
-  margin-bottom: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.cta-sec .section-title h2 {
-  font-size: 42px;
+.block-text h2 {
+  font-size: 40px;
   font-weight: 700;
   margin-bottom: 20px;
-  color: var(--primary-text-color);
 }
 
-.cta-sec p {
+.block-text p {
   font-size: 18px;
   line-height: 1.6;
-  color: var(--secondary-text-color);
   margin-bottom: 30px;
-  padding-right: 50px;
 }
 
-/* CTA Button */
-.main-btns {
-  display: inline-block;
-  font-weight: 300;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  user-select: none;
-  padding: 0 20px;
-  font-size: 14px;
-  line-height: 40px;
-  cursor: pointer;
-  transition: all 0.4s ease-out;
-  text-transform: capitalize;
-  letter-spacing: 1px;
-  color: var(--primary-color);
-  border: none;
-  font-family: 'Montserrat', sans-serif;
-}
-
+/* Shop Button */
 .main-btns.btn-filled {
-  background-color: var(--primary-hover-color) !important;
-  color: var(--primary-color) !important;
+  display: inline-block;
+  background: #c97b45;
+  color: #fff;
+  padding: 12px 30px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s ease;
 }
 
 .main-btns.btn-filled:hover {
-  background-color: var(--white-color) !important;
-  color: var(--primary-text-color) !important;
-  box-shadow: none;
+  background: #b05f2c;
 }
 
-/* --------- RESPONSIVE STYLES ----------- */
-
-/* Large Tablets (992px - 1199px) */
-@media (max-width: 1199px) {
-  .cta-sec .row {
-    padding: 0 60px;
-  }
-  
-  .cta-sec .section-title h2 {
-    font-size: 36px;
-  }
-  
-  .cta-sec p {
-    font-size: 17px;
-    padding-right: 30px;
-  }
-}
-
-/* Tablets (768px - 991px) */
+/* Responsive Adjustments */
 @media (max-width: 991px) {
-  .cta-sec {
-    padding: 60px 20px;
-  }
-  
   .cta-sec .row {
-    padding: 0 30px;
-    justify-content: center;
-  }
-  
-  .cta-sec .block-text {
+    flex-direction: column;
+    padding: 0 20px;
     text-align: center;
-    max-width: 100%;
-    padding: 0;
   }
-  
-  .cta-sec .section-title h2 {
+  .block-text {
+    padding-right: 0;
+    margin-bottom: 20px;
+  }
+  .block-text h2 {
     font-size: 32px;
   }
-  
-  .cta-sec p {
-    font-size: 16px;
-    padding-right: 0;
-    margin-left: auto;
-    margin-right: auto;
-  }
 }
 
-/* Small Tablets and Large Phones (576px - 767px) */
-@media (max-width: 767px) {
-  .cta-sec {
-    padding: 50px 15px;
+@media (max-width: 576px) {
+  .block-text h2 {
+    font-size: 26px;
   }
-  
-  .cta-sec .row {
-    padding: 0 20px;
-  }
-  
-  .cta-sec .section-title h2 {
-    font-size: 28px;
-  }
-  
-  .cta-sec p {
+  .block-text p {
     font-size: 15px;
-    line-height: 1.5;
   }
-}
-
-/* Mobile Devices (max 575px) */
-@media (max-width: 575px) {
-  .cta-sec {
-    padding: 40px 10px;
-  }
-  
-  .cta-sec .row {
-    padding: 0 15px;
-  }
-  
-  .cta-sec .section-title h2 {
-    font-size: 24px;
-  }
-  
-  .cta-sec p {
+  .main-btns.btn-filled {
     font-size: 14px;
-  }
-  
-  .cta-sec .section-title span.title-tag {
-    font-size: 14px;
-  }
-}
-
-/* Extra Small Devices (max 375px) */
-@media (max-width: 375px) {
-  .cta-sec {
-    padding: 30px 8px;
-  }
-  
-  .cta-sec .section-title h2 {
-    font-size: 22px;
-  }
-  
-  .cta-sec p {
-    font-size: 13px;
+    padding: 10px 24px;
   }
 }

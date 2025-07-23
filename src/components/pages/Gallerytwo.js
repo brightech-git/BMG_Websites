@@ -11,7 +11,7 @@ class Gallerytwo extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Laramiss | Gallery</title>
+                    <title>BMG | Gallery</title>
                     <meta
                         name="description"
                         content="#"

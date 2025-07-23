@@ -11,7 +11,7 @@ class Shopright extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Laramiss | Shop Right</title>
+                    <title>BMG | Shop Right</title>
                     <meta
                         name="description"
                         content="#"

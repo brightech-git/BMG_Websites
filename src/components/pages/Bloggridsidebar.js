@@ -11,7 +11,7 @@ class Bloggridsidebar extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Laramiss | Blog Grid</title>
+                    <title>BMG | Blog Grid</title>
                     <meta
                         name="description"
                         content="#"

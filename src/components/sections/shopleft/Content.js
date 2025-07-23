@@ -7,6 +7,7 @@ import { useAddFavorite, useRemoveFavorite, useFavorites } from '../../../hook/f
 import { useAuth } from '../../../context/authContext/UserAuthContext';
 import './ShopContent.css';
 import ProductCard from '../productCard/ProductCard';
+import Filter from '../Filter/Filter';
 
 const baseUrl = "https://app.bmgjewellers.com";
 
@@ -15,6 +16,7 @@ const Content = () => {
     const history = useHistory();
     const { user } = useAuth();
     const [animateHeart, setAnimateHeart] = useState(false);
+    const [showFilterModal, setShowFilterModal] = useState(false);
 
     const { data: favoritesData } = useFavorites();
     const addFavorite = useAddFavorite();
@@ -57,6 +59,14 @@ const Content = () => {
 
     return (
         <section className="shop-container">
+            {/* Mobile Filter Button - Only visible on small screens */}
+            <button 
+                className="mobile-filter-btn"
+                onClick={() => setShowFilterModal(true)}
+            >
+                <i className="fas fa-filter"></i> Filters
+            </button>
+
             <div className="shop-layout">
                 <div className="sidebar-area">
                     <Sidebar />
@@ -65,16 +75,7 @@ const Content = () => {
                 <div className="product-area">
                     <div className="product-header">
                         <p>Showing 1 To {products.length} of {products.length} results</p>
-                        {/* <div className="sorting-box">
-                            <select>
-                                <option>DEFAULT Sorting</option>
-                                <option>Sort By Popularity</option>
-                                <option>Sort By Latest</option>
-                                <option>Sort By Rating</option>
-                                <option>Sort By Price: Low to High</option>
-                                <option>Sort By Price: High to Low</option>
-                            </select>
-                        </div> */}
+                        {/* Optional: Add a sort dropdown if needed */}
                     </div>
 
                     <div className="product-grid">
@@ -90,12 +91,21 @@ const Content = () => {
 
                             return (
                                 <ProductCard key={item.SNO || i} item={item} />
-
                             );
                         })}
                     </div>
                 </div>
             </div>
+
+            {/* Filter Modal */}
+            <Filter 
+                showModal={showFilterModal} 
+                setShowModal={setShowFilterModal}
+                onApplyFilters={() => {
+                    // You can add any additional logic here when filters are applied
+                    setShowFilterModal(false);
+                }}
+            />
         </section>
     );
 };

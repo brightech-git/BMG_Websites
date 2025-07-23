@@ -11,7 +11,7 @@ class Cart extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Laramiss | Cart</title>
+                    <title>BMG | Cart</title>
                     <meta
                         name="description"
                         content="#"

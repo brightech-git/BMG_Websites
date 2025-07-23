@@ -233,3 +233,29 @@
         background: rgba(255, 255, 255, 0.8);
     }
 }
+
+@media (max-width: 768px) {
+    .shop-category-names {
+        display: flex;
+        flex-wrap: nowrap;      /* Single row */
+        overflow-x: auto;       /* Horizontal scroll */
+        overflow-y: hidden;
+        gap: 15px;
+        padding: 0 10px;
+        white-space: nowrap;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        scroll-snap-type: x mandatory;      /* Smooth snap */
+        scroll-padding-left: 10px;          /* Prevent first item cut */
+        justify-content: flex-start;
+    }
+
+    .shop-category-names::-webkit-scrollbar {
+        display: none;
+    }
+
+    .shop-category-name {
+        flex: 0 0 auto;
+        scroll-snap-align:start;   /* Snap each category */
+    }
+}

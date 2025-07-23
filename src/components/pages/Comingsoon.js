@@ -7,7 +7,7 @@ class Comingsoon extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Laramiss | Coming Soon</title>
+                    <title>BMG | Coming Soon</title>
                     <meta
                         name="description"
                         content="#"

@@ -11,7 +11,7 @@ class Classification extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Laramiss | Classification</title>
+                    <title>BMG | Classification</title>
                     <meta
                         name="description"
                         content="#"

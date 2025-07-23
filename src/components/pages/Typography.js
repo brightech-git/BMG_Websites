@@ -11,7 +11,7 @@ class Typography extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Laramiss | Typography</title>
+                    <title>BMG | Typography</title>
                     <meta
                         name="description"
                         content="#"

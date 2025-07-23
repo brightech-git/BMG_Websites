@@ -49,9 +49,9 @@ class Content extends Component {
                             </div>
                         ))}
                     </div>
-                    <div className="pagination-wrap mt-50">
+                    {/* <div className="pagination-wrap mt-50">
                         <Pagination />
-                    </div>
+                    </div> */}
                 </div>
             </section>
 

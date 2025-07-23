@@ -11,7 +11,7 @@ class Shoplefttwo extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Laramiss | Shop Left</title>
+                    <title>BMG | Shop Left</title>
                     <meta
                         name="description"
                         content="#"

@@ -11,7 +11,7 @@ class Legal extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Laramiss | Legal</title>
+                    <title>BMG | Legal</title>
                     <meta
                         name="description"
                         content="#"

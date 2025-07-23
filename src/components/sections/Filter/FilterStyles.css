@@ -1,33 +1,90 @@
-.filter-container {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-}
-
-.filter-container h3 {
-  margin-bottom: 20px;
-  color: #333;
-  font-size: 18px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
-}
-
-.filter-section {
-  margin-bottom: 20px;
-}
-
-.filter-section h4 {
-  margin-bottom: 10px;
-  color: #555;
-  font-size: 14px;
-}
-
-.price-inputs {
+/* Filter Button */
+.filter-toggle-btn {
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  z-index: 1000;
+  background: #cd865c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
   display: flex;
   align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.filter-toggle-btn:hover {
+  background: #b3744d;
+}
+
+/* Filter Modal */
+.filter-modal {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 350px;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  transition: right 0.3s ease;
+}
+
+.filter-modal.show {
+  right: 0;
+}
+
+.filter-modal-content {
+  position: absolute;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.close-modal-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+.filter-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.filter-modal-footer {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  margin-top: auto;
+}
+
+/* Price inputs */
+.price-inputs {
+  display: flex;
   gap: 10px;
+  align-items: center;
   margin-top: 10px;
 }
 
@@ -38,46 +95,57 @@
   border-radius: 4px;
 }
 
-.price-inputs span {
-  color: #777;
+/* Filter sections */
+.filter-section {
+  margin-bottom: 20px;
 }
 
-.checkbox-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.filter-section h4 {
+  margin-bottom: 10px;
+  color: #333;
 }
 
-.filter-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
+/* Buttons */
 .apply-btn {
-  background: #1890ff;
+  background: #cd865c;
   color: white;
   border: none;
-  padding: 8px 16px;
+  padding: 8px 15px;
   border-radius: 4px;
   cursor: pointer;
-  transition: background 0.3s;
 }
 
 .apply-btn:hover {
-  background: #40a9ff;
+  background: #b3744d;
 }
 
 .reset-btn {
   background: #f5f5f5;
   color: #333;
-  border: 1px solid #d9d9d9;
-  padding: 8px 16px;
+  border: 1px solid #ddd;
+  padding: 8px 15px;
   border-radius: 4px;
   cursor: pointer;
-  transition: all 0.3s;
 }
 
 .reset-btn:hover {
-  background: #e6e6e6;
+  background: #e5e5e5;
+}
+
+/* Checkbox group */
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .filter-modal {
+    width: 100%;
+  }
+  
+  .filter-modal-content {
+    padding: 15px;
+  }
 }

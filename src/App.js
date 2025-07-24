@@ -1,13 +1,11 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Route, Switch, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 // Preloader
 import Preloader from './components/layouts/Preloader';
 // Pages
 import Home from './components/pages/Home';
-// import Hometwo from './components/pages/Hometwo';
-// import Homethree from './components/pages/Homethree';
-// import Homefour from './components/pages/Homefour';
 import About from './components/pages/About';
 import Account from './components/pages/Account';
 import Blogdetail from './components/pages/Blogdetail';
@@ -34,16 +32,26 @@ import Wishlist from './components/pages/Wishlist';
 import PrivacyPolicy from './components/pages/Policies/Privacy';
 import PaymentPage from './components/pages/payment/Payment';
 
+function ScrollWatcher() {
+  const location = useLocation();
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      localStorage.setItem('lastVisited', location.pathname);
+    }
+  }, [location, isAuthenticated]);
+
+  return null;
+}
 
 function App() {
   return (
-    <Router basename={'/bmgjewellers/'}>
+    <Router basename="/bmgjewellers/">
       <Preloader />
+      <ScrollWatcher />
       <Switch>
         <Route exact path="/" component={Home} />
-        {/* <Route exact path="/home-two" component={Hometwo} />
-        <Route exact path="/home-three" component={Homethree} />
-        <Route exact path="/home-four" component={Homefour} /> */}
         <Route exact path="/about" component={About} />
         <Route exact path="/account" component={Account} />
         <Route exact path="/blog-detail" component={Blogdetail} />
@@ -66,10 +74,9 @@ function App() {
         <Route exact path="/team" component={Team} />
         <Route exact path="/typography" component={Typography} />
         <Route exact path="/wishlist" component={Wishlist} />
-        <Route exact path="/error" component={Error} />
         <Route exact path="/privacypolicy" component={PrivacyPolicy} />
         <Route exact path="/payment/:orderId" component={PaymentPage} />
-        <Route exact component={Error} />
+        <Route component={Error} />
       </Switch>
     </Router>
   );

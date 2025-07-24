@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
-import './Bestselling.css'; // Reuse same styles
+import './Bestselling.css'; 
 import useFilterProducts from '../../../hook/product/useFilterProducts';
 import ProductCard from '../productCard/ProductCard';
 
@@ -33,7 +33,7 @@ const TrendingProducts = () => {
             {
                 breakpoint: 992,
                 settings: {
-                    slidesToShow: 2,
+                    slidesToShow: 3,
                 },
             },
             {

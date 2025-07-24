@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { useAuth } from '../../../context/authContext/UserAuthContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { signup } from '../../../redux/slices/userSlice';
 import loginbg from '../../../assets/img/bg/sign.webp';
 
 const Content = () => {
@@ -8,39 +9,29 @@ const Content = () => {
     const [email, setEmail] = useState('');
     const [contactNumber, setContactNumber] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
-    const { signup } = useAuth();
+
+    const dispatch = useDispatch();
     const history = useHistory();
 
-    const handleRegister = async (e) => {
+    const { user, error, loading } = useSelector((state) => state.user);
+    const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+
+    const handleRegister = (e) => {
         e.preventDefault();
-        setError(null);
-
-        const userData = {
-            username,
-            email,
-            contactNumber,
-            password
-        };
-
-        try {
-            const response = await signup(userData);
-
-            // If response is truthy and has an `id`, assume success
-            if (response?.id) {
-                // Save to localStorage if needed
-                localStorage.setItem("user", JSON.stringify(response));
-                
-                // Redirect to homepage
-                history.push('/');
-            } else {
-                setError("Signup failed. Please try again.");
-            }
-        } catch (err) {
-            setError(err.message || "Something went wrong during registration");
-        }
+        dispatch(signup({ username, email, contactNumber, password }));
     };
 
+    // Redirect after successful signup
+      useEffect(() => {
+            if (isAuthenticated) {
+                const lastVisited = localStorage.getItem("lastVisited");
+                if (lastVisited && lastVisited !== '/login') {
+                    history.push(lastVisited);
+                } else {
+                    history.push('/');
+                }
+            }
+        }, [isAuthenticated, history]);
 
     return (
         <section className="login-sec pt-80 pb-80">
@@ -51,9 +42,7 @@ const Content = () => {
                             <div
                                 className="login-content"
                                 style={{ backgroundImage: `url(${loginbg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
-                            >
-                                <div className="description text-center"></div>
-                            </div>
+                            />
                         </div>
                         <div className="col-lg-6">
                             <div className="login-form">
@@ -61,7 +50,7 @@ const Content = () => {
 
                                 {error && (
                                     <div className="alert alert-danger" style={{ fontSize: '14px' }}>
-                                        {typeof error === 'string' ? error : error.message || "An unknown error occurred"}
+                                        {error}
                                     </div>
                                 )}
 
@@ -106,19 +95,13 @@ const Content = () => {
                                         />
                                     </div>
 
-                                   
-
-                                    <button type="submit" className="main-btn btn-filled mt-20 login-btn">
-                                        Register
+                                    <button type="submit" className="main-btn btn-filled mt-20 login-btn" disabled={loading}>
+                                        {loading ? 'Registering...' : 'Register'}
                                     </button>
 
                                     <p style={{ color: '#404040', fontFamily: 'Montserrat' }}>
                                         Already have an Account?
-                                        <Link
-                                            to="/login"
-                                            className="d-inline-block"
-                                            style={{ marginLeft: '10px' }}
-                                        >
+                                        <Link to="/login" className="d-inline-block" style={{ marginLeft: '10px' }}>
                                             Login
                                         </Link>
                                     </p>

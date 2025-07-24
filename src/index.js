@@ -39,7 +39,7 @@ ReactDOM.render(
     </QueryClientProvider>
     </Provider>
   </React.StrictMode>,
-  document.getElementById('laramiss')
+  document.getElementById('bmg')
 );
 
 serviceWorker.unregister();

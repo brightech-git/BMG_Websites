@@ -1,34 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { useAuth } from '../../../context/authContext/UserAuthContext';
 import loginbg from '../../../assets/img/bg/sign.webp';
 
-const Content = () => {
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../../../redux/slices/userSlice';
 
+const Content = () => {
     const [contactOrEmailOrUsername, setContactOrEmailOrUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
-    const { login } = useAuth();
+    const [localError, setLocalError] = useState(null); // for field errors
+
+    const dispatch = useDispatch();
     const history = useHistory();
 
+    // Redux state
+    const user = useSelector((state) => state.user.user);
+    const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+    const error = useSelector((state) => state.user.error);
+
+
+    // Handle login submit
     const handleLogin = async (e) => {
         e.preventDefault();
 
-        try {
-            const response = await login({ contactOrEmailOrUsername, password });
-            console.log(response);
+        if (!contactOrEmailOrUsername || !password) {
+            setLocalError('Please fill in all fields');
+            return;
+        }
 
-            if (response?.token) {
-                history.push('/'); // redirect to home
-            } else {
-                console.log(response);
-                setError('Invalid credentials');
+        try {
+            const resultAction = await dispatch(
+                login({
+                    contactOrEmailOrUsername: contactOrEmailOrUsername,
+                    password: password, // adjust field name based on your AuthService
+                })
+            ).unwrap();
+
+            if (resultAction?.token) {
+                const lastVisited = localStorage.getItem('lastVisited');
+                history.push(lastVisited || '/');
             }
+          
         } catch (err) {
-            
-            setError(err.message || 'Login failed');
+            setLocalError(err || 'Login failed');
         }
     };
+
+    // Clear local error if Redux error appears
+    useEffect(() => {
+        if (error) setLocalError(error);
+    }, [error]);
+    useEffect(() => {
+        if (isAuthenticated) {
+            const lastVisited = localStorage.getItem("lastVisited");
+            if (lastVisited && lastVisited !== '/login') {
+                history.push(lastVisited);
+            } else {
+                history.push('/');
+            }
+        }
+    }, [isAuthenticated, history]);
+
 
     return (
         <section className="login-sec pt-120 pb-120">
@@ -38,18 +70,23 @@ const Content = () => {
                         <div className="col-lg-6">
                             <div
                                 className="login-content"
-                                style={{ backgroundImage: `url(${loginbg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                                style={{
+                                    backgroundImage: `url(${loginbg})`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                }}
                             >
                                 <div className="description text-center"></div>
                             </div>
                         </div>
+
                         <div className="col-lg-6">
                             <div className="login-form">
                                 <h2>Log in</h2>
 
-                                {error && (
+                                {localError && (
                                     <div className="alert alert-danger" style={{ fontSize: '14px' }}>
-                                        {error}
+                                        {localError}
                                     </div>
                                 )}
 
@@ -81,11 +118,7 @@ const Content = () => {
 
                                     <p style={{ color: '#404040', fontFamily: 'Montserrat' }}>
                                         Don't have an Account?
-                                        <Link
-                                            to="/register"
-                                            className="d-inline-block"
-                                            style={{ marginLeft: '10px' }}
-                                        >
+                                        <Link to="/register" className="d-inline-block" style={{ marginLeft: '10px' }}>
                                             Create One
                                         </Link>
                                     </p>

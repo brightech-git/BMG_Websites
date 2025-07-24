@@ -16,8 +16,8 @@
 
 /* Shop Category Section */
 .shop-category-section {
-    padding: 80px 0;
-    background-color: var(--primary-color);
+    padding: 20px 0;
+    background-color: var(--secondary-card-color);
     font-family: var(--primary-font);
     color: var(--primary-text-color);
     

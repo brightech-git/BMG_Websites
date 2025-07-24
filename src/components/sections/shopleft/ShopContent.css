@@ -78,7 +78,9 @@
     .shop-container {
         padding: 20px 30px;
     }
-
+.product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
     .sidebar-area {
         flex: 0 0 250px;
     }

@@ -6,7 +6,6 @@ import './productCard.css';
 
 const ProductCard = ({ item }) => {
 
-    console.log(item,'items')
     const [isWishlisted, setIsWishlisted] = useState(false);
     const [animateHeart, setAnimateHeart] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -37,9 +36,6 @@ const ProductCard = ({ item }) => {
 
     const images = getProductImages();
     const hasMultipleImages = images.length > 1;
-    console.log("Item:", item);
-    console.log("SUBITEMNAME:", item?.SUBITEMNAME);
-    console.log("ITEMNAME:", item?.ITEMNAME);
 
     // Determine display name based on SUBITEM flag
     const displayName = item?.SUBITEMNAME || item?.ITEMNAME || 'Jewelry Item';

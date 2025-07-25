@@ -1,113 +1,205 @@
-import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 import Pagination from '../../layouts/Pagination';
-import Sidebar from '../../layouts/Shopsidebar';
-import { useProductsQuery } from '../../../hook/product/useProductsQuery';
-import { useAddFavorite, useRemoveFavorite, useFavorites } from '../../../hook/favorites/useFavoritesQuery';
+import useFilterProducts from '../../../hook/product/useFilterProducts';
 import { useAuth } from '../../../context/authContext/UserAuthContext';
+import {
+    setItemName,
+    setSubItemName,
+    setMetalId,
+    setSizeId,
+    setSizeName,
+    setCatName,
+    setGender,
+    setSortBy,
+    setSortDirection,
+    setMinGrandTotal,
+    setMaxGrandTotal,
+    setPriceRange,
+    setOccasion,
+    setMaterialFinish,
+    setColorAccent,
+    setStoneUnit,
+    setAvailability,
+    setNewArrival,
+    setTopTrending,
+    setPage,
+    setPageSize,
+} from '../../../redux/slices/filterSlice';
 import './ShopContent.css';
 import ProductCard from '../productCard/ProductCard';
-import Filter from '../Filter/Filter';
+import ProductFilterBar from './ProductFilterBar';
 
-const baseUrl = "https://app.bmgjewellers.com";
+const baseUrl = 'https://app.bmgjewellers.com';
 
 const Content = () => {
-    const { data, isLoading, isError } = useProductsQuery('', 1, 10);
+    const dispatch = useDispatch();
     const history = useHistory();
+    const location = useLocation();
     const { user } = useAuth();
-    const [animateHeart, setAnimateHeart] = useState(false);
-    const [showFilterModal, setShowFilterModal] = useState(false);
+    const filters = useSelector((state) => state.productFilters);
 
-    const { data: favoritesData } = useFavorites();
-    const addFavorite = useAddFavorite();
-    const removeFavorite = useRemoveFavorite();
+    // Parse query params
+    const searchParams = new URLSearchParams(location.search);
+    const page = Number(searchParams.get('page')) || 1;
+    const pageSize = Number(searchParams.get('pageSize')) || 10;
 
-    const handleWishlistToggle = (e, itemSno, isWishlisted) => {
+    // Debug query params and Redux state
+    useEffect(() => {
+        console.log('Current searchParams:', Object.fromEntries(searchParams));
+        console.log('location.search:', location.search);
+        console.log('Redux filters:', filters);
+    }, [location.search, filters]);
+
+    // Sync Redux state with URL on mount
+    useEffect(() => {
+        console.log('Syncing Redux with URL:', Object.fromEntries(searchParams));
+        dispatch(setItemName(searchParams.get('itemName')?.replace(/^"|"$/g, '') || ''));
+        dispatch(setSubItemName(searchParams.get('subItemName')?.replace(/^"|"$/g, '') || ''));
+        dispatch(setMetalId(searchParams.get('metalId')?.replace(/^"|"$/g, '') || ''));
+        dispatch(setSizeId(searchParams.get('sizeId') ? Number(searchParams.get('sizeId')) : ''));
+        dispatch(setSizeName(searchParams.get('sizeName')?.replace(/^"|"$/g, '') || ''));
+        dispatch(setCatName(searchParams.get('catName')?.replace(/^"|"$/g, '') || ''));
+        dispatch(setGender(searchParams.get('gender')?.replace(/^"|"$/g, '') || ''));
+        dispatch(setSortBy(searchParams.get('sortBy')?.replace(/^"|"$/g, '') || ''));
+        dispatch(setSortDirection(searchParams.get('sortDirection')?.toUpperCase() || 'ASC'));
+        dispatch(setMinGrandTotal(searchParams.get('minGrandTotal') ? Number(searchParams.get('minGrandTotal')) : ''));
+        dispatch(setMaxGrandTotal(searchParams.get('maxGrandTotal') ? Number(searchParams.get('maxGrandTotal')) : ''));
+        dispatch(setPriceRange(searchParams.get('priceRange')?.replace(/^"|"$/g, '') || ''));
+        dispatch(setOccasion(searchParams.get('occasion')?.replace(/^"|"$/g, '') || ''));
+        dispatch(setMaterialFinish(searchParams.get('materialFinish')?.replace(/^"|"$/g, '') || ''));
+        dispatch(setColorAccent(searchParams.get('colorAccent')?.replace(/^"|"$/g, '') || ''));
+        dispatch(setStoneUnit(searchParams.get('stoneUnit')?.replace(/^"|"$/g, '') || ''));
+        dispatch(setAvailability(searchParams.get('availability')?.replace(/^"|"$/g, '') || ''));
+        dispatch(setNewArrival(searchParams.get('newArrival')?.replace(/^"|"$/g, '') || ''));
+        dispatch(setTopTrending(searchParams.get('topTrending')?.replace(/^"|"$/g, '') || ''));
+        dispatch(setPage(page));
+        dispatch(setPageSize(pageSize));
+    }, [location.search, dispatch]);
+
+    // Fetch filtered products
+    const { data, loading: isLoading, error: isError, refetch } = useFilterProducts(location.search, page, pageSize);
+
+    // Debug API response
+    useEffect(() => {
+        console.log('useFilterProducts data:', data);
+        console.log('useFilterProducts isLoading:', isLoading);
+        console.log('useFilterProducts isError:', isError);
+    }, [data, isLoading, isError]);
+
+    const handleWishlistToggle = useCallback((e, itemSno, isWishlisted) => {
         e.preventDefault();
         e.stopPropagation();
 
         if (!user) {
             localStorage.setItem(
-                "redirectAfterLogin",
+                'redirectAfterLogin',
                 JSON.stringify({
                     path: window.location.pathname,
-                    action: "wishlistToggle",
-                    itemSno: itemSno,
-                    isWishlisted: isWishlisted,
+                    action: 'wishlistToggle',
+                    itemSno,
+                    isWishlisted,
                 })
             );
-            history.push("/login");
+            history.push('/login');
             return;
         }
 
-        setAnimateHeart(true);
-        if (isWishlisted) {
-            removeFavorite.mutate(itemSno);
-        } else {
-            addFavorite.mutate(itemSno);
-        }
-        setTimeout(() => setAnimateHeart(false), 800);
-    };
+        // Wishlist functionality placeholder
+    }, [user, history]);
 
-    if (isLoading) return <div className="loading-spinner"></div>;
-    if (isError) return <p className="error-message">Failed to load products. Please try again.</p>;
+    if (isLoading) return <div className="loading-spinner">Loading...</div>;
+    if (isError) return (
+        <p className="error-message">
+            Failed to load products: {isError.message || 'Unknown error'}. <button onClick={refetch}>Retry</button>
+        </p>
+    );
 
-    const products = data || [];
-    const favorites = Array.isArray(favoritesData?.data) ? favoritesData.data :
-        Array.isArray(favoritesData) ? favoritesData : [];
-    const favoriteItemIds = new Set(favorites.map(fav => fav.itemSno));
+    const products = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : [];
+
+    console.log(products,'contents for shp products');
 
     return (
         <section className="shop-container">
-            {/* Mobile Filter Button - Only visible on small screens */}
-            <button 
-                className="mobile-filter-btn"
-                onClick={() => setShowFilterModal(true)}
-            >
-                <i className="fas fa-filter"></i> Filters
-            </button>
-
-            <div className="shop-layout">
-                <div className="sidebar-area">
-                    <Sidebar />
+            <ProductFilterBar /> 
+            <div className="product-area">
+                <div className="product-header">
+                    <p>Showing {products.length ? 1 : 0} to {products.length} of {data?.totalItems || products.length} results</p>
                 </div>
-
-                <div className="product-area">
-                    <div className="product-header">
-                        <p>Showing 1 To {products.length} of {products.length} results</p>
-                        {/* Optional: Add a sort dropdown if needed */}
-                    </div>
-
-                    <div className="product-grid">
-                        {products.map((item, i) => {
+                <div className="product-grid">
+                    {products.length > 0 ? (
+                        products.map((item, i) => {
                             let images = [];
                             try {
                                 images = JSON.parse(item.ImagePath || '[]');
                             } catch (error) {
                                 console.warn('Invalid image JSON for item', item.ITEMID);
                             }
-                            const firstImage = images.length > 0 ? `${baseUrl}${images[0]}` : 'https://via.placeholder.com/245x331';
-                            const isWishlisted = favoriteItemIds.has(item.SNO);
-
+                            const firstImage = images.length > 0
+                                ? `${baseUrl}${images[0]}`
+                                : 'https://via.placeholder.com/245x331';
                             return (
-                                <ProductCard key={item.SNO || i} item={item} />
+                                <ProductCard
+                                    key={item.SNO || i}
+                                    item={item}
+                                    onWishlistToggle={(e) => handleWishlistToggle(e, item.SNO, false)}
+                                    imageSrc={firstImage}
+                                />
                             );
-                        })}
-                    </div>
+                        })
+                    ) : (
+                        <p>No products found.</p>
+                    )}
                 </div>
+                <Pagination
+                    currentPage={page}
+                    pageSize={pageSize}
+                    totalItems={data?.totalItems || products.length}
+                />
             </div>
-
-            {/* Filter Modal */}
-            <Filter 
-                showModal={showFilterModal} 
-                setShowModal={setShowFilterModal}
-                onApplyFilters={() => {
-                    // You can add any additional logic here when filters are applied
-                    setShowFilterModal(false);
-                }}
-            />
         </section>
     );
 };
 
 export default Content;
+
+// import React, { useEffect } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { fetchFilteredProducts } from '../../../redux/slices/filteredProductsSlice';
+// import { useLocation } from 'react-router-dom';
+// import queryString from 'query-string';
+// import { setFilter } from '../../../redux/slices/filterSlice';
+// import FilterBar from './ProductFilterBar';
+// import ProductCard from '../productCard/ProductCard';
+
+// const Content = () => {
+//     const dispatch = useDispatch();
+//     const location = useLocation();
+//     const filters = useSelector(state => state.productFilters);
+//     const products = useSelector(state => state.filteredProducts.items);
+
+//     useEffect(() => {
+//         // 1. On URL change → update filters in redux
+//         const query = queryString.parse(location.search);
+//         dispatch(setFilter(query));
+//     }, [location.search]);
+
+//     useEffect(() => {
+//         // 2. On Redux filters change → fetch data
+//         dispatch(fetchFilteredProducts(filters));
+//     }, [filters]);
+
+//     return (
+//         <div>
+//             <FilterBar />
+//             <div className="product-grid">
+//                 {products.map(product => (
+//                     <ProductCard item={product} key={product.SNO}/>
+//                 ))}
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default Content;

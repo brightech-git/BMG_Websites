@@ -1,0 +1,63 @@
+// src/hooks/product/useProductFilters.js
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  setItemName,
+  setSubItemName,
+  setMetalId,
+  setSizeId,
+  setSizeName,
+  setCatName,
+  setGender,
+  setSortBy,
+  setSortDirection,
+  setMinGrandTotal,
+  setMaxGrandTotal,
+  setPriceRange,
+  setOccasion,
+  setMaterialFinish,
+  setColorAccent,
+  setStoneUnit,
+  setAvailability,
+  setNewArrival,
+  setTopTrending,
+  setPage,
+  setPageSize,
+  resetFilters
+} from '../../redux/slices/filterSlice';
+
+const useProductFilters = () => {
+  const dispatch = useDispatch();
+  const filters = useSelector((state) => state.productFilters);
+
+  return {
+    filters,
+
+    // Setters
+    setItemName: (value) => dispatch(setItemName(value)),
+    setSubItemName: (value) => dispatch(setSubItemName(value)),
+    setMetalId: (value) => dispatch(setMetalId(value)),
+    setSizeId: (value) => dispatch(setSizeId(value)),
+    setSizeName: (value) => dispatch(setSizeName(value)),
+    setCatName: (value) => dispatch(setCatName(value)),
+    setGender: (value) => dispatch(setGender(value)),
+    setSortBy: (value) => dispatch(setSortBy(value)),
+    setSortDirection: (value) => dispatch(setSortDirection(value)),
+    setMinGrandTotal: (value) => dispatch(setMinGrandTotal(value)),
+    setMaxGrandTotal: (value) => dispatch(setMaxGrandTotal(value)),
+    setPriceRange: (value) => dispatch(setPriceRange(value)),
+    setOccasion: (value) => dispatch(setOccasion(value)),
+    setMaterialFinish: (value) => dispatch(setMaterialFinish(value)),
+    setColorAccent: (value) => dispatch(setColorAccent(value)),
+    setStoneUnit: (value) => dispatch(setStoneUnit(value)),
+    setAvailability: (value) => dispatch(setAvailability(value)),
+    setNewArrival: (value) => dispatch(setNewArrival(value)),
+    setTopTrending: (value) => dispatch(setTopTrending(value)),
+    setPage: (value) => dispatch(setPage(value)),
+    setPageSize: (value) => dispatch(setPageSize(value)),
+
+    resetFilters: () => dispatch(resetFilters())
+  };
+};
+
+
+export default useProductFilters;

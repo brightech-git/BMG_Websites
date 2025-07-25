@@ -24,14 +24,31 @@ export const getProductBySno = async (sno) => {
     throw new Error(`No product found for SNO: ${sno}`);
 };
 
+
 export const filterProducts = async (filters) => {
+    console.log('filter products in the service', filters);
     try {
-        const response = await PublicUrl.post('/product/items/filter', null, {
-            params: filters,
+        // Clean filters to remove quotes or invalid characters
+        const cleanedFilters = {};
+        Object.entries(filters).forEach(([key, value]) => {
+            if (typeof value === 'string') {
+                cleanedFilters[key] = value.replace(/^"|"$/g, '').trim();
+            } else {
+                cleanedFilters[key] = value;
+            }
         });
+
+        // Convert cleaned filters to query string
+        const queryString = new URLSearchParams(cleanedFilters).toString();
+        console.log('Query string:', queryString); // Debug
+
+        // Use POST with query string (as per your current implementation)
+        const response = await PublicUrl.post(`/product/items/filter?${queryString}`);
+        console.log('filterProducts response:', response.data); // Debug
         return response.data;
     } catch (error) {
-        throw error.response?.data || error;
+        console.error('filterProducts error:', error.response?.data || error.message);
+        throw error.response?.data || error.message;
     }
 };
 export const getProductsByMetalId = async (metalId) => {

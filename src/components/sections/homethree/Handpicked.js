@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 
-import '../../../assets/css/handpicked.css';
+import './handpicked.css';
 
 import img1 from '../../../assets/img/room-slider/img_1.jpg';
 import img2 from '../../../assets/img/room-slider/img_3.jpg';

@@ -1,14 +1,14 @@
 import React, { useRef } from 'react';
 import ProductCard from '../sections/productCard/ProductCard';
-import './Ourproducts.css';
+import './OurProducts.css';
 import useFilterProducts from '../../hook/product/useFilterProducts';
-
+import { useHistory } from 'react-router-dom';
 const Ourproducts = () => {
     const gridRef = useRef(null);
-
+    const history = useHistory();
     // Call hook with initial filter
     const {
-        data: featuredProducts,
+        data: newArrival,
         loading,
         error
     } = useFilterProducts({ new_arrival: 'Y' });
@@ -30,14 +30,21 @@ const Ourproducts = () => {
             });
         }
     };
-
+    const handleSeeAll = () => {
+        history.push('/shop-left?new_arrival=Y');
+    };
     return (
         <section className="featured-products">
             <div className="featured-products__container">
                 <div className="featured-products__header">
                     <span className="featured-products__subtitle">New Arrival</span>
                 </div>
-
+                <div className="featured-products__header">
+                    <span className="featured-products__subtitle">Featured Products</span>
+                    <button className="see-all-btn" onClick={handleSeeAll}>
+                        See All
+                    </button>
+                </div>
                 <div className="featured-products__grid-wrapper">
                     <button
                         className="featured-products__nav-button featured-products__nav-button--prev"
@@ -50,10 +57,15 @@ const Ourproducts = () => {
                     <div className="featured-products__grid" ref={gridRef}>
                         {loading && <p>Loading...</p>}
                         {error && <p>Failed to load products</p>}
-                        {!loading && !error && featuredProducts.length > 0 && (
-                            featuredProducts.map((item, i) => (
-                                <ProductCard key={i} item={item} />
+                        {!loading && !error && newArrival?.data?.length > 0 ? (
+                            newArrival.data.map((item) => (
+                                <ProductCard
+                                    key={item.SNO || item.id || item.ITEMID}
+                                    item={item}
+                                />
                             ))
+                        ) : (
+                            !loading && !error && <p>No featured products found.</p>
                         )}
                     </div>
 

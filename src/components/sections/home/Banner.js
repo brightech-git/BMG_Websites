@@ -1,27 +1,14 @@
 import React from 'react';
 import Slider from 'react-slick';
-import '../../../assets/css/Banner.css';
+import './Banner.css';
 import { useBanners } from '../../../hook/banner/useBannerQueries';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const Banner = () => {
-    const { data: images = [], isLoading } = useBanners();
-
+    const { data: bannerResponse = {}, isLoading } = useBanners();
+    const banners = bannerResponse?.data ?? [];
+    const history = useHistory();
     const baseUrl = "https://app.bmgjewellers.com";
-
-    const bannerContent = [
-        {
-            title: "Fine Craftsmanship",
-            description: "Elegance in every detail. Discover timeless treasures with BMG Jewellers."
-        },
-        {
-            title: "Celebrate with Gold",
-            description: "Make every moment precious. Shop exclusive gold jewellery now!"
-        },
-        {
-            title: "Shine Brighter Today",
-            description: "Unveil your inner glow with our handcrafted collections."
-        }
-    ];
 
     const settings = {
         dots: true,
@@ -31,40 +18,51 @@ const Banner = () => {
         speed: 1000,
         autoplaySpeed: 4000,
         slidesToShow: 1,
-        slidesToScroll: 1
+        slidesToScroll: 1,
+        adaptiveHeight: true
     };
 
-    if (isLoading) {
-        return <div>Loading banners...</div>;
-    }
+    const handleExploreNow = (itemName, gender) => {
+        const queryParams = new URLSearchParams();
+        if (itemName) queryParams.append('itemName', itemName);
+        if (gender) queryParams.append('gender', gender);
+        const fixedQuery = queryParams.toString().replace(/\+/g, '%20');
+        history.push(`/shop-left?${fixedQuery}`);
+    };
+
+    if (isLoading) return <div className="banner-loading">Loading banners...</div>;
 
     return (
         <section className="banner-area">
             <Slider {...settings}>
-                {images?.data?.map((img, index) => {
-                    const imgSrc = img?.image_path ? `${baseUrl}${img.image_path}` : img?.image || img;
-                    const content = bannerContent[index % bannerContent.length];
-
-                    return (
-                        <div className="single-slide" key={img.id}>
-                            <div className="slide-image-wrapper">
-                                <img src={imgSrc} alt={`banner-${index}`} className="slide-image" />
-                                <div className="image-overlay" />
-                            </div>
-                            <div className="content-overlay">
-                                <div className="container">
-                                    <div className="banner-content">
-                                        <h1 className="title">{content.title}</h1>
-                                        <p className="description">{content.description}</p>
-                                        <a className="cat-shop-btn cat-shop-filled" href="/shop-left">Shop Now</a>
-                                    </div>
-                                </div>
+                {banners.map((img, index) => (
+                    <div className="banner-slide" key={img.id || index}>
+                        <div className="banner-media-container">
+                            <img
+                                src={img?.image_path ? `${baseUrl}${img.image_path}` : img?.image || img}
+                                alt={`banner-${index}`}
+                                className="banner-image"
+                                loading="lazy"
+                            />
+                            <div className="banner-overlay" />
+                        </div>
+                        <div className="banner-content-wrapper">
+                            <div className="banner-content">
+                                <h1 className="banner-title">{img.title}</h1>
+                                <p className="banner-description">{img.subtitle || 'Discover our latest collection.'}</p>
+                                {(img.itemname || img.gender) && (
+                                    <button
+                                        className="banner-button"
+                                        onClick={() => handleExploreNow(img.itemname, img.gender)}
+                                    >
+                                        Explore Now
+                                    </button>
+                                )}
                             </div>
                         </div>
-                    );
-                })}
+                    </div>
+                ))}
             </Slider>
-
         </section>
     );
 };

@@ -1,86 +1,90 @@
-import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import './BestDesign.css';
-import useFilterProducts from '../../../hook/product/useFilterProducts';
-import ProductCard from '../productCard/ProductCard';
+
+import img1 from '../../../assets/img/banner/Tritiya_Slider_1.webp';
+import img2 from '../../../assets/img/banner/Tritiya_Slider_2.webp';
+import img3 from '../../../assets/img/banner/Tritiya_Slider_3.webp';
 
 const BestDesign = () => {
-    const {
-        data: bestDesign = [],
-        loading,
-        error,
-    } = useFilterProducts({ best_design: true });
+    const history = useHistory();
+    const [activePanel, setActivePanel] = useState(null);
 
-    const productsContainerRef = useRef(null);
-    const scrollIntervalRef = useRef(null);
-    const isHoveringRef = useRef(false);
+    const showcaseItems = [
+        {
+            id: 1,
+            image: img1,
+            title: "Artisan Crafted",
+            tagline: "Handmade Perfection",
+            link: "/shop-left?best_design=true"
+        },
+        {
+            id: 2,
+            image: img2,
+            title: "Modern Elegance",
+            tagline: "Contemporary Designs",
+            link: "/shop-left?best_design=true"
+        },
+        {
+            id: 3,
+            image: img3,
+            title: "Vintage Charm",
+            tagline: "Timeless Beauty",
+            link: "/shop-left?best_design=true"
+        }
+    ];
 
-    useEffect(() => {
-        const container = productsContainerRef.current;
-        if (!container || bestDesign.length <= 4) return;
-
-        const scrollProducts = () => {
-            if (isHoveringRef.current) return;
-
-            const container = productsContainerRef.current;
-            if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 10) {
-                container.scrollTo({ left: 0, behavior: 'smooth' });
-            } else {
-                container.scrollBy({ left: 300, behavior: 'smooth' });
-            }
-        };
-
-        scrollIntervalRef.current = setInterval(scrollProducts, 4000);
-
-        return () => {
-            clearInterval(scrollIntervalRef.current);
-        };
-    }, [bestDesign]);
-
-    const handleMouseEnter = () => {
-        isHoveringRef.current = true;
-        clearInterval(scrollIntervalRef.current);
-    };
-
-    const handleMouseLeave = () => {
-        isHoveringRef.current = false;
-        scrollIntervalRef.current = setInterval(() => {
-            const container = productsContainerRef.current;
-            if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 10) {
-                container.scrollTo({ left: 0, behavior: 'smooth' });
-            } else {
-                container.scrollBy({ left: 300, behavior: 'smooth' });
-            }
-        }, 4000);
-    };
-
-    if (loading) return <div className="loading-spinner">Loading...</div>;
-    if (error) return <div className="error-message">Error: {error.message}</div>;
+    const handleSeeAll = () => history.push('/shop-left?best_design=true');
+    const handleItemClick = (link) => history.push(link);
 
     return (
-        <section className="best-design-section">
-            <div className="best-design-container">
-                <div className="best-design-wrapper">
-                    <div className="best-design-products-wrapper"
-                        ref={productsContainerRef}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}>
-                        <div className="products-container">
-                            {bestDesign.map((item, i) => (
-                                <div key={item.SNO || item.id || i} className="product-item">
-                                    <ProductCard item={item} />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="best-design-content">
-                        <h2 className="section-title">Best Designed Products</h2>
-                        <p className="section-description">
-                            Discover what's trending now - our most popular picks in gold polished, silver.
+        <section className="enhanced-panel-showcase">
+            <div className="enhanced-container">
+                <div className="enhanced-header">
+                    <div className="title-group">
+                        <h2 className="enhanced-title">
+                            <span className="title-line">Curated Collections</span>
+                        </h2>
+                        <p className="enhanced-subtitle">
+                            Discover our exclusive selection of premium designs
                         </p>
-                        <Link to="/shop-left" className="trending-shop-btn">Shop Now</Link>
                     </div>
+                    <button
+                        className="enhanced-shop-btn"
+                        onClick={handleSeeAll}
+                        aria-label="View all collections"
+                    >
+                        Explore All
+                        <span className="btn-arrow">→</span>
+                    </button>
+                </div>
+
+                <div className="enhanced-gallery">
+                    {showcaseItems.map((item, index) => (
+                        <div
+                            key={item.id}
+                            className={`enhanced-panel ${activePanel === index ? 'active' : ''}`}
+                            onMouseEnter={() => setActivePanel(index)}
+                            onMouseLeave={() => setActivePanel(null)}
+                            onClick={() => handleItemClick(item.link)}
+                            aria-label={`View ${item.title} collection`}
+                        >
+                            <div className="panel-image-container">
+                                <img
+                                    src={item.image}
+                                    alt={item.title}
+                                    className="panel-img"
+                                    loading="lazy"
+                                />
+                                <div className="panel-overlay"></div>
+                            </div>
+                            <div className="panel-details">
+                                <span className="panel-meta">{item.tagline}</span>
+                                <h3 className="panel-heading">{item.title}</h3>
+                                <div className="panel-highlight"></div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </section>

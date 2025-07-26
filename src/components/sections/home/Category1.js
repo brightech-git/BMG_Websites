@@ -1,38 +1,48 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import image1 from '../../../assets/img/category/grid2_-1.webp';
-import image2 from '../../../assets/img/category/Group_129625.webp';
-
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { useOfferBanners } from '../../../hook/banner/useOfferBanner';
 import '../../../assets/css/Category1.css';
 
-class Category1 extends Component {
-    render() {
-        return (
-            <div className="category1-container">
-                {/* Card 1 */}
-                <section className="category1-card">
-                    <img src={image1} alt="Earrings Offer" className="category1-img" />
-                    <div className="category1-content">
-                        <p className="category1-label">Big Deal</p>
-                        <h2 className="category1-title">Get 20% Flat Offer</h2>
-                        <h3 className="category1-subtitle">on Earrings</h3>
-                        <Link to="/shop-left" className="cat-shop-btn cat-shop-filled">Shop Now</Link>
-                    </div>
-                </section>
+const Category1 = () => {
+    const history = useHistory();
+    const { data, isLoading, error } = useOfferBanners();
+    const baseUrl = "https://app.bmgjewellers.com";
+    const banners = data?.data || [];
 
-                {/* Card 2 */}
-                <section className="category1-card">
-                    <img src={image2} alt="Pendant Offer" className="category1-img" />
-                    <div className="category1-content">
-                        <h2 className="category1-title dark">Well Designed Pendant</h2>
-                        <p className="category1-subtitle light">Nascetur ridiculus mus mauris vitae</p>
-                        <Link to="/shop-left" className="cat-shop-btn cat-shop-filled">Shop Now</Link>
-                       
-                    </div>
-                </section>
-            </div>
-        );
-    }
-}
+    const handleShopNow = (itemName, subItemName) => {
+        const queryParams = new URLSearchParams();
+        if (itemName) queryParams.append('itemName', itemName);
+        if (subItemName) queryParams.append('subItemName', subItemName);
+
+        const fixedQuery = queryParams.toString().replace(/\+/g, '%20');
+        history.push(`/shop-left?${fixedQuery}`);
+    };
+
+    if (isLoading) return <div>Loading Offer Banners...</div>;
+    if (error) return <div>Error loading offers: {error.message}</div>;
+
+    return (
+        <div className="category1-container">
+            {banners.map((item, i) => {
+                const imgSrc = item?.image_path ? `${baseUrl}${item.image_path}` : '';
+                return (
+                    <section className="category1-card" key={item.id}>
+                        <img src={imgSrc} alt={item.title} className="category1-img" onClick={()=>handleShopNow(item.item_name, item.sub_item_name)} />
+                        {/* <div className="category1-content">
+                            <h2 className="category1-title">{item.title}</h2>
+                            <p className="category1-subtitle">{item.subtitle}</p>
+                            <button
+                                className="cat-shop-btn cat-shop-filled"
+                                onClick={() => handleShopNow(item.item_name, item.sub_item_name)}
+                            >
+                                Shop Now
+                            </button>
+                        </div> */}
+                    </section>
+                );
+            })}
+        </div>
+    );
+};
 
 export default Category1;

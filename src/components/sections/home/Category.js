@@ -1,44 +1,57 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import image1 from '../../../assets/img/category/grid.png';
-import image2 from '../../../assets/img/category/grid_2.webp';
-import image3 from '../../../assets/img/category/grid-3.webp';
-import '../../../assets/css/category.css';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { useOccasionBanners } from '../../../hook/banner/useOccasionBanners';
+import './category.css';
 
-const categoryposts = [
-    { icon: image1, title: 'Golden Pendants', name: 'Traditional', action: 'Shop Now' },
-    { icon: image2, title: 'Golden Rings', name: 'Trending', action: 'Shop Now' },
-    { icon: image3, title: 'Golden Necklaces', name: 'Modern', action: 'Shop Now' },
-];
+const Category = () => {
+    const history = useHistory();
+    const { data, isLoading, error } = useOccasionBanners();
+    const baseUrl = "https://app.bmgjewellers.com";
+    const banners = data?.data || [];
 
-class Category extends Component {
-    render() {
-        return (
-            <div className="categories-box-layout">
-                <div className="row custom-category-row">
-                    {categoryposts.map((item, i) => (
-                        <div key={i} className="col-lg-4 col-md-6 col-sm-12 category-col">
-                            <section className="categories-box" style={{ backgroundImage: `url(${item.icon})` }}>
-                                <div className="category-content">
-                                    <div className="icon">
-                                        <p className="title-name">{item.name}</p>
-                                    </div>
-                                    <h5 className="title">{item.title}</h5>
-                                    <Link
-                                        to="/shop-left"
-                                        className="cat-shop-btn cat-shop-filled"
+    const handleShopNow = (occasion, gender) => {
+        const queryParams = new URLSearchParams();
+        if (occasion) queryParams.append('occasion', occasion);
+        if (gender) queryParams.append('gender', gender);
+        history.push(`/shop-left?${queryParams.toString()}`);
+    };
+
+    if (isLoading) {
+        return <div className="occasion-loading" aria-live="polite">Loading collections...</div>;
+    }
+
+    if (error) {
+        return <div className="occasion-error" aria-live="assertive">Error loading collections: {error.message}</div>;
+    }
+
+    return (
+        <div className="occasion-container">
+            <div className="occasion-grid">
+                {banners.map((item, i) => {
+                    const imgSrc = item?.image_path ? `${baseUrl}${item.image_path}` : '';
+                    return (
+                        <div key={i} className="occasion-card-wrapper">
+                            <div className="occasion-card">
+                                <div className="occasion-image" style={{ backgroundImage: `url(${imgSrc})` }}>
+                                    <div className="occasion-overlay"></div>
+                                </div>
+                                <div className="occasion-content">
+                                    <div className="occasion-tag">{item.occasion}</div>
+                                    <button
+                                        className="occasion-btn"
+                                        onClick={() => handleShopNow(item.occasion, item.gender)}
                                         aria-label={`Shop ${item.title}`}
                                     >
-                                        {item.action}
-                                    </Link>
+                                        {item.action || 'Shop Now'}
+                                    </button>
                                 </div>
-                            </section>
+                            </div>
                         </div>
-                    ))}
-                </div>
+                    );
+                })}
             </div>
-        );
-    }
-}
+        </div>
+    );
+};
 
 export default Category;

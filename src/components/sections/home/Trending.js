@@ -48,7 +48,7 @@ class Trending extends Component {
                         <Link to="/shop-left" className="view-more">
                             View more
                             <i className="fal fa-arrow-right ml-2" />
-                        </Link>
+                        </Link> tr
                     </div>
                     <div className="row">
                         {trendingPosts.map((item, i) => (

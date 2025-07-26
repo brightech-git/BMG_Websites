@@ -19,6 +19,7 @@ import RecentlyViewed from '../../layouts/RecentlyViewed';
 import Blog from './Blog';
 import Handpicked from '../homethree/Handpicked';
 import BestDesign from './BestDesign';
+import FeaturedBanners from '../../layouts/FeaturedProduct';
 class Content extends Component {
     render() {
         return (
@@ -27,7 +28,7 @@ class Content extends Component {
                 <Category/>
                 <Category1/>
                 <Handpicked />
-                <FeaturedProducts />
+                <FeaturedBanners />
                 <Cta />     
                 {/* <Trending/> */}
                 <Condos/>

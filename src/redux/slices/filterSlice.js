@@ -20,7 +20,8 @@ const initialState = {
     availability: '',
     new_arrival: '', // Expects 'YES'/'NO'
     top_trending: '', // Expects 'YES'/'NO'
-    page: 1, // Default to 1
+    featured_products: '', // Add this
+    page: 0, // Default to 0
     pageSize: 10,
 };
 
@@ -85,6 +86,9 @@ const filterSlice = createSlice({
         setTopTrending: (state, action) => {
             state.top_trending = action.payload === true ? 'YES' : action.payload === false ? 'NO' : '';
         },
+        setFeaturedProducts(state, action) {
+            state.featured_products = action.payload;
+        },
         setPage: (state, action) => {
             state.page = Number(action.payload) || 1; // Default to 1
         },
@@ -118,6 +122,7 @@ export const {
     setPage,
     setPageSize,
     resetFilters,
+    setFeaturedProducts, // Export new reducer
 } = filterSlice.actions;
 
 export default filterSlice.reducer;

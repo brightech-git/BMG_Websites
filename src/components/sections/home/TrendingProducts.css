@@ -1,0 +1,210 @@
+/* Trending Products Showcase */
+
+/* Bestselling Products Section */
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
+
+:root {
+    --primary-font: 'Gloock', 'serif';
+    --secondary-font: 'Montserrat', 'sans-serif';
+    --primary-color: #f6f5f0;
+    --primary-text-color: #404040;
+    --primary-card-color: #edebe7;
+    --primary-hover-color: #cd865c;
+    --secondary-card-color: #cfdcdd;
+    --white-color: #ffffff;
+    --header-height: 80px;
+    --mobile-header-height: 60px;
+    --green-color: #024908;
+    --grey-color: #A9A9A9;
+    --black-color: #000000;
+}
+.trending-showcase {
+    padding: 5rem 0;
+    background-color: var(--primary-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.trending-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Header Styles */
+.trending-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.trending-title-group {
+    max-width: 600px;
+}
+
+.trending-main-title {
+    font-size: clamp(1.8rem, 4vw, 1.8rem);
+    font-weight: 400;
+    color: var(--primary-text-color);
+    font-family: var(--primary-font);
+    line-height: 0.95;
+    margin: 0 0 0.5rem 0;
+}
+
+.title-line {
+    display: block;
+}
+
+.trending-subtitle {
+    font-size: 1.1rem;
+    color: var(--primary-text-color);
+    opacity: 0.8;
+    font-weight: 300;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Slider Container */
+.trending-slider-container {
+    position: relative;
+    padding: 1rem 0 3rem;
+}
+
+.trending-slider {
+    position: relative;
+    z-index: 2;
+}
+
+.slider-card {
+    padding: 0 1rem;
+    transition: transform 0.3s ease;
+}
+
+.slider-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Slider Dots Customization */
+.slick-dots {
+    bottom: 0;
+}
+
+.slick-dots li button:before {
+    font-size: 10px;
+    color: var(--primary-hover-color);
+    opacity: 0.3;
+}
+
+.slick-dots li.slick-active button:before {
+    color: var(--primary-hover-color);
+    opacity: 1;
+}
+
+/* CTA Button */
+.trending-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    background-color: var(--primary-hover-color);
+    color: var(--white-color);
+    border: none;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 0.5rem;
+}
+
+.trending-cta:hover {
+    background-color: var(--primary-text-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cta-arrow {
+    transition: transform 0.3s ease;
+}
+
+.trending-cta:hover .cta-arrow {
+    transform: translateX(4px);
+}
+
+/* Loading States */
+.trending-loading,
+.trending-error {
+    text-align: center;
+    padding: 3rem;
+    font-size: 1.1rem;
+    color: var(--primary-text-color);
+    font-family: var(--secondary-font);
+}
+
+.trending-error {
+    color: #dc3545;
+}
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+    .trending-slider-container {
+        padding: 1rem 0 2.5rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .trending-showcase {
+        padding: 4rem 0;
+    }
+
+    .trending-header {
+        margin-bottom: 2rem;
+    }
+
+    .slick-slide {
+        padding: 0 0.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .trending-container {
+        padding: 0 1.5rem;
+    }
+
+    .trending-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .trending-cta {
+        padding: 0.65rem 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .trending-showcase {
+        padding: 3rem 0;
+    }
+
+    .trending-main-title {
+        font-size: 2.2rem;
+    }
+
+    .trending-subtitle {
+        font-size: 1rem;
+    }
+
+    .slick-dots {
+        bottom: -0.5rem;
+    }
+}
+
+/* Focus states for accessibility */
+.trending-cta:focus-visible,
+.slider-card:focus-visible {
+    outline: 2px solid var(--primary-hover-color);
+    outline-offset: 2px;
+}

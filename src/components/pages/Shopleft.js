@@ -22,7 +22,7 @@ class Shopleft extends Component {
                 <Breadcrumb breadcrumb={{pagename:'Shop Left'}}/>
                 
                 <Content/>
-                <Instafeeds/>
+                {/* <Instafeeds/> */}
                 <Footer/>
             </Fragment>
         );

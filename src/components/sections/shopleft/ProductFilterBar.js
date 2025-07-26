@@ -21,13 +21,14 @@ import {
     setAvailability,
     setNewArrival,
     setTopTrending,
+    setFeaturedProducts, // Add this
     setPage,
     setPageSize,
     resetFilters,
 } from '../../../redux/slices/filterSlice';
 import './ProductFilterBar.css';
 
-// Predefined options (can be fetched dynamically later)
+// Predefined options
 const itemNameOptions = ['Ring', 'Necklace', 'Earrings', 'Bracelet'];
 const subItemNameOptions = ['Solitaire', 'Pendant', 'Stud', 'Bangle'];
 const genderOptions = ['MEN', 'WOMEN', 'KIDS'];
@@ -37,12 +38,9 @@ const ProductFilterBar = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const location = useLocation();
-    const filters = useSelector((state) => {
-        console.log('Redux state in ProductFilterBar:', state);
-        return state.productFilters;
-    });
+    const filters = useSelector((state) => state.productFilters);
 
-    // Reset state on page refresh or back navigation
+    // Reset state on page refresh
     React.useEffect(() => {
         const handleUnload = () => {
             dispatch(resetFilters());
@@ -55,18 +53,17 @@ const ProductFilterBar = () => {
     const updateQueryString = () => {
         const params = new URLSearchParams();
         Object.entries(filters).forEach(([key, value]) => {
-            if (value !== '' && value !== 0 && value !== 'ASC') {
+            if (value !== '' && value !== null && value !== undefined && value !== 'ASC') {
                 params.append(key, value);
             }
         });
-        console.log('Updated query string:', params.toString()); // Debug
         history.push({ search: params.toString() });
     };
 
     // Handlers for filter changes
     const handleSetItemName = (value) => {
         dispatch(setItemName(value));
-        dispatch(setPage(1)); // Reset to first page
+        dispatch(setPage(1));
         updateQueryString();
     };
     const handleSetSubItemName = (value) => {
@@ -112,7 +109,7 @@ const ProductFilterBar = () => {
     const handleSetMinGrandTotal = (value) => {
         const numValue = value ? Number(value) : '';
         if (numValue && filters.maxGrandTotal && numValue > filters.maxGrandTotal) {
-            return; // Prevent min > max
+            return;
         }
         dispatch(setMinGrandTotal(numValue));
         dispatch(setPage(1));
@@ -155,18 +152,23 @@ const ProductFilterBar = () => {
         updateQueryString();
     };
     const handleSetNewArrival = (value) => {
-        dispatch(setNewArrival(value));
+        dispatch(setNewArrival(value ? 'YES' : ''));
         dispatch(setPage(1));
         updateQueryString();
     };
     const handleSetTopTrending = (value) => {
-        dispatch(setTopTrending(value));
+        dispatch(setTopTrending(value ? 'YES' : ''));
+        dispatch(setPage(1));
+        updateQueryString();
+    };
+    const handleSetFeaturedProducts = (value) => {
+        dispatch(setFeaturedProducts(value ? 'true' : ''));
         dispatch(setPage(1));
         updateQueryString();
     };
     const handleSetPageSize = (value) => {
         dispatch(setPageSize(Number(value)));
-        dispatch(setPage(1)); // Reset to first page
+        dispatch(setPage(1));
         updateQueryString();
     };
     const handleResetFilters = () => {
@@ -345,6 +347,14 @@ const ProductFilterBar = () => {
                         />
                         Top Trending
                     </label>
+                    <label className="checkbox-label">
+                        <input
+                            type="checkbox"
+                            checked={filters.featured_products === 'true'}
+                            onChange={(e) => handleSetFeaturedProducts(e.target.checked)}
+                        />
+                        Featured Products
+                    </label>
                 </div>
 
                 <div className="filter-group">
@@ -374,7 +384,7 @@ const ProductFilterBar = () => {
                         <input
                             type="range"
                             min="0"
-                            max="10000" // Adjust max value dynamically if needed
+                            max="10000"
                             value={filters.priceRange || 0}
                             onChange={(e) => handleSetPriceRange(e.target.value)}
                         />

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import ProductCard from '../sections/productCard/ProductCard';
-import './OurProducts.css';
+import './Ourproducts.css';
 import useFilterProducts from '../../hook/product/useFilterProducts';
 import { useHistory } from 'react-router-dom';
 const Ourproducts = () => {
@@ -36,14 +36,17 @@ const Ourproducts = () => {
     return (
         <section className="featured-products">
             <div className="featured-products__container">
+                <div className='new-arrival-container'>
                 <div className="featured-products__header">
                     <span className="featured-products__subtitle">New Arrival</span>
                 </div>
                 <div className="featured-products__header">
-                    <span className="featured-products__subtitle">Featured Products</span>
-                    <button className="see-all-btn" onClick={handleSeeAll}>
+                   
+                    <button className="products-see-all-btn" onClick={() => handleSeeAll()}>
                         See All
+                        <span className="products-btn-arrow">&rarr;</span>
                     </button>
+                </div>
                 </div>
                 <div className="featured-products__grid-wrapper">
                     <button

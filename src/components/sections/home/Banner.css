@@ -13,6 +13,7 @@
     --grey-color: #A9A9A9;
     --black-color: #000000;
 }
+
 /* ===== Banner Area ===== */
 /* Banner Loading State */
 .banner-loading {
@@ -28,7 +29,7 @@
     position: relative;
     width: 100%;
     margin: 0 auto;
-    margin-top: 160px;
+    /* Remove any potential gap */
 }
 
 /* Slide Container */
@@ -42,8 +43,8 @@
 .banner-media-container {
     position: relative;
     width: 100%;
-    padding-top: 56.25%;
-    /* 16:9 aspect ratio by default */
+    padding-top: 45%;
+    /* Slightly adjusted for better proportions */
 }
 
 /* Banner Image */
@@ -160,14 +161,12 @@
 
 /* Responsive Adjustments */
 @media (max-width: 1300px) {
-    .banner-area {
-        margin-top: 120px;
-    }
-
     .banner-media-container {
-        padding-top: 60%;
+        padding-top: 50%;
     }
-
+.banner-area{
+    margin-bottom: -20px;
+}
     .banner-content {
         text-align: center;
         margin: 0 auto;
@@ -179,15 +178,12 @@
 }
 
 @media (max-width: 992px) {
-    .banner-area {
-        margin-top: 10px;
-        margin-bottom: -50px;
-    }
-
     .banner-media-container {
-        padding-top: 70%;
+        padding-top: 55%;
     }
-
+.banner-area {
+    margin-bottom: -150px;
+}
     .banner-title {
         font-size: clamp(2rem, 5vw, 2.5rem);
     }
@@ -195,12 +191,12 @@
 
 @media (max-width: 768px) {
     .banner-area {
-        margin-top: 80px;
-        margin-bottom: -100px;
+        margin-top: 0;
+        margin-bottom: -200px;
     }
 
     .banner-media-container {
-        padding-top: 85%;
+        padding-top: 65%;
     }
 
     .banner-content {
@@ -214,15 +210,13 @@
 }
 
 @media (max-width: 576px) {
-    .banner-area {
-        margin-top: 70px;
-        margin-bottom: -120px;
-    }
-
     .banner-media-container {
-        padding-top: 100%;
+        padding-top: 75%;
     }
-
+ .banner-area {
+     margin-top: 0;
+     margin-bottom: -300px;
+ }
     .banner-content {
         padding: 1rem;
     }
@@ -241,11 +235,18 @@
         font-size: 0.8125rem;
     }
 }
-@media (max-width: 400px){
- .banner-area{
-    margin-bottom: -250px;
- }
+
+/* Remove all negative margins that were causing gaps */
+@media (max-width: 400px) {
+    .banner-media-container {
+        padding-top: 85%;
+    }
+         .banner-area {
+             margin-top: 0;
+             margin-bottom: -380px;
+         }
 }
+
 /* Touch Devices */
 @media (hover: none) and (pointer: coarse) {
     .banner-button {

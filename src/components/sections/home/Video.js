@@ -1,52 +1,79 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import ReactWOW from 'react-wow';
-import $ from 'jquery';
-import 'magnific-popup';
+import { useVideos } from '../../../hook/video/useVideoQuery';
 
-import videoimg from '../../../assets/img/room-suite/Product_7.webp'
+const Video = () => {
+    const history = useHistory();
+    const videoRef = useRef(null);
+    const baseUrl = 'https://bmgjewellers.com';
+    const { data: videos, isLoading, isError } = useVideos();
 
-class Video extends Component {
-    componentDidMount(){
-        function popup(){
-            $('.popup-video').magnificPopup({
-                type: 'iframe',
-            });
-        }
-        popup();
-    }
-    render() {
-        return (
-            <section className="text-block  with-pattern pt-85 pb-85">
-                <div className='container'>
-                    <div className="row align-items-center justify-content-center">
-                        <div className="col-lg-6 col-md-10 order-2 order-lg-1">
-                            <div className="block-text">
-                                <div className="section-title mb-20">
-                                    {/* <span className="title-tag">design video</span> */}
-                                    <h2>Make Your Day Brighter .</h2>
-                                </div>
-                                <p className="pr-50">
-                                    Elevate your look with handcrafted silver pieces designed to shine with simplicity and grace.
-                                </p>
-                                <Link to="/contact" className="main-btns btn-filled mt-40">See More</Link>
+    // useEffect(() => {
+    //     if (videoRef.current) {
+    //         videoRef.current.scrollIntoView({ behavior: 'smooth' });
+    //     }
+    // }, [videos]);
+
+    if (isLoading) return <div className="loading-spinner">Loading video...</div>;
+    if (isError) return <div className="error-message">Error loading video</div>;
+
+    const videoData = videos?.data?.[0];
+    const videoUrl = videoData?.video_path ? `${baseUrl}${videoData.video_path}` : '';
+
+    const handleSeeMore = () => {
+        history.push('/shop-left');
+    };
+
+    return (
+        <section className="video-section with-pattern pt-85 pb-85">
+            <div className="container">
+                <div className="row align-items-center justify-content-center">
+                    <div className="col-lg-6 col-md-10 order-2 order-lg-1">
+                        <div className="video-content">
+                            <div className="section-title mb-20">
+                                <h2>Make Your Day Brighter</h2>
                             </div>
+                            <p className="video-description">
+                                Elevate your look with handcrafted silver pieces designed to shine with simplicity and grace.
+                            </p>
+                            <button
+                                onClick={handleSeeMore}
+                                className="main-btns btn-filled mt-40"
+                            >
+                                See More
+                            </button>
                         </div>
-                        <ReactWOW animation="fadeInRight" data-wow-delay=".3s">
-                            <div className="col-lg-6 col-md-10 order-1 order-lg-2">
-                                <div className="video-wrap video-wrap-two mb-small" style={{ backgroundImage: "url(" + videoimg + ")" }}>
-                                    <Link to="http://www.youtube.com/embed/watch?v=EEJFMdfraVY" className="popup-video"><i className="fas fa-play" /></Link>
-                                </div>
-                            </div>
-                        </ReactWOW>
                     </div>
+
+                    <ReactWOW animation="fadeInRight" data-wow-delay=".3s">
+                        <div className="col-lg-6 col-md-10 order-1 order-lg-2">
+                            {videoUrl && (
+                                <div className="video-container" ref={videoRef}>
+                                    <video
+                                        width="100%"
+                                        height="100%"
+                                        src={videoUrl}
+                                        autoPlay
+                                        muted
+                                        loop
+                                        playsInline
+                                        controls={false}
+                                        className="video-element"
+                                    />
+                                   
+                                </div>
+                            )}
+                        </div>
+                    </ReactWOW>
                 </div>
-                <div className="pattern-wrap">
-                    <div className="pattern" />
-                </div>
-            </section>
-        );
-    }
-}
+            </div>
+
+            <div className="pattern-overlay">
+                <div className="pattern" />
+            </div>
+        </section>
+    );
+};
 
 export default Video;

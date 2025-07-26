@@ -19,7 +19,6 @@
 .product-card {
     background-color: var(--primary-card-color);
     overflow: hidden;
-    margin-bottom: 30px;
     transition: var(--transition);
     position: relative;
     font-family: var(--secondary-font);
@@ -163,7 +162,6 @@
     text-decoration: none;
     text-transform: capitalize;
     display: block;
-    margin-bottom: 12px;
     transition: var(--transition);
 }
 

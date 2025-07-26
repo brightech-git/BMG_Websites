@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useQueries } from '@tanstack/react-query';
 import { useRecentlyViewed } from '../../hook/recentlyViewed/useRecentlyViewedQuery';
@@ -8,6 +8,9 @@ import './recently-viewed.css';
 
 const RecentlyViewed = ({ history }) => {
     const gridRef = useRef(null);
+    const [showNavButtons, setShowNavButtons] = useState(false);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(false);
 
     // Fetch recently viewed product SNOs
     const {
@@ -41,6 +44,14 @@ const RecentlyViewed = ({ history }) => {
             SNO: q.data.SNO || q.data.id,
         }));
 
+    const checkScrollPosition = () => {
+        if (gridRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = gridRef.current;
+            setCanScrollLeft(scrollLeft > 0);
+            setCanScrollRight(scrollLeft < scrollWidth - clientWidth);
+        }
+    };
+
     const scrollLeft = () => {
         if (gridRef.current) {
             gridRef.current.scrollBy({
@@ -59,11 +70,24 @@ const RecentlyViewed = ({ history }) => {
         }
     };
 
+    useEffect(() => {
+        const grid = gridRef.current;
+        if (grid) {
+            checkScrollPosition();
+            grid.addEventListener('scroll', checkScrollPosition);
+            return () => grid.removeEventListener('scroll', checkScrollPosition);
+        }
+    }, [products]);
+
+    useEffect(() => {
+        setShowNavButtons(products.length > 0);
+    }, [products]);
+
     if (isSnoError) {
         return (
             <section className="recently-viewed">
                 <div className="recently-viewed__container">
-                    <p>{snoError.message || 'Failed to load recently viewed products'}</p>
+                    <p className="recently-viewed__error">{snoError.message || 'Failed to load recently viewed products'}</p>
                 </div>
             </section>
         );
@@ -77,45 +101,63 @@ const RecentlyViewed = ({ history }) => {
                     <h2 className="recently-viewed__title">Viewed Products</h2>
                 </div>
 
-                <div className="recently-viewed__grid-wrapper">
-                    <button
-                        className="recently-viewed__nav-button recently-viewed__nav-button--prev"
-                        onClick={scrollLeft}
-                        aria-label="Previous products"
-                    >
-                        &lt;
-                    </button>
+                <div className="recently-viewed__content">
+                    {showNavButtons && (
+                        <button
+                            className={`recently-viewed__nav-button recently-viewed__nav-button--prev ${!canScrollLeft ? 'recently-viewed__nav-button--disabled' : ''}`}
+                            onClick={scrollLeft}
+                            aria-label="Previous products"
+                            disabled={!canScrollLeft}
+                        >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </button>
+                    )}
 
-                    <div className="recently-viewed__grid" ref={gridRef}>
-                        {isSnoLoading ? (
-                            Array.from({ length: 4 }).map((_, i) => (
-                                <div key={`skeleton-${i}`} className="recently-viewed__grid-item">
-                                    <div className="recently-viewed__skeleton" />
+                    <div className="recently-viewed__grid-wrapper">
+                        <div className="recently-viewed__grid" ref={gridRef}>
+                            {isSnoLoading ? (
+                                Array.from({ length: 4 }).map((_, i) => (
+                                    <div key={`skeleton-${i}`} className="recently-viewed__grid-item">
+                                        <div className="recently-viewed__skeleton" />
+                                    </div>
+                                ))
+                            ) : products.length > 0 ? (
+                                products.map((item, i) => (
+                                    <div key={`product-${item.SNO || i}`} className="recently-viewed__grid-item">
+                                        <ProductCard
+                                            item={item}
+                                            onClick={() => history.push(`/product/${item.SNO}`)}
+                                        />
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="recently-viewed__empty">
+                                    <p>No recently viewed products.</p>
+                                    <button
+                                        className="recently-viewed__cta"
+                                        onClick={() => history.push('/shop')}
+                                    >
+                                        Browse Products
+                                    </button>
                                 </div>
-                            ))
-                        ) : products.length > 0 ? (
-                            products.map((item, i) => (
-                                <div key={`product-${item.SNO || i}`} className="recently-viewed__grid-item">
-                                    <ProductCard
-                                        item={item}
-                                        onClick={() => history.push(`/product/${item.SNO}`)}
-                                    />
-                                </div>
-                            ))
-                        ) : (
-                            <div className="recently-viewed__empty">
-                                <p>No recently viewed products.</p>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
 
-                    <button
-                        className="recently-viewed__nav-button recently-viewed__nav-button--next"
-                        onClick={scrollRight}
-                        aria-label="Next products"
-                    >
-                        &gt;
-                    </button>
+                    {showNavButtons && (
+                        <button
+                            className={`recently-viewed__nav-button recently-viewed__nav-button--next ${!canScrollRight ? 'recently-viewed__nav-button--disabled' : ''}`}
+                            onClick={scrollRight}
+                            aria-label="Next products"
+                            disabled={!canScrollRight}
+                        >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 6L15 12L9 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </button>
+                    )}
                 </div>
             </div>
         </section>

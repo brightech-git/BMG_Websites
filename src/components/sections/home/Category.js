@@ -17,38 +17,46 @@ const Category = () => {
     };
 
     if (isLoading) {
-        return <div className="occasion-loading" aria-live="polite">Loading collections...</div>;
+        return (
+            <div className="occasion-loading" aria-live="polite">
+                Loading collections...
+            </div>
+        );
     }
 
     if (error) {
-        return <div className="occasion-error" aria-live="assertive">Error loading collections: {error.message}</div>;
+        return (
+            <div className="occasion-error" aria-live="assertive">
+                Error loading collections: {error.message}
+            </div>
+        );
     }
 
     return (
         <div className="occasion-container">
             <div className="occasion-grid">
-                {banners.map((item, i) => {
-                    const imgSrc = item?.image_path ? `${baseUrl}${item.image_path}` : '';
-                    return (
-                        <div key={i} className="occasion-card-wrapper">
-                            <div className="occasion-card">
-                                <div className="occasion-image" style={{ backgroundImage: `url(${imgSrc})` }}>
-                                    <div className="occasion-overlay"></div>
-                                </div>
-                                <div className="occasion-content">
-                                    <div className="occasion-tag">{item.occasion}</div>
-                                    <button
-                                        className="occasion-btn"
-                                        onClick={() => handleShopNow(item.occasion, item.gender)}
-                                        aria-label={`Shop ${item.title}`}
-                                    >
-                                        {item.action || 'Shop Now'}
-                                    </button>
-                                </div>
-                            </div>
+                {banners.map((item, i) => (
+                    <div key={i} className="occasion-card">
+                        <img
+                            src={`${baseUrl}${item.image_path}`}
+                            alt={`${item.occasion} banner`}
+                            className="occasion-img"
+                            onError={(e) => {
+                                e.target.src = '/fallback-image.jpg'; // Fallback image
+                            }}
+                        />
+                        <div className="occasion-content">
+                            <span className="occasion-tag">{item.occasion}</span>
+                            <button
+                                className="occasion-btn"
+                                onClick={() => handleShopNow(item.occasion, item.gender)}
+                                aria-label={`Shop ${item.occasion}`}
+                            >
+                                {item.action || 'Shop Now'}
+                            </button>
                         </div>
-                    );
-                })}
+                    </div>
+                ))}
             </div>
         </div>
     );

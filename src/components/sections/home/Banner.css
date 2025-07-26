@@ -27,8 +27,8 @@
 .banner-area {
     position: relative;
     width: 100%;
-    margin: 0 auto;
-    margin-top: 160px;
+    /* margin: 0 auto; */
+    /* margin-top: 160px; */
 }
 
 /* Slide Container */
@@ -181,7 +181,7 @@
 @media (max-width: 992px) {
     .banner-area {
         margin-top: 10px;
-        margin-bottom: -50px;
+        /* margin-bottom: -50px; */
     }
 
     .banner-media-container {
@@ -196,7 +196,7 @@
 @media (max-width: 768px) {
     .banner-area {
         margin-top: 80px;
-        margin-bottom: -100px;
+        /* margin-bottom: -100px; */
     }
 
     .banner-media-container {
@@ -216,7 +216,7 @@
 @media (max-width: 576px) {
     .banner-area {
         margin-top: 70px;
-        margin-bottom: -120px;
+        /* margin-bottom: -120px; */
     }
 
     .banner-media-container {
@@ -243,7 +243,7 @@
 }
 @media (max-width: 400px){
  .banner-area{
-    margin-bottom: -250px;
+    /* margin-bottom: -250px; */
  }
 }
 /* Touch Devices */
@@ -256,4 +256,13 @@
     .banner-slide {
         -webkit-tap-highlight-color: transparent;
     }
+}
+.banner-area {
+  margin-bottom: 0;
+}
+
+@media (max-width: 767.98px) {
+  .banner-area {
+    margin-bottom: 0px; /* or your desired value */
+  }
 }

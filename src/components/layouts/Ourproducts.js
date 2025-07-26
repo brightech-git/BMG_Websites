@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import ProductCard from '../sections/productCard/ProductCard';
-import './OurProducts.css';
+import './Ourproducts.css';
 import useFilterProducts from '../../hook/product/useFilterProducts';
 import { useHistory } from 'react-router-dom';
 const Ourproducts = () => {

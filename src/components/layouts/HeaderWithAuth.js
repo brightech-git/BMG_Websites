@@ -1,10 +1,11 @@
 // src/components/layouts/HeaderWithAuth.js
 import React from 'react';
-import Header from './Header'; // your existing class component
-import { useAuth } from '../../context/authContext/UserAuthContext';
+import Header from './Header'; // Your existing class component
+import { useSelector } from 'react-redux';
 
 const HeaderWithAuth = (props) => {
-    const { isAuthenticated } = useAuth();
+    const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+
     return <Header {...props} isAuthenticated={isAuthenticated} />;
 };
 

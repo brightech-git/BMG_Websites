@@ -250,7 +250,7 @@ const Header = ({ isAuthenticated }) => {
                 <div className="login-btn">
                                   
                   {isAuthenticated ? (
-                    <Link to="/profile">
+                    <Link to="/account">
                       <User size={20} strokeWidth={1.8} />
                     </Link>
                   ) : (

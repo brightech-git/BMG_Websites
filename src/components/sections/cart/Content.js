@@ -191,7 +191,7 @@ const Cart = ({ history }) => {
             .reduce((sum, item) => {
                 const product = productDataMap[item.sno];
                 const price = product?.price || item.amount || 0;
-                return sum + Number(price) * Number(item.quantity);
+                return sum + Number(price);
             }, 0);
 
         const isDataComplete = selectedItems.every((sno) => !!productDataMap[sno]);

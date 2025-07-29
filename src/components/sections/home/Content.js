@@ -35,7 +35,7 @@ class Content extends Component {
                 <TrendingProducts />
                 <Ourcategory/>
                 <BestDesign />
-                <Handpick/>
+                {/* <Handpick/> */}
                 <Ourproducts/>
                  {/* <Saleproducts/> */}
                 <Counter/>

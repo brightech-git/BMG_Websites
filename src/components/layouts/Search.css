@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
+
+:root {
+    --primary-font: 'Gloock', serif;
+    --secondary-font: 'Montserrat', sans-serif;
+    --primary-color: #f6f5f0;
+    --primary-text-color: #404040;
+    --primary-card-color: #edebe7;
+    --primary-hover-color: #cd865c;
+    --secondary-card-color: #cfdcdd;
+    --white-color: #ffffff;
+    --header-height: 80px;
+    --mobile-header-height: 60px;
+    --green-color: #024908;
+    --grey-color: #A9A9A9;
+    --black-color: #000000;
+}
+
+/* Search Bar */
+.jewelry-search-bar {
+    position: relative;
+    width: 100%;
+    width: 400px;
+    /* Reduced from 500px for compactness */
+    height: 46px;
+    /* Fixed height to reduce overall size */
+    background: var(--primary-color);
+    border: 1px solid var(--primary-text-color);
+    /* Thinner border */
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+   
+    transition: all 0.3s ease;
+}
+
+/* Input Field */
+.jewelry-search-bar .search-input {
+    width: 100%;
+    height: 100%;
+    padding: 8px 40px 8px 12px;
+    /* Reduced padding for compactness */
+    border: none;
+    outline: none;
+    font-size: 14px;
+    /* Smaller font size */
+    font-family: var(--secondary-font);
+    color: var(--primary-text-color);
+    background: transparent;
+}
+
+.jewelry-search-bar .search-input::placeholder {
+    color: var(--grey-color);
+    font-weight: 400;
+}
+
+
+/* Icons */
+.jewelry-search-bar .search-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-text-color);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.jewelry-search-bar .search-icon:hover {
+    color: var(--primary-hover-color);
+}
+
+.jewelry-search-bar .search-action {
+    right: 10px;
+}
+
+.jewelry-search-bar .clear-icon {
+    right: 30px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.jewelry-search-bar .search-input:not(:placeholder-shown)+.clear-icon,
+.jewelry-search-bar .search-input:focus+.clear-icon {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Responsive Styles */
+@media (max-width: 1300px) {
+    .jewelry-search-bar {
+        max-width: 100%;
+        height: 42px;
+        /* Even smaller for mobile */
+        width:300px;
+    }
+
+    .jewelry-search-bar .search-input {
+        font-size: 13px;
+        padding: 6px 36px 6px 10px;
+    }
+
+    .jewelry-search-bar .search-icon {
+        size: 14px;
+    }
+
+    .jewelry-search-bar .search-action {
+        right: 8px;
+    }
+
+    .jewelry-search-bar .clear-icon {
+        right: 26px;
+    }
+}
+@media (max-width: 992px) {
+    .jewelry-search-bar {
+        height: 42px;
+        /* Even smaller for mobile */
+        width: 100%;
+        padding: 10px;
+    }
+
+    .jewelry-search-bar .search-input {
+        font-size: 13px;
+        padding: 6px 36px 6px 10px;
+    }
+
+    .jewelry-search-bar .search-icon {
+        size: 14px;
+    }
+
+    .jewelry-search-bar .search-action {
+        right: 8px;
+    }
+
+    .jewelry-search-bar .clear-icon {
+        right: 26px;
+    }
+}
+
+

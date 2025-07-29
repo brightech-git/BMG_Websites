@@ -1,0 +1,128 @@
+.highlight-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    flex-wrap: wrap;
+    background-color: #f9f7f2;
+    gap: 2rem;
+}
+
+.highlight-image img {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border-radius: 10px;
+}
+
+.highlight-content {
+    flex: 1;
+    min-width: 280px;
+    max-width: 500px;
+}
+
+.new-design {
+    color: #cf8d6d;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    line-height: 1.2;
+    margin: 0.5rem 0;
+}
+
+.description {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.highlight {
+    font-size: 1.2rem;
+    color: #cf8d6d;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.shop-button {
+    background-color: #cf8d6d;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.highlight-product {
+    text-align: center;
+    min-width: 200px;
+}
+
+.highlight-product img {
+    width: 100%;
+    max-width: 150px;
+    height: auto;
+}
+
+.product-name {
+    font-size: 1rem;
+    color: #cf8d6d;
+    margin-top: 0.5rem;
+}
+
+.product-price {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1024px) {
+    .title {
+        font-size: 2rem;
+    }
+
+    .description,
+    .highlight,
+    .product-price {
+        font-size: 0.95rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .highlight-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .highlight-content {
+        max-width: 100%;
+    }
+
+    .title {
+        font-size: 1.8rem;
+    }
+
+    .highlight-product img {
+        max-width: 120px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .title {
+        font-size: 1.5rem;
+    }
+
+    .description,
+    .highlight,
+    .shop-button {
+        font-size: 0.9rem;
+    }
+
+    .shop-button {
+        padding: 0.6rem 1.2rem;
+    }
+}

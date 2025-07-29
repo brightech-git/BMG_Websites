@@ -28,16 +28,16 @@ const Category1 = () => {
                 return (
                     <section className="category1-card" key={item.id}>
                         <img src={imgSrc} alt={item.title} className="category1-img" onClick={()=>handleShopNow(item.item_name, item.sub_item_name)} />
-                        {/* <div className="category1-content">
-                            <h2 className="category1-title">{item.title}</h2>
-                            <p className="category1-subtitle">{item.subtitle}</p>
+                       {/* <div className="category1-content">
+                            <h2 className="category1-title">{item.itemName}</h2>
+                            <p className="category1-subtitle">{item.sub_item_name}</p>
                             <button
                                 className="cat-shop-btn cat-shop-filled"
                                 onClick={() => handleShopNow(item.item_name, item.sub_item_name)}
                             >
                                 Shop Now
                             </button>
-                        </div> */}
+                        </div>  */}
                     </section>
                 );
             })}

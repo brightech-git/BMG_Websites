@@ -7,7 +7,6 @@ const Onsale = () => {
     const { data: festivalBannerResponse, isLoading, isError } = useFestivalBanner();
     const baseUrl = "https://bmgjewellers.com";
 
-    // Ensure we always have an array, even if the data structure changes
     const festivalBanners = festivalBannerResponse?.data || [];
 
     const handleProductClick = (itemName, subItemName) => {
@@ -23,7 +22,6 @@ const Onsale = () => {
         return <div className="text-center py-5">No products available</div>;
     }
 
-    // Safely get first 3 banners
     const mainBanner = festivalBanners[0] || null;
     const secondaryBanners = festivalBanners.slice(1, 3);
 
@@ -40,12 +38,18 @@ const Onsale = () => {
                     {/* Main Banner (Left Column) */}
                     <div className="col-lg-6">
                         <div className="room-box extra-height">
-                            <img
-                                src={`${baseUrl}${mainBanner.image_path}`}
-                                alt={mainBanner.title}
-                                className="room-bg"
-                                onClick={() => handleProductClick(mainBanner.item_name, mainBanner.sub_item_name)}
-                            />
+                            <div className="image-container" onClick={() => handleProductClick(mainBanner.item_name, mainBanner.sub_item_name)} >
+                                <img
+                                    src={`${baseUrl}${mainBanner.image_path}`}
+                                    alt={mainBanner.title}
+                                    className="banner-image"
+                                    onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = '/fallback-image.jpg';
+                                    }}
+                                    onClick={() => handleProductClick(mainBanner.item_name, mainBanner.sub_item_name)}
+                                />
+                            </div>
                             <div className="room-content">
                                 <h3>
                                     <Link to="#" onClick={(e) => {
@@ -77,12 +81,18 @@ const Onsale = () => {
                                 banner && (
                                     <div className="col-lg-12 col-md-6" key={banner.id}>
                                         <div className="room-box">
-                                            <img
-                                                src={`${baseUrl}${banner.image_path}`}
-                                                alt={banner.title}
-                                                className="room-bg"
-                                                onClick={() => handleProductClick(banner.item_name, banner.sub_item_name)}
-                                            />
+                                            <div className="image-container" onClick={() => handleProductClick(banner.item_name, banner.sub_item_name)}>
+                                                <img
+                                                    src={`${baseUrl}${banner.image_path}`}
+                                                    alt={banner.title}
+                                                    className="banner-image"
+                                                    onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = '/fallback-image.jpg';
+                                                    }}
+                                                    onClick={() => handleProductClick(banner.item_name, banner.sub_item_name)}
+                                                />
+                                            </div>
                                             <div className="room-content">
                                                 <h3>
                                                     <Link to="#" onClick={(e) => {

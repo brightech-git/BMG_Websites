@@ -50,19 +50,13 @@
 /* Shop Category Navigation */
 .shop-category-names {
     display: flex;
-    justify-content: center;
     /* Changed from center to ensure first item is visible */
     flex-wrap: nowrap;
-    /* Ensure horizontal scrolling on smaller screens */
-    gap: 15px;
-    margin-bottom: 30px;
-    padding: 0 15px;
     scroll-behavior: smooth;
     overflow-x: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
     scroll-padding-left: 15px;
-    /* Ensure first category is fully visible */
     scroll-snap-type: x proximity;
 }
 
@@ -71,9 +65,8 @@
 }
 
 .shop-category-name {
-    padding: 8px 20px;
+    padding: 8px 15px;
     font-size: 16px;
-    font-weight: 600;
     color: var(--primary-text-color);
     cursor: pointer;
     transition: all 0.3s ease;

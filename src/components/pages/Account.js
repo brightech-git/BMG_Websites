@@ -11,7 +11,7 @@ class Account extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title> My Account</title>
+                    <title> BMG- My Account</title>
                     <meta
                         name="description"
                         content="#"

@@ -31,6 +31,15 @@ import Typography from './components/pages/Typography';
 import Wishlist from './components/pages/Wishlist';
 import PrivacyPolicy from './components/pages/Policies/Privacy';
 import PaymentPage from './components/pages/payment/Payment';
+import AddressManager from './components/sections/account/Address/AddressManager';
+import AccountSidebar from './components/sections/account/AccountSidebar/AccountSideBar';
+import CartSection from './components/sections/account/Cart/Cart';
+import ChangePassword from './components/sections/account/ChangePassword/ChangePassword';
+import Dashboard from './components/sections/account/Dashboard/Dashboard';
+import Order from './components/sections/account/Order/Order';
+import OrderDetail from './components/sections/account/OrderDetails/OrderDetails';
+import WishlistSection from './components/sections/account/Wishlist/Wishlist';
+
 
 function ScrollWatcher() {
   const location = useLocation();
@@ -76,6 +85,16 @@ function App() {
         <Route exact path="/wishlist" component={Wishlist} />
         <Route exact path="/privacypolicy" component={PrivacyPolicy} />
         <Route exact path="/payment/:orderId" component={PaymentPage} />
+        <Route exact path="/AddressManager" component={AddressManager} />
+        <Route exact path="/dashboard" component={Dashboard} />
+        <Route exact path="/orders" component={Order} />
+        <Route exact path="/orderdetail" component={OrderDetail} />
+        <Route exact path="/cartsection" component={CartSection} />
+        <Route exact path="/wishlist" component={WishlistSection} />
+        <Route exact path="/change-password" component={ChangePassword} />
+        <Route path="/account" component={AccountSidebar} />
+        {/* Catch-all route for 404 errors */}
+        
         <Route component={Error} />
       </Switch>
     </Router>

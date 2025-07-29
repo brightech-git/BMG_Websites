@@ -25,10 +25,10 @@ const ItemSearch = () => {
     };
 
     return (
-        <div className="jewelry-search-bar">
+        <div className="jewel-search-container">
             <input
                 type="text"
-                className="search-input"
+                className="jewel-input-field"
                 placeholder="Search products..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -36,13 +36,13 @@ const ItemSearch = () => {
             />
             {query && (
                 <X
-                    className="search-icon clear-icon"
+                    className="jewel-clear-icon"
                     size={16}
                     onClick={handleClear}
                 />
             )}
             <Search
-                className="search-icon search-action"
+                className="jewel-search-icon"
                 size={16}
                 onClick={handleSearch}
             />

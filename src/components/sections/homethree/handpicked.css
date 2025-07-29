@@ -1,273 +1,356 @@
-/*-----------------------------------------------------------------------------------
-    HANDPICKED CSS
-    ===================
-    Rooms Slider Two (Jewelry Carousel)
------------------------------------------------------------------------------------*/
-
-
-
-
-/*======= Rooms Slider Two =======*/
-.room-slider {
+/* ======= Professional Jewelry Slider Styles ======= */
+.jewelry-slider {
     position: relative;
     z-index: 1;
-    /* Accounts for sticky header height (~80px) */
-    padding-top: 55px;
-    padding-bottom: 50px;
-    background-color: var(--white-color);
-}
-
-.room-slider .rooms-slider-two .single-rooms-box {
-    position: relative;
-    margin-bottom: 130px;
-}
-
-.room-slider .rooms-slider-two .single-rooms-box .room-img {
+    padding: 5rem 0 6rem;
+    background-color:transparent;
     overflow: hidden;
-    width: 100%;
-    height: 500px;
 }
 
-.room-slider .rooms-slider-two .single-rooms-box .room-img .img {
-    height: 100%;
-    width: 100%;
-    background-size: cover;
-    background-position: center;
-    transition: all 0.3s ease-out 0s;
-}
-
-.room-slider .rooms-slider-two .single-rooms-box:hover .img {
-    transform: scale(1.1);
-}
-
-.room-slider .rooms-slider-two .single-rooms-box .room-desc {
-    position: absolute;
-    left: 40px;
-    right: 40px;
-    bottom: -65px;
-    background-color: var(--primary-card-color);
-    padding: 20px;
-    font-size: 14px;
-    visibility: visible;
-    opacity: 0;
-    transition: all 0.3s ease-out 0s;
-    font-family: var(--secondary-font);
-}
-
-.room-slider .rooms-slider-two .single-rooms-box .room-desc .title {
-    font-size: 28px;
-    font-family: var(--primary-font);
-    margin-bottom: 10px;
-    color: var(--primary-text-color);
-}
-
-.room-slider .rooms-slider-two .single-rooms-box .room-desc .title:hover {
-    color: var(--primary-hover-color);
-}
-
-.room-slider .rooms-slider-two .single-rooms-box .room-desc p {
-    font-size: 16px;
-    font-family: var(--secondary-font);
-}
-
-.room-slider .rooms-slider-two .single-rooms-box .room-desc .price {
-    text-align: right;
-    font-size: 18px;
-    color: var(--primary-hover-color);
-    font-family: var(--primary-font);
-}
-
-.room-slider .rooms-slider-two .single-rooms-box .room-desc .price span {
-    font-size: 16px;
-    font-family: var(--primary-font);
-}
-
-.room-slider .rooms-slider-two .slick-current .single-rooms-box .room-desc {
-    visibility: visible;
-    opacity: 1;
-}
-
-.room-slider .rooms-slider-two .slick-arrow {
-    height: 60px;
-    width: 60px;
+/* Section Header */
+.section-header {
     text-align: center;
-    line-height: 60px;
-    font-size: 20px;
-    color: var(--primary-text-color);
-    background-color: var(--primary-color);
-    cursor: pointer;
-    transition: all 0.3s ease-out 0s;
-    position: absolute;
-    top: 40%;
-    z-index: 2;
-    left: 22%;
-    transform: translateY(-50%);
+    margin-bottom: 5rem;
+    padding: 0 1rem;
 }
 
-.room-slider .rooms-slider-two .slick-arrow.next-arrow {
-    margin-left: 20px;
-    left: auto;
-    right: 22%;
-}
-
-.room-slider .rooms-slider-two .slick-arrow:hover {
-    background-color: var(--primary-hover-color);
-    color: var(--white-color);
-    box-shadow: 0 14px 24px rgba(190, 173, 142, 0.3);
-}
-
-/*======= Section Title =======*/
-.section-title {
-    text-align: center;
-    margin-bottom: 80px;
-}
-
-.section-title .section-title-icon {
-    display: inline-block;
-    margin-bottom: 10px;
-}
-
-.section-title .section-title-icon svg {
-    width: 45px;
-    height: 45px;
-}
-
-.section-title .title-tag {
+.section-tag {
     display: block;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--primary-text-color);
-    margin-bottom: 10px;
+    letter-spacing: 0.125rem;
+    color: var(--text-secondary, #888);
+    margin-bottom: 1rem;
 }
 
-.section-title h2 {
-    font-size: 36px;
-    font-family: var(--primary-font);
-    color: var(--primary-text-color);
+.section-title {
+    font-size: 2.25rem;
+    font-family: 'Playfair Display', serif;
+    color: var(--text-primary, #222);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.2;
 }
 
-/*======= Responsive Styles =======*/
-@media only screen and (min-width: 992px) and (max-width: 1199px) {
-    .room-slider .rooms-slider-two .single-rooms-box .room-img {
-        height: 420px;
+.section-subtitle {
+    font-size: 1rem;
+    color: var(--text-tertiary, #666);
+    max-width: 43.75rem;
+    margin: 0 auto;
+}
+
+/* Slider Container */
+.jewelry-slider-container {
+    padding: 0;
+    margin: 0 -0.9375rem;
+}
+
+/* Slide Item */
+.jewelry-slide {
+    padding: 0 0.9375rem;
+}
+
+.main-jewelry-item {
+    position: relative;
+    margin-bottom: 6.25rem;
+}
+
+/* Main Image */
+.main-jewelry-img {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 31.25rem;
+    margin-bottom: 1.875rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+
+.main-jewelry-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+
+
+/* Product Grid */
+.banner-products {
+    position: absolute;
+    bottom: -4.375rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 62.5rem;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+}
+
+.banner-product-card {
+    overflow: hidden;
+    height: 10.25rem;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.product-image-container {
+    height: 100%;
+    overflow: hidden;
+}
+
+.product-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+
+
+.product-info {
+    padding: 0.625rem;
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--background-white, #fff);
+}
+
+.product-info h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.3125rem;
+    color: var(--text-primary, #222);
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.product-info p {
+    font-size: 0.75rem;
+    color: var(--text-tertiary, #666);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Navigation Arrows */
+.slick-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3.75rem;
+    height: 3.75rem;
+    line-height: 3.75rem;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: var(--text-primary, #222);
+    cursor: pointer;
+    z-index: 3;
+    transition: all 0.3s ease;
+    font-size: 1.25rem;
+    border: none;
+    outline: none;
+    box-shadow: 0 0.3125rem 0.9375rem rgba(0, 0, 0, 0.1);
+    opacity: 0.8;
+}
+
+.slick-arrow:hover {
+    background-color: var(--background-white, #fff);
+    opacity: 1;
+    box-shadow: 0 0.5rem 1.5625rem rgba(0, 0, 0, 0.15);
+}
+
+.prev-arrow {
+    left: 5%;
+}
+
+.next-arrow {
+    right: 5%;
+}
+
+/* Loading and Error States */
+.loading-spinner,
+.error-message {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1rem;
+}
+
+.error-message {
+    color: var(--error-color, #dc3545);
+}
+
+/* Responsive Styles */
+@media (max-width: 100em) {
+
+    /* 1600px */
+    .main-jewelry-img {
+        height: 28.125rem;
     }
 
-    .room-slider .rooms-slider-two .single-rooms-box .room-desc {
-        left: 20px;
-        right: 20px;
-        padding: 10px;
-    }
-
-    .room-slider .rooms-slider-two .single-rooms-box .room-desc .title {
-        font-size: 24px;
-    }
-
-    .room-slider .rooms-slider-two .single-rooms-box .room-desc p {
-        font-size: 14px;
-    }
-
-    .room-slider .rooms-slider-two .single-rooms-box .room-desc .price {
-        font-size: 16px;
-    }
-
-    .room-slider .rooms-slider-two .slick-arrow {
-        left: 10%;
-    }
-
-    .room-slider .rooms-slider-two .slick-arrow.next-arrow {
-        right: 10%;
-    }
-
-    .section-title h2 {
-        font-size: 32px;
+    .banner-products {
+        width: 85%;
     }
 }
 
-@media only screen and (min-width: 768px) and (max-width: 991px) {
-    .room-slider .rooms-slider-two .single-rooms-box .room-img {
-        height: 420px;
+@media (max-width: 87.5em) {
+
+    /* 1400px */
+    .main-jewelry-img {
+        height: 25rem;
     }
 
-    .room-slider .rooms-slider-two .single-rooms-box .room-desc {
-        left: 20px;
-        right: 20px;
-        padding: 8px;
-    }
-
-    .room-slider .rooms-slider-two .single-rooms-box .room-desc .title {
-        font-size: 20px;
-    }
-
-    .room-slider .rooms-slider-two .single-rooms-box .room-desc p {
-        font-size: 12px;
-    }
-
-    .room-slider .rooms-slider-two .single-rooms-box .room-desc .price {
-        font-size: 14px;
-    }
-
-    .room-slider .rooms-slider-two .slick-arrow {
-        left: 5%;
-    }
-
-    .room-slider .rooms-slider-two .slick-arrow.next-arrow {
-        right: 5%;
-    }
-
-    .section-title h2 {
-        font-size: 28px;
+    .banner-product-card {
+        height: 10rem;
     }
 }
 
-@media (max-width: 767px) {
-    .room-slider .rooms-slider-two .single-rooms-box .room-img {
-        height: 350px;
+@media (max-width: 75em) {
+
+    /* 1200px */
+    .jewelry-slider {
+        padding: 3.125rem 0 4.375rem;
     }
 
-    .room-slider .rooms-slider-two .single-rooms-box .room-desc {
-        left: 10px;
-        right: 10px;
-        padding: 5px;
+    .main-jewelry-img {
+        height: 23.75rem;
     }
 
-    .room-slider .rooms-slider-two .single-rooms-box .room-desc .title {
-        font-size: 18px;
+    .banner-product-card {
+        height: 8.75rem;
     }
 
-    .room-slider .rooms-slider-two .single-rooms-box .room-desc p {
-        font-size: 12px;
+    .banner-products {
+        width: 90%;
+        gap: 0.9375rem;
     }
 
-    .room-slider .rooms-slider-two .single-rooms-box .room-desc .price {
-        font-size: 14px;
-    }
-
-    .room-slider .rooms-slider-two .slick-arrow {
-        left: 2%;
-        width: 50px;
-        height: 50px;
-        line-height: 50px;
-        font-size: 15px;
-    }
-
-    .room-slider .rooms-slider-two .slick-arrow.next-arrow {
-        right: 2%;
-    }
-
-    .section-title h2 {
-        font-size: 24px;
+    .slick-arrow {
+        width: 3.125rem;
+        height: 3.125rem;
+        line-height: 3.125rem;
+        font-size: 1.125rem;
     }
 }
 
-@media (max-width: 575px) {
-    .room-slider .rooms-slider-two .single-rooms-box .room-desc .price {
-        text-align: left;
-        margin-top: 10px;
+@media (max-width: 62em) {
+
+    /* 992px */
+    .section-header {
+        margin-bottom: 3.75rem;
     }
 
-    .section-title .title-tag {
-        font-size: 12px;
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .main-jewelry-img {
+        height: 21.875rem;
+    }
+
+    .banner-product-card {
+        height: 7.5rem;
+    }
+
+    .banner-products {
+        bottom: -3.75rem;
+        gap: 0.75rem;
+    }
+}
+
+@media (max-width: 48em) {
+
+    /* 768px */
+    .jewelry-slider {
+        padding: 2.5rem 0 3.75rem;
+    }
+
+    .section-title {
+        font-size: 1.75rem;
+    }
+
+    .main-jewelry-img {
+        height: 18.75rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .banner-product-card {
+        height: 6.25rem;
+    }
+
+    .banner-products {
+        width: 95%;
+        bottom: -3.125rem;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 36em) {
+
+    /* 576px */
+  
+    .section-header {
+        margin-bottom: 2.5rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .section-subtitle {
+        font-size: 0.875rem;
+    }
+
+    .main-jewelry-img {
+        height: 15.625rem;
+    }
+
+    .banner-product-card {
+        height: 5rem;
+    }
+
+    .banner-products {
+        bottom: -2.5rem;
+        gap: 0.3125rem;
+    }
+
+    .main-jewelry-item {
+        margin-bottom: 5rem;
+    }
+
+    .product-info h3 {
+        font-size: 0.75rem;
+    }
+
+    .product-info p {
+        font-size: 0.625rem;
+    }
+}
+
+@media (max-width: 30em) {
+
+    /* 480px */
+    .main-jewelry-img {
+        height: 13.75rem;
+    }
+
+    .banner-product-card {
+        height: 4.375rem;
+    }
+
+    .banner-products {
+        bottom: -2.1875rem;
     }
 }

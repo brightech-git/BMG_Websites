@@ -39,7 +39,7 @@ export const getItemFilter = async ({ itemId, itemName, page = 1, pageSize = 20 
 
   export const getCategory = async()=>{
     try{
-        const response = await PublicUrl.get('/product/items/categories');
+        const response = await PublicUrl.get('/product/items/MainCategory');
         return response.data;
     }
     catch(error){

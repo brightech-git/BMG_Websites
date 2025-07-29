@@ -3,6 +3,6 @@ import * as FestivalBannerService from '../../service/FestivalBanner';
 
 export const useFestivalBanner = () =>
     useQuery({
-        queryKey: ["offerBanners"],
+        queryKey: ["festivalBanners"],
         queryFn: FestivalBannerService.getAllFestivalBanner,
     }); 

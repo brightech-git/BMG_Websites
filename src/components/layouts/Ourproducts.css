@@ -13,7 +13,7 @@
     --green-color: #024908;
     --grey-color: #A9A9A9;
     --black-color: #000000;
-    --scroll-button-size: 2.5rem;
+    --scroll-button-size: 2.5rem;   
     --card-min-width: 280px;
     --grid-gap: 1.5rem;
     --container-padding: 1.5rem;
@@ -58,7 +58,7 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: clamp(0.5rem, 1.5vw, 0.65rem) clamp(0.75rem, 2vw, 1rem);
+    padding: clamp(0.4rem, 1vw, 0.55rem) clamp(0.65rem, 1vw, 0.8rem);
     font-size: clamp(0.75rem, 3vw, 0.95rem);
     font-weight: 500;
     text-transform: capitalize;
@@ -247,6 +247,7 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
+    padding: 0rem 3rem 2rem ;
 }
 
 .featured-products__header-container {

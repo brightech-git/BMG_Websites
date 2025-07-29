@@ -17,125 +17,114 @@
 }
 
 /* Search Bar */
-.jewelry-search-bar {
+.jewel-search-container {
     position: relative;
     width: 100%;
     width: 400px;
-    /* Reduced from 500px for compactness */
     height: 46px;
-    /* Fixed height to reduce overall size */
     background: var(--primary-color);
     border: 1px solid var(--primary-text-color);
-    /* Thinner border */
     border-radius: 4px;
     display: flex;
     align-items: center;
-   
     transition: all 0.3s ease;
 }
 
 /* Input Field */
-.jewelry-search-bar .search-input {
+.jewel-input-field {
     width: 100%;
     height: 100%;
     padding: 8px 40px 8px 12px;
-    /* Reduced padding for compactness */
     border: none;
     outline: none;
     font-size: 14px;
-    /* Smaller font size */
     font-family: var(--secondary-font);
     color: var(--primary-text-color);
     background: transparent;
 }
 
-.jewelry-search-bar .search-input::placeholder {
+.jewel-input-field::placeholder {
     color: var(--grey-color);
     font-weight: 400;
 }
 
-
 /* Icons */
-.jewelry-search-bar .search-icon {
+.jewel-search-icon {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+    right: 10px;
     color: var(--primary-text-color);
     cursor: pointer;
     transition: color 0.3s ease;
 }
 
-.jewelry-search-bar .search-icon:hover {
+.jewel-search-icon:hover {
     color: var(--primary-hover-color);
 }
 
-.jewelry-search-bar .search-action {
-    right: 10px;
-}
-
-.jewelry-search-bar .clear-icon {
+.jewel-clear-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     right: 30px;
+    color: var(--primary-text-color);
+    cursor: pointer;
+    transition: color 0.3s ease;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
-.jewelry-search-bar .search-input:not(:placeholder-shown)+.clear-icon,
-.jewelry-search-bar .search-input:focus+.clear-icon {
+.jewel-input-field:not(:placeholder-shown)+.jewel-clear-icon,
+.jewel-input-field:focus+.jewel-clear-icon {
     opacity: 1;
     visibility: visible;
 }
 
+.jewel-clear-icon:hover {
+    color: var(--primary-hover-color);
+}
+
 /* Responsive Styles */
 @media (max-width: 1300px) {
-    .jewelry-search-bar {
+    .jewel-search-container {
         max-width: 100%;
         height: 42px;
-        /* Even smaller for mobile */
-        width:300px;
+        width: 250px;
     }
 
-    .jewelry-search-bar .search-input {
+    .jewel-input-field {
         font-size: 13px;
         padding: 6px 36px 6px 10px;
     }
 
-    .jewelry-search-bar .search-icon {
-        size: 14px;
-    }
-
-    .jewelry-search-bar .search-action {
+    .jewel-search-icon {
         right: 8px;
     }
 
-    .jewelry-search-bar .clear-icon {
+    .jewel-clear-icon {
         right: 26px;
     }
 }
+
 @media (max-width: 992px) {
-    .jewelry-search-bar {
+    .jewel-search-container {
         height: 42px;
-        /* Even smaller for mobile */
         width: 100%;
         padding: 10px;
     }
 
-    .jewelry-search-bar .search-input {
+    .jewel-input-field {
         font-size: 13px;
         padding: 6px 36px 6px 10px;
     }
 
-    .jewelry-search-bar .search-icon {
-        size: 14px;
-    }
-
-    .jewelry-search-bar .search-action {
+    .jewel-search-icon {
         right: 8px;
     }
 
-    .jewelry-search-bar .clear-icon {
+    .jewel-clear-icon {
         right: 26px;
     }
 }
-
-

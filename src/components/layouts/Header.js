@@ -239,7 +239,7 @@ const Header = ({ isAuthenticated }) => {
                                      
                   </Link>
                 </div>
-                              <div style={{marginLeft:'20px'}}>  <ItemSearch /></div>         
+                              <div style={{marginLeft:'20px'}} className='headersearch'>  <ItemSearch /></div>         
               </div>
                             
               {/* Navbar Right Content */}

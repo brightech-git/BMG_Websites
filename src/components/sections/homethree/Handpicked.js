@@ -7,13 +7,13 @@ import './handpicked.css';
 
 const BASE_URL = "https://app.bmgjewellers.com";
 
-const ArrowButton = ({ direction, onClick }) => {
+const NavigationButton = ({ direction, onClick }) => {
     const iconClass = direction === 'next' ? 'fal fa-arrow-right' : 'fal fa-arrow-left';
     const ariaLabel = direction === 'next' ? 'Next slide' : 'Previous slide';
 
     return (
         <button
-            className={`slick-arrow ${direction}-arrow`}
+            className={`nav-arrow ${direction}-nav`}
             onClick={onClick}
             aria-label={ariaLabel}
         >
@@ -22,7 +22,7 @@ const ArrowButton = ({ direction, onClick }) => {
     );
 };
 
-const ProductCard = ({ product }) => {
+const ItemCard = ({ product }) => {
     const handleProductClick = (e, sno) => {
         e.preventDefault();
         e.stopPropagation();
@@ -30,8 +30,8 @@ const ProductCard = ({ product }) => {
     };
 
     return (
-        <div className="banner-product-card">
-            <div className="product-image-container">
+        <div className="jewel-item-card">
+            <div className="item-image-wrapper">
                 <img
                     src={`${BASE_URL}${product.image_path}`}
                     alt={product.productName}
@@ -42,21 +42,20 @@ const ProductCard = ({ product }) => {
                     onClick={(e) => handleProductClick(e, product.SNO)}
                 />
             </div>
-           
         </div>
     );
 };
 
-const BannerProductList = ({ itemName, subItemName }) => {
+const FeaturedItems = ({ itemName, subItemName }) => {
     const { data, loading, error } = useFilterProducts({ itemName, subItemName }, 0, 3);
 
     if (loading) return <div className="text-center">Loading products...</div>;
     if (error) return <div className="text-center text-danger">Error loading products</div>;
 
     return (
-        <div className="banner-products">
+        <div className="featured-items-grid">
             {data?.data?.map((product, index) => (
-                <ProductCard key={`product-${index}`} product={product} />
+                <ItemCard key={`product-${index}`} product={product} />
             ))}
         </div>
     );
@@ -81,8 +80,8 @@ const Handpicked = () => {
         centerMode: true,
         autoplay: true,
         centerPadding: '25%',
-        nextArrow: <ArrowButton direction="next" />,
-        prevArrow: <ArrowButton direction="prev" />,
+        nextArrow: <NavigationButton direction="next" />,
+        prevArrow: <NavigationButton direction="prev" />,
         responsive: [
             { breakpoint: 1600, settings: { centerPadding: '20%' } },
             { breakpoint: 1200, settings: { centerPadding: '15%' } },
@@ -96,22 +95,22 @@ const Handpicked = () => {
     if (error) return <div className="error-message">Error loading banners: {error.message}</div>;
 
     return (
-        <section className="jewelry-slider">
+        <section className="jewel-showcase">
             <div className="container-fluid">
-                <div className="section-header">
-                    <span className="section-tag">Exclusive Collection</span>
-                    <h2 className="section-title">Curated Jewelry Masterpieces</h2>
-                    <p className="section-subtitle">
+                <div className="section-top">
+                    <span className="section-label">Exclusive Collection</span>
+                    <h2 className="section-heading">Curated Jewelry Masterpieces</h2>
+                    <p className="section-description">
                         Hand-selected premium pieces for the discerning collector
                     </p>
                 </div>
 
-                <Slider className="jewelry-slider-container" {...sliderSettings}>
+                <Slider className="jewel-slider-wrapper" {...sliderSettings}>
                     {data?.data?.map((banner, index) => (
-                        <div key={`banner-${index}`} className="jewelry-slide">
-                            <div className="main-jewelry-item">
+                        <div key={`banner-${index}`} className="jewel-slide-item">
+                            <div className="main-jewel-piece">
                                 <div
-                                    className="main-jewelry-img"
+                                    className="main-jewel-image"
                                     onClick={() => handleShopNow(banner.itemName, banner.subItemName)}
                                     role="button"
                                     tabIndex={0}
@@ -123,7 +122,7 @@ const Handpicked = () => {
                                         loading="lazy"
                                     />
                                 </div>
-                                <BannerProductList
+                                <FeaturedItems
                                     itemName={banner.itemName}
                                     subItemName={banner.subItemName}
                                 />

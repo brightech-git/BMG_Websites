@@ -19,9 +19,9 @@ const Wishlist = () => {
 
   if (isLoading) {
     return (
-      <section className="wishlist-container">
-        <div className="wishlist-loading">
-          <Loader2 className="loading-spinner" size={48} strokeWidth={1.5} />
+      <section className="wishlist-wrapper">
+        <div className="wishlist-progress">
+          <Loader2 className="progress-spinner" size={48} strokeWidth={1.5} />
           <p>Loading your wishlist...</p>
         </div>
       </section>
@@ -30,9 +30,9 @@ const Wishlist = () => {
 
   if (isError) {
     return (
-      <section className="wishlist-container">
-        <div className="wishlist-error">
-          <div className="error-icon">
+      <section className="wishlist-wrapper">
+        <div className="wishlist-failure">
+          <div className="failure-icon">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -40,7 +40,7 @@ const Wishlist = () => {
           <h3>Unable to load wishlist</h3>
           <p>Please refresh the page or try again later</p>
           <button
-            className="wishlist-retry-btn"
+            className="wishlist-retry-action"
             onClick={() => window.location.reload()}
           >
             Retry
@@ -51,25 +51,25 @@ const Wishlist = () => {
   }
 
   return (
-    <section className="wishlist-container">
-      <div className="wishlist-header">
-        <h1 className="wishlist-title">My Wishlist</h1>
+    <section className="wishlist-wrapper">
+      <div className="wishlist-top">
+        <h1 className="wishlist-heading">My Wishlist</h1>
         {favoriteSnoList.length > 0 && (
-          <div className="wishlist-count">{favoriteSnoList.length} {favoriteSnoList.length === 1 ? 'Item' : 'Items'}</div>
+          <div className="wishlist-total">{favoriteSnoList.length} {favoriteSnoList.length === 1 ? 'Item' : 'Items'}</div>
         )}
       </div>
 
       {favoriteSnoList.length === 0 ? (
-        <div className="wishlist-empty">
-          <Heart className="empty-icon" size={80} strokeWidth={1.2} />
+        <div className="wishlist-none">
+          <Heart className="none-icon" size={80} strokeWidth={1.2} />
           <h2>Your wishlist is empty</h2>
           <p>Save your favorite items to view them here</p>
-          <Link to="/shop-left" className="wishlist-shop-btn">
+          <Link to="/shop-left" className="wishlist-explore-btn">
             Explore Our Collection
           </Link>
         </div>
       ) : (
-        <div className="wishlist-grid">
+        <div className="wishlist-layout">
           {favoriteSnoList.map((sno) => (
             <WishlistItem
               key={sno}
@@ -99,7 +99,7 @@ const WishlistItem = ({ sno, onRemove }) => {
   if (isLoading) {
     return (
       <div className="wishlist-item loading">
-        <div className="item-loading-spinner">
+        <div className="item-progress-spinner">
           <Loader2 size={24} strokeWidth={1.5} />
         </div>
       </div>
@@ -110,7 +110,7 @@ const WishlistItem = ({ sno, onRemove }) => {
 
   return (
     <div className="wishlist-item">
-      <Link to={`/product/${sno}`} className="item-image-link">
+      <Link to={`/ product / ${ sno } `} className="item-image-link">
         <img
           src={firstImage}
           alt={product.SUBITEMNAME}
@@ -119,19 +119,19 @@ const WishlistItem = ({ sno, onRemove }) => {
         />
       </Link>
 
-      <div className="item-details">
-        <h3 className="item-title">
-          <Link to={`/product/${sno}`}>{product.SUBITEMNAME}</Link>
+      <div className="item-info">
+        <h3 className="item-name">
+          <Link to={`/ product / ${ sno } `}>{product.SUBITEMNAME}</Link>
         </h3>
 
-        <div className="item-price">₹{product.GrandTotal}</div>
+        <div className="item-cost">₹{product.GrandTotal}</div>
 
-        <div className="item-actions">
+        <div className="item-controls">
           <button className="main-btn btn-filled">
             Add to Cart
           </button>
           <button
-            className="remove-item-btn"
+            className="remove-item-action"
             onClick={() => onRemove(sno)}
             aria-label="Remove item"
           >

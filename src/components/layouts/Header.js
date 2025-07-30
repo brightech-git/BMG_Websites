@@ -8,6 +8,8 @@ import Mobilemenu from './Mobilemenu';
 import Logo from '../../assets/img/banner/logo.png';
 import ItemSearch from './Search';
 import useScreenWidth from './useScreenWidth'; // adjust path as needed
+import { useDispatch } from 'react-redux';
+import { logout } from '../../redux/slices/userSlice'; // adjust path if needed
 
 const Header = ({ isAuthenticated }) => {
     const width = useScreenWidth();
@@ -17,7 +19,7 @@ const Header = ({ isAuthenticated }) => {
   const [togglemethod, setTogglemethod] = useState(false);
   const [togglecart, setTogglecart] = useState(false);
   const [activeTab, setActiveTab] = useState(0); // Track active mega menu tab
-
+  const dispatch = useDispatch();
   const addClass = () => setClassmethod(true);
   const removeClass = () => setClassmethod(false);
   const toggleClass = () => setTogglemethod((prev) => !prev);
@@ -84,7 +86,9 @@ const Header = ({ isAuthenticated }) => {
             }
         ]
     };
-
+  const handleLogout=()=>{
+   dispatch(logout());
+  }
   const handleClick = (keyName, keyValue) => {
     const queryParams = new URLSearchParams();
     queryParams.append(keyName, keyValue);
@@ -109,7 +113,7 @@ const Header = ({ isAuthenticated }) => {
               <ul className="header-top-info">
                 <li>Today's Deal</li>
                 <li>Great Deal</li>
-                <li>Gift Vouchers</li>
+                <li onClick={handleLogout}>Gift Vouchers</li>
                 
                 <li>{localStorage.getItem('userMobileNumber')}</li>
               </ul>

@@ -1,162 +1,118 @@
 import React from 'react';
-import { FaMoneyBillWave, FaClock, FaShippingFast, FaExclamationTriangle, FaCheckCircle } from 'react-icons/fa';
+import {
+  FaMoneyBillWave,
+  FaClock,
+  FaShippingFast,
+  FaExclamationTriangle,
+  FaCheckCircle
+} from 'react-icons/fa';
+
 import './RefundPolicy.css';
 
 const RefundPolicy = () => {
-    return (
-        <div className="container py-5 refund-policy">
-            <h1 className="text-center mb-5 main-heading">Refund Policy</h1>
+  return (
+    <div className="refund-wrapper">
+      <div className="refund-container">
+        <h1 className="refund-heading">Refund Policy</h1>
 
-            {/* Refund Eligibility */}
-            <div className="card mb-4 policy-card">
-                <div className="card-body">
-                    <div className="d-flex">
-                        <div className="icon-wrapper me-4">
-                            <FaCheckCircle className="icon eligibility-icon" />
-                        </div>
-                        <div>
-                            <h2 className="card-title section-title">Refund Eligibility</h2>
-                            <p className="card-text mb-3">
-                                Refunds will be initiated only for:
-                            </p>
-                            <ul className="list-group list-group-flush">
-                                <li className="list-group-item">
-                                    <span className="badge bg-primary me-2">1</span>
-                                    <strong>Cancelled prepaid orders</strong> (before dispatch)
-                                </li>
-                                <li className="list-group-item">
-                                    <span className="badge bg-primary me-2">2</span>
-                                    <strong>Returned items</strong> approved under our Return Policy
-                                </li>
-                            </ul>
-                            <div className="alert alert-warning mt-3">
-                                <FaExclamationTriangle className="me-2" />
-                                Refunds are not available for orders cancelled after dispatch or for custom-made products
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        {/* Refund Eligibility */}
+        <section className="refund-section">
+          <div className="refund-icon-box">
+            <FaCheckCircle className="refund-icon eligibility" />
+          </div>
+          <div className="refund-content">
+            <h2 className="refund-title">Refund Eligibility</h2>
+            <p>Refunds are provided only for:</p>
+            <ul className="refund-list">
+              <li><span className="refund-badge">1</span> Cancelled prepaid orders (before dispatch)</li>
+              <li><span className="refund-badge">2</span> Returned items approved under our Return Policy</li>
+            </ul>
+            <div className="refund-warning">
+              <FaExclamationTriangle className="refund-alert-icon" />
+              Refunds not applicable after dispatch or for custom-made products.
             </div>
+          </div>
+        </section>
 
-            {/* Refund Mode and Time */}
-            <div className="card mb-4 policy-card">
-                <div className="card-body">
-                    <div className="d-flex">
-                        <div className="icon-wrapper me-4">
-                            <FaMoneyBillWave className="icon mode-icon" />
-                        </div>
-                        <div>
-                            <h2 className="card-title section-title">Refund Mode and Time</h2>
-                            <div className="row">
-                                <div className="col-md-6 mb-3">
-                                    <div className="p-3 h-100 bg-light rounded">
-                                        <h5>Prepaid Orders</h5>
-                                        <p className="mb-0">
-                                            Refund to <strong>original payment method</strong> (UPI, card, net banking)<br />
-                                            <span className="text-success">
-                                                <FaClock className="me-1" />
-                                                Processed within <strong>7–10 business days</strong>
-                                            </span>
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="col-md-6 mb-3">
-                                    <div className="p-3 h-100 bg-light rounded">
-                                        <h5>Cash on Delivery (COD)</h5>
-                                        <p className="mb-0">
-                                            Refund via <strong>NEFT/IMPS</strong> to provided bank account<br />
-                                            <span className="text-success">
-                                                <FaClock className="me-1" />
-                                                Processed within <strong>7–10 business days</strong>
-                                            </span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="alert alert-info mt-2">
-                                <strong>Note:</strong> Refund processing time depends on your bank/payment gateway and may take additional 2-3 days to reflect in your account
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        {/* Refund Mode and Time */}
+        <section className="refund-section">
+          <div className="refund-icon-box">
+            <FaMoneyBillWave className="refund-icon mode" />
+          </div>
+          <div className="refund-content">
+            <h2 className="refund-title">Refund Mode and Time</h2>
+            <div className="refund-grid">
+              <div className="refund-box">
+                <h3>Prepaid Orders</h3>
+                <p>
+                  Refunded to <strong>original payment method</strong><br />
+                  <span className="refund-time">
+                    <FaClock /> 7–10 business days
+                  </span>
+                </p>
+              </div>
+              <div className="refund-box">
+                <h3>Cash on Delivery (COD)</h3>
+                <p>
+                  Refunded via <strong>NEFT/IMPS</strong><br />
+                  <span className="refund-time">
+                    <FaClock /> 7–10 business days
+                  </span>
+                </p>
+              </div>
             </div>
+            <div className="refund-note">
+              Refund time depends on bank/payment gateway; may take 2–3 extra days to reflect.
+            </div>
+          </div>
+        </section>
 
-            {/* Shipping Charge Refunds */}
-            <div className="card mb-4 policy-card">
-                <div className="card-body">
-                    <div className="d-flex">
-                        <div className="icon-wrapper me-4">
-                            <FaShippingFast className="icon shipping-icon" />
-                        </div>
-                        <div>
-                            <h2 className="card-title section-title">Shipping Charge Refunds</h2>
-                            <ul className="list-group list-group-flush">
-                                <li className="list-group-item">
-                                    <span className="badge bg-secondary me-2">✗</span>
-                                    <strong>Shipping charges are non-refundable</strong> in most cases
-                                </li>
-                                <li className="list-group-item">
-                                    <span className="badge bg-success me-2">✓</span>
-                                    <strong>Exception:</strong> Refunded if return is due to <strong>our mistake</strong> (wrong or defective item)
-                                </li>
-                            </ul>
-                            <div className="mt-3 p-3 bg-light rounded">
-                                <p className="mb-0">
-                                    <strong>Example:</strong> If you received a wrong item, we'll refund both product amount and shipping charges
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        {/* Shipping Refunds */}
+        <section className="refund-section">
+          <div className="refund-icon-box">
+            <FaShippingFast className="refund-icon shipping" />
+          </div>
+          <div className="refund-content">
+            <h2 className="refund-title">Shipping Charge Refunds</h2>
+            <ul className="refund-list">
+              <li><span className="refund-cross">✗</span> Shipping charges are non-refundable</li>
+              <li><span className="refund-check">✓</span> Refunded if return is due to <strong>our mistake</strong></li>
+            </ul>
+            <div className="refund-example">
+              <strong>Example:</strong> If you received a wrong item, both product and shipping costs are refunded.
             </div>
+          </div>
+        </section>
 
-            {/* Delayed or Missing Refunds */}
-            <div className="card policy-card">
-                <div className="card-body">
-                    <div className="d-flex">
-                        <div className="icon-wrapper me-4">
-                            <FaExclamationTriangle className="icon missing-icon" />
-                        </div>
-                        <div>
-                            <h2 className="card-title section-title">Delayed or Missing Refunds</h2>
-                            <p className="card-text mb-3">
-                                If you haven't received your refund yet:
-                            </p>
-                            <div className="steps">
-                                <div className="step">
-                                    <div className="step-number">1</div>
-                                    <div className="step-content">
-                                        First, <strong>check your bank account</strong> (including spam/junk folders for UPI notifications)
-                                    </div>
-                                </div>
-                                <div className="step">
-                                    <div className="step-number">2</div>
-                                    <div className="step-content">
-                                        Then contact your <strong>bank or payment gateway</strong> (sometimes delays occur at their end)
-                                    </div>
-                                </div>
-                                <div className="step">
-                                    <div className="step-number">3</div>
-                                    <div className="step-content">
-                                        If still unresolved, contact our <strong>support team</strong> with:
-                                        <ul className="mt-2">
-                                            <li>Order number</li>
-                                            <li>Refund request date</li>
-                                            <li>Payment method details</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="alert alert-warning mt-3">
-                                <FaClock className="me-2" />
-                                Please allow <strong>full 10 business days</strong> for refund processing before contacting support
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        {/* Delayed Refunds */}
+        <section className="refund-section">
+          <div className="refund-icon-box">
+            <FaExclamationTriangle className="refund-icon delay" />
+          </div>
+          <div className="refund-content">
+            <h2 className="refund-title">Delayed or Missing Refunds</h2>
+            <p>If you haven't received your refund yet:</p>
+            <ol className="refund-steps">
+              <li>Check your bank or UPI inbox/spam</li>
+              <li>Contact your bank or payment gateway</li>
+              <li>
+                Contact our support team with:
+                <ul>
+                  <li>Order number</li>
+                  <li>Refund request date</li>
+                  <li>Payment method</li>
+                </ul>
+              </li>
+            </ol>
+            <div className="refund-warning">
+              <FaClock className="refund-alert-icon" />
+              Allow up to <strong>10 business days</strong> before contacting support.
             </div>
-        </div>
-    );
+          </div>
+        </section>
+      </div>
+    </div>
+  );
 };
 
 export default RefundPolicy;

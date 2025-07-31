@@ -13,6 +13,7 @@ header {
 		@media #{$xl} {
 			max-width: 100%;
 		}
+
 		@media #{$lg} {
 			max-width: 100%;
 		}
@@ -21,18 +22,23 @@ header {
 	.nav-container {
 		.toggle {
 			margin-right: 50px;
+
 			@media #{$lg} {
 				margin-right: 20px;
 			}
+
 			@media #{$lg} {
 				margin-right: 15px;
 			}
+
 			@media #{$md} {
 				display: none;
 			}
+
 			@media #{$sm} {
 				display: none;
 			}
+
 			a {
 				color: $heading-color;
 				font-size: 24px;
@@ -43,13 +49,16 @@ header {
 		.site-logo {
 			img {
 				max-width: 250px;
+
 				@media #{$lg} {
 					max-width: 200px;
 				}
+
 				@media #{$xsm} {
 					max-width: 180px;
 				}
 			}
+
 			.sticky-logo {
 				display: none;
 			}
@@ -67,12 +76,15 @@ header {
 			.item {
 				padding-left: 50px;
 				position: relative;
+
 				@media #{$md} {
 					color: $white;
 				}
+
 				@media #{$sm} {
 					color: $white;
 				}
+
 				i {
 					position: absolute;
 					left: 0;
@@ -86,44 +98,56 @@ header {
 					color: $white;
 					font-size: 14px;
 				}
+
 				span {
 					font-weight: 600;
 					font-size: 14px;
 					padding-bottom: 4px;
 				}
+
 				a {
 					display: block;
 				}
+
 				.title {
 					font-size: 24px;
 					font-weight: 400;
+
 					@media #{$xl} {
 						font-size: 20px;
 					}
+
 					@media #{$lg} {
 						font-size: 16px;
 					}
+
 					@media #{$md} {
 						color: $white;
 						font-size: 22px;
 					}
+
 					@media #{$sm} {
 						color: $white;
 						font-size: 22px;
 					}
 				}
+
 				&:not(:last-child) {
 					margin-right: 45px;
+
 					@media #{$xl} {
 						margin-right: 15px;
 					}
+
 					@media #{$lg} {
 						margin-right: 15px;
 					}
+
 					@media #{$md} {
 						margin-right: 0;
 						margin-bottom: 30px;
 					}
+
 					@media #{$sm} {
 						margin-right: 0;
 						margin-bottom: 30px;
@@ -136,6 +160,7 @@ header {
 			ul li {
 				display: inline-block;
 				position: relative;
+
 				a {
 					font-size: 16px;
 					font-weight: 600;
@@ -143,10 +168,12 @@ header {
 					text-transform: capitalize;
 					line-height: 80px;
 					padding: 0px 20px;
+
 					@media #{$xl} {
 						font-size: 14px;
 						padding: 0 10px;
 					}
+
 					@media #{$lg} {
 						padding: 0 8px;
 					}
@@ -157,7 +184,7 @@ header {
 					left: 0;
 					top: 110%;
 					width: 200px;
-					background-color: #fff;
+					background-color: #f6f5f0;
 					opacity: 0;
 					visibility: hidden;
 					transition: all 0.3s ease-out 0s;
@@ -166,6 +193,7 @@ header {
 
 					li {
 						display: block;
+
 						a {
 							display: block;
 							padding: 8px 24px;
@@ -198,7 +226,7 @@ header {
 				}
 
 				&:hover {
-					& > .submenu {
+					&>.submenu {
 						opacity: 1;
 						visibility: visible;
 						top: 100%;
@@ -234,14 +262,17 @@ header {
 				cursor: pointer;
 				display: block;
 			}
+
 			&.active {
 				span:nth-of-type(1) {
 					transform: rotate3d(0, 0, 1, 45deg);
 					top: 8px;
 				}
+
 				span:nth-of-type(2) {
 					opacity: 0;
 				}
+
 				span:nth-of-type(3) {
 					transform: rotate3d(0, 0, 1, -45deg);
 					top: -8px;
@@ -255,11 +286,13 @@ header {
 			right: 20px;
 			z-index: 12;
 			display: none;
+
 			.cross-wrap {
 				width: 26px;
 				height: 26px;
 				cursor: pointer;
 				position: relative;
+
 				span {
 					position: absolute;
 					display: block;
@@ -267,12 +300,14 @@ header {
 					height: 2px;
 					border-radius: 6px;
 					background: $white;
+
 					&.top {
 						top: 12px;
 						left: 0;
 						-webkit-transform: rotate(45deg);
 						transform: rotate(45deg);
 					}
+
 					&.bottom {
 						bottom: 12px;
 						left: 0;
@@ -299,15 +334,18 @@ header {
 				overflow-x: hidden;
 				overflow-y: scroll;
 				padding-top: 70px;
+
 				.menu-items {
 					ul li {
 						display: block;
+
 						a {
 							display: block;
 							border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 							color: $white !important;
 							line-height: 45px !important;
 						}
+
 						.submenu {
 							width: 100%;
 							position: relative;
@@ -319,10 +357,12 @@ header {
 							opacity: 1;
 							display: none;
 							transition: none;
+
 							li a {
 								color: $white;
 								padding: 0px 20px 0 40px;
 								line-height: 45px !important;
+
 								&:hover {
 									border-color: rgba(255, 255, 255, 0.5);
 								}
@@ -363,6 +403,7 @@ header {
 
 	&.header-two {
 		.nav-container {
+
 			.toggle a,
 			.menu-items ul li a {
 				color: $white;
@@ -374,17 +415,21 @@ header {
 				}
 			}
 		}
+
 		.header-info {
 			.item {
 				i {
 					background: $primary-color;
+
 					@media #{$md} {
 						background: $black;
 					}
+
 					@media #{$sm} {
 						color: $black;
 					}
 				}
+
 				a,
 				&,
 				.title {
@@ -405,11 +450,13 @@ header {
 			z-index: 99;
 			height: auto;
 			bottom: -60px;
+
 			@media #{$tiny} {
 				position: relative;
 				bottom: 0;
 				top: 0;
 			}
+
 			&.sticky-header.sticky-active {
 				position: fixed;
 				top: 0;
@@ -418,8 +465,10 @@ header {
 				bottom: auto;
 				z-index: 999;
 				animation: sticky 1.2s;
+
 				.nav-container {
 					box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.04);
+
 					.menu-items ul li a {
 						line-height: 100px;
 					}
@@ -432,30 +481,38 @@ header {
 			padding-bottom: 75px;
 			font-family: $roboto;
 			background-color: $heading-color;
+
 			@media #{$md} {
 				padding-bottom: 60px;
 			}
+
 			@media #{$sm} {
 				text-align: center;
 				padding-bottom: 50px;
 			}
+
 			@media #{$tiny} {
 				display: none;
 			}
+
 			&,
 			a {
 				color: $white;
 			}
+
 			ul.header-top-info {
 				@media #{$sm} {
 					margin-top: 10px;
 				}
+
 				li {
 					display: inline-block;
 					margin-left: 15px;
+
 					@media #{$xsm} {
 						margin-left: 5px;
 					}
+
 					i {
 						margin-right: 10px;
 						color: $primary-color;
@@ -467,12 +524,15 @@ header {
 		.nav-container {
 			background-color: $white;
 			padding: 0 40px;
+
 			@media #{$lg} {
 				padding: 0 10px;
 			}
+
 			@media #{$md} {
 				padding: 10px;
 			}
+
 			@media #{$sm} {
 				padding: 10px;
 			}
@@ -488,6 +548,7 @@ header {
 					@media #{$lsm} {
 						max-width: 200px;
 					}
+
 					@media #{$tiny} {
 						max-width: 150px;
 					}
@@ -499,6 +560,7 @@ header {
 					a {
 						line-height: 120px;
 					}
+
 					.submenu {
 						li {
 							a {
@@ -511,15 +573,18 @@ header {
 
 			.menu-right-buttons {
 				display: flex;
+
 				.toggle {
 					margin-right: 0;
 				}
 
-				& > div {
+				&>div {
 					margin-left: 20px;
+
 					@media #{$lg} {
 						margin-left: 5px;
 					}
+
 					@media #{$sm} {
 						margin-left: 5px;
 					}
@@ -528,8 +593,10 @@ header {
 				.navbar-toggler {
 					border: 2px solid rgba($color: #858585, $alpha: 0.2);
 					padding: 15px;
+
 					@media #{$xsm} {
 						padding: 5px 10px;
+
 						span {
 							width: 20px;
 						}
@@ -544,12 +611,14 @@ header {
 					line-height: 65px;
 					padding: 0;
 					color: $black;
+
 					@media #{$xsm} {
 						height: 40px;
 						width: 40px;
 						line-height: 40px;
 						font-size: 14px;
 					}
+
 					&:hover {
 						background-color: $primary-color;
 						color: $white;
@@ -560,9 +629,11 @@ header {
 
 		.search {
 			position: relative;
+
 			.search-icon {
 				position: relative;
 				display: block;
+
 				.close-icon,
 				.open-icon {
 					position: absolute;
@@ -571,43 +642,53 @@ header {
 					z-index: 2;
 					transform: translate(-50%, -50%);
 				}
+
 				.close-icon {
 					visibility: hidden;
 					opacity: 0;
 				}
+
 				&.active {
 					.close-icon {
 						visibility: visible;
 						opacity: 1;
 					}
+
 					.open-icon {
 						visibility: hidden;
 						opacity: 0;
 					}
 				}
 			}
+
 			.search-form {
 				position: absolute;
 				right: 0;
 				width: 350px;
 				display: none;
 				top: calc(100% + 27px);
+
 				@media #{$md} {
 					top: calc(100% + 17px);
 				}
+
 				@media #{$lsm} {
 					top: calc(100% + 10px);
 				}
+
 				@media #{$xsm} {
 					top: calc(100% + 20px);
 					width: 250px;
 				}
+
 				@media #{$tiny} {
 					right: -100%;
 					top: calc(100% + 12px);
 				}
+
 				form {
 					position: relative;
+
 					input {
 						width: 100%;
 						background-color: $main-bg;
@@ -616,10 +697,12 @@ header {
 						padding-left: 30px;
 						padding-right: 60px;
 						font-size: 14px;
+
 						@media #{$xsm} {
 							height: 50px;
 						}
 					}
+
 					button {
 						border: none;
 						position: absolute;
@@ -632,6 +715,7 @@ header {
 						font-size: 14px;
 						color: $white;
 						@include transition(0.3s);
+
 						&:hover {
 							background-color: $black;
 							color: $white;
@@ -645,13 +729,16 @@ header {
 	&.inner-page.header-absolute {
 		background-color: $white;
 		top: 0;
+
 		.nav-container {
 			@media #{$md} {
 				padding: 10px 0;
 			}
+
 			@media #{$sm} {
 				padding: 10px 0;
 			}
+
 			.menu-items ul li a {
 				line-height: 130px;
 			}
@@ -671,6 +758,7 @@ header {
 		.nav-container {
 			@media #{$md} {
 				padding: 10px 0;
+
 				.site-logo img {
 					max-width: 200px;
 				}
@@ -690,32 +778,40 @@ header {
 				.main-logo {
 					display: none;
 				}
+
 				.sticky-logo {
 					display: block;
 				}
 			}
 		}
+
 		&.header-two {
 			.nav-container {
+
 				.toggle a,
 				.menu-items ul li a {
 					color: $black;
 				}
+
 				.navbar-toggler {
 					span {
 						background-color: $black;
 					}
 				}
 			}
+
 			.header-info {
 				.item {
+
 					a,
 					&,
 					.title {
 						color: $black;
+
 						@media #{$md} {
 							color: $white;
 						}
+
 						@media #{$sm} {
 							color: $white;
 						}
@@ -763,6 +859,7 @@ header {
 			opacity: 0.5;
 		}
 	}
+
 	.offcanvas-widget {
 		background-color: $white;
 		width: 100%;
@@ -782,12 +879,14 @@ header {
 		.widget {
 			margin-bottom: 50px;
 			font-size: 14px;
+
 			.widget-title {
 				font-size: 20px;
 				margin-bottom: 25px;
 				line-height: 1;
 				position: relative;
 				padding-left: 30px;
+
 				&::before {
 					position: absolute;
 					left: 0;
@@ -798,10 +897,12 @@ header {
 					content: '';
 				}
 			}
+
 			/* Search Widget */
 			&.search-widget {
 				form {
 					position: relative;
+
 					input {
 						width: 100%;
 						background-color: $main-bg;
@@ -811,6 +912,7 @@ header {
 						padding-right: 60px;
 						font-size: 14px;
 					}
+
 					button {
 						border: none;
 						position: absolute;
@@ -823,6 +925,7 @@ header {
 						font-size: 14px;
 						color: $white;
 						@include transition(0.3s);
+
 						&:hover {
 							background-color: $black;
 							color: $white;
@@ -835,14 +938,17 @@ header {
 			&.nav-widget {
 				ul li {
 					line-height: 30px;
+
 					a {
 						color: $text-color;
 						font-weight: 700;
+
 						&:hover {
 							padding-left: 10px;
 							color: $primary-color;
 						}
 					}
+
 					.submenu {
 						padding-left: 10px;
 					}
@@ -854,6 +960,7 @@ header {
 				ul li {
 					display: inline-block;
 					margin-right: 5px;
+
 					a {
 						height: 40px;
 						width: 40px;
@@ -861,6 +968,7 @@ header {
 						color: $white;
 						line-height: 40px;
 						text-align: center;
+
 						&:hover {
 							background-color: $heading-color;
 						}
@@ -906,29 +1014,36 @@ header {
 	.breadcrumb-text {
 		position: relative;
 		padding: 100px 0;
+
 		&,
 		h2.page-title {
 			color: $white;
 		}
+
 		h2.page-title {
 			font-size: 72px;
 			letter-spacing: -1px;
+
 			@media #{$lsm} {
 				font-size: 60px;
 			}
+
 			@media #{$xsm} {
 				font-size: 50px;
 			}
 		}
+
 		span {
 			font-size: 14px;
 			font-weight: 700;
 			letter-spacing: 4px;
 			text-transform: uppercase;
 			padding-bottom: 25px;
+
 			@media #{$sm} {
 				letter-spacing: 2px;
 			}
+
 			@media #{$xsm} {
 				font-size: 12px;
 			}
@@ -941,14 +1056,17 @@ header {
 			background-color: $white;
 			padding: 20px 40px;
 			z-index: 2;
+
 			@media #{$xsm} {
 				padding: 15px 20px;
 				font-size: 14px;
 			}
+
 			li {
 				display: inline-block;
 				font-weight: 700;
 				position: relative;
+
 				&,
 				a {
 					color: $heading-color;
@@ -961,6 +1079,7 @@ header {
 				&:not(:first-child) {
 					padding-left: 10px;
 					margin-left: 10px;
+
 					&::before {
 						position: absolute;
 						left: -2px;
@@ -973,6 +1092,7 @@ header {
 
 				&.active {
 					color: $primary-color;
+
 					&::before {
 						color: $primary-color;
 					}

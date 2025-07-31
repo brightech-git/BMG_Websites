@@ -20,6 +20,9 @@ import Blog from './Blog';
 import Handpicked from '../homethree/Handpicked';
 import BestDesign from './BestDesign';
 import FeaturedBanners from '../../layouts/FeaturedProduct';
+import ShopByRecipient from './ShopByRecipient';
+import './HomeContent.css';
+
 class Content extends Component {
     render() {
         return (
@@ -28,6 +31,7 @@ class Content extends Component {
                 <Category/>
                 <Category1/>
                 <Handpicked />
+                <ShopByRecipient />
                 <FeaturedBanners />
                 <Cta />     
                 {/* <Trending/> */}
@@ -44,6 +48,7 @@ class Content extends Component {
                 <RecentlyViewed />
                 {/* <Habout /> */}
                 <Blog/>
+                
             </Fragment>
         );
     }

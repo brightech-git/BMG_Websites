@@ -1,0 +1,285 @@
+.budget-corner {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f6f5f0;
+    padding: clamp(2rem, 5vw, 3rem) 0;
+}
+
+.section-title {
+    font-family: 'Gloock', serif;
+    color: #404040;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 400;
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background: #cd865c;
+}
+
+.products-row {
+    display: flex;
+    gap: clamp(0.5rem, 1.5vw, 1rem);
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: nowrap;
+}
+
+.product-card {
+    flex: 1;
+    min-width: 0;
+    max-width: clamp(200px, 25vw, 250px);
+}
+
+.gift-card {
+    position: relative;
+    height: clamp(260px, 40vw, 320px);
+    border-radius: 20px 20px 0 0;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+}
+
+.gift-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: clamp(12px, 2vw, 15px);
+    background: repeating-linear-gradient(90deg,
+            transparent,
+            transparent 8px,
+            #cd865c 8px,
+            #cd865c 16px);
+    z-index: 3;
+}
+
+.card-image-container {
+    position: relative;
+    height: clamp(120px, 20vw, 160px);
+    overflow: hidden;
+    margin-top: clamp(12px, 2vw, 15px);
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.gift-card:hover .card-image {
+    transform: scale(1.1);
+}
+
+.card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.1) 0%,
+            rgba(0, 0, 0, 0.3) 100%);
+}
+
+.card-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: clamp(0.5rem, 1.5vw, 1rem);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border-radius: 15px 15px 0 0;
+    text-align: center;
+}
+
+.card-title {
+    font-family: 'Gloock', serif;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    font-weight: 500;
+    color: #404040;
+    margin-bottom: 0.3rem;
+    line-height: 1.2;
+}
+
+.card-description {
+    font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+    color: #666;
+    margin-bottom: clamp(0.3rem, 1vw, 0.5rem);
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.price-tag {
+    display: inline-block;
+    background: #cd865c;
+    color: #ffffff;
+    padding: clamp(0.2rem, 0.8vw, 0.4rem) clamp(0.6rem, 1.5vw, 1rem);
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+    margin-bottom: clamp(0.3rem, 1vw, 0.5rem);
+    box-shadow: 0 3px 10px rgba(205, 134, 92, 0.2);
+    white-space: nowrap;
+}
+
+.shop-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: clamp(0.3rem, 1vw, 0.6rem) clamp(0.6rem, 1.5vw, 1rem);
+    background: transparent;
+    border: 1.5px solid #cd865c;
+    color: #cd865c;
+    border-radius: 20px;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.shop-btn:hover {
+    background: #cd865c;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(205, 134, 92, 0.2);
+}
+
+.btn-arrow {
+    transition: transform 0.3s ease;
+    font-size: clamp(0.6rem, 1vw, 0.75rem);
+}
+
+.shop-btn:hover .btn-arrow {
+    transform: translateX(2px);
+}
+
+.gift-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+@media (max-width: 768px) {
+    .products-row {
+        gap: clamp(0.3rem, 1vw, 0.5rem);
+        padding: 0 clamp(0.3rem, 1vw, 0.5rem);
+    }
+
+    .product-card {
+        max-width: clamp(160px, 30vw, 200px);
+    }
+
+    .gift-card {
+        height: clamp(220px, 45vw, 280px);
+    }
+
+    .card-image-container {
+        height: clamp(100px, 25vw, 120px);
+    }
+
+    .card-content {
+        padding: clamp(0.4rem, 1.2vw, 0.8rem);
+    }
+
+    .card-title {
+        font-size: clamp(0.8rem, 1.8vw, 1rem);
+    }
+
+    .card-description {
+        font-size: clamp(0.65rem, 1.3vw, 0.8rem);
+        -webkit-line-clamp: 1;
+    }
+
+    .price-tag {
+        font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+        padding: clamp(0.2rem, 0.7vw, 0.3rem) clamp(0.5rem, 1.2vw, 0.8rem);
+    }
+
+    .shop-btn {
+        font-size: clamp(0.6rem, 1vw, 0.75rem);
+        padding: clamp(0.25rem, 0.8vw, 0.5rem) clamp(0.5rem, 1.2vw, 0.8rem);
+    }
+}
+
+@media (max-width: 576px) {
+    .budget-corner {
+        padding: clamp(1.5rem, 4vw, 2rem) 0;
+    }
+
+    .products-row {
+        gap: clamp(0.2rem, 0.8vw, 0.3rem);
+    }
+
+    .product-card {
+        max-width: clamp(140px, 28vw, 180px);
+    }
+
+    .gift-card {
+        height: clamp(200px, 40vw, 260px);
+    }
+
+    .card-image-container {
+        height: clamp(90px, 20vw, 110px);
+    }
+
+    .card-content {
+        padding: clamp(0.3rem, 1vw, 0.6rem);
+    }
+
+    .card-title {
+        margin-bottom: 0.2rem;
+    }
+
+    .card-description {
+        margin-bottom: 0.2rem;
+    }
+
+    .price-tag {
+        margin-bottom: 0.2rem;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.product-card {
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.product-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.product-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.product-card:nth-child(3) {
+    animation-delay: 0.3s;
+}

@@ -1,42 +1,41 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import ctabg from '../../../assets/img/category/img1.jpg';
+import './Cta.css';
 
-import ctabg from "../../../assets/img/category/img1.jpg";
-
-class Cta extends Component {
-  render() {
-    return (
-      <section
-        className="pt-115 pb-115 bg-white cta-sec"
-        style={{
-          backgroundImage: `url(${ctabg})`,
-          marginBottom: "70px",
-        }}
-      >
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-7">
-              <div className="block-text">
-                <div className="section-title mb-20">
-                  {/* <span className="title-tag">Buy Now</span> */}
-                  <h2>Rare Collections.</h2>
-                </div>
-                <p className="pr-50">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, aliquip ex ea commodo consequat you
-                  have to understand this.
-                </p>
-                <Link to="/shop-left" className="main-btn btn-filled mt-40">
-                  Shop now
-                </Link>
-              </div>
+const Cta = () => {
+  return (
+    <section className="cta-section position-relative overflow-hidden">
+      <div
+        className="cta-background position-absolute w-100 h-100"
+        style={{ backgroundImage: `url(${ctabg})` }}
+        aria-hidden="true"
+      />
+      <div className="cta-overlay position-absolute w-100 h-100" />
+      <div className="container position-relative py-4">
+        <div className="row justify-content-start">
+          <div className="col-12 col-lg-6">
+            <div className="cta-content text-white p-3 p-md-4">
+              <h2 className="cta-title mb-3">
+                Exclusive Artworks
+              </h2>
+              <p className="cta-text mb-4">
+                Discover our curated collection of unique artworks crafted by talented artists. Each piece tells a story, blending creativity with timeless elegance. Elevate your space with art that inspires.
+              </p>
+              <Link
+                to="/shop"
+                className="cta-btn btn btn-primary"
+                aria-label="Explore our exclusive artworks"
+              >
+                Shop Now
+                <i className="fas fa-arrow-right ms-2" aria-hidden="true" />
+              </Link>
             </div>
           </div>
         </div>
-      </section>
-    );
-  }
-}
+      </div>
+    </section>
+  );
+};
 
 export default Cta;

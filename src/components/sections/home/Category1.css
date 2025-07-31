@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
+
+:root {
+    --primary-font: 'Gloock', serif;
+    --secondary-font: 'Montserrat', sans-serif;
+    --primary-color: #f6f5f0;
+    --primary-text-color: #404040;
+    --primary-card-color: #edebe7;
+    --primary-hover-color: #cd865c;
+    --secondary-card-color: #cfdcdd;
+    --white-color: #ffffff;
+    --header-height: 80px;
+    --mobile-header-height: 60px;
+    --green-color: #024908;
+    --grey-color: #A9A9A9;
+}
+
+.offer-container {
+    padding: 2rem 2rem;
+    background-color: var(--primary-color);
+    font-family: var(--secondary-font);
+    width: 100%;
+}
+
+.offer-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+}
+
+.offer-card {
+    flex: 0 0 calc(50% - 0.5rem);
+    min-width: 200px;
+    height: 30vw;
+    max-height: 400px;
+    min-height: 200px;
+    background-color: var(--primary-color);
+  
+    scroll-snap-align: start;
+    position: relative;
+    overflow: hidden;
+}
+
+.offer-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+.offer-image.shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+.offer-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 100%;
+    padding: calc(0.8rem + 0.2vw);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.85);
+    z-index: 2;
+}
+
+.offer-title {
+    font-family: var(--primary-font);
+    font-size: calc(1.2rem + 0.4vw);
+    font-weight: 500;
+    color: var(--primary-hover-color);
+    margin-bottom: 0.5rem;
+}
+
+.offer-subtitle {
+    font-family: var(--secondary-font);
+    font-size: calc(0.8rem + 0.2vw);
+    color: #555;
+    margin-bottom: 0.75rem;
+}
+
+.offer-shop-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--secondary-font);
+    font-size: calc(0.7rem + 0.2vw);
+    font-weight: 400;
+    text-transform: capitalize;
+    letter-spacing: 1px;
+    color: var(--primary-text-color);
+    background-color: var(--white-color);
+    border: 1px solid var(--primary-hover-color);
+    padding: calc(0.4rem + 0.2vw) calc(0.8rem + 0.4vw);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.offer-shop-btn.offer-shop-filled:hover {
+    background-color: var(--primary-hover-color);
+    color: var(--white-color);
+    border-color: var(--primary-hover-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(205, 134, 92, 0.3);
+}
+
+.offer-shop-btn:focus {
+    outline: 2px solid var(--primary-hover-color);
+    outline-offset: 2px;
+}
+
+.offer-error {
+    text-align: center;
+    padding: 2rem;
+    color: #dc3545;
+    font-family: var(--secondary-font);
+}
+
+.shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .offer-container {
+        padding: 1.5rem 0;
+    }
+
+    .offer-grid {
+        gap: 0.75rem;
+    }
+
+    .offer-card {
+        flex: 0 0 calc(50% - 0.375rem);
+        min-width: 160px;
+        height: 28vw;
+        min-height: 180px;
+    }
+
+    .offer-content {
+        padding: calc(0.6rem + 0.15vw);
+        width: 50%;
+    }
+
+    .offer-title {
+        font-size: calc(1rem + 0.3vw);
+    }
+
+    .offer-subtitle {
+        font-size: calc(0.7rem + 0.15vw);
+    }
+
+    .offer-shop-btn {
+        font-size: calc(0.65rem + 0.15vw);
+        padding: calc(0.35rem + 0.15vw) calc(0.7rem + 0.3vw);
+    }
+}
+
+@media (max-width: 576px) {
+    .offer-container{
+        padding:0.5rem ;
+    }
+    .offer-card {
+        flex: 0 0 calc(50% - 0.375rem);
+        min-width: 110px;
+        height: 20vw;
+        min-height: 120px;
+    }
+    .offer-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    }
+    .offer-content {
+        padding: calc(0.5rem + 0.1vw);
+        width: 60%;
+    }
+
+    .offer-title {
+        font-size: calc(0.9rem + 0.2vw);
+    }
+
+    .offer-subtitle {
+        font-size: calc(0.65rem + 0.1vw);
+    }
+
+    .offer-shop-btn {
+        font-size: calc(0.6rem + 0.1vw);
+        padding: calc(0.3rem + 0.1vw) calc(0.6rem + 0.2vw);
+    }
+}
+

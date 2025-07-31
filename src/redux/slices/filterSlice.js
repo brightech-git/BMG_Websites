@@ -9,7 +9,7 @@ const initialState = {
     catName: '',
     gender: '',
     sortBy: '',
-    sortDirection: 'ASC',
+    sortDirection: '',
     minGrandTotal: '', // Will store as number or empty string
     maxGrandTotal: '', // Will store as number or empty string
     priceRange: '', // Consider removing if redundant

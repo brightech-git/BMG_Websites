@@ -18,28 +18,11 @@
 
 /* Filter Container */
 .filter-bar-container {
-    background: var(--primary-color) ;
+    background: var(--primary-color);
     margin-bottom: 2rem;
     font-family: var(--secondary-font);
     overflow: hidden;
     box-shadow: none !important;
-}
-
-/* Filter Header */
-.filter-header {
-    background: var(--primary-color)
-}
-
-.filter-header h6 {
-    color: var(--primary-text-color);
-    font-weight: 600;
-    font-family: var(--secondary-font);
-    margin: 0;
-}
-
-.filter-header .badge {
-    font-size: 0.7rem;
-    font-weight: 500;
 }
 
 /* Single Row Filter Layout */
@@ -99,13 +82,14 @@
     display: flex;
     align-items: center;
 }
-.filter-container{
+
+.filter-container {
     background-color: var(--primary-color) !important;
 }
+
 /* Form Controls */
 .filter-select,
 .form-select {
-    
     border-radius: var(--border-radius-sm);
     padding: 0.65rem 0.875rem;
     font-size: 0.875rem;
@@ -116,7 +100,6 @@
     box-shadow: var(--shadow-sm);
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23404040' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
 }
-
 
 .filter-select:disabled,
 .form-select:disabled {
@@ -349,20 +332,6 @@
         max-width: 100%;
         flex: none;
     }
-
-    .filter-header {
-        padding: 1rem !important;
-    }
-
-    .filter-section {
-        margin-bottom: 1rem;
-    }
-
-    .filter-pill {
-        font-size: 0.75rem;
-        padding: 0.35rem 0.65rem;
-        max-width: 180px;
-    }
 }
 
 @media (max-width: 768px) {
@@ -375,23 +344,10 @@
         border-radius: var(--border-radius-sm);
     }
 
-    .filter-header {
-        padding: 0.75rem !important;
-        flex-direction: column;
-        align-items: flex-start !important;
-        gap: 0.5rem;
-    }
-
-    .filter-header .d-flex:first-child {
-        width: 100%;
-        justify-content: space-between;
-    }
-
     .filter-toggle {
         padding: 0.4rem 0.8rem;
         font-size: 0.8rem;
         align-self: flex-end;
-        margin-top: -2rem;
     }
 
     .form-label {
@@ -432,6 +388,47 @@
     }
 }
 
+@media (max-width: 678px) {
+    .filters-single-row {
+        gap: 0.5rem;
+    }
+
+    .filter-item,
+    .price-range-container {
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    .price-range-wrapper {
+        padding: 0 2px;
+    }
+
+    .rc-slider {
+        height: 4px;
+    }
+
+    .rc-slider-handle {
+        width: 14px;
+        height: 14px;
+        margin-top: -4px;
+    }
+
+    .price-label {
+        font-size: 0.65rem;
+        padding: 1px 3px;
+    }
+
+    .form-label {
+        font-size: 0.75rem;
+    }
+
+    .filter-select,
+    .form-select {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.7rem;
+    }
+}
+
 @media (max-width: 576px) {
     .filters-single-row {
         gap: 0.5rem;
@@ -441,99 +438,53 @@
         border-radius: 4px;
     }
 
-    .filter-header {
-        padding: 0.5rem !important;
-    }
-
-    .filter-header h6 {
-        font-size: 0.9rem;
+    .filter-toggle {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.75rem;
     }
 
     .form-label {
-        font-size: 0.75rem;
-        margin-bottom: 0.3rem;
-        font-weight: 600;
+        font-size: 0.7rem;
+        margin-bottom: 0.25rem;
     }
 
     .filter-select,
     .form-select {
-        padding: 0.45rem 0.65rem;
-        font-size: 0.75rem;
-        border-radius: 4px;
+        padding: 0.35rem 0.5rem;
+        font-size: 0.7rem;
     }
 
     .filter-pill {
-        font-size: 0.65rem;
-        padding: 0.25rem 0.4rem;
-        border-radius: 16px;
-        max-width: 120px;
+        font-size: 0.6rem;
+        padding: 0.2rem 0.35rem;
+        max-width: 100px;
     }
 
     .btn-outline-danger {
-        font-size: 0.7rem;
-        padding: 0.3rem 0.6rem;
+        font-size: 0.65rem;
+        padding: 0.25rem 0.5rem;
     }
 
     .rc-slider-handle {
-        width: 14px;
-        height: 14px;
-        margin-top: -4px;
-        border-width: 2px;
+        width: 12px;
+        height: 12px;
+        margin-top: -3px;
     }
 
     .rc-slider {
-        height: 4px;
-        margin: 6px 0 2px 0;
+        height: 3px;
     }
 
     .rc-slider-rail,
     .rc-slider-track {
-        height: 4px;
-        border-radius: 2px;
+        height: 3px;
     }
 
     .price-label {
-        font-size: 0.65rem;
-        padding: 1px 3px;
+        font-size: 0.6rem;
+        padding: 0px 2px;
     }
 }
-
-filter-select,
-.form-select {
-    padding: 0.45rem 0.65rem;
-    font-size: 0.75rem;
-    border-radius: 4px;
-}
-
-.filter-pill {
-    font-size: 0.65rem;
-    padding: 0.25rem 0.4rem;
-    border-radius: 16px;
-    max-width: 120px;
-}
-
-.btn-outline-danger {
-    font-size: 0.7rem;
-    padding: 0.3rem 0.6rem;
-}
-
-.rc-slider-handle {
-    width: 16px;
-    height: 16px;
-    margin-top: -5px;
-    border-width: 2px;
-}
-
-.rc-slider {
-    height: 4px;
-}
-
-.rc-slider-rail,
-.rc-slider-track {
-    height: 4px;
-    border-radius: 2px;
-}
-
 
 /* Focus and Accessibility Improvements */
 .filter-select:focus-visible,
@@ -551,8 +502,6 @@ filter-select,
 
 /* Dark mode support (if needed) */
 @media (prefers-color-scheme: dark) {
-    
-
     .filter-header {
         background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
         border-bottom-color: #333;
@@ -668,22 +617,4 @@ filter-select,
     100% {
         background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
     }
-}
-/* styles.css or your component's CSS file */
-.filter-select {
-    border: none !important;
-    box-shadow: none !important;
-    background-color: var(--primary-color) !important;
-    padding-left: 0;
-    /* optional: aligns text with label if present */
-    font-size: 0.9rem;
-    /* adjust to match rest of UI */
-    color: var(--primary-text-color);
-    /* bootstrap default text color */
-}
-
-.filter-select:focus {
-    outline: none;
-    box-shadow: none !important;
-    border: none !important;
 }

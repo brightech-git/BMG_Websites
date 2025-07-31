@@ -21,6 +21,7 @@
     "@testing-library/user-event": "^7.2.1",
     "animate.css": "^4.1.1",
     "antd": "^5.26.6",
+    "aos": "^2.3.4",
     "axios": "^1.10.0",
     "bootstrap": "^4.6.0",
     "classnames": "^2.3.1",
@@ -58,8 +59,8 @@
     "slick-carousel": "^1.8.1"
   },
   "scripts": {
-    "start": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
-    "build": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts build",
+    "start": " react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

@@ -20,15 +20,15 @@
 .jewel-showcase {
     position: relative;
     z-index: 1;
-    padding: 5rem 0 6rem;
-    background-color: transparent;
+    padding: 2rem 1rem 4rem;
+    background-color: var(--primary-color);
     overflow: hidden;
 }
 
 /* Section Header */
 .section-top {
     text-align: center;
-    margin-bottom: 5rem;
+    margin-bottom: 2rem;
     padding: 0 1rem;
 }
 
@@ -43,15 +43,6 @@
     font-family: var(--primary-font);
 }
 
-.section-heading {
-    font-size: 2.05rem;
-    font-family: var(--primary-font);
-    color: var(--primary-text-color);
-    font-weight: 700;
-    margin-bottom: 1rem;
-    line-height: 1.2;
-}
-
 .section-description {
     font-size: 1rem;
     color: var(--primary-text-color);
@@ -64,7 +55,6 @@
 /* Slider Container */
 .jewel-slider-wrapper {
     padding: 0;
-    margin: 0 -0.9375rem;
 }
 
 /* Slide Item */
@@ -119,6 +109,7 @@
     flex-direction: column;
     background: var(--white-color);
 }
+
 .item-image-wrapper {
     height: 100%;
     overflow: hidden;
@@ -201,13 +192,18 @@
 
 @media (max-width: 75em) {
     .jewel-showcase {
-        padding: 3.125rem 0 4.375rem;
+        padding: 3.125rem 0 2.375rem;
     }
 
     .main-jewel-image {
         height: 23.75rem;
     }
-
+.section-label{
+    font-size: 10px;
+}
+.section-description{
+font-size: 0.8rem;
+}
     .jewel-item-card {
         height: 8.75rem;
     }
@@ -227,7 +223,7 @@
 
 @media (max-width: 62em) {
     .section-top {
-        margin-bottom: 3.75rem;
+        margin-bottom: 1.75rem;
     }
 
     .section-heading {
@@ -246,11 +242,18 @@
         bottom: -3.75rem;
         gap: 0.75rem;
     }
+          .section-label {
+              font-size: 0.8rem;
+          }
+    
+          .section-description {
+              font-size: 0.9rem;
+          }
 }
 
 @media (max-width: 48em) {
     .jewel-showcase {
-        padding: 2.5rem 0 3.75rem;
+        padding: 2.5rem 0 0.75rem;
     }
 
     .section-heading {
@@ -271,11 +274,18 @@
         bottom: -3.125rem;
         gap: 0.5rem;
     }
+          .section-label {
+              font-size: 0.7rem;
+          }
+    
+          .section-description {
+              font-size: 0.8rem;
+          }
 }
 
 @media (max-width: 36em) {
     .section-top {
-        margin-bottom: 2.5rem;
+        margin-bottom: 1.5rem;
     }
 
     .section-heading {
@@ -302,6 +312,7 @@
     .main-jewel-piece {
         margin-bottom: 5rem;
     }
+       
 }
 
 @media (max-width: 30em) {
@@ -316,4 +327,11 @@
     .featured-items-grid {
         bottom: -2.1875rem;
     }
+        .section-label {
+            font-size: 0.6rem;
+        }
+    
+        .section-description {
+            font-size: 0.7rem;
+        }
 }

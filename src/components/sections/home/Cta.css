@@ -1,87 +1,123 @@
-/* CTA Section */
-.cta-sec {
-  display: flex;
-  align-items: center;
-  background-size: cover;
-  background-position: right center;
-  background-repeat: no-repeat;
-  padding: 80px 0;
+.cta-section {
+  min-height: 400px;
+  margin-bottom: 50px;
   position: relative;
+  overflow: hidden;
+}
+
+.cta-background {
+  background-size: cover;
+  background-position: center;
   z-index: 1;
-  color: var(--primary-text-color);
-
-}
-
-/* Row Layout */
-.cta-sec .row {
-  display: flex;
-  align-items: center;
-  max-width: 1200px;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  margin: 0 auto;
-  padding: 0 80px;
+  height: 100%;
 }
 
-/* Text Block */
-.block-text {
-  max-width: 600px;
-  padding-right: 40px;
+.cta-overlay {
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
-.block-text h2 {
-  font-size: 40px;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-
-.block-text p {
-  font-size: 18px;
-  line-height: 1.6;
-  margin-bottom: 30px;
-}
-
-/* Shop Button */
-.main-btns.btn-filled {
-  display: inline-block;
-  background: #c97b45;
+.cta-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+  padding: 2rem;
   color: #fff;
-  padding: 12px 30px;
-  border-radius: 4px;
-  font-size: 16px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: 0.3s ease;
 }
 
-.main-btns.btn-filled:hover {
-  background: #b05f2c;
+.cta-title {
+  font-family: 'Gloock', sans-serif;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 1rem;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 991px) {
-  .cta-sec .row {
-    flex-direction: column;
-    padding: 0 20px;
+.cta-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  max-width: 500px;
+}
+
+.cta-btn {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  text-transform: capitalize;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0;
+  transition: all 0.3s ease;
+  display: inline-block;
+  background-color: #f6f5f0;
+  color: var(--primary-color);
+  border-radius: 0px !important;
+  border: none;
+  width: auto;
+  /* ✅ Ensures it doesn’t stretch */
+  max-width: 200px;
+  /* Optional cap */
+  white-space: nowrap;
+}
+
+.cta-btn:hover {
+  transform: translateY(-2px);
+  background-color: #f6f5f0 !important;
+  color: var(--primary-hover-color) !important;
+  cursor: pointer;
+}
+
+@media (max-width: 992px) {
+  .cta-section {
+    min-height: 250px;
+  }
+
+  .cta-title {
+    font-size: 1.35rem !important;
+  }
+
+  .cta-text {
+    font-size: 0.7rem !important;
+  }
+
+  .cta-btn {
+    font-size: 0.65rem !important;
+    padding: 0.4rem 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .cta-section {
+    min-height: 200px;
     text-align: center;
   }
-  .block-text {
-    padding-right: 0;
-    margin-bottom: 20px;
-  }
-  .block-text h2 {
-    font-size: 32px;
-  }
-}
 
-@media (max-width: 576px) {
-  .block-text h2 {
-    font-size: 26px;
+  .cta-content {
+    align-items: center;
+    text-align: center;
+    padding: 1.5rem;
   }
-  .block-text p {
-    font-size: 15px;
-  }
-  .main-btns.btn-filled {
-    font-size: 14px;
-    padding: 10px 24px;
+
+  .cta-btn {
+    font-size: 0.75rem;
+    padding: 0.4rem 1rem;
+    width: auto !important;
+    /* ✅ Force button to stay inline size */
+    max-width: none;
+    margin-top: 0.5rem;
   }
 }

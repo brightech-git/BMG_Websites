@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Slider from 'react-slick';
 import { useCategoryBanner } from '../../../hook/banner/useCategoriesBanner';
 import useFilterProducts from '../../../hook/product/useFilterProducts';
-import './handpicked.css';
+import './Handpicked.css';
 
 const BASE_URL = "https://app.bmgjewellers.com";
 
@@ -99,7 +99,6 @@ const Handpicked = () => {
             <div className="container-fluid">
                 <div className="section-top">
                     <span className="section-label">Exclusive Collection</span>
-                    <h2 className="section-heading">Curated Jewelry Masterpieces</h2>
                     <p className="section-description">
                         Hand-selected premium pieces for the discerning collector
                     </p>

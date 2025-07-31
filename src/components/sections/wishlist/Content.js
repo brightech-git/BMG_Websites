@@ -110,7 +110,7 @@ const WishlistItem = ({ sno, onRemove }) => {
 
   return (
     <div className="wishlist-item">
-      <Link to={`/ product / ${ sno } `} className="item-image-link">
+      <Link to={`/product/${sno}`} className="item-image-link">
         <img
           src={firstImage}
           alt={product.SUBITEMNAME}
@@ -121,13 +121,14 @@ const WishlistItem = ({ sno, onRemove }) => {
 
       <div className="item-info">
         <h3 className="item-name">
-          <Link to={`/ product / ${ sno } `}>{product.SUBITEMNAME}</Link>
+          <Link to={`/product/${sno}`}>{product.SUBITEMNAME}</Link>
         </h3>
 
         <div className="item-cost">₹{product.GrandTotal}</div>
 
         <div className="item-controls">
           <button className="main-btn btn-filled">
+            <ShoppingCart size={18} className="mr-2" />
             Add to Cart
           </button>
           <button

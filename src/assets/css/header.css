@@ -175,12 +175,15 @@ header.sticky-header.sticky-active .nav-container .site-logo .sticky-logo {
     align-items: center;
     font-size: 16px;
 }
-.site-logo-text h3{
+
+.site-logo-text h3 {
     font-size: 14px;
 }
-.site-logo h6{
+
+.site-logo h6 {
     font-size: 12px;
 }
+
 .site-logo.site-logo-text a svg {
     width: 35px;
     height: 35px;
@@ -342,7 +345,7 @@ header .nav-container .navbar-toggler {
 
 header .nav-container .navbar-toggler span {
     position: relative;
-    background-color: #fff;
+    background-color: #f6f5f0;
     border-radius: 3px;
     display: block;
     height: 3px;
@@ -513,7 +516,7 @@ header.sticky-header.sticky-active.header-two .header-info .item .title {
 }
 
 header.sticky-header.sticky-active.header-two .nav-container .navbar-toggler span {
-    background-color: #fff;
+    background-color: #f6f5f0;
 }
 
 /*======= Header Three =======*/
@@ -689,7 +692,7 @@ header.header-three .search .search-form form button {
 }
 
 header.header-three .search .search-form form button:hover {
-    background-color: #fff;
+    background-color: #f6f5f0;
     color: #1c1b19;
 }
 
@@ -823,7 +826,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap:0px;
+    gap: 0px;
 }
 
 .sigma-header .sigma-main-menu>.menu-item {
@@ -1486,26 +1489,30 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 }
 
 
-.menu-item:hover .dropdown-icon{
+.menu-item:hover .dropdown-icon {
     transform: rotate(180deg);
 }
-.menu-card p{
+
+.menu-card p {
     text-align: center;
     justify-content: center;
 }
-.img-fluid{
+
+.img-fluid {
     height: 150px !important;
     width: 200px;
     object-fit: cover;
 }
-.login-btns a{
-    color: var(--primary-text-color) ;
+
+.login-btns a {
+    color: var(--primary-text-color);
     margin-right: 10px;
 }
-.site-logo-text h3{
+
+.site-logo-text h3 {
     font-size: 14px !important;
 }
+
 .site-logo-text h6 {
     font-size: 12px !important;
 }
-

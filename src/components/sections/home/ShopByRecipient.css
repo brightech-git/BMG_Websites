@@ -1,0 +1,188 @@
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
+
+:root {
+    --primary-font: 'Gloock', 'serif';
+    --secondary-font: 'Montserrat', 'sans-serif';
+    --primary-color: #f6f5f0;
+    --primary-text-color: #404040;
+    --primary-card-color: #edebe7;
+    --primary-hover-color: #cd865c;
+    --secondary-card-color: #cfdcdd;
+    --white-color: #ffffff;
+    --header-height: 80px;
+    --mobile-header-height: 60px;
+    --green-color: #024908;
+    --grey-color: #A9A9A9;
+    --black-color: #000000;
+}
+.shop-container{
+    background-color: var(--primary-color);
+}
+.card {
+    border: none;
+    border-radius: 25px;
+    background-color: linear-gradient(145deg, var(--primary-color) 0%, var(--primary-color) 100%) ;
+    transition: all 0.3s ease;
+    min-height: 400px;
+    overflow: hidden;
+    font-family: var(--secondary-font);
+}
+
+.card-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), inset 0 2px 4px rgba(255, 255, 255, 0.5);
+}
+
+.gold-edge-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(145deg, var(--primary-hover-color), #f4d03f, var(--primary-hover-color));
+    border-radius: 25px;
+    padding: 3px;
+    z-index: 1;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 22px;
+    background: var(--white-color);
+    overflow: hidden;
+    z-index: 2;
+    font-family: var(--secondary-font);
+}
+
+.card-image-container {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+}
+
+.card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    border-radius: 22px 22px 0 0;
+    transition: transform 0.3s ease;
+}
+
+.card-hover:hover .card-img {
+    transform: scale(1.1);
+}
+
+.card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.3) 70%, rgba(0, 0, 0, 0.5) 100%);
+    border-radius: 22px 22px 0 0;
+    z-index: 3;
+}
+
+.view-collection-btn {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    text-align: center;
+    padding: 1rem 0;
+    background: var(--primary-card-color);
+    border-radius: 20px 20px 0 0;
+    z-index: 4;
+    font-family: var(--secondary-font);
+}
+
+.btn-custom {
+    background: transparent;
+    border: none;
+    color: var(--primary-text-color);
+    font-weight: 600;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    padding: 0.3rem 1.2rem;
+    min-width: 150px;
+    font-family: var(--secondary-font);
+}
+
+.btn-custom:hover {
+    color: var(--primary-text-color);
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    transform: scale(1.05);
+}
+
+.btn-custom:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(var(--primary-hover-color), 0.5);
+}
+
+/* Responsive Adjustments */
+@media (min-width: 768px) {
+    .card {
+        min-height: 500px;
+    }
+
+    .view-collection-btn {
+        width: 70%;
+    }
+}
+
+@media (min-width: 992px) {
+    .card {
+        min-height: 600px;
+    }
+
+    .view-collection-btn {
+        width: 60%;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .card {
+        min-height: 300px;
+    }
+
+    .card-image-container {
+        height: 100%;
+    }
+
+    .view-collection-btn {
+        width: 85%;
+        padding: 0.75rem 0;
+    }
+
+    .btn-custom {
+        font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+        padding: 0.4rem 1.2rem;
+        min-width: 130px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .card {
+        min-height: 200px;
+    }
+
+    .card-image-container {
+        height: 100%;
+    }
+
+    .view-collection-btn {
+        width: 90%;
+        padding: 0.5rem 0;
+    }
+
+    .btn-custom {
+        font-size: clamp(0.8rem, 2.5vw, 1rem);
+        padding: 0.3rem 0.5rem;
+        min-width: 90px;
+    }
+}

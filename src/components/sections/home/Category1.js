@@ -1,46 +1,94 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useOfferBanners } from '../../../hook/banner/useOfferBanner';
-import '../../../assets/css/Category1.css';
-
-const Category1 = () => {
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './Category1.css';
+const CategoryCard = ({ item }) => {
     const history = useHistory();
-    const { data, isLoading, error } = useOfferBanners();
     const baseUrl = "https://app.bmgjewellers.com";
-    const banners = data?.data || [];
 
     const handleShopNow = (itemName, subItemName) => {
         const queryParams = new URLSearchParams();
         if (itemName) queryParams.append('itemName', itemName);
         if (subItemName) queryParams.append('subItemName', subItemName);
-
         const fixedQuery = queryParams.toString().replace(/\+/g, '%20');
         history.push(`/shop-left?${fixedQuery}`);
     };
 
-    if (isLoading) return <div>Loading Offer Banners...</div>;
-    if (error) return <div>Error loading offers: {error.message}</div>;
+    if (!item) {
+        return (
+            <div className="offer-card shimmer">
+                <div className="offer-content">
+                    <h2 className="offer-title shimmer" style={{ width: '80%', height: '2rem' }}></h2>
+                    <p className="offer-subtitle shimmer" style={{ width: '60%', height: '1.2rem' }}></p>
+                    <button className="offer-shop-btn offer-shop-filled shimmer" style={{ width: '100px', height: '2.5rem' }} disabled></button>
+                </div>
+            </div>
+        );
+    }
+
+    const imgSrc = item?.image_path ? `${baseUrl}${item.image_path}` : '/fallback-image.jpg';
 
     return (
-        <div className="category1-container">
-            {banners.map((item, i) => {
-                const imgSrc = item?.image_path ? `${baseUrl}${item.image_path}` : '';
-                return (
-                    <section className="category1-card" key={item.id}>
-                        <img src={imgSrc} alt={item.title} className="category1-img" onClick={()=>handleShopNow(item.item_name, item.sub_item_name)} />
-                       {/* <div className="category1-content">
-                            <h2 className="category1-title">{item.itemName}</h2>
-                            <p className="category1-subtitle">{item.sub_item_name}</p>
-                            <button
-                                className="cat-shop-btn cat-shop-filled"
-                                onClick={() => handleShopNow(item.item_name, item.sub_item_name)}
-                            >
-                                Shop Now
-                            </button>
-                        </div>  */}
-                    </section>
-                );
-            })}
+        <div className="offer-card">
+            <img
+                src={imgSrc}
+                alt={`${item.item_name} ${item.sub_item_name}`}
+                className="offer-image"
+                onError={(e) => {
+                    e.target.src = '/fallback-image.jpg';
+                }}
+            />
+            {/* <div className="offer-content">
+                <h2 className="offer-title text-truncate" title={item.item_name}>
+                    {item.item_name}
+                </h2>
+                <p className="offer-subtitle text-truncate" title={item.sub_item_name}>
+                    {item.sub_item_name}
+                </p>
+                <button
+                    className="offer-shop-btn offer-shop-filled mt-2"
+                    onClick={() => handleShopNow(item.item_name, item.sub_item_name)}
+                    aria-label={`Shop ${item.item_name} collection`}
+                >
+                    Shop Now
+                </button>
+            </div> */}
+        </div>
+    );
+};
+
+const Category1 = () => {
+    const { data, isLoading, error } = useOfferBanners();
+    const banners = data?.data || [];
+
+    if (isLoading) {
+        return (
+            <div className="offer-container">
+                <div className="offer-grid">
+                    {[...Array(2)].map((_, i) => (
+                        <CategoryCard key={i} />
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="offer-error" aria-live="assertive">
+                Error loading offers: {error.message}
+            </div>
+        );
+    }
+
+    return (
+        <div className="offer-container">
+            <div className="offer-grid">
+                {banners.map((item, i) => (
+                    <CategoryCard key={item.id || i} item={item} />
+                ))}
+            </div>
         </div>
     );
 };

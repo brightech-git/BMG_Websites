@@ -41,6 +41,8 @@ import CancellationReturnPolicy from './components/pages/Policies/CancellationRe
 import RefundPolicy from './components/pages/Policies/RefundPolicy';
 import TermsConditions from './components/pages/Policies/TermsConditions';
 
+
+
 function ScrollWatcher() {
   const location = useLocation();
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
@@ -57,7 +59,7 @@ function ScrollWatcher() {
 function App() {
   return (
     <Router basename="/bmgjewellers/">
-      <Preloader />
+      {/* <Preloader /> */}
       <ScrollWatcher />
       <Switch>
         <Route exact path="/" component={Home} />

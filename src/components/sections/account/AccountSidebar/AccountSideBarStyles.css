@@ -1,96 +1,298 @@
-.account-sidebar {
+:root {
+  --primary-color: #4f46e5;
+  --primary-hover: #4338ca;
+  --secondary-color: #f3f4f6;
+  --text-color: #1f2937;
+  --text-light: #6b7280;
+  --border-color: #e5e7eb;
+  --danger-color: #ef4444;
+  --white: #ffffff;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --radius-sm: 0.25rem;
+  --radius: 0.375rem;
+  --radius-md: 0.5rem;
+  --transition: all 0.2s ease-in-out;
+  --primary-hover-color: #cd865c;
+}
+
+.account-navigation-panel {
   width: 280px;
-  background: #ffffff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  padding: 20px;
-  border-radius: 8px;
+  background-color: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  height: fit-content;
+  position: sticky;
+  top: 1rem;
 }
 
-.user-profile {
+.user-profile-card {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 30px;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
 }
 
-.avatar {
-  width: 60px;
-  height: 60px;
+.profile-image-container {
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   overflow: hidden;
-  margin-right: 15px;
+  margin-bottom: 1rem;
+  border: 3px solid var(--primary-color);
 }
 
-.avatar img {
+.profile-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.user-details h3 {
-  margin: 0 0 5px 0;
-  font-size: 18px;
-  color: #333;
+.profile-info {
+  text-align: center;
 }
 
-.badge {
-  background: #FFD700;
-  color: #333;
-  padding: 3px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  display: inline-block;
+.profile-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 0.25rem;
 }
 
-.sidebar-menu ul {
+.user-email {
+  font-size: 0.875rem;
+  color: var(--text-light);
+}
+
+.account-navigation {
+  margin-top: 1rem;
+}
+
+.navigation-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.sidebar-menu li {
-  margin-bottom: 5px;
+.navigation-item {
+  margin-bottom: 0.5rem;
 }
 
-.menu-item {
+.navigation-link {
   display: flex;
   align-items: center;
-  padding: 12px 15px;
-  color: #555;
+  padding: 0.75rem 1rem;
+  color: var(--text-light);
   text-decoration: none;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-}
-
-.menu-item:hover {
-  background: #f5f5f5;
-  color: #333;
-}
-
-.menu-item.active {
-  background: #e3f2fd;
-  color: #1976d2;
-  font-weight: 500;
-}
-
-.icon {
-  margin-right: 12px;
-  display: flex;
-  align-items: center;
-}
-
-.label {
-  font-size: 15px;
-}
-
-.logout {
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+  width: 100%;
   background: none;
   border: none;
   cursor: pointer;
-  width: 100%;
   text-align: left;
+  font-size: 0.9375rem;
 }
 
-.logout:hover {
-  background: #ffeeee;
-  color: #d32f2f;
+.navigation-link:hover {
+  background-color: var(--primary-hover-color);
+  color: var(--text-color);
+}
+
+.navigation-link.current-route {
+  background-color: rgba(79, 70, 229, 0.1);
+  color: var(--primary-hover-color);
+  font-weight: 500;
+}
+
+.link-icon {
+  margin-right: 0.75rem;
+  display: flex;
+  align-items: center;
+}
+
+.link-text {
+  flex: 1;
+}
+
+.sign-out-btn {
+  color: var(--danger-color);
+}
+
+.sign-out-btn:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--danger-color);
+}
+
+/* Mobile styles */
+.mobile-menu-header {
+  display: none;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--white);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+}
+
+.mobile-menu-toggle {
+  margin-right: 1rem;
+}
+
+.mobile-profile-info {
+  flex: 1;
+}
+
+.sidebar-content {
+  display: block;
+}
+
+/* Responsive styles */
+@media (max-width: 992px) {
+  .account-navigation-panel {
+    width: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .account-navigation-panel {
+    width: 100%;
+    position: static;
+    margin-bottom: 1.5rem;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .mobile-menu-header {
+    display: flex;
+  }
+
+  .sidebar-content {
+    display: none;
+    padding: 0 1rem 1rem;
+  }
+
+  .sidebar-content.mobile-open {
+    display: block;
+  }
+
+  .user-profile-card {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    padding: 1rem 0;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .profile-image-container {
+    margin-right: 1rem;
+    margin-bottom: 0;
+    width: 60px;
+    height: 60px;
+  }
+
+  .profile-info {
+    text-align: left;
+  }
+
+  .navigation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .navigation-item {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-menu-header {
+    padding: 0.75rem;
+  }
+
+  .profile-image-container {
+    width: 50px;
+    height: 50px;
+  }
+
+  .profile-name {
+    font-size: 1rem;
+  }
+
+  .user-email {
+    font-size: 0.8125rem;
+  }
+
+  .navigation-link {
+    padding: 0.75rem;
+  }
+
+  .link-icon {
+    margin-right: 0.5rem;
+  }
+}
+/* Add these styles to your existing CSS */
+
+.profile-avatar-container {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1rem;
+}
+
+.profile-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #3498db; /* You can change this color */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Remove or comment out the old profile image styles */
+/*
+.profile-image-container {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 1rem;
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+*/
+
+/* Mobile profile avatar */
+.mobile-profile-info {
+  /* Add this if you want to show initials on mobile header too */
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.mobile-profile-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #3498db;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  text-transform: uppercase;
+  flex-shrink: 0;
 }

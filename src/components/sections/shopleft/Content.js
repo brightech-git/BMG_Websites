@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback ,useEffect} from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import Pagination from '../../layouts/Pagination';
 import useFilterProducts from '../../../hook/product/useFilterProducts';
@@ -48,6 +48,10 @@ const Content = () => {
         },
         [user, history]
     );
+    useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to top on mount or when location changes (page, filter, etc.)
+}, [location]);
+
 
     const handlePageChange = (newPage) => {
         const params = new URLSearchParams(location.search);

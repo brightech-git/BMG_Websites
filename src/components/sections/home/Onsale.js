@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useFestivalBanner } from '../../../hook/banner/useFestivalBanner';
-
+import './OnSale.css';
 const Onsale = () => {
     const history = useHistory();
     const { data: festivalBannerResponse, isLoading, isError } = useFestivalBanner();
@@ -32,7 +32,7 @@ const Onsale = () => {
             <div className='container'>
                 <div className="section-title text-center mb-50">
                     <span className="title-tag">May Be You Have Earned It</span>
-                    <h2>On Sale Products</h2>
+                    
                 </div>
                 <div className="row room-items">
                     {/* Main Banner (Left Column) */}

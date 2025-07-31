@@ -528,10 +528,9 @@ select {
 
 .section-title .title-tag {
     font-size: 18px;
-    font-weight: 700;
+    font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 2px;
-    padding-bottom: 20px;
     color: var(--primary-text-color);
     font-family: var(--primary-font);
 }
@@ -7018,7 +7017,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 
 /*=======  COUNTER CSS  =======*/
 .counter-section {
-    background-color: var(--secondary-card-color);
+    background-color: var(--primary-card-color);
 }
 
 .counter-section .counter-box {
@@ -7030,14 +7029,15 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     .counter-section .counter-box {
         font-size: 12px;
     }
+    
 }
 
 .counter-section .counter-box .icon {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .counter-section .counter-box .icon i {
-    font-size: 70px;
+    font-size: 60px;
     font-weight: 400;
     line-height: 1;
     color: var(--primary-hover-color);
@@ -7052,10 +7052,11 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     color: var(--primary-text-color);
     font-weight: 600;
     font-family: var(--secondary-font);
+    font-size: 14px ;
 }
 
 .counter-section .counter-box h4 {
-    font-size: 40px;
+    font-size: 30px;
     word-spacing: 0;
     font-family: var(--primary-font);
 }
@@ -7066,7 +7067,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 
 .counter-section .counter-box .title {
     color: var(--primary-text-color);
-    font-size: 26px;
+    font-size: 22px;
 }
 
 @media (max-width: 575px) {
@@ -7079,6 +7080,9 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
         color: var(--primary-text-color);
         font-size: 18px;
     }
+        .counter-box .icon i{
+            font-size: 40px  !important;
+        }
 }
 
 

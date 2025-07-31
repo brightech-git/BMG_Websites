@@ -1,16 +1,18 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import './TrendingProducts.css';
-import img1 from '../../../assets/img/room-suite/BMG_Earings.webp';
+import img1 from './image/WeddingRing.jpg';
 import coupleImg from '../../../assets/img/room-suite/pngegg (2).png';
+import img2 from './image/counpleRing.jpg';
+import img3 from './image/engageRing.jpg'
 
 const TrendingProducts = () => {
     const history = useHistory();
 
     const categories = [
-        { id: 1, label: "Daily Wear", image: img1, query: "occasion=DAILY_WEAR" },
-        { id: 2, label: "Wedding", image: img1, query: "occasion=WEDDING" },
-        { id: 3, label: "Office Wear", image: img1, query: "occasion=OFFICE" },
+        { id: 1, label: "For Couple", image: img2, query: "itemName=Rings&subItemName=Couple Rings" },
+        { id: 2, label: "For Engage", image: img3, query: "itemName=Rings&subItemName=Engagement Rings" },
+        { id: 3, label: "For Wedding", image: img1, query: "itemName=Rings&subItemName=Wedding Rings" },
     ];
 
     const handleCategoryClick = (query) => {
@@ -69,7 +71,7 @@ const TrendingProducts = () => {
                                                             {/* Overlay Gradient */}
                                                             <div className="premium-overlay"></div>
                                                             {/* Category Label */}
-                                                            <div className="position-absolute top-0 start-0 p-2 p-md-3">
+                                                            {/* <div className="position-absolute top-0 start-0 p-2 p-md-3">
                                                                 <h3
                                                                     className="text fw-bold mb-0"
                                                                     style={{
@@ -81,17 +83,17 @@ const TrendingProducts = () => {
                                                                 >
                                                                     {category.label}
                                                                 </h3>
-                                                            </div>
+                                                            </div> */}
                                                             {/* Shop Now Button */}
                                                             <div className="premium-action-bar">
                                                                 <button
-                                                                    className="btn premium-action-btn btn-sm px-2 py-1"
+                                                                    className="btn premium-action-btn btn-sm px-1 py-1"
                                                                     onClick={(e) => {
                                                                         e.stopPropagation();
                                                                         handleCategoryClick(category.query);
                                                                     }}
                                                                 >
-                                                                    Shop Now
+                                                                    {category.label}
                                                                 </button>
                                                             </div>
                                                         </div>

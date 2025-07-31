@@ -17,7 +17,7 @@
 }
 
 .product-card {
-    background-color: var(--primary-card-color);
+    background-color:inherit;
     overflow: hidden;
     transition: var(--transition);
     position: relative;
@@ -25,6 +25,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    border:1px solid #e2e2e2
 }
 
 .product-card:hover {
@@ -149,8 +150,9 @@
 }
 
 .product-desc {
+    border-top: 1px solid #e4e2e2;
     padding: 20px;
-    background-color: var(--primary-color);
+    background-color:inherit;
     position: relative;
 }
 

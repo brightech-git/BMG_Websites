@@ -3,10 +3,10 @@ import CountUp from "react-countup";
 import VisibilitySensor from "react-visibility-sensor";
 
 const counterposts = [
-    { icon: 'flaticon-bracelet-1', number: '84', prefix: 'k', title: 'Jewelriess in Album' },
-    { icon: 'flaticon-like', number: '10', prefix: 'M', title: 'Happy Feedbacks' },
-    { icon: 'flaticon-earrings', number: '02', prefix: 'k', title: 'Categories Served' },
-    { icon: 'flaticon-user-1', number: '100', prefix: 'M', title: 'Happy Clients' },
+    { icon: 'flaticon-bracelet-1', number: '84', prefix: 'k', title: 'Jewels in Album' },
+    { icon: 'flaticon-like', number: '10', prefix: 'K', title: 'Happy Feedbacks' },
+    { icon: 'flaticon-earrings', number: '20', prefix: 'k', title: 'Categories Served' },
+    { icon: 'flaticon-user-1', number: '50', prefix: 'K', title: 'Happy Clients' },
 ];
 export default function Counter() {
     const [focus, setFocus] = React.useState(false);

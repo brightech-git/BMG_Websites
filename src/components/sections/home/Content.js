@@ -18,10 +18,11 @@ import Video from './Video';
 import RecentlyViewed from '../../layouts/RecentlyViewed';
 import Blog from './Blog';
 import Handpicked from '../homethree/Handpicked';
-import BestDesign from './BestDesign';
+//import BestDesign from './BestDesign';
 import FeaturedBanners from '../../layouts/FeaturedProduct';
 import ShopByRecipient from './ShopByRecipient';
 import './HomeContent.css';
+import JewelryShowcase from './jewelleryShowCase';
 
 class Content extends Component {
     render() {
@@ -30,15 +31,17 @@ class Content extends Component {
                 <Banner/>
                 <Category/>
                 <Category1/>
+                <Condos />
                 <Handpicked />
                 <ShopByRecipient />
                 <FeaturedBanners />
                 <Cta />     
-                {/* <Trending/> */}
-                <Condos/>
+                {/* <Trending/> */}        
+              
                 <TrendingProducts />
                 <Ourcategory/>
-                <BestDesign />
+                <JewelryShowcase />
+                {/* <BestDesign /> */}
                 {/* <Handpick/> */}
                 <Ourproducts/>
                  {/* <Saleproducts/> */}
@@ -47,7 +50,7 @@ class Content extends Component {
                 <Video/>
                 <RecentlyViewed />
                 {/* <Habout /> */}
-                <Blog/>
+                {/* <Blog/> */}
                 
             </Fragment>
         );

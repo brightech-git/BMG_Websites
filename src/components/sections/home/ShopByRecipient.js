@@ -1,13 +1,16 @@
 import React from 'react';
 import './ShopByRecipient.css';
 import { useHistory } from 'react-router-dom';
-
+import men from './image/Men.png';
+import women from'./image/Women.png';
+import kid from './image/kids.png';
 const ShopByRecipient = () => {
     const history = useHistory();
 
     const categories = [
-        { id: 1, label: "Him", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop&crop=face", query: "recipient=him" },
-        { id: 2, label: "Her", image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=600&fit=crop&crop=face", query: "recipient=her" },
+        { id: 1, label: "Him", image: men, query: "recipient=him" },
+        { id: 2, label: "Her", image:women, query: "recipient=her" },
+        { id: 3, label: "Kids", image: kid, query: "recipient=kids" },
     ];
 
     const handleCategoryClick = (query) => {
@@ -15,56 +18,42 @@ const ShopByRecipient = () => {
     };
 
     return (
-        <div className="container-fluid py-5 shop-container" >
+        <div className="recipient-container">
             <div className="container">
                 {/* Section Title */}
-                <div className="row mb-4 mb-md-5">
-                    <div className="col-12 text-center">
-                        <h2 className="display-2  fw-light text-dark mb-0" style={{ letterSpacing: '1px', fontSize: 'clamp(1.3rem, 4vw, 1.8rem)' , color:'#404040',}}>
-                            Shop by Recipient
-                        </h2>
-                    </div>
+                <div className="recipient-header">
+                    <h2 className="recipient-title">
+                        Shop by Recipient
+                    </h2>
                 </div>
 
-                {/* Cards Row */}
-                <div className="row g-4 justify-content-center">
-                    {categories.map((category) => (
-                        <div key={category.id} className="col-6 col-md-6 col-lg-6">
-                            <div
-                                className="card h-100 position-relative overflow-hidden card-hover"
-                                onClick={() => handleCategoryClick(category.query)}
-                                role="button"
-                                tabIndex={0}
-                            >
-                                {/* Gold Edge Frame and Content */}
-                                <div className="gold-edge-frame">
-                                    <div className="card-inner">
-                                        {/* Image and Button Container */}
-                                        <div className="card-image-container">
-                                            <img
-                                                src={category.image}
-                                                alt={category.label}
-                                                className="card-img"
-                                            />
-                                            {/* Overlay Gradient */}
-                                            <div className="card-overlay"></div>
-                                            {/* Label */}
-                                            <div className="position-absolute top-0 start-0 p-3 p-md-4">
-                                                <h3
-                                                    className="text-white fw-bold mb-0"
-                                                    style={{
-                                                        fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
-                                                        textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
-                                                        letterSpacing: '1px'
-                                                    }}
-                                                >
+                {/* Cards Grid - Different layout for mobile */}
+                <div className="recipient-grid">
+                    {/* Him and Kids on top for mobile */}
+                    <div className="recipient-row-top">
+                        {categories.filter(cat => cat.label !== "Her").map((category) => (
+                            <div key={category.id} className="recipient-card-wrapper">
+                                <div
+                                    className="recipient-card"
+                                    onClick={() => handleCategoryClick(category.query)}
+                                    role="button"
+                                    tabIndex={0}
+                                >
+                                    <div className="recipient-card-frame">
+                                        <div className="recipient-card-inner">
+                                            <div className="recipient-image-container">
+                                                <img
+                                                    src={category.image}
+                                                    alt={category.label}
+                                                    className="recipient-image"
+                                                    loading="lazy"
+                                                />
+                                                <div className="recipient-overlay"></div>
+                                                <h3 className="recipient-label">
                                                     {category.label}
                                                 </h3>
-                                            </div>
-                                            {/* View Collection Button */}
-                                            <div className="view-collection-btn">
                                                 <button
-                                                    className="btn btn-custom btn-lg px-2 py-1"
+                                                    className="recipient-button"
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         handleCategoryClick(category.query);
@@ -77,8 +66,48 @@ const ShopByRecipient = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
+
+                    {/* Her card full width on mobile */}
+                    <div className="recipient-row-bottom">
+                        {categories.filter(cat => cat.label === "Her").map((category) => (
+                            <div key={category.id} className="recipient-card-wrapper">
+                                <div
+                                    className="recipient-card"
+                                    onClick={() => handleCategoryClick(category.query)}
+                                    role="button"
+                                    tabIndex={0}
+                                >
+                                    <div className="recipient-card-frame">
+                                        <div className="recipient-card-inner">
+                                            <div className="recipient-image-container">
+                                                <img
+                                                    src={category.image}
+                                                    alt={category.label}
+                                                    className="recipient-image"
+                                                    loading="lazy"
+                                                />
+                                                <div className="recipient-overlay"></div>
+                                                <h3 className="recipient-label">
+                                                    {category.label}
+                                                </h3>
+                                                <button
+                                                    className="recipient-button"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleCategoryClick(category.query);
+                                                    }}
+                                                >
+                                                    View Collection
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

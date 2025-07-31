@@ -128,9 +128,9 @@ const OurCategory = () => {
 
     return (
         <section className="shop-category-section">
-            <div className="container">
+            <div className="cat-container">
                 <div className="shop-category-header">
-                    <span className="shop-category-subtitle">Our Collections</span>
+                    
                     <h2 className="shop-category-title">Shop By Category</h2>
                 </div>
 

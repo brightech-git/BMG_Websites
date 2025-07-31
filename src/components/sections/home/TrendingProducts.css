@@ -30,17 +30,17 @@
     border-radius: 24px;
     margin: 1rem;
     overflow: hidden;
-    min-height: 300px;
+    min-height: 320px;
 }
 
 /* Hero Content - Left Side */
 .premium-hero-section {
-    padding: 2rem;
+    padding: 3rem;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 300px;
+    min-height: 320px;
     text-align: center;
 }
 
@@ -74,7 +74,7 @@
     opacity: 0.95;
     font-weight: 400;
     line-height: 1.4;
-    margin: 0;
+    margin: 0 auto;
     font-family: var(--secondary-font);
 }
 
@@ -114,6 +114,7 @@
     font-family: var(--secondary-font);
     max-width: 100%;
 }
+
 .premium-hover:hover {
     transform: translateY(-6px);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(255, 255, 255, 0.5);
@@ -179,7 +180,7 @@
     transform: translateX(-50%);
     width: 70%;
     text-align: center;
-    padding: 0.75rem 0;
+    padding: 0.4rem 0;
     background: var(--primary-card-color);
     border-radius: 15px 15px 0 0;
     z-index: 4;
@@ -238,7 +239,8 @@
     .premium-action-bar {
         width: 75%;
     }
-    .premium-action-btn{
+
+    .premium-action-btn {
         font-size: 0.7rem;
         min-width: 50px;
     }
@@ -331,7 +333,7 @@
     }
 
     .premium-product-grid {
-        padding: 0.25rem;
+        padding: 0.05rem;
     }
 
     /* Switch to single column */
@@ -342,12 +344,12 @@
     }
 
     .premium-card {
-        min-height: 180px !important;
+        min-height: 150px !important;
         /* Slightly taller for better visibility */
     }
 
     .premium-action-bar {
-        width: 60%;
+        width: 80%;
         padding: 0.5rem 0;
     }
 
@@ -365,19 +367,21 @@
         font-size: 0.9rem;
     }
 }
-@media (max-width: 400px){
+
+@media (max-width: 400px) {
     .premium-card {
-            min-height: 120px !important;
-            /* Slightly taller for better visibility */
-        }
-               
-                .premium-action-bar {
-                    width: 100%;
-                    padding: 0.3rem 0;
-                }
-                .premium-action-btn {
-                    font-size: 0.6rem;
-                    padding: 0.2rem 0.5rem;
-                    min-width: 30px;
-                }
+        min-height: 120px !important;
+        /* Slightly taller for better visibility */
+    }
+
+    .premium-action-bar {
+        width: 100%;
+        padding: 0.3rem 0;
+    }
+
+    .premium-action-btn {
+        font-size: 0.6rem;
+        padding: 0.2rem 0.5rem;
+        min-width: 30px;
+    }
 }

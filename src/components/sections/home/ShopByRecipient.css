@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
 
 :root {
-    --primary-font: 'Gloock', 'serif';
-    --secondary-font: 'Montserrat', 'sans-serif';
+    --primary-font: 'Gloock', serif;
+    --secondary-font: 'Montserrat', sans-serif;
     --primary-color: #f6f5f0;
     --primary-text-color: #404040;
     --primary-card-color: #edebe7;
@@ -15,174 +15,243 @@
     --grey-color: #A9A9A9;
     --black-color: #000000;
 }
-.shop-container{
+
+.recipient-container {
     background-color: var(--primary-color);
-}
-.card {
-    border: none;
-    border-radius: 25px;
-    background-color: linear-gradient(145deg, var(--primary-color) 0%, var(--primary-color) 100%) ;
-    transition: all 0.3s ease;
-    min-height: 400px;
-    overflow: hidden;
+    padding: 3rem 1rem;
     font-family: var(--secondary-font);
 }
 
-.card-hover:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), inset 0 2px 4px rgba(255, 255, 255, 0.5);
+.recipient-header {
+    margin-bottom: 2.5rem;
+    text-align: center;
 }
 
-.gold-edge-frame {
+.recipient-title {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 400;
+    color: var(--primary-text-color);
+    letter-spacing: 1px;
+    margin: 0;
+    font-family: var(--primary-font);
+    position: relative;
+    display: inline-block;
+}
+
+.recipient-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background: var(--primary-hover-color);
+}
+
+.recipient-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.recipient-row-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.recipient-row-bottom {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.recipient-card-wrapper {
+    width: 100%;
+}
+
+.recipient-card {
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    height: 100%;
+    position: relative;
+}
+
+.recipient-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.recipient-card-frame {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background: linear-gradient(145deg, var(--primary-hover-color), #f4d03f, var(--primary-hover-color));
-    border-radius: 25px;
-    padding: 3px;
+    border-radius: 20px;
+    padding: 2px;
     z-index: 1;
 }
 
-.card-inner {
+.recipient-card-inner {
     position: relative;
     width: 100%;
     height: 100%;
-    border-radius: 22px;
+    border-radius: 18px;
     background: var(--white-color);
     overflow: hidden;
     z-index: 2;
-    font-family: var(--secondary-font);
 }
 
-.card-image-container {
+.recipient-image-container {
     position: relative;
     height: 100%;
+    width: 100%;
     overflow: hidden;
 }
 
-.card-img {
+.recipient-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center top;
-    border-radius: 22px 22px 0 0;
-    transition: transform 0.3s ease;
+    object-position: center;
+    transition: transform 0.4s ease;
 }
 
-.card-hover:hover .card-img {
-    transform: scale(1.1);
+.recipient-card:hover .recipient-image {
+    transform: scale(1.05);
 }
 
-.card-overlay {
+.recipient-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.3) 70%, rgba(0, 0, 0, 0.5) 100%);
-    border-radius: 22px 22px 0 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.4) 100%);
     z-index: 3;
 }
 
-.view-collection-btn {
+.recipient-label {
     position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50%;
-    text-align: center;
-    padding: 1rem 0;
-    background: var(--primary-card-color);
-    border-radius: 20px 20px 0 0;
+    top: 1.5rem;
+    left: 1.5rem;
+    color: var(--white-color);
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 600;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    margin: 0;
     z-index: 4;
     font-family: var(--secondary-font);
 }
 
-.btn-custom {
+.recipient-button {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
     background: transparent;
-    border: none;
-    color: var(--primary-text-color);
-    font-weight: 600;
-    font-size: clamp(1rem, 2.5vw, 1.2rem);
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--white-color);
+    color: var(--white-color);
+    padding: 0.5rem 1.3rem;
+    font-size: clamp(0.7rem, 2vw, 0.9rem);
+    font-weight: 400;
+    border-radius: 25px;
+    cursor: pointer;
     transition: all 0.3s ease;
-    padding: 0.3rem 1.2rem;
-    min-width: 150px;
+    z-index: 4;
+    min-width: 200px;
+    text-align: center;
     font-family: var(--secondary-font);
 }
 
-.btn-custom:hover {
+.recipient-button:hover {
+    background: var(--white-color);
     color: var(--primary-text-color);
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-    transform: scale(1.05);
 }
 
-.btn-custom:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(var(--primary-hover-color), 0.5);
-}
-
-/* Responsive Adjustments */
+/* Desktop Layout */
 @media (min-width: 768px) {
-    .card {
-        min-height: 500px;
+    .recipient-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
     }
 
-    .view-collection-btn {
-        width: 70%;
-    }
-}
-
-@media (min-width: 992px) {
-    .card {
-        min-height: 600px;
+    .recipient-row-top,
+    .recipient-row-bottom {
+        display: contents;
     }
 
-    .view-collection-btn {
-        width: 60%;
-    }
-}
-
-@media (max-width: 767.98px) {
-    .card {
-        min-height: 300px;
+    .recipient-card-wrapper {
+        height: 400px;
     }
 
-    .card-image-container {
-        height: 100%;
-    }
-
-    .view-collection-btn {
-        width: 85%;
-        padding: 0.75rem 0;
-    }
-
-    .btn-custom {
-        font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-        padding: 0.4rem 1.2rem;
-        min-width: 130px;
+    .recipient-button {
+        bottom: 2rem;
     }
 }
 
-@media (max-width: 575.98px) {
-    .card {
-        min-height: 200px;
+/* Large Desktop */
+@media (min-width: 1200px) {
+    .recipient-container {
+        padding: 4rem 0;
     }
 
-    .card-image-container {
-        height: 100%;
+    .recipient-card-wrapper {
+        height: 500px;
     }
 
-    .view-collection-btn {
-        width: 90%;
-        padding: 0.5rem 0;
+    .recipient-button {
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+    }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 767px) {
+    .recipient-container {
+        padding: 2rem 1rem;
     }
 
-    .btn-custom {
-        font-size: clamp(0.8rem, 2.5vw, 1rem);
-        padding: 0.3rem 0.5rem;
-        min-width: 90px;
+    .recipient-card-wrapper {
+        height: 200px;
+    }
+
+    .recipient-row-bottom .recipient-card-wrapper {
+        height: 250px;
+    }
+
+    .recipient-button {
+        padding: 0.4rem 1rem;
+        font-size: 0.8rem;
+        min-width: 120px;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .recipient-card-wrapper {
+        height: 160px;
+    }
+
+    .recipient-row-bottom .recipient-card-wrapper {
+        height: 200px;
+    }
+
+    .recipient-label {
+        top: 1rem;
+        left: 1rem;
+        font-size: 1.2rem;
+    }
+
+    .recipient-button {
+        bottom: 1rem;
+        padding: 0.3rem 0.8rem;
+        font-size: 0.7rem;
+        min-width: 100px;
     }
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import ReactWOW from 'react-wow';
 import { useVideos } from '../../../hook/video/useVideoQuery';
-
+import './Videos.css'
 const Video = () => {
     const history = useHistory();
     const videoRef = useRef(null);

@@ -1,0 +1,369 @@
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+:root {
+    --primary-font: 'Playfair Display', serif;
+    --secondary-font: 'Montserrat', sans-serif;
+    --primary-color: #f6f5f0;
+    --primary-text-color: #404040;
+    --primary-card-color: #edebe7;
+    --primary-hover-color: #cd865c;
+    --secondary-card-color: #cfdcdd;
+    --white-color: #ffffff;
+    --grey-color: #A9A9A9;
+    --black-color: #000000;
+    --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    --show-bg-color: linear-gradient(135deg, #f5f7fa 0%, #eef8f0 100%);
+    --glass-color: rgba(255, 255, 255, 0.2);
+    --gradient-text: linear-gradient(90deg, #cd865c, #a05f3a);
+}
+
+.jewelry-showcase {
+    background: var(--show-bg-color);
+    font-family: var(--secondary-font);
+    overflow: hidden;
+    position: relative;
+}
+
+.jewelry-showcase::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 70% 30%, rgba(205, 134, 92, 0.1) 0%, transparent 50%);
+    z-index: 0;
+}
+
+/* Custom two-column layout */
+.jewelry-showcase .container .row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* Enforce two columns */
+    gap: 1rem;
+    align-items: center;
+}
+
+.jewelry-showcase .col-lg-6 {
+    width: 100%;
+    /* Ensure full width within grid column */
+    max-width: none;
+    /* Override Bootstrap's max-width */
+    flex: none;
+    /* Disable Bootstrap's flex behavior */
+}
+
+.jewelry-banner-container {
+    border-radius: 50% 50% 0px 0px !important;
+    overflow: hidden;
+    aspect-ratio: 1/1;
+    max-height: 500px;
+    background: var(--glass-color);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    position: relative;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.jewelry-banner-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.15);
+}
+
+.jewelry-banner-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.jewelry-banner-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease-in-out;
+    will-change: transform;
+}
+
+.jewelry-banner-img.active {
+    opacity: 1;
+}
+
+.carousel-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: var(--transition);
+    border-radius: 12px;
+}
+
+.jewelry-banner-container:hover .carousel-overlay {
+    opacity: 1;
+}
+
+.view-collection {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50px;
+    font-weight: 600;
+    color: var(--primary-hover-color);
+    transform: translateY(20px);
+    transition: var(--transition);
+    font-size: 0.9rem;
+}
+
+.jewelry-banner-container:hover .view-collection {
+    transform: translateY(0);
+}
+
+.arrow-icon {
+    transition: transform 0.3s ease;
+}
+
+.view-collection:hover .arrow-icon {
+    transform: translateX(4px);
+}
+
+/* Shimmer effect */
+.shimmer-overlay {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    z-index: 1;
+    animation: shimmer 3s infinite;
+    border-radius: 12px;
+}
+
+@keyframes shimmer {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+/* Content styles */
+.jewelry-content {
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.jewelry-title {
+    font-family: var(--primary-font);
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 600;
+    color: var(--primary-text-color);
+    letter-spacing: 0.5px;
+    line-height: 1.3;
+    margin-bottom: 1.5rem;
+}
+
+.gradient-text {
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline;
+}
+
+.jewelry-desc {
+    font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+    color: var(--grey-color);
+    line-height: 1.8;
+    max-width: 500px;
+    margin-bottom: 2rem;
+}
+
+/* Feature highlights */
+.feature-highlights {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 2rem;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--primary-text-color);
+}
+
+.feature-icon {
+    color: var(--primary-hover-color);
+    font-size: 1rem;
+}
+
+/* Enhanced button */
+.premium-shop-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 14px 28px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    letter-spacing: 0.05em;
+    color: var(--white-color);
+    background: var(--gradient-text);
+    border: none;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    cursor: pointer;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(205, 134, 92, 0.3);
+}
+
+.premium-shop-btn span {
+    position: relative;
+    z-index: 2;
+}
+
+.arrow-wrapper {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hover-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1;
+}
+
+.premium-shop-btn:hover {
+    box-shadow: 0 8px 25px rgba(205, 134, 92, 0.4);
+}
+
+.premium-shop-btn:hover .arrow-wrapper {
+    transform: translateX(4px);
+}
+
+.premium-shop-btn:hover .hover-effect {
+    width: 100%;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 767px) {
+    .jewelry-showcase .container .row {
+        grid-template-columns: repeat(2, 1fr);
+        /* Maintain two columns */
+        gap: 0.5rem;
+        /* Reduce gap for smaller screens */
+    }
+
+    .jewelry-banner-container {
+        max-height: 250px;
+        /* Smaller height for mobile */
+    }
+
+    .jewelry-content {
+        padding: 10px;
+    }
+
+    .jewelry-title {
+        font-size: clamp(1.2rem, 2vw, 1.5rem);
+    }
+
+    .jewelry-desc {
+        font-size: 0.85rem;
+        display: none;
+        max-width: 100%;
+    }
+
+    .feature-highlights {
+        grid-template-columns: 1fr;
+        /* Stack features in one column on mobile */
+        gap: 8px;
+    }
+
+    .feature-item {
+        font-size: 0.6rem;
+    }
+
+    .premium-shop-btn {
+        padding: 10px 20px;
+        font-size: 0.8rem;
+    }
+
+    .view-collection {
+        padding: 8px 16px;
+        font-size: 0.7rem;
+
+    }
+}
+
+@media (max-width: 575px) {
+    .jewelry-banner-container {
+        max-height: 200px;
+        /* Further reduce height for very small screens */
+    }
+  .feature-item {
+      font-size: 0.5rem;
+  }
+    .jewelry-title {
+        font-size: 0.8rem;
+    }
+
+    .jewelry-desc {
+        font-size: 0.5rem;
+    }
+
+    .premium-shop-btn {
+        padding: 6px 10px;
+        font-size: 0.6rem;
+    }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .shimmer-overlay {
+        animation: none;
+        display: none;
+    }
+
+    .jewelry-banner-img {
+        transition: none !important;
+    }
+}

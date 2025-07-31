@@ -1,10 +1,24 @@
 /* AddressStyles.css */
 
+/* Root Variables */
+:root {
+  --primary-font: 'Gloock', serif;
+  --secondary-font: 'Montserrat', sans-serif;
+  --primary-color: #f6f5f0;
+  --primary-text-color: #404040;
+  --primary-card-color: #edebe7;
+  --primary-hover-color: #cd865c;
+  --secondary-card-color: #cfdcdd;
+  --white-color: #ffffff;
+  --btn-color: #cecdeb;
+}
+
 /* Base Styles */
 .address-page-layout {
   display: flex;
   min-height: 100vh;
-  background-color: #f8f9fa;
+  background-color: var(--primary-color);
+  font-family: var(--secondary-font);
 }
 
 .address-manager-container {
@@ -15,7 +29,7 @@
 }
 
 .address-manager {
-  background-color: #fff;
+  background-color: var(--white-color);
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   padding: 2rem;
@@ -38,13 +52,15 @@
 .header-title {
   font-size: 1.8rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--primary-text-color);
   margin-bottom: 0.5rem;
+  font-family: var(--primary-font);
 }
 
 .header-subtitle {
   color: #718096;
   font-size: 0.95rem;
+  font-family: var(--secondary-font);
 }
 
 /* Button Styles */
@@ -52,18 +68,20 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #cd865c;
-  color: white;
+  background-color: var(--primary-hover-color);
+  color: var(--white-color);
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-family: var(--secondary-font);
 }
 
 .add-address-btn:hover {
-  background-color: #43b581;
+  background-color: var(--primary-hover-color);
+  opacity: 0.9;
   transform: translateY(-1px);
 }
 
@@ -86,6 +104,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-family: var(--secondary-font);
 }
 
 .error-close-btn {
@@ -116,11 +135,12 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  font-family: var(--secondary-font);
 }
 
 .tab-btn.active {
-  background-color: #cd865c;
-  color: white;
+  background-color: var(--primary-hover-color);
+  color: var(--white-color);
 }
 
 .tab-btn:hover:not(.active) {
@@ -146,6 +166,7 @@
   transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
+  background-color: var(--primary-card-color);
 }
 
 .address-card:hover {
@@ -154,7 +175,8 @@
 }
 
 .address-card.default {
-  border-left: 4px solid #4f46e5;
+  border-left: 4px solid var(--primary-hover-color);
+  background-color: var(--secondary-card-color);
 }
 
 .address-card.default::before {
@@ -162,11 +184,12 @@
   position: absolute;
   top: 0;
   right: 0;
-  background-color: #4f46e5;
-  color: white;
+  background-color: var(--primary-hover-color);
+  color: var(--white-color);
   font-size: 0.75rem;
   padding: 0.25rem 0.75rem;
   border-bottom-left-radius: 8px;
+  font-family: var(--secondary-font);
 }
 
 /* Card Header Styles */
@@ -203,7 +226,8 @@
 
 .address-summary .name {
   font-weight: 600;
-  color: #2d3748;
+  color: var(--primary-text-color);
+  font-family: var(--primary-font);
 }
 
 .default-badge {
@@ -211,8 +235,9 @@
   align-items: center;
   gap: 0.25rem;
   font-size: 0.75rem;
-  color: #4f46e5;
+  color: var(--primary-hover-color);
   margin-top: 0.25rem;
+  font-family: var(--secondary-font);
 }
 
 /* Card Details Styles */
@@ -238,12 +263,14 @@
   color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  font-family: var(--secondary-font);
 }
 
 .detail-value {
   font-size: 0.9rem;
-  color: #2d3748;
+  color: var(--primary-text-color);
   margin-top: 0.1rem;
+  font-family: var(--secondary-font);
 }
 
 /* Card Actions Styles */
@@ -265,40 +292,41 @@
   cursor: pointer;
   transition: all 0.2s ease;
   border: none;
+  font-family: var(--secondary-font);
 }
 
 .btn-edit {
-  background-color: #e0e7ff;
-  color: #4f46e5;
+  background-color: var(--btn-color);
+  color: #000000;
 }
 
 .btn-edit:hover {
-  background-color: #c7d2fe;
+  background-color:var(--primary-hover-color);
 }
 
 .btn-set-default {
-  background-color: #ecfdf5;
-  color: #10b981;
+  background-color: var(--btn-color);
+  color: #000000;
 }
 
 .btn-set-default:hover {
-  background-color: #d1fae5;
+  background-color:var(--btn-color);
 }
 
 .btn-delete {
-  background-color: #fee2e2;
-  color: #ef4444;
+  background-color: var(--btn-color);
+  color: #000000;
 }
 
 .btn-delete:hover {
-  background-color: #fecaca;
+  background-color:var(--primary-hover-color);
 }
 
 /* No Addresses State */
 .no-addresses {
   text-align: center;
   padding: 3rem 2rem;
-  background-color: #f8fafc;
+  background-color: var(--primary-card-color);
   border-radius: 12px;
   margin-top: 1.5rem;
 }
@@ -311,21 +339,23 @@
 
 .no-addresses h3 {
   font-size: 1.25rem;
-  color: #2d3748;
+  color: var(--primary-text-color);
   margin-bottom: 0.5rem;
+  font-family: var(--primary-font);
 }
 
 .no-addresses p {
   color: #64748b;
   margin-bottom: 1.5rem;
+  font-family: var(--secondary-font);
 }
 
 .add-first-address-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #4f46e5;
-  color: white;
+  background-color: var(--primary-hover-color);
+  color: var(--white-color);
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
@@ -333,10 +363,12 @@
   cursor: pointer;
   margin: 0 auto;
   transition: all 0.2s ease;
+  font-family: var(--secondary-font);
 }
 
 .add-first-address-btn:hover {
-  background-color: #4338ca;
+  background-color: var(--primary-hover-color);
+  opacity: 0.9;
 }
 
 /* Form Overlay Styles */
@@ -355,7 +387,7 @@
 }
 
 .address-form-container {
-  background-color: white;
+  background-color: var(--white-color);
   border-radius: 12px;
   width: 100%;
   max-width: 700px;
@@ -386,8 +418,9 @@
 
 .form-header h2 {
   font-size: 1.5rem;
-  color: #2d3748;
+  color: var(--primary-text-color);
   margin: 0;
+  font-family: var(--primary-font);
 }
 
 .close-btn {
@@ -430,7 +463,8 @@ form {
 .form-group label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #2d3748;
+  color: var(--primary-text-color);
+  font-family: var(--secondary-font);
 }
 
 .form-group input,
@@ -441,16 +475,17 @@ form {
   border-radius: 8px;
   font-size: 0.95rem;
   transition: all 0.2s ease;
-  background-color: #f8fafc;
+  background-color: var(--primary-color);
+  font-family: var(--secondary-font);
 }
 
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #a5b4fc;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-  background-color: white;
+  border-color: var(--primary-hover-color);
+  box-shadow: 0 0 0 3px rgba(205, 134, 92, 0.1);
+  background-color: var(--white-color);
 }
 
 .form-group textarea {
@@ -474,21 +509,22 @@ form {
   padding: 0.75rem;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  background-color: #f8fafc;
+  background-color: var(--primary-color);
   color: #64748b;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-family: var(--secondary-font);
 }
 
 .type-btn.active {
-  background-color: #e0e7ff;
-  border-color: #a5b4fc;
-  color: #4f46e5;
+  background-color: var(--primary-card-color);
+  border-color: var(--primary-hover-color);
+  color: var(--primary-hover-color);
 }
 
 .type-btn:hover:not(.active) {
-  background-color: #f1f5f9;
+  background-color: var(--primary-card-color);
 }
 
 /* Checkbox Styles */
@@ -502,7 +538,8 @@ form {
   cursor: pointer;
   user-select: none;
   gap: 0.75rem;
-  color: #2d3748;
+  color: var(--primary-text-color);
+  font-family: var(--secondary-font);
 }
 
 .custom-checkbox input {
@@ -517,19 +554,19 @@ form {
   position: relative;
   height: 20px;
   width: 20px;
-  background-color: #f8fafc;
+  background-color: var(--primary-color);
   border: 1px solid #e2e8f0;
   border-radius: 4px;
   transition: all 0.2s ease;
 }
 
 .custom-checkbox:hover input ~ .checkmark {
-  background-color: #f1f5f9;
+  background-color: var(--primary-card-color);
 }
 
 .custom-checkbox input:checked ~ .checkmark {
-  background-color: #4f46e5;
-  border-color: #4f46e5;
+  background-color: var(--primary-hover-color);
+  border-color: var(--primary-hover-color);
 }
 
 .checkmark:after {
@@ -547,7 +584,7 @@ form {
   top: 3px;
   width: 5px;
   height: 10px;
-  border: solid white;
+  border: solid var(--white-color);
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
@@ -571,6 +608,7 @@ form {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-family: var(--secondary-font);
 }
 
 .btn-cancel:hover {
@@ -580,19 +618,21 @@ form {
 .btn-save {
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
-  background-color: #4f46e5;
+  background-color: var(--primary-hover-color);
   border: none;
-  color: white;
+  color: var(--white-color);
   font-weight: 500;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   transition: all 0.2s ease;
+  font-family: var(--secondary-font);
 }
 
 .btn-save:hover {
-  background-color: #4338ca;
+  background-color: var(--primary-hover-color);
+  opacity: 0.9;
 }
 
 .btn-save:disabled {
@@ -605,7 +645,7 @@ form {
   height: 18px;
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
-  border-top-color: white;
+  border-top-color: var(--white-color);
   animation: spin 1s ease-in-out infinite;
 }
 
@@ -662,7 +702,7 @@ form {
   width: 50px;
   height: 50px;
   border: 4px solid #e2e8f0;
-  border-top-color: #4f46e5;
+  border-top-color: var(--primary-hover-color);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 1.5rem;
@@ -676,26 +716,30 @@ form {
 
 .error-container h3 {
   font-size: 1.5rem;
-  color: #2d3748;
+  color: var(--primary-text-color);
   margin-bottom: 0.5rem;
+  font-family: var(--primary-font);
 }
 
 .error-container p {
   color: #64748b;
   margin-bottom: 1.5rem;
+  font-family: var(--secondary-font);
 }
 
 .retry-button {
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
-  background-color: #4f46e5;
-  color: white;
+  background-color: var(--primary-hover-color);
+  color: var(--white-color);
   border: none;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-family: var(--secondary-font);
 }
 
 .retry-button:hover {
-  background-color: #4338ca;
+  background-color: var(--primary-hover-color);
+  opacity: 0.9;
 }

@@ -360,11 +360,11 @@ const AddressManager = () => {
                       )}
                       <div className="address-summary">
                         <span className="name">{address.name}</span>
-                        {address.isDefault && (
+                        {/* {address.isDefault && (
                           <span className="default-badge">
                             <FiCheckCircle /> Default
                           </span>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </div>

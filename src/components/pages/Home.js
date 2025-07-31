@@ -16,7 +16,7 @@ class Home extends Component {
                         content="#"
                     />
                 </MetaTags>
-                <Newsletter/>
+                {/* <Newsletter/> */}
                 <Header/>
                 <Content/>
                 <Footer/>

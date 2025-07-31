@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
 import Backtotop from "./Backtotop";
 import logo from "../../assets/img/logo1.jpg";
+import './Footer.css'
 
 class Footertwo extends Component {
   render() {
@@ -134,122 +135,418 @@ class Footertwo extends Component {
               </h5>
 
               <div className="row">
-                {/* Gifts For Women */}
+                {/* Column 1 */}
+                <div className="col-lg-3 col-sm-6 mb-3">
+                  <h6 className="text-dark font-weight-bold">Rings</h6>
+                  <ul className="footer-links">
+                    <li>
+                      <Link to="/shop-left?itemName=RINGS&subItemName=DAILY WEAR">
+                        Daily Wear
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=RINGS&subItemName=STATEMENT RINGS">
+                        Statement Rings
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=RINGS&subItemName=COUPLE RINGS">
+                        Couple Rings
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=RINGS&subItemName=ENGAGEMENT RINGS">
+                        Engagement Rings
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=RINGS&subItemName=WEDDING RINGS">
+                        Wedding Rings
+                      </Link>
+                    </li>
+                  </ul>
+
+                  <h6 className="text-dark font-weight-bold mt-3">Earrings</h6>
+                  <ul className="footer-links">
+                    <li>
+                      <Link to="/shop-left?itemName=EARRINGS&subItemName=JHUMAKAS">
+                        Jhumkas
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=EARRINGS&subItemName=STUDS">
+                        Studs
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=EARRINGS&subItemName=CHANDBALIS">
+                        Chandbalis
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=EARRINGS&subItemName=DANGLERS">
+                        Danglers
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Column 2 */}
                 <div className="col-lg-3 col-sm-6 mb-3">
                   <h6 className="text-dark font-weight-bold">
-                    Gifts For Women
-                  </h6>
-                  <ul className="footer-links" >
-                    <li>
-                      <Link to="#">Rings For Women</Link>
-                    </li>
-                    <li>
-                      <Link to="#">925 Silver Ring For Women</Link>
-                    </li>
-                    <li>
-                      <Link to="#">Gold Ring For Women</Link>
-                    </li>
-                    <li>
-                      <Link to="#">Rose Gold Ring For Women</Link>
-                    </li>
-                    <li>
-                      <Link to="#">Earrings For Women</Link>
-                    </li>
-                    <li>
-                      <Link to="#">Bracelet For Women</Link>
-                    </li>
-                    <li>
-                      <Link to="#">Pendants For Women</Link>
-                    </li>
-                    <li>
-                      <Link to="#">Necklaces For Women</Link>
-                    </li>
-                    <li>
-                      <Link to="#">Maang Tikka</Link>
-                    </li>
-                  </ul>
-                </div>
-
-                {/* Gifts For Men */}
-                <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="text-dark font-weight-bold">Gifts For Men</h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="#">Rings For Men</Link>
-                    </li>
-                    <li>
-                      <Link to="#">Earrings For Men</Link>
-                    </li>
-                    <li>
-                      <Link to="#">Bracelet For Men</Link>
-                    </li>
-                    <li>
-                      <Link to="#">Mens Chain</Link>
-                    </li>
-                  </ul>
-                </div>
-
-                {/* Mangalsutra & Pendants */}
-                <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="text-dark font-weight-bold">Mangalsutra</h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="#">Modern Mangalsutra</Link>
-                    </li>
-                    <li>
-                      <Link to="#">Gold Mangalsutra</Link>
-                    </li>
-                    <li>
-                      <Link to="#">Mangalsutra Bracelet</Link>
-                    </li>
-                  </ul>
-                  <h6 className="text-dark font-weight-bold mt-3">Pendants</h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="#">Gold Pendants</Link>
-                    </li>
-                    <li>
-                      <Link to="#">Evil Eye Pendants</Link>
-                    </li>
-                    <li>
-                      <Link to="#">Customized Pendants</Link>
-                    </li>
-                  </ul>
-                </div>
-
-                {/* Bangles & Others */}
-                <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="text-dark font-weight-bold">
-                    Bracelets & More
+                    Necklaces & Sets
                   </h6>
                   <ul className="footer-links">
                     <li>
-                      <Link to="#">Daily Wear Bangles</Link>
+                      <Link to="/shop-left?itemName=NECKLACES&subItemName=CHOCKER SETS">
+                        Chocker sets
+                      </Link>
                     </li>
                     <li>
-                      <Link to="#">Bridal Bangles</Link>
+                      <Link to="/shop-left?itemName=NECKLACES&subItemName=LONG HARAM">
+                        Long Haram
+                      </Link>
                     </li>
                     <li>
-                      <Link to="#">Pearl Bracelets</Link>
+                      <Link to="/shop-left?itemName=NECKLACES&subItemName=SHORT CHAINS">
+                        Short Chains
+                      </Link>
                     </li>
                     <li>
-                      <Link to="#">Evil Eye Bracelets</Link>
+                      <Link to="/shop-left?itemName=NECKLACES&subItemName=TEMPLE SETS">
+                        Temple sets
+                      </Link>
+                    </li>
+                  </ul>
+
+                  <h6 className="text-dark font-weight-bold mt-3">
+                    Bangles & Bracelets
+                  </h6>
+                  <ul className="footer-links">
+                    <li>
+                      <Link to="/shop-left?itemName=BANGLES&subItemName=KADAS">
+                        Kadas
+                      </Link>
                     </li>
                     <li>
-                      <Link to="#">18k Gold Necklace</Link>
+                      <Link to="/shop-left?itemName=BANGLES&subItemName=CLOSED BANGLES">
+                        Closed Bangles
+                      </Link>
                     </li>
                     <li>
-                      <Link to="#">Solitaire Rings</Link>
+                      <Link to="/shop-left?itemName=BANGLES&subItemName=OPENABLE BANGLES">
+                        Openable Bangles
+                      </Link>
                     </li>
                     <li>
-                      <Link to="#">Engagement Rings</Link>
+                      <Link to="/shop-left?itemName=BANGLES&subItemName=ADJUSTABLE BRACELETS">
+                        Adjustable Bracelets
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Column 3 */}
+                <div className="col-lg-3 col-sm-6 mb-3">
+                  <h6 className="text-dark font-weight-bold">
+                    Ankles & Toe Rings
+                  </h6>
+                  <ul className="footer-links">
+                    <li>
+                      <Link to="/shop-left?itemName=ANKLES&subItemName=TRADITIONAL ANKLETS">
+                        Traditional Anklets
+                      </Link>
                     </li>
                     <li>
-                      <Link to="#">Kids Earrings</Link>
+                      <Link to="/shop-left?itemName=ANKLES&subItemName=FANCY ANKLETS">
+                        Fancy Anklets
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=ANKLES&subItemName=TOE RINGS">
+                        Toe Rings
+                      </Link>
+                    </li>
+                  </ul>
+
+                  <h6 className="text-dark font-weight-bold mt-3">
+                    Pendants & Chains
+                  </h6>
+                  <ul className="footer-links">
+                    <li>
+                      <Link to="/shop-left?itemName=PENDANTS&subItemName=NAME PENDANTS">
+                        Name Pendants
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=PENDANTS&subItemName=STONE PENDANTS">
+                        Stone Pendants
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=PENDANTS&subItemName=PLAIN CHAINS">
+                        Plain Chains
+                      </Link>
+                    </li>
+                  </ul>
+
+                  <h6 className="text-dark font-weight-bold mt-3">
+                    Maang Tikka & Hair
+                  </h6>
+                  <ul className="footer-links">
+                    <li>
+                      <Link to="/shop-left?itemName=MAANG TIKKA&subItemName=BRIDAL">
+                        Bridal
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=MAANG TIKKA&subItemName=FESTIVE LOOK">
+                        Festive Look
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Column 4 */}
+                <div className="col-lg-3 col-sm-6 mb-3">
+                  <h6 className="text-dark font-weight-bold">
+                    Bridal Collection
+                  </h6>
+                  <ul className="footer-links">
+                    <li>
+                      <Link to="/shop-left?itemName=BRIDAL&subItemName=FULL SETS">
+                        Full Sets
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=BRIDAL&subItemName=BRIDAL EARRINGS">
+                        Bridal Earrings
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=BRIDAL&subItemName=BRIDAL BANGLES">
+                        Bridal Bangles
+                      </Link>
+                    </li>
+                  </ul>
+
+                  <h6 className="text-dark font-weight-bold mt-3">
+                    Temple Jewellery
+                  </h6>
+                  <ul className="footer-links">
+                    <li>
+                      <Link to="/shop-left?itemName=TEMPLE&subItemName=TRADITIONAL KEMP">
+                        Traditional Kemp
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=TEMPLE&subItemName=MATTE GOLD FINISH">
+                        Matte Gold Finish
+                      </Link>
+                    </li>
+                  </ul>
+
+                  <h6 className="text-dark font-weight-bold mt-3">
+                    Men's Jewellery
+                  </h6>
+                  <ul className="footer-links">
+                    <li>
+                      <Link to="/shop-left?itemName=MEN&subItemName=CHAINS">
+                        Chains
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=MEN&subItemName=KADA">
+                        Kada
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=MEN&subItemName=RINGS">
+                        Rings
+                      </Link>
                     </li>
                   </ul>
                 </div>
               </div>
+
+              {/* Second Row */}
+              <div className="row mt-3">
+                {/* Column 1 */}
+                <div className="col-lg-3 col-sm-6 mb-3">
+                  <h6 className="text-dark font-weight-bold">Kids Jewellery</h6>
+                  <ul className="footer-links">
+                    <li>
+                      <Link to="/shop-left?itemName=KIDS&subItemName=CUTE NECKPIECES">
+                        Cute Neckpieces
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=KIDS&subItemName=MINI BANGLES">
+                        Mini Bangles
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=KIDS&subItemName=STUDS">
+                        Studs
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Column 2 */}
+                <div className="col-lg-3 col-sm-6 mb-3">
+                  <h6 className="text-dark font-weight-bold">
+                    Oxidised Jewellery
+                  </h6>
+                  <ul className="footer-links">
+                    <li>
+                      <Link to="/shop-left?itemName=OXIDISED&subItemName=GERMAN SILVER">
+                        German Silver
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=OXIDISED&subItemName=ANTIQUE LOOK SETS">
+                        Antique Look Sets
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Column 3 */}
+                <div className="col-lg-3 col-sm-6 mb-3">
+                  <h6 className="text-dark font-weight-bold">
+                    Customised Jewellery
+                  </h6>
+                  <ul className="footer-links">
+                    <li>
+                      <Link to="/shop-left?itemName=CUSTOMISED&subItemName=NAME JEWELLERY">
+                        Name Jewellery
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=CUSTOMISED&subItemName=ALPHABET PENDANTS">
+                        Alphabet Pendants
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=CUSTOMISED&subItemName=BIRTHSTONE RINGS">
+                        BirthStone Rings
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Column 4 */}
+                <div className="col-lg-3 col-sm-6 mb-3">
+                  <h6 className="text-dark font-weight-bold">Gift Ideas</h6>
+                  <ul className="footer-links">
+                    <li>
+                      <Link to="/shop-left?maxGrandTotal=999">
+                        Under Rs.999
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?maxGrandTotal=1999">
+                        Under Rs.1999
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?maxGrandTotal=2999">
+                        Under Rs.2999
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?minGrandTotal=3000">
+                        Above Rs.3000
+                      </Link>
+                    </li>
+                    {/* <li>
+                      <Link to="/shop-left?itemName=GIFTS&subItemName=FOR HIM">
+                        For Him
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=GIFTS&subItemName=FOR HER">
+                        For Her
+                      </Link>
+                    </li> */}
+                  </ul>
+                </div>
+              </div>
+
+             {/* Third Row */}
+<div className="row mt-3">
+  <div className="col-lg-3 col-sm-6 mb-3">
+    <h6 className="text-dark font-weight-bold">
+      Festival Specials
+    </h6>
+    <ul className="footer-links">
+      <li>
+        <Link to="/shop-left?itemName=FESTIVAL&subItemName=NAVARATRI">
+          Navaratri
+        </Link>
+      </li>
+      <li>
+        <Link to="/shop-left?itemName=FESTIVAL&subItemName=DIWALI">
+          Diwali
+        </Link>
+      </li>
+      <li>
+        <Link to="/shop-left?itemName=FESTIVAL&subItemName=WEDDING SEASON">
+          Wedding Season Picks
+        </Link>
+      </li>
+    </ul>
+  </div>
+
+  <div className="col-lg-3 col-sm-6 mb-3">
+    <h6 className="text-dark font-weight-bold">Clearance Sale</h6>
+    <ul className="footer-links">
+      <li>
+        <Link to="/shop-left?itemName=CLEARANCE&subItemName=HEAVY DISCOUNT">
+          Heavy Discount
+        </Link>
+      </li>
+      <li>
+        <Link to="/shop-left?itemName=CLEARANCE&subItemName=LAST STOCK">
+          Last Stock Items
+        </Link>
+      </li>
+    </ul>
+  </div>
+
+  <div className="col-lg-3 col-sm-6 mb-3">
+    <h6 className="text-dark font-weight-bold">Offers</h6>
+    <ul className="footer-links">
+      <li>
+        <Link to="/shop-left?itemName=OFFERS&subItemName=BUY 2 GET 1">
+          Buy 2 Get 1
+        </Link>
+      </li>
+      <li>
+        <Link to="/shop-left?itemName=OFFERS&subItemName=50% OFF">
+          50% Off
+        </Link>
+      </li>
+    </ul>
+  </div>
+
+  <div className="col-lg-3 col-sm-6 mb-3">
+    <h6 className="text-dark font-weight-bold">New Arrivals</h6>
+    <ul className="footer-links">
+      <li>
+        <Link to="/shop-left?itemName=NEW&subItemName=TRENDING">
+          Trending Now
+        </Link>
+      </li>
+      <li>
+        <Link to="/shop-left?itemName=NEW&subItemName=JUST IN">
+          Just In
+        </Link>
+      </li>
+    </ul>
+  </div>
+</div>
             </div>
           </div>
 

@@ -56,7 +56,7 @@ const AccountSidebar = () => {
         </div>
         <div className="mobile-profile-info">
           <h3 className="profile-name">{user?.username || "Guest User"}</h3>
-          <p className="user-email">{user?.email || "No email provided"}</p>
+          {/* <p className="user-email">{user?.email || "No email provided"}</p> */}
         </div>
       </div>
 
@@ -70,7 +70,7 @@ const AccountSidebar = () => {
           </div>
           <div className="profile-info">
             <h3 className="profile-name">{user?.username || "Guest User"}</h3>
-            <p className="user-email">{user?.email || "No email provided"}</p>
+            {/* <p className="user-email">{user?.email || "No email provided"}</p> */}
           </div>
         </div>
 

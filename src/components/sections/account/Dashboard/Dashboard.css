@@ -4,7 +4,8 @@
 .dashboard-layout {
   display: flex;
   min-height: 100vh;
-  background: #f6f5f0;
+  background: var(--primary-color);
+  font-family: var(--secondary-font);
 }
 
 .dashboard-main {
@@ -13,7 +14,7 @@
   padding: 1.5rem;
   transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow-x: hidden;
-  background: #f6f5f0;
+  background: var(--primary-color);
   min-height: 100vh;
 }
 
@@ -36,18 +37,20 @@
 .dashboard-title {
   font-size: 2.25rem;
   font-weight: 700;
-  color: #2d3748;
+  color: var(--primary-text-color);
   margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, #cd865c, #4f46e5);
+  background: linear-gradient(135deg, var(--primary-hover-color), #4f46e5);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-family: var(--primary-font);
 }
 
 .dashboard-subtitle {
   font-size: 1rem;
   color: #64748b;
   margin: 0;
+  font-family: var(--secondary-font);
 }
 
 /* Mobile Header */
@@ -62,8 +65,9 @@
 .mobile-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--primary-text-color);
   margin: 0;
+  font-family: var(--primary-font);
 }
 
 /* Stats Grid */
@@ -71,14 +75,13 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
-  /* margin-bottom: 0.01rem; */
   max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
 }
 
 .stat-card {
-  background: #edebe7;
+  background: var(--primary-card-color);
   border-radius: 16px;
   padding: 1.5rem;
   display: flex;
@@ -90,7 +93,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   position: relative;
   overflow: hidden;
-   max-width: 90%;
+  max-width: 90%;
   max-height: 70%;
 }
 
@@ -135,13 +138,14 @@
 .stat-value {
   font-size: 2rem;
   font-weight: 800;
-  color: #2d3748;
+  color: var(--primary-text-color);
   margin: 0 0 0.25rem 0;
   line-height: 1.1;
   background: linear-gradient(135deg, var(--accent-color), var(--icon-color));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-family: var(--primary-font);
 }
 
 .stat-label {
@@ -149,6 +153,7 @@
   font-weight: 600;
   color: #374151;
   margin: 0;
+  font-family: var(--secondary-font);
 }
 
 .stat-description {
@@ -156,6 +161,7 @@
   color: #6b7280;
   margin: 0;
   font-weight: 500;
+  font-family: var(--secondary-font);
 }
 
 .stat-arrow {
@@ -170,7 +176,7 @@
 
 /* Color variants for stat cards */
 .stat-blue {
-  --accent-color: #cd865c;
+  --accent-color: var(--primary-hover-color);
   --icon-bg: #fef3ec;
   --icon-color: #b37752;
 }
@@ -187,7 +193,7 @@
 
 /* Recent Orders Section */
 .recent-orders-section {
-  background: #edebe7;
+  background: var(--primary-card-color);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
@@ -210,14 +216,16 @@
 .section-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--primary-text-color);
   margin: 0 0 0.25rem 0;
+  font-family: var(--primary-font);
 }
 
 .section-subtitle {
   font-size: 0.8rem;
   color: #64748b;
   margin: 0;
+  font-family: var(--secondary-font);
 }
 
 .view-all-link {
@@ -226,17 +234,18 @@
   gap: 0.5rem;
   font-size: 0.8rem;
   font-weight: 600;
-  color: #cd865c;
+  color: var(--primary-hover-color);
   text-decoration: none;
   padding: 0.5rem 1rem;
   border-radius: 6px;
   transition: all 0.3s ease;
   border: 1px solid transparent;
+  font-family: var(--secondary-font);
 }
 
 .view-all-link:hover {
   background: #fef3ec;
-  border-color: #cd865c;
+  border-color: var(--primary-hover-color);
   transform: translateX(2px);
 }
 
@@ -268,10 +277,11 @@
   color: #475569;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  font-family: var(--secondary-font);
 }
 
 .table-body {
-  background: #f6f5f0;
+  background: var(--primary-color);
 }
 
 .table-row {
@@ -318,7 +328,8 @@
 .order-id {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--primary-text-color);
+  font-family: var(--secondary-font);
 }
 
 .order-meta {
@@ -326,6 +337,7 @@
   align-items: center;
   gap: 0.375rem;
   color: #64748b;
+  font-family: var(--secondary-font);
 }
 
 .order-date {
@@ -348,13 +360,15 @@
   gap: 0.5rem;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--primary-text-color);
   margin-bottom: 0.25rem;
+  font-family: var(--secondary-font);
 }
 
 .customer-contact {
   font-size: 0.75rem;
   color: #64748b;
+  font-family: var(--secondary-font);
 }
 
 /* Order Items Cell */
@@ -400,7 +414,6 @@
 }
 
 .items-details {
-  /* flex: 1; */
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -408,15 +421,17 @@
 
 .items-text {
   font-size: 0.85rem;
-  color: #2d3748;
+  color: var(--primary-text-color);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: var(--secondary-font);
 }
 
 .items-count {
   font-size: 0.75rem;
   color: #64748b;
+  font-family: var(--secondary-font);
 }
 
 /* Order Total Cell */
@@ -430,11 +445,13 @@
   font-weight: 600;
   color: #059669;
   margin-bottom: 0.125rem;
+  font-family: var(--secondary-font);
 }
 
 .payment-mode {
   font-size: 0.75rem;
   color: #64748b;
+  font-family: var(--secondary-font);
 }
 
 /* Order Status Cell */
@@ -454,6 +471,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.025em;
+  font-family: var(--secondary-font);
 }
 
 .status-green {
@@ -462,7 +480,7 @@
 }
 .status-blue {
   background: #fef3ec;
-  color: #cd865c;
+  color: var(--primary-hover-color);
 }
 .status-amber {
   background: #fef3c7;
@@ -481,6 +499,7 @@
   font-size: 0.65rem;
   color: #64748b;
   font-weight: 500;
+  font-family: var(--secondary-font);
 }
 
 /* Order Actions Cell */
@@ -503,7 +522,7 @@
 }
 
 .view-order-button:hover {
-  background: #cd865c;
+  background: var(--primary-hover-color);
   color: white;
   border-color: #b37752;
   transform: scale(1.1);
@@ -528,8 +547,9 @@
 .no-orders-message h3 {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--primary-text-color);
   margin: 0 0 0.5rem 0;
+  font-family: var(--primary-font);
 }
 
 .no-orders-message p {
@@ -539,6 +559,7 @@
   max-width: 300px;
   margin-left: auto;
   margin-right: auto;
+  font-family: var(--secondary-font);
 }
 
 .shop-now-button {
@@ -546,7 +567,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.25rem;
-  background: #cd865c;
+  background: var(--primary-hover-color);
   color: white;
   text-decoration: none;
   border-radius: 6px;
@@ -554,6 +575,7 @@
   font-weight: 600;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: var(--secondary-font);
 }
 
 .shop-now-button:hover {
@@ -576,7 +598,7 @@
   width: 32px;
   height: 32px;
   border: 3px solid #e2e8f0;
-  border-top-color: #cd865c;
+  border-top-color: var(--primary-hover-color);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -594,6 +616,7 @@
   font-size: 0.8rem;
   color: #64748b;
   margin: 0;
+  font-family: var(--secondary-font);
 }
 
 /* Error States */
@@ -618,8 +641,9 @@
 .error-container h3 {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--primary-text-color);
   margin: 0;
+  font-family: var(--primary-font);
 }
 
 .error-container p {
@@ -627,6 +651,7 @@
   color: #64748b;
   margin: 0;
   max-width: 300px;
+  font-family: var(--secondary-font);
 }
 
 .error-detail {
@@ -637,12 +662,13 @@
   border-radius: 6px;
   border: 1px solid #fecaca;
   margin-top: 0.5rem;
+  font-family: var(--secondary-font);
 }
 
 .retry-button {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
-  background: #cd865c;
+  background: var(--primary-hover-color);
   color: white;
   border: none;
   border-radius: 6px;
@@ -650,6 +676,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-family: var(--secondary-font);
 }
 
 .retry-button:hover {
@@ -711,7 +738,7 @@
 .view-order-button:focus,
 .shop-now-button:focus,
 .retry-button:focus {
-  outline: 2px solid #cd865c;
+  outline: 2px solid var(--primary-hover-color);
   outline-offset: 2px;
 }
 
@@ -1339,4 +1366,3 @@
     overflow-x: visible;
   }
 }
-

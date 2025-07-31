@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Slider from 'react-slick';
 import { useCategoryBanner } from '../../../hook/banner/useCategoriesBanner';
 import useFilterProducts from '../../../hook/product/useFilterProducts';
-import './Handpicked.css';
+import './handpicked.css';
 
 const BASE_URL = "https://app.bmgjewellers.com";
 

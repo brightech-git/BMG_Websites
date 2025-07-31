@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import { Link } from 'react-router-dom';
 import {
   FiShoppingBag,
   FiClock,
@@ -26,25 +25,18 @@ const Dashboard = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const history = useHistory();
 
-  // Fetch real-time data - Updated to match your API response structure
   const {
     data: ordersData,
     isLoading: ordersLoading,
     error: ordersError,
-  } = useOrderHistory({
-    page: 0,
-    size: 3, // Only fetch the 3 most recent orders for dashboard
-    status: "",
-  });
+  } = useOrderHistory({ page: 0, size: 3, status: "" });
 
-  // Cart data
   const {
     cartItems: cartData,
     isLoading: cartLoading,
     error: cartError,
   } = useCart();
 
-  // Wishlist data
   const {
     data: wishlistResponse = { data: [] },
     isLoading: wishlistLoading,
@@ -58,55 +50,27 @@ const Dashboard = () => {
         setIsMobileMenuOpen(false);
       }
     };
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Helper function to parse image paths - Updated for your API response
-  const parseImagePath = (imagePath) => {
-    if (!imagePath) return [];
-    try {
-      // Handle both JSON array format and comma-separated format
-      if (typeof imagePath === "string") {
-        if (imagePath.startsWith("[") && imagePath.endsWith("]")) {
-          return JSON.parse(imagePath);
-        } else {
-          return imagePath
-            .split(",")
-            .map((path) => path.trim().replace(/['"]/g, ""));
-        }
-      }
-      return [];
-    } catch (error) {
-      console.error("Error parsing image path:", error);
-      return [];
-    }
-  };
-
-  // Helper function to get the first valid image - Updated for your API
   const getFirstImage = (imagePath) => {
     if (!imagePath) return null;
-    const images = parseImagePath(imagePath);
-    return images.length > 0 ? images[0] : null;
+    return imagePath.trim();
   };
 
-  // Calculate stats from real data - Only show Total Orders, Wishlist, and Cart
-  const calculateStats = () => {
-    // ordersData is now a direct array, not wrapped in content
-    const orders = Array.isArray(ordersData) ? ordersData : [];
+  const getResolvedImageUrl = (url) => {
+    if (!url) return null;
+    if (url.startsWith("http")) return url;
+    if (url.startsWith("/")) return `https://app.bmgjewellers.com${url}`;
+    return null;
+  };
 
+  const calculateStats = () => {
+    const orders = Array.isArray(ordersData) ? ordersData : [];
     const totalOrders = orders.length;
     const wishlistItems = wishlistResponse?.data?.length || 0;
     const cartItems = cartData?.data?.length || 0;
-    console.log(
-      "Total Orders:",
-      totalOrders,
-      "Wishlist Items:",
-      wishlistItems,
-      "Cart Items:",
-      cartItems
-    );
 
     return [
       {
@@ -172,7 +136,6 @@ const Dashboard = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // Format date helper
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     try {
@@ -188,13 +151,11 @@ const Dashboard = () => {
     }
   };
 
-  // Calculate total items in an order
   const getTotalItems = (orderItems) => {
     if (!Array.isArray(orderItems)) return 0;
     return orderItems.reduce((total, item) => total + (item.quantity || 1), 0);
   };
 
-  // Get order items summary
   const getOrderItemsSummary = (orderItems) => {
     if (!Array.isArray(orderItems) || orderItems.length === 0) {
       return { text: "No items", count: "0 items" };
@@ -216,10 +177,9 @@ const Dashboard = () => {
     };
   };
 
-  // Combined loading state
   const isLoading = ordersLoading || cartLoading || wishlistLoading;
-  // Combined error state
   const hasError = ordersError || cartError || wishlistError;
+  const orders = Array.isArray(ordersData) ? ordersData : [];
 
   if (isLoading) {
     return (
@@ -275,17 +235,9 @@ const Dashboard = () => {
     );
   }
 
-  // Updated to handle direct array response
-  const orders = Array.isArray(ordersData) ? ordersData : [];
-
   return (
     <div className="dashboard-layout">
-      {/* Mobile header */}
-      {windowWidth <= 768 && (
-        <div className="mobile-header">
-          {/* <h1 className="mobile-title">Dashboard</h1> */}
-        </div>
-      )}
+      {windowWidth <= 768 && <div className="mobile-header"></div>}
 
       <AccountSideBar
         isMobileMenuOpen={isMobileMenuOpen}
@@ -295,13 +247,11 @@ const Dashboard = () => {
       <main className={`dashboard-main ${isMobileMenuOpen ? "menu-open" : ""}`}>
         <div className="dashboard-container">
           <div className="dashboard-header">
-            {/* <h1 className="dashboard-title">Dashboard</h1> */}
             <p className="dashboard-subtitle">
               Welcome back! Here's what's happening with your account.
             </p>
           </div>
 
-          {/* Enhanced Stats Grid */}
           <div className="stats-grid">
             {stats.map((stat, index) => (
               <Link
@@ -322,7 +272,6 @@ const Dashboard = () => {
             ))}
           </div>
 
-          {/* Enhanced Recent Orders Section */}
           <div className="recent-orders-section">
             <div className="section-header">
               <div className="section-title-group">
@@ -348,17 +297,16 @@ const Dashboard = () => {
 
                   <div className="table-body">
                     {orders.map((order, index) => {
-                      const itemsSummary = getOrderItemsSummary(
-                        order.orderItems
-                      );
                       const firstItem = order.orderItems?.[0];
                       const firstImage = firstItem
                         ? getFirstImage(firstItem.image_path)
                         : null;
+                      const itemsSummary = getOrderItemsSummary(
+                        order.orderItems
+                      );
 
                       return (
                         <div key={order.orderId || index} className="table-row">
-                          {/* Order Details - Always visible */}
                           <div className="table-cell order-details">
                             <div className="order-info">
                               <div className="order-id-group">
@@ -374,7 +322,7 @@ const Dashboard = () => {
                               </div>
                             </div>
                           </div>
-                          {/* Customer Info */}
+
                           <div className="table-cell customer-info">
                             <div className="customer-details">
                               <div className="customer-name">
@@ -386,57 +334,62 @@ const Dashboard = () => {
                               </div>
                             </div>
                           </div>
-                          {/* Order Items */}
+
                           <div className="table-cell order-items">
                             <div className="items-info">
                               {firstImage ? (
-                                <div className="item-image">
-                                  <img
-                                    src={firstImage}
-                                    alt={firstItem?.productName || "Order item"}
-                                    onError={(e) => {
-                                      e.target.style.display = "none";
-                                      // Show placeholder instead
-                                      const placeholder =
-                                        e.target.parentNode.parentNode.querySelector(
-                                          ".item-image-placeholder"
-                                        );
-                                      if (placeholder)
-                                        placeholder.style.display = "flex";
-                                    }}
-                                  />
+                                <div className="item-image-container">
+                                  <div className="item-image">
+                                    <img
+                                      src={getResolvedImageUrl(firstImage)}
+                                      alt={firstItem?.productName || "Product"}
+                                      onError={(e) => {
+                                        e.target.style.display = "none";
+                                        const placeholder =
+                                          e.target.parentNode.querySelector(
+                                            ".item-image-placeholder"
+                                          );
+                                        if (placeholder)
+                                          placeholder.style.display = "flex";
+                                      }}
+                                    />
+                                    <div
+                                      className="item-image-placeholder"
+                                      style={{ display: "none" }}
+                                    >
+                                      <FiPackage size={20} />
+                                    </div>
+                                  </div>
+                                  {/* <div className="item-details">
+                                    <div className="item-name">
+                                      {firstItem?.productName || "Unknown Item"}
+                                    </div>
+                                    <div className="item-count">
+                                      {itemsSummary.count}
+                                    </div>
+                                  </div> */}
                                 </div>
                               ) : (
-                                <div className="item-image-placeholder">
-                                  <FiPackage size={20} />
+                                <div className="item-image-container">
+                                  <div className="item-image-placeholder">
+                                    <FiPackage size={20} />
+                                  </div>
+                                  {/* <div className="item-details">
+                                    <div className="item-name">
+                                      {firstItem?.productName || "Unknown Item"}
+                                    </div>
+                                    <div className="item-count">
+                                      {itemsSummary.count}
+                                    </div>
+                                  </div> */}
                                 </div>
                               )}
-                              {/* Hidden placeholder for error fallback */}
-                              {firstImage && (
-                                <div
-                                  className="item-image-placeholder"
-                                  style={{ display: "none" }}
-                                >
-                                  <FiPackage size={20} />
-                                </div>
-                              )}
-                              <div className="items-details">
-                                <span
-                                  className="items-text"
-                                  title={itemsSummary.text}
-                                >
-                                  {itemsSummary.text}
-                                </span>
-                                <span className="items-count">
-                                  {itemsSummary.count}
-                                </span>
-                              </div>
                             </div>
                           </div>
-                          {/* Order Total */}
+
                           <div className="table-cell order-total">
                             <span className="total-amount">
-                              ${order.totalAmount?.toFixed(2) || "0.00"}
+                              ₹{order.totalAmount?.toFixed(2) || "0.00"}
                             </span>
                             {order.paymentMode && (
                               <span className="payment-mode">
@@ -444,7 +397,7 @@ const Dashboard = () => {
                               </span>
                             )}
                           </div>
-                          {/* Order Status */}
+
                           <div className="table-cell order-status">
                             <span
                               className={`status-badge status-${getStatusBadge(
@@ -460,8 +413,7 @@ const Dashboard = () => {
                               </span>
                             )}
                           </div>
-                          {/* Actions */}
-                         
+
                           <div className="table-cell order-actions">
                             <button
                               onClick={() => {
@@ -497,8 +449,7 @@ const Dashboard = () => {
                   orders here!
                 </p>
                 <Link to="/shop-left" className="shop-now-button">
-                  <FiShoppingCart size={16} />
-                  Start Shopping
+                  <FiShoppingCart size={16} /> Start Shopping
                 </Link>
               </div>
             )}

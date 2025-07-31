@@ -23,17 +23,9 @@ import {
   faHome,
   faClock,
   faCreditCard,
+  faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import "./OrderDetails.css";
-
-const getFirstImageUrl = (imagePath) => {
-  if (!imagePath) return null;
-  let cleaned = imagePath.trim();
-  cleaned = cleaned.replace(/^\[+|]+$/g, "");
-  const paths = cleaned.split(/["',]+/).filter((p) => p.startsWith("/uploads"));
-  if (paths.length === 0) return null;
-  return `https://app.bmgjewellers.com${paths[0]}`;
-};
 
 const OrderDetailsPage = () => {
   const history = useHistory();
@@ -44,23 +36,31 @@ const OrderDetailsPage = () => {
     error,
   } = useOrderHistory({ page: 1, size: 100 });
   const [order, setOrder] = useState(null);
-  const [isStatusExpanded, setIsStatusExpanded] = useState(false);
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
 
   useEffect(() => {
     if (orderHistory && Array.isArray(orderHistory)) {
-      setOrder(orderHistory.find((order) => order.orderId === orderId));
+      const foundOrder = orderHistory.find(
+        (order) => order.orderId === orderId
+      );
+      if (foundOrder) {
+        // Use the status directly from the API response
+        setOrder({
+          ...foundOrder,
+          subTotal: foundOrder.totalAmount,
+          totalAmount: foundOrder.totalAmount,
+        });
+      }
     }
   }, [orderHistory, orderId]);
-
-  const toggleStatus = () => setIsStatusExpanded((v) => !v);
 
   const getStatusSteps = () => {
     const allSteps = [
       {
-        id: "PLACED",
-        label: "Order Placed",
+        id: "PENDING",
+        label: "Pending",
         icon: faReceipt,
-        description: "Your order was received",
+        description: "Your order has been confirmed",
         color: "#3498db",
       },
       {
@@ -68,34 +68,20 @@ const OrderDetailsPage = () => {
         label: "Processing",
         icon: faSpinner,
         description: "Preparing your items",
-        color: "#3498db",
-      },
-      {
-        id: "PACKED",
-        label: "Packed",
-        icon: faBox,
-        description: "Order packed and ready",
-        color: "#3498db",
+        color: "#9b59b6", // Changed to purple for better distinction
       },
       {
         id: "SHIPPED",
         label: "Shipped",
         icon: faTruck,
-        description: "Shipped by seller/courier",
-        color: "#3498db",
-      },
-      {
-        id: "OUT_FOR_DELIVERY",
-        label: "Out for Delivery",
-        icon: faTruck,
-        description: "Courier is almost there",
-        color: "#3498db",
+        description: "Order has been shipped",
+        color: "#f39c12", // Changed to orange
       },
       {
         id: "DELIVERED",
         label: "Delivered",
         icon: faHome,
-        description: "Order delivered",
+        description: "Order delivered successfully",
         color: "#2ecc71",
       },
       {
@@ -131,6 +117,167 @@ const OrderDetailsPage = () => {
       .filter(
         (step) => step.id !== "CANCELLED" || order.status === "CANCELLED"
       );
+  };
+
+ const renderStatusModal = () => {
+  const statusSteps = getStatusSteps();
+  const currentStatus = statusSteps.find(
+    (step) => step.id === order.status // Directly compare with order.status
+  );
+
+    // Status color mapping for better visual distinction
+    const statusColors = {
+      PENDING: "#3498db", // Blue for pending
+      PROCESSING: "#9b59b6", // Purple for processing
+      SHIPPED: "#f39c12", // Orange for shipped
+      DELIVERED: "#2ecc71", // Green for delivered
+      CANCELLED: "#e74c3c", // Red for cancelled
+    };
+
+    return (
+      <div className="status-modal-overlay">
+        <div className="status-modal">
+          <div className="status-modal-header">
+            <h3>Order #{order.orderId} Status</h3>
+            <button
+              onClick={() => setIsStatusModalOpen(false)}
+              className="close-modal"
+            >
+              &times;
+            </button>
+          </div>
+          <div className="status-modal-body">
+            <div className="current-status-summary">
+              <div
+                className="status-badge-large"
+                style={{
+                  backgroundColor:
+                    statusColors[order.status] || currentStatus?.color,
+                  boxShadow: `0 0 10px ${
+                    statusColors[order.status] || currentStatus?.color
+                  }33`,
+                }}
+              >
+                {currentStatus?.label || order.status}
+              </div>
+              <div className="status-details">
+                <p className="status-description">
+                  <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
+                  {currentStatus?.description}
+                </p>
+                <div className="status-meta">
+                  <span>
+                    <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" />
+                    Ordered on: {new Date(order.orderTime).toLocaleDateString()}
+                  </span>
+                  {order.status === "DELIVERED" && (
+                    <span>
+                      <FontAwesomeIcon icon={faCheckCircle} className="mr-2" />
+                      Delivered on: {new Date().toLocaleDateString()}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="status-timeline">
+              <div
+                className="timeline-connector"
+                style={{
+                  background: `linear-gradient(to bottom, 
+                ${statusColors.PENDING} 0%, 
+                ${
+                  order.status === "PROCESSING"
+                    ? statusColors.PROCESSING
+                    : order.status === "SHIPPED"
+                    ? statusColors.SHIPPED
+                    : order.status === "DELIVERED"
+                    ? statusColors.DELIVERED
+                    : statusColors.PENDING
+                } 100%)`,
+                }}
+              ></div>
+
+              {statusSteps.map((step) => {
+                const isCurrent = step.id === order.status;
+                return (
+                  <div
+                    key={step.id}
+                    className={`status-step 
+                    ${isCurrent ? "current" : ""} 
+                    ${step.completed ? "completed" : ""} 
+                    ${step.future ? "future" : ""} 
+                    ${step.isCancelled ? "cancelled" : ""}`}
+                  >
+                    <div
+                      className="step-icon-container"
+                      style={{
+                        borderColor: statusColors[step.id],
+                        boxShadow: isCurrent
+                          ? `0 0 0 3px ${statusColors[step.id]}33`
+                          : "none",
+                      }}
+                    >
+                      {step.completed ? (
+                        <FontAwesomeIcon
+                          icon={faCheckCircle}
+                          className="step-icon completed-icon"
+                          style={{ color: statusColors[step.id] }}
+                        />
+                      ) : step.isCancelled ? (
+                        <FontAwesomeIcon
+                          icon={faTimesCircle}
+                          className="step-icon cancelled-icon"
+                          style={{ color: statusColors[step.id] }}
+                        />
+                      ) : isCurrent ? (
+                        <FontAwesomeIcon
+                          icon={step.icon}
+                          className="step-icon current-icon"
+                          spin={step.id === "PROCESSING"}
+                          style={{ color: statusColors[step.id] }}
+                        />
+                      ) : (
+                        <FontAwesomeIcon
+                          icon={step.icon}
+                          className="step-icon"
+                          style={{
+                            color: step.future ? "#ccc" : statusColors[step.id],
+                          }}
+                        />
+                      )}
+                    </div>
+                    <div className="step-content">
+                      <h4
+                        className="step-title"
+                        style={{
+                          color: isCurrent ? statusColors[step.id] : "inherit",
+                        }}
+                      >
+                        {step.label}
+                        {isCurrent && (
+                          <span className="current-indicator">
+                            Current Status
+                          </span>
+                        )}
+                      </h4>
+                      <p className="step-description">{step.description}</p>
+                      {(isCurrent || step.completed) && (
+                        <div className="step-updated">
+                          <FontAwesomeIcon icon={faClock} className="mr-2" />
+                          {isCurrent ? "Last updated: " : "Completed on: "}
+                          {new Date().toLocaleDateString()}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   if (isLoading) {
@@ -217,7 +364,7 @@ const OrderDetailsPage = () => {
   }
 
   const statusSteps = getStatusSteps();
-  const curStatus = statusSteps.find(
+  const currentStatus = statusSteps.find(
     (step) => step.active || step.id === order.status
   );
 
@@ -226,121 +373,77 @@ const OrderDetailsPage = () => {
       <AccountSideBar />
       <div className="order-content">
         {/* Order Header */}
-        <div className="order-header">
-          <button onClick={() => history.push("/orders")} className="back-btn">
+        {/* Order Header */}
+        <div className="order-header-simplified">
+          <h1 className="order-title">Order Details</h1>
+          <button
+            onClick={() => history.push("/orders")}
+            className="back-btn-right"
+          >
             <FontAwesomeIcon icon={faAngleLeft} /> Back to Orders
           </button>
-          <h1 className="order-title">Order Details</h1>
-          <div className="order-meta">
-            <span className="meta-item">
-              <strong>Order #</strong>
-              {order.orderId}
-            </span>
-            <span className="meta-item">
-              <FontAwesomeIcon icon={faCalendarAlt} className="meta-icon" />
-              {new Date(order.orderTime).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-              })}
-            </span>
-            <span className="meta-item">
-              <FontAwesomeIcon icon={faCreditCard} className="meta-icon" />
-              {order.paymentMethod || "Credit/Debit Card"}
-            </span>
-            <span className="meta-item total-amount">
-              <strong>Total: </strong>
-              {formatCurrency(order.totalAmount)}
-            </span>
-          </div>
         </div>
 
-        {/* Status Tracker */}
-        <div className={`status-tracker-container ${isStatusExpanded ? "expanded" : ""}`}>
-          <div className="status-tracker-header" onClick={toggleStatus}>
-            <div className="status-summary">
+        {/* Status Summary */}
+        {/* Status Summary */}
+        <div className="status-summary-container">
+          <div className="status-summary-content">
+            <div className="status-meta">
+              <span className="order-id">Order #{order.orderId}</span>
+              <span className="order-date">
+                <FontAwesomeIcon icon={faCalendarAlt} className="meta-icon" />
+                {new Date(order.orderTime).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+              </span>
+            </div>
+            <div className="status-info">
               <div
-                className={`status-badge ${order.status.toLowerCase().replace(/\s/g, "-")}`}
-                style={{ backgroundColor: curStatus?.color }}
+                className="status-badge"
+                style={{ backgroundColor: currentStatus?.color }}
               >
-                {curStatus?.label || order.status}
+                {currentStatus?.label || order.status}
               </div>
-              {curStatus?.description && (
-                <p className="status-description">{curStatus.description}</p>
-              )}
             </div>
-            <FontAwesomeIcon
-              icon={isStatusExpanded ? faChevronUp : faChevronDown}
-              className="status-toggle-icon"
-            />
           </div>
-
-          {isStatusExpanded && (
-            <div className="status-steps">
-              {statusSteps.map((step) => (
-                <div
-                  key={step.id}
-                  className={`
-                    status-step 
-                    ${step.active ? "active" : ""} 
-                    ${step.completed ? "completed" : ""} 
-                    ${step.future ? "future" : ""} 
-                    ${step.isCancelled ? "cancelled" : ""}
-                  `}
-                >
-                  <div className="step-icon-container">
-                    {step.completed ? (
-                      <FontAwesomeIcon
-                        icon={faCheckCircle}
-                        className="step-icon completed-icon"
-                      />
-                    ) : step.isCancelled ? (
-                      <FontAwesomeIcon
-                        icon={faTimesCircle}
-                        className="step-icon cancelled-icon"
-                      />
-                    ) : step.active ? (
-                      <FontAwesomeIcon
-                        icon={step.icon}
-                        className="step-icon active-icon"
-                        spin={step.id === "PROCESSING"}
-                      />
-                    ) : (
-                      <FontAwesomeIcon icon={step.icon} className="step-icon" />
-                    )}
-                  </div>
-                  <div className="step-content">
-                    <h4 className="step-title">{step.label}</h4>
-                    <p className="step-description">{step.description}</p>
-                    {step.active && order.statusUpdatedAt && (
-                      <div className="step-updated">
-                        <FontAwesomeIcon icon={faClock} className="mr-2" />
-                        Updated on{" "}
-                        {new Date(order.statusUpdatedAt).toLocaleDateString()}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          <button
+            className="view-status-btn"
+            onClick={() => setIsStatusModalOpen(true)}
+          >
+            View all updates
+          </button>
         </div>
 
         {/* Order Sections */}
         <div className="order-sections-container">
+          {/* Ordered Items */}
           {/* Ordered Items */}
           <div className="order-section">
             <h3 className="section-title">
               <FontAwesomeIcon icon={faBox} className="section-icon" />
               Items in your order
             </h3>
-            <div className="order-items-list">
+            <div
+              className={`order-items-list ${
+                order.orderItems?.length > 2 ? "scrollable-items" : ""
+              }`}
+              style={{
+                maxHeight: order.orderItems?.length > 2 ? "400px" : "auto",
+                overflowY: order.orderItems?.length > 2 ? "auto" : "visible",
+              }}
+            >
               {order.orderItems?.map((item) => (
-                <div key={item.sno} className="order-item-detail">
+                <div key={item.id} className="order-item-detail">
                   <div className="item-image">
                     {item.image_path ? (
                       <img
-                        src={getFirstImageUrl(item.image_path)}
+                        src={
+                          item.image_path.startsWith("http")
+                            ? item.image_path
+                            : `https://app.bmgjewellers.com${item.image_path}`
+                        }
                         alt={item.productName}
                         className="item-img"
                         onError={(e) => {
@@ -363,24 +466,16 @@ const OrderDetailsPage = () => {
                       <span className="item-price">
                         {formatCurrency(item.price)}
                       </span>
-                      <span className="item-quantity">Qty: {item.quantity}</span>
+                      <span className="item-quantity">
+                        Qty: {item.quantity}
+                      </span>
                       <span className="item-subtotal">
                         Subtotal: {formatCurrency(item.price * item.quantity)}
                       </span>
                     </div>
-                    {item.color && (
+                    {item.tagno && (
                       <div className="item-attribute">
-                        <strong>Color:</strong> {item.color}
-                      </div>
-                    )}
-                    {item.size && (
-                      <div className="item-attribute">
-                        <strong>Size:</strong> {item.size}
-                      </div>
-                    )}
-                    {item.seller && (
-                      <div className="item-attribute">
-                        <strong>Seller:</strong> {item.seller}
+                        <strong>Tag No:</strong> {item.tagno}
                       </div>
                     )}
                   </div>
@@ -400,24 +495,21 @@ const OrderDetailsPage = () => {
                 <span>Subtotal</span>
                 <span>{formatCurrency(order.subTotal)}</span>
               </div>
-              {order.discount > 0 && (
-                <div className="summary-row discount">
-                  <span>Discount</span>
-                  <span>-{formatCurrency(order.discount)}</span>
-                </div>
-              )}
+             
               <div className="summary-row">
                 <span>Shipping</span>
                 <span>
-                  {order.shippingFee ? formatCurrency(order.shippingFee) : "FREE"}
+                  {order.shippingFee
+                    ? formatCurrency(order.shippingFee)
+                    : 50}
                 </span>
               </div>
-              {order.tax ? (
-                <div className="summary-row">
-                  <span>Tax</span>
-                  <span>{formatCurrency(order.tax)}</span>
-                </div>
-              ) : null}
+               <div className="summary-row discount">
+                <span>Discount</span>
+                <span>-{order.shippingFee
+                    ? formatCurrency(order.discount)
+                    : 50}</span>
+              </div>
               <div className="summary-row total">
                 <span>Total</span>
                 <span>{formatCurrency(order.totalAmount)}</span>
@@ -434,23 +526,26 @@ const OrderDetailsPage = () => {
             <div className="info-card">
               <div className="address-details">
                 <div className="address-name">
-                  <strong>{order.shippingAddress?.name}</strong>
+                  <strong>{order.customerName}</strong>
                 </div>
-                <div className="address-street">{order.shippingAddress?.street}</div>
+                <div className="address-street">
+                  {order.address.split(",")[0]}
+                </div>
                 <div className="address-city">
-                  {order.shippingAddress?.city}, {order.shippingAddress?.state}{" "}
-                  {order.shippingAddress?.zipCode}
+                  {order.address.split(",").slice(1, -2).join(",")}
                 </div>
-                <div className="address-country">{order.shippingAddress?.country}</div>
+                <div className="address-country">
+                  {order.address.split(",").slice(-1)[0]}
+                </div>
                 <div className="address-phone">
-                  <strong>Phone:</strong> {order.shippingAddress?.phone}
+                  <strong>Phone:</strong> {order.contact}
                 </div>
               </div>
             </div>
           </div>
 
           {/* Payment Method */}
-          <div className="order-section">
+          {/* <div className="order-section">
             <h3 className="section-title">
               <FontAwesomeIcon icon={faCreditCard} className="section-icon" />
               Payment Method
@@ -458,10 +553,13 @@ const OrderDetailsPage = () => {
             <div className="info-card">
               <div className="payment-method">
                 <FontAwesomeIcon icon={faCreditCard} className="payment-icon" />
-                <span>{order.paymentMethod || "Credit/Debit Card"}</span>
+                <span>{order.paymentMode || "Online Payment"}</span>
+              </div>
+              <div className="payment-status">
+                <strong>Status:</strong> {order.paymentStatus || "Paid"}
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <button
@@ -471,6 +569,9 @@ const OrderDetailsPage = () => {
           <FontAwesomeIcon icon={faShoppingBag} /> Continue Shopping
         </button>
       </div>
+
+      {/* Status Modal */}
+      {isStatusModalOpen && renderStatusModal()}
     </div>
   );
 };

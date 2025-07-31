@@ -63,6 +63,7 @@ export const UserAuthProvider = ({ children }) => {
         localStorage.removeItem("user");
         localStorage.removeItem("user_token");
         localStorage.removeItem("userMobileNumber");
+        window.location.href = "/login"; // Redirect to login page
     };
 
     return (

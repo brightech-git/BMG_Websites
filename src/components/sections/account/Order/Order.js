@@ -1,190 +1,148 @@
+// OrdersPage.jsx (Enhanced with classNames, accessibility, and structure)
+// NOTE: This code assumes CSS classes (shown below) exist and are scoped properly.
+
 import React, { useState } from 'react';
-import { Link, useLocation, useHistory } from 'react-router-dom';
-import { 
-  FiShoppingBag, FiFilter, FiSearch, FiChevronDown,
-  FiTruck, FiCheckCircle, FiClock, FiX
-} from 'react-icons/fi';
+import { useHistory } from 'react-router-dom';
+import { useOrderHistory } from '../../../../hook/order/useOrderHistoryQuery';
+import { formatCurrency } from '../../../../assets/utills/formatters';
+import AccountSideBar from '../AccountSidebar/AccountSideBar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faBox, faBoxOpen, faExclamationCircle, faSpinner, faAngleLeft,
+  faAngleRight, faShoppingBag, faUndo, faCalendarAlt, faReceipt,
+  faUser, faCreditCard
+} from '@fortawesome/free-solid-svg-icons';
 import './OrderStyles.css';
 
-const Orders = () => {
+const getFirstImageUrl = (imagePath) => {
+  if (!imagePath) return null;
+  const cleaned = imagePath.trim().replace(/\[|\]/g, '');
+  const paths = cleaned.split(/["',]+/).filter(p => p.startsWith('/uploads'));
+  return paths.length ? `https://app.bmgjewellers.com${paths[0]}` : null;
+};
+
+const OrdersPage = () => {
   const history = useHistory();
-  const location = useLocation();
-  const query = new URLSearchParams(location.search);
-  
-  const [searchQuery, setSearchQuery] = useState('');
-  const [showFilters, setShowFilters] = useState(false);
-  
-  const statusFilter = query.get('status') || 'all';
-  
-  const orders = [
-    { id: '#3258', date: '12 Jun 2023', status: 'Delivered', total: '$149.99', items: 2 },
-    { id: '#3257', date: '10 Jun 2023', status: 'Shipped', total: '$89.99', items: 1 },
-    { id: '#3256', date: '05 Jun 2023', status: 'Processing', total: '$249.99', items: 2 },
-    { id: '#3255', date: '01 Jun 2023', status: 'Delivered', total: '$79.99', items: 1 },
-    { id: '#3254', date: '28 May 2023', status: 'Delivered', total: '$199.99', items: 3 },
-    { id: '#3253', date: '25 May 2023', status: 'Cancelled', total: '$59.99', items: 1 }
-  ];
+  const [currentPage, setCurrentPage] = useState(0);
+  const { data, isLoading, error } = useOrderHistory({ page: currentPage, size: 10 });
+  const orders = Array.isArray(data?.content) ? data.content : (Array.isArray(data) ? data : []);
 
-  const filteredOrders = statusFilter === 'all' 
-    ? orders 
-    : orders.filter(order => order.status.toLowerCase() === statusFilter.toLowerCase());
+  const handlePageChange = (page) => {
+    if (page >= 0 && page < (data?.totalPages || 1)) setCurrentPage(page);
+  };
 
-  const handleStatusFilter = (status) => {
-    const newQuery = new URLSearchParams();
-    if (status !== 'all') {
-      newQuery.set('status', status);
-    }
+  const handleOrderClick = (order) => {
     history.push({
-      pathname: location.pathname,
-      search: newQuery.toString()
+      pathname: `/orderdetail/${order.orderId || order.id}`,
+      state: { orderData: order },
     });
   };
 
-  const statusFilters = [
-    { value: 'all', label: 'All Orders' },
-    { value: 'processing', label: 'Processing' },
-    { value: 'shipped', label: 'Shipped' },
-    { value: 'delivered', label: 'Delivered' },
-    { value: 'cancelled', label: 'Cancelled' }
-  ];
-
-  const getStatusIcon = (status) => {
-    switch(status.toLowerCase()) {
-      case 'delivered': return <FiCheckCircle className="mr-1" />;
-      case 'shipped': return <FiTruck className="mr-1" />;
-      case 'processing': return <FiClock className="mr-1" />;
-      case 'cancelled': return <FiX className="mr-1" />;
-      default: return <FiShoppingBag className="mr-1" />;
-    }
-  };
-
-  const getStatusColor = (status) => {
-    switch(status.toLowerCase()) {
-      case 'delivered': return 'bg-green-100 text-green-800';
-      case 'shipped': return 'bg-blue-100 text-blue-800';
-      case 'processing': return 'bg-amber-100 text-amber-800';
-      case 'cancelled': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-
   return (
-    <div className="orders-container">
-      <div className="orders-header">
-        <h1>My Orders</h1>
-        <p>View and manage your order history</p>
-      </div>
+    <div className="account-container">
+      <AccountSideBar />
+      <div className="order-content">
+        {isLoading ? (
+          <div className="order-loading">
+            <FontAwesomeIcon icon={faSpinner} spin size="3x" />
+            <p>Loading your orders...</p>
+          </div>
+        ) : error ? (
+          <div className="order-error">
+            <FontAwesomeIcon icon={faExclamationCircle} size="3x" />
+            <h3>Something went wrong</h3>
+            <p>{error.message || 'Please try refreshing the page.'}</p>
+            <button onClick={() => window.location.reload()}>
+              <FontAwesomeIcon icon={faUndo} /> Retry
+            </button>
+          </div>
+        ) : !orders.length ? (
+          <div className="order-empty">
+            <FontAwesomeIcon icon={faBoxOpen} size="5x" />
+            <h3>No orders yet</h3>
+            <p>Your order history will appear here once you make a purchase.</p>
+            <button onClick={() => history.push('/shop-left')}>
+              <FontAwesomeIcon icon={faShoppingBag} /> Start Shopping
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="order-header">
+              <h1><FontAwesomeIcon icon={faBox} /> Order History</h1>
+              <p>View and manage your past orders</p>
+            </div>
 
-      <div className="orders-toolbar">
-        <div className="search-box">
-          <FiSearch className="search-icon" />
-          <input
-            type="text"
-            placeholder="Search orders..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-        
-        <div className="filters">
-          <button 
-            className="filter-btn"
-            onClick={() => setShowFilters(!showFilters)}
-          >
-            <FiFilter className="mr-2" />
-            Filters
-            <FiChevronDown className={`ml-2 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
-          </button>
-          
-          {showFilters && (
-            <div className="filter-dropdown">
-              {statusFilters.map(filter => (
-                <button
-                  key={filter.value}
-                  className={`filter-option ${statusFilter === filter.value ? 'active' : ''}`}
-                  onClick={() => {
-                    handleStatusFilter(filter.value);
-                    setShowFilters(false);
-                  }}
-                >
-                  {filter.label}
-                </button>
+            {/* Desktop View */}
+            <div className="order-table-wrapper desktop-view">
+              <table className="order-table">
+                <thead>
+                  <tr>
+                    <th>Order</th>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orders.map((order) => (
+                    <tr key={order.orderId || order.id} onClick={() => handleOrderClick(order)}>
+                      <td>
+                        <div className="order-summary">
+                          <img src={getFirstImageUrl(order.orderItems?.[0]?.image_path)} alt="Product" />
+                          <div>
+                            <div>#{order.orderId || order.id}</div>
+                            <div>{order.orderItems?.[0]?.productName}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>{new Date(order.orderTime || order.createdAt).toLocaleDateString()}</td>
+                      <td><FontAwesomeIcon icon={faUser} /> {order.customerName}</td>
+                      <td className={`status ${order.status?.toLowerCase().replace(/\s/g, '-')}`}>{order.status}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile View */}
+            <div className="mobile-view">
+              {orders.map((order) => (
+                <div className="order-card" key={order.orderId || order.id} onClick={() => handleOrderClick(order)}>
+                  <div className="order-card-header">
+                    <span><FontAwesomeIcon icon={faReceipt} /> #{order.orderId || order.id}</span>
+                    <span className={`status ${order.status?.toLowerCase().replace(/\s/g, '-')}`}>{order.status}</span>
+                  </div>
+                  <div className="order-card-body">
+                    <img src={getFirstImageUrl(order.orderItems?.[0]?.image_path)} alt="Product" />
+                    <div>
+                      <div>{order.orderItems?.[0]?.productName}</div>
+                      <div><FontAwesomeIcon icon={faCalendarAlt} /> {new Date(order.orderTime || order.createdAt).toLocaleDateString()}</div>
+                      <div><FontAwesomeIcon icon={faUser} /> {order.customerName}</div>
+                      {/* <div><FontAwesomeIcon icon={faCreditCard} /> {order.paymentMethod}</div> */}
+                      <div>Total: {formatCurrency(order.totalAmount || order.amount)}</div>
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
-          )}
-        </div>
-      </div>
 
-      <div className="status-tabs">
-        {statusFilters.map(filter => (
-          <button
-            key={filter.value}
-            className={`status-tab ${statusFilter === filter.value ? 'active' : ''}`}
-            onClick={() => handleStatusFilter(filter.value)}
-          >
-            {filter.label}
-          </button>
-        ))}
-      </div>
-
-      {filteredOrders.length === 0 ? (
-        <div className="empty-orders">
-          <FiShoppingBag size={48} className="empty-icon" />
-          <h3>No orders found</h3>
-          <p>You don't have any {statusFilter === 'all' ? '' : statusFilter} orders yet</p>
-          <Link to="/shop" className="shop-btn">Start Shopping</Link>
-        </div>
-      ) : (
-        <div className="orders-list">
-          {filteredOrders.map(order => (
-            <Link to={`/account/orders/${order.id}`} key={order.id} className="order-card">
-              <div className="order-header">
-                <div>
-                  <h3>Order {order.id}</h3>
-                  <p className="order-date">Placed on {order.date}</p>
-                </div>
-                <span className={`status-badge ${getStatusColor(order.status)}`}>
-                  {getStatusIcon(order.status)}
-                  {order.status}
-                </span>
-              </div>
-              
-              <div className="order-details">
-                <div className="order-items">
-                  <span className="items-count">{order.items} item{order.items > 1 ? 's' : ''}</span>
-                </div>
-                <div className="order-total">
-                  <span>Total:</span>
-                  <span className="total-amount">{order.total}</span>
-                </div>
-              </div>
-              
-              <div className="order-actions">
-                <button 
-                  className="action-btn reorder"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    // Handle reorder logic here
-                  }}
-                >
-                  Reorder
+            {/* Pagination */}
+            {data?.totalPages > 1 && (
+              <div className="pagination-controls">
+                <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 0}>
+                  <FontAwesomeIcon icon={faAngleLeft} /> Prev
                 </button>
-                <button 
-                  className="action-btn details"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    history.push(`/account/orders/${order.id}`);
-                  }}
-                >
-                  View Details
+                <span>Page {currentPage + 1} of {data.totalPages}</span>
+                <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage >= data.totalPages - 1}>
+                  Next <FontAwesomeIcon icon={faAngleRight} />
                 </button>
               </div>
-            </Link>
-          ))}
-        </div>
-      )}
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
 
-export default Orders;
+export default OrdersPage;

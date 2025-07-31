@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
+import { FiLock, FiEye, FiEyeOff, FiCheckCircle } from 'react-icons/fi';
+import AccountSideBar from '../AccountSidebar/AccountSideBar';
 import './ChangePassword.css';
 
 const ChangePassword = () => {
@@ -22,7 +23,6 @@ const ChangePassword = () => {
       [name]: value
     });
     
-    // Clear error when user types
     if (errors[name]) {
       setErrors({
         ...errors,
@@ -42,6 +42,12 @@ const ChangePassword = () => {
       newErrors.newPassword = 'New password is required';
     } else if (formData.newPassword.length < 8) {
       newErrors.newPassword = 'Password must be at least 8 characters';
+    } else if (!/[A-Z]/.test(formData.newPassword)) {
+      newErrors.newPassword = 'Password must contain at least one uppercase letter';
+    } else if (!/[0-9]/.test(formData.newPassword)) {
+      newErrors.newPassword = 'Password must contain at least one number';
+    } else if (!/[^A-Za-z0-9]/.test(formData.newPassword)) {
+      newErrors.newPassword = 'Password must contain at least one special character';
     }
     
     if (formData.newPassword !== formData.confirmPassword) {
@@ -68,111 +74,141 @@ const ChangePassword = () => {
           confirmPassword: ''
         });
         
-        // Hide success message after 5 seconds
         setTimeout(() => setSuccess(false), 5000);
       }, 1500);
     }
   };
 
   return (
-    <div className="change-password-container">
-      <div className="change-password-header">
-        <h1>Change Password</h1>
-        <p>Update your account password</p>
-      </div>
+    <div className="change-password-page">
+      <AccountSideBar />
       
-      {success && (
-        <div className="success-message">
-          Your password has been updated successfully!
-        </div>
-      )}
-      
-      <form onSubmit={handleSubmit} className="password-form">
-        <div className={`form-group ${errors.currentPassword ? 'error' : ''}`}>
-          <label htmlFor="currentPassword">Current Password</label>
-          <div className="input-wrapper">
-            <FiLock className="input-icon" />
-            <input
-              type={showCurrentPassword ? "text" : "password"}
-              id="currentPassword"
-              name="currentPassword"
-              value={formData.currentPassword}
-              onChange={handleChange}
-              placeholder="Enter current password"
-            />
-            <button
-              type="button"
-              className="toggle-password"
-              onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-            >
-              {showCurrentPassword ? <FiEyeOff /> : <FiEye />}
-            </button>
+      <main className="change-password-main">
+        <div className="change-password-container">
+          <div className="change-password-header">
+            <h1 className="page-title">Change Password</h1>
+            <p className="page-subtitle">Secure your account with a new password</p>
           </div>
-          {errors.currentPassword && (
-            <p className="error-message">{errors.currentPassword}</p>
+          
+          {success && (
+            <div className="success-message">
+              <FiCheckCircle className="success-icon" />
+              <span>Your password has been updated successfully!</span>
+            </div>
           )}
+          
+          <form onSubmit={handleSubmit} className="password-form">
+            <div className={`form-group ${errors.currentPassword ? 'error' : ''}`}>
+              <label htmlFor="currentPassword">Current Password</label>
+              <div className="input-wrapper">
+                <FiLock className="input-icon" />
+                <input
+                  type={showCurrentPassword ? "text" : "password"}
+                  id="currentPassword"
+                  name="currentPassword"
+                  value={formData.currentPassword}
+                  onChange={handleChange}
+                  placeholder="Enter current password"
+                  className="password-input"
+                />
+                <button
+                  type="button"
+                  className="toggle-password"
+                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                  aria-label={showCurrentPassword ? "Hide password" : "Show password"}
+                >
+                  {showCurrentPassword ? <FiEyeOff /> : <FiEye />}
+                </button>
+              </div>
+              {errors.currentPassword && (
+                <p className="error-message">{errors.currentPassword}</p>
+              )}
+            </div>
+            
+            <div className={`form-group ${errors.newPassword ? 'error' : ''}`}>
+              <label htmlFor="newPassword">New Password</label>
+              <div className="input-wrapper">
+                <FiLock className="input-icon" />
+                <input
+                  type={showNewPassword ? "text" : "password"}
+                  id="newPassword"
+                  name="newPassword"
+                  value={formData.newPassword}
+                  onChange={handleChange}
+                  placeholder="Enter new password"
+                  className="password-input"
+                />
+                <button
+                  type="button"
+                  className="toggle-password"
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                  aria-label={showNewPassword ? "Hide password" : "Show password"}
+                >
+                  {showNewPassword ? <FiEyeOff /> : <FiEye />}
+                </button>
+              </div>
+              {errors.newPassword && (
+                <p className="error-message">{errors.newPassword}</p>
+              )}
+              <div className="password-strength">
+                <div className={`strength-indicator ${formData.newPassword.length >= 8 ? 'active' : ''}`}>
+                  Minimum 8 characters
+                </div>
+                <div className={`strength-indicator ${/[A-Z]/.test(formData.newPassword) ? 'active' : ''}`}>
+                  Uppercase letter
+                </div>
+                <div className={`strength-indicator ${/[0-9]/.test(formData.newPassword) ? 'active' : ''}`}>
+                  Number
+                </div>
+                <div className={`strength-indicator ${/[^A-Za-z0-9]/.test(formData.newPassword) ? 'active' : ''}`}>
+                  Special character
+                </div>
+              </div>
+            </div>
+            
+            <div className={`form-group ${errors.confirmPassword ? 'error' : ''}`}>
+              <label htmlFor="confirmPassword">Confirm New Password</label>
+              <div className="input-wrapper">
+                <FiLock className="input-icon" />
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  placeholder="Confirm new password"
+                  className="password-input"
+                />
+                <button
+                  type="button"
+                  className="toggle-password"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                >
+                  {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
+                </button>
+              </div>
+              {errors.confirmPassword && (
+                <p className="error-message">{errors.confirmPassword}</p>
+              )}
+            </div>
+            
+            <div className="form-footer">
+              <button
+                type="submit"
+                className="submit-btn"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <span className="loading-spinner"></span>
+                ) : (
+                  'Update Password'
+                )}
+              </button>
+            </div>
+          </form>
         </div>
-        
-        <div className={`form-group ${errors.newPassword ? 'error' : ''}`}>
-          <label htmlFor="newPassword">New Password</label>
-          <div className="input-wrapper">
-            <FiLock className="input-icon" />
-            <input
-              type={showNewPassword ? "text" : "password"}
-              id="newPassword"
-              name="newPassword"
-              value={formData.newPassword}
-              onChange={handleChange}
-              placeholder="Enter new password"
-            />
-            <button
-              type="button"
-              className="toggle-password"
-              onClick={() => setShowNewPassword(!showNewPassword)}
-            >
-              {showNewPassword ? <FiEyeOff /> : <FiEye />}
-            </button>
-          </div>
-          {errors.newPassword && (
-            <p className="error-message">{errors.newPassword}</p>
-          )}
-        </div>
-        
-        <div className={`form-group ${errors.confirmPassword ? 'error' : ''}`}>
-          <label htmlFor="confirmPassword">Confirm New Password</label>
-          <div className="input-wrapper">
-            <FiLock className="input-icon" />
-            <input
-              type={showConfirmPassword ? "text" : "password"}
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="Confirm new password"
-            />
-            <button
-              type="button"
-              className="toggle-password"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            >
-              {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
-            </button>
-          </div>
-          {errors.confirmPassword && (
-            <p className="error-message">{errors.confirmPassword}</p>
-          )}
-        </div>
-        
-        <div className="form-footer">
-          <button
-            type="submit"
-            className="submit-btn"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Updating...' : 'Update Password'}
-          </button>
-        </div>
-      </form>
+      </main>
     </div>
   );
 };

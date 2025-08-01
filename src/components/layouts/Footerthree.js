@@ -71,12 +71,12 @@ class Footertwo extends Component {
                     </ul>
 
                     {/* ✅ PAYMENT ICONS BELOW LINKS */}
-                    <div className="payment-icons mt-4">
+                    {/* <div className="payment-icons mt-4">
                       <i className="fab fa-cc-visa"></i>
                       <i className="fab fa-cc-mastercard"></i>
                       <i className="fab fa-cc-paypal"></i>
                       <i className="fab fa-cc-apple-pay"></i>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
 

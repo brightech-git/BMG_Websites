@@ -21,7 +21,7 @@
 }
 
 .site-info-widget p {
-  color: #cccccc;
+  color: #000000;
   font-size: 15px;
 }
 
@@ -103,7 +103,7 @@
 }
 .contact-box .desc span,
 .contact-box .desc a {
-  color: #cccccc;
+  color: #000000;
   font-size: 15px;
   text-decoration: none;
   display: block;

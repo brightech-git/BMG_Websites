@@ -571,6 +571,7 @@ header.header-three .header-top a {
 header.header-three .header-top ul.header-top-info li {
     display: inline-block;
     margin-left: 15px;
+    cursor: pointer;
 }
 
 header.header-three .header-top ul.header-top-info li i {

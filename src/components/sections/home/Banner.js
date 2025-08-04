@@ -3,6 +3,7 @@ import Slider from 'react-slick';
 import './Banner.css';
 import { useBanners } from '../../../hook/banner/useBannerQueries';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { Button } from 'react-bootstrap';
 
 const Banner = () => {
     const { data: bannerResponse = {}, isLoading } = useBanners();
@@ -19,7 +20,7 @@ const Banner = () => {
         autoplaySpeed: 4000,
         slidesToShow: 1,
         slidesToScroll: 1,
-        adaptiveHeight: true
+        adaptiveHeight: false
     };
 
     const handleExploreNow = (itemName, gender) => {
@@ -30,7 +31,11 @@ const Banner = () => {
         history.push(`/shop-left?${fixedQuery}`);
     };
 
-    if (isLoading) return <div className="banner-loading">Loading banners...</div>;
+    if (isLoading) return (
+        <div className="banner-skeleton-container">
+            <div className="banner-skeleton-placeholder"></div>
+        </div>
+    );
 
     return (
         <section className="banner-area">
@@ -51,12 +56,13 @@ const Banner = () => {
                                 <h1 className="banner-title">{img.title}</h1>
                                 <p className="banner-description">{img.subtitle || 'Discover our latest collection.'}</p>
                                 {(img.itemname || img.gender) && (
-                                    <button
+                                    <Button
+                                        
                                         className="banner-button"
                                         onClick={() => handleExploreNow(img.itemname, img.gender)}
                                     >
-                                        Explore Now
-                                    </button>
+                                        Explore Now 
+                                    </Button>
                                 )}
                             </div>
                         </div>

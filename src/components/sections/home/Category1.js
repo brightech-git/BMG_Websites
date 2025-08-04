@@ -27,10 +27,16 @@ const CategoryCard = ({ item }) => {
         );
     }
 
-    const imgSrc = item?.image_path ? `${baseUrl}${item.image_path}` : '/fallback-image.jpg';
+    const imgSrc = item?.image_path
+  ? item.image_path.startsWith('http')
+    ? item.image_path
+    : `${baseUrl}${item.image_path.startsWith('/') ? '' : '/'}${item.image_path}`
+  : '/fallback-image.jpg';
+
+    console.log(imgSrc,'images')
 
     return (
-        <div className="offer-card">
+        <div className="offer-card" onClick={() => handleShopNow(item.item_name, item.sub_item_name)} >
             <img
                 src={imgSrc}
                 alt={`${item.item_name} ${item.sub_item_name}`}
@@ -60,7 +66,9 @@ const CategoryCard = ({ item }) => {
 
 const Category1 = () => {
     const { data, isLoading, error } = useOfferBanners();
+    
     const banners = data?.data || [];
+    console.log(banners, 'banner');
 
     if (isLoading) {
         return (
@@ -84,7 +92,7 @@ const Category1 = () => {
 
     return (
         <div className="offer-container">
-            <div className="offer-grid">
+            <div className="offer-grid" >
                 {banners.map((item, i) => (
                     <CategoryCard key={item.id || i} item={item} />
                 ))}

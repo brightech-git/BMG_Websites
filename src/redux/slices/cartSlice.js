@@ -46,13 +46,13 @@ export const deleteCartAsync = createAsyncThunk("cart/deleteCart", async (id, th
         return thunkAPI.rejectWithValue(err.response?.data || err.message);
     }
 });
-
 const cartSlice = createSlice({
     name: "cart",
     initialState: {
-        cartItems: [],
+        cartItems: [],  // This will store the actual cart items
         loading: false,
         error: null,
+        actionStatus: null,
     },
     reducers: {
         resetCartState: (state) => {
@@ -69,12 +69,30 @@ const cartSlice = createSlice({
             })
             .addCase(fetchCartAsync.fulfilled, (state, action) => {
                 state.loading = false;
-                state.cartItems = action.payload?.data || [];
+                // Assuming the API returns data in action.payload.data
+                state.cartItems = Array.isArray(action.payload?.data)
+                    ? action.payload.data
+                    : [];
             })
             .addCase(fetchCartAsync.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload || "Failed to fetch cart";
-            });
+            })
+                        .addCase(addToCartAsync.pending, (state) => {
+                state.actionStatus = "adding";
+            })
+            .addCase(updateCartAsync.pending, (state) => {
+                state.actionStatus = "updating";
+            })
+            .addCase(deleteCartAsync.pending, (state) => {
+                state.actionStatus = "deleting";
+            })
+            .addMatcher(
+                (action) => action.type.endsWith("/fulfilled") || action.type.endsWith("/rejected"),
+                (state) => {
+                    state.actionStatus = null; // reset
+                }
+            );
     },
 });
 

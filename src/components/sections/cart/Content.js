@@ -5,20 +5,38 @@ import { useSingleProductQuery } from '../../../hook/product/useSingleProductQue
 import fallbackImage from '../../../assets/img/shop/image-4 (2).jpg';
 import "./Cart.css";
 
-// CartItem component
+// CartItem component with enhanced pricing and skeleton loading
 const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
     const [imageError, setImageError] = useState(false);
     const { data: product, isLoading: productLoading, error: productError } = useSingleProductQuery(item.itemTagSno);
 
+    // Calculate pricing with discount (15% markup for strikethrough effect)
+    const calculatePricing = useCallback((currentPrice) => {
+        const price = Number(currentPrice) || 0;
+        const originalPrice = price * 1.15; // Add 15% for original price
+        const discount = Math.round(((originalPrice - price) / originalPrice) * 100);
+
+        return {
+            current: price,
+            original: originalPrice,
+            discount: discount
+        };
+    }, []);
+
     useEffect(() => {
         if (productError) {
             console.error(`Failed to load product for ${item.itemTagSno}:`, productError);
+            const pricing = calculatePricing(item.amount || 0);
             onProductData(item.sno, {
                 itemId: item.itemId || null,
                 tagNo: item.tagNo || null,
                 productName: item.itemTagSno || 'Unknown Product',
-                price: item.amount || 0,
+                price: pricing.current,
+                originalPrice: pricing.original,
+                discount: pricing.discount,
                 imagePath: fallbackImage,
+                weight: item.netWt || null,
+                purity: item.purity || null,
             });
         } else if (product) {
             let imageUrls = [];
@@ -27,15 +45,22 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
             } catch (err) {
                 console.error("Error parsing ImagePath for item", item.itemTagSno, err);
             }
+
+            const pricing = calculatePricing(product.GrandTotal || item.amount || 0);
+
             onProductData(item.sno, {
                 itemId: product.ITEMID || item.itemId || null,
                 tagNo: product.TAGNO || item.tagNo || null,
-                productName: [product.ITEMNAME, product.SUBITEMNAME].filter(Boolean).join('- ') || item.itemTagSno || 'Unknown Product',
-                price: product.GrandTotal || item.amount || 0,
+                productName: [product.ITEMNAME, product.SUBITEMNAME].filter(Boolean).join(' - ') || item.itemTagSno || 'Unknown Product',
+                price: pricing.current,
+                originalPrice: pricing.original,
+                discount: pricing.discount,
                 imagePath: imageUrls.length > 0 ? `https://app.bmgjewellers.com${imageUrls[0]}` : fallbackImage,
+                weight: product.NETWT || item.netWt || null,
+                purity: product.PURITY || item.purity || null,
             });
         }
-    }, [product, productError, item.sno, item.itemId, item.tagNo, item.itemTagSno, item.amount, onProductData]);
+    }, [product, productError, item, onProductData, calculatePricing]);
 
     let imageUrls = [];
     try {
@@ -45,6 +70,8 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
     }
     const baseUrl = "https://app.bmgjewellers.com";
     const firstImage = imageUrls.length > 0 ? baseUrl + imageUrls[0] : fallbackImage;
+
+    const pricing = calculatePricing(product?.GrandTotal || item.amount || 0);
 
     return (
         <div className="cart-item">
@@ -57,7 +84,7 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
             />
             <div className="cart-item-image-container">
                 {productLoading ? (
-                    <div className="cart-item-image-loading"></div>
+                    <div className="cart-item-image-loading skeleton"></div>
                 ) : (
                     <img
                         src={imageError ? fallbackImage : firstImage}
@@ -71,8 +98,8 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
             <div className="cart-item-details">
                 {productLoading ? (
                     <>
-                        <div className="cart-item-title-loading"></div>
-                        <div className="cart-item-sku-loading"></div>
+                        <div className="cart-item-title-loading skeleton"></div>
+                        <div className="cart-item-sku-loading skeleton"></div>
                     </>
                 ) : (
                     <>
@@ -86,27 +113,35 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
                         </div>
                     </>
                 )}
+
                 <div className="cart-item-price">
-                    ₹{Number(product?.GrandTotal || item.amount || 0).toFixed(2)}
-                </div>
-                <div className="cart-item-specs">
-                    {item.netWt && (
-                        <div className="cart-item-spec">
-                            <span className="spec-label">Weight:</span>
-                            <span className="spec-value">{product?.NETWT || item.netWt}g</span>
-                        </div>
+                    {!productLoading && (
+                        <>
+                            {/* <div className="price-original">₹{pricing.original.toFixed(2)}</div> */}
+                            <div className="price-current"><span className='price-label'>Price</span> : ₹{pricing.current.toFixed(2)}</div>
+                            {/* {pricing.discount > 0 && (
+                                <div className="price-discount">{pricing.discount}% OFF</div>
+                            )} */}
+                        </>
                     )}
-                    {item.purity && (
-                        <div className="cart-item-spec">
-                            <span className="spec-label">Purity:</span>
-                            <span className="spec-value">{product?.PURITY || item.purity}</span>
-                        </div>
-                    )}
-                    {/* <div className="cart-item-spec">
-                        <span className="spec-label">Quantity:</span>
-                        <span className="spec-value">{item.quantity}</span>
-                    </div> */}
                 </div>
+
+                {!productLoading && (
+                    <div className="cart-item-specs">
+                        {(product?.NETWT || item.netWt) && (
+                            <div className="cart-item-spec">
+                                <span className="spec-label">Weight:</span>
+                                <span className="spec-value">{product?.NETWT || item.netWt}g</span>
+                            </div>
+                        )}
+                        {(product?.PURITY || item.purity) && (
+                            <div className="cart-item-spec">
+                                <span className="spec-label">Purity:</span>
+                                <span className="spec-value">{product?.PURITY || item.purity}</span>
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
             <button
                 className="cart-item-remove"
@@ -115,7 +150,7 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
                 aria-label="Remove item"
                 disabled={productLoading}
             >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
@@ -123,7 +158,7 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
     );
 };
 
-// Cart component
+// Enhanced Cart component
 const Cart = ({ history }) => {
     const { cartItems, isLoading, error, deleteCart } = useCart();
     const [selectedItems, setSelectedItems] = useState([]);
@@ -182,22 +217,45 @@ const Cart = ({ history }) => {
         return Array.isArray(cartItems.data) ? cartItems.data : Object.values(cartItems.data);
     }, [cartItems]);
 
-    const { subtotal, shipping, total, isDataComplete } = useMemo(() => {
-        const defaultTotals = { subtotal: 0, shipping: 0, total: 0, isDataComplete: false };
+    const { subtotal, originalSubtotal, totalSavings, shipping, total, isDataComplete } = useMemo(() => {
+        const defaultTotals = {
+            subtotal: 0,
+            originalSubtotal: 0,
+            totalSavings: 0,
+            shipping: 0,
+            total: 0,
+            isDataComplete: false
+        };
         if (items.length === 0) return defaultTotals;
 
-        const subtotal = items
-            .filter((item) => selectedItems.includes(item.sno))
-            .reduce((sum, item) => {
-                const product = productDataMap[item.sno];
-                const price = product?.price || item.amount || 0;
-                return sum + Number(price);
-            }, 0);
+        const selectedItemsData = items.filter((item) => selectedItems.includes(item.sno));
 
+        const subtotal = selectedItemsData.reduce((sum, item) => {
+            const product = productDataMap[item.sno];
+            const price = product?.price || item.amount || 0;
+            return sum + Number(price);
+        }, 0);
+
+        const originalSubtotal = selectedItemsData.reduce((sum, item) => {
+            const product = productDataMap[item.sno];
+            const originalPrice = product?.originalPrice || (product?.price || item.amount || 0) * 1.15;
+            return sum + Number(originalPrice);
+        }, 0);
+
+        const totalSavings = originalSubtotal - subtotal;
         const isDataComplete = selectedItems.every((sno) => !!productDataMap[sno]);
 
-        return { subtotal, shipping: 0, total: subtotal, isDataComplete };
+        return {
+            subtotal,
+            originalSubtotal,
+            totalSavings,
+            shipping: 0,
+            total: subtotal,
+            isDataComplete
+        };
     }, [items, selectedItems, productDataMap]);
+
+
 
     const handleOnCheckout = useCallback(() => {
         if (selectedItems.length === 0) {
@@ -208,6 +266,7 @@ const Cart = ({ history }) => {
             alert('Please wait until all product data is loaded before proceeding to checkout.');
             return;
         }
+
         const selectedCartItems = items
             .filter((item) => selectedItems.includes(item.sno))
             .map((item) => ({
@@ -217,119 +276,190 @@ const Cart = ({ history }) => {
                 productName: productDataMap[item.sno]?.productName || item.itemTagSno || 'Unknown Product',
                 quantity: item.quantity,
                 price: productDataMap[item.sno]?.price || item.amount || 0,
+                originalPrice: productDataMap[item.sno]?.originalPrice || 0,
                 imagePath: productDataMap[item.sno]?.imagePath || fallbackImage,
+                weight: productDataMap[item.sno]?.weight || null,
+                purity: productDataMap[item.sno]?.purity || null,
             }));
+
         const checkoutPayload = {
             items: selectedCartItems,
             totalAmount: total,
+            originalAmount: originalSubtotal,
+            totalSavings: totalSavings,
         };
-        console.log('Navigating with payload:', checkoutPayload); // Debug
+
+        console.log('Navigating with payload:', checkoutPayload);
         history.push('/checkout', checkoutPayload);
-    }, [selectedItems, isDataComplete, items, productDataMap, total, history]);
+    }, [selectedItems, isDataComplete, items, productDataMap, total, originalSubtotal, totalSavings, history]);
 
     if (isLoading && !cartItems) {
         return (
-            <div className="cart-loading">
-                <div className="loading-spinner"></div>
-                <p>Loading your cart...</p>
+            <div className="container-fluid">
+                <div className="row justify-content-center">
+                    <div className="col-12">
+                        <div className="cart-loading">
+                            <div className="loading-spinner"></div>
+                            <p>Loading your cart...</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="cart-error">
-                <div className="error-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+            <div className="container-fluid">
+                <div className="row justify-content-center">
+                    <div className="col-12 col-md-8 col-lg-6">
+                        <div className="cart-error">
+                            <div className="error-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <h3>Failed to load cart</h3>
+                            <p>Please try again later</p>
+                            <Link to="/" className="btn-primary">
+                                Return Home
+                            </Link>
+                        </div>
+                    </div>
                 </div>
-                <h3>Failed to load cart</h3>
-                <p>Please try again later</p>
-                <Link to="/" className="btn-primary">
-                    Return Home
-                </Link>
             </div>
         );
     }
 
     return (
-        <main className="cart-container">
-            <div className="cart-header">
-                <h1>Your Shopping Cart</h1>
-                <div className="cart-item-count">{items.length} {items.length === 1 ? 'Item' : 'Items'}</div>
-            </div>
-            {items.length === 0 ? (
-                <div className="empty-cart">
-                    <div className="empty-cart-icon">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
+        <div className="container-fluid">
+            <main className="cart-container">
+                <div className="cart-header">
+                    <h1>Your Shopping Cart</h1>
+                    <div className="cart-item-count">
+                        {items.length} {items.length === 1 ? 'Item' : 'Items'}
                     </div>
-                    <h2>Your cart is empty</h2>
-                    {/* <p>Looks like you haven't added anything to your cart yet</p> */}
-                    <Link to="/shop-left" className="btn-primary">
-                        Continue Shopping
-                    </Link>
                 </div>
-            ) : (
-                <div className="cart-content">
-                    <div className="cart-items-section">
-                        {items.map((item) => (
-                            <CartItem
-                                key={item.sno}
-                                item={item}
-                                onRemove={handleRemoveItem}
-                                onSelect={handleSelectItem}
-                                isSelected={selectedItems.includes(item.sno)}
-                                onProductData={handleProductData}
-                            />
-                        ))}
-                    </div>
-                    <div className="cart-summary-section">
-                        <div className="summary-card">
-                            <h3 className="summary-title">Order Summary</h3>
-                            {isDataComplete ? (
-                                <>
-                                    <div className="summary-row">
-                                        <span>Subtotal ({selectedItems.length} {selectedItems.length === 1 ? 'Item' : 'Items'})</span>
-                                        <span>₹{subtotal.toLocaleString('en-IN')}</span>
-                                    </div>
-                                    <div className="summary-row">
-                                        <span>Shipping</span>
-                                        <span className="free-shipping">Free</span>
-                                    </div>
-                                    <div className="summary-divider"></div>
-                                    <div className="summary-row total-row">
-                                        <span>Total</span>
-                                        <span className="total-amount">₹{total.toLocaleString('en-IN')}</span>
-                                    </div>
-                                </>
-                            ) : (
-                                <div className="summary-loading">
-                                    <p>Loading order summary...</p>
-                                </div>
-                            )}
-                            <button
-                                className="main-btn btn-filled"
-                                onClick={handleOnCheckout}
-                                disabled={!isDataComplete || isRemoving}
-                            >
-                                {isRemoving ? 'Removing...' : 'Proceed to Checkout'}
-                            </button>
-                            <div className="payment-methods">
-                                <p>Secure Payment Options:</p>
-                                <div className="payment-icons">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        {/* Credit card icons would go here */}
+
+                {items.length === 0 ? (
+                    <div className="row justify-content-center">
+                        <div className="col-12 col-md-8 col-lg-6">
+                            <div className="empty-cart">
+                                <div className="empty-cart-icon">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                                     </svg>
+                                </div>
+                                <h2>Your cart is empty</h2>
+                                <p>Discover our amazing jewelry collection</p>
+                                <Link to="/shop-left" className="btn-primary">
+                                    Continue Shopping
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="cart-content">
+                        <div className="cart-items-section">
+                            {/* Select All Controls */}
+                            <div className="d-flex align-items-center justify-center ">
+                                
+                                <span className="text-muted" style={{ fontSize: '0.75rem' }}>
+                                    {selectedItems.length} out of {items.length} selected
+                                </span>
+                            </div>
+
+                            {/* Cart Items */}
+                            {items.map((item) => (
+                                <CartItem
+                                    key={item.sno}
+                                    item={item}
+                                    onRemove={handleRemoveItem}
+                                    onSelect={handleSelectItem}
+                                    isSelected={selectedItems.includes(item.sno)}
+                                    onProductData={handleProductData}
+                                />
+                            ))}
+                        </div>
+
+                        <div className="cart-summary-section">
+                            <div className="summary-card">
+                                <h3 className="summary-title">Order Summary</h3>
+                                {isDataComplete ? (
+                                    <>
+                                        <div className="summary-row">
+                                            <span>Items ({selectedItems.length})</span>
+                                            {/* <span>₹{originalSubtotal.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span> */}
+                                        </div>
+                                        {/* {totalSavings > 0 && (
+                                            <div className="summary-row">
+                                                <span>Savings</span>
+                                                <span style={{ color: 'var(--success-color)', fontWeight: '600' }}>
+                                                    -₹{totalSavings.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                                </span>
+                                            </div>
+                                        )} */}
+                                        <div className="summary-row">
+                                            <span>Subtotal</span>
+                                            <span>₹{subtotal.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
+                                        </div>
+                                        <div className="summary-row">
+                                            <span>Shipping</span>
+                                            <span className="free-shipping">Free</span>
+                                        </div>
+                                        <div className="summary-divider"></div>
+                                        <div className="summary-row total-row">
+                                            <span>Total</span>
+                                            <span className="total-amount">
+                                                ₹{total.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                            </span>
+                                        </div>
+                                        {/* {totalSavings > 0 && (
+                                            <div className="text-center mt-2">
+                                                <small style={{
+                                                    color: 'var(--success-color)',
+                                                    fontSize: '0.75rem',
+                                                    fontWeight: '600',
+                                                    background: 'rgba(40, 167, 69, 0.1)',
+                                                    padding: '0.25rem 0.5rem',
+                                                    borderRadius: '4px'
+                                                }}>
+                                                    You're saving ₹{totalSavings.toLocaleString('en-IN', { maximumFractionDigits: 0 })}!
+                                                </small>
+                                            </div>
+                                        )} */}
+                                    </>
+                                ) : (
+                                    <div className="summary-loading">
+                                        <div className="skeleton" style={{ height: '20px', marginBottom: '10px' }}></div>
+                                        <div className="skeleton" style={{ height: '20px', marginBottom: '10px' }}></div>
+                                        <div className="skeleton" style={{ height: '20px', marginBottom: '10px' }}></div>
+                                        <p>Loading order summary...</p>
+                                    </div>
+                                )}
+
+                                <button
+                                    className="main-btn btn-filled w-100 mt-3"
+                                    onClick={handleOnCheckout}
+                                    disabled={!isDataComplete || isRemoving || selectedItems.length === 0}
+                                >
+                                    {isRemoving ? 'Removing...' :
+                                        selectedItems.length === 0 ? 'Select Items to Checkout' :
+                                            'Proceed to Checkout'}
+                                </button>
+
+                                <div className="payment-methods">
+                                    <p>Secure Payment Options:</p>
+                                    <div className="payment-icons">
+                                        <small className="text-muted">💳 Credit Card | 💰 UPI | 🏦 Net Banking</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            )}
-        </main>
+                )}
+            </main>
+        </div>
     );
 };
 

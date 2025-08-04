@@ -4,6 +4,7 @@ import { useCategories, useItemFilter } from '../../../hook/category/useCategory
 import ProductCard from '../productCard/ProductCard';
 import './OurCategory.css';
 import { useSwipeable } from 'react-swipeable';
+import { Container, Row, Col } from 'react-bootstrap';
 
 const OurCategory = () => {
     const { data: categories = [], isLoading: isCategoriesLoading } = useCategories();
@@ -131,7 +132,10 @@ const OurCategory = () => {
             <div className="cat-container">
                 <div className="shop-category-header">
                     
-                    <h2 className="shop-category-title">Shop By Category</h2>
+                    <h2 className="shop-category-title">
+                        <span className="gradient-text">Shop By</span> <span className="normal-text">Category</span>
+                    </h2>
+
                 </div>
 
                 {activeCategories.length > 0 ? (

@@ -14,6 +14,15 @@ const CategoryCard = ({ item }) => {
         history.push(`/shop-left?${queryParams.toString()}`);
     };
 
+    const capitalizeWords = (str) => {
+        if (!str) return '';
+        return str
+            .toLowerCase()
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+    };
+
     if (!item) {
         return (
             <div className="category-card shimmer">
@@ -37,13 +46,17 @@ const CategoryCard = ({ item }) => {
                 }}
             />
             <div className="category-content">
-                <span className="category-tag">{item.occasion}</span>
+                <span className="category-tag">
+                    {capitalizeWords(item.occasion)}
+                </span>
                 <button
                     className="category-btn"
                     onClick={() => handleShopNow(item.occasion, item.gender)}
                     aria-label={`Shop ${item.occasion} collection`}
                 >
-                    {item.action || 'Shop Now'}
+                    <span className="btn-icon">✨</span>
+                    <span className="btn-text">{item.action || 'Shop Now'}</span>
+                    <span className="btn-arrow">→</span>
                 </button>
             </div>
         </div>

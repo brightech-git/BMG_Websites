@@ -1,3 +1,4 @@
+// src/components/layouts/Header.js
 import React, { useState, useEffect, Fragment } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import classNames from 'classnames';
@@ -5,21 +6,24 @@ import { ChevronDown, ShoppingCart, Menu, User, Heart } from 'lucide-react';
 import '../../assets/css/header.css';
 import Canvas from './Canvas';
 import Mobilemenu from './Mobilemenu';
-import Logo from '../../assets/img/banner/logo.png';
+import Logo from './logo.png';
 import ItemSearch from './Search';
-import useScreenWidth from './useScreenWidth'; // adjust path as needed
+import useScreenWidth from './useScreenWidth';
 import { useDispatch } from 'react-redux';
-import { logout } from '../../redux/slices/userSlice'; // adjust path if needed
+import { logout } from '../../redux/slices/userSlice';
+
 
 const Header = ({ isAuthenticated }) => {
-    const width = useScreenWidth();
+  const width = useScreenWidth();
   const history = useHistory();
   const [isTop, setIsTop] = useState(false);
   const [classmethod, setClassmethod] = useState(false);
   const [togglemethod, setTogglemethod] = useState(false);
   const [togglecart, setTogglecart] = useState(false);
-  const [activeTab, setActiveTab] = useState(0); // Track active mega menu tab
+  const [activeTab, setActiveTab] = useState(0);
   const dispatch = useDispatch();
+
+
   const addClass = () => setClassmethod(true);
   const removeClass = () => setClassmethod(false);
   const toggleClass = () => setTogglemethod((prev) => !prev);
@@ -86,9 +90,11 @@ const Header = ({ isAuthenticated }) => {
             }
         ]
     };
-  const handleLogout=()=>{
-   dispatch(logout());
-  }
+  const handleLogout = () => {
+    dispatch(logout());
+    history.push('/login');
+  };
+
   const handleClick = (keyName, keyValue) => {
     const queryParams = new URLSearchParams();
     queryParams.append(keyName, keyValue);
@@ -113,9 +119,7 @@ const Header = ({ isAuthenticated }) => {
               <ul className="header-top-info">
                 <li>Today's Deal</li>
                 <li>Great Deal</li>
-                <li onClick={handleLogout}>Gift Vouchers</li>
-                
-                <li>{localStorage.getItem('userMobileNumber')}</li>
+                {isAuthenticated ? (<li onClick={handleLogout}> LogOut</li>):( <li onClick={()=>history.push('/login')}>LogIn</li>)} 
               </ul>
             </div>
           </div>
@@ -123,16 +127,13 @@ const Header = ({ isAuthenticated }) => {
         <div className="main-menu-area sticky-header">
           <div className="container-fluid p-0">
             <div className="nav-container d-flex align-items-center justify-content-between">
-              {/* Main Menu */}
               <div className="nav-menu d-lg-flex align-items-center justify-content-between">
-                {/* Navbar Close Icon */}
                 <div className="navbar-close">
                   <div className="cross-wrap">
                     <span className="top" />
                     <span className="bottom" />
                   </div>
                 </div>
-                {/* Menu Items */}
                 <div className="sigma-header-nav">
                   <div className="container">
                     <div className="sigma-header-nav-inner">
@@ -174,7 +175,10 @@ const Header = ({ isAuthenticated }) => {
                                           <div className="row">
                                             {section.items.map((item, idx) => (
                                               <div className="col-md-3" key={idx}>
-                                                <div className="menu-card" onClick={() => handleClick(item.keyName, item.keyValue)}>
+                                                <div
+                                                  className="menu-card"
+                                                  onClick={() => handleClick(item.keyName, item.keyValue)}
+                                                >
                                                   {item.image && (
                                                     <img
                                                       src={item.image}
@@ -223,56 +227,45 @@ const Header = ({ isAuthenticated }) => {
                     </div>
                   </div>
                 </div>
-                {/* Site Logo */}
                 <div className="site-logo site-logo-text">
                   <Link to="/">
                     <img
                       src={Logo}
                       alt="Diamond Icon"
                       style={{
-                        width: '50px',
+                        width: '100px',
                         height: 'auto',
                         marginRight: '10px',
                       }}
                     />
-                    <div className="site-logo-text">
-                      <h3>Bmg Jewellers</h3>
-                      <h6>Private Limited</h6>
-                    </div>
-                                     
-                                     
+                    
                   </Link>
                 </div>
-                              <div style={{marginLeft:'20px'}} className='headersearch'>  <ItemSearch /></div>         
+                <div style={{ marginLeft: '20px' }} className="headersearch">
+                  <ItemSearch />
+                </div>
               </div>
-                            
-              {/* Navbar Right Content */}
               <div className="menu-right-buttons">
-                            
-                                
-                             
                 <div className="login-btn">
-                                  
-                  {isAuthenticated ? (
+                  
                     <Link to="/account">
                       <User size={20} strokeWidth={1.8} />
                     </Link>
-                  ) : (
-                    <Link to="/login" id="loginBtn">
-                      <User size={20} strokeWidth={1.8} />
-                    </Link>
-                  )}
-                </div>
-                <div className="login-btn">
-                  <Link to="/wishlist" id="loginBtn">
-                    <Heart size={20} strokeWidth={1.8} />
-                  </Link>
-                </div>
-                <div className="login-btn">
-                  <Link to="/cart" id="loginBtn">
-                    <ShoppingCart size={20} strokeWidth={1.8} />
-                  </Link>
                  
+                </div>
+                <div className="login-btn">
+               
+                    <Link to="/wishlist">
+                      <Heart size={20} strokeWidth={1.8} />
+                    </Link>
+                  
+                </div>
+                <div className="login-btn">
+                 
+                    <Link to="/cart">
+                      <ShoppingCart size={20} strokeWidth={1.8} />
+                    </Link>
+                
                 </div>
                 <div className="navbar-toggler" onClick={toggleClass}>
                   <span />
@@ -283,7 +276,6 @@ const Header = ({ isAuthenticated }) => {
             </div>
           </div>
         </div>
-        {/* Mobile Header Start */}
         <div className="sigma-mobile-header">
           <div className="sigma-mobile-header-inner">
             <div className="site-logo site-logo-text">
@@ -292,50 +284,43 @@ const Header = ({ isAuthenticated }) => {
                   src={Logo}
                   alt="Diamond Icon"
                   style={{
-                    width: '50px',
+                    width: '100px',
                     height: 'auto',
                     marginRight: '10px',
                   }}
                 />
-                <div className="site-logo-text">
-                  <h3>Bmg Jewellers</h3>
-                  <h6>Pvt Ltd</h6>
-                </div>
+                
               </Link>
-                      </div>
-                      <div className='search-container'>
-                          {width >= 768 && (
-                              <div className="search-item" style={{marginLeft:'-300px' , marginRight:'20px'}}>
-                                  <ItemSearch />
-                              </div>
-                          )}
-                      </div>
-                    
-                      <div className="login-btns">
-
-                          {isAuthenticated ? (
-                              <Link to="/profile">
-                                  <User size={16} strokeWidth={1.8} />
-                              </Link>
-                          ) : (
-                              <Link to="/login" id="loginBtn">
-                                  <User size={16} strokeWidth={1.8} />
-                              </Link>
-                          )}
-                      </div>
-                      <div className="login-btns">
-                          <Link to="/wishlist" id="loginBtn">
-                              <Heart size={16} strokeWidth={1.8} />
-                          </Link>
-                      </div>
-                      <div className="login-btns">
-                          <Link to="/cart" id="loginBtn">
-                              <ShoppingCart size={16} strokeWidth={1.8} />
-                          </Link>
-
-                      </div>
+            </div>
+            <div className="search-container">
+              {width >= 768 && (
+                <div className="search-item" style={{ marginLeft: '-300px', marginRight: '20px' }}>
+                  <ItemSearch />
+                </div>
+              )}
+            </div>
+            <div className="login-btns">
+             
+                <Link to="/account">
+                  <User size={16} strokeWidth={1.8} />
+                </Link>
+           
+            </div>
+            <div className="login-btns">
+             
+                <Link to="/wishlist">
+                  <Heart size={16} strokeWidth={1.8} />
+                </Link>
+             
+            </div>
+            <div className="login-btns">
+              
+                <Link to="/cart">
+                  <ShoppingCart size={16} strokeWidth={1.8} />
+                </Link>
+             
+            </div>
             <div className="sigma-hamburger-menu" onClick={toggleClass}>
-                 
               <Menu
                 size={20}
                 strokeWidth={1.8}
@@ -343,20 +328,18 @@ const Header = ({ isAuthenticated }) => {
               />
             </div>
           </div>
-              </div>
-              {width < 768 && (<div style={{ background: '#f5f6f0', justifyContent: 'center', alignItems: 'center', padding: '10px' }} className='search-items'>
-                  <ItemSearch />
-             </div>
-             )}
-               
-              
-            
-        {/* Mobile Header End */}
-        {/* Mobile Menu Start */}
+        </div>
+        {width < 768 && (
+          <div
+            style={{ background: '#f6f5f0', justifyContent: 'center', alignItems: 'center', padding: '10px' }}
+            className="search-items"
+          >
+            <ItemSearch />
+          </div>
+        )}
         <aside className={classNames('sigma-mobile-menu', { active: togglemethod })}>
           <Mobilemenu />
         </aside>
-        {/* Mobile Menu End */}
       </header>
       <div className={classNames('offcanvas-wrapper', { 'show-offcanvas': classmethod })}>
         <div className={classNames('offcanvas-overly', { 'show-overly': classmethod })} onClick={removeClass} />

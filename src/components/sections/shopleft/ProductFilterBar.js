@@ -561,7 +561,7 @@ const ModernFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false 
                 {`
             .modern-filter-container {
                 font-family: 'Montserrat', sans-serif;
-                background: #f5f6f0;
+                background: #f6f5f0;
                 padding: 16px;
               
             }
@@ -572,10 +572,12 @@ const ModernFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false 
                 justify-content: space-between;
                 align-items: center;
                 margin-bottom: 12px;
+                background-color:#f6f5f0;
+                box-shadow:none ;
             }
 
             .mobile-menu-toggle {
-                background: #ffffff;
+                background: #f6f5f0;
                 border: 1px solid #cd865c;
                 color: #cd865c;
                 padding: 6px 12px;
@@ -883,7 +885,7 @@ const ModernFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false 
 
             /* Filter Modal */
             .filter-modal {
-                background: #ffffff;
+                background: #f6f5f0;
                 border-radius: 8px;
                 box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
                 min-width: 240px;
@@ -1035,6 +1037,9 @@ const ModernFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false 
             @media (max-width: 768px) {
                 .mobile-header {
                     display: flex;
+                    background-color:#f6f5f0;
+                    box-shadow:none ;
+                    
                 }
 
                 .desktop-filter-row {

@@ -10,7 +10,8 @@ import "./Checkout.css";
 const Checkout = ({ location, history }) => {
   const { state: checkoutPayload } = location || {};
   const { items: cartItems, totalAmount } = checkoutPayload || { items: [], totalAmount: 0 };
-  console.log(cartItems,'catss')
+  console.log(cartItems,'catss',totalAmount);
+  localStorage.setItem('cartitems', cartItems.imagePath);
   const { data: profile, isLoading: profileLoading } = useCurrentProfile();
   const { data: addresses, refetch: refetchAddresses, isLoading: addressesLoading } = useAddressesByCustomer(profile?.id);
   const { mutate: createAddress, isLoading: creatingAddress } = useCreateAddress();
@@ -302,23 +303,25 @@ const Checkout = ({ location, history }) => {
 };
 
 function OrderSummaryContent({ items, subtotal, total }) {
+  console.log('items',items)
   return (
     <aside className="checkout-summary-panel">
       {items.map((item, index) => (
         <div key={index} className="summary-product-row">
           <div className="summary-product-thumb-wrap">
             <img
-              src={item.imagePath || item.image_path}
+              src={item.imagePath}
               alt={item.productName || item.name}
               className="summary-product-thumb"
+             
             />
+
           </div>
           <div className="summary-product-details">
             <div className="summary-product-title">{item.productName || item.name}</div>
-            <div className="summary-product-desc">{`Qty: ${item.quantity}`}</div>
           </div>
           <div className="summary-product-price">
-            ₹{(item.price * item.quantity).toFixed(2)}
+            ₹{item.price.toFixed(2) }
           </div>
         </div>
       ))}

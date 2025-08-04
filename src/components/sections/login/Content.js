@@ -40,11 +40,33 @@ const Content = () => {
                 const lastVisited = localStorage.getItem('lastVisited');
                 history.push(lastVisited || '/');
             }
+            if (resultAction?.token) {
+                // Clear form and errors
+                setContactOrEmailOrUsername('');
+                setPassword('');
+                setLocalError(null);
+
+                // Redirect
+                const lastVisited = localStorage.getItem('lastVisited');
+                history.push(lastVisited || '/');
+            }
           
         } catch (err) {
             setLocalError(err || 'Login failed');
         }
     };
+    useEffect(() => {
+        if (localError) {
+            const timer = setTimeout(() => setLocalError(null), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [localError]);
+
+    useEffect(() => {
+        if (contactOrEmailOrUsername || password) {
+            setLocalError(null); // reset error when user types again
+        }
+    }, [contactOrEmailOrUsername, password]);
 
     // Clear local error if Redux error appears
     useEffect(() => {

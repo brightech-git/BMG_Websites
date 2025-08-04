@@ -1218,7 +1218,8 @@ header.header-absolute {
     width: 100%;
     z-index: 99;
     background-color: #f6f5f0;
-    top: 0px;
+    padding: 10px !important;
+    top: 0px ;
 }
 
 @media only screen and (min-width: 1200px) and (max-width: 1599px) {
@@ -1784,7 +1785,7 @@ header.header-three .main-menu-area {
     width: 100%;
     z-index: 99;
     height: auto;
-    bottom: -60px;
+    bottom: -80px;
 
 }
 
@@ -1798,7 +1799,7 @@ header.header-three .main-menu-area {
 
 header.header-three .main-menu-area.sticky-header.sticky-active {
     position: fixed;
-    top: 0;
+    top: 0 ;
     left: 0;
     right: 0;
     bottom: auto;
@@ -1814,11 +1815,10 @@ header.header-three .main-menu-area.sticky-header.sticky-active .nav-container {
 }
 
 header.header-three .main-menu-area.sticky-header.sticky-active .nav-container .menu-items ul li a {
-    line-height: 100px;
+    line-height: 80px;
 }
 
 header.header-three .header-top {
-    padding-top: 15px;
     font-family: var(--secondary-font)
 }
 
@@ -1918,7 +1918,7 @@ header.header-three .nav-container {
 }
 
 header.header-three .nav-container .menu-items ul li a {
-    line-height: 120px;
+    line-height: 60px;
 }
 
 header.header-three .nav-container .menu-items ul li .submenu li a {
@@ -2123,7 +2123,7 @@ header.inner-page.header-absolute {
 }
 
 header.inner-page.header-absolute .nav-container .menu-items ul li a {
-    line-height: 130px;
+    line-height: 60px;
 }
 
 header.sticky-header.sticky-active {

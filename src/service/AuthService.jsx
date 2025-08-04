@@ -3,14 +3,29 @@ import PublicUrl from "../api/publicUrl";
 // Register
 export const registerUser = async (userData) => {
     const response = await PublicUrl.post("auth/user/register", userData);
+  
     return response.data;
 };
 
 // Login
 export const loginUser = async (loginData) => {
     const response = await PublicUrl.post("auth/user/login", loginData);
-    return response.data;
+ 
+    const data = response.data;
+
+    // If there's an 'error' field, throw it
+    if (data.error) {
+        throw new Error(data.error); // e.g., "Invalid username or password"
+    }
+
+    // Optional: also check for missing token, just in case
+    if (!data.token) {
+        throw new Error("Login failed: Missing token from server.");
+    }
+
+    return data;
 };
+
 
 // Forgot Password (Send OTP via SMS only)
 export const forgotPassword = async ({ contactNumber }) => {

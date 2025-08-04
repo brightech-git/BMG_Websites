@@ -50,28 +50,38 @@ const FeaturedBanners = () => {
                 {`
           .fb-banner-container {
             font-family: 'Montserrat', sans-serif;
-            background-color: #f8f7f2;
+            background-color: #f6f5f0;
             max-width: 1440px;
             margin: 0 auto;
             padding: 2rem 0;
           }
           .fb-main-title {
-            font-family: 'Gloock', serif;
-            font-size: clamp(1.5rem, 3vw, 2rem);
-            font-weight: 400;
-            color: #333333;
-            position: relative;
-            padding-bottom: 1rem;
-          }
+  font-family: 'Gloock', serif;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 400;
+  position: relative;
+  padding-bottom: 1rem;
+
+ background: linear-gradient(to right, #cd865c, #a05ccdff);
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
           .fb-main-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 60px;
-            height: 2px;
-            background-color: #cd865c;
-          }
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(to right, #ff6a00, #ee0979);
+
+}
+
           .fb-explore-btn {
             padding: 10px 20px;
             font-size: 14px;
@@ -234,7 +244,7 @@ const FeaturedBanners = () => {
                     {/* Header Section */}
                     <div className="row align-items-center justify-content-between mb-4">
                         <div className="col-auto">
-                            <h2 className="fb-main-title">Our Featured Collections</h2>
+                                    <h2 className="fb-main-title">Curated Just for You</h2>
                         </div>
                         <div className="col-auto">
                             <button

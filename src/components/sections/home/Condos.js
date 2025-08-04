@@ -3,69 +3,39 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { useBudgetBanners } from '../../../hook/budgetBanner/useBudgetBanners';
 
 const PriceUnderSection = () => {
-    const history = useHistory();
+  const { data: budgetBanners, isLoading, isError } = useBudgetBanners();
+  const baseURL = "https://app.bmgjewellers.com";
+  console.log(budgetBanners,'budget')
+  const history = useHistory();
 
-    useEffect(() => {
-        AOS.init({
-            duration: 1000,
-            easing: 'ease-out',
-            once: true,
-        });
-    }, []);
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      easing: 'ease-out',
+      once: true,
+    });
+  }, []);
 
-    const budgetCategories = [
-        {
-            img: 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=400&h=400&fit=crop',
-            title: 'Under 999',
-            subtext: 'Casual Comfort',
-            alt: 'Everyday wear collection',
-            min: 0,
-            max: 999,
-            isPremium: false,
-        },
-        {
-            img: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&h=400&fit=crop',
-            title: 'Under 1999',
-            subtext: 'Glamorous Outfits',
-            alt: 'Party wear collection',
-            min: 1000,
-            max: 1999,
-            isPremium: true,
-        },
-        {
-            img: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop',
-            title: 'Under 2999',
-            subtext: 'Relaxed Styles',
-            alt: 'Casual comfort collection',
-            min: 2000,
-            max: 2999,
-            isPremium: false,
-        },
-        {
-            img: 'https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=400&h=400&fit=crop',
-            title: 'Above 2999',
-            subtext: 'Premium Charm',
-            alt: 'Glamorous outfits collection',
-            min: 3000,
-            max: 10000000,
-            isPremium: false,
-        },
-    ];
+  const handleCategoryNavigation = (minPrice, maxPrice) => {
+    const searchParams = new URLSearchParams();
+    if (minPrice) searchParams.append('minGrandTotal', minPrice);
+    if (maxPrice) searchParams.append('maxGrandTotal', maxPrice);
+    const formattedQuery = searchParams.toString().replace(/\+/g, '%20');
+    history.push(`/shop-left?${formattedQuery}`);
+  };
 
-    const handleCategoryNavigation = (minPrice, maxPrice) => {
-        const searchParams = new URLSearchParams();
-        if (minPrice) searchParams.append('minGrandTotal', minPrice);
-        if (maxPrice) searchParams.append('maxGrandTotal', maxPrice);
-        const formattedQuery = searchParams.toString().replace(/\+/g, '%20');
-        history.push(`/shop-left?${formattedQuery}`);
-    };
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error loading data</div>;
+  if (!Array.isArray(budgetBanners)) return <div>No data available</div>;
 
-    return (
-        <>
-            <style>
-                {`
+  return (
+    <>
+      <style>
+        {`
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap');
           :root {
             --primary-font: 'Gloock', serif;
             --secondary-font: 'Montserrat', sans-serif;
@@ -75,6 +45,7 @@ const PriceUnderSection = () => {
             --grey-color: #666666;
             --white-color: #ffffff;
             --primary-card-bg: #edebe7;
+            --gradient-text: linear-gradient(90deg, #cd865c, #a05f3a);
           }
 
           .pus-budget-section {
@@ -92,14 +63,29 @@ const PriceUnderSection = () => {
           }
 
           .pus-section-title {
-            font-family: var(--primary-font);
-            font-size: clamp(1.6rem, 3.5vw, 2.2rem);
-            font-weight: 400;
-            color: var(--primary-text-color);
+            font-family:'Dancing Script' ;
+            font-size: clamp(1.6rem, 4vw, 2.5rem);
+            font-weight: 900;
             text-align: center;
             margin-bottom: 1rem;
             letter-spacing: 0.5px;
             position: relative;
+            display: flex;
+            justify-content: center;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+          }
+
+          .pus-section-title .title-part-1 {
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+          }
+
+          .pus-section-title .title-part-2 {
+            color: #404040;
+            font-weight: 500;
           }
 
           .pus-section-title::after {
@@ -131,8 +117,8 @@ const PriceUnderSection = () => {
             border-radius: 25px;
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            height: 400px;
-            width: 90%;
+            height: 350px;
+            width: 92%;
             display: flex;
             flex-direction: column;
           }
@@ -360,58 +346,65 @@ const PriceUnderSection = () => {
             }
           }
         `}
-            </style>
-            <section className="pus-budget-section">
-                <div className="container">
-                    <h2 className="pus-section-title">Explore by Budget</h2>
-                    <p className="pus-section-subtitle">
-                        Discover curated collections tailored to your budget for every style and occasion
-                    </p>
-                    <div className="pus-card-container">
-                        <div className="row row-cols-2 pus-row-cols-2">
-                            {budgetCategories.map((category, index) => (
-                                <div
-                                    key={index}
-                                    className="col"
-                                    data-aos="fade-up"
-                                    data-aos-delay={150 * index}
-                                >
-                                    <div
-                                        className="pus-budget-card"
-                                        onClick={() => handleCategoryNavigation(category.min, category.max)}
-                                        role="button"
-                                        tabIndex={0}
-                                        aria-label={`Shop ${category.title} products`}
-                                    >
-                                        <div className="pus-image-container">
-                                            <img
-                                                src={category.img}
-                                                alt={category.alt}
-                                                className="pus-card-image"
-                                                loading="lazy"
-                                            />
-                                            <button
-                                                className="pus-category-btn"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleCategoryNavigation(category.min, category.max);
-                                                }}
-                                                aria-label={`Explore ${category.title} collection`}
-                                            >
-                                                {category.title}
-                                                <span className="pus-btn-arrow">›</span>
-                                            </button>
-                                        </div>
-                                       
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+      </style>
+      <section className="pus-budget-section">
+        <div className="container">
+          <h2 className="pus-section-title">
+            <span className="title-part-1">Explore by</span>
+            <span className="title-part-2"> Budget</span>
+          </h2>
+
+          <p className="pus-section-subtitle">
+            Discover curated collections tailored to your budget for every style and occasion
+          </p>
+          <div className="pus-card-container">
+            <div className="row row-cols-2 pus-row-cols-2">
+              {budgetBanners.map((category, index) => (
+                <div
+                  key={index}
+                  className="col"
+                  data-aos="fade-up"
+                  data-aos-delay={150 * index}
+                >
+                  <div
+                    className="pus-budget-card"
+                    onClick={() => handleCategoryNavigation(category.min_price, category.max_price)}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Shop ${category.title} products`}
+                  >
+                    <div className="pus-image-container">
+                     
+                      <img
+                        src={category.image_path?.startsWith('/') ? `${baseURL}${category.image_path}`: category.image_path? `${baseURL}/${category.image_path}`: category.image}
+                        alt={category.alt || category.title}
+                        className="pus-card-image"
+                        loading="lazy"
+                        onError={(e) => {
+                          e.target.src = 'https://via.placeholder.com/400x400?text=Image+Not+Available';
+                        }}
+                      />
+                      <button
+                        className="pus-category-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCategoryNavigation(category.min, category.max);
+                        }}
+                        aria-label={`Explore ${category.title} collection`}
+                      >
+                        {category.title}
+                        <span className="pus-btn-arrow">›</span>
+                      </button>
                     </div>
+                  </div>
                 </div>
-            </section>
-        </>
-    );
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
 };
 
 export default PriceUnderSection;

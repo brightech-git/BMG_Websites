@@ -73,21 +73,61 @@ const Handpicked = () => {
     };
 
     const sliderSettings = {
-        slidesToShow: 1,
+        slidesToShow: 3,
         slidesToScroll: 1,
         infinite: true,
         arrows: true,
-        centerMode: true,
+        centerMode: false,
         autoplay: true,
-        centerPadding: '25%',
+        autoplaySpeed: 4000,
+        speed: 800,
         nextArrow: <NavigationButton direction="next" />,
         prevArrow: <NavigationButton direction="prev" />,
         responsive: [
-            { breakpoint: 1600, settings: { centerPadding: '20%' } },
-            { breakpoint: 1200, settings: { centerPadding: '15%' } },
-            { breakpoint: 992, settings: { centerPadding: '10%' } },
-            { breakpoint: 768, settings: { centerPadding: '5%', arrows: false } },
-            { breakpoint: 576, settings: { centerMode: false, centerPadding: '0' } },
+            {
+                breakpoint: 1400,
+                settings: {
+                    slidesToShow: 2,
+                    centerMode: true,
+                    centerPadding: '10%',
+                }    
+            },
+            {
+                breakpoint: 992,
+                settings: {
+                    slidesToShow: 2,
+                    centerMode: true,
+                    centerPadding: '15%',
+                    
+                }
+            },
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 2,
+                    centerMode: true,
+                    centerPadding: '5%',
+                    arrows: false
+                }
+            },
+            {
+                breakpoint: 576,
+                settings: {
+                    slidesToShow: 2,
+                    centerMode: true,
+                    centerPadding: '0',
+                    arrows: false
+                }
+            },
+            {
+                breakpoint: 520,
+                settings: {
+                    slidesToShow: 1,
+                    centerMode: true,
+                    centerPadding: '0',
+                    arrows: false
+                }
+            },
         ],
     };
 
@@ -98,11 +138,15 @@ const Handpicked = () => {
         <section className="jewel-showcase">
             <div className="container-fluid">
                 <div className="section-top">
-                    <span className="section-label">Exclusive Collection</span>
+                    <h2 className="section-label">
+                        <span className="gradient-text">Exclusive</span>
+                        <span className="sub-section-label"> Collection</span>
+                    </h2>
                     <p className="section-description">
                         Hand-selected premium pieces for the discerning collector
                     </p>
                 </div>
+
 
                 <Slider className="jewel-slider-wrapper" {...sliderSettings}>
                     {data?.data?.map((banner, index) => (

@@ -40,7 +40,7 @@ import OrderDetail from './components/sections/account/OrderDetails/OrderDetails
 import CancellationReturnPolicy from './components/pages/Policies/CancellationReturnPolicy';
 import RefundPolicy from './components/pages/Policies/RefundPolicy';
 import TermsConditions from './components/pages/Policies/TermsConditions';
-
+import PrivateRoute from './route/UserPrivateRoute';
 
 
 function ScrollWatcher() {
@@ -64,13 +64,13 @@ function App() {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/about" component={About} />
-        <Route exact path="/account" component={Account} />
+        <PrivateRoute exact path="/account" component={Account} />
         <Route exact path="/blog-detail" component={Blogdetail} />
         <Route exact path="/blog-grid" component={Bloggrid} />
         <Route exact path="/blog-grid-sidebar" component={Bloggridsidebar} />
         <Route exact path="/blog-list" component={Bloglist} />
-        <Route exact path="/cart" component={Cart} />
-        <Route exact path="/checkout" component={Checkout} />
+        <PrivateRoute exact path="/cart" component={Cart} />
+        <PrivateRoute exact path="/checkout" component={Checkout} />
         <Route exact path="/classification" component={Classification} />
         <Route exact path="/coming-soon" component={Comingsoon} />
         <Route exact path="/contact" component={Contact} />
@@ -84,12 +84,12 @@ function App() {
         <Route exact path="/shop-left" component={Shopleft} />
         <Route exact path="/team" component={Team} />
         <Route exact path="/typography" component={Typography} />
-        <Route exact path="/wishlist" component={Wishlist} />
+        <PrivateRoute exact path="/wishlist" component={Wishlist} />
         <Route exact path="/privacypolicy" component={PrivacyPolicy} />
-        <Route exact path="/payment/:orderId" component={PaymentPage} />
+        <PrivateRoute exact path="/payment/:orderId" component={PaymentPage} />
         <Route exact path="/AddressManager" component={AddressManager} />
-        <Route exact path="/dashboard" component={Dashboard} />
-        <Route exact path="/orders" component={Order} />
+        <PrivateRoute exact path="/dashboard" component={Dashboard} />
+        <PrivateRoute exact path="/orders" component={Order} />
         <Route exact path="/orderdetail/:orderId" component={OrderDetail} />
         <Route exact path="/change-password" component={ChangePassword} />
         <Route path="/account" component={AccountSidebar} />

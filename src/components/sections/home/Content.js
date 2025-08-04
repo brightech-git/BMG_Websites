@@ -23,6 +23,7 @@ import FeaturedBanners from '../../layouts/FeaturedProduct';
 import ShopByRecipient from './ShopByRecipient';
 import './HomeContent.css';
 import JewelryShowcase from './jewelleryShowCase';
+import RecentlyViewedWrapper from '../../layouts/RecentlyViewedWrapper';
 
 class Content extends Component {
     render() {
@@ -48,7 +49,7 @@ class Content extends Component {
                 <Counter/>
                 <Onsale/>
                 <Video/>
-                <RecentlyViewed />
+                <RecentlyViewedWrapper/>
                 {/* <Habout /> */}
                 {/* <Blog/> */}
                 

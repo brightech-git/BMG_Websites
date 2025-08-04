@@ -1,16 +1,18 @@
+// src/redux/slices/userSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { loginUser, registerUser } from '../../service/AuthService';
-
-// Get user from localStorage if exists
-const initialUser = JSON.parse(localStorage.getItem("user")) || null;
+import { toast } from 'react-toastify';
+// Get user and token from localStorage if exists
+const initialUser = JSON.parse(localStorage.getItem('user')) || null;
+const initialToken = localStorage.getItem('user_token') || null;
 
 // Async thunk: login
 export const login = createAsyncThunk('user/login', async (loginData, thunkAPI) => {
     try {
         const response = await loginUser(loginData);
-        localStorage.setItem("user", JSON.stringify(response));
-        localStorage.setItem("user_token", response.token);
-        localStorage.setItem("userMobileNumber", response.contact);
+        localStorage.setItem('user', JSON.stringify(response));
+        localStorage.setItem('user_token', response.token);
+        localStorage.setItem('userMobileNumber', response.contact);
         return response;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message);
@@ -18,38 +20,44 @@ export const login = createAsyncThunk('user/login', async (loginData, thunkAPI) 
 });
 
 // Async thunk: signup
-export const signup = createAsyncThunk('user/signup', async (userData, thunkAPI) => {
+export const signup = createAsyncThunk('auth/user/register', async (userData, thunkAPI) => {
     try {
         const response = await registerUser(userData);
-        if (response.message?.toLowerCase().includes("already exists")) {
+
+        // If the backend ever returns a 'message' key indicating error
+        if (response?.message && response.message.toLowerCase().includes('already exists')) {
             return thunkAPI.rejectWithValue(response.message);
         }
-        localStorage.setItem("user", JSON.stringify(response));
-        localStorage.setItem("userMobileNumber", response.contactNumber);
+
+        // If there's no error, save user and return
+        localStorage.setItem('user', JSON.stringify(response));
+        localStorage.setItem('userMobileNumber', response.contactNumber);
+        localStorage.setItem('user_token', response.token);
         return response;
+
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.message || "Signup failed");
+        return thunkAPI.rejectWithValue(error.message || 'Signup failed');
     }
 });
+
 
 const userSlice = createSlice({
     name: 'user',
     initialState: {
         user: initialUser,
-        isAuthenticated: !!(initialUser && initialUser.token),
-        loading: false,              // <-- Add this
+        isAuthenticated: !!(initialUser && (initialUser.token || initialToken)), // Check both user.token and user_token
+        loading: false,
         error: null,
     },
-
     reducers: {
         logout(state) {
             state.user = null;
             state.isAuthenticated = false;
             state.error = null;
-            localStorage.removeItem("user");
-            localStorage.removeItem("user_token");
-            localStorage.removeItem("userMobileNumber");
-        }
+            localStorage.removeItem('user');
+            localStorage.removeItem('user_token');
+            localStorage.removeItem('userMobileNumber');
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -62,6 +70,11 @@ const userSlice = createSlice({
                 state.user = action.payload;
                 state.isAuthenticated = true;
                 state.error = null;
+                toast.success("🎉 Registered successfully!", {
+                    position: 'top-right',
+                    autoClose: 2000,
+                });
+
             })
             .addCase(signup.rejected, (state, action) => {
                 state.loading = false;
@@ -76,13 +89,18 @@ const userSlice = createSlice({
                 state.user = action.payload;
                 state.isAuthenticated = true;
                 state.error = null;
+                
+                    toast.success("✅ Login successful!", {
+                        position: 'top-right',
+                        autoClose: 2000,
+                    });
+                
             })
             .addCase(login.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
-            })
-
-
+               
+            });
     },
 });
 

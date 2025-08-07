@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import ReactWOW from 'react-wow';
-import $ from 'jquery';
-import 'magnific-popup';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css';
 
 import img1 from '../../../assets/img/gallery/01.jpg';
 import img2 from '../../../assets/img/gallery/02.jpg';
@@ -25,39 +24,50 @@ const galleryposts = [
     { img: img8 },
     { img: img9 },
 ];
-class Content extends Component {
-    componentDidMount(){
-        function popup(){
-            $('.gallery-loop .popup-image').magnificPopup({
-                type: 'image',
-                gallery: {
-                    enabled: true,
-                },
-                mainClass: 'mfp-fade',
-            });
-        }
-        popup();
-    }
-    render() {
-        return (
-            <div className="gallery-wrappper pt-120 pb-120">
-                <div className="container">
-                    <div className="gallery-loop columns-3">
-                        {galleryposts.map((item, i) => (
-                            <ReactWOW key={i} animation="fadeInUp" data-wow-delay=".3s">
-                                <div className="single-gallery-image">
-                                    <Link to={item.img} className="popup-image">
-                                        <img src={item.img} alt="" />
-                                    </Link>
-                                </div>
-                            </ReactWOW>
-                        ))}
-                    </div>
-                </div>
-            </div >
 
-        );
-    }
-}
+const Content = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [photoIndex, setPhotoIndex] = useState(0);
+
+    return (
+        <div className="gallery-wrappper pt-120 pb-120">
+            <div className="container">
+                <div className="gallery-loop columns-3">
+                    {galleryposts.map((item, i) => (
+                        <motion.div
+                            key={i}
+                            className="single-gallery-image"
+                            initial={{ opacity: 0, y: 50 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: i * 0.1 }}
+                            onClick={() => {
+                                setIsOpen(true);
+                                setPhotoIndex(i);
+                            }}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <img src={item.img} alt={`Gallery ${i + 1}`} />
+                        </motion.div>
+                    ))}
+                </div>
+            </div>
+
+            {isOpen && (
+                <Lightbox
+                    mainSrc={galleryposts[photoIndex].img}
+                    nextSrc={galleryposts[(photoIndex + 1) % galleryposts.length].img}
+                    prevSrc={galleryposts[(photoIndex + galleryposts.length - 1) % galleryposts.length].img}
+                    onCloseRequest={() => setIsOpen(false)}
+                    onMovePrevRequest={() =>
+                        setPhotoIndex((photoIndex + galleryposts.length - 1) % galleryposts.length)
+                    }
+                    onMoveNextRequest={() =>
+                        setPhotoIndex((photoIndex + 1) % galleryposts.length)
+                    }
+                />
+            )}
+        </div>
+    );
+};
 
 export default Content;

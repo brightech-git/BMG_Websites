@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import ReactWOW from 'react-wow';
+import { motion } from 'framer-motion';
 import $ from 'jquery';
 import 'magnific-popup';
-
 
 import img1 from '../../../assets/img/gallery/5.jpg';
 import img2 from '../../../assets/img/gallery/5.jpg';
@@ -15,48 +14,48 @@ import img7 from '../../../assets/img/gallery/5.jpg';
 import img8 from '../../../assets/img/gallery/5.jpg';
 
 const galleryposts = [
-    { img: img1, animationtime: '.3s' },
-    { img: img2, animationtime: '.4s' },
-    { img: img3, animationtime: '.5s' },
-    { img: img4, animationtime: '.6s' },
-    { img: img5, animationtime: '.7s' },
-    { img: img6, animationtime: '.8s' },
-    { img: img7, animationtime: '.9s' },
-    { img: img8, animationtime: '1.1s' },
+    { img: img1, delay: 0.3 },
+    { img: img2, delay: 0.4 },
+    { img: img3, delay: 0.5 },
+    { img: img4, delay: 0.6 },
+    { img: img5, delay: 0.7 },
+    { img: img6, delay: 0.8 },
+    { img: img7, delay: 0.9 },
+    { img: img8, delay: 1.1 },
 ];
-class Content extends Component {
-    componentDidMount(){
-        function popup(){
-            $('.gallery-loop .popup-image').magnificPopup({
-                type: 'image',
-                gallery: {
-                    enabled: true,
-                },
-                mainClass: 'mfp-fade',
-            });
-        }
-        popup();
-    }
-    render() {
-        return (
-            <div className="gallery-wrappper pt-120 pb-120">
-                <div className="container">
-                    <div className="gallery-loop">
-                        {galleryposts.map((item, i) => (
-                            <ReactWOW key={i} animation="fadeInUp" data-wow-delay={item.animationtime}>
-                                <div className="single-gallery-image">
-                                    <Link to={item.img} className="popup-image">
-                                        <img src={item.img} alt="" />
-                                    </Link>
-                                </div>
-                            </ReactWOW>
-                        ))}
-                    </div>
-                </div>
-            </div >
 
-        );
-    }
-}
+const Content = () => {
+    useEffect(() => {
+        $('.gallery-loop .popup-image').magnificPopup({
+            type: 'image',
+            gallery: {
+                enabled: true,
+            },
+            mainClass: 'mfp-fade',
+        });
+    }, []);
+
+    return (
+        <div className="gallery-wrappper pt-120 pb-120">
+            <div className="container">
+                <div className="gallery-loop">
+                    {galleryposts.map((item, i) => (
+                        <motion.div
+                            className="single-gallery-image"
+                            key={i}
+                            initial={{ opacity: 0, y: 40 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: item.delay, duration: 0.5 }}
+                        >
+                            <Link to={item.img} className="popup-image">
+                                <img src={item.img} alt={`Gallery ${i}`} />
+                            </Link>
+                        </motion.div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+};
 
 export default Content;

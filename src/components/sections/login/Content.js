@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import loginbg from '../../../assets/img/bg/sign.webp';
@@ -83,6 +84,38 @@ const Content = () => {
         }
     }, [isAuthenticated, history]);
 
+=======
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../context/authContext/UserAuthContext';
+import loginbg from '../../../assets/img/bg/sign.webp';
+
+const Content = () => {
+    const [contactOrEmailOrUsername, setContactOrEmailOrUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
+    const { login } = useAuth();
+    const navigate = useNavigate(); 
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await login({
+                contactOrEmailOrUsername,
+                password,
+            });
+
+            if (response?.token) {
+                navigate('/'); // changed from history.push
+            } else {
+                setError('Invalid credentials');
+            }
+        } catch (err) {
+            setError(err.message || 'Login failed');
+        }
+    };
+>>>>>>> Stashed changes
 
     return (
         <section className="login-sec pt-120 pb-120">
@@ -92,15 +125,20 @@ const Content = () => {
                         <div className="col-lg-6">
                             <div
                                 className="login-content"
+<<<<<<< Updated upstream
                                 style={{
                                     backgroundImage: `url(${loginbg})`,
                                     backgroundSize: 'cover',
                                     backgroundPosition: 'center',
                                 }}
+=======
+                                style={{ backgroundImage: `url(${loginbg})` }}
+>>>>>>> Stashed changes
                             >
                                 <div className="description text-center"></div>
                             </div>
                         </div>
+<<<<<<< Updated upstream
 
                         <div className="col-lg-6">
                             <div className="login-form">
@@ -112,6 +150,16 @@ const Content = () => {
                                     </div>
                                 )}
 
+=======
+                        <div className="col-lg-6">
+                            <div className="login-form">
+                                <h2>Log in</h2>
+                                {error && (
+                                    <div className="alert alert-danger" style={{ fontSize: '14px' }}>
+                                        {error}
+                                    </div>
+                                )}
+>>>>>>> Stashed changes
                                 <form onSubmit={handleLogin}>
                                     <div className="input-group input-group-two mb-20">
                                         <input
@@ -131,6 +179,7 @@ const Content = () => {
                                             required
                                         />
                                     </div>
+<<<<<<< Updated upstream
 
                                     <Link to="/forgot-password">Forgot Password?</Link>
 
@@ -141,6 +190,19 @@ const Content = () => {
                                     <p style={{ color: '#404040', fontFamily: 'Montserrat' }}>
                                         Don't have an Account?
                                         <Link to="/register" className="d-inline-block" style={{ marginLeft: '10px' }}>
+=======
+                                    <Link to="/forgot-password">Forgot Password?</Link>
+                                    <button type="submit" className="main-btn btn-filled mt-20 login-btn">
+                                        Login
+                                    </button>
+                                    <p style={{ color: '#404040', fontFamily: 'Montserrat' }}>
+                                        Don't have an Account?
+                                        <Link
+                                            to="/register"
+                                            className="d-inline-block"
+                                            style={{ marginLeft: '10px' }}
+                                        >
+>>>>>>> Stashed changes
                                             Create One
                                         </Link>
                                     </p>

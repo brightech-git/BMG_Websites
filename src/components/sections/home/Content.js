@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import Banner from './Banner';
 import Category from './Category';
 import Category1 from './Category1';
@@ -18,6 +18,7 @@ import Video from './Video';
 import RecentlyViewed from '../../layouts/RecentlyViewed';
 import Blog from './Blog';
 import Handpicked from '../homethree/Handpicked';
+<<<<<<< Updated upstream
 //import BestDesign from './BestDesign';
 import FeaturedBanners from '../../layouts/FeaturedProduct';
 import ShopByRecipient from './ShopByRecipient';
@@ -57,5 +58,32 @@ class Content extends Component {
         );
     }
 }
+=======
+>>>>>>> Stashed changes
+
+const Content = () => {
+    return (
+        <Fragment>
+            <Banner />
+            <Category />
+            <Category1 />
+            <Handpicked />
+            {/* <Cta />
+            <Trending />
+            <Condos />
+            <Bestselling />
+            <Ourcategory />
+            <Handpick />
+            <Ourproducts />
+            {/* <Saleproducts /> */}
+            {/* <Counter />
+            <Onsale />
+            <Video />
+            <Latestproducts />
+            {/* <Habout /> */}
+            {/* <Blog /> */}
+        </Fragment>
+    );
+};
 
 export default Content;

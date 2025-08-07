@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -42,6 +43,12 @@ import RefundPolicy from './components/pages/Policies/RefundPolicy';
 import TermsConditions from './components/pages/Policies/TermsConditions';
 import PrivateRoute from './route/UserPrivateRoute';
 
+=======
+// src/App.js
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import AppRoutes from '../src/routes/AppRoutes';
+>>>>>>> Stashed changes
 
 function ScrollWatcher() {
   const location = useLocation();
@@ -58,6 +65,7 @@ function ScrollWatcher() {
 
 function App() {
   return (
+<<<<<<< Updated upstream
     <Router basename="/bmgjewellers/">
       {/* <Preloader /> */}
       <ScrollWatcher />
@@ -102,6 +110,9 @@ function App() {
         <Route component={Error} />
       </Switch>
     </Router>
+=======
+      <AppRoutes />
+>>>>>>> Stashed changes
   );
 }
 

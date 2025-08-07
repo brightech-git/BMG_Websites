@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -94,17 +95,65 @@ const Content = () => {
 
     return (
         <section className="login-sec pt-80 pb-80">
+=======
+import React, { useState } from 'react';
+import { useNavigate ,Link } from 'react-router-dom';
+import { useAuth } from '../../../context/authContext/UserAuthContext';
+import registerbg from "../../../assets/img/bg/gold1.jpg";
+
+const Content = () => {
+    const navigate = useNavigate();
+    const { signup } = useAuth();
+
+    const [formData, setFormData] = useState({
+        username: '',
+        email: '',
+        contactNumber: '',
+        password: '',
+    });
+
+    const [error, setError] = useState('');
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSignup = async (e) => {
+        e.preventDefault();
+        const { username, email, contactNumber, password } = formData;
+
+        try {
+            const response = await signup({ username, email, contactNumber, password });
+
+            if (response?.token) {
+                navigate('/');
+            } else {
+                setError(response.message || 'Signup failed');
+            }
+        } catch (err) {
+            setError(err.message || 'Something went wrong');
+        }
+    };
+
+    return (
+        <section className="login-sec pt-120 pb-120">
+>>>>>>> Stashed changes
             <div className="container">
                 <div className="account-wrapper">
                     <div className="row no-gutters">
                         <div className="col-lg-6">
                             <div
                                 className="login-content"
+<<<<<<< Updated upstream
                                 style={{ backgroundImage: `url(${loginbg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+=======
+                                style={{ backgroundImage: `url(${registerbg})` }}
+>>>>>>> Stashed changes
                             />
                         </div>
                         <div className="col-lg-6">
                             <div className="login-form">
+<<<<<<< Updated upstream
                                 <h2>Create Account</h2>
 
                                 <form onSubmit={handleRegister}>
@@ -185,6 +234,20 @@ const Content = () => {
                                         <Link to="/login" className="d-inline-block" style={{ marginLeft: '10px' }}>
                                             Login
                                         </Link>
+=======
+                                <h2>Sign Up</h2>
+                                {error && <div className="alert alert-danger">{error}</div>}
+                                <form onSubmit={handleSignup}>
+                                    <input type="text" name="username" placeholder="Username" value={formData.username} onChange={handleChange} required />
+                                    <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
+                                    <input type="text" name="contactNumber" placeholder="Mobile Number" value={formData.contactNumber} onChange={handleChange} required />
+                                    <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
+
+                                    <button type="submit" className="main-btn btn-filled mt-20 login-btn">Signup</button>
+
+                                    <p>Already have an Account?
+                                        <Link to="/login" style={{ marginLeft: '10px' }}>Login</Link>
+>>>>>>> Stashed changes
                                     </p>
                                 </form>
                             </div>

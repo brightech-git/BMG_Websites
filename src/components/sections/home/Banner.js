@@ -1,4 +1,9 @@
+<<<<<<< Updated upstream
 import React from 'react';
+=======
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+>>>>>>> Stashed changes
 import Slider from 'react-slick';
 import './Banner.css';
 import { useBanners } from '../../../hook/banner/useBannerQueries';
@@ -11,6 +16,7 @@ const Banner = () => {
     const history = useHistory();
     const baseUrl = "https://app.bmgjewellers.com";
 
+<<<<<<< Updated upstream
     const settings = {
         dots: true,
         infinite: true,
@@ -64,6 +70,84 @@ const Banner = () => {
                                         Explore Now 
                                     </Button>
                                 )}
+=======
+const bannerSlides = [
+    {
+        img: img1,
+        title: "High-End Jewelry Items",
+        description: "Discover our exquisite collection of handcrafted jewelry pieces that embody elegance and timeless beauty.",
+    },
+    {
+        img: img2,
+        title: "Luxury Silver Collections",
+        description: "Experience the brilliance of our premium silver selections, perfect for special occasions.",
+    },
+    {
+        img: img3,
+        title: "Handmade Silver Masterpieces",
+        description: "Explore our unique silver jewelry designs that combine traditional craftsmanship with modern aesthetics.",
+    },
+];
+
+const Banner = () => {
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 992);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const settings = {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        infinite: true,
+        autoplay: true,
+        autoplaySpeed: 5000,
+        arrows: false,
+        dots: true,
+        draggable: true,
+        speed: 800,
+        fade: true,
+        cssEase: "ease-in-out",
+        pauseOnHover: true,
+        pauseOnFocus: true,
+    };
+
+    return (
+        <section className="banner-area">
+            <Slider {...settings} className="combined-slider">
+                {bannerSlides.map((slide, index) => (
+                    <div key={index} className="single-slide">
+                        <div className="slide-image-wrapper">
+                            <img src={slide.img} alt={slide.title} className="slide-image" />
+                            <div className="image-overlay" />
+                        </div>
+                        <div className="content-overlay">
+                            <div className="container container-custom-two">
+                                <div className={`row align-items-center ${isMobile ? 'justify-content-center' : ''}`}>
+                                    <div className={`${isMobile ? 'col-12' : 'col-lg-6 col-md-8'}`}>
+                                        <div className={`banner-content ${isMobile ? 'mobile-content' : ''}`}>
+                                            <ReactWOW animation="fadeInLeft" delay="0.5s">
+                                                <h1 className="title">{slide.title}</h1>
+                                            </ReactWOW>
+                                            <ReactWOW animation="fadeInLeft" delay="0.7s">
+                                                <p className="description">{slide.description}</p>
+                                            </ReactWOW>
+                                            <div className="button-groups">
+                                                <ReactWOW animation="fadeInUp" delay="0.9s">
+                                                    <Link className="main-btn btn-filled mt-20" to="/about" aria-label="Shop Now">
+                                                        Shop Now
+                                                    </Link>
+                                                </ReactWOW>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+>>>>>>> Stashed changes
                             </div>
                         </div>
                     </div>

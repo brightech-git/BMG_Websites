@@ -1,5 +1,9 @@
 import React from 'react';
+<<<<<<< Updated upstream
 import { useHistory } from 'react-router-dom';
+=======
+import { Link } from 'react-router-dom';
+>>>>>>> Stashed changes
 import Slider from 'react-slick';
 import { useCategoryBanner } from '../../../hook/banner/useCategoriesBanner';
 import useFilterProducts from '../../../hook/product/useFilterProducts';
@@ -11,6 +15,7 @@ const NavigationButton = ({ direction, onClick }) => {
     const iconClass = direction === 'next' ? 'fal fa-arrow-right' : 'fal fa-arrow-left';
     const ariaLabel = direction === 'next' ? 'Next slide' : 'Previous slide';
 
+<<<<<<< Updated upstream
     return (
         <button
             className={`nav-arrow ${direction}-nav`}
@@ -57,11 +62,52 @@ const FeaturedItems = ({ itemName, subItemName }) => {
             {data?.data?.map((product, index) => (
                 <ItemCard key={`product-${index}`} product={product} />
             ))}
+=======
+const roomslidertwoposts = [
+    {
+        img: img1,
+        title: 'Get All Gold Jewels',
+        text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.',
+        price: '345',
+        weight: '10gm'
+    },
+    {
+        img: img2,
+        title: 'Grab Silver Jewel',
+        text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.',
+        price: '235',
+        weight: '10gm'
+    },
+    {
+        img: img3,
+        title: 'Buy All Diamond',
+        text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.',
+        price: '1,345',
+        weight: '10gm'
+    },
+];
+
+const SampleNextArrow = (props) => {
+    const { onClick } = props;
+    return (
+        <div className="slick-arrow next-arrow" onClick={onClick}>
+            <i className="fal fa-arrow-right" />
+        </div>
+    );
+};
+
+const SamplePrevArrow = (props) => {
+    const { onClick } = props;
+    return (
+        <div className="slick-arrow prev-arrow" onClick={onClick}>
+            <i className="fal fa-arrow-left" />
+>>>>>>> Stashed changes
         </div>
     );
 };
 
 const Handpicked = () => {
+<<<<<<< Updated upstream
     const history = useHistory();
     const { data, isLoading, error } = useCategoryBanner();
 
@@ -169,6 +215,58 @@ const Handpicked = () => {
                                     itemName={banner.itemName}
                                     subItemName={banner.subItemName}
                                 />
+=======
+    const settings = {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        fade: false,
+        infinite: true,
+        autoplay: false,
+        autoplaySpeed: 4000,
+        arrows: true,
+        nextArrow: <SampleNextArrow />,
+        prevArrow: <SamplePrevArrow />,
+        dots: false,
+        centerMode: true,
+        centerPadding: '28%',
+        responsive: [
+            { breakpoint: 1600, settings: { centerPadding: '20%' } },
+            { breakpoint: 992, settings: { centerPadding: '15%' } },
+            { breakpoint: 768, settings: { centerPadding: '10%' } },
+            { breakpoint: 576, settings: { centerPadding: '5%' } }
+        ]
+    };
+
+    return (
+        <section className="room-slider bg-white pb-50 pt-55">
+            <div className="container-fluid p-0">
+                <div className="section-title mb-80 text-center">
+                    <span className="title-tag">Get On Sale</span>
+                    <h2>Hand Picked Jewelries</h2>
+                </div>
+                <Slider className="row rooms-slider-two justify-content-center" {...settings}>
+                    {roomslidertwoposts.map((item, i) => (
+                        <div key={i} className="col-lg-12">
+                            <div className="single-rooms-box">
+                                <div className="room-img">
+                                    <div className="img" style={{ backgroundImage: `url(${item.img})` }} />
+                                </div>
+                                <div className="room-desc">
+                                    <div className="row align-items-center">
+                                        <div className="col-sm-8">
+                                            <h3>
+                                                <Link to="/shop-detail" className="title">{item.title}</Link>
+                                            </h3>
+                                            <p>{item.text}</p>
+                                        </div>
+                                        <div className="col-sm-4">
+                                            <div className="price">
+                                                ${item.price}<span>/{item.weight}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+>>>>>>> Stashed changes
                             </div>
                         </div>
                     ))}

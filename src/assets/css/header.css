@@ -827,7 +827,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0px;
+    gap: 10px;
 }
 
 .sigma-header .sigma-main-menu>.menu-item {
@@ -983,8 +983,8 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 }
 
 .sigma-header .sigma-main-menu .menu-item-has-children.menu-item-has-megamenu>.sub-menu .sigm-megamenu-nav>.nav-item>.nav-link.active {
-    border-right: 3px solid #fcd462;
-    color: #fcd462;
+    border-right: 3px solid #cd865c;
+    color: #cd865c;
 }
 
 .sigma-header .sigma-main-menu .menu-item-has-children.menu-item-has-megamenu>.sub-menu .sigma-megamenu-img,
@@ -1332,11 +1332,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
         font-size: 14px;
     }
 
-    header.header-three .main-menu-area,
-    .sigma-header .sigma-header-nav {
-        display: none;
-        padding-bottom: 0;
-    }
+  
 
     .sigma-mobile-menu,
     .sigma-mobile-header {
@@ -1495,14 +1491,15 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 }
 
 .menu-card p {
-    text-align: center;
-    justify-content: center;
+    text-align: left;
 }
 
 .img-fluid {
-    height: 150px !important;
-    width: 200px;
+    height: 100px !important;
+    width: 100px !important;
     object-fit: cover;
+    border-radius: 50%;
+
 }
 
 .login-btns a {
@@ -1516,4 +1513,146 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 
 .site-logo-text h6 {
     font-size: 12px !important;
+}
+.badge-container {
+    position: relative;
+}
+
+.icon-link {
+    position: relative;
+    display: inline-block;
+}
+
+.icon-badge {
+    position: absolute;
+    top: 5px;
+    right: 54px;
+    color: var(--primary-text-color);
+    font-family: var(--secondary-font);
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 5px;
+    border-radius: 50%;
+    line-height: 1;
+    min-width: 16px;
+    text-align: center;
+    z-index: 10;
+}
+.cart-icon-badge{
+    position: absolute;
+        top: 5px;
+        right: 10px;
+        color:var(--primary-text-color);
+        font-size: 10px;
+        font-weight: bold;
+        padding: 2px 5px;
+        line-height: 1;
+        min-width: 16px;
+        text-align: center;
+        z-index: 10;
+        font-family: var(--secondary-font);
+}
+
+@media(max-width:1200px){
+
+    .icon-badge{
+    top: 4px;
+    right: 34px ;
+    }
+    .cart-icon-badge{
+        top: 4px;
+            right: 5px;
+    }
+}
+@media(max-width:992px){
+    .icon-badge {
+            top: 15px;
+            right: 82px;
+        }
+    
+        .cart-icon-badge {
+            top: 15px;
+            right: 55px;
+        }
+}
+@media(max-width:768px) {
+    .icon-badge {
+        top: 25px;
+        right:  58px;
+    }
+
+    .cart-icon-badge {
+        top: 25px;
+        right: 25px;
+    }
+}
+@media (max-width: 576px){
+.icon-badge {
+    top: 25px;
+    right: 68px;
+}
+
+.cart-icon-badge {
+    top: 25px;
+    right: 40px;
+}
+}
+.enhanced-card {
+    padding: 12px;
+    border-radius: 10px;
+    background-color: #f6f5f0;
+    text-align: center;
+    transition: box-shadow 0.2s ease;
+    height: 100%;
+    display: flex;
+    flex-direction:column;
+    max-width: 150px !important;
+        margin: 0 auto;
+    /* Better alignment */
+}
+
+.enhanced-card:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+}
+
+.menu-card-img-wrapper {
+    width: auto;
+    height: auto;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-card-img {
+    width: 100px !important;
+    /* Slightly smaller */
+    height: 100px !important;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+}
+
+.menu-card-label {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #404040;
+    margin: 0;
+    text-align: center;
+    font-family: var(--secondary-font);
+}
+@media(max-width:1200px){
+   
+    .menu-card-img {
+            width: 80px !important;
+            height: 80px !important;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+        }
+                .menu-card-label {
+                    font-size: 0.75rem;
+               
+                }
 }

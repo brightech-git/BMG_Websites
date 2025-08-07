@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory ,useLocation} from 'react-router-dom';
 import { Tab, Nav } from 'react-bootstrap';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { useSingleProductQuery } from '../../../hook/product/useSingleProductQuery';
@@ -49,9 +49,10 @@ const ProductSkeleton = () => (
     </div>
 );
 
-const Shopinfo = ({ sno }) => {
-    const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+const Shopinfo = ({ sno,Authenticated }) => {
+    const isAuthenticated=Authenticated;
     const history = useHistory();
+    const location=useLocation();
     const [isWishlisted, setIsWishlisted] = useState(false);
     const [animateHeart, setAnimateHeart] = useState(false);
     const { data: product, isLoading, error } = useSingleProductQuery(sno);
@@ -67,15 +68,17 @@ const Shopinfo = ({ sno }) => {
     const showAuthToast = (action) => {
         toast.error(`Please log in to ${action}.`, {
             position: "top-right",
-            autoClose: 3000,
+            autoClose: 2000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
             theme: "colored",
         });
-        setTimeout(() => history.push('/login', { from: history.location.pathname }), 1000);
+
+        history.push('/login', { from: location.pathname + location.search });
     };
+
 
     // Check if product is in wishlist on mount or when favorites/product changes
     useEffect(() => {
@@ -96,12 +99,28 @@ const Shopinfo = ({ sno }) => {
         }
     }, [product?.SNO, addItem]);
 
-    const handleAddToCart = () => {
+    const handleAddToCart = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('add to cart is triggered');
+
         if (!isAuthenticated) {
             showAuthToast("add items to cart");
+            history.push('/login');
             return;
         }
+
         if (!product?.SNO) return;
+
+        if (isInCart) {
+            // Optionally show info toast if you want
+            toast.info(`${product.ITEMNAME} is already in cart`, {
+                position: "top-right",
+                autoClose: 2000,
+                theme: "colored",
+            });
+            return; // Prevent duplicate add
+        }
 
         const cartItem = {
             itemSno: product.SNO,
@@ -110,7 +129,9 @@ const Shopinfo = ({ sno }) => {
             price: product.GrandTotal,
             image: product.ImagePath ? JSON.parse(product.ImagePath)[0] : '',
         };
+
         addToCartHandler(cartItem);
+
         toast.success(`${product.ITEMNAME} added to cart!`, {
             position: "top-right",
             autoClose: 2000,
@@ -118,7 +139,11 @@ const Shopinfo = ({ sno }) => {
         });
     };
 
-    const handleBuyNow = () => {
+
+    const handleBuyNow = (e) => {
+        console.log('buy now triggered')
+        e.preventDefault();
+        e.stopPropagation();
         if (!isAuthenticated) {
             showAuthToast("proceed with purchase");
             return;
@@ -160,7 +185,7 @@ const Shopinfo = ({ sno }) => {
     const handleWishlistToggle = (e) => {
         e.preventDefault();
         e.stopPropagation();
-
+        console.log('add to whislist is triggered')
         if (!isAuthenticated) {
             showAuthToast("manage your wishlist");
             return;
@@ -297,7 +322,7 @@ const Shopinfo = ({ sno }) => {
                                 <button
                                     className={`action-btn add-to-cart ${isInCart ? 'in-cart' : ''}`}
                                     onClick={handleAddToCart}
-                                    disabled={isCartLoading}
+                                    // disabled={isCartLoading}
                                 >
                                     <i className="fas fa-shopping-cart"></i>
                                     {isInCart ? 'In Cart' : 'Add to Cart'}
@@ -305,7 +330,7 @@ const Shopinfo = ({ sno }) => {
                                 <button
                                     className="action-btn buy-now"
                                     onClick={handleBuyNow}
-                                    disabled={isCartLoading}
+                                    // disabled={isCartLoading}
                                 >
                                     <i className="fas fa-bolt"></i>
                                     Buy Now

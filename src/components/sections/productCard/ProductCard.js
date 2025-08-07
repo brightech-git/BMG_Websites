@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Heart, RefreshCw } from 'lucide-react';
 import { useFavorites, useAddFavorite, useRemoveFavorite } from '../../../hook/favorites/useFavoritesQuery';
 import { useCart } from '../../../hook/cart/useCartQuery';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -10,15 +10,17 @@ const ProductCard = ({ item }) => {
     const { data: favorites, isFavoritesLoading } = useFavorites();
     const addFavorite = useAddFavorite();
     const removeFavorite = useRemoveFavorite();
-    const { cartItems, addToCartHandler, isLoading: isCartLoading } = useCart();
+    const { cartItems, addToCartHandler } = useCart();
     const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
     const history = useHistory();
+    const location = useLocation();
 
     const [isWishlisted, setIsWishlisted] = useState(false);
     const [heartAnimation, setHeartAnimation] = useState(false);
     const [cartAnimation, setCartAnimation] = useState(false);
     const [imageIndex, setImageIndex] = useState(0);
     const [hoverState, setHoverState] = useState(false);
+    const [isTouchActive, setIsTouchActive] = useState(false);
     const [loadingState, setLoadingState] = useState(true);
     const [imageFade, setImageFade] = useState(false);
 
@@ -60,7 +62,7 @@ const ProductCard = ({ item }) => {
 
     useEffect(() => {
         let timer;
-        if (hoverState && multipleImages) {
+        if ((hoverState || isTouchActive) && multipleImages) {
             timer = setInterval(() => {
                 setImageFade(true);
                 setTimeout(() => {
@@ -74,7 +76,7 @@ const ProductCard = ({ item }) => {
         }
         return () => {
             if (timer) clearInterval(timer);
-            if (!hoverState && multipleImages) {
+            if (!(hoverState || isTouchActive) && multipleImages) {
                 setImageFade(true);
                 setTimeout(() => {
                     setImageIndex(0);
@@ -82,17 +84,15 @@ const ProductCard = ({ item }) => {
                 }, 300);
             }
         };
-    }, [hoverState, multipleImages, productImages.length]);
+    }, [hoverState, isTouchActive, multipleImages, productImages.length]);
 
     const addItemToCart = (e) => {
         e.preventDefault();
         e.stopPropagation();
 
-        console.log("addItemToCart called");
-
         if (!isAuthenticated) {
             toast.info('🔐 Please log in to add items to your cart.');
-            history.push('/login');
+            history.push('/login', { from: location.pathname });
             return;
         }
 
@@ -124,12 +124,12 @@ const ProductCard = ({ item }) => {
         e.preventDefault();
         e.stopPropagation();
         if (!isAuthenticated) {
-            toast.info('🔐 Please log in to add items to your cart.');
-            history.push('/login');
+            toast.info('🔐 Please log in to add items to your favorite.');
+            history.push('/login', { from: location.pathname });
             return;
         }
         if (!item?.SNO) return;
-       
+
         setHeartAnimation(true);
 
         if (isWishlisted) {
@@ -165,10 +165,8 @@ const ProductCard = ({ item }) => {
         }
 
         setIsWishlisted(!isWishlisted);
-
         setTimeout(() => setHeartAnimation(false), 600);
     };
-
 
     const refreshProduct = (e) => {
         e.preventDefault();
@@ -182,20 +180,24 @@ const ProductCard = ({ item }) => {
         window.location.href = `/shop-detail/${item?.SNO}`;
     };
 
-   
+    const handleTouchToggle = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsTouchActive((prev) => !prev);
+    };
+
     const isInCart = Array.isArray(cartItems?.data) && cartItems.data.some(cartItem => cartItem.itemTagSno === item?.SNO);
-   
 
     if (loadingState || !item) {
         return (
             <div className="card-container">
                 <div className="product-item loading">
                     <div className="image-wrapper">
-                        <div className="loading-image"></div>
+                        <div className="placeholder placeholder-wave" style={{ width: '100%', height: '100%' }}></div>
                     </div>
                     <div className="item-info">
-                        <div className="loading-name"></div>
-                        <div className="loading-price"></div>
+                        <div className="placeholder placeholder-wave mb-2" style={{ height: '16px', width: '75%', margin: '0 auto' }}></div>
+                        <div className="placeholder placeholder-wave" style={{ height: '18px', width: '50%', margin: '0 auto' }}></div>
                     </div>
                 </div>
             </div>
@@ -208,6 +210,8 @@ const ProductCard = ({ item }) => {
                 className="product-item"
                 onMouseEnter={() => setHoverState(true)}
                 onMouseLeave={() => setHoverState(false)}
+                onClick={clickProduct}
+                onTouchStart={handleTouchToggle}
             >
                 <div className="image-wrapper">
                     <img
@@ -226,9 +230,7 @@ const ProductCard = ({ item }) => {
                         </span>
                     )}
 
-                  
-
-                    <div className={`quick-actions ${hoverState ? 'show-actions' : ''}`}>
+                    <div className={`quick-actions ${hoverState || isTouchActive ? 'show-actions' : ''}`}>
                         <button
                             className="action-button exchange-btn"
                             onClick={refreshProduct}
@@ -240,18 +242,14 @@ const ProductCard = ({ item }) => {
                         <button
                             className={`action-buttons add-cart-btn ${cartAnimation ? 'cart-animation' : ''}`}
                             onClick={addItemToCart}
-                            disabled={isCartLoading}
                             aria-label="Add to Cart"
                             title="Add to Cart"
                         >
                             <span className="add-button-text">{isInCart ? 'In Cart' : 'Add to Cart'}</span>
                         </button>
-
-
                         <button
                             className={`action-button wish-btn ${heartAnimation ? 'heart-animation' : ''}`}
                             onClick={toggleWishlist}
-                            disabled={isFavoritesLoading}
                             aria-label={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
                             title={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
                         >
@@ -277,16 +275,10 @@ const ProductCard = ({ item }) => {
                         )}
                     </div>
                 </div>
-
-                <div
-                    className="click-overlay"
-                    onClick={clickProduct}
-                    aria-label={`View details of ${productName}`}
-                />
             </div>
             <style jsx>{`
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
                 .card-container {
                     width: 100%;
                     max-width: 300px;
@@ -345,19 +337,6 @@ const ProductCard = ({ item }) => {
                     filter: brightness(1.05);
                 }
 
-                .loading-image {
-                    width: 100%;
-                    height: 100%;
-                    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 37%, #f0f0f0 63%);
-                    background-size: 400% 100%;
-                    animation: shimmer 2s ease-in-out infinite;
-                }
-
-                @keyframes shimmer {
-                    0% { background-position: 100% 50%; }
-                    100% { background-position: 0% 50%; }
-                }
-
                 .sale-tag {
                     position: absolute;
                     top: 8px;
@@ -373,7 +352,6 @@ const ProductCard = ({ item }) => {
                     box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
                 }
 
-                
                 .quick-actions {
                     position: absolute;
                     bottom: 12px;
@@ -398,15 +376,15 @@ const ProductCard = ({ item }) => {
                     min-width: 36px;
                     height: 36px;
                     border: none;
-                   
                     color: #444;
                     border-radius: 18px;
                     padding: 0 10px;
                     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                     cursor: pointer;
-                   
+                    touch-action: manipulation; /* Prevent default touch behaviors like scrolling */
                 }
-                    .action-buttons {
+
+                .action-buttons {
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -416,21 +394,19 @@ const ProductCard = ({ item }) => {
                     color: #404040;
                     border-radius: 18px;
                     padding: 0 10px;
-                    background:none !important; 
+                    background: #f6f5f0;
                     cursor: pointer;
-                
+                    font-size: clamp(0.4rem, 1vw, 0.2rem) !important;
+                    touch-action: manipulation;
                 }
 
                 .add-cart-btn {
-                    
-                    color: #404040;
-                    font-family:'Gloock';
-                    font-weight:600px;
+                    color: #303030;
+                    font-family: 'Gloock';
+                    font-weight: bolder;
                     min-width: auto;
-                    border:none !important;
+                    border: none !important;
                     padding: 0 12px;
-                    
-                    
                 }
 
                 .action-button:hover {
@@ -440,7 +416,6 @@ const ProductCard = ({ item }) => {
                 }
 
                 .add-cart-btn:hover {
-                   
                     color: #cd865c;
                 }
 
@@ -477,11 +452,12 @@ const ProductCard = ({ item }) => {
                     font-weight: 500;
                     white-space: nowrap;
                 }
-                    .add-button-text{
-                     font-size: 1.05rem;
-                    font-weight: 500;
+
+                .add-button-text {
+                    font-size: 14px !important;
+                    font-weight: bolder;
                     white-space: nowrap;
-                    }
+                }
 
                 .item-info {
                     padding: 10px 8px;
@@ -524,26 +500,6 @@ const ProductCard = ({ item }) => {
                     text-decoration: line-through;
                 }
 
-                .loading-name {
-                    height: 16px;
-                    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 37%, #f0f0f0 63%);
-                    background-size: 400% 100%;
-                    border-radius: 4px;
-                    margin: 0 auto 8px;
-                    width: 75%;
-                    animation: shimmer 2s ease-in-out infinite;
-                }
-
-                .loading-price {
-                    height: 18px;
-                    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 37%, #f0f0f0 63%);
-                    background-size: 400% 100%;
-                    border-radius: 4px;
-                    margin: 0 auto;
-                    width: 50%;
-                    animation: shimmer 2s ease-in-out infinite;
-                }
-
                 .click-overlay {
                     position: absolute;
                     top: 0;
@@ -553,53 +509,62 @@ const ProductCard = ({ item }) => {
                     z-index: 1;
                 }
 
+                /* Touch Device Optimizations */
+                @media (hover: none) and (pointer: coarse) {
+                    .quick-actions {
+                        opacity: 0;
+                        transform: translateX(-50%) translateY(10px);
+                    }
+                    .show-actions {
+                        opacity: 1;
+                        transform: translateX(-50%) translateY(0);
+                    }
+                }
+
                 /* Mobile Optimizations */
                 @media (max-width: 768px) {
                     .card-container {
                         max-width: 260px;
                     }
-                    
+                    .add-button-text {
+                        font-size: 12px !important;
+                    }
                     .product-item {
                         border-radius: 10px;
                     }
-                    
                     .item-info {
                         padding: 12px 8px;
                     }
-                        .add-cart-btn{
+                    .add-cart-btn {
                         padding: 0 10px;
-                        }
-                    .add-button-text{
-                        font-size:0.95rem
                     }
                     .item-name {
                         font-size: 0.82rem;
                         margin-bottom: 6px;
                     }
-                    
                     .new-price {
                         font-size: 0.8rem;
                     }
-                    
                     .old-price {
                         font-size: 0.8rem;
                     }
-                    
                     .action-button {
                         min-width: 32px;
                         height: 32px;
                         padding: 0 8px;
                     }
-                    
+                    .action-buttons {
+                        min-width: 32px;
+                        height: 32px;
+                        padding: 0 8px;
+                    }
                     .button-text {
                         font-size: 0.7rem;
                     }
-                    
                     .sale-tag {
                         font-size: 0.7rem;
                         padding: 3px 6px;
                     }
-                    
                     .quick-actions {
                         bottom: 8px;
                         gap: 6px;
@@ -610,53 +575,43 @@ const ProductCard = ({ item }) => {
                     .card-container {
                         max-width: 240px;
                     }
-                    ..add-button-text{
-                        font-size:0.75rem !important;
+                    .add-button-text {
+                        font-size: 10px !important;
                     }
                     .item-info {
                         padding: 10px 6px;
                     }
-                    
                     .item-name {
                         font-size: 0.75rem;
                         margin-bottom: 4px;
                     }
-                    
                     .new-price {
                         font-size: 0.7rem;
                     }
-                    
                     .old-price {
                         font-size: 0.75rem;
                     }
-                    
                     .action-button {
                         min-width: 26px;
                         height: 26px;
                         padding: 0 6px;
                     }
-                     .add-cart-btn{
+                    .action-buttons {
+                        min-width: 26px;
+                        height: 26px;
                         padding: 0 6px;
-                        }
+                    }
+                    .add-cart-btn {
+                        padding: 0 6px;
+                    }
                     .button-text {
                         font-size: 0.65rem;
                     }
-                    
                     .sale-tag {
                         font-size: 0.65rem;
                         padding: 2px 5px;
                         top: 6px;
                         left: 6px;
-                    }
-                    
-                    .image-dots {
-                        top: 6px;
-                        right: 6px;
-                    }
-                    
-                    .dot {
-                        width: 5px;
-                        height: 5px;
                     }
                 }
 
@@ -664,20 +619,23 @@ const ProductCard = ({ item }) => {
                     .card-container {
                         max-width: 220px;
                     }
-                    
+                    .add-button-text {
+                        font-size: 10px !important;
+                    }
                     .item-name {
                         font-size: 0.7rem;
                     }
-                    
                     .new-price {
                         font-size: 0.6rem;
                     }
-                    
                     .action-button {
                         min-width: 24px;
                         height: 24px;
                     }
-                    
+                    .action-buttons {
+                        min-width: 24px;
+                        height: 24px;
+                    }
                     .button-text {
                         font-size: 0.6rem;
                     }

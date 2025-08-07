@@ -1,3 +1,5 @@
+ @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap');
+
 .room-type-section {
     position: relative;
     z-index: 1;
@@ -17,17 +19,20 @@
 }
 
 .section-title {
-    margin-bottom: 50px;
+    margin-bottom: 20px !important;
 }
 
-.title-tag {
+.onsale-title-tag {
     display: block;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 28px;
+    font-weight: bolder;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    color: #404040;
-    font-family: var(--secondary-font) !important;
+    background: linear-gradient(120deg, #e76f2a, #000000);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: transparent;
+    font-family: 'Dancing Script' ;
     text-align: center;
     justify-content: center;
     margin: 0 auto;

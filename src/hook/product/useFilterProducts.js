@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { filterProducts } from '../../service/ProductService';
 
-const useFilterProducts = (inputFilters = {}, page = 0, pageSize = 10) => {
+const useFilterProducts = (inputFilters = {}, page , pageSize ) => {
     const [data, setData] = useState({ data: [], totalItems: 0 });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);

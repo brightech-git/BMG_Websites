@@ -48,6 +48,7 @@
 
 
 @import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap');
 
 :root {
     --primary-font: 'Gloock', 'serif';
@@ -428,7 +429,8 @@ select {
 
 .main-btn {
     display: inline-block;
-    font-weight: 300 !important;
+    font-weight: 400;
+    text-align: center;
     white-space: nowrap;
     vertical-align: middle;
     -webkit-user-select: none;
@@ -444,7 +446,7 @@ select {
     text-transform: capitalize;
     color: var(--primary-text-color);
     border: none;
-    font-family: var(--secondary-font);
+    font-family: 'Montserrat';
 }
 
 .main-btn.btn-filled {
@@ -1218,7 +1220,7 @@ header.header-absolute {
     z-index: 99;
     background-color: #f6f5f0;
     padding: 10px !important;
-    top: 0px ;
+    top: 0px;
 }
 
 @media only screen and (min-width: 1200px) and (max-width: 1599px) {
@@ -1784,7 +1786,7 @@ header.header-three .main-menu-area {
     width: 100%;
     z-index: 99;
     height: auto;
-    bottom: -80px;
+    bottom: -55px;
 
 }
 
@@ -1798,7 +1800,7 @@ header.header-three .main-menu-area {
 
 header.header-three .main-menu-area.sticky-header.sticky-active {
     position: fixed;
-    top: 0 ;
+    top: 0;
     left: 0;
     right: 0;
     bottom: auto;
@@ -2342,8 +2344,10 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 
 /*=====sigma-navigation======*/
 
-.sigma-mobile-header .sigma-mobile-header-inner {
-    padding: 0 20px;
+.sigma-mobile-header {
+    padding: 0 10px;
+    width: 100%;
+
 }
 
 .sigma-header .sigma-main-menu {
@@ -2621,8 +2625,8 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 }
 
 .sigma-header .sigma-main-menu .menu-item-has-children.menu-item-has-megamenu>.sub-menu .sigm-megamenu-nav>.nav-item>.nav-link.active {
-    border-right: 3px solid #fcd462;
-    color: #fcd462;
+    border-right: 3px solid #cd865c;
+    color: #cd865c;
 }
 
 .sigma-header .sigma-main-menu .menu-item-has-children.menu-item-has-megamenu>.sub-menu .sigma-megamenu-img,
@@ -2714,6 +2718,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     align-items: center;
     justify-content: center;
     padding-bottom: 10px;
+    width: 100% !important;
 }
 
 .sigma-mobile-header .sigma-mobile-header-inner .site-logo {
@@ -2850,11 +2855,14 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     .sigma-header .sigma-header-nav {
         display: none;
         padding-bottom: 10px;
+        width: 100%;
     }
 
     .sigma-mobile-menu,
     .sigma-mobile-header {
         display: block;
+        width: 104% !important;
+        margin-left: -12px !important;
     }
 
 
@@ -2862,6 +2870,12 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 }
 
 @media (max-width: 767px) {
+    .sigma-mobile-menu,
+        .sigma-mobile-header {
+            display: block;
+            width: 105% !important;
+            margin-left: -12px !important;
+        }
     .sigma-mobile-header .sigma-mobile-header-inner {
         padding: 10px 0;
     }
@@ -7028,7 +7042,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     .counter-section .counter-box {
         font-size: 12px;
     }
-    
+
 }
 
 .counter-section .counter-box .icon {
@@ -7051,7 +7065,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     color: var(--primary-text-color);
     font-weight: 600;
     font-family: var(--secondary-font);
-    font-size: 14px ;
+    font-size: 14px;
 }
 
 .counter-section .counter-box h4 {
@@ -7079,9 +7093,10 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
         color: var(--primary-text-color);
         font-size: 18px;
     }
-        .counter-box .icon i{
-            font-size: 40px  !important;
-        }
+
+    .counter-box .icon i {
+        font-size: 40px !important;
+    }
 }
 
 
@@ -7483,237 +7498,6 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     box-shadow: none;
 }
 
-<<<<<<< Updated upstream
-=======
-/*------map----------*/
-
-
-/* General Styles */
-.about-contact-section {
-  padding: 60px 0;
-  font-family: var(--secondary-font);
-  color: var(--primary-text-color);
-  background-color: var(--primary-color);
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
-}
-
-/* Contact Info Box Styles */
-.contact-info-box {
-  background: var(--primary-card-color);
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
-  height: 100%;
-}
-
-.contact-info-box h3 {
-  color: var(--primary-text-color);
-  margin-top: 25px;
-  margin-bottom: 15px;
-  font-size: 20px;
-  font-weight: 600;
-  font-family: var(--primary-font);
-}
-
-.contact-info-box p {
-  margin-bottom: 5px;
-  line-height: 1.6;
-  color: var(--primary-text-color);
-}
-
-/* Social Icons Styles */
-.social-icons {
-  display: flex;
-  gap: 15px;
-  margin-top: 15px;
-}
-
-.social-icons a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  background: var(--secondary-card-color);
-  color: var(--primary-text-color);
-  border-radius: 50%;
-  transition: all 0.3s ease;
-}
-
-.social-icons a:hover {
-  background: var(--primary-hover-color);
-  transform: translateY(-3px);
-}
-
-/* Message Form Styles */
-.message-form {
-  background: var(--white-color);
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
-  height: 100%;
-}
-
-.message-form h2 {
-  color: var(--primary-text-color);
-  margin-bottom: 25px;
-  font-size: 24px;
-  font-weight: 600;
-  font-family: var(--primary-font);
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 12px 15px;
-  border: 1px solid var(--grey-color);
-  border-radius: 4px;
-  font-size: 16px;
-  transition: border-color 0.3s;
-  font-family: var(--secondary-font);
-  background-color: var(--primary-card-color);
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: var(--primary-hover-color);
-}
-
-.form-group textarea {
-  min-height: 150px;
-  resize: vertical;
-}
-
-.form-check {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.form-check-input {
-  margin-right: 10px;
-  width: 16px; /* Reduced checkbox size */
-  height: 16px; /* Reduced checkbox size */
-}
-
-.form-check label {
-  font-size: 14px;
-  color: var(--primary-text-color);
-  font-family: var(--secondary-font);
-}
-
-/* Alert Styles */
-.alert {
-  padding: 15px;
-  margin-bottom: 20px;
-  border-radius: 4px;
-  font-family: var(--secondary-font);
-}
-
-.alert-success {
-  background-color: #d4edda;
-  color: #155724;
-  border-color: #c3e6cb;
-}
-
-.alert-danger {
-  background-color: #f8d7da;
-  color: #721c24;
-  border-color: #f5c6cb;
-}
-
-/* Google Map Styles */
-.google-map-container {
-  margin-top: 50px;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-}
-
-/* Responsive Styles */
-@media (max-width: 991px) {
-  .about-contact-section {
-    padding: 40px 0;
-  }
-  
-  .contact-info-box,
-  .message-form {
-    padding: 25px;
-  }
-  
-  .row {
-    flex-direction: column;
-  }
-  
-  .col-lg-5,
-  .col-lg-7 {
-    width: 100%;
-    max-width: 100%;
-    margin-bottom: 30px;
-  }
-}
-
-@media (max-width: 767px) {
-  .about-contact-section {
-    padding: 30px 0;
-  }
-  
-  .contact-info-box h3 {
-    font-size: 18px;
-  }
-  
-  .message-form h2 {
-    font-size: 22px;
-  }
-  
-  .form-group input,
-  .form-group textarea {
-    padding: 10px 12px;
-    font-size: 15px;
-  }
-  
-  .main-btn {
-    padding: 10px 25px;
-    font-size: 15px;
-  }
-  
-  .google-map-container {
-    margin-top: 30px;
-  }
-}
-
-@media (max-width: 575px) {
-  .contact-info-box,
-  .message-form {
-    padding: 20px;
-  }
-  
-  .social-icons {
-    gap: 10px;
-  }
-  
-  .social-icons a {
-    width: 32px;
-    height: 32px;
-    font-size: 14px;
-  }
-  
-  .form-check-input {
-    width: 14px; /* Further reduced for mobile */
-    height: 14px; /* Further reduced for mobile */
-  }
-}
->>>>>>> Stashed changes
 
 /*=======  Offers  =======*/
 

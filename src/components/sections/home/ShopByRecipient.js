@@ -8,12 +8,13 @@ const ShopByRecipient = () => {
     const history = useHistory();
 
     const categories = [
-        { id: 1, label: "Him", image: men, query: "recipient=him" },
-        { id: 2, label: "Her", image:women, query: "recipient=her" },
-        { id: 3, label: "Kids", image: kid, query: "recipient=kids" },
+        { id: 1, label: "Him", image: men, query: "itemName=Gift Ideas&Subitemname=FOR HIM" },
+        { id: 2, label: "Her", image: women, query: "itemName=Gift Ideas&Subitemname=FOR HER" },
+        { id: 3, label: "Kids", image: kid, query: "Subitemname=FOR KIDS&itemName=Gift Ideas" },
     ];
 
     const handleCategoryClick = (query) => {
+
         history.push(`/shop-left?${query}`);
     };
 

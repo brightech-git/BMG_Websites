@@ -4,7 +4,6 @@ import { useCategories, useItemFilter } from '../../../hook/category/useCategory
 import ProductCard from '../productCard/ProductCard';
 import './OurCategory.css';
 import { useSwipeable } from 'react-swipeable';
-import { Container, Row, Col } from 'react-bootstrap';
 
 const OurCategory = () => {
     const { data: categories = [], isLoading: isCategoriesLoading } = useCategories();
@@ -96,7 +95,7 @@ const OurCategory = () => {
                 >
                     {products.length > 0 ? (
                         products.map((item, i) => (
-                            <ProductCard key={item.id || i} item={item} />
+                            <ProductCard key={item.id || i} item={item}  />
                         ))
                     ) : (
                         <div className="text-center w-100 py-4">

@@ -1,9 +1,9 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import img1 from '../../assets/img/banner/Tritiya_Slider_1.webp';
-import img2 from '../../assets/img/banner/Tritiya_Slider_2.webp';
-import img3 from '../../assets/img/banner/Tritiya_Slider_3.webp';
-import img4 from '../../assets/img/banner/Tritiya_Slider_3.webp';
+import img1 from './feature.jpg';
+import img2 from './feature2.jpg';
+import img3 from './feature3.jpg';
+import img4 from './feature4.jpg';
 
 const FeaturedBanners = () => {
     const history = useHistory();
@@ -48,6 +48,7 @@ const FeaturedBanners = () => {
         <>
             <style>
                 {`
+                 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap');
           .fb-banner-container {
             font-family: 'Montserrat', sans-serif;
             background-color: #f6f5f0;
@@ -56,11 +57,11 @@ const FeaturedBanners = () => {
             padding: 2rem 0;
           }
           .fb-main-title {
-  font-family: 'Gloock', serif;
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  font-weight: 400;
+  font-family: 'Dancing Script';
+   font-size: clamp(2.5rem, 4vw,3rem);
+  font-weight: bolder;
   position: relative;
-  padding-bottom: 1rem;
+  padding-bottom: 0.5rem;
 
  background: linear-gradient(to right, #cd865c, #a05ccdff);
 
@@ -155,13 +156,20 @@ const FeaturedBanners = () => {
             margin-bottom: 0.5rem;
             color: #333333;
             opacity: 0.9;
+            
           }
           .fb-title {
-            font-size: clamp(0.9rem, 2vw, 1.3rem);
+            font-size: clamp(1rem, 2vw, 1.5rem);
             font-weight: 500;
             margin-bottom: 1rem;
             line-height: 1.2;
-            color: #333333;
+             background: linear-gradient(to right, #8f520cff, #d44107ff);
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+            font-family:'Dancing Script';
           }
           .fb-cta-btn {
             padding: 8px 16px;

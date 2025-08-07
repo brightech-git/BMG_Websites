@@ -1,12 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
 import { Heart, Trash2, Loader2, ShoppingCart, Star } from "lucide-react";
 import { useFavorites, useRemoveFavorite } from "../../../hook/favorites/useFavoritesQuery";
 import { useSingleProductQuery } from "../../../hook/product/useSingleProductQuery";
+import { useCart } from "../../../hook/cart/useCartQuery";
+import { toast } from "react-toastify";
 import "./Wishlist.css";
+import { useSelector } from "react-redux";
 
 const Wishlist = () => {
   const { data: favorites, isLoading, isError } = useFavorites();
+  const { cartItems, addToCartHandler } = useCart();
   const removeFavorite = useRemoveFavorite();
 
   const favoriteSnoList = favorites?.data || [];
@@ -57,7 +61,7 @@ const Wishlist = () => {
           <Heart className="wl-empty-icon" size={64} strokeWidth={1.5} />
           <h2>Your wishlist is empty</h2>
           <p>Discover and save your favorite items</p>
-          <Link to="/shop" className="wl-explore-btn">
+          <Link to="/shop-left" className="wl-explore-btn">
             Explore Collection
           </Link>
         </div>
@@ -67,6 +71,8 @@ const Wishlist = () => {
             <WishlistItem
               key={sno}
               sno={sno}
+              cartItems={cartItems}
+              addToCartHandler={addToCartHandler}
               onRemove={handleRemove}
             />
           ))}
@@ -76,18 +82,57 @@ const Wishlist = () => {
   );
 };
 
-const WishlistItem = ({ sno, onRemove }) => {
-  const { data: product, isLoading } = useSingleProductQuery(sno);
+const WishlistItem = ({ sno, onRemove, cartItems, addToCartHandler }) => {
+  const { data: item, isLoading } = useSingleProductQuery(sno);
+  const isAuthenticated  = useSelector((state)=>state.user.isAuthenticated);
+  const location = useLocation();
+  const history = useHistory();
+
+  const isInCart = Array.isArray(cartItems?.data) &&
+    cartItems.data.some(cartItem => cartItem.itemTagSno === item?.SNO);
 
   let imageUrls = [];
   try {
-    imageUrls = JSON.parse(product?.ImagePath || "[]");
+    imageUrls = JSON.parse(item?.ImagePath || "[]");
   } catch (err) {
     console.error("Error parsing ImagePath", err);
   }
 
   const baseUrl = "https://app.bmgjewellers.com";
-  const firstImage = imageUrls.length > 0 ? baseUrl + imageUrls[0] : "/images/placeholder.png";
+  const productImages = imageUrls.map((path) => baseUrl + path);
+  const firstImage = productImages.length > 0 ? productImages[0] : "/images/placeholder.png";
+
+  const addItemToCart = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!isAuthenticated) {
+      toast.info('🔐 Please log in to add items to your cart.');
+      history.push('/login', { from: location.pathname });
+      return;
+    }
+
+    if (!item?.SNO) {
+      console.warn('Missing item SNO');
+      return;
+    }
+
+    if (isInCart) {
+      toast.warning('Item already in cart');
+      return;
+    }
+
+    const cartItem = {
+      itemSno: item.SNO,
+      itemTagSno: item.SNO,
+      itemName: item.ITEMNAME || item.SUBITEMNAME,
+      price: item.GrandTotal,
+      image: productImages[0],
+    };
+
+    addToCartHandler(cartItem);
+    toast.success('🛒 Item added to cart!');
+  };
 
   if (isLoading) {
     return (
@@ -99,19 +144,17 @@ const WishlistItem = ({ sno, onRemove }) => {
     );
   }
 
-  if (!product) return null;
+  if (!item) return null;
 
-  // Mock ratings data (replace with actual API data)
-  const rating = Math.random() * 0.2 + 4.7;
-  const reviews = Math.floor(Math.random() * 1000) + 100;
+
 
   return (
     <div className="wl-item">
       <div className="wl-item-img-container">
-        <Link to={`/shop-info/${sno}`}>
+        <Link to={`/shop-detail/${sno}`}>
           <img
             src={firstImage}
-            alt={product.SUBITEMNAME}
+            alt={item.SUBITEMNAME}
             className="wl-item-img"
             loading="lazy"
           />
@@ -126,21 +169,16 @@ const WishlistItem = ({ sno, onRemove }) => {
       </div>
 
       <div className="wl-item-details">
-        {/* <div className="wl-item-rating">
-          <Star className="wl-star-icon" size={12} fill="#FFD700" strokeWidth={1} />
-          <span>{rating.toFixed(1)}</span>
-          <span className="wl-reviews-count">({reviews.toLocaleString()})</span>
-        </div> */}
+        <div className="wl-items-wrap">
+          <h3 className="wl-item-title">
+            <Link to={`/shop-detail/${sno}`}>{item.SUBITEMNAME}</Link>
+          </h3>
 
-        <h3 className="wl-item-title">
-          <Link to={`/product/${sno}`}>{product.SUBITEMNAME}</Link>
-        </h3>
-
-        <div className="wl-item-price">₹{product.GrandTotal.toLocaleString()}</div>
-
-        <button className="wl-move-to-cart-btn">
+          <h4 className="wl-item-price">₹{item.GrandTotal.toLocaleString()}</h4>
+        </div>
+        <button className="wl-move-to-cart-btn" onClick={addItemToCart}>
           <ShoppingCart size={14} className="wl-cart-icon" />
-          Add to Cart
+          {isInCart ? 'In Cart' : 'Add to Cart'}
         </button>
       </div>
     </div>

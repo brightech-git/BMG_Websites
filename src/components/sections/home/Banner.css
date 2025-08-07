@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap');
 :root {
     --primary-font: 'Gloock', 'serif';
     --secondary-font: 'Montserrat', 'sans-serif';
@@ -21,7 +21,6 @@
     position: relative;
     overflow: hidden;
     background-color: #f0f0f0;
-    margin-bottom: 0;
 }
 
 .banner-skeleton-placeholder {
@@ -102,20 +101,20 @@
 /* Banner Content */
 .banner-content {
     max-width: 1200px;
-    width: 90%;
-    padding: 2rem;
-    text-align: left;
+    width: 100%;
+    padding: 4rem;
+    text-align: left ;
 }
 
 /* Banner Title */
 .banner-title {
-    font-size: clamp(2.3rem, 4vw, 3rem);
+    font-size: 3rem;
     line-height: 1.2;
-    font-weight: 500;
+    font-weight: bolder;
     letter-spacing: 1px;
     margin-bottom: 1rem;
     color: var(--primary-text-color);
-    font-family: var(--primary-font);
+    font-family: 'Dancing Script';
 }
 
 /* Banner Description */
@@ -126,21 +125,6 @@
     margin-bottom: 2rem;
     color: var(--primary-hover-color);
     max-width: 600px;
-}
-.banner-button {
-    font-family: var(--secondary-font) !important;
-    letter-spacing: 1px !important;
-    padding: 0.5rem 2rem !important;
-    border: 2px solid #404040 !important;
-    color: var(--primary-text-color) !important;
-    border-radius: 0 !important;
-    font-weight: 500 !important;
-    text-transform: capitalize !important;
-    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-    position: relative !important;
-    overflow: hidden !important;
-    z-index: 1 !important;
-    background: transparent !important;
 }
 
 .banner-button::before {
@@ -208,7 +192,7 @@
     }
 
     .banner-content {
-        text-align: center;
+        text-align: left;
         margin: 0 auto;
     }
 
@@ -223,7 +207,7 @@
     }
 
     .banner-title {
-        font-size: clamp(2rem, 5vw, 2.5rem);
+        font-size:2.4rem;
     }
 }
 
@@ -247,6 +231,7 @@
     }
 
     .banner-title {
+        font-size: 2rem;
         margin-bottom: 0.75rem;
     }
 
@@ -270,7 +255,7 @@
     letter-spacing: 1px !important;
     padding: 0.5rem 1.5rem !important;
     /* Reduced base padding */
-    border: 2px solid #404040 !important;
+    border: 1px solid #8a8a8a !important;
     color: var(--primary-text-color) !important;
     border-radius: 0 !important;
     font-weight: 500 !important;
@@ -393,6 +378,7 @@
         padding: 0.75rem !important;
     }
     .banner-title {
+        font-size: 1.5rem;
         margin-bottom: 0.5rem !important;
     }
     .banner-description {

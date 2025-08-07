@@ -3,12 +3,12 @@
 :root {
   --wl-primary-font: 'Inter', sans-serif;
   --wl-primary-color: #ffffff;
-  --wl-card-bg: #f8f9fa;
+  --wl-card-bg: #edebe7;
   --wl-text-primary: #1a1a1a;
-  --wl-text-secondary: #6b7280;
-  --wl-accent-color: #d97706;
-  --wl-accent-hover: #b45309;
-  --wl-border-color: #e5e7eb;
+  --wl-text-secondary: #806b6b;
+  --wl-accent-color: #cd865c;
+  --wl-accent-hover: #d3753e;
+  --wl-border-color: #d8d8d8;
   --wl-error-color: #dc2626;
   --wl-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
 }
@@ -50,7 +50,6 @@
 .wl-item {
   background: var(--wl-card-bg);
   border: 1px solid var(--wl-border-color);
-  border-radius: 8px;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -62,8 +61,9 @@
 
 .wl-item-img-container {
   position: relative;
-  aspect-ratio: 3.5/3;
+  aspect-ratio: 3/3;
   overflow: hidden;
+  border-bottom: 1px solid var(--wl-border-color);
 }
 
 .wl-item-img {
@@ -103,14 +103,13 @@
 }
 
 .wl-item-details {
-  padding: 0.75rem;
+  padding: 0.5rem;
 }
 
 .wl-item-rating {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  margin-bottom: 0.5rem;
   font-size: 0.75rem;
   color: var(--wl-text-secondary);
 }
@@ -122,12 +121,15 @@
 .wl-reviews-count {
   color: var(--wl-text-secondary);
 }
-
+.wl-items-wrap{
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3rem;;
+}
 .wl-item-title {
   font-size: 0.875rem;
+margin: 0.5rem 0;
   font-weight: 500;
-  margin: 0.25rem 0;
-  line-height: 1.3;
   color: var(--wl-text-primary);
 }
 
@@ -148,16 +150,16 @@
 }
 
 .wl-move-to-cart-btn {
-  width: 100%;
+  width: 50%;
   padding: 0.5rem;
   background: var(--wl-accent-color);
   color: white;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 auto ;
   gap: 0.25rem;
   font-size: 0.75rem;
   font-weight: 500;
@@ -235,7 +237,8 @@
 }
 
 .wl-explore-btn:hover {
-  background: var(--wl-accent-hover);
+  background: var(--wl-card-bg);
+  color:var(--wl-text-secondary)
 }
 
 @keyframes wl-spin {
@@ -311,6 +314,7 @@
   .wl-move-to-cart-btn {
     font-size: 0.7rem;
     padding: 0.4rem;
+    width:100%;
   }
 }
 

@@ -36,8 +36,8 @@
 /* Product Grid - Fixed to eliminate spaces */
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap:2rem;
     width: 100%;
     margin: 0;
     padding: 0;
@@ -80,6 +80,7 @@
     }
 .product-grid {
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap:1.3rem;
 }
     .sidebar-area {
         flex: 0 0 250px;
@@ -99,6 +100,7 @@
 
     .product-grid {
         grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap:1rem;
     }
 }
 
@@ -108,6 +110,7 @@
     }
 
     .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
         gap: 15px;
     }
 }

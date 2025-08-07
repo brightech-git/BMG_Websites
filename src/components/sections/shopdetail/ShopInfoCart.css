@@ -287,7 +287,6 @@
 .product-actions {
     display: flex;
     gap: 0.75rem;
-    margin-top: auto;
 }
 
 .action-btn {
@@ -309,7 +308,7 @@
 }
 
 .add-to-cart {
-    background: var(--green-color);
+    background: var(--primary-hover-color);
     color: var(--white-color);
 }
 

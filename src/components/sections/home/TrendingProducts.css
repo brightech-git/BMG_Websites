@@ -184,24 +184,32 @@
     background: var(--primary-card-color);
     border-radius: 15px 15px 0 0;
     z-index: 4;
-    font-family: var(--secondary-font);
+    font-family:'Dancing Script';
+    font-weight: bolder;
 }
 
 .premium-action-btn {
-    background: transparent;
-    border: none;
-    color: var(--primary-text-color);
-    font-weight: 600;
-    font-size: clamp(0.9rem, 2vw, 1.1rem);
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+
+    background: linear-gradient(to right, rgb(31, 30, 30), rgb(0, 0, 0));
+    
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: transparent;
+    font-weight: bolder;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
     transition: all 0.3s ease;
-    padding: 0.2rem 1rem;
     min-width: 120px;
-    font-family: var(--secondary-font);
+    font-family: 'Dancing Script';
 }
 
 .premium-action-btn:hover {
-    color: var(--primary-text-color);
+    background: linear-gradient(to right, #8f520cff, #d44107ff);
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
     transform: scale(1.03);
 }

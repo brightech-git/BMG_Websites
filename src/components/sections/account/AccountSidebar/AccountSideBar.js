@@ -41,6 +41,7 @@ const AccountSidebar = () => {
   const handleLogout = () => {
     dispatch(logout());
     history.push("/login");
+    window.location.reload();
   };
 
   const toggleMobileMenu = () => {

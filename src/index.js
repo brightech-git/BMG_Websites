@@ -36,7 +36,7 @@ ReactDOM.render(
             <App />
             <ToastContainer // ✅ Add this below App to show toasts anywhere
               position="top-right"
-              autoClose={3000}
+              autoClose={2000}
               hideProgressBar={false}
               newestOnTop={false}
               closeOnClick

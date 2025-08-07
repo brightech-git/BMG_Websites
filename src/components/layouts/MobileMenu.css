@@ -20,8 +20,8 @@
     padding: 24px;
     background: var(--primary-color);
     border-radius: 10px;
-    width: 100%;
-    max-width: 340px;
+    width: 80%;
+    max-width: 220px;
     margin: 0 auto;
     font-family: var(--secondary-font);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);

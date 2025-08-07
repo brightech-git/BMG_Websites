@@ -12,6 +12,7 @@ import './TermsConditions.css';
 
 const TermsConditions = () => {
     return (
+        <>
         <div className="container py-5 terms-conditions-wrapper">
             <h1 className="text-center mb-5 terms-heading">Terms & Conditions</h1>
 
@@ -225,6 +226,7 @@ const TermsConditions = () => {
                 })}
             </div>
         </div>
+        </>
     );
 };
 

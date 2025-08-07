@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory ,useLocation} from 'react-router-dom';
 import loginbg from '../../../assets/img/bg/sign.webp';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +12,7 @@ const Content = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const location=useLocation();
 
     // Redux state
     const user = useSelector((state) => state.user.user);
@@ -37,8 +38,8 @@ const Content = () => {
             ).unwrap();
 
             if (resultAction?.token) {
-                const lastVisited = localStorage.getItem('lastVisited');
-                history.push(lastVisited || '/');
+                const redirectTo = location.state?.from || '/'; // fallback to homepage
+                history.push(redirectTo);
             }
             if (resultAction?.token) {
                 // Clear form and errors

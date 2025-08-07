@@ -7,13 +7,13 @@ import './handpicked.css';
 
 const BASE_URL = "https://app.bmgjewellers.com";
 
-const NavigationButton = ({ direction, onClick }) => {
+const NavButton = ({ direction, onClick }) => {
     const iconClass = direction === 'next' ? 'fal fa-arrow-right' : 'fal fa-arrow-left';
     const ariaLabel = direction === 'next' ? 'Next slide' : 'Previous slide';
 
     return (
         <button
-            className={`nav-arrow ${direction}-nav`}
+            className={`gem-nav-btn ${direction}-btn`}
             onClick={onClick}
             aria-label={ariaLabel}
         >
@@ -22,7 +22,7 @@ const NavigationButton = ({ direction, onClick }) => {
     );
 };
 
-const ItemCard = ({ product }) => {
+const ProductCard = ({ product }) => {
     const handleProductClick = (e, sno) => {
         e.preventDefault();
         e.stopPropagation();
@@ -30,8 +30,8 @@ const ItemCard = ({ product }) => {
     };
 
     return (
-        <div className="jewel-item-card">
-            <div className="item-image-wrapper">
+        <div className="gem-product-card">
+            <div className="product-img-container">
                 <img
                     src={`${BASE_URL}${product.image_path}`}
                     alt={product.productName}
@@ -46,16 +46,16 @@ const ItemCard = ({ product }) => {
     );
 };
 
-const FeaturedItems = ({ itemName, subItemName }) => {
+const HighlightedProducts = ({ itemName, subItemName }) => {
     const { data, loading, error } = useFilterProducts({ itemName, subItemName }, 0, 3);
 
     if (loading) return <div className="text-center">Loading products...</div>;
     if (error) return <div className="text-center text-danger">Error loading products</div>;
 
     return (
-        <div className="featured-items-grid">
+        <div className="gem-products-grid">
             {data?.data?.map((product, index) => (
-                <ItemCard key={`product-${index}`} product={product} />
+                <ProductCard key={`product-${index}`} product={product} />
             ))}
         </div>
     );
@@ -81,8 +81,8 @@ const Handpicked = () => {
         autoplay: true,
         autoplaySpeed: 4000,
         speed: 800,
-        nextArrow: <NavigationButton direction="next" />,
-        prevArrow: <NavigationButton direction="prev" />,
+        nextArrow: <NavButton direction="next" />,
+        prevArrow: <NavButton direction="prev" />,
         responsive: [
             {
                 breakpoint: 1400,
@@ -90,7 +90,7 @@ const Handpicked = () => {
                     slidesToShow: 2,
                     centerMode: true,
                     centerPadding: '10%',
-                }    
+                }
             },
             {
                 breakpoint: 992,
@@ -98,7 +98,6 @@ const Handpicked = () => {
                     slidesToShow: 2,
                     centerMode: true,
                     centerPadding: '15%',
-                    
                 }
             },
             {
@@ -131,29 +130,28 @@ const Handpicked = () => {
         ],
     };
 
-    if (isLoading) return <div className="loading-spinner">Loading banners...</div>;
-    if (error) return <div className="error-message">Error loading banners: {error.message}</div>;
+    if (isLoading) return <div className="gem-loading">Loading banners...</div>;
+    if (error) return <div className="gem-error">Error loading banners: {error.message}</div>;
 
     return (
-        <section className="jewel-showcase">
+        <section className="gem-display">
             <div className="container-fluid">
-                <div className="section-top">
-                    <h2 className="section-label">
-                        <span className="gradient-text">Exclusive</span>
-                        <span className="sub-section-label"> Collection</span>
+                <div className="gem-header">
+                    <h2 className="gem-title">
+                        <span className="gem-gradient-text">Exclusive</span>
+                        <span className="gem-subtitle"> Collection</span>
                     </h2>
-                    <p className="section-description">
+                    <p className="gem-description">
                         Hand-selected premium pieces for the discerning collector
                     </p>
                 </div>
 
-
-                <Slider className="jewel-slider-wrapper" {...sliderSettings}>
+                <Slider className="gem-slider-container" {...sliderSettings}>
                     {data?.data?.map((banner, index) => (
-                        <div key={`banner-${index}`} className="jewel-slide-item">
-                            <div className="main-jewel-piece">
+                        <div key={`banner-${index}`} className="gem-slide">
+                            <div className="gem-main-product">
                                 <div
-                                    className="main-jewel-image"
+                                    className="gem-main-img"
                                     onClick={() => handleShopNow(banner.itemName, banner.subItemName)}
                                     role="button"
                                     tabIndex={0}
@@ -165,7 +163,7 @@ const Handpicked = () => {
                                         loading="lazy"
                                     />
                                 </div>
-                                <FeaturedItems
+                                <HighlightedProducts
                                     itemName={banner.itemName}
                                     subItemName={banner.subItemName}
                                 />

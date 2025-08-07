@@ -36,6 +36,7 @@ const PriceUnderSection = () => {
       <style>
         {`
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap');
+        
           :root {
             --primary-font: 'Gloock', serif;
             --secondary-font: 'Montserrat', sans-serif;
@@ -386,10 +387,7 @@ const PriceUnderSection = () => {
                       />
                       <button
                         className="pus-category-btn"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleCategoryNavigation(category.min, category.max);
-                        }}
+                        onClick={() => handleCategoryNavigation(category.min_price, category.max_price)}
                         aria-label={`Explore ${category.title} collection`}
                       >
                         {category.title}

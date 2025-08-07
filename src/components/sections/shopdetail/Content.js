@@ -1,20 +1,20 @@
 // src/sections/shopdetail/Content.jsx
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import Shopinfo from './Shopinfo';
 import Shoprelated from '../../layouts/Shoprelated';
-import { withRouter } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-class Content extends Component {
-    render() {
-        const { sno } = this.props.match.params;
+const Content = () => {
+    const { sno } = useParams();
+    const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 
-        return (
-            <Fragment>
-                <Shopinfo sno={sno} />
-                <Shoprelated />
-            </Fragment>
-        );
-    }
-}
+    return (
+        <Fragment>
+            <Shopinfo sno={sno} Authenticated={isAuthenticated} />
+            <Shoprelated />
+        </Fragment>
+    );
+};
 
-export default withRouter(Content);
+export default Content;

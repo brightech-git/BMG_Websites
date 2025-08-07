@@ -20,11 +20,11 @@ class Footertwo extends Component {
                     <div className="footer-logo mb-50">
                       <img src={logo} alt="Logo" />
                     </div>
-                    <p>
+                    {/* <p>
                       Lorem ipsum dolor sit amet, consectetur adipisicing elit,
                       sed do eiusmod tempor incididunt ut labore et dolore magna
                       aliqua.
-                    </p>
+                    </p> */}
                     <div className="social-links mt-40">
                       <Link to="#">
                         <i className="fab fa-facebook-f" />
@@ -51,32 +51,25 @@ class Footertwo extends Component {
                     <h4 className="widget-title">Useful Links</h4>
                     <ul className="useful-links">
                       <li>
-                        <Link to="#">Contact Us</Link>
+                        <Link to="/contact">Contact Us</Link>
                       </li>
                       <li>
-                        <Link to="#">About Us</Link>
+                        <Link to="/privacypolicy">Privacy Policy</Link>
                       </li>
                       <li>
-                        <Link to="#">Shipping & Returns</Link>
+                        <Link to="/terms-conditions">Terms & Conditions</Link>
                       </li>
                       <li>
-                        <Link to="#">Refund Policy</Link>
+                        <Link to="/cancellation-return-policy">Shipping & Returns</Link>
                       </li>
                       <li>
-                        <Link to="#">Terms & Conditions</Link>
+                        <Link to="/refund-policy">Refund Policy</Link>
                       </li>
-                      <li>
-                        <Link to="faq">FAQ</Link>
-                      </li>
+                    
+                    
                     </ul>
 
-                    {/* ✅ PAYMENT ICONS BELOW LINKS */}
-                    {/* <div className="payment-icons mt-4">
-                      <i className="fab fa-cc-visa"></i>
-                      <i className="fab fa-cc-mastercard"></i>
-                      <i className="fab fa-cc-paypal"></i>
-                      <i className="fab fa-cc-apple-pay"></i>
-                    </div> */}
+                  
                   </div>
                 </div>
 

@@ -35,8 +35,9 @@ class Content extends Component {
                 <Condos />
                 <Handpicked />
                 <ShopByRecipient />
-                <FeaturedBanners />
-                <Cta />     
+                <Ourproducts />
+              
+                {/* <Cta />      */}
                 {/* <Trending/> */}        
               
                 <TrendingProducts />
@@ -44,7 +45,7 @@ class Content extends Component {
                 <JewelryShowcase />
                 {/* <BestDesign /> */}
                 {/* <Handpick/> */}
-                <Ourproducts/>
+                <FeaturedBanners />
                  {/* <Saleproducts/> */}
                 <Counter/>
                 <Onsale/>

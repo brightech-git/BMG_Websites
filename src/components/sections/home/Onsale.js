@@ -31,7 +31,7 @@ const Onsale = () => {
         <section className="pt-55 pb-55 room-type-section style-2">
             <div className='container'>
                 <div className="section-title text-center mb-50">
-                    <span className="title-tag">May Be You Have Earned It</span>
+                    <span className="onsale-title-tag">May Be You Have Earned It</span>
                     
                 </div>
                 <div className="row room-items">

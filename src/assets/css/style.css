@@ -48,6 +48,7 @@
 
 
 @import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap');
 
 :root {
     --primary-font: 'Gloock', 'serif';
@@ -1219,7 +1220,7 @@ header.header-absolute {
     z-index: 99;
     background-color: #f6f5f0;
     padding: 10px !important;
-    top: 0px ;
+    top: 0px;
 }
 
 @media only screen and (min-width: 1200px) and (max-width: 1599px) {
@@ -1785,7 +1786,7 @@ header.header-three .main-menu-area {
     width: 100%;
     z-index: 99;
     height: auto;
-    bottom: -80px;
+    bottom: -55px;
 
 }
 
@@ -1799,7 +1800,7 @@ header.header-three .main-menu-area {
 
 header.header-three .main-menu-area.sticky-header.sticky-active {
     position: fixed;
-    top: 0 ;
+    top: 0;
     left: 0;
     right: 0;
     bottom: auto;
@@ -2343,8 +2344,10 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 
 /*=====sigma-navigation======*/
 
-.sigma-mobile-header .sigma-mobile-header-inner {
-    padding: 0 20px;
+.sigma-mobile-header {
+    padding: 0 10px;
+    width: 100%;
+
 }
 
 .sigma-header .sigma-main-menu {
@@ -2622,8 +2625,8 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 }
 
 .sigma-header .sigma-main-menu .menu-item-has-children.menu-item-has-megamenu>.sub-menu .sigm-megamenu-nav>.nav-item>.nav-link.active {
-    border-right: 3px solid #fcd462;
-    color: #fcd462;
+    border-right: 3px solid #cd865c;
+    color: #cd865c;
 }
 
 .sigma-header .sigma-main-menu .menu-item-has-children.menu-item-has-megamenu>.sub-menu .sigma-megamenu-img,
@@ -2715,6 +2718,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     align-items: center;
     justify-content: center;
     padding-bottom: 10px;
+    width: 100% !important;
 }
 
 .sigma-mobile-header .sigma-mobile-header-inner .site-logo {
@@ -2851,11 +2855,14 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     .sigma-header .sigma-header-nav {
         display: none;
         padding-bottom: 10px;
+        width: 100%;
     }
 
     .sigma-mobile-menu,
     .sigma-mobile-header {
         display: block;
+        width: 104% !important;
+        margin-left: -12px !important;
     }
 
 
@@ -2863,6 +2870,12 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 }
 
 @media (max-width: 767px) {
+    .sigma-mobile-menu,
+        .sigma-mobile-header {
+            display: block;
+            width: 105% !important;
+            margin-left: -12px !important;
+        }
     .sigma-mobile-header .sigma-mobile-header-inner {
         padding: 10px 0;
     }
@@ -7029,7 +7042,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     .counter-section .counter-box {
         font-size: 12px;
     }
-    
+
 }
 
 .counter-section .counter-box .icon {
@@ -7052,7 +7065,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     color: var(--primary-text-color);
     font-weight: 600;
     font-family: var(--secondary-font);
-    font-size: 14px ;
+    font-size: 14px;
 }
 
 .counter-section .counter-box h4 {
@@ -7080,9 +7093,10 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
         color: var(--primary-text-color);
         font-size: 18px;
     }
-        .counter-box .icon i{
-            font-size: 40px  !important;
-        }
+
+    .counter-box .icon i {
+        font-size: 40px !important;
+    }
 }
 
 

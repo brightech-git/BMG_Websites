@@ -1,3 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
+
+:root {
+    --primary-font: 'Gloock', 'serif';
+    --secondary-font: 'Montserrat', 'sans-serif';
+    --primary-color: #f6f5f0;
+    --primary-text-color: #404040;
+    --primary-card-color: #edebe7;
+    --primary-hover-color: #cd865c;
+    --secondary-card-color: #cfdcdd;
+    --white-color: #ffffff;
+    --header-height: 80px;
+    --mobile-header-height: 60px;
+    --green-color: #024908;
+    --grey-color: #A9A9A9;
+    --black-color: #000000;
+}
+
 .terms-conditions-wrapper {
     font-family: var(--secondary-font);
     color: var(--primary-text-color);
@@ -7,20 +25,24 @@
 .terms-heading {
     font-family: var(--primary-font);
     font-size: 2.5rem;
-    color: var(--black-color);
+    color: var(--black-color) !important;
 }
 
 .terms-card {
-    background-color: var(--primary-card-color);
     border: none;
     border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
-
+.card-body{
+    background-color: var(--primary-card-color);
+}
+.card-title{
+    color: var(--primary-text-color) !important;
+    font-size: 1.3rem !important;
+}
 .section-heading {
     font-family: var(--primary-font);
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
     color: var(--black-color);
 }
 

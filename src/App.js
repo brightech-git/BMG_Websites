@@ -74,7 +74,6 @@ function App() {
         <Route exact path="/classification" component={Classification} />
         <Route exact path="/coming-soon" component={Comingsoon} />
         <Route exact path="/contact" component={Contact} />
-        <Route exact path="/faq" component={Faq} />
         <Route exact path="/gallery" component={Gallery} />
         <Route exact path="/gallery-two" component={Gallerytwo} />
         <Route exact path="/legal" component={Legal} />
@@ -85,7 +84,7 @@ function App() {
         <Route exact path="/team" component={Team} />
         <Route exact path="/typography" component={Typography} />
         <PrivateRoute exact path="/wishlist" component={Wishlist} />
-        <Route exact path="/privacypolicy" component={PrivacyPolicy} />
+   
         <PrivateRoute exact path="/payment/:orderId" component={PaymentPage} />
         <Route exact path="/AddressManager" component={AddressManager} />
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
@@ -93,6 +92,8 @@ function App() {
         <Route exact path="/orderdetail/:orderId" component={OrderDetail} />
         <Route exact path="/change-password" component={ChangePassword} />
         <Route path="/account" component={AccountSidebar} />
+
+        <Route exact path="/privacypolicy" component={PrivacyPolicy} />
         <Route exact path="/cancellation-return-policy" component={CancellationReturnPolicy} />
         <Route exact path="/refund-policy" component={RefundPolicy} />
         <Route exact path="/terms-conditions" component={TermsConditions} />  

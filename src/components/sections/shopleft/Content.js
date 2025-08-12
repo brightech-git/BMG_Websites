@@ -1,6 +1,5 @@
-import React, { useCallback ,useEffect} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import Pagination from '../../layouts/Pagination';
 import useFilterProducts from '../../../hook/product/useFilterProducts';
 import { useAuth } from '../../../context/authContext/UserAuthContext';
 import ProductCard from '../productCard/ProductCard';
@@ -14,16 +13,21 @@ const Content = () => {
     const location = useLocation();
     const { user } = useAuth();
 
-    // Parse query params
+    const defaultPageSize = 10;
+    const [pageSize, setPageSize] = useState(defaultPageSize);
+    const [hideLoadMore, setHideLoadMore] = useState(false);
+    const previousProductCount = useRef(0);
+
+    const page = 0;
     const searchParams = new URLSearchParams(location.search);
-    const page = parseInt(searchParams.get('page')) || 0;
-    const pageSize = parseInt(searchParams.get('pageSize')) || 10;
-
-    // Parse query params into an object for useFilterProducts
     const queryFilters = Object.fromEntries(searchParams);
-
-    // Fetch filtered products
-    const { data, loading: isLoading, error: isError, refetch } = useFilterProducts(queryFilters, page, pageSize);
+    const [loadTriggered, setLoadTriggered] = useState(false);
+    const {
+        data,
+        loading: isLoading,
+        error: isError,
+        refetch,
+    } = useFilterProducts(queryFilters, page, pageSize);
 
     const handleWishlistToggle = useCallback(
         (e, itemSno, isWishlisted) => {
@@ -44,20 +48,39 @@ const Content = () => {
                 return;
             }
 
-            // Wishlist functionality placeholder
+            // Wishlist action placeholder
         },
         [user, history]
     );
+
     useEffect(() => {
-    window.scrollTo(0, 0); // Scroll to top on mount or when location changes (page, filter, etc.)
-}, [location]);
+        window.scrollTo(0, 0);
+    }, [location]);
 
-
-    const handlePageChange = (newPage) => {
-        const params = new URLSearchParams(location.search);
-        params.set('page', newPage);
-        history.push({ search: params.toString() });
+    const handleLoadMore = () => {
+        previousProductCount.current = products.length;
+        setLoadTriggered(true);
+        setPageSize((prevSize) => prevSize + 10);
     };
+
+    const products = Array.isArray(data?.data)
+        ? data.data
+        : Array.isArray(data)
+            ? data
+            : [];
+
+    const totalItems = data?.totalItems || products.length;
+
+    // 🔍 Detect if load more fetched anything new
+    useEffect(() => {
+        if (loadTriggered) {
+            if (products.length === previousProductCount.current) {
+                // No new products were loaded
+                setHideLoadMore(true);
+            }
+            setLoadTriggered(false); // Reset flag after checking
+        }
+    }, [products.length, loadTriggered]);
 
     if (isLoading) return <div className="loading-spinner">Loading...</div>;
     if (isError)
@@ -68,16 +91,13 @@ const Content = () => {
             </p>
         );
 
-    const products = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : [];
-
     return (
         <section className="shop-container">
             <ProductFilterBar />
             <div className="product-area">
                 <div className="product-header">
                     <p>
-                        Showing {products.length ? 1 : 0} to {products.length} of{' '}
-                        {data?.totalItems || products.length} results
+                        Showing {products.length ? 1 : 0} to {products.length} of {totalItems} results
                     </p>
                 </div>
                 <div className="product-grid">
@@ -89,15 +109,19 @@ const Content = () => {
                             } catch (error) {
                                 console.warn('Invalid image JSON for item', item.ITEMID);
                             }
+
                             const firstImage =
                                 images.length > 0
                                     ? `${baseUrl}${images[0]}`
                                     : 'https://via.placeholder.com/245x331';
+
                             return (
                                 <ProductCard
                                     key={item.SNO || item.id || item.ITEMID}
                                     item={item}
-                                    onWishlistToggle={(e) => handleWishlistToggle(e, item.SNO, false)}
+                                    onWishlistToggle={(e) =>
+                                        handleWishlistToggle(e, item.SNO, false)
+                                    }
                                     imageSrc={firstImage}
                                 />
                             );
@@ -106,12 +130,15 @@ const Content = () => {
                         <p>No products found.</p>
                     )}
                 </div>
-                <Pagination
-                    currentPage={page}
-                    pageSize={pageSize}
-                    totalItems={data?.totalItems || products.length}
-                    onPageChange={handlePageChange}
-                />
+
+                {/* ✅ Show Load More only if more products are available */}
+          
+                    <div className="load-more-container">
+                        <button className="load-more-btn" onClick={handleLoadMore}>
+                            Load More
+                        </button>
+                    </div>
+           
             </div>
         </section>
     );

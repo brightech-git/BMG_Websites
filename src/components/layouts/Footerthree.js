@@ -50,9 +50,7 @@ class Footertwo extends Component {
                   <div className="widget nav-widget mb-50">
                     <h4 className="widget-title">Useful Links</h4>
                     <ul className="useful-links">
-                      <li>
-                        <Link to="/contact">Contact Us</Link>
-                      </li>
+                     
                       <li>
                         <Link to="/privacypolicy">Privacy Policy</Link>
                       </li>
@@ -60,7 +58,10 @@ class Footertwo extends Component {
                         <Link to="/terms-conditions">Terms & Conditions</Link>
                       </li>
                       <li>
-                        <Link to="/cancellation-return-policy">Shipping & Returns</Link>
+                        <Link to="/delivery&shipping">Delivery-Shiiping Policy</Link>
+                      </li>
+                      <li>
+                        <Link to="/cancellation-return-policy">Cancellation & Return Policy</Link>
                       </li>
                       <li>
                         <Link to="/refund-policy">Refund Policy</Link>
@@ -553,19 +554,26 @@ class Footertwo extends Component {
                   </p>
                 </div>
                 <div className="col-lg-6 col-md-7 order-1 order-md-2">
-                  <div className="footer-menu text-center text-md-right">
-                    <ul>
-                      <li>
-                        <Link to="#">Today's Deal</Link>
-                      </li>
-                      <li>
-                        <Link to="#">Our Collections</Link>
-                      </li>
-                      <li>
-                        <Link to="#">Deal of the Day</Link>
-                      </li>
-                    </ul>
+                  <div className="footer-menu text-center text-md-right py-3">
+                    <span style={{ color: '#cd865c', fontSize: '16px', fontWeight: 'bold' }}>
+                      Powered By
+                    </span>{' '}
+                    <a
+                      href="https://www.brightechsoftware.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        color: '#404040',
+                        fontSize: '16px',
+                        textDecoration: 'none',
+                        fontWeight: '600',
+                        marginLeft: '4px',
+                      }}
+                    >
+                      BrightechSoftwareSolution
+                    </a>
                   </div>
+
                 </div>
               </div>
             </div>

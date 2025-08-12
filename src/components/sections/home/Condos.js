@@ -387,7 +387,7 @@ const PriceUnderSection = () => {
                       />
                       <button
                         className="pus-category-btn"
-                        onClick={() => handleCategoryNavigation(category.min_price, category.max_price)}
+                        
                         aria-label={`Explore ${category.title} collection`}
                       >
                         {category.title}

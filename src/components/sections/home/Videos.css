@@ -1,277 +1,194 @@
-/* Video Component Styles */
-
- @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap');
-:root {
-    --primary-font: 'Gloock', 'serif';
-    --secondary-font: 'Montserrat', 'sans-serif';
-    --primary-color: #f6f5f0;
-    --primary-text-color: #404040;
-    --primary-card-color: #edebe7;
-    --primary-hover-color: #cd865c;
-    --secondary-card-color: #cfdcdd;
-    --white-color: #ffffff;
-    --header-height: 80px;
-    --mobile-header-height: 60px;
-    --green-color: #024908;
-    --grey-color: #A9A9A9;
-    --black-color: #000000;
-}
-.video-section.with-pattern {
+/* Base layout */
+.video-section {
+    padding: 40px 0;
+    background-color: #f6f5f0;
     position: relative;
-    overflow: hidden;
-    z-index: 1;
-    padding: 85px 0;
-}
-
-.pattern-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
-    z-index: -1;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.pattern {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-repeat: repeat;
-    opacity: 0.05;
-}
-
-/* Custom two-column layout */
-.video-section .container .row {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    /* Enforce two columns */
-    gap: 1rem;
+.video-navigation {
+    display: flex;
     align-items: center;
-}
-
-.video-section .col-lg-6 {
-    width: 100%;
-    /* Ensure full width within grid column */
-    max-width: none;
-    /* Override Bootstrap's max-width */
-    flex: none;
-    /* Disable Bootstrap's flex behavior */
-}
-
-.video-container {
+    justify-content: center;
+    gap: 15px;
     position: relative;
-    width: 100%;
-    height: 0;
-    padding-bottom: 56.25%;
-    /* 16:9 aspect ratio */
+}
+
+/* Video container */
+.video-container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    width: 80%;
+}
+
+.video-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Video card styling */
+.video-card {
+    scroll-snap-align: center;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 0 0 auto;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    background-color: #000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    height: 400px;
 }
 
-.video-container:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+.video-card.active {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-.video-element {
-    position: absolute;
-    top: 0;
-    left: 0;
+.video-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.video-thumb {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
+    border-radius: 12px;
 }
 
-.video-overlay {
+.video-indicator {
     position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Navigation arrows */
+.nav-arrow {
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.nav-arrow:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+}
+
+/* Modal styling */
+.video-modal-overlay {
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.2);
-    transition: opacity 0.3s ease;
 }
 
-.video-container:hover .video-overlay {
-    opacity: 0.8;
+.video-modal-content {
+    position: relative;
+    width: 95%;
+    height: 95%;
+    max-width: 1200px;
+    max-height: 90vh;
+    background-color: #000;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
-.play-button {
-    width: 80px;
-    height: 80px;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #000;
-    font-size: 24px;
-    transition: all 0.3s ease;
+.video-modal-player {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.video-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    color: #fff;
+    background: none;
     border: none;
     cursor: pointer;
+    z-index: 10;
 }
 
-.play-button:hover {
-    background: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    transform: scale(1.1);
-}
-
-.video-content {
-    padding: 20px;
-}
-
-.section-title h2 {
-    font-size: 36px;
-    margin-bottom: 0px;
-    background: linear-gradient(120deg, #e76f2a, #000000);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        color: transparent;
-    font-family: 'Dancing Script'!important;
-    letter-spacing: 1px !important;
-    font-weight: bolder !important;
-}
-
-.video-description {
-    font-size: 16px;
-    line-height: 1.8;
-    color:var(--primary-text-color);
-    margin-bottom: 0px;
-    max-width: 90%;
-    font-family: var(--secondary-font);
-}
-
-.video-button {
-    display: inline-block;
-    padding: 12px 30px;
-    background: #000;
-    color: #fff;
-    border-radius: 30px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-}
-
-.video-button:hover {
-    background: #333;
-    color: #fff;
-    transform: translateY(-3px);
-}
-
-.loading-spinner,
-.error-message {
+/* Loading/Error states */
+.video-loading,
+.video-error {
     text-align: center;
-    padding: 40px;
-    font-size: 18px;
+    font-size: 16px;
+    padding: 30px;
+    color: #666;
 }
 
-/* Responsive Styles */
-@media (max-width: 1199px) {
-    .video-content {
-        padding: 15px;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .video-container {
+        width: 90%;
     }
 
-    .section-title h2 {
-        font-size: 32px;
-    }
-}
-
-@media (max-width: 991px) {
-    .video-section.with-pattern {
-        padding: 60px 0;
+    .video-card {
+        width: 250px;
+        height: 350px;
     }
 
-    .section-title h2 {
-        font-size: 28px;
-    }
-
-    .video-description {
-        font-size: 15px;
-        max-width: 100%;
-        margin-bottom: 0px;
-    }
-
-    .play-button {
-        width: 70px;
-        height: 70px;
-        font-size: 22px;
-    }
-}
-
-@media (max-width: 767px) {
-    .video-section .container .row {
-        grid-template-columns: repeat(2, 1fr);
-        /* Maintain two columns */
-        gap: 0.5rem;
-        /* Reduce gap for smaller screens */
-    }
-
-    .section-title h2 {
-        font-size: 24px;
-    }
-
-    .video-description {
-        font-size: 13px;
-        max-width: 100%;
-        margin-bottom: 0px;
-    }
-
-    .video-button {
-        padding: 8px 20px;
-        font-size: 13px;
-    }
-
-    .play-button {
-        width: 50px;
-        height: 50px;
+    .nav-arrow {
+        width: 35px;
+        height: 35px;
         font-size: 18px;
     }
-
-    .video-container {
-        padding-bottom: 75%;
-        /* Adjust aspect ratio for smaller screens */
-    }
 }
 
-@media (max-width: 575px) {
-    .video-section.with-pattern {
-        padding: 40px 0;
-    }
-
-    .section-title h2 {
-        font-size: 16px !important;
-        margin-bottom: 0px !important;
-    }
-
-    .video-description {
-        font-size: 12px;
-        margin-bottom: 0px ;
-        display: none;
-    }
-
-    .video-button {
-        padding: 6px 16px;
-        font-size: 12px;
-    }
-
-    .play-button {
-        width: 40px;
-        height: 40px;
-        font-size: 16px;
-    }
-
+@media (max-width: 480px) {
     .video-container {
-        padding-bottom: 100%;
-        /* Maintain adjusted aspect ratio */
+        width: 100%;
+        padding: 10px;
+    }
+
+    .video-card {
+        width: 220px;
+        height: 300px;
+    }
+
+    .video-navigation {
+        gap: 5px;
+    }
+
+    .nav-arrow {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
     }
 }

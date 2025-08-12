@@ -41,6 +41,7 @@ import CancellationReturnPolicy from './components/pages/Policies/CancellationRe
 import RefundPolicy from './components/pages/Policies/RefundPolicy';
 import TermsConditions from './components/pages/Policies/TermsConditions';
 import PrivateRoute from './route/UserPrivateRoute';
+import DeliveryShippingPolicy from './components/pages/Policies/DeliveryAndShipping';
 
 
 function ScrollWatcher() {
@@ -95,6 +96,7 @@ function App() {
 
         <Route exact path="/privacypolicy" component={PrivacyPolicy} />
         <Route exact path="/cancellation-return-policy" component={CancellationReturnPolicy} />
+        <Route exact path="/delivery&shipping" component={DeliveryShippingPolicy} />
         <Route exact path="/refund-policy" component={RefundPolicy} />
         <Route exact path="/terms-conditions" component={TermsConditions} />  
         

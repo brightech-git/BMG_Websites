@@ -8,9 +8,9 @@ const ShopByRecipient = () => {
     const history = useHistory();
 
     const categories = [
-        { id: 1, label: "Him", image: men, query: "itemName=Gift Ideas&Subitemname=FOR HIM" },
-        { id: 2, label: "Her", image: women, query: "itemName=Gift Ideas&Subitemname=FOR HER" },
-        { id: 3, label: "Kids", image: kid, query: "Subitemname=FOR KIDS&itemName=Gift Ideas" },
+        { id: 1, label: "Him", image: men, query: "itemName=Gift Ideas&subItemName=FOR HIM" },
+        { id: 2, label: "Her", image: women, query: "itemName=Gift Ideas&subItemName=FOR HER" },
+        { id: 3, label: "Kids", image: kid, query: "subItemName=FOR KIDS&itemName=Gift Ideas" },
     ];
 
     const handleCategoryClick = (query) => {

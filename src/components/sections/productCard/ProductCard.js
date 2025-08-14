@@ -220,7 +220,7 @@ const ProductCard = ({ item }) => {
                         className={`item-image ${imageFade ? 'hide-image' : 'show-image'}`}
                         onError={(e) => {
                             e.target.onerror = null;
-                            e.target.src = 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop';
+                            e.target.src = '/fallback-image.jpg';
                         }}
                     />
 
@@ -276,7 +276,7 @@ const ProductCard = ({ item }) => {
                     </div>
                 </div>
             </div>
-            <style jsx>{`
+            <style >{`
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&display=swap');
                 @import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
                 .card-container {

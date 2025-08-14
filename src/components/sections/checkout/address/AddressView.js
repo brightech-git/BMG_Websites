@@ -1,75 +1,98 @@
 import React from 'react';
-import './address.css';
+import { Badge } from 'react-bootstrap';
+import './AddressView.css';
 
-const AddressView = ({ address, onEdit, onAdd, onChangeAddress }) => {
-    if (!address) {
+const AddressView = ({
+    address,
+    showActions = false,
+    onEdit = null,
+    onDelete = null,
+    variant = 'default', // 'default', 'compact', 'card', 'minimal'
+    className = ''
+}) => {
+    if (!address) return null;
+
+    const renderActions = () => {
+        if (!showActions || (!onEdit && !onDelete)) return null;
+
         return (
-            <div className="address-view">
-                <p>No address selected</p>
-                <button
-                    className="main-btn btn-filled"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log('AddressView: Add New Address clicked');
-                        onAdd();
-                    }}
-                >
-                    + Add New Address
-                </button>
+            <div className="address-view-actions">
+                {onEdit && (
+                    <button
+                        className="address-action-btn edit-btn"
+                        onClick={() => onEdit(address)}
+                        aria-label="Edit address"
+                    >
+                        Edit
+                    </button>
+                )}
+                {onDelete && !address.isDefault && (
+                    <button
+                        className="address-action-btn delete-btn"
+                        onClick={() => onDelete(address.id)}
+                        aria-label="Delete address"
+                    >
+                        Delete
+                    </button>
+                )}
             </div>
         );
-    }
+    };
+
+    const renderHeader = () => {
+        if (variant === 'minimal') return null;
+
+        return (
+            <div className="address-view-header">
+                <div className="address-view-name-section">
+                    <h5 className="address-view-name">{address.name}</h5>
+                    {address.isDefault && (
+                        <Badge bg="success" className="address-default-badge">
+                            Default
+                        </Badge>
+                    )}
+                </div>
+                {variant !== 'compact' && (
+                    <p className="address-view-phone">{address.phone}</p>
+                )}
+            </div>
+        );
+    };
+
+    const renderAddressLines = () => {
+        const lines = [
+            address.addressLine,
+            [address.locality, address.city].filter(Boolean).join(', '),
+            `${address.state} - ${address.pincode}`,
+            address.country || 'India'
+        ].filter(Boolean);
+
+        if (address.landmark) {
+            lines.push(`Landmark: ${address.landmark}`);
+        }
+
+        return (
+            <div className="address-view-content">
+                {variant === 'compact' && (
+                    <span className="address-view-phone-compact">{address.phone} • </span>
+                )}
+                {lines.map((line, index) => (
+                    <p
+                        key={index}
+                        className={`address-line ${index === lines.length - 1 && address.landmark ? 'landmark-line' : ''}`}
+                    >
+                        {line}
+                    </p>
+                ))}
+            </div>
+        );
+    };
 
     return (
-        <div className="address-view">
-            <div className="address-details">
-                <p>
-                    <strong>{address.name}</strong> - {address.phone}
-                </p>
-                <p>{address.addressLine}</p>
-                <p>
-                    {address.locality}, {address.landmark}
-                </p>
-                <p>
-                    {address.city}, {address.state} - {address.pincode}
-                </p>
-                {address.alternatePhone && <p>Alternate: {address.alternatePhone}</p>}
-                {address.isDefault && <span className="default-badge">Default</span>}
-            </div>
-            <div className="address-actions">
-                <button
-                    className="main-btn btn-outlined change-address-btn"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log('AddressView: Change Address clicked');
-                        onChangeAddress();
-                    }}
-                >
-                    Change Address
-                </button>
-                <button
-                    className="main-btn btn-filled"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        onEdit(address.id);
-                    }}
-                >
-                    Edit
-                </button>
-                <button
-                    className="main-btn btn-filled"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        onAdd();
-                    }}
-                >
-                    + Add New
-                </button>
-            </div>
+        <div className={`address-view address-view-${variant} ${className}`}>
+            {renderHeader()}
+            {renderAddressLines()}
+            {renderActions()}
         </div>
     );
 };

@@ -26,6 +26,19 @@ export const loginUser = async (loginData) => {
     return data;
 };
 
+export const verifyOtpService = async (contactNumber, otp) => {
+    const response = await PublicUrl.post(
+        `auth/user/verify-otp?contactNumber=${contactNumber}&otp=${otp}`
+    );
+
+    const data = response.data;
+
+    if (data.error) {
+        throw new Error(data.error);
+    }
+
+    return data; // { message, user, token }
+};
 
 // Forgot Password (Send OTP via SMS only)
 export const forgotPassword = async ({ contactNumber }) => {

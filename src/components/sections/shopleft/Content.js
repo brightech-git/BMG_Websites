@@ -1,19 +1,19 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import useFilterProducts from '../../../hook/product/useFilterProducts';
-import { useAuth } from '../../../context/authContext/UserAuthContext';
 import ProductCard from '../productCard/ProductCard';
 import ProductFilterBar from './ProductFilterBar';
 import './ShopContent.css';
+import { useSelector } from 'react-redux';
 
 const baseUrl = 'https://app.bmgjewellers.com';
 
 const Content = () => {
     const history = useHistory();
     const location = useLocation();
-    const { user } = useAuth();
+    const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 
-    const defaultPageSize = 10;
+    const defaultPageSize = 40;
     const [pageSize, setPageSize] = useState(defaultPageSize);
     const [hideLoadMore, setHideLoadMore] = useState(false);
     const previousProductCount = useRef(0);
@@ -34,7 +34,7 @@ const Content = () => {
             e.preventDefault();
             e.stopPropagation();
 
-            if (!user) {
+            if (!isAuthenticated) {
                 localStorage.setItem(
                     'redirectAfterLogin',
                     JSON.stringify({
@@ -50,7 +50,7 @@ const Content = () => {
 
             // Wishlist action placeholder
         },
-        [user, history]
+        [isAuthenticated, history]
     );
 
     useEffect(() => {

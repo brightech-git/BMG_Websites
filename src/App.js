@@ -87,6 +87,8 @@ function App() {
         <PrivateRoute exact path="/wishlist" component={Wishlist} />
    
         <PrivateRoute exact path="/payment/:orderId" component={PaymentPage} />
+        <PrivateRoute exact path="/payment/success" component={Home} />
+
         <Route exact path="/AddressManager" component={AddressManager} />
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
         <PrivateRoute exact path="/orders" component={Order} />

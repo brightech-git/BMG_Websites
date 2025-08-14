@@ -170,7 +170,7 @@ const ProductCard = ({ item, isMain }) => {
                         className="product-card__image"
                         onError={(e) => {
                             e.target.onerror = null;
-                            e.target.src = 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop';
+                            e.target.src = '/fallback-image.jpg';
                         }}
                     />
                     {hasDiscount && (
@@ -428,7 +428,7 @@ const ProductCarousel = () => {
                     </button>
                 </div>
             </div>
-            <style jsx>{`
+            <style >{`
                 @import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
                 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap');
 

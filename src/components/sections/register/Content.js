@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { signup } from '../../../redux/slices/userSlice';
+import { signup, verifyOtp } from '../../../redux/slices/userSlice';
 import { toast } from 'react-toastify';
 import loginbg from '../../../assets/img/bg/sign.webp';
 
@@ -10,6 +10,9 @@ const Content = () => {
     const [email, setEmail] = useState('');
     const [contactNumber, setContactNumber] = useState('');
     const [password, setPassword] = useState('');
+    const [otp, setOtp] = useState('');
+    const [showOtpModal, setShowOtpModal] = useState(false);
+    const [tempContactNumber, setTempContactNumber] = useState('');
     const [errors, setErrors] = useState({});
 
     const dispatch = useDispatch();
@@ -52,9 +55,15 @@ const Content = () => {
 
     const handleRegister = (e) => {
         e.preventDefault();
-
         if (validateForm()) {
-            dispatch(signup({ username, email, contactNumber, password }));
+            dispatch(signup({ username, email, contactNumber, password }))
+                .unwrap()
+                .then(() => {
+                    setShowOtpModal(true);
+                    setTempContactNumber(contactNumber); // use the value already in the form
+                })
+
+                .catch(err => toast.error(err.message || 'Registration failed'));
         } else {
             toast.error('Please fix the form errors', {
                 position: 'top-right',
@@ -66,8 +75,40 @@ const Content = () => {
         }
     };
 
+    const handleVerifyOtp = (e) => {
+        e.preventDefault();
+        if (otp.length !== 6) {
+            toast.error('Please enter a valid 6-digit OTP', {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            return;
+        }
+
+        dispatch(verifyOtp({
+            contactNumber: tempContactNumber || contactNumber,
+            otp
+        }))
+            .unwrap()
+            .then(() => {
+                toast.success('Account verified!', {
+                    position: 'top-right',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                });
+                setShowOtpModal(false);
+                navigate.push('/');
+            })
+            .catch(err => toast.error(err.message || 'OTP verification failed'));
+    };
+
     useEffect(() => {
-        if (isAuthenticated && user) {
+        if (isAuthenticated && user && !showOtpModal) {
             toast.success(`Registration successful for ${username}!`, {
                 position: 'top-right',
                 autoClose: 2000,
@@ -77,11 +118,11 @@ const Content = () => {
             });
 
             setTimeout(() => {
-                navigate.push('/'); // Redirect to home page
+                navigate.push('/');
             }, 2200);
         }
 
-        if (error) {
+        if (error && !showOtpModal) {
             toast.error(error, {
                 position: 'top-right',
                 autoClose: 3000,
@@ -90,7 +131,7 @@ const Content = () => {
                 draggable: true,
             });
         }
-    }, [isAuthenticated, error, user, navigate, username]);
+    }, [isAuthenticated, error, user, navigate, username, showOtpModal]);
 
     return (
         <section className="login-sec pt-80 pb-80">
@@ -105,88 +146,131 @@ const Content = () => {
                         </div>
                         <div className="col-lg-6">
                             <div className="login-form">
-                                <h2>Create Account</h2>
+                                <h2>{showOtpModal ? 'Verify OTP' : 'Create Account'}</h2>
 
-                                <form onSubmit={handleRegister}>
-                                    <div className="input-group input-group-two mb-20">
-                                        <input
-                                            type="text"
-                                            placeholder="Username"
-                                            value={username}
-                                            onChange={(e) => setUsername(e.target.value)}
-                                            className={errors.username ? 'is-invalid' : ''}
-                                        />
-                                        {errors.username && (
-                                            <div className="invalid-feedback" style={{ fontSize: '12px', color: '#dc3545' }}>
-                                                {errors.username}
-                                            </div>
-                                        )}
-                                    </div>
+                                {!showOtpModal ? (
+                                    <form onSubmit={handleRegister}>
+                                        <div className="input-group input-group-two mb-20">
+                                            <input
+                                                type="text"
+                                                placeholder="Username"
+                                                value={username}
+                                                onChange={(e) => setUsername(e.target.value)}
+                                                className={errors.username ? 'is-invalid' : ''}
+                                            />
+                                            {errors.username && (
+                                                <div className="invalid-feedback" style={{ fontSize: '12px', color: '#dc3545' }}>
+                                                    {errors.username}
+                                                </div>
+                                            )}
+                                        </div>
 
-                                    <div className="input-group input-group-two mb-20">
-                                        <input
-                                            type="email"
-                                            placeholder="Email"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            className={errors.email ? 'is-invalid' : ''}
-                                        />
-                                        {errors.email && (
-                                            <div className="invalid-feedback" style={{ fontSize: '12px', color: '#dc3545' }}>
-                                                {errors.email}
-                                            </div>
-                                        )}
-                                    </div>
+                                        <div className="input-group input-group-two mb-20">
+                                            <input
+                                                type="email"
+                                                placeholder="Email"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                                className={errors.email ? 'is-invalid' : ''}
+                                            />
+                                            {errors.email && (
+                                                <div className="invalid-feedback" style={{ fontSize: '12px', color: '#dc3545' }}>
+                                                    {errors.email}
+                                                </div>
+                                            )}
+                                        </div>
 
-                                    <div className="input-group input-group-two mb-20">
-                                        <input
-                                            type="text"
-                                            placeholder="Mobile Number"
-                                            value={contactNumber}
-                                            onChange={(e) => {
-                                                const value = e.target.value.replace(/\D/g, ''); // Only allow digits
-                                                setContactNumber(value);
-                                            }}
-                                            maxLength={10}
-                                            className={errors.contactNumber ? 'is-invalid' : ''}
-                                        />
-                                        {errors.contactNumber && (
-                                            <div className="invalid-feedback" style={{ fontSize: '12px', color: '#dc3545' }}>
-                                                {errors.contactNumber}
-                                            </div>
-                                        )}
-                                    </div>
+                                        <div className="input-group input-group-two mb-20">
+                                            <input
+                                                type="text"
+                                                placeholder="Mobile Number"
+                                                value={contactNumber}
+                                                onChange={(e) => {
+                                                    const value = e.target.value.replace(/\D/g, '');
+                                                    setContactNumber(value);
+                                                }}
+                                                maxLength={10}
+                                                className={errors.contactNumber ? 'is-invalid' : ''}
+                                            />
+                                            {errors.contactNumber && (
+                                                <div className="invalid-feedback" style={{ fontSize: '12px', color: '#dc3545' }}>
+                                                    {errors.contactNumber}
+                                                </div>
+                                            )}
+                                        </div>
 
-                                    <div className="input-group input-group-two mb-20">
-                                        <input
-                                            type="password"
-                                            placeholder="Password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            className={errors.password ? 'is-invalid' : ''}
-                                        />
-                                        {errors.password && (
-                                            <div className="invalid-feedback" style={{ fontSize: '12px', color: '#dc3545' }}>
-                                                {errors.password}
-                                            </div>
-                                        )}
-                                    </div>
+                                        <div className="input-group input-group-two mb-20">
+                                            <input
+                                                type="password"
+                                                placeholder="Password"
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                className={errors.password ? 'is-invalid' : ''}
+                                            />
+                                            {errors.password && (
+                                                <div className="invalid-feedback" style={{ fontSize: '12px', color: '#dc3545' }}>
+                                                    {errors.password}
+                                                </div>
+                                            )}
+                                        </div>
 
-                                    <button
-                                        type="submit"
-                                        className="main-btn btn-filled mt-20 login-btn"
-                                        disabled={loading}
-                                    >
-                                        {loading ? 'Registering...' : 'Register'}
-                                    </button>
+                                        <button
+                                            type="submit"
+                                            className="main-btn btn-filled mt-20 login-btn"
+                                            disabled={loading}
+                                        >
+                                            {loading ? 'Registering...' : 'Register'}
+                                        </button>
 
-                                    <p style={{ color: '#404040', fontFamily: 'Montserrat' }}>
-                                        Already have an Account?
-                                        <Link to="/login" className="d-inline-block" style={{ marginLeft: '10px' }}>
-                                            Login
-                                        </Link>
-                                    </p>
-                                </form>
+                                        <p style={{ color: '#404040', fontFamily: 'Montserrat' }}>
+                                            Already have an Account?
+                                            <Link to="/login" className="d-inline-block" style={{ marginLeft: '10px' }}>
+                                                Login
+                                            </Link>
+                                        </p>
+                                    </form>
+                                ) : (
+                                    <form onSubmit={handleVerifyOtp}>
+                                        <div className="input-group input-group-two mb-20">
+                                            <input
+                                                type="text"
+                                                placeholder="Enter 6-digit OTP"
+                                                value={otp}
+                                                onChange={(e) => {
+                                                    const value = e.target.value.replace(/\D/g, '');
+                                                    setOtp(value);
+                                                }}
+                                                maxLength={6}
+                                                className={errors.otp ? 'is-invalid' : ''}
+                                            />
+                                            {errors.otp && (
+                                                <div className="invalid-feedback" style={{ fontSize: '12px', color: '#dc3545' }}>
+                                                    {errors.otp}
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <button
+                                            type="submit"
+                                            className="main-btn btn-filled mt-20 login-btn"
+                                            disabled={loading}
+                                        >
+                                            {loading ? 'Verifying...' : 'Verify OTP'}
+                                        </button>
+
+                                        <p style={{ color: '#404040', fontFamily: 'Montserrat' }}>
+                                            Back to
+                                            <button
+                                                type="button"
+                                                className="d-inline-block"
+                                                style={{ marginLeft: '10px', background: 'none', border: 'none', color: '#007bff' }}
+                                                onClick={() => setShowOtpModal(false)}
+                                            >
+                                                Register
+                                            </button>
+                                        </p>
+                                    </form>
+                                )}
                             </div>
                         </div>
                     </div>

@@ -215,7 +215,7 @@ const Header = ({ isAuthenticated }) => {
                                                         className="menu-card-img"
                                                         onError={(e) => {
                                                           e.target.onerror = null;
-                                                          e.target.src = '/fallback.jpg';
+                                                          e.target.src = '/fallback-image.jpg';
                                                         }}
                                                       />
                                                     </div>

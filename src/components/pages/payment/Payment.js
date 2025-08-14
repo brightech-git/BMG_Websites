@@ -1,81 +1,90 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useOrderHistory } from '../../../hook/order/useOrderHistoryQuery';
-import { useCreatePaymentLinkMutation } from '../../../hook/payment/useCreatePaymentLinkMutation';
+import { useInitiatePayment } from '../../../hook/payment/useInitiatePayment';
 import './PaymentPage.css';
+import { getPaymentRedirectUrl } from '../../../service/paymentServiceicici';
+import { ToastContainer } from 'react-toastify';
 
 const PaymentPage = () => {
-    const { orderId } = useParams(); // from `/payment/:orderId`
+    const { orderId } = useParams();
     const history = useHistory();
     const [retryCount, setRetryCount] = useState(0);
     const maxRetries = 3;
+    const toast = ToastContainer;
 
-    const { mutate: createPaymentLink } = useCreatePaymentLinkMutation();
-    const {
-        data: orders = [],
-        isLoading,
-        isError,
-        refetch,
-    } = useOrderHistory({ page: 0, size: 10 });
+    const { mutate: initiatePayment } = useInitiatePayment();
+    const { data: orders = [], isLoading, isError, refetch } = useOrderHistory({ page: 0, size: 10 });
+
+    const onSuccess = async (response) => {
+        console.log("Payment initiated successfully:", response);
+
+        const { redirectURI, tranCtx } = response || {};
+
+        if (redirectURI && tranCtx) {
+            try {
+                const redirectUrl = await getPaymentRedirectUrl(redirectURI, tranCtx);
+                window.location.href = redirectUrl;
+            } catch (err) {
+                console.error(err);
+                toast.error("Something went wrong while redirecting to payment page.");
+                history.push("/orders");
+            }
+        } else {
+            toast.warning("Payment initiation successful but redirect details are missing.");
+            history.push("/orders");
+        }
+    };
+
+
+    const onError = (error) => {
+        console.error('Payment initiation failed:', error);
+        alert('Payment failed. Please try again.');
+        history.push('/orders');
+    };
 
     useEffect(() => {
-        const token = localStorage.getItem('user_token');
-        if (!token) {
-            alert('Please login to proceed with payment');
-            history.push('/login');
+        if (!orderId || isLoading || isError) return;
+        if (!localStorage.getItem("user_token")) {
+            alert("Please login");
+            history.push("/login");
             return;
         }
 
-        if (!orderId || isLoading || isError) return;
-
         const matchedOrder = orders.find(order => order.orderId === orderId);
+        console.log(matchedOrder,'orderdetail');
 
         if (!matchedOrder && retryCount < maxRetries) {
             const timer = setTimeout(() => {
-                setRetryCount(retryCount + 1);
+                setRetryCount(prev => prev + 1);
                 refetch();
             }, 1000);
             return () => clearTimeout(timer);
         }
 
         if (!matchedOrder && retryCount >= maxRetries) {
-            alert('Order not found after multiple attempts.');
-            localStorage.removeItem('pendingOrderId');
-            history.push('/orders');
+            alert("Order not found");
+            localStorage.removeItem("pendingOrderId");
+            history.push("/orders");
             return;
         }
 
         if (matchedOrder) {
-            const payload = {
-                orderId,
-                username: matchedOrder.customerName,
-                contact: matchedOrder.contact,
-                email: matchedOrder.email,
+            initiatePayment({
+                merchantTxnNo: orderId,
                 amount: matchedOrder.totalAmount,
-                callback_url: `${window.location.origin}/payment/callback/${orderId}`,
-                cancel_url: `${window.location.origin}/payment/callback/${orderId}`,
-            };
-
-            createPaymentLink(payload, {
-                onSuccess: (res) => {
-                    if (res.payment_link || res.paymentUrl) {
-                        // Razorpay link received, redirect
-                        localStorage.removeItem('pendingOrderId');
-                        window.location.href = res.payment_link || res.paymentUrl;
-                    } else {
-                        alert('No payment URL received.');
-                        history.push('/orders');
-                    }
-                },
-                onError: (err) => {
-                    console.error('Payment link creation failed:', err);
-                    alert('Failed to create payment link. Please try again.');
-                    localStorage.removeItem('pendingOrderId');
-                    history.push('/orders');
-                }
-            });
+                currencyCode: 356,
+                payType: 0,
+                transactionType: "SALE",
+                addlParam1:'',
+                addlParam2:'',
+                returnURL:"https://bmgjewellers.com",
+                customerEmailID:matchedOrder.email,
+                customerMobileNo:matchedOrder.contact
+            }, { onSuccess, onError });
         }
-    }, [orderId, orders, isLoading, isError, refetch, retryCount, createPaymentLink, history]);
+    }, [orderId, orders, isLoading, isError, retryCount]);
+
 
     return (
         <div className="payment-loading-page">

@@ -37,7 +37,7 @@ const ProductCard = ({ product }) => {
                     alt={product.productName}
                     onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src = '/fallback.jpg';
+                        e.target.src = '/fallback-image.jpg';
                     }}
                     onClick={(e) => handleProductClick(e, product.SNO)}
                 />

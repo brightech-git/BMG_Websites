@@ -7,6 +7,8 @@ import './BreadStyles.css';
 const Breadcrumbs = ({ itemName, subItemName }) => {
     const { data: bannerData } = useCategoryBanner({ itemName, subItemName });
 
+    console.log(bannerData,'')
+
     const imageSrc = bannerData?.images?.[0]
         ? `https://app.bmgjewellers.com${bannerData.images[0]}`
         : fallbackImage;

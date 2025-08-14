@@ -4,7 +4,6 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
 
-import { UserAuthProvider } from './context/authContext/UserAuthContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { ToastContainer } from 'react-toastify'; // ✅ Import ToastContainer
@@ -31,7 +30,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <UserAuthProvider>
+
           <BrowserRouter>
             <App />
             <ToastContainer // ✅ Add this below App to show toasts anywhere
@@ -44,7 +43,7 @@ ReactDOM.render(
               draggable
             />
           </BrowserRouter>
-        </UserAuthProvider>
+ 
       </QueryClientProvider>
     </Provider>
   </React.StrictMode>,

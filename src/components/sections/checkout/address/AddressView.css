@@ -1,0 +1,227 @@
+/* AddressView.css */
+
+.address-view {
+    line-height: 1.5;
+    color: var(--primary-text-color);
+    font-family: var(--secondary-font);
+}
+
+/* Header Section */
+.address-view-header {
+    margin-bottom: 12px;
+}
+
+.address-view-name-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.address-view-name {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--primary-text-color);
+}
+
+.address-default-badge {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 12px;
+}
+
+.address-view-phone {
+    margin: 0;
+    font-size: 14px;
+    color: var(--grey-color);
+    font-weight: 500;
+}
+
+.address-view-phone-compact {
+    font-size: 14px;
+    color: var(--grey-color);
+    font-weight: 500;
+}
+
+/* Content Section */
+.address-view-content {
+    margin-bottom: 12px;
+}
+
+.address-line {
+    margin: 0 0 4px 0;
+    font-size: 15px;
+    color: var(--primary-text-color);
+}
+
+.address-line.landmark-line {
+    color: var(--grey-color);
+    font-size: 14px;
+    font-style: italic;
+}
+
+/* Actions Section */
+.address-view-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.address-action-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: var(--secondary-font);
+    transition: color 0.2s;
+}
+
+.address-action-btn.edit-btn {
+    color: var(--primary-hover-color);
+}
+
+.address-action-btn.edit-btn:hover {
+    color: var(--black-color);
+}
+
+.address-action-btn.delete-btn {
+    color: #dc3545;
+}
+
+.address-action-btn.delete-btn:hover {
+    color: #b02a37;
+}
+
+/* Variants */
+
+/* Default Variant - Full display with all details */
+.address-view-default {
+    padding: 16px;
+    background: var(--white-color);
+    border: 1px solid var(--main-border);
+    border-radius: 8px;
+}
+
+/* Compact Variant - Inline phone, condensed */
+.address-view-compact {
+    padding: 12px;
+    background: var(--primary-card-color);
+    border: 1px solid var(--main-border);
+    border-radius: 6px;
+}
+
+.address-view-compact .address-view-name {
+    font-size: 16px;
+}
+
+.address-view-compact .address-line {
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+/* Card Variant - Elevated with shadow */
+.address-view-card {
+    padding: 18px;
+    background: var(--white-color);
+    border: 1px solid var(--main-border);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.address-view-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px);
+}
+
+/* Minimal Variant - No header, just address */
+.address-view-minimal {
+    padding: 8px 0;
+}
+
+.address-view-minimal .address-line {
+    font-size: 14px;
+    color: var(--grey-color);
+}
+
+.address-view-minimal .address-line:first-child {
+    color: var(--primary-text-color);
+    font-weight: 500;
+}
+
+/* Selected State */
+.address-view.selected {
+    border-color: var(--primary-hover-color);
+    background-color: rgba(205, 134, 92, 0.05);
+}
+
+.address-view-card.selected {
+    border-color: var(--primary-hover-color);
+    box-shadow: 0 4px 16px rgba(205, 134, 92, 0.2);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .address-view {
+        padding: 12px;
+    }
+
+    .address-view-name {
+        font-size: 16px;
+    }
+
+    .address-view-phone {
+        font-size: 13px;
+    }
+
+    .address-line {
+        font-size: 14px;
+    }
+
+    .address-view-actions {
+        margin-top: 8px;
+    }
+
+    .address-action-btn {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .address-view-name-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .address-default-badge {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+
+    .address-view-phone-compact {
+        display: block;
+        margin-bottom: 4px;
+    }
+}
+
+/* Accessibility */
+.address-action-btn:focus {
+    outline: 2px solid var(--primary-hover-color);
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    .address-view-actions {
+        display: none;
+    }
+
+    .address-view {
+        border: 1px solid #ccc;
+        break-inside: avoid;
+    }
+}

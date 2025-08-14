@@ -676,7 +676,7 @@ const CompactFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
                 </div>
             )}
 
-            <style jsx>{`
+            <style >{`
         .compact-filter-container {
           font-family: 'Inter', sans-serif;
           background: #f6f5f0 !important;

@@ -19,6 +19,7 @@ import './assets/css/font-awesome.min.css';
 import './assets/css/flaticon.css';
 import './assets/fonts/flaticon/flaticon-2.css';
 import './assets/css/default.css';
+
 import './assets/css/style.css';
 
 import { Provider } from 'react-redux';

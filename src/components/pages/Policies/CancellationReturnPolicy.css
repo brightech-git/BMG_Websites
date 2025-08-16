@@ -1,54 +1,29 @@
-:root {
-  --primary-font: 'Gloock', serif;
-  --secondary-font: 'Montserrat', sans-serif;
-  --primary-color: #f6f5f0;
-  --primary-text-color: #404040;
-  --primary-card-color: #edebe7;
-  --primary-hover-color: #cd865c;
-  --secondary-card-color: #cfdcdd;
-  --white-color: #ffffff;
-  --header-height: 80px;
-  --mobile-header-height: 60px;
-  --green-color: #024908;
-  --grey-color: #A9A9A9;
-  --black-color: #000000;
-}
-
+/* Cancellation & Return Policy Styles */
 .crp-wrapper {
   padding: 2rem 1rem;
   background-color: var(--primary-color);
   font-family: var(--secondary-font);
   color: var(--primary-text-color);
+  margin-top: 100px;
+  max-width:1200px;
+  margin: 100px auto;
 }
 
 .crp-heading {
   text-align: center;
-  font-size: 2.5rem;
+  font-size: clamp(1.8rem, 2vw, 2.3rem);
   font-family: var(--primary-font);
-  font-weight: 700;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   color: var(--black-color);
-  position: relative;
   padding-bottom: 10px;
-}
-
-.crp-heading::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-50%);
-  width: 100px;
-  height: 4px;
-  background-color: var(--primary-hover-color);
-  border-radius: 2px;
+  border-bottom: 2px solid var(--primary-hover-color);
 }
 
 .crp-card {
-  background: var(--white-color);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  border-radius: 10px;
-  margin-bottom: 2rem;
+  background: var(--primary-color);
+  box-shadow: 0 2px 8px var(--shadow-color);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
 }
 
 .crp-card-body {
@@ -58,7 +33,6 @@
 .crp-section {
   display: flex;
   gap: 1.5rem;
-  flex-wrap: wrap;
 }
 
 .crp-icon-wrapper {
@@ -69,33 +43,16 @@
   align-items: center;
   justify-content: center;
   font-size: 1.4rem;
-}
-
-.crp-icon-cancel {
   background-color: rgba(205, 134, 92, 0.15);
   color: var(--primary-hover-color);
 }
 
-.crp-icon-return {
-  background-color: rgba(52, 152, 219, 0.15);
-  color: #3498db;
-}
-
-.crp-icon-nonreturn {
-  background-color: rgba(155, 89, 182, 0.1);
-  color: #9b59b6;
-}
-
-.crp-icon-procedure {
-  background-color: rgba(2, 73, 8, 0.08);
-  color: var(--green-color);
-}
-
 .crp-section-title {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 600;
   margin-bottom: 1rem;
   color: var(--black-color);
+  font-family: var(--secondary-font);
 }
 
 .crp-list {
@@ -105,12 +62,13 @@
 
 .crp-list li {
   margin-bottom: 1rem;
-  line-height: 1.5;
+  line-height: 1.6;
+  font-size: 1rem;
 }
 
 .crp-badge {
   background-color: var(--primary-hover-color);
-  color: white;
+  color: var(--white-color);
   border-radius: 50%;
   display: inline-block;
   width: 24px;
@@ -152,6 +110,11 @@
   font-size: 0.95rem;
 }
 
+.crp-box h5 {
+  margin-bottom: 0.5rem;
+  color: var(--black-color);
+}
+
 .crp-steps {
   position: relative;
   padding-left: 40px;
@@ -187,16 +150,6 @@
   font-size: 0.95rem;
 }
 
-.crp-step-content::before {
-  content: '';
-  position: absolute;
-  left: -15px;
-  top: 10px;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-right: 15px solid var(--primary-card-color);
-}
-
 .crp-note {
   background-color: #fef3c7;
   color: #7c2d12;
@@ -209,8 +162,22 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .crp-wrapper {
+    margin-top: var(--mobile-header-height);
+    padding: 1.5rem 1rem;
+  }
+
   .crp-heading {
     font-size: 1.8rem;
+  }
+
+  .crp-section {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .crp-icon-wrapper {
+    align-self: flex-start;
   }
 
   .crp-steps {

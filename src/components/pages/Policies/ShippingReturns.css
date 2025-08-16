@@ -1,0 +1,167 @@
+.shipping-section {
+    background: var(--primary-color);
+    font-family: "Times New Roman", Times, serif;
+    padding: 2.5rem 0;
+    min-height: 100vh;
+    color: var(--black-color);
+}
+
+.shipping-header {
+    margin-bottom: 2rem;
+}
+
+.shipping-title {
+    font-size: clamp(1.8rem, 2.5vw, 1.5rem);
+    font-weight: 500;
+    font-family: "Times New Roman", Times, serif;
+    color: var(--primary-hover-color);
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+}
+
+.shipping-title-line {
+    display: block;
+}
+
+.shipping-script {
+    font-family: "Times New Roman", Times, serif;
+    font-weight: 500;
+    color: var(--primary-hover-color);
+}
+
+.shipping-subtitle {
+    font-size: clamp(0.9rem, 1.3vw, 1.2rem);
+    color: var(--grey-color);
+    font-family: "Times New Roman", Times, serif;
+    margin: 0 auto;
+}
+
+.shipping-card {
+    border-radius: 5px;
+    background: var(--primary-color);
+    transition: none;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    margin-bottom: 1.5rem;
+}
+
+.shipping-card .card {
+    background: transparent;
+    border-radius: 5px;
+    border: 1px solid var(--grey-color);
+}
+
+.shipping-card-title {
+    font-size: clamp(1.4rem, 2.3vw, 1.6rem);
+    font-weight: 600;
+    color: var(--black-color);
+    font-family: "Times New Roman", Times, serif;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--grey-color);
+    padding-bottom: 0.5rem;
+}
+
+.shipping-card-content h4 {
+    font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+    font-weight: 500;
+    color: var(--black-color);
+    font-family: "Times New Roman", Times, serif;
+    margin: 1rem 0 0.5rem;
+}
+
+.shipping-card-content ul,
+.shipping-card-content ol {
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+}
+
+.shipping-card-content li {
+    font-size: clamp(0.85rem, 1.5vw, 0.95rem);
+    color: var(--black-color);
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+}
+
+.shipping-link {
+    color: var(--primary-hover-color);
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.shipping-link:hover,
+.shipping-link:focus {
+    color: var(--gold-color);
+}
+
+.shipping-contact-btn {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    font-size: clamp(0.85rem, 1.2vw, 0.95rem);
+    font-weight: 600;
+    color: var(--white-color);
+    background: var(--button-bg);
+    border: none;
+    border-radius: 3px;
+    font-family: "Times New Roman", Times, serif;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.shipping-contact-btn:hover,
+.shipping-contact-btn:focus {
+    background: var(--black-color);
+}
+
+@media (max-width: 768px) {
+    .shipping-section {
+        padding: 1.5rem 0;
+        margin-top: 120px !important; 
+    }
+
+    .shipping-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .shipping-title {
+        font-size: clamp(1.6rem, 3vw, 2rem);
+    }
+
+    .shipping-subtitle {
+        font-size: clamp(0.8rem, 1.5vw, 1rem);
+    }
+
+    .shipping-card-title {
+        font-size: clamp(1.2rem, 2vw, 1.5rem);
+    }
+
+    .shipping-card-content h4 {
+        font-size: clamp(1rem, 1.8vw, 1.2rem);
+    }
+
+    .shipping-card-content li {
+        font-size: clamp(0.8rem, 1.3vw, 0.9rem);
+    }
+
+    .shipping-contact-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .shipping-section {
+        padding: 1rem 0.5rem;
+    }
+
+    .shipping-card-title {
+        font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+    }
+
+    .shipping-card-content h4 {
+        font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+    }
+
+    .shipping-contact-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+}

@@ -1,6 +1,6 @@
 // src/redux/slices/userSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { loginUser, registerUser, verifyOtpService } from '../../service/AuthService';
+import { loginUser, registerUser, verifyOtpService, forgotPasswordService, resetPasswordService } from '../../service/AuthService';
 import { toast } from 'react-toastify';
 
 // Safely parse localStorage user
@@ -87,6 +87,49 @@ export const verifyOtp = createAsyncThunk(
 );
 
 
+// Forgot Password
+export const forgotPassword = createAsyncThunk(
+    'user/forgotPassword',
+    async (contactNumber, thunkAPI) => {
+        try {
+            const response = await forgotPasswordService(contactNumber);
+            toast.success(response.message || "OTP sent to your registered number", {
+                position: 'top-right',
+                autoClose: 2500,
+            });
+            return response;
+        } catch (error) {
+            toast.error(error.message || "Failed to send OTP", {
+                position: 'top-right',
+                autoClose: 2500,
+            });
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+);
+
+// Reset Password
+export const resetPassword = createAsyncThunk(
+    'user/resetPassword',
+    async ({ contactNumber, otp, newPassword }, thunkAPI) => {
+        try {
+            const response = await resetPasswordService({ contactNumber, otp, newPassword });
+            toast.success(response.message || "Password reset successful", {
+                position: 'top-right',
+                autoClose: 2500,
+            });
+            return response;
+        } catch (error) {
+            toast.error(error.message || "Failed to reset password", {
+                position: 'top-right',
+                autoClose: 2500,
+            });
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+);
+
+
 const userSlice = createSlice({
     name: 'user',
     initialState: {
@@ -118,7 +161,7 @@ const userSlice = createSlice({
                 state.error = null;
                 toast.success('🎉 Registered successfully! Please verify OTP.');
             })
-           
+
             .addCase(signup.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
@@ -153,6 +196,33 @@ const userSlice = createSlice({
             })
 
             .addCase(verifyOtp.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            // Forgot Password
+            .addCase(forgotPassword.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(forgotPassword.fulfilled, (state) => {
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(forgotPassword.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
+            // Reset Password
+            .addCase(resetPassword.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(resetPassword.fulfilled, (state) => {
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(resetPassword.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signup, verifyOtp } from '../../../redux/slices/userSlice';
 import { toast } from 'react-toastify';
 import loginbg from '../../../assets/img/bg/sign.webp';
+import GoogleLoginButton from './GoogleLoginButton';
 
 const Content = () => {
     const [username, setUsername] = useState('');
@@ -19,6 +20,8 @@ const Content = () => {
     const navigate = useHistory();
     const { user, error, loading } = useSelector((state) => state.user);
     const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+
+    const roles = ["ROLE_USER"];
 
     const validateForm = () => {
         const newErrors = {};
@@ -49,6 +52,10 @@ const Content = () => {
             newErrors.password = 'Password must be at least 6 characters long';
         }
 
+
+        if (!roles || roles.length === 0) {
+            newErrors.roles = 'Role must be set for this account';
+        }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -56,7 +63,7 @@ const Content = () => {
     const handleRegister = (e) => {
         e.preventDefault();
         if (validateForm()) {
-            dispatch(signup({ username, email, contactNumber, password }))
+            dispatch(signup({ username, email, contactNumber, password, roles }))
                 .unwrap()
                 .then(() => {
                     setShowOtpModal(true);
@@ -228,6 +235,8 @@ const Content = () => {
                                                 Login
                                             </Link>
                                         </p>
+
+                                        <GoogleLoginButton/>
                                     </form>
                                 ) : (
                                     <form onSubmit={handleVerifyOtp}>

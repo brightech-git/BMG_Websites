@@ -1,9 +1,10 @@
 import React from 'react';
-import './ShopByRecipient.css';
 import { useHistory } from 'react-router-dom';
+import './ShopByRecipient.css';
 import men from './image/Men.png';
-import women from'./image/Women.png';
+import women from './image/Women.png';
 import kid from './image/kids.png';
+
 const ShopByRecipient = () => {
     const history = useHistory();
 
@@ -14,23 +15,18 @@ const ShopByRecipient = () => {
     ];
 
     const handleCategoryClick = (query) => {
-
         history.push(`/shop-left?${query}`);
     };
 
     return (
-        <div className="recipient-container">
+        <section className="recipient-section">
             <div className="container">
-                {/* Section Title */}
                 <div className="recipient-header">
                     <h2 className="recipient-title">
                         Shop by Recipient
                     </h2>
                 </div>
-
-                {/* Cards Grid - Different layout for mobile */}
                 <div className="recipient-grid">
-                    {/* Him and Kids on top for mobile */}
                     <div className="recipient-row-top">
                         {categories.filter(cat => cat.label !== "Her").map((category) => (
                             <div key={category.id} className="recipient-card-wrapper">
@@ -39,6 +35,7 @@ const ShopByRecipient = () => {
                                     onClick={() => handleCategoryClick(category.query)}
                                     role="button"
                                     tabIndex={0}
+                                    aria-label={`Shop ${category.label} products`}
                                 >
                                     <div className="recipient-card-frame">
                                         <div className="recipient-card-inner">
@@ -50,15 +47,14 @@ const ShopByRecipient = () => {
                                                     loading="lazy"
                                                 />
                                                 <div className="recipient-overlay"></div>
-                                                <h3 className="recipient-label">
-                                                    {category.label}
-                                                </h3>
+                                                <h3 className="recipient-label">{category.label}</h3>
                                                 <button
                                                     className="recipient-button"
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         handleCategoryClick(category.query);
                                                     }}
+                                                    aria-label={`View ${category.label} collection`}
                                                 >
                                                     View Collection
                                                 </button>
@@ -69,8 +65,6 @@ const ShopByRecipient = () => {
                             </div>
                         ))}
                     </div>
-
-                    {/* Her card full width on mobile */}
                     <div className="recipient-row-bottom">
                         {categories.filter(cat => cat.label === "Her").map((category) => (
                             <div key={category.id} className="recipient-card-wrapper">
@@ -79,6 +73,7 @@ const ShopByRecipient = () => {
                                     onClick={() => handleCategoryClick(category.query)}
                                     role="button"
                                     tabIndex={0}
+                                    aria-label={`Shop ${category.label} products`}
                                 >
                                     <div className="recipient-card-frame">
                                         <div className="recipient-card-inner">
@@ -90,15 +85,14 @@ const ShopByRecipient = () => {
                                                     loading="lazy"
                                                 />
                                                 <div className="recipient-overlay"></div>
-                                                <h3 className="recipient-label">
-                                                    {category.label}
-                                                </h3>
+                                                <h3 className="recipient-label">{category.label}</h3>
                                                 <button
                                                     className="recipient-button"
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         handleCategoryClick(category.query);
                                                     }}
+                                                    aria-label={`View ${category.label} collection`}
                                                 >
                                                     View Collection
                                                 </button>
@@ -111,7 +105,7 @@ const ShopByRecipient = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 

@@ -1,118 +1,143 @@
 import React from 'react';
-import {
-  FaMoneyBillWave,
-  FaClock,
-  FaShippingFast,
-  FaExclamationTriangle,
-  FaCheckCircle
-} from 'react-icons/fa';
+import { useHistory } from 'react-router-dom';
+import './ShippingReturns.css';
+import HeaderWithAuth from '../../layouts/HeaderWithAuth';
+import Footertwo from '../../layouts/Footerthree';
 
-import './RefundPolicy.css';
+const ShippingReturns = () => {
+  const history = useHistory();
 
-const RefundPolicy = () => {
+  const handleContactClick = () => {
+    history.push('/contact');
+  };
+
   return (
-    <div className="refund-wrapper">
-      <div className="refund-container">
-        <h1 className="refund-heading">Refund Policy</h1>
-
-        {/* Refund Eligibility */}
-        <section className="refund-section">
-          <div className="refund-icon-box">
-            <FaCheckCircle className="refund-icon eligibility" />
-          </div>
-          <div className="refund-content">
-            <h2 className="refund-title">Refund Eligibility</h2>
-            <p>Refunds are provided only for:</p>
-            <ul className="refund-list">
-              <li><span className="refund-badge">1</span> Cancelled prepaid orders (before dispatch)</li>
-              <li><span className="refund-badge">2</span> Returned items approved under our Return Policy</li>
-            </ul>
-            <div className="refund-warning">
-              <FaExclamationTriangle className="refund-alert-icon" />
-              Refunds not applicable after dispatch or for custom-made products.
-            </div>
-          </div>
-        </section>
-
-        {/* Refund Mode and Time */}
-        <section className="refund-section">
-          <div className="refund-icon-box">
-            <FaMoneyBillWave className="refund-icon mode" />
-          </div>
-          <div className="refund-content">
-            <h2 className="refund-title">Refund Mode and Time</h2>
-            <div className="refund-grid">
-              <div className="refund-box">
-                <h3>Prepaid Orders</h3>
-                <p>
-                  Refunded to <strong>original payment method</strong><br />
-                  <span className="refund-time">
-                    <FaClock /> 7–10 business days
-                  </span>
-                </p>
-              </div>
-              <div className="refund-box">
-                <h3>Cash on Delivery (COD)</h3>
-                <p>
-                  Refunded via <strong>NEFT/IMPS</strong><br />
-                  <span className="refund-time">
-                    <FaClock /> 7–10 business days
-                  </span>
-                </p>
+    <>
+    <HeaderWithAuth />
+    <section className="shipping-section mt-80">
+      <div className="container">
+        <div className="shipping-header text-center mb-5">
+          <h2 className="shipping-title">
+            <span className="shipping-title-line">BMG Jewellers</span>
+            <span className="shipping-title-line shipping-script">Shipping & Returns Policy</span>
+          </h2>
+          <p className="shipping-subtitle">
+            Your guide to our policies for Gold Polish Silver Jewellery Collection
+          </p>
+        </div>
+        <div className="row justify-content-center">
+          <div className="col-12 col-md-10 col-lg-8">
+            <div className="shipping-card mb-4">
+              <div className="card border-0">
+                <div className="card-body">
+                  <h3 className="shipping-card-title">Shipping</h3>
+                  <div className="shipping-card-content">
+                    <h4>Processing & Dispatch</h4>
+                    <ul>
+                      <li>Orders are typically processed and shipped within 48 hours of placement.</li>
+                      <li>Personalised or made-to-order items may take longer to process.</li>
+                      <li>If your order includes both personalised/made-to-order and ready-stock items, ready-stock items may ship first, with personalised items sent separately.</li>
+                    </ul>
+                    <h4>Shipping Charges</h4>
+                    <ul>
+                      <li>Free shipping on all orders above ₹449 within India.</li>
+                      <li>Shipping charges apply for all international orders and returns (calculated at checkout).</li>
+                    </ul>
+                    <h4>Order Tracking</h4>
+                    <ul>
+                      <li>Once shipped, tracking details will be sent via WhatsApp, Email, and SMS.</li>
+                    </ul>
+                    <h4>Split Deliveries</h4>
+                    <ul>
+                      <li>Orders containing personalised items or gold-polished premium jewellery, silver articles, or jewellery may be delivered in multiple shipments.</li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="refund-note">
-              Refund time depends on bank/payment gateway; may take 2–3 extra days to reflect.
+            <div className="shipping-card mb-4">
+              <div className="card border-0">
+                <div className="card-body">
+                  <h3 className="shipping-card-title">Returns & Exchanges</h3>
+                  <div className="shipping-card-content">
+                    <h4>Return Policy</h4>
+                    <ul>
+                      <li>30-day return policy for unused, unworn, and undamaged products — no questions asked.</li>
+                      <li>Returns are not applicable for personalised jewellery, gift articles, utensils, religious idols, or promotional/free products unless defective or incorrect.</li>
+                      <li>Refunds processed only after the returned product passes our quality check.</li>
+                      <li>If purchased from an authorised partner or third-party store, their return policy applies.</li>
+                      <li>Shipping charges paid at the time of order are non-refundable.</li>
+                    </ul>
+                    <h4>Missing Items in Return Orders</h4>
+                    <ul>
+                      <li>If any item from a multi-product return is missing, BMG Jewellers may deduct up to the full MRP of the missing product from the refund, including promotional/free gifts.</li>
+                    </ul>
+                    <h4>Refunds</h4>
+                    <ul>
+                      <li>Refunds are initiated after we receive and verify the returned product at our warehouse.</li>
+                      <li>Refund mode will match the original payment method unless otherwise agreed.</li>
+                    </ul>
+                    <h4>Replacements & Exchanges</h4>
+                    <ul>
+                      <li>Replacements or exchanges follow the same conditions as returns.</li>
+                      <li>For gold-polished silver jewellery, silver articles, or jewellery, replacements ship only after we receive the original item.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="shipping-card mb-4">
+              <div className="card border-0">
+                <div className="card-body">
+                  <h3 className="shipping-card-title">Return Process</h3>
+                  <div className="shipping-card-content">
+                    <ol>
+                      <li>
+                        <strong>Initiate a Return:</strong> Request a return through our website or contact our{' '}
+                        <span
+                          className="shipping-link"
+                          onClick={handleContactClick}
+                          role="button"
+                          tabIndex={0}
+                          aria-label="Contact Customer Support"
+                        >
+                          Customer Support
+                        </span>{' '}
+                        team.
+                      </li>
+                      <li>
+                        <strong>Reverse Pick-Up:</strong> Our courier partner will arrange collection from your address. Ensure availability and respond to calls from the delivery agent to avoid delays.
+                      </li>
+                      <li>
+                        <strong>Non-Serviceable Locations:</strong> If reverse pick-up is unavailable, send the product via India Post or another courier. We reimburse up to ₹70 for return shipping; extra costs beyond ₹70 will be deducted from your refund.
+                      </li>
+                    </ol>
+                    <h4>Important Notes</h4>
+                    <ul>
+                      <li>For empty parcel or missing product complaints, contact us within 48 hours of delivery with a 360° unboxing video clearly showing the package before opening.</li>
+                      <li>Tampered packaging or insufficient proof may result in claim rejection.</li>
+                      <li>Final decisions on such claims rest with BMG Jewellers.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="text-center">
+              <button
+                className="shipping-contact-btn"
+                onClick={handleContactClick}
+                aria-label="Contact us for support"
+              >
+                Contact Us for Support
+              </button>
             </div>
           </div>
-        </section>
-
-        {/* Shipping Refunds */}
-        <section className="refund-section">
-          <div className="refund-icon-box">
-            <FaShippingFast className="refund-icon shipping" />
-          </div>
-          <div className="refund-content">
-            <h2 className="refund-title">Shipping Charge Refunds</h2>
-            <ul className="refund-list">
-              <li><span className="refund-cross">✗</span> Shipping charges are non-refundable</li>
-              <li><span className="refund-check">✓</span> Refunded if return is due to <strong>our mistake</strong></li>
-            </ul>
-            <div className="refund-example">
-              <strong>Example:</strong> If you received a wrong item, both product and shipping costs are refunded.
-            </div>
-          </div>
-        </section>
-
-        {/* Delayed Refunds */}
-        <section className="refund-section">
-          <div className="refund-icon-box">
-            <FaExclamationTriangle className="refund-icon delay" />
-          </div>
-          <div className="refund-content">
-            <h2 className="refund-title">Delayed or Missing Refunds</h2>
-            <p>If you haven't received your refund yet:</p>
-            <ol className="refund-steps">
-              <li>Check your bank or UPI inbox/spam</li>
-              <li>Contact your bank or payment gateway</li>
-              <li>
-                Contact our support team with:
-                <ul>
-                  <li>Order number</li>
-                  <li>Refund request date</li>
-                  <li>Payment method</li>
-                </ul>
-              </li>
-            </ol>
-            <div className="refund-warning">
-              <FaClock className="refund-alert-icon" />
-              Allow up to <strong>10 business days</strong> before contacting support.
-            </div>
-          </div>
-        </section>
+        </div>
       </div>
-    </div>
+    </section>
+    <Footertwo />
+    </>
   );
 };
 
-export default RefundPolicy;
+export default ShippingReturns;

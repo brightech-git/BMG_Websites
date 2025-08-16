@@ -1,37 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap');
-
-:root {
-    --primary-font: 'Gloock', 'serif';
-    --secondary-font: 'Montserrat', 'sans-serif';
-    --primary-color: #f6f5f0;
-    --primary-text-color: #404040;
-    --primary-card-color: #edebe7;
-    --primary-hover-color: #cd865c;
-    --secondary-card-color: #cfdcdd;
-    --white-color: #ffffff;
-    --header-height: 80px;
-    --mobile-header-height: 60px;
-    --green-color: #024908;
-    --grey-color: #A9A9A9;
-    --black-color: #000000;
-}
-
-/* Display Section */
+/* Using only the root variables from index.js */
 .gem-display {
     position: relative;
     z-index: 1;
     padding: 3rem 0 5rem;
     background-color: var(--primary-color);
     overflow: hidden;
-    width:1600px;
+    width: 1600px;
     max-width: 100%;
     align-items: center;
     justify-content: center;
     margin: 0 auto;
 }
 
-/* Section Header */
 .gem-header {
     text-align: center;
     margin-bottom: 3rem;
@@ -44,7 +24,7 @@
     text-transform: capitalize;
     letter-spacing: 0.125rem;
     margin-bottom: 0.5rem;
-    font-family: 'Dancing Script';
+    font-family: var(--title-font);
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -54,7 +34,7 @@
 }
 
 .gem-gradient-text {
-    background: linear-gradient(90deg, #cd865c, #a05f3a);
+    background: var(--gradient-text);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -74,7 +54,6 @@
     opacity: 0.8;
 }
 
-/* Slider Container */
 .gem-slider-container {
     padding: 0 2rem;
     position: relative;
@@ -89,7 +68,6 @@
     padding: 0 1rem;
 }
 
-/* Slide Item */
 .gem-slide {
     outline: none;
 }
@@ -102,7 +80,6 @@
     align-items: center;
 }
 
-/* Main Image - Fixed dimensions for consistency */
 .gem-main-img {
     position: relative;
     overflow: hidden;
@@ -121,7 +98,6 @@
     transition: transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 
-/* Product Grid - Better positioning and spacing */
 .gem-products-grid {
     position: absolute;
     bottom: -2.5rem;
@@ -136,7 +112,6 @@
     padding: 0.5rem;
 }
 
-/* Product Cards - Fixed dimensions for consistency */
 .gem-product-card {
     overflow: hidden;
     height: 6rem;
@@ -162,7 +137,6 @@
     transition: transform 0.3s ease;
 }
 
-/* Navigation Buttons */
 .gem-nav-btn {
     position: absolute;
     top: 50%;
@@ -197,7 +171,6 @@
     right: 1rem;
 }
 
-/* Loading and Error States */
 .gem-loading,
 .gem-error {
     text-align: center;

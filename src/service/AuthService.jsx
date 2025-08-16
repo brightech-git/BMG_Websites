@@ -40,54 +40,32 @@ export const verifyOtpService = async (contactNumber, otp) => {
     return data; // { message, user, token }
 };
 
-// Forgot Password (Send OTP via SMS only)
-export const forgotPassword = async ({ contactNumber }) => {
-    const otp = Math.floor(100000 + Math.random() * 900000);
-    sessionStorage.setItem(`otp_${contactNumber}`, otp);
-
-    const smsMessage = `BMG JEWELLERS PRIVATE LIMITED: Your OTP for joining our Saving Scheme is ${otp}. It is valid for 10 minutes. Please do not share this code with anyone. BMG JEWELLERS PRIVATE LIMITED.`;
-
-    const params = new URLSearchParams({
-        apikey: "dYU7ULuItj9iZQWM",
-        senderid: "BMGJEW",
-        templateid: "1707174972288335913",
-        number: `91${contactNumber}`,
-        message: smsMessage,
+//Forgot password
+export const forgotPasswordService = async (contactNumber) => {
+    const response = await PublicUrl.post("auth/user/forgot-password", {
+        contactNumber,
     });
+    const data = response.data;
 
-    try {
-        const smsRes = await fetch(`https://sms.textspeed.in/vb/apikey.php?${params.toString()}`);
-        const smsText = await smsRes.text();
-
-        // console.log("📨 SMS Response:", smsText);
-
-        if (!smsText.toLowerCase().includes("success")) {
-            throw new Error("SMS failed: " + smsText);
-        }
-
-        return {
-            success: true,
-            contactNumber,
-            otp, // Dev/debug only, don’t use in prod
-        };
-    } catch (err) {
-        console.error("SMS send error:", err);
-        throw new Error("OTP sending failed. Try again.");
+    if (data.error) {
+        throw new Error(data.error);
     }
+
+    return data; // { message: "...", otpSent: true }
 };
 
-// Reset Password (OTP check done on frontend)
-export const resetPassword = async ({ contactNumber, otp, newPassword }) => {
-    const storedOtp = sessionStorage.getItem(`otp_${contactNumber}`);
-    if (!storedOtp || storedOtp !== otp) {
-        throw new Error("Invalid or expired OTP");
-    }
-
+// Reset Password
+export const resetPasswordService = async ({ contactNumber, otp, newPassword }) => {
     const response = await PublicUrl.post("auth/user/reset-password", {
         contactNumber,
+        otp,
         newPassword,
     });
+    const data = response.data;
 
-    sessionStorage.removeItem(`otp_${contactNumber}`);
-    return response.data;
+    if (data.error) {
+        throw new Error(data.error);
+    }
+
+    return data; // { message: "Password reset successful" }
 };

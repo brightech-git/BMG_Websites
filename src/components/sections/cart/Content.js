@@ -45,8 +45,12 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
             } catch (err) {
                 console.error("Error parsing ImagePath for item", item.itemTagSno, err);
             }
-
-            const pricing = calculatePricing(product.GrandTotal || item.amount || 0);
+            const getPrice = (data) => {
+                return Number(data?.GrandTotal) > 0
+                    ? Number(data.GrandTotal)
+                    : Number(data?.RATE || data?.amount || 0);
+            };
+            const pricing = calculatePricing(getPrice(product));
 
             onProductData(item.sno, {
                 itemId: product.ITEMID || item.itemId || null,
@@ -71,8 +75,14 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
     const baseUrl = "https://app.bmgjewellers.com";
     const firstImage = imageUrls.length > 0 ? baseUrl + imageUrls[0] : fallbackImage;
 
-    const pricing = calculatePricing(product?.GrandTotal || item.amount || 0);
+   
+    const getPrice = (data) => {
+        return Number(data?.GrandTotal) > 0
+            ? Number(data.GrandTotal)
+            : Number(data?.RATE || data?.amount || 0);
+    };
 
+  
     return (
         <div className="cart-item">
             <input
@@ -117,11 +127,12 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
                 <div className="cart-item-price">
                     {!productLoading && (
                         <>
-                            {/* <div className="price-original">₹{pricing.original.toFixed(2)}</div> */}
-                            <div className="price-current"><span className='price-label'>Price</span> : ₹{pricing.current.toFixed(2)}</div>
-                            {/* {pricing.discount > 0 && (
-                                <div className="price-discount">{pricing.discount}% OFF</div>
-                            )} */}
+                          
+                            <div className="price-current">
+                                <span className="price-label">Price</span> : ₹
+                                {getPrice(product).toFixed(2)}
+                            </div>
+                           
                         </>
                     )}
                 </div>
@@ -389,16 +400,9 @@ const Cart = ({ history }) => {
                                     <>
                                         <div className="summary-row">
                                             <span>Items ({selectedItems.length})</span>
-                                            {/* <span>₹{originalSubtotal.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span> */}
+                                           
                                         </div>
-                                        {/* {totalSavings > 0 && (
-                                            <div className="summary-row">
-                                                <span>Savings</span>
-                                                <span style={{ color: 'var(--success-color)', fontWeight: '600' }}>
-                                                    -₹{totalSavings.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
-                                                </span>
-                                            </div>
-                                        )} */}
+                                     
                                         <div className="summary-row">
                                             <span>Subtotal</span>
                                             <span>₹{subtotal.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
@@ -414,20 +418,7 @@ const Cart = ({ history }) => {
                                                 ₹{total.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
                                             </span>
                                         </div>
-                                        {/* {totalSavings > 0 && (
-                                            <div className="text-center mt-2">
-                                                <small style={{
-                                                    color: 'var(--success-color)',
-                                                    fontSize: '0.75rem',
-                                                    fontWeight: '600',
-                                                    background: 'rgba(40, 167, 69, 0.1)',
-                                                    padding: '0.25rem 0.5rem',
-                                                    borderRadius: '4px'
-                                                }}>
-                                                    You're saving ₹{totalSavings.toLocaleString('en-IN', { maximumFractionDigits: 0 })}!
-                                                </small>
-                                            </div>
-                                        )} */}
+                                    
                                     </>
                                 ) : (
                                     <div className="summary-loading">

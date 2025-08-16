@@ -53,6 +53,7 @@
 :root {
     --primary-font: 'Gloock', 'serif';
     --secondary-font: 'Montserrat', 'sans-serif';
+    --title-font:'Dancing Script';
     --primary-color: #f6f5f0;
     --primary-text-color: #404040;
     --primary-card-color: #edebe7;
@@ -63,7 +64,23 @@
     --mobile-header-height: 60px;
     --green-color: #024908;
     --grey-color: #A9A9A9;
-    --black-color: #000000;
+    --black-color: #101010;
+    --gold-color: #e6d710;
+    --gradient-text: linear-gradient(90deg, #cd865c, #a05f3a);
+
+    /* New variables for shopby recipient enhancements */
+    --shadow-color: rgba(0, 0, 0, 0.1);
+        --focus-outline: var(--primary-hover-color);
+        --overlay-blur: blur(2px);
+        --gradient-border: linear-gradient(145deg, var(--primary-hover-color), var(--gold-color));
+        --text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    
+        /* New variables for new Arrivals*/
+            --primary-gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-card-color) 100%);
+            --button-bg: var(--primary-hover-color);
+            /* Matches #cd865c */
+            --shimmer-color: rgba(255, 255, 255, 0.2);
+            --overlay-bg: rgba(0, 0, 0, 0.3); 
 }
 
 .texture-1 {

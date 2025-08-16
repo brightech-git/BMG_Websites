@@ -47,9 +47,13 @@ const ProductCard = ({ item }) => {
     const productImages = getProductImages();
     const multipleImages = productImages.length > 1;
     const mainImage = productImages[imageIndex];
-
     const productName = (item?.SUBITEMNAME || item?.ITEMNAME || 'Jewelry Item').toLowerCase();
-    const currentPrice = item?.GrandTotal ? parseFloat(item.GrandTotal) : 0;
+
+
+    const currentPrice = parseFloat(item?.GrandTotal) > 0
+        ? parseFloat(item.GrandTotal)
+        : parseFloat(item?.RATE || 0);
+
     const oldPrice = item?.GrossAmount ? parseFloat(item.GrossAmount) : currentPrice;
     const hasDiscount = oldPrice > currentPrice;
     const discountValue = hasDiscount ? Math.round((1 - currentPrice / oldPrice) * 100) : 0;
@@ -268,11 +272,7 @@ const ProductCard = ({ item }) => {
                         <span className="new-price">
                             ₹{currentPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                         </span>
-                        {hasDiscount && (
-                            <span className="old-price">
-                                ₹{oldPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                            </span>
-                        )}
+                       
                     </div>
                 </div>
             </div>

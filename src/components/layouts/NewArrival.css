@@ -1,171 +1,145 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;500;600&display=swap');
 
-:root {
-    --new-primary-color: #007bff;
-    --new-secondary-color: #6610f2;
-    --primary-color:#f6f5f0;
-    --secondary-card-color:#f7fbfc;
-    --new-text-color: #333333;
-    --new-white-color: #ffffff;
-    --grey-color: #6c757d;
-    --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    --gradient-bg: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-card-color) 100%);
-    --gradient-text: linear-gradient(90deg, var(--primary-color), var(--secondary-card-color));
-}
-
-.new-arrival-section {
-    background: var(--gradient-bg);
-    font-family: 'Montserrat', sans-serif;
-    padding: 3rem 0;
+.arrival-section {
+    background: var(--primary-gradient);
+    font-family: var(--secondary-font);
+    padding: 2.5rem 0;
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
 }
 
-.new-arrival-section::before {
+.arrival-section::before {
     content: '';
     position: absolute;
     top: -50%;
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle at 70% 30%, rgba(0, 123, 255, 0.1) 0%, transparent 50%);
+    background: radial-gradient(circle at 70% 30%, var(--primary-color) 0%, transparent 50%);
     z-index: 0;
 }
 
-.new-arrival-title {
-    font-family: 'Dancing Script', cursive;
-    font-size: clamp(2rem, 3vw, 3rem);
-    background: var(--gradient-text);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    margin-bottom: 0;
-    z-index: 1;
+.arrival-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
     position: relative;
-}
-
-.see-all-btn {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
-    padding: 0.5rem 1.5rem;
-    border-radius: 50px;
-    background: var(--new-white-color);
-    color: var(--new-primary-color);
-    transition: var(--transition);
     z-index: 1;
-    position: relative;
 }
 
-.see-all-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    background: var(--gradient-bg);
-    color: var(--new-white-color);
+.arrival-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    min-height: 350px;
 }
 
-.new-arrival-banner-container {
-    border-radius: 12px;
+.arrival-content-col,
+.arrival-image-col {
+    flex: 1;
+    min-width: 0;
+}
+
+.arrival-banner-container {
+    border-radius: 10px;
     overflow: hidden;
     aspect-ratio: 4/3;
-    max-height: 400px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    background: var(--white-color);
+    border: 1px solid var(--grey-color);
     position: relative;
-    transition: var(--transition);
+    transition: transform 0.3s ease;
     cursor: pointer;
+    will-change: transform;
 }
 
-.new-arrival-banner-container:hover,
-.new-arrival-banner-container:active {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+.arrival-banner-container:hover {
+    transform: translateY(-4px);
 }
 
-.new-arrival-banner-wrapper {
+.arrival-banner-wrapper {
     position: relative;
     width: 100%;
     height: 100%;
     overflow: hidden;
 }
 
-.new-arrival-banner-img {
+.arrival-banner-img {
     position: absolute;
     width: 100%;
     height: 100%;
     object-fit: cover;
     opacity: 0;
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease-in-out;
-    will-change: transform;
+    transition: transform 0.4s ease, opacity 0.6s ease-in-out;
+    will-change: transform, opacity;
 }
 
-.new-arrival-banner-img.active {
+.arrival-banner-img.arrival-active {
     opacity: 1;
 }
 
-.carousel-overlay {
+.arrival-carousel-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--overlay-bg);
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
-    transition: var(--transition);
-    border-radius: 12px;
+    transition: opacity 0.3s ease;
+    border-radius: 10px;
     z-index: 2;
 }
 
-.new-arrival-banner-container:hover .carousel-overlay,
-.new-arrival-banner-container:active .carousel-overlay {
+.arrival-banner-container:hover .arrival-carousel-overlay {
     opacity: 1;
 }
 
-.view-collection {
+.arrival-view-collection {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 12px 20px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 50px;
-    font-family: 'Montserrat', sans-serif;
+    gap: 6px;
+    padding: 10px 18px;
+    background: var(--white-color);
+    border-radius: 40px;
+    font-family: var(--secondary-font);
     font-weight: 600;
-    color: var(--primary-color);
-    transform: translateY(20px);
-    transition: var(--transition);
-    font-size: 0.9rem;
+    color: var(--primary-hover-color);
+    transform: translateY(15px);
+    transition: transform 0.3s ease;
+    font-size: 0.85rem;
+    cursor: pointer;
 }
 
-.new-arrival-banner-container:hover .view-collection,
-.new-arrival-banner-container:active .view-collection {
+.arrival-banner-container:hover .arrival-view-collection {
     transform: translateY(0);
 }
 
-.arrow-icon {
+.arrival-arrow-icon {
     transition: transform 0.3s ease;
 }
 
-.view-collection:hover .arrow-icon,
-.view-collection:active .arrow-icon {
-    transform: translateX(4px);
+.arrival-view-collection:hover .arrival-arrow-icon {
+    transform: translateX(3px);
 }
 
-.shimmer-overlay {
+.arrival-shimmer-overlay {
     position: absolute;
     top: 0;
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    background: linear-gradient(90deg, transparent, var(--shimmer-color), transparent);
     z-index: 1;
     animation: shimmer 3s infinite;
-    border-radius: 12px;
+    border-radius: 10px;
 }
 
 @keyframes shimmer {
@@ -178,158 +152,174 @@
     }
 }
 
-.new-arrival-content {
-    padding: 20px;
+.arrival-content {
+    padding: 15px;
     position: relative;
     z-index: 1;
 }
 
-.new-arrival-subtitle {
-    font-family: 'Dancing Script', cursive;
-    font-size: clamp(1.5rem, 2.5vw, 2rem);
-    color: var(--new-text-color);
-    line-height: 1.3;
+.arrival-subtitle {
+    font-family: var(--title-font);
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    color: var(--primary-text-color);
+    line-height: 1.2;
+    margin-bottom: 1rem;
 }
 
-.gradient-text {
-    background: var(--gradient-text);
+.arrival-gradient-text {
+    background: var(--gradient-border);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     display: inline;
 }
 
-.new-arrival-desc {
-    font-size: clamp(0.9rem, 1.2vw, 1rem);
+.arrival-desc {
+    font-size: clamp(0.85rem, 1.3vw, 0.95rem);
     color: var(--grey-color);
-    line-height: 1.8;
-    max-width: 500px;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
 }
 
-.shop-now-btn {
+.arrival-shop-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.8rem;
-    padding: 14px 28px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.9rem;
+    gap: 0.6rem;
+    padding: 12px 24px;
+    font-family: var(--secondary-font);
+    font-size: clamp(0.8rem, 1.1vw, 0.9rem);
     font-weight: 600;
     text-transform: capitalize;
-    color: var(--primary-hover-color);
-    background: var(--gradient-bg);
+    color: var(--white-color);
+    background: var(--button-bg);
     border: none;
-    border-radius: 50px;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
-    transition: var(--transition);
+    border-radius: 40px;
+    transition: transform 0.3s ease;
     position: relative;
     overflow: hidden;
     cursor: pointer;
 }
 
-.shop-now-btn span {
+.arrival-shop-btn span {
     position: relative;
     z-index: 2;
 }
 
-.arrow-wrapper {
+.arrival-arrow-wrapper {
     position: relative;
     z-index: 2;
     display: flex;
     align-items: center;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.3s ease;
 }
 
-.hover-effect {
+.arrival-hover-effect {
     position: absolute;
     top: 0;
     left: 0;
     width: 0;
     height: 100%;
-    background: rgba(255, 255, 255, 0.2);
-    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    background: var(--shimmer-color);
+    transition: width 0.5s ease;
     z-index: 1;
 }
 
-.shop-now-btn:hover,
-.shop-now-btn:active {
-    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.4);
+.arrival-shop-btn:hover {
+    transform: translateY(-2px);
 }
 
-.shop-now-btn:hover .arrow-wrapper,
-.shop-now-btn:active .arrow-wrapper {
-    transform: translateX(4px);
+.arrival-shop-btn:hover .arrival-arrow-wrapper {
+    transform: translateX(3px);
 }
 
-.shop-now-btn:hover .hover-effect,
-.shop-now-btn:active .hover-effect {
+.arrival-shop-btn:hover .arrival-hover-effect {
     width: 100%;
 }
 
-@media (max-width: 767px) {
-    .new-arrival-title {
-        font-size: clamp(1.5rem, 2vw, 2rem);
+@media (max-width: 768px) {
+    .arrival-row {
+        gap: 1.2rem;
+        min-height: 300px;
     }
 
-    .see-all-btn {
-        padding: 0.4rem 1rem;
-        font-size: 0.9rem;
+    .arrival-content {
+        padding: 12px;
     }
 
-    .new-arrival-banner-container {
-        max-height: 200px;
+    .arrival-desc {
+        margin-bottom: 1.2rem;
     }
 
-    .new-arrival-content {
-        padding: 10px;
-    }
-
-    .new-arrival-subtitle {
-        font-size: clamp(1.2rem, 2vw, 1.5rem);
-    }
-
-    .new-arrival-desc {
-        font-size: 0.85rem;
-    }
-
-    .shop-now-btn {
+    .arrival-shop-btn {
         padding: 10px 20px;
-        font-size: 0.8rem;
     }
 
-    .view-collection {
-        padding: 8px 16px;
-        font-size: 0.7rem;
+    .arrival-view-collection {
+        padding: 8px 14px;
+        font-size: 0.75rem;
     }
 }
 
-@media (max-width: 575px) {
-    .new-arrival-banner-container {
-        max-height: 1px;
+@media (max-width: 576px) {
+    .arrival-container {
+        padding: 0 10px;
     }
 
-    .new-arrival-title {
-        font-size: 1.5rem;
+    .arrival-row {
+        gap: 0.8rem;
+        min-height: 250px;
     }
 
-    .see-all-btn {
-        padding: 0.3rem 0.8rem;
+    .arrival-content {
+        padding: 10px;
+    }
+
+    .arrival-subtitle {
+        margin-bottom: 0.8rem;
+    }
+
+    .arrival-desc {
+        margin-bottom: 1rem;
+    }
+
+    .arrival-shop-btn {
+        padding: 8px 16px;
         font-size: 0.8rem;
+        gap: 0.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .arrival-row {
+        flex-direction: column;
+        gap: 0.8rem;
+        min-height: auto;
+    }
+
+    .arrival-content-col,
+    .arrival-image-col {
+        flex: none;
+        width: 100%;
+    }
+
+    .arrival-banner-container {
+        max-width: 100%;
+        aspect-ratio: 16/9;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
 
-    .shimmer-overlay {
-        animation: none;
-        display: none;
-    }
-
-    .new-arrival-banner-img {
+    .arrival-shimmer-overlay,
+    .arrival-banner-img,
+    .arrival-shop-btn,
+    .arrival-view-collection,
+    .arrival-banner-container {
+        animation: none !important;
         transition: none !important;
+    }
+
+    .arrival-shimmer-overlay {
+        display: none;
     }
 }

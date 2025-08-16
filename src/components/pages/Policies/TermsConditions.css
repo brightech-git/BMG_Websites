@@ -1,85 +1,171 @@
-@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
-
-:root {
-    --primary-font: 'Gloock', 'serif';
-    --secondary-font: 'Montserrat', 'sans-serif';
-    --primary-color: #f6f5f0;
-    --primary-text-color: #404040;
-    --primary-card-color: #edebe7;
-    --primary-hover-color: #cd865c;
-    --secondary-card-color: #cfdcdd;
-    --white-color: #ffffff;
-    --header-height: 80px;
-    --mobile-header-height: 60px;
-    --green-color: #024908;
-    --grey-color: #A9A9A9;
-    --black-color: #000000;
-}
-
-.terms-conditions-wrapper {
+/* Terms & Conditions Styles */
+.terms-wrapper {
+    background-color: var(--primary-color);
+    padding: 3rem 1rem;
     font-family: var(--secondary-font);
     color: var(--primary-text-color);
-    background-color: var(--primary-color);
+    min-height: 100vh;
+    margin-top: 90px;
+}
+
+.terms-container {
+    max-width: 960px;
+    margin: 0 auto;
 }
 
 .terms-heading {
     font-family: var(--primary-font);
-    font-size: 2.5rem;
-    color: var(--black-color) !important;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--black-color);
+    font-weight: 500;
 }
 
 .terms-card {
-    border: none;
+    background: var(--primary-color);
     border-radius: 12px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px var(--shadow-color);
 }
-.card-body{
-    background-color: var(--primary-card-color);
+
+.terms-card-body {
+    padding: 1.5rem;
 }
-.card-title{
-    color: var(--primary-text-color) !important;
-    font-size: 1.3rem !important;
+
+.terms-card-content {
+    display: flex;
+    gap: 1.5rem;
 }
-.section-heading {
+
+.terms-icon {
+    color: var(--primary-hover-color);
+    font-size: 1.5rem;
+    min-width: 40px;
+    padding-top: 0.3rem;
+}
+
+.terms-section-heading {
     font-family: var(--primary-font);
-    font-size: 1.3rem;
+    font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+    margin-bottom: 1rem;
+    color: var(--primary-text-color);
+}
+
+.terms-list {
+    padding-left: 1.5rem;
+    margin: 1rem 0;
+}
+
+.terms-list li {
+    font-size: clamp(0.9rem, 1.1vw, 1rem);
+    line-height: 1.8;
     margin-bottom: 0.5rem;
     color: var(--black-color);
 }
 
-.icon-box {
-    min-width: 40px;
-    font-size: 1.5rem;
-    color: var(--primary-hover-color);
+.terms-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
 }
 
-.icon {
-    vertical-align: middle;
+@media (min-width: 768px) {
+    .terms-grid {
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
-.list-group-item {
-    background-color: transparent;
-    border: none;
-    padding-left: 0;
+.terms-box {
+    background: var(--primary-card-color);
+    border-radius: 8px;
+    padding: 1.2rem;
+    border: 1px solid var(--grey-color);
 }
 
-.bg-green {
+.terms-box h5 {
+    font-size: clamp(1rem, 1.2vw, 1.2rem);
+    margin-bottom: 0.5rem;
+    color: var(--primary-text-color);
+}
+
+.terms-box ul {
+    padding-left: 1.2rem;
+    margin: 0.5rem 0 0;
+}
+
+.terms-box ul li {
+    font-size: clamp(0.85rem, 1vw, 0.95rem);
+    line-height: 1.6;
+    margin-bottom: 0.3rem;
+}
+
+.payment-online {
     background-color: rgba(2, 73, 8, 0.1);
 }
 
-.bg-blue {
+.payment-cod {
     background-color: rgba(207, 220, 221, 0.3);
 }
 
-.pricing-box {
+.terms-note {
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    margin-top: 1rem;
+    font-size: clamp(0.85rem, 1vw, 0.95rem);
+}
+
+.terms-note.info {
     background-color: var(--secondary-card-color);
-    border-radius: 10px;
+    border-left: 4px solid var(--primary-hover-color);
 }
 
-.payment-option {
-    border-radius: 10px;
+.terms-note.warning {
+    background-color: rgba(205, 134, 92, 0.1);
+    border-left: 4px solid var(--primary-hover-color);
 }
 
-.alert {
-    font-size: 0.95rem;
-    font-family: var(--secondary-font);
+.terms-note.secondary {
+    background-color: rgba(169, 169, 169, 0.1);
+    border-left: 4px solid var(--grey-color);
+}
+
+.terms-update {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 0.8rem;
+    background-color: var(--primary-card-color);
+    border-radius: 6px;
+    font-size: clamp(0.85rem, 1vw, 0.95rem);
+}
+
+@media (max-width: 768px) {
+    .terms-wrapper {
+        margin-top: 110px;
+        padding-top: 1.5rem;
+    }
+
+    .terms-card-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .terms-icon {
+        align-self: flex-start;
+    }
+}
+
+@media (max-width: 576px) {
+    .terms-card-body {
+        padding: 1rem;
+    }
+
+    .terms-list {
+        padding-left: 1rem;
+    }
+
+    .terms-box {
+        padding: 1rem;
+    }
 }

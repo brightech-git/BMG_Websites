@@ -57,14 +57,14 @@ class Footertwo extends Component {
                       <li>
                         <Link to="/terms-conditions">Terms & Conditions</Link>
                       </li>
-                      <li>
+                      {/* <li>
                         <Link to="/delivery&shipping">Delivery-Shiiping Policy</Link>
-                      </li>
+                      </li> */}
                       <li>
                         <Link to="/cancellation-return-policy">Cancellation & Return Policy</Link>
                       </li>
                       <li>
-                        <Link to="/refund-policy">Refund Policy</Link>
+                        <Link to="/refund-policy">Shipping and Returns</Link>
                       </li>
                     
                     

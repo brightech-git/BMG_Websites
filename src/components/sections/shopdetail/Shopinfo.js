@@ -98,7 +98,11 @@ const Shopinfo = ({ sno,Authenticated }) => {
             addItem(product.SNO);
         }
     }, [product?.SNO, addItem]);
-
+    const getPrice = (product) => {
+        return Number(product?.GrandTotal) > 0
+            ? Number(product.GrandTotal)
+            : Number(product?.RATE || 0);
+    };
     const handleAddToCart = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -126,7 +130,7 @@ const Shopinfo = ({ sno,Authenticated }) => {
             itemSno: product.SNO,
             itemTagSno: product.SNO,
             itemName: product.ITEMNAME,
-            price: product.GrandTotal,
+            price: getPrice(product),
             image: product.ImagePath ? JSON.parse(product.ImagePath)[0] : '',
         };
 
@@ -156,7 +160,7 @@ const Shopinfo = ({ sno,Authenticated }) => {
             itemSno: product.SNO,
             itemTagSno: product.SNO,
             itemName: product.ITEMNAME,
-            price: product.GrandTotal,
+            price: getPrice(product),
             image: product.ImagePath ? Base_URL + JSON.parse(product.ImagePath)[0]: '',
         };
 
@@ -167,11 +171,11 @@ const Shopinfo = ({ sno,Authenticated }) => {
                 tagNo: product.TAGNO || null,
                 productName: product.ITEMNAME || 'Unknown Product',
                 quantity: 1,
-                price: product.GrandTotal || 0,
+                price: getPrice(product),
                 imagePath: product.ImagePath ? Base_URL + JSON.parse(product.ImagePath)[0] : '',
                
             }],
-            totalAmount: product.GrandTotal || 0,
+            totalAmount: getPrice(product),
         };
         console.log('checkout',checkoutPayload.items.imagePath);
         
@@ -288,7 +292,15 @@ const Shopinfo = ({ sno,Authenticated }) => {
                             </div>
                             <div className="product-pricing">
                                 <div className="price-row">
-                                    <span className="current-price">₹{product.GrandTotal?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                                    <span className="current-price">
+                                        ₹
+                                        {(
+                                            parseFloat(product?.GrandTotal) > 0
+                                                ? parseFloat(product.GrandTotal)
+                                                : parseFloat(product?.RATE || 0)
+                                        ).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                    </span>
+
                                     {discountPercentage > 0 && (
                                         <span className="original-price">₹{originalPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                                     )}

@@ -42,6 +42,8 @@ import RefundPolicy from './components/pages/Policies/RefundPolicy';
 import TermsConditions from './components/pages/Policies/TermsConditions';
 import PrivateRoute from './route/UserPrivateRoute';
 import DeliveryShippingPolicy from './components/pages/Policies/DeliveryAndShipping';
+import ForgotPassword from './components/pages/ForgotPassword';
+import PaymentSuccess from './components/pages/PaymentSuccess';
 
 
 function ScrollWatcher() {
@@ -63,6 +65,9 @@ function App() {
       {/* <Preloader /> */}
       <ScrollWatcher />
       <Switch>
+
+
+        <Route exact path="/" component={Home} />
         <Route exact path="/" component={Home} />
         <Route exact path="/about" component={About} />
         <PrivateRoute exact path="/account" component={Account} />
@@ -78,13 +83,22 @@ function App() {
         <Route exact path="/gallery" component={Gallery} />
         <Route exact path="/gallery-two" component={Gallerytwo} />
         <Route exact path="/legal" component={Legal} />
+
+
         <Route exact path="/login" component={Login} />
         <Route exact path="/register" component={Register} />
+        <Route exact path="/forgot-password" component={ForgotPassword} />
+
+
+
+
         <Route exact path="/shop-detail/:sno" component={Shopdetail} />
         <Route exact path="/shop-left" component={Shopleft} />
         <Route exact path="/team" component={Team} />
         <Route exact path="/typography" component={Typography} />
+
         <PrivateRoute exact path="/wishlist" component={Wishlist} />
+
    
         <PrivateRoute exact path="/payment/:orderId" component={PaymentPage} />
         <PrivateRoute exact path="/payment/success" component={Home} />
@@ -101,6 +115,8 @@ function App() {
         <Route exact path="/delivery&shipping" component={DeliveryShippingPolicy} />
         <Route exact path="/refund-policy" component={RefundPolicy} />
         <Route exact path="/terms-conditions" component={TermsConditions} />  
+
+        <Route exact path="/payment-success/:orderId" component={PaymentSuccess} />
         
         {/* Catch-all route for 404 errors */}
         

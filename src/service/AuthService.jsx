@@ -13,14 +13,13 @@ export const loginUser = async (loginData) => {
  
     const data = response.data;
 
-    // If there's an 'error' field, throw it
-    if (data.error) {
-        throw new Error(data.error); // e.g., "Invalid username or password"
+    if (data.status === "error" || data.error) {
+        throw new Error(data.message || data.error || "Login failed");
     }
 
-    // Optional: also check for missing token, just in case
+    // Optional: also validate token
     if (!data.token) {
-        throw new Error("Login failed: Missing token from server.");
+        throw new Error("No token received. Please try again.");
     }
 
     return data;

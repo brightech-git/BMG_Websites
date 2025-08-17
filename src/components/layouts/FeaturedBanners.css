@@ -1,172 +1,51 @@
-/* Banner Showcase Section */
-@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
-
-:root {
-    --primary-font: 'Gloock', 'serif';
-    --secondary-font: 'Montserrat', 'sans-serif';
-    --primary-color: #f6f5f0;
-    --primary-text-color: #404040;
-    --primary-card-color: #edebe7;
-    --primary-hover-color: #cd865c;
-    --secondary-card-color: #cfdcdd;
-    --white-color: #ffffff;
-    --header-height: 80px;
-    --mobile-header-height: 60px;
-    --green-color: #024908;
-    --grey-color: #A9A9A9;
-    --black-color: #000000;
-}
-.banner-showcase {
-    padding: 1rem 0;
-    background-color: var(--primary-color);
+.fb-banner-container {
     font-family: var(--secondary-font);
-}
-
-.banner-container {
-    max-width: 1400px;
+    background-color: var(--primary-color);
+    max-width: 1440px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 2rem 0;
 }
 
-/* Header Styles */
-.banner-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 3rem;
-}
-
-.banner-main-title {
-    font-size: 1.5rem;
-    font-weight: 400;
-    color: var(--primary-text-color);
-    font-family: var(--primary-font);
+.fb-main-title {
+    font-family: var(--title-font);
+    font-size: clamp(2.5rem, 4vw, 3rem);
+    font-weight: 700;
     position: relative;
-    padding-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    background: linear-gradient(to right, var(--primary-hover-color), #a05ccdff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
-.banner-main-title::after {
+.fb-main-title::after {
     content: '';
     position: absolute;
     bottom: 0;
-    left: 0;
-    width: 80px;
-    height: 3px;
-    background: var(--primary-hover-color);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(to right, #ff6a00, #ee0979);
 }
 
-/* Banner Grid Layout */
-.banner-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 200px);
-    gap: 1.5rem;
-}
-
-.banner-item {
-    position: relative;
-    cursor: pointer;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background-color: var(--primary-card-color);
-}
-
-.banner-item:hover {
-    transform: translateY(-5px);
-  
-}
-
-.banner-item-1 {
-    grid-column: 1 / span 2;
-    grid-row: 1 / span 2;
-}
-
-.banner-item-2 {
-    grid-column: 3;
-    grid-row: 1;
-}
-
-.banner-item-3 {
-    grid-column: 4;
-    grid-row: 1;
-}
-
-.banner-item-4 {
-    grid-column: 3 / span 2;
-    grid-row: 2;
-}
-
-.banner-image-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-
-.banner-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-.banner-item:hover .banner-image {
-    transform: scale(1.05);
-}
-
-.banner-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-.banner-content {
-    position: absolute;
-    bottom: 2rem;
-    left: 2rem;
-    color: var(--primary-text-color);
-    z-index: 2;
-    max-width: 80%;
-}
-
-.banner-subtitle {
-    display: block;
-    font-size: 0.875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 0.5rem;
-    color: var(--primary-text-color);
-}
-
-.banner-title {
-    font-size: 1.5rem;
+.fb-explore-btn {
+    padding: 10px 20px;
+    font-size: 16px !important;
     font-weight: 500;
-    margin-bottom: 1rem;
-    line-height: 1.2;
-}
-
-/* Button Styles - Using your enhanced button */
-.trending-shop-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 12px 28px;
-    font-size: 14px;
-    font-weight: 400;
     text-transform: capitalize;
     letter-spacing: 1px;
-    color: var(--white-color);
-    background-color: var(--primary-hover-color);
+    color: var(--white-color) !important;
+    background-color: var(--primary-hover-color) !important;
     border: 1px solid var(--primary-hover-color);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
     z-index: 1;
-    cursor: pointer;
+    border-radius: 0px 20px !important;
 }
 
-.trending-shop-btn::before {
+.fb-explore-btn::before {
     content: '';
     position: absolute;
     top: 0;
@@ -178,143 +57,165 @@
     z-index: -1;
 }
 
-.trending-shop-btn:hover {
-    color: var(--primary-hover-color);
-}
-
-.trending-shop-btn:hover::before {
+.fb-explore-btn:hover::before {
     width: 100%;
 }
 
-.btn-arrow {
+.fb-explore-btn:hover {
+    color: var(--primary-hover-color) !important;
+}
+
+.fb-banner-item {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    background-color: var(--primary-card-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.fb-banner-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+.fb-banner-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.fb-banner-item:hover .fb-banner-image {
+    transform: scale(1.05);
+}
+
+.fb-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.1) 100%);
+}
+
+.fb-banner-content {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    color: #333333;
+    z-index: 2;
+    max-width: 80%;
+}
+
+.fb-subtitle {
+    font-size: clamp(0.8rem, 1.5vw, 1.1rem);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    color: #333333;
+    opacity: 0.9;
+}
+
+.fb-title {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-weight: 500;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    background: linear-gradient(to right, #8f520cff, #d44107ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-family: var(--title-font);
+}
+
+.fb-cta-btn {
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: var(--primary-text-color);
+    background-color: rgba(255, 255, 255, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+    backdrop-filter: var(--overlay-blur);
+}
+
+.fb-cta-btn:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-color: rgba(255, 255, 255, 0.9);
+}
+
+.fb-btn-arrow {
     transition: transform 0.3s ease;
 }
 
-.trending-shop-btn:hover .btn-arrow {
+.fb-cta-btn:hover .fb-btn-arrow,
+.fb-explore-btn:hover .fb-btn-arrow {
     transform: translateX(5px);
 }
 
-/* Banner CTA specific styles */
-.banner-cta {
-    padding: 10px 20px;
-    font-size: 13px;
-    margin-top: 0.5rem;
+.fb-featured-banner {
+    height: 500px;
 }
 
-/* Responsive Styles */
-@media (max-width: 1200px) {
-    .banner-grid {
-        grid-template-rows: repeat(2, 180px);
-    }
-
-    .banner-content {
-        bottom: 1.5rem;
-        left: 1.5rem;
-    }
-
-    .banner-title {
-        font-size: 1.3rem;
-    }
+.fb-small-banner {
+    height: 220px;
 }
 
-@media (max-width: 992px) {
-    .banner-grid {
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(3, 200px);
-    }
-
-    .banner-item-1 {
-        grid-column: 1 / span 2;
-        grid-row: 1;
-    }
-
-    .banner-item-2 {
-        grid-column: 1;
-        grid-row: 2;
-    }
-
-    .banner-item-3 {
-        grid-column: 2;
-        grid-row: 2;
-    }
-
-    .banner-item-4 {
-        grid-column: 1 / span 2;
-        grid-row: 3;
-    }
-
-    .banner-main-title {
-        font-size: 1.8rem;
-    }
+.fb-bottom-banner {
+    height: 260px;
 }
 
 @media (max-width: 768px) {
-    .banner-showcase {
-        padding: 3rem 0;
+    .fb-banner-content {
+        bottom: 0.5rem;
+        left: 0.5rem;
     }
 
-    .banner-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-        margin-bottom: 2rem;
+    .fb-subtitle {
+        font-size: 0.75rem;
     }
 
-    .banner-grid {
-        grid-template-rows: repeat(3, 160px);
-        gap: 1rem;
+    .fb-title {
+        font-size: 0.8rem;
     }
 
-    .banner-content {
-        bottom: 1rem;
-        left: 1rem;
+    .fb-cta-btn {
+        padding: 6px 12px;
+        font-size: 12px;
     }
 
-    .banner-title {
-        font-size: 1.1rem;
-        margin-bottom: 0.5rem;
+    .fb-small-banner {
+        height: 160px;
     }
 
-    .trending-shop-btn {
-        padding: 10px 20px;
+    .fb-featured-banner {
+        height: 300px;
+    }
+
+    .fb-bottom-banner {
+        height: 200px;
     }
 }
 
 @media (max-width: 576px) {
-    .banner-grid {
-        grid-template-columns: 1fr;
-        grid-template-rows: repeat(4, 200px);
+    .fb-banner-container {
+        padding: 1rem 0;
     }
 
-    .banner-item-1,
-    .banner-item-2,
-    .banner-item-3,
-    .banner-item-4 {
-        grid-column: 1;
+    .fb-small-banner,
+    .fb-featured-banner,
+    .fb-bottom-banner {
+        height: 150px;
+        margin-bottom: 0.5rem;
     }
 
-    .banner-item-1 {
-        grid-row: 1;
+    .fb-main-title {
+        font-size: 1.2rem;
     }
 
-    .banner-item-2 {
-        grid-row: 2;
-    }
-
-    .banner-item-3 {
-        grid-row: 3;
-    }
-
-    .banner-item-4 {
-        grid-row: 4;
-    }
-
-    .banner-main-title {
-        font-size: 1.5rem;
-    }
-
-    .trending-shop-btn {
+    .fb-explore-btn {
+        font-size: 10px !important;
         padding: 8px 16px;
-        font-size: 13px;
+        color: var(--white-color) ;
     }
 }

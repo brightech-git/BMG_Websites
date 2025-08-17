@@ -70,21 +70,7 @@ const TrendingProducts = () => {
                                                             />
                                                             {/* Overlay Gradient */}
                                                             <div className="premium-overlay"></div>
-                                                            {/* Category Label */}
-                                                            {/* <div className="position-absolute top-0 start-0 p-2 p-md-3">
-                                                                <h3
-                                                                    className="text fw-bold mb-0"
-                                                                    style={{
-                                                                        fontSize: 'clamp(1rem, 2vw, 1.4rem)',
-                                                                        textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
-                                                                        letterSpacing: '1px',
-                                                                        color:'#404040'
-                                                                    }}
-                                                                >
-                                                                    {category.label}
-                                                                </h3>
-                                                            </div> */}
-                                                            {/* Shop Now Button */}
+                                                     
                                                             <div className="premium-action-bar">
                                                                 <button
                                                                     className="btn premium-action-btn btn-sm px-1 py-1"

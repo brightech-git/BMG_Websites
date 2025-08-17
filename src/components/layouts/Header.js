@@ -16,6 +16,7 @@ import { useFavorites } from '../../hook/favorites/useFavoritesQuery';
 import { useCart } from '../../hook/cart/useCartQuery';
 
 
+
 const Header = ({ isAuthenticated }) => {
   const width = useScreenWidth();
   const history = useHistory();

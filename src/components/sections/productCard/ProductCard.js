@@ -228,11 +228,7 @@ const ProductCard = ({ item }) => {
                         }}
                     />
 
-                    {hasDiscount && (
-                        <span className="sale-tag">
-                            -{discountValue}%
-                        </span>
-                    )}
+                   
 
                     <div className={`quick-actions ${hoverState || isTouchActive ? 'show-actions' : ''}`}>
                         <button
@@ -467,7 +463,7 @@ const ProductCard = ({ item }) => {
 
                 .item-name {
                     font-family: 'Montserrat', sans-serif;
-                    font-size: 0.95rem;
+                    font-size: 1rem;
                     font-weight: 400;
                     color: #2d3748;
                     margin: 0 auto;
@@ -487,7 +483,7 @@ const ProductCard = ({ item }) => {
 
                 .new-price {
                     font-family: 'Montserrat', sans-serif;
-                    font-size: 1.1rem;
+                    font-size: 0.9rem;
                     font-weight: 400;
                     color: #1a202c;
                 }

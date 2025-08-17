@@ -1,0 +1,118 @@
+.register-section {
+    padding: 80px 0;
+}
+
+.account-wrapper {
+    box-shadow: 0 0 20px var(--shadow-color);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.login-content {
+    height: 100%;
+    min-height: 500px;
+    background-size: cover;
+    background-position: center;
+}
+
+.register-form {
+    padding: 40px;
+    background-color: var(--white-color);
+}
+
+.register-form h2 {
+    font-family: var(--title-font);
+    color: var(--primary-hover-color);
+    font-size: 2rem;
+    font-weight: 700px;
+    text-align: center;
+    align-items: center;
+}
+
+.input-group-two {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-group-two input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--grey-color);
+    border-radius: 5px;
+    font-family: var(--secondary-font);
+    color: var(--primary-text-color);
+    transition: all 0.3s ease;
+}
+
+.input-group-two input:focus {
+    outline: 2px solid var(--focus-outline);
+    border-color: transparent;
+}
+
+.invalid-feedback {
+    color: var(--error-color, #dc3545);
+    font-size: 0.75rem;
+    margin-top: 5px;
+    font-family: var(--secondary-font);
+}
+
+.is-invalid {
+    border-color: var(--error-color, #dc3545) !important;
+}
+
+.main-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--button-bg, var(--primary-hover-color));
+    color: var(--white-color);
+    border: none;
+    border-radius: 5px;
+    font-family: var(--secondary-font);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.main-btn:hover {
+    background-color: var(--black-color);
+    transform: translateY(-2px);
+}
+
+.main-btn:disabled {
+    background-color: var(--grey-color);
+    cursor: not-allowed;
+}
+
+.register-link {
+    color: var(--primary-text-color);
+    font-family: var(--secondary-font);
+    margin: 15px 0;
+    text-align: center;
+}
+
+.login-redirect,
+.back-to-register {
+    margin-left: 10px;
+    color: var(--primary-hover-color);
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--secondary-font);
+    padding: 0;
+}
+
+.login-redirect:hover,
+.back-to-register:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 991.98px) {
+    .login-content {
+        min-height: 300px;
+    }
+
+    .register-form {
+        padding: 30px 20px;
+    }
+}

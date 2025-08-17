@@ -1,32 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
- @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap');
-:root {
-    --primary-font: 'Gloock', serif;
-    --secondary-font: 'Montserrat', sans-serif;
-    --primary-color: #f6f5f0;
-    --primary-text-color: #404040;
-    --primary-card-color: #edebe7;
-    --primary-hover-color: #cd865c;
-    --secondary-card-color: #cfdcdd;
-    --white-color: #ffffff;
-    --green-color: #024908;
-    --grey-color: #A9A9A9;
-    --black-color: #000000;
-    --cat-bg-color:#faf7ef;
-}
-
 /* Shop Category Section */
 .shop-category-section {
     padding: 40px 0;
-    background-color: var(--cat-bg-color);
+    background-color: var(--primary-color);
     font-family: var(--primary-font);
     color: var(--primary-text-color);
 }
-.shop-category-section  .cat-container{
-    background-color: var(--cat-bg-color);
+
+.shop-category-section .cat-container {
+    background-color: var(--primary-color);
     margin: 0 auto;
     max-width: 1400px;
 }
+
 /* Shop Category Header */
 .shop-category-header {
     padding: 1rem;
@@ -41,19 +26,17 @@
     margin-bottom: 10px;
     text-transform: uppercase;
     letter-spacing: 2px;
-    
 }
 
 .shop-category-title {
     font-size: clamp(2.3rem, 4vw, 3rem);
     font-weight: bolder;
     text-align: center;
-    font-family: 'Dancing Script';
+    font-family: var(--title-font);
 }
 
 .shop-category-title .gradient-text {
-    background: linear-gradient(to right, #ff7e5f, #feb47b);
-    /* Warm orange tone */
+    background: var(--gradient-text);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -63,13 +46,12 @@
 
 .shop-category-title .normal-text {
     color: var(--primary-text-color);
-    /* or #333 */
     display: inline-block;
 }
+
 /* Shop Category Navigation */
 .shop-category-names {
     display: flex;
-    /* Changed from center to ensure first item is visible */
     flex-wrap: nowrap;
     scroll-behavior: smooth;
     overflow-x: auto;
@@ -87,7 +69,7 @@
 
 .shop-category-name {
     padding: 8px 15px;
-    font-size: 16px;
+    font-size: 15px;
     color: var(--primary-text-color);
     cursor: pointer;
     transition: all 0.3s ease;
@@ -97,11 +79,8 @@
     border: none;
     background: transparent;
     flex: 0 0 auto;
-    /* Ensure categories don't stretch */
     white-space: nowrap;
-    /* Prevent text wrapping */
     scroll-snap-align: start;
-    /* Align categories to start when scrolling */
 }
 
 .shop-category-name:hover {
@@ -110,7 +89,7 @@
 
 .shop-category-name.active {
     color: var(--primary-hover-color);
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .shop-category-name.active::after {
@@ -131,7 +110,7 @@
     max-width: 100%;
     margin: 0 auto;
     padding: 0 50px;
-    background-color: var(--cat-bg-color);
+    background-color: var(--primary-color);
 }
 
 /* Scroll Buttons */
@@ -146,7 +125,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px var(--shadow-color);
     z-index: 2;
     cursor: pointer;
     border: none;
@@ -247,11 +226,12 @@
     .shop-product-grid>* {
         flex: 0 0 260px;
     }
-        .shop-category-names {
-            padding: 0 10px;
-            scroll-padding-left: 50px;
-            justify-content: flex-start;
-        }
+
+    .shop-category-names {
+        padding: 0 10px;
+        scroll-padding-left: 50px;
+        justify-content: flex-start;
+    }
 }
 
 @media (max-width: 992px) {
@@ -268,13 +248,13 @@
         height: 35px;
         font-size: 16px;
     }
-         .shop-category-names {
-             padding: 0 10px;
-             scroll-padding-left: 10px;
-             gap: 10px;
-             justify-content: flex-start;
-             /* Ensure first category is visible */
-         }
+
+    .shop-category-names {
+        padding: 0 10px;
+        scroll-padding-left: 10px;
+        gap: 10px;
+        justify-content: flex-start;
+    }
 }
 
 @media (max-width: 768px) {
@@ -293,9 +273,8 @@
     .shop-category-names {
         padding: 0 10px;
         scroll-padding-left: 10px;
-        gap:10px;
+        gap: 10px;
         justify-content: flex-start;
-        /* Ensure first category is visible */
     }
 
     .shop-category-name {
@@ -330,8 +309,7 @@
     .shop-category-names {
         padding: 0 5px;
         scroll-padding-left: 5px;
-        gap:5px
-        /* Ensure first category is visible */
+        gap: 5px;
     }
 
     .shop-category-name {

@@ -5,6 +5,7 @@ import { signup, verifyOtp } from '../../../redux/slices/userSlice';
 import { toast } from 'react-toastify';
 import loginbg from '../../../assets/img/bg/sign.webp';
 import GoogleLoginButton from './GoogleLoginButton';
+import './Register.css';
 
 const Content = () => {
     const [username, setUsername] = useState('');
@@ -26,12 +27,10 @@ const Content = () => {
     const validateForm = () => {
         const newErrors = {};
 
-        // Username validation
         if (!username.trim() || username.length < 3) {
             newErrors.username = 'Username must be at least 3 characters long';
         }
 
-        // Email validation
         if (!email) {
             newErrors.email = 'Email is required';
         } else if (!email.endsWith('@gmail.com')) {
@@ -40,18 +39,15 @@ const Content = () => {
             newErrors.email = 'Invalid email format';
         }
 
-        // Contact number validation
         if (!contactNumber) {
             newErrors.contactNumber = 'Mobile number is required';
         } else if (!/^\d{10}$/.test(contactNumber)) {
             newErrors.contactNumber = 'Mobile number must be exactly 10 digits';
         }
 
-        // Password validation
         if (!password || password.length < 6) {
             newErrors.password = 'Password must be at least 6 characters long';
         }
-
 
         if (!roles || roles.length === 0) {
             newErrors.roles = 'Role must be set for this account';
@@ -67,31 +63,18 @@ const Content = () => {
                 .unwrap()
                 .then(() => {
                     setShowOtpModal(true);
-                    setTempContactNumber(contactNumber); // use the value already in the form
+                    setTempContactNumber(contactNumber);
                 })
-
                 .catch(err => toast.error(err.message || 'Registration failed'));
         } else {
-            toast.error('Please fix the form errors', {
-                position: 'top-right',
-                autoClose: 3000,
-                hideProgressBar: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
+            toast.error('Please fix the form errors');
         }
     };
 
     const handleVerifyOtp = (e) => {
         e.preventDefault();
         if (otp.length !== 6) {
-            toast.error('Please enter a valid 6-digit OTP', {
-                position: 'top-right',
-                autoClose: 3000,
-                hideProgressBar: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
+            toast.error('Please enter a valid 6-digit OTP');
             return;
         }
 
@@ -101,13 +84,7 @@ const Content = () => {
         }))
             .unwrap()
             .then(() => {
-                toast.success('Account verified!', {
-                    position: 'top-right',
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    pauseOnHover: true,
-                    draggable: true,
-                });
+                toast.success('Account verified!');
                 setShowOtpModal(false);
                 navigate.push('/');
             })
@@ -116,43 +93,30 @@ const Content = () => {
 
     useEffect(() => {
         if (isAuthenticated && user && !showOtpModal) {
-            toast.success(`Registration successful for ${username}!`, {
-                position: 'top-right',
-                autoClose: 2000,
-                hideProgressBar: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
-
+            toast.success(`Registration successful for ${username}!`);
             setTimeout(() => {
                 navigate.push('/');
             }, 2200);
         }
 
         if (error && !showOtpModal) {
-            toast.error(error, {
-                position: 'top-right',
-                autoClose: 3000,
-                hideProgressBar: false,
-                pauseOnHover: true,
-                draggable: true,
-            });
+            toast.error(error);
         }
     }, [isAuthenticated, error, user, navigate, username, showOtpModal]);
 
     return (
-        <section className="login-sec pt-80 pb-80">
+        <section className="register-section">
             <div className="container">
                 <div className="account-wrapper">
                     <div className="row no-gutters">
                         <div className="col-lg-6">
                             <div
                                 className="login-content"
-                                style={{ backgroundImage: `url(${loginbg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                                style={{ backgroundImage: `url(${loginbg})` }}
                             />
                         </div>
                         <div className="col-lg-6">
-                            <div className="login-form">
+                            <div className="register-form">
                                 <h2>{showOtpModal ? 'Verify OTP' : 'Create Account'}</h2>
 
                                 {!showOtpModal ? (
@@ -166,7 +130,7 @@ const Content = () => {
                                                 className={errors.username ? 'is-invalid' : ''}
                                             />
                                             {errors.username && (
-                                                <div className="invalid-feedback" style={{ fontSize: '12px', color: '#dc3545' }}>
+                                                <div className="invalid-feedback">
                                                     {errors.username}
                                                 </div>
                                             )}
@@ -181,7 +145,7 @@ const Content = () => {
                                                 className={errors.email ? 'is-invalid' : ''}
                                             />
                                             {errors.email && (
-                                                <div className="invalid-feedback" style={{ fontSize: '12px', color: '#dc3545' }}>
+                                                <div className="invalid-feedback">
                                                     {errors.email}
                                                 </div>
                                             )}
@@ -200,7 +164,7 @@ const Content = () => {
                                                 className={errors.contactNumber ? 'is-invalid' : ''}
                                             />
                                             {errors.contactNumber && (
-                                                <div className="invalid-feedback" style={{ fontSize: '12px', color: '#dc3545' }}>
+                                                <div className="invalid-feedback">
                                                     {errors.contactNumber}
                                                 </div>
                                             )}
@@ -215,7 +179,7 @@ const Content = () => {
                                                 className={errors.password ? 'is-invalid' : ''}
                                             />
                                             {errors.password && (
-                                                <div className="invalid-feedback" style={{ fontSize: '12px', color: '#dc3545' }}>
+                                                <div className="invalid-feedback">
                                                     {errors.password}
                                                 </div>
                                             )}
@@ -229,14 +193,13 @@ const Content = () => {
                                             {loading ? 'Registering...' : 'Register'}
                                         </button>
 
-                                        <p style={{ color: '#404040', fontFamily: 'Montserrat' }}>
+                                        <p className="register-link">
                                             Already have an Account?
-                                            <Link to="/login" className="d-inline-block" style={{ marginLeft: '10px' }}>
+                                            <Link to="/login" className="login-redirect">
                                                 Login
                                             </Link>
                                         </p>
-
-                                        <GoogleLoginButton/>
+                                        <GoogleLoginButton />
                                     </form>
                                 ) : (
                                     <form onSubmit={handleVerifyOtp}>
@@ -253,7 +216,7 @@ const Content = () => {
                                                 className={errors.otp ? 'is-invalid' : ''}
                                             />
                                             {errors.otp && (
-                                                <div className="invalid-feedback" style={{ fontSize: '12px', color: '#dc3545' }}>
+                                                <div className="invalid-feedback">
                                                     {errors.otp}
                                                 </div>
                                             )}
@@ -267,12 +230,11 @@ const Content = () => {
                                             {loading ? 'Verifying...' : 'Verify OTP'}
                                         </button>
 
-                                        <p style={{ color: '#404040', fontFamily: 'Montserrat' }}>
+                                        <p className="register-link">
                                             Back to
                                             <button
                                                 type="button"
-                                                className="d-inline-block"
-                                                style={{ marginLeft: '10px', background: 'none', border: 'none', color: '#007bff' }}
+                                                className="back-to-register"
                                                 onClick={() => setShowOtpModal(false)}
                                             >
                                                 Register

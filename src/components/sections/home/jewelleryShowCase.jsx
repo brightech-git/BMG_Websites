@@ -118,7 +118,7 @@ const JewelryShowcase = () => {
                                 onClick={handleSeeAll}
                                 aria-label="Shop Now for best designed jewels"
                             >
-                                <span>Shop Now</span>
+                                <span >Shop Now</span>
                                 <div className="arrow-wrapper">
                                     <FiArrowRight className="arrow-icon" />
                                 </div>

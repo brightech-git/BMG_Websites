@@ -47,7 +47,7 @@ class Content extends Component {
                 {/* <Handpick/> */}
                 <FeaturedBanners />
                  {/* <Saleproducts/> */}
-                <Counter/>
+                {/* <Counter/> */}
                 <Onsale/>
                 <Video/>
                 <RecentlyViewedWrapper/>

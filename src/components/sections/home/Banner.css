@@ -236,6 +236,7 @@
 .banner-area+* {
     margin-top: 0 !important;
 }
+
 .banner-button {
     font-family: var(--secondary-font) !important;
     letter-spacing: 1px !important;
@@ -243,7 +244,7 @@
     /* Reduced base padding */
     border: 1px solid #8a8a8a !important;
     color: var(--primary-text-color) !important;
-    border-radius: 0 !important;
+    border-radius: 20px 0px!important;
     font-weight: 500 !important;
     text-transform: capitalize !important;
     transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;

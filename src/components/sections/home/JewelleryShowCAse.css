@@ -1,25 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
-
-:root {
-    --primary-font: 'Playfair Display', serif;
-    --secondary-font: 'Montserrat', sans-serif;
-    --primary-color: #f6f5f0;
-    --primary-text-color: #404040;
-    --primary-card-color: #edebe7;
-    --primary-hover-color: #cd865c;
-    --secondary-card-color: #cfdcdd;
-    --white-color: #ffffff;
-    --grey-color: #A9A9A9;
-    --black-color: #000000;
-    --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    --show-bg-color: linear-gradient(135deg, #f5f7fa 0%, #eef8f0 100%);
-    --glass-color: rgba(255, 255, 255, 0.2);
-    --gradient-text: linear-gradient(90deg, #cd865c, #a05f3a);
-}
-
 .jewelry-showcase {
-    background: var(--show-bg-color);
+    background: var(--primary-color);
     font-family: var(--secondary-font);
     overflow: hidden;
     position: relative;
@@ -40,18 +20,14 @@
 .jewelry-showcase .container .row {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    /* Enforce two columns */
     gap: 1rem;
     align-items: center;
 }
 
 .jewelry-showcase .col-lg-6 {
     width: 100%;
-    /* Ensure full width within grid column */
     max-width: none;
-    /* Override Bootstrap's max-width */
     flex: none;
-    /* Disable Bootstrap's flex behavior */
 }
 
 .jewelry-banner-container {
@@ -59,19 +35,19 @@
     overflow: hidden;
     aspect-ratio: 1/1;
     max-height: 500px;
-    background: var(--glass-color);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: var(--primary-card-color);
+    backdrop-filter: var(--overlay-blur);
+    -webkit-backdrop-filter: var(--overlay-blur);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    box-shadow: 0 8px 32px 0 var(--shadow-color);
     position: relative;
-    transition: var(--transition);
+    transition: all 0.3s ease;
     cursor: pointer;
 }
 
 .jewelry-banner-container:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.15);
+    box-shadow: 0 12px 40px 0 var(--shadow-color);
 }
 
 .jewelry-banner-wrapper {
@@ -105,9 +81,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--overlay-bg);
     opacity: 0;
-    transition: var(--transition);
+    transition: all 0.3s ease;
     border-radius: 12px;
 }
 
@@ -125,7 +101,7 @@
     font-weight: 600;
     color: var(--primary-hover-color);
     transform: translateY(20px);
-    transition: var(--transition);
+    transition: all 0.3s ease;
     font-size: 0.9rem;
 }
 
@@ -148,7 +124,7 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    background: linear-gradient(90deg, transparent, var(--shimmer-color), transparent);
     z-index: 1;
     animation: shimmer 3s infinite;
     border-radius: 12px;
@@ -172,7 +148,7 @@
 }
 
 .jewelry-title {
-    font-family: 'Dancing Script';
+    font-family: var(--title-font);
     font-size: clamp(1.8rem, 3vw, 3.5rem);
     font-weight: bolder;
     color: var(--primary-text-color);
@@ -191,7 +167,7 @@
 
 .jewelry-desc {
     font-size: clamp(0.95rem, 1.2vw, 1.05rem);
-    color: var(--grey-color);
+    color: var(--primary-text-color);
     line-height: 1.8;
     max-width: 500px;
     margin-bottom: 2rem;
@@ -231,14 +207,13 @@
     color: var(--white-color);
     background: var(--gradient-text);
     border: none;
-    transition: var(--transition);
+    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
     z-index: 1;
     cursor: pointer;
-    border-radius: 50px;
-    box-shadow: 0 4px 15px rgba(205, 134, 92, 0.3);
-    font-family: 'Dancing Script';
+    border-radius:  20px 0px;
+    font-family: var(--title-font);
 }
 
 .premium-shop-btn span {
@@ -282,14 +257,11 @@
 @media (max-width: 767px) {
     .jewelry-showcase .container .row {
         grid-template-columns: repeat(2, 1fr);
-        /* Maintain two columns */
         gap: 0.5rem;
-        /* Reduce gap for smaller screens */
     }
 
     .jewelry-banner-container {
         max-height: 250px;
-        /* Smaller height for mobile */
     }
 
     .jewelry-content {
@@ -308,7 +280,6 @@
 
     .feature-highlights {
         grid-template-columns: 1fr;
-        /* Stack features in one column on mobile */
         gap: 8px;
     }
 
@@ -324,18 +295,18 @@
     .view-collection {
         padding: 8px 16px;
         font-size: 0.7rem;
-
     }
 }
 
 @media (max-width: 575px) {
     .jewelry-banner-container {
         max-height: 200px;
-        /* Further reduce height for very small screens */
     }
-  .feature-item {
-      font-size: 0.5rem;
-  }
+
+    .feature-item {
+        font-size: 0.5rem;
+    }
+
     .jewelry-title {
         font-size: 0.8rem;
     }

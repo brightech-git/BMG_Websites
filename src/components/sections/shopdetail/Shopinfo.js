@@ -8,8 +8,7 @@ import { useFavorites, useAddFavorite, useRemoveFavorite } from '../../../hook/f
 import './ShopInfoCart.css';
 import ImageGallery from './ImageGallery';
 import { useRecentlyViewed } from '../../../hook/recentlyViewed/useRecentlyViewedQuery';
-import { useSelector } from 'react-redux';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const ProductSkeleton = () => (
@@ -200,7 +199,7 @@ const Shopinfo = ({ sno,Authenticated }) => {
         if (isWishlisted) {
             removeFavorite.mutate(product.SNO, {
                 onSuccess: () => {
-                    toast.success(`${product.ITEMNAME} removed from wishlist`, {
+                    toast.info(`${product.ITEMNAME} removed from wishlist`, {
                         position: "top-right",
                         autoClose: 2000,
                         theme: "colored",
@@ -256,7 +255,6 @@ const Shopinfo = ({ sno,Authenticated }) => {
 
     return (
         <section className="modern-product-section">
-            <ToastContainer />
             <div className="container">
                 <div className="row product-detail-row g-4">
                     <div className="col-lg-6 col-md-12">

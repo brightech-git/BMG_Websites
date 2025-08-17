@@ -1,4 +1,3 @@
- @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap');
 
 .room-type-section {
     position: relative;
@@ -32,7 +31,7 @@
         -webkit-text-fill-color: transparent;
         background-clip: text;
         color: transparent;
-    font-family: 'Dancing Script' ;
+    font-family:var(--title-font);
     text-align: center;
     justify-content: center;
     margin: 0 auto;
@@ -40,7 +39,7 @@
 
 .section-title h2 {
     font-size: 36px;
-    font-family: 'Playfair Display', serif;
+    font-family:var(--primary-font);
     color: #222;
     font-weight: 700;
     margin-bottom: 0;

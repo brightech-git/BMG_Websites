@@ -618,6 +618,129 @@
     border-radius: var(--border-radius-sm);
 }
 
+/* Share button styles */
+
+/* Share Button Styles */
+.header-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.share-btn {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.share-btn:hover {
+    color: #333;
+    transform: scale(1.1);
+}
+
+.share-btn.active {
+    color: #d4af37; /* Gold color to match jewelry theme */
+}
+
+.share-options {
+  position: absolute;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 12px;
+  z-index: 100;
+  animation: fadeIn 0.3s ease;
+  margin-top: 45px;
+  right: 0;
+  width: max-content;
+  margin-right: 40px;
+}
+
+
+.share-icons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.share-icons a {
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.share-icons a:hover {
+    transform: scale(1.1);
+}
+
+.share-icons a:nth-child(1) { /* WhatsApp */
+    background-color: #25D366;
+}
+
+.share-icons a:nth-child(2) { /* Instagram */
+    background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+}
+
+.share-icons a:nth-child(3) { /* Facebook */
+    background-color: #3b5998;
+}
+
+.share-icons a:nth-child(4) { /* Twitter */
+    background-color: #1DA1F2;
+}
+
+/* Animation for share options */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* For mobile */
+@media (max-width: 768px) {
+  .share-options {
+    right: auto;
+    left: 0;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .share-options {
+        right: auto;
+        left: 0;
+    }
+    
+    .share-icons {
+        gap: 10px;
+    }
+    
+    .share-icons a {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+
 @keyframes shimmer {
     0% {
         background-position: -200% 0;

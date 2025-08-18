@@ -66,6 +66,9 @@ class Footertwo extends Component {
                       <li>
                         <Link to="/refund-policy">Shipping and Returns</Link>
                       </li>
+                      <li>
+                        <Link to="/why-choose-us">why choose us</Link>
+                      </li>
                     
                     
                     </ul>

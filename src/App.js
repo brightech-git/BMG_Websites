@@ -44,6 +44,7 @@ import PrivateRoute from './route/UserPrivateRoute';
 import DeliveryShippingPolicy from './components/pages/Policies/DeliveryAndShipping';
 import ForgotPassword from './components/pages/ForgotPassword';
 import PaymentSuccess from './components/pages/PaymentSuccess';
+import WhyChooseUs from "./components/pages/Policies/WhyChooseUs";
 
 
 function ScrollWatcher() {
@@ -114,7 +115,8 @@ function App() {
         <Route exact path="/cancellation-return-policy" component={CancellationReturnPolicy} />
         <Route exact path="/delivery&shipping" component={DeliveryShippingPolicy} />
         <Route exact path="/refund-policy" component={RefundPolicy} />
-        <Route exact path="/terms-conditions" component={TermsConditions} />  
+        <Route exact path="/terms-conditions" component={TermsConditions} />
+        <Route exact path="/why-choose-us" component={WhyChooseUs} />
 
         <Route exact path="/payment-success/:orderId" component={PaymentSuccess} />
         

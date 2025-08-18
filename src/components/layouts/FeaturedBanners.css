@@ -1,9 +1,13 @@
+.fb-container{
+background-color: var(--feature-bg-color);
+}
 .fb-banner-container {
+margin: 0 auto;
+    padding: 2rem 1rem;
     font-family: var(--secondary-font);
-    background-color: var(--primary-color);
-    max-width: 1440px;
-    margin: 0 auto;
-    padding: 2rem 0;
+    
+    max-width: 1400px;
+   
 }
 
 .fb-main-title {
@@ -42,7 +46,7 @@
     position: relative;
     overflow: hidden;
     z-index: 1;
-    border-radius: 0px 20px !important;
+    border-radius: 0px 10px !important;
 }
 
 .fb-explore-btn::before {
@@ -129,10 +133,10 @@
 
 .fb-cta-btn {
     padding: 8px 16px;
-    font-size: 13px;
+    font-size: 13px !important;
     font-weight: 500;
-    text-transform: uppercase;
-    color: var(--primary-text-color);
+    text-transform: capitalize;
+    color: var(--primary-text-color) !important;
     background-color: rgba(255, 255, 255, 0.3) !important;
     border: 1px solid rgba(255, 255, 255, 0.4);
     transition: all 0.3s ease;
@@ -181,7 +185,7 @@
 
     .fb-cta-btn {
         padding: 6px 12px;
-        font-size: 12px;
+        font-size: 12px !important;
     }
 
     .fb-small-banner {
@@ -218,4 +222,8 @@
         padding: 8px 16px;
         color: var(--white-color) ;
     }
+         .fb-cta-btn {
+             padding: 5px 10px !important; 
+             font-size: 9px !important;
+         }
 }

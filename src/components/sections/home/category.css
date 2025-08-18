@@ -179,17 +179,12 @@
         background-position: -200% 0;
     }
 }
-@media (max-width: 992px){
-    .category-container {
-            margin-top: -250px !important;
-        }
-}
+
 
 /* Responsive Styles */
 @media (max-width: 768px) {
     .category-container {
         padding: 1.5rem 0.75rem;
-        margin-top: -300px !important;
            }
 
     .category-grid {
@@ -222,7 +217,6 @@
 @media (max-width: 576px) {
     .category-container {
             padding: 1.5rem 0.75rem;
-            margin-top: -350px !important;
         }
     .category-grid {
         display: flex;

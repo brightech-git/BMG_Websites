@@ -38,22 +38,18 @@ class Content extends Component {
                 <ShopByRecipient />
                 <Ourproducts />
               
-                {/* <Cta />      */}
-                {/* <Trending/> */}        
+                 
               
                 <TrendingProducts />
                 
                 <JewelryShowcase />
-                {/* <BestDesign /> */}
-                {/* <Handpick/> */}
+              
                 <FeaturedBanners />
-                 {/* <Saleproducts/> */}
-                {/* <Counter/> */}
+              
                 <Onsale/>
                 <Video/>
                 <RecentlyViewedWrapper/>
-                {/* <Habout /> */}
-                {/* <Blog/> */}
+               
                 
             </Fragment>
         );

@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 const ProductCard = ({ item }) => {
+    
     const { data: favorites, isFavoritesLoading } = useFavorites();
     const addFavorite = useAddFavorite();
     const removeFavorite = useRemoveFavorite();
@@ -54,9 +55,7 @@ const ProductCard = ({ item }) => {
         ? parseFloat(item.GrandTotal)
         : parseFloat(item?.RATE || 0);
 
-    const oldPrice = item?.GrossAmount ? parseFloat(item.GrossAmount) : currentPrice;
-    const hasDiscount = oldPrice > currentPrice;
-    const discountValue = hasDiscount ? Math.round((1 - currentPrice / oldPrice) * 100) : 0;
+  
 
     useEffect(() => {
         if (!isFavoritesLoading && favorites?.data && item?.SNO) {

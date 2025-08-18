@@ -46,7 +46,8 @@ const FeaturedBanners = () => {
   };
 
   return (
-    <section className="fb-banner-container">
+    <section className='fb-container'>
+    <div className="fb-banner-container">
       <div className="container-fluid px-4">
         {/* Header Section */}
         <div className="row align-items-center justify-content-between mb-4">
@@ -151,6 +152,7 @@ const FeaturedBanners = () => {
           </div>
         </div>
       </div>
+    </div>
     </section>
   );
 };

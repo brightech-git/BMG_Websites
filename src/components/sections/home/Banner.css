@@ -1,15 +1,25 @@
+/* Hero Banner Component Styles */
 
+.hero-banner {
+    position: relative;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    background-color: var(--primary-card-color);
+    padding: 0;
+    overflow: hidden;
+    margin-top: 140px;
+}
 
-/* ===== Banner Area ===== */
-/* Banner Skeleton Loading */
-.banner-skeleton-container {
+/* Skeleton Loading */
+.hero-skeleton-container {
     width: 100%;
     position: relative;
     overflow: hidden;
     background-color: #f0f0f0;
 }
 
-.banner-skeleton-placeholder {
+.hero-skeleton-placeholder {
     width: 100%;
     padding-top: 45%;
     background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
@@ -27,31 +37,28 @@
     }
 }
 
-/* Banner Container */
-.banner-area {
-    position: relative;
-    width: 100%;
-    margin: 0 auto;
-    background-color: var(--primary-color);
-    margin-bottom: 0 !important;
-}
-
 /* Slide Container */
-.banner-slide {
+.hero-slide {
     position: relative;
     width: 100%;
-    overflow: hidden;
+    outline: none;
+    padding: 0 15px;
+    /* Add gap between banners */
 }
 
-/* Media Container with Aspect Ratio */
-.banner-media-container {
+/* Media Container */
+.hero-media {
     position: relative;
     width: 100%;
     padding-top: 45%;
+    /* Maintain aspect ratio */
+    height: 0;
+    border-radius: 15px;
+    /* Rounded corners for a polished look */
+    overflow: hidden;
 }
 
-/* Banner Image */
-.banner-image {
+.hero-image {
     position: absolute;
     top: 0;
     left: 0;
@@ -59,20 +66,15 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
+    transition: transform 0.4s ease;
 }
 
-/* Overlay */
-.banner-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
+.hero-slide.slick-active .hero-image {
+    transform: scale(1.02);
 }
 
-/* Content Wrapper */
-.banner-content-wrapper {
+/* Content Container */
+.hero-content-container {
     position: absolute;
     top: 0;
     left: 0;
@@ -80,310 +82,259 @@
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    /* Left-aligned content like Tanishq */
     z-index: 2;
 }
 
-/* Banner Content */
-.banner-content {
-    max-width: 1200px;
-    width: 100%;
-    padding: 4rem;
-    text-align: left ;
+/* Content */
+.hero-content {
+    max-width: 600px;
+    padding: 2rem 4rem;
+    color: var(--white-color, #fff);
+    text-align: left;
 }
 
-/* Banner Title */
-.banner-title {
-    font-size: 3rem;
+.hero-title {
+    font-family: var(--title-font, 'Playfair Display', serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
     line-height: 1.2;
-    font-weight: bolder;
-    letter-spacing: 1px;
     margin-bottom: 1rem;
-    color: var(--primary-text-color);
-    font-family:var(--title-font);
+    color: var(--green-color);
 }
 
-/* Banner Description */
-.banner-description {
-    font-size: clamp(0.875rem, 2vw, 1rem);
-    font-family: var(--secondary-font);
+.hero-description {
+    font-family: var(--secondary-font, 'Roboto', sans-serif);
+    font-size: clamp(1rem, 2vw, 1rem);
     line-height: 1.6;
     margin-bottom: 2rem;
-    color: var(--primary-hover-color);
-    max-width: 600px;
 }
 
-.banner-button::before {
-    content: '' !important;
-    position: absolute !important;
-    top: 0 !important;
-    right: 0 !important;
-    width: 0 !important;
-    height: 100% !important;
-    background-color: var(--primary-hover-color) !important;
-    transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-    z-index: -1 !important;
+/* Button */
+.hero-button {
+    font-family: var(--secondary-font, 'Roboto', sans-serif);
+    font-size: clamp(0.9rem, 2vw, 1rem);
+    font-weight: 500;
+    letter-spacing: 1px;
+    padding: 0.75rem 2rem;
+    border: none !important;
+    border-radius: 25px;
+    color: var(--white-color, #fff);
+    background: transparent;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    z-index: 1;
 }
 
-.banner-button:hover {
-    border-color: var(--primary-hover-color) !important;
-    color: var(--white-color) !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+.hero-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 100%;
+    background-color: var(--primary-hover-color, #cd865c);
+    transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    z-index: -1;
 }
 
-.banner-button:hover::before {
-    width: 100% !important;
-    right: auto !important;
-    left: 0 !important;
+.hero-button:hover {
+    border-color: var(--primary-hover-color, #cd865c);
+    color: var(--white-color, #fff);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Optional: Add a subtle pulse animation after the hover */
-@keyframes pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(205, 134, 92, 0.4) !important;
-    }
-
-    70% {
-        box-shadow: 0 0 0 8px rgba(205, 134, 92, 0) !important;
-    }
-
-    100% {
-        box-shadow: 0 0 0 0 rgba(205, 134, 92, 0) !important;
-    }
+.hero-button:hover::before {
+    width: 100%;
+    right: auto;
+    left: 0;
 }
 
-.banner-button:hover::after {
-    content: '' !important;
-    display: block !important;
-    position: absolute !important;
-    border-radius: 50% !important;
-    left: 50% !important;
-    top: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    width: 0 !important;
-    height: 0 !important;
-    background: rgba(255, 255, 255, 0.1) !important;
-    opacity: 0 !important;
-    transition: all 0.5s !important;
+/* Slick Slider Arrows */
+.slick-prev,
+.slick-next {
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    z-index: 2;
+    transition: background 0.3s ease;
 }
 
-.banner-button:active {
-    transform: translateY(-1px) !important;
+.slick-prev:hover,
+.slick-next:hover {
+    background: var(--primary-hover-color, #cd865c);
 }
+
+.slick-prev:before,
+.slick-next:before {
+    font-size: 20px;
+    color: var(--white-color, #fff);
+}
+
+.slick-prev {
+    left: 20px;
+}
+
+.slick-next {
+    right: 20px;
+}
+
+/* Slick Slider Dots */
+.slick-dots {
+    bottom: 20px;
+    z-index: 2;
+}
+
+.slick-dots li button:before {
+    font-size: 12px;
+    color: var(--white-color, #fff);
+    opacity: 0.5;
+}
+
+.slick-dots li.slick-active button:before {
+    color: var(--primary-hover-color, #cd865c);
+    opacity: 1;
+}
+
 /* Responsive Adjustments */
+@media (min-width: 1600px) {
+    .hero-slide {
+        padding: 0 20px;
+        /* Larger gap on wide screens */
+    }
+}
+
 @media (max-width: 1300px) {
-    .banner-media-container {
+    .hero-media {
         padding-top: 50%;
     }
 
-    .banner-content {
-        text-align: left;
-        margin: 0 auto;
-    }
-
-    .banner-description {
-        margin: 0 auto 2rem;
+    .hero-content {
+        padding: 2rem;
     }
 }
 
 @media (max-width: 992px) {
-    .banner-media-container {
+    .hero-media {
         padding-top: 55%;
     }
 
-    .banner-title {
-        font-size:2.4rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .banner-media-container {
-        padding-top: 65%;
+    .hero-title {
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
     }
 
-    .banner-content {
+    .hero-content {
         padding: 1.5rem;
     }
-}
 
-@media (max-width: 576px) {
-    .banner-media-container {
-        padding-top: 75%;
-    }
-
-    .banner-content {
-        padding: 1rem;
-    }
-
-    .banner-title {
-        font-size: 2rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .banner-description {
-        margin-bottom: 1.5rem;
-    }
-}
-
-@media (max-width: 400px) {
-    .banner-media-container {
-        padding-top: 85%;
-    }
-}
-
-/* Ensure no margin issues */
-.banner-area+* {
-    margin-top: 0 !important;
-}
-
-.banner-button {
-    font-family: var(--secondary-font) !important;
-    letter-spacing: 1px !important;
-    padding: 0.5rem 1.5rem !important;
-    /* Reduced base padding */
-    border: 1px solid #8a8a8a !important;
-    color: var(--primary-text-color) !important;
-    border-radius: 20px 0px!important;
-    font-weight: 500 !important;
-    text-transform: capitalize !important;
-    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-    position: relative !important;
-    overflow: hidden !important;
-    z-index: 1 !important;
-    background: transparent !important;
-    font-size: clamp(0.8rem, 2vw, 1rem) !important;
-    /* Responsive font size */
-    min-width: 120px !important;
-    /* Minimum width */
-}
-
-/* Responsive adjustments for button */
-@media (max-width: 992px) {
-    .banner-button {
-        padding: 0.4rem 1.2rem !important;
+    .hero-slide {
+        padding: 0 10px;
+        /* Smaller gap */
     }
 }
 
 @media (max-width: 768px) {
-    .banner-button {
-        padding: 0.35rem 1rem !important;
-        min-width: 110px !important;
-    }
-}
-
-@media (max-width: 576px) {
-    .banner-button {
-        padding: 0.3rem 0.8rem !important;
-        min-width: 100px !important;
-        font-size: 0.8rem !important;
-    }
-}
-
-@media (max-width: 400px) {
-    .banner-button {
-        padding: 0.25rem 0.6rem !important;
-        min-width: 90px !important;
-    }
-}
-
-/* Rest of your existing button styles remain the same */
-.banner-button::before {
-    content: '' !important;
-    position: absolute !important;
-    top: 0 !important;
-    right: 0 !important;
-    width: 0 !important;
-    height: 100% !important;
-    background-color: var(--primary-hover-color) !important;
-    transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-    z-index: -1 !important;
-}
-
-.banner-button:hover {
-    border-color: var(--primary-hover-color) !important;
-    color: var(--white-color) !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
-}
-
-.banner-button:hover::before {
-    width: 100% !important;
-    right: auto !important;
-    left: 0 !important;
-}
-/* Add this to your existing CSS */
-.banner-area {
-    position: relative;
-    width: 100%;
-    margin: 0 auto;
-    background-color: var(--primary-color);
-    margin-bottom: 0 !important;
-    overflow: hidden; /* Prevents any overflow from causing gaps */
-}
-
-.banner-slide {
-    position: relative;
-    width: 100%;
-    height: 100%; /* Ensures slide takes full height */
-}
-
-.banner-media-container {
-    position: relative;
-    width: 100%;
-    padding-top: 45%; /* Maintain aspect ratio */
-    height: 0; /* Fix for consistent height */
-}
-
-/* Update your responsive breakpoints */
-@media (max-width: 1300px) {
-    .banner-media-container {
-        padding-top: 50%;
-    }
-}
-
-@media (max-width: 992px) {
-    .banner-media-container {
-        padding-top: 55%;
-    }
-}
-
-@media (max-width: 768px) {
-    .banner-media-container {
+    .hero-media {
         padding-top: 65%;
     }
-    .banner-content {
-        padding: 1rem !important; /* Reduced padding */
+
+    .hero-content {
+        padding: 1rem;
+        max-width: 70%;
+    }
+
+    .hero-title {
+        font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+    }
+
+    .hero-description {
+        font-size: clamp(0.9rem, 2vw, 1rem);
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-button {
+        padding: 0.6rem 1.3rem !important;
+        font-size: clamp(0.7rem, 1vw, 0.7rem) !important;
+    }
+
+    .slick-prev,
+    .slick-next {
+        width: 35px;
+        height: 35px;
+    }
+
+    .slick-prev:before,
+    .slick-next:before {
+        font-size: 18px;
     }
 }
 
 @media (max-width: 576px) {
-    .banner-media-container {
-        padding-top: 75%;
+    .hero-media {
+        padding-top: 55%;
     }
-    .banner-content {
-        padding: 0.75rem !important;
+
+    .hero-content {
+        padding: 0.75rem;
+        max-width: 60%;
     }
-    .banner-title {
-        font-size: 1.5rem;
-        margin-bottom: 0.5rem !important;
+
+    .hero-title {
+        font-size: clamp(1.2rem, 3vw, 1.8rem);
     }
-    .banner-description {
-        margin-bottom: 1rem !important;
+
+    .hero-description {
+        font-size: clamp(0.8rem, 2vw, 0.9rem);
+        margin-bottom: 1rem;
+    }
+
+    .hero-button {
+        padding: 0.5rem 1.2rem !important;
+        font-size: 10px !important;
+    }
+
+    .hero-slide {
+        padding: 10px;
+        /* No gap on mobile */
     }
 }
 
 @media (max-width: 400px) {
-    .banner-media-container {
+    .hero-media {
         padding-top: 85%;
     }
-    .banner-content {
-        padding: 0.5rem !important;
+
+    .hero-content {
+        padding: 0.5rem;
+    }
+
+    .hero-button {
+        padding: 0.4rem 1rem;
     }
 }
 
-/* Add this to ensure no gaps between components */
-.banner-area + * {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
+/* Accessibility */
+.hero-button:focus-visible,
+.slick-prev:focus-visible,
+.slick-next:focus-visible {
+    outline: 2px solid var(--primary-hover-color, #cd865c);
+    outline-offset: 2px;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .hero-image,
+    .hero-button,
+    .hero-button::before {
+        transition: none;
+    }
+
+    .hero-skeleton-placeholder {
+        animation: none;
+    }
 }

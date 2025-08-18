@@ -1,9 +1,11 @@
 import React from 'react';
 import Slider from 'react-slick';
-import './Banner.css';
-import { useBanners } from '../../../hook/banner/useBannerQueries';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { useHistory } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
+import { useBanners } from '../../../hook/banner/useBannerQueries';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import './Banner.css';
 
 const Banner = () => {
     const { data: bannerResponse = {}, isLoading } = useBanners();
@@ -15,12 +17,40 @@ const Banner = () => {
         dots: true,
         infinite: true,
         autoplay: true,
-        arrows: false,
-        speed: 1000,
         autoplaySpeed: 4000,
+        speed: 1000,
         slidesToShow: 1,
         slidesToScroll: 1,
-        adaptiveHeight: false
+        centerMode: true,
+        centerPadding: '15%', 
+        arrows: true, 
+        swipe: true,
+        swipeToSlide: true, 
+        touchThreshold: 10, 
+        adaptiveHeight: false,
+        responsive: [
+            {
+                breakpoint: 992,
+                settings: {
+                    centerPadding: '10%',
+                },
+            },
+            {
+                breakpoint: 768,
+                settings: {
+                    centerPadding: '5%',
+                    arrows: true, 
+                },
+            },
+            {
+                breakpoint: 576,
+                settings: {
+                    centerPadding: '0',
+                    centerMode: false, 
+                    arrows: false, 
+                },
+            },
+        ],
     };
 
     const handleExploreNow = (itemName, gender) => {
@@ -31,37 +61,42 @@ const Banner = () => {
         history.push(`/shop-left?${fixedQuery}`);
     };
 
-    if (isLoading) return (
-        <div className="banner-skeleton-container">
-            <div className="banner-skeleton-placeholder"></div>
-        </div>
-    );
+    if (isLoading) {
+        return (
+            <div className="hero-skeleton-container">
+                <div className="hero-skeleton-placeholder"></div>
+            </div>
+        );
+    }
 
     return (
-        <section className="banner-area">
+        <section className="hero-banner">
             <Slider {...settings}>
                 {banners.map((img, index) => (
-                    <div className="banner-slide" key={img.id || index}>
-                        <div className="banner-media-container">
+                    <div className="hero-slide" key={img.id || index}>
+                        <div className="hero-media">
                             <img
-                                src={img?.image_path ? `${baseUrl}${img.image_path}` : img?.image || img}
+                                src={img?.image_path ? `${baseUrl}${img.image_path}` : img?.image || '/fallback-image.jpg'}
                                 alt={`banner-${index}`}
-                                className="banner-image"
+                                className="hero-image"
                                 loading="lazy"
+                                onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = '/fallback-image.jpg';
+                                }}
                             />
-                            <div className="banner-overlay" />
                         </div>
-                        <div className="banner-content-wrapper">
-                            <div className="banner-content">
-                                <h1 className="banner-title">{img.title}</h1>
-                                <p className="banner-description">{img.subtitle || 'Discover our latest collection.'}</p>
+                        <div className="hero-content-container">
+                            <div className="hero-content">
+                                <h1 className="hero-title">{img.title || 'Explore Our Collection'}</h1>
+                                <p className="hero-description">{img.subtitle || 'Discover our latest collection.'}</p>
                                 {(img.itemname || img.gender) && (
                                     <Button
-                                        
-                                        className="banner-button"
+                                        className="hero-button"
                                         onClick={() => handleExploreNow(img.itemname, img.gender)}
+                                        aria-label={`Explore ${img.title || 'collection'}`}
                                     >
-                                        Explore Now 
+                                        Explore Now
                                     </Button>
                                 )}
                             </div>

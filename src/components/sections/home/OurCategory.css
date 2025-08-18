@@ -1,6 +1,7 @@
 .elegant-category-section {
     padding: 4rem 0;
     position: relative;
+    background-color: var(--cat-bg-color);
 }
 
 .elegant-container {
@@ -8,6 +9,7 @@
     margin: 0 auto;
     padding: 0 2rem;
     position: relative;
+    
 }
 
 /* Scroll Container */

@@ -109,13 +109,13 @@ const Header = ({ isAuthenticated }) => {
                     { name: "Buy 1 Get 1", keyName: "subItemName", keyValue: "Buy 2 Get 1", image: "/images/offers/b1g1.jpg" }
                 ]
             },
-            {
-                label: "Gift Ideas",
-                items: [
-                    { name: "For Him", keyName: "giftIdeas", keyValue: "for_him", image: "/images/giftIdeas/for_him.jpg" },
-                    { name: "For Her", keyName: "giftIdeas", keyValue: "for_her", image: "/images/giftIdeas/for_her.jpg" }
-                ]
-            }
+            // {
+            //     label: "Gift Ideas",
+            //     items: [
+            //         { name: "For Him", keyName: "giftIdeas", keyValue: "for_him", image: "/images/giftIdeas/for_him.jpg" },
+            //         { name: "For Her", keyName: "giftIdeas", keyValue: "for_her", image: "/images/giftIdeas/for_her.jpg" }
+            //     ]
+            // }
         ]
     };
   const handleLogout = () => {

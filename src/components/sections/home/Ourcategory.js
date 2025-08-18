@@ -1,125 +1,74 @@
-import React, { useState, useRef } from 'react';
-import { Tab } from 'react-bootstrap';
-import { useCategories, useItemFilter } from '../../../hook/category/useCategoryQuery';
-import ProductCard from '../productCard/ProductCard';
+import React, { useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useCategoryImages } from '../../../hook/categorywithImage/useCategoryQuery';
 import './OurCategory.css';
-import { useSwipeable } from 'react-swipeable';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const OurCategory = () => {
-    const { data: categories = [], isLoading: isCategoriesLoading } = useCategories();
-    const [activeTab, setActiveTab] = useState(null);
-    const productGridRefs = useRef({});
+    const { data: categories = [], isLoading: isCategoriesLoading } = useCategoryImages();
+    const history = useHistory();
+    const containerRef = useRef(null);
+    const baseUrl = "https://app.bmgjewellers.com";
+    const [showArrows, setShowArrows] = useState(false);
 
-    console.log(categories,'categories');
+    // Drag scroll functionality (only for smaller screens)
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
 
-    // Category mapping for display and API
-    const categoryMap = categories.map((cat) => ({
-        key: cat.toLowerCase().replace(/_/g, '-'), // e.g., "NECKLACES_AND_SETS" → "necklaces-and-sets"
-        apiKey: cat,                               // original key from API
-        displayName: formatDisplayName(cat),      // prettified display name
-    }));
-    function formatDisplayName(cat) {
-        return cat
-            .replace(/_/g, ' ')              // Replace underscores with spaces
-            .toLowerCase()
-            .replace(/\b\w/g, (l) => l.toUpperCase()); // Capitalize each word
-    }
-
-    // Filter active categories based on API response
-    const activeCategories = categoryMap.filter(cat => categories.includes(cat.apiKey));
-
-    // Set initial active tab when categories load
-    React.useEffect(() => {
-        if (activeCategories.length > 0 && !activeTab) {
-            setActiveTab(activeCategories[0].key);
-        }
-    }, [activeCategories]);
-
-    // Scroll handlers
-    const scrollLeft = (categoryKey) => {
-        if (productGridRefs.current[categoryKey]) {
-            productGridRefs.current[categoryKey].scrollBy({
-                left: -300,
-                behavior: 'smooth'
-            });
-        }
+    const handleItemClick = (itemName) => {
+        history.push(`/shop-left?itemName=${encodeURIComponent(itemName)}`);
     };
 
-    const scrollRight = (categoryKey) => {
-        if (productGridRefs.current[categoryKey]) {
-            productGridRefs.current[categoryKey].scrollBy({
-                left: 300,
-                behavior: 'smooth'
-            });
-        }
+    const formatItemName = (name) => {
+        return name
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join(' ');
     };
 
-    // Component for rendering product grid with swipe functionality
-    const ProductGridWithSwipe = ({ categoryKey, apiKey }) => {
-        const { data: products = [], isLoading: isProductsLoading } = useItemFilter({
-            itemName: apiKey
-        });
-        console.log('API Key:', apiKey, 'Products:', products);
+    const startDrag = (e) => {
+        if (window.innerWidth >= 992) return; // Disable drag on large screens
+        setIsDragging(true);
+        setStartX(e.pageX - containerRef.current.offsetLeft);
+        setScrollLeft(containerRef.current.scrollLeft);
+    };
 
-        const handlers = useSwipeable({
-            onSwipedLeft: () => scrollRight(categoryKey),
-            onSwipedRight: () => scrollLeft(categoryKey),
-            preventDefaultTouchmoveEvent: true,
-            trackMouse: true
-        });
+    const endDrag = () => setIsDragging(false);
 
-        if (isProductsLoading) {
-            return (
-                <div className="shop-product-container">
-                    <div className="text-center py-4">
-                        <div className="spinner-border text-primary" role="status">
-                            <span className="visually-hidden">Loading products...</span>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
+    const handleDrag = (e) => {
+        if (!isDragging || window.innerWidth >= 992) return;
+        e.preventDefault();
+        const x = e.pageX - containerRef.current.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        containerRef.current.scrollLeft = scrollLeft - walk;
+    };
 
-        return (
-            <div className="shop-product-container" {...handlers}>
-                <button
-                    className="scroll-button left"
-                    onClick={() => scrollLeft(categoryKey)}
-                    aria-label="Scroll left"
-                >
-                    &lt;
-                </button>
-                <div
-                    className="shop-product-grid"
-                    ref={(el) => (productGridRefs.current[categoryKey] = el)}
-                >
-                    {products.length > 0 ? (
-                        products.map((item, i) => (
-                            <ProductCard key={item.id || i} item={item}  />
-                        ))
-                    ) : (
-                        <div className="text-center w-100 py-4">
-                            <p className="no-products-text">No products available</p>
-                        </div>
-                    )}
-                </div>
-                <button
-                    className="scroll-button right"
-                    onClick={() => scrollRight(categoryKey)}
-                    aria-label="Scroll right"
-                >
-                    &gt;
-                </button>
-            </div>
-        );
+    const scrollLeftHandler = () => {
+        containerRef.current.scrollBy({ left: -220, behavior: 'smooth' });
+    };
+
+    const scrollRightHandler = () => {
+        containerRef.current.scrollBy({ left: 220, behavior: 'smooth' });
     };
 
     if (isCategoriesLoading) {
         return (
-            <section className="shop-category-section">
-                <div className="container text-center py-5">
-                    <div className="spinner-border text-primary" role="status">
-                        <span className="visually-hidden">Loading categories...</span>
+            <section className="elegant-category-section">
+                <div className="elegant-container">
+                    <div className="elegant-scroll-container">
+                        {[...Array(5)].map((_, index) => (
+                            <div key={index} className="elegant-card">
+                                <div className="elegant-image-container placeholder-glow">
+                                    <div className="placeholder w-100 h-100"></div>
+                                </div>
+                                <div className="elegant-details">
+                                    <h3 className="elegant-title placeholder-glow">
+                                        <span className="placeholder col-6"></span>
+                                    </h3>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>
@@ -127,46 +76,54 @@ const OurCategory = () => {
     }
 
     return (
-        <section className="shop-category-section">
-            <div className="cat-container">
-                <div className="shop-category-header">
-                    
-                    <h2 className="shop-category-title">
-                        <span className="gradient-text">Shop By</span> <span className="normal-text">Category</span>
-                    </h2>
-
-                </div>
-
-                {activeCategories.length > 0 ? (
-                    <Tab.Container activeKey={activeTab} onSelect={setActiveTab}>
-                        <div className="shop-category-names">
-                            {activeCategories.map((category) => (
-                                <div
-                                    key={category.key}
-                                    className={`shop-category-name ${activeTab === category.key ? 'active' : ''}`}
-                                    onClick={() => setActiveTab(category.key)}
-                                >
-                                    {category.displayName}
-                                </div>
-                            ))}
+        <section className="elegant-category-section">
+            <div className="elegant-container">
+                <div
+                    className="elegant-scroll-container"
+                    ref={containerRef}
+                    onMouseDown={startDrag}
+                    onMouseLeave={endDrag}
+                    onMouseUp={endDrag}
+                    onMouseMove={handleDrag}
+                    onMouseEnter={() => setShowArrows(true)}
+                    onMouseLeave={() => setShowArrows(false)}
+                >
+                    {categories.map((category) => (
+                        <div
+                            key={category.id}
+                            className="elegant-card"
+                            onClick={() => handleItemClick(category.item_name)}
+                        >
+                            <div className="elegant-image-container">
+                                <img
+                                    src={`${baseUrl}${category.image_path}`}
+                                    alt={formatItemName(category.item_name)}
+                                    className="elegant-image"
+                                    loading="lazy"
+                                />
+                            </div>
+                            <div className="elegant-details">
+                                <h3 className="elegant-title">
+                                    {formatItemName(category.item_name)}
+                                </h3>
+                            </div>
                         </div>
-
-                        <Tab.Content className="shop-category-content">
-                            {activeCategories.map((category) => (
-                                <Tab.Pane key={category.key} eventKey={category.key}>
-                                    <ProductGridWithSwipe
-                                        categoryKey={category.key}
-                                        apiKey={category.apiKey}
-                                    />
-                                </Tab.Pane>
-                            ))}
-                        </Tab.Content>
-                    </Tab.Container>
-                ) : (
-                    <div className="shop-no-categories">
-                        <p>No categories available</p>
-                    </div>
-                )}
+                    ))}
+                </div>
+                <button
+                    className={`elegant-arrow elegant-arrow-left ${showArrows ? 'visible' : ''}`}
+                    onClick={scrollLeftHandler}
+                    aria-label="Scroll Left"
+                >
+                    <FaChevronLeft />
+                </button>
+                <button
+                    className={`elegant-arrow elegant-arrow-right ${showArrows ? 'visible' : ''}`}
+                    onClick={scrollRightHandler}
+                    aria-label="Scroll Right"
+                >
+                    <FaChevronRight />
+                </button>
             </div>
         </section>
     );

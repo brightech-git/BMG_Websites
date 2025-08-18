@@ -23,24 +23,39 @@ const NavButton = ({ direction, onClick }) => {
 };
 
 const ProductCard = ({ product }) => {
+    console.log(product, 'productcard');
+
     const handleProductClick = (e, sno) => {
         e.preventDefault();
         e.stopPropagation();
         window.location.href = `/shop-detail/${sno}`;
     };
 
+    // Handle multiple images (array or comma-separated string)
+    const getFirstImage = () => {
+        if (Array.isArray(product.ImagePath)) {
+            return product.ImagePath[0]; // first element if it's an array
+        }
+        if (typeof product.ImagePath === "string") {
+            return product.ImagePath.split(",")[0]; // first part if comma-separated string
+        }
+        return null;
+    };
+
+    const firstImage = getFirstImage();
+
     return (
         <div className="gem-product-card">
             <div className="product-img-container">
-                <img
-                    src={`${BASE_URL}${product.image_path}`}
-                    alt={product.productName}
-                    onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = '/fallback-image.jpg';
-                    }}
-                    onClick={(e) => handleProductClick(e, product.SNO)}
-                />
+                {firstImage ? (
+                    <img
+                        src={`${BASE_URL}${product.firstImage}`}
+                        alt={product.ITEMNAME}
+                        onClick={(e) => handleProductClick(e, product.SNO)}
+                    />
+                ) : (
+                    <div className="no-image">No Image</div>
+                )}
             </div>
         </div>
     );
@@ -48,6 +63,8 @@ const ProductCard = ({ product }) => {
 
 const HighlightedProducts = ({ itemName, subItemName }) => {
     const { data, loading, error } = useFilterProducts({ itemName, subItemName }, 0, 3);
+
+    console.log('productsdata',data)
 
     if (loading) return <div className="text-center">Loading products...</div>;
     if (error) return <div className="text-center text-danger">Error loading products</div>;

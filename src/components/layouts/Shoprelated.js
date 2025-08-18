@@ -1,111 +1,117 @@
-import React, { Component } from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import ProductCard from '../sections/productCard/ProductCard';
+import useFilterProducts from '../../hook/product/useFilterProducts';
 import './ShopRelated.css';
 
-import img1 from '../../assets/img/shop/01.jpg';
-import img2 from '../../assets/img/shop/02.jpg';
-import img3 from '../../assets/img/shop/03.jpg';
-import img4 from '../../assets/img/shop/04.jpg';
+const ShopRelated = () => {
+    const sliderRef = useRef(null);
 
-const relatedshopposts = [
-    { img: img1, discount: 15, title: 'Ankle Bracelet', price: 390 },
-    { img: img2, discount: '', title: 'Stud Earrings', price: 290 },
-    { img: img3, discount: 10, title: 'Crumpled Ring', price: 450 },
-    { img: img4, discount: 25, title: 'Moon Necklace', price: 500 },
-];
+    // Fetch related products using useFilterProducts hook
+    const { data, loading, error } = useFilterProducts(
+        {}, // No specific filters for related products (can customize)
+        1,  // Page 1
+        10  // Fetch up to 10 products
+    );
+    console.log('API data:', data); // Debug API response
 
-class ShopRelated extends Component {
-    constructor(props) {
-        super(props);
-        this.next = this.next.bind(this);
-        this.previous = this.previous.bind(this);
-    }
+    const next = () => {
+        sliderRef.current.slickNext();
+    };
 
-    next() {
-        this.slider.slickNext();
-    }
+    const previous = () => {
+        sliderRef.current.slickPrev();
+    };
 
-    previous() {
-        this.slider.slickPrev();
-    }
-
-    render() {
-        const settings = {
-            slidesToShow: 4,
-            slidesToScroll: 1,
-            fade: false,
-            infinite: true,
-            autoplay: true,
-            autoplaySpeed: 4000,
-            arrows: false,
-            dots: false,
-            responsive: [
-                {
-                    breakpoint: 992,
-                    settings: {
-                        slidesToShow: 4,
-                    },
+    const settings = {
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        fade: false,
+        infinite: true,
+        autoplay: true,
+        autoplaySpeed: 4000,
+        arrows: false,
+        dots: false,
+        responsive: [
+            {
+                breakpoint: 992,
+                settings: {
+                    slidesToShow: 4,
                 },
-                {
-                    breakpoint: 768,
-                    settings: {
-                        slidesToShow: 4,
-                    },
+            },
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 4,
                 },
-                {
-                    breakpoint: 576,
-                    settings: {
-                        slidesToShow: 3,
-                    },
+            },
+            {
+                breakpoint: 576,
+                settings: {
+                    slidesToShow: 3,
                 },
-            ],
-        };
+            },
+        ],
+    };
 
-        return (
-            <section className="related-products-section">
-                <div className="related-products-container">
-                    <div className="related-products-header">
-                        <div className="related-products-title">
-                            <span className="title-tag">Shop</span>
-                            <h2>Related Products</h2>
-                        </div>
-                        <div className="related-products-nav">
-                            <button
-                                className="related-products-nav-arrow"
-                                onClick={this.previous}
-                                aria-label="Previous products"
-                            >
-                                <i className="fal fa-arrow-left" />
-                            </button>
-                            <button
-                                className="related-products-nav-arrow"
-                                onClick={this.next}
-                                aria-label="Next products"
-                            >
-                                <i className="fal fa-arrow-right" />
-                            </button>
-                        </div>
+    // Map API data to match ProductCard props based on actual API response
+    const relatedProducts = data?.data;
+
+    console.log('Mapped products:', relatedProducts); // Debug mapped products
+
+    return (
+        <section className="related-products-section">
+            <div className="related-products-container">
+                <div className="related-products-header">
+                    <div className="related-products-title">
+                        <span className="title-tag">Shop</span>
+                        <h2>Related Products</h2>
                     </div>
-
-                    <Slider
-                        className="related-products-slider"
-                        ref={c => (this.slider = c)}
-                        {...settings}
-                    >
-                        {relatedshopposts.map((item, i) => (
-                            <div key={i}>
-                                <div >
-                                    <ProductCard item={item} />
-                                </div>
-                            </div>
-                        ))}
-                    </Slider>
+                    <div className="related-products-nav">
+                        <button
+                            className="related-products-nav-arrow"
+                            onClick={previous}
+                            aria-label="Previous products"
+                        >
+                            <i className="fal fa-arrow-left" />
+                        </button>
+                        <button
+                            className="related-products-nav-arrow"
+                            onClick={next}
+                            aria-label="Next products"
+                        >
+                            <i className="fal fa-arrow-right" />
+                        </button>
+                    </div>
                 </div>
-            </section>
-        );
-    }
-}
+
+                {loading && <div>Loading products...</div>}
+                {error && (
+                    <div className="alert alert-danger" style={{ fontSize: '14px' }}>
+                        Failed to load products: {error}
+                    </div>
+                )}
+                {!loading && !error && relatedProducts.length === 0 && (
+                    <div>No related products found.</div>
+                )}
+
+                <Slider
+                    className="related-products-slider"
+                    ref={sliderRef}
+                    {...settings}
+                >
+                    {relatedProducts.map((item, i) => (
+                        <div key={i}>
+                            <div>
+                                <ProductCard item={item} />
+                            </div>
+                        </div>
+                    ))}
+                </Slider>
+            </div>
+        </section>
+    );
+};
 
 export default ShopRelated;

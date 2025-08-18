@@ -369,7 +369,7 @@ const ProductCarousel = () => {
                                 <p>No recently viewed products.</p>
                                 <button
                                     className="jewel-carousel__cta"
-                                    onClick={() => navigate.push('/shop')}
+                                    onClick={() => navigate.push('/shop-left')}
                                     aria-label="Browse Products"
                                 >
                                     Browse Products

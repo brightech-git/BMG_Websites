@@ -31,6 +31,7 @@ class Content extends Component {
             <Fragment>
                 <Banner/>
                 <Category/>
+                <Ourcategory />
                 <Category1/>
                 <Condos />
                 <Handpicked />
@@ -41,7 +42,7 @@ class Content extends Component {
                 {/* <Trending/> */}        
               
                 <TrendingProducts />
-                <Ourcategory/>
+                
                 <JewelryShowcase />
                 {/* <BestDesign /> */}
                 {/* <Handpick/> */}

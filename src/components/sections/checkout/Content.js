@@ -1,32 +1,52 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Modal, Button, Badge, Form } from 'react-bootstrap';
+import { Check, Plus, Edit2, Trash2, Phone, Home, ShoppingBag, MapPin, User, CreditCard } from 'lucide-react';
 import { useCreateOrder } from '../../../hook/order/useOrderMutation';
 import { useCurrentProfile } from '../../../hook/userProfile/useUserProfileQuery';
-import {
-  useCreateAddress,
-  useUpdateAddress,
-  useAddressesByCustomer,
-  useDeleteAddress,
-} from '../../../hook/address/useNewAddress';
+import { useCreateAddress, useUpdateAddress, useAddressesByCustomer, useDeleteAddress } from '../../../hook/address/useNewAddress';
 import { toast } from 'react-toastify';
-import AddressView from './address/AddressView';
 import './Checkout.css';
-import './address/AddressView.css';
 
-const AddressModal = ({
-  show,
-  onHide,
-  addresses,
-  selectedAddress,
-  onSelectAddress,
-  onSaveAddress,
-  onDeleteAddress,
-  customerProfile
-}) => {
-  const [mode, setMode] = useState('list'); // 'list', 'add', 'edit'
+// Progress Stepper Component
+const ProgressStepper = ({ currentStep }) => {
+  const steps = [
+    { id: 1, name: 'Address', icon: MapPin },
+    { id: 2, name: 'Order', icon: ShoppingBag },
+    { id: 3, name: 'Payment', icon: CreditCard }
+  ];
+
+  return (
+    <div className="progress-tracker">
+      <div className="tracker-container">
+        {steps.map((step, index) => {
+          const Icon = step.icon;
+          const isActive = currentStep === step.id;
+          const isCompleted = currentStep > step.id;
+
+          return (
+            <div key={step.id} className="tracker-step">
+              <div className={`step-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`}>
+                <div className="step-number-container">
+                  <div className="step-number">{isCompleted ? <Check size={10} /> : step.id}</div>
+                </div>
+                <div className="step-info">
+                  <span className="step-label">{step.name}</span>
+                </div>
+              </div>
+              {index < steps.length - 1 && <div className="step-divider"></div>}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+// Address Modal
+const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddress, onSaveAddress, onDeleteAddress, customerProfile }) => {
+  const [mode, setMode] = useState('list');
   const [currentAddress, setCurrentAddress] = useState(null);
-
   const [formData, setFormData] = useState({
     name: customerProfile?.name || '',
     phone: customerProfile?.contactNumber || '',
@@ -42,10 +62,7 @@ const AddressModal = ({
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
+    setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
 
   const handleAddNew = () => {
@@ -84,24 +101,18 @@ const AddressModal = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Validation
-    if (!formData.name || !formData.phone || !formData.addressLine ||
-      !formData.city || !formData.state || !formData.pincode) {
+    if (!formData.name || !formData.phone || !formData.addressLine || !formData.city || !formData.state || !formData.pincode) {
       toast.error('Please fill all required fields');
       return;
     }
-
     if (!/^\d{10}$/.test(formData.phone)) {
       toast.error('Phone number must be 10 digits');
       return;
     }
-
     if (!/^\d{6}$/.test(formData.pincode)) {
       toast.error('Pincode must be 6 digits');
       return;
     }
-
     onSaveAddress(currentAddress?.id ? { id: currentAddress.id, ...formData } : formData);
     setMode('list');
   };
@@ -113,192 +124,130 @@ const AddressModal = ({
   };
 
   return (
-    <Modal show={show} onHide={onHide} size="lg" centered>
-      <Modal.Header closeButton>
-        <Modal.Title>
-          {mode === 'list' ? 'Select Delivery Address' :
-            mode === 'add' ? 'Add New Address' : 'Edit Address'}
+    <Modal show={show} onHide={onHide} centered className="address-modal">
+      <Modal.Header closeButton className="modal-header-styled">
+        <Modal.Title className="modal-title-styled">
+          {mode === 'list' ? 'Select Address' : mode === 'add' ? 'Add Address' : 'Edit Address'}
         </Modal.Title>
       </Modal.Header>
-
-      <Modal.Body>
+      <Modal.Body className="modal-body-styled">
         {mode === 'list' ? (
-          <div className="address-list-container">
+          <div className="address-list">
             {addresses.map(address => (
-              <div
-                key={address.id}
-                className={`address-item mb-3 ${selectedAddress?.id === address.id ? 'selected' : ''}`}
-              >
-                <AddressView
-                  address={address}
-                  variant="card"
-                  showActions={true}
-                  onEdit={handleEdit}
-                  onDelete={handleDelete}
-                  className={selectedAddress?.id === address.id ? 'selected' : ''}
-                />
-                <div className="d-grid mt-2">
+              <div key={address.id} className={`address-item ${selectedAddress?.id === address.id ? 'selected' : ''}`}>
+                <div className="address-content">
+                  <div className="address-heading">
+                    <div className="address-name-section">
+                      <h6 className="address-name">{address.name}</h6>
+                      {address.isDefault && <Badge bg="success" className="default-badge">Default</Badge>}
+                    </div>
+                    <div className="address-actions">
+                      <button className="action-button edit-button" onClick={() => handleEdit(address)} title="Edit address">
+                        <Edit2 size={12} />
+                      </button>
+                      {!address.isDefault && (
+                        <button className="action-button delete-button" onClick={() => handleDelete(address.id)} title="Delete address">
+                          <Trash2 size={12} />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  <div className="address-info">
+                    <p className="address-line">{address.addressLine}</p>
+                    <p className="address-line">{[address.locality, address.city].filter(Boolean).join(', ')}</p>
+                    <p className="address-line">{address.state} - {address.pincode}, {address.country || 'India'}</p>
+                    {address.landmark && <p className="landmark-line">Landmark: {address.landmark}</p>}
+                    <p className="phone-info"><Phone size={10} className="phone-icon" /> {address.phone}</p>
+                  </div>
+                </div>
+                <div className="address-select-area">
                   <Button
-                    variant={selectedAddress?.id === address.id ? 'primary' : 'outline-primary'}
-                    onClick={() => {
-                      onSelectAddress(address);
-                      onHide();
-                    }}
+                    variant={selectedAddress?.id === address.id ? 'success' : 'outline-primary'}
+                    onClick={() => { onSelectAddress(address); onHide(); }}
+                    className="select-button"
                   >
-                    {selectedAddress?.id === address.id ? 'Selected' : 'Deliver Here'}
+                    {selectedAddress?.id === address.id ? (
+                      <>
+                        <Check size={10} className="check-icon" /> Selected
+                      </>
+                    ) : (
+                      'Deliver Here'
+                    )}
                   </Button>
                 </div>
               </div>
             ))}
-
-            <Button
-              variant="outline-secondary"
-              className="w-100 mt-3"
-              onClick={handleAddNew}
-            >
-              + Add New Address
-            </Button>
+            <button className="add-new-address-button" onClick={handleAddNew}>
+              <Plus size={14} className="plus-icon" /> Add New Address
+            </button>
           </div>
         ) : (
-          <Form onSubmit={handleSubmit}>
-            <div className="row mb-3">
-              <div className="col-md-6">
-                <Form.Group controlId="name">
-                  <Form.Label>Full Name*</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                  />
+          <Form onSubmit={handleSubmit} className="address-form-container">
+            <div className="row mb-2">
+              <div className="col-12 col-md-6 mb-2 mb-md-0">
+                <Form.Group>
+                  <Form.Label className="form-label">Full Name*</Form.Label>
+                  <Form.Control type="text" name="name" value={formData.name} onChange={handleChange} className="form-control" required />
                 </Form.Group>
               </div>
-              <div className="col-md-6">
-                <Form.Group controlId="phone">
-                  <Form.Label>Phone Number*</Form.Label>
-                  <Form.Control
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    pattern="[0-9]{10}"
-                    required
-                  />
+              <div className="col-12 col-md-6">
+                <Form.Group>
+                  <Form.Label className="form-label">Phone Number*</Form.Label>
+                  <Form.Control type="tel" name="phone" value={formData.phone} onChange={handleChange} className="form-control" pattern="[0-9]{10}" required />
                 </Form.Group>
               </div>
             </div>
-
-            <Form.Group controlId="addressLine" className="mb-3">
-              <Form.Label>Address Line*</Form.Label>
-              <Form.Control
-                as="textarea"
-                name="addressLine"
-                value={formData.addressLine}
-                onChange={handleChange}
-                required
-                rows={3}
+            <Form.Group className="mb-2">
+              <Form.Label className="form-label">Address Line*</Form.Label>
+              <Form.Control as="textarea" name="addressLine" value={formData.addressLine} onChange={handleChange} className="form-control" rows={2} required />
+            </Form.Group>
+            <div className="row mb-2">
+              <div className="col-12 col-md-6 mb-2 mb-md-0">
+                <Form.Group>
+                  <Form.Label className="form-label">Locality*</Form.Label>
+                  <Form.Control type="text" name="locality" value={formData.locality} onChange={handleChange} className="form-control" required />
+                </Form.Group>
+              </div>
+              <div className="col-12 col-md-6">
+                <Form.Group>
+                  <Form.Label className="form-label">Landmark</Form.Label>
+                  <Form.Control type="text" name="landmark" value={formData.landmark} onChange={handleChange} className="form-control" />
+                </Form.Group>
+              </div>
+            </div>
+            <div className="row mb-2">
+              <div className="col-12 col-md-4 mb-2 mb-md-0">
+                <Form.Group>
+                  <Form.Label className="form-label">City*</Form.Label>
+                  <Form.Control type="text" name="city" value={formData.city} onChange={handleChange} className="form-control" required />
+                </Form.Group>
+              </div>
+              <div className="col-12 col-md-4 mb-2 mb-md-0">
+                <Form.Group>
+                  <Form.Label className="form-label">State*</Form.Label>
+                  <Form.Control type="text" name="state" value={formData.state} onChange={handleChange} className="form-control" required />
+                </Form.Group>
+              </div>
+              <div className="col-12 col-md-4">
+                <Form.Group>
+                  <Form.Label className="form-label">Pincode*</Form.Label>
+                  <Form.Control type="text" name="pincode" value={formData.pincode} onChange={handleChange} className="form-control" pattern="[0-9]{6}" required />
+                </Form.Group>
+              </div>
+            </div>
+            <Form.Group className="mb-2">
+              <Form.Check 
+                type="checkbox" 
+                name="isDefault" 
+                label="Set as default address" 
+                checked={formData.isDefault} 
+                onChange={handleChange} 
+                className="form-check"
               />
             </Form.Group>
-
-            <div className="row mb-3">
-              <div className="col-md-6">
-                <Form.Group controlId="locality">
-                  <Form.Label>Locality*</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="locality"
-                    value={formData.locality}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
-              </div>
-              <div className="col-md-6">
-                <Form.Group controlId="landmark">
-                  <Form.Label>Landmark</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="landmark"
-                    value={formData.landmark}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-              </div>
-            </div>
-
-            <div className="row mb-3">
-              <div className="col-md-6">
-                <Form.Group controlId="city">
-                  <Form.Label>City*</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
-              </div>
-              <div className="col-md-6">
-                <Form.Group controlId="state">
-                  <Form.Label>State*</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="state"
-                    value={formData.state}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
-              </div>
-            </div>
-
-            <div className="row mb-3">
-              <div className="col-md-6">
-                <Form.Group controlId="pincode">
-                  <Form.Label>Pincode*</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="pincode"
-                    value={formData.pincode}
-                    onChange={handleChange}
-                    pattern="[0-9]{6}"
-                    required
-                  />
-                </Form.Group>
-              </div>
-              <div className="col-md-6">
-                <Form.Group controlId="country">
-                  <Form.Label>Country</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="country"
-                    value={formData.country}
-                    onChange={handleChange}
-                    disabled
-                  />
-                </Form.Group>
-              </div>
-            </div>
-
-            <Form.Group controlId="isDefault" className="mb-3">
-              <Form.Check
-                type="checkbox"
-                name="isDefault"
-                label="Set as default address"
-                checked={formData.isDefault}
-                onChange={handleChange}
-              />
-            </Form.Group>
-
-            <div className="d-flex justify-content-end gap-2">
-              <Button variant="secondary" onClick={() => setMode('list')}>
-                Cancel
-              </Button>
-              <Button variant="primary" type="submit">
-                {currentAddress ? 'Update Address' : 'Save Address'}
-              </Button>
+            <div className="form-actions">
+              <Button variant="outline-secondary" onClick={() => setMode('list')} className="cancel-button">Cancel</Button>
+              <Button variant="primary" type="submit" className="save-button">{currentAddress ? 'Update' : 'Save'}</Button>
             </div>
           </Form>
         )}
@@ -307,74 +256,57 @@ const AddressModal = ({
   );
 };
 
-const OrderSummaryContent = ({ items, subtotal, total }) => {
+// Order Summary Panel
+const OrderSummaryPanel = ({ items, subtotal, total, isCompact = false }) => {
   return (
-    <aside className="checkout-summary-panel">
-      <h3 className="summary-title">Order Summary</h3>
-      {items.map((item, index) => (
-        <div key={index} className="summary-product-row">
-          <div className="summary-product-thumb-wrap">
-            <img
-              src={item.imagePath}
-              alt={item.productName || item.name}
-              className="summary-product-thumb"
-            />
-          </div>
-          <div className="summary-product-details">
-            <div className="summary-product-title">{item.productName || item.name}</div>
-            <div className="summary-product-variant">{item.sno || item.tagNo}</div>
-          </div>
-          <div className="summary-product-price">₹{(item.price * item.quantity).toFixed(2)}</div>
-        </div>
-      ))}
-      <div className="summary-breakdown">
-        <div className="summary-row">
-          <div>Subtotal</div>
-          <div>₹{subtotal.toFixed(2)}</div>
-        </div>
-        <div className="summary-row">
-          <div>Shipping</div>
-          <div className="summary-hint">Calculated at next step</div>
-        </div>
-        <div className="summary-row summary-row-total">
-          <div>
-            <b>Total</b>
-          </div>
-          <div>
-            <b>₹{total.toFixed(2)}</b>
-          </div>
-        </div>
+    <div className={`order-panel ${isCompact ? 'compact' : ''}`}>
+      <div className="order-header">
+        <h4 className="order-title"><ShoppingBag size={14} className="order-icon" /> Order Summary</h4>
+        <span className="item-count-badge">{items.length} item{items.length > 1 ? 's' : ''}</span>
       </div>
-    </aside>
+      <div className="order-items">
+        {items.map((item, index) => (
+          <div key={index} className="order-item">
+            <div className="item-image-container">
+              <img src={item.imagePath || 'https://via.placeholder.com/40x40'} alt={item.productName || item.name} onError={(e) => { e.target.src = 'https://via.placeholder.com/40x40'; }} />
+            </div>
+            <div className="item-details">
+              <h6 className="item-name">{item.productName || item.name}</h6>
+              <p className="item-variant">SKU: {item.sno || item.tagNo}</p>
+              <p className="item-quantity">Qty: {item.quantity}</p>
+            </div>
+            <div className="item-price">₹{(item.price * item.quantity).toFixed(2)}</div>
+          </div>
+        ))}
+      </div>
+      <div className="order-totals">
+        <div className="total-row"><span>Subtotal</span><span>₹{subtotal.toFixed(2)}</span></div>
+        <div className="total-row"><span>Shipping</span><span className="free-shipping">FREE</span></div>
+        <div className="total-row final-total"><span>Total</span><span>₹{total.toFixed(2)}</span></div>
+      </div>
+    </div>
   );
 };
 
-const Checkout = ({ location, history }) => {
+// Main Checkout Component
+const EnhancedCheckout = ({ location, history }) => {
   const { state: checkoutPayload = {} } = location || {};
-  const { items: initialCartItems = [], totalAmount: initialTotalAmount = 0 } =
-    checkoutPayload;
+  const { items: initialCartItems = [], totalAmount: initialTotalAmount = 0 } = checkoutPayload;
   const [cartItems, setCartItems] = useState(initialCartItems);
   const [totalAmount, setTotalAmount] = useState(initialTotalAmount);
-  const { data: profile, isLoading: profileLoading } = useCurrentProfile();
-
-  // Address related states
-  const [showAddressModal, setShowAddressModal] = useState(false);
-  const {
-    data: addresses,
-    isLoading: addressesLoading,
-    refetch: refetchAddresses
-  } = useAddressesByCustomer(profile?.id);
-
-  const [summaryOpen, setSummaryOpen] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [paymentMode, setPaymentMode] = useState('ONLINE');
+  const [showAddressModal, setShowAddressModal] = useState(false);
+  const [summaryOpen, setSummaryOpen] = useState(false);
 
+  const { data: profile, isLoading: profileLoading } = useCurrentProfile();
+  const { data: addresses, isLoading: addressesLoading, refetch: refetchAddresses } = useAddressesByCustomer(profile?.id);
   const { mutate: createOrder } = useCreateOrder();
   const { mutate: createAddress } = useCreateAddress();
   const { mutate: updateAddress } = useUpdateAddress();
   const { mutate: deleteAddress } = useDeleteAddress();
 
-  // Restore cart from localStorage if available
   useEffect(() => {
     const storedCart = localStorage.getItem('cartitems');
     if (!cartItems.length && storedCart) {
@@ -388,12 +320,10 @@ const Checkout = ({ location, history }) => {
     }
   }, []);
 
-  // Save cart to localStorage
   useEffect(() => {
     localStorage.setItem('cartitems', JSON.stringify({ items: cartItems, totalAmount }));
   }, [cartItems, totalAmount]);
 
-  // Set default address if available
   useEffect(() => {
     if (addresses && addresses.length > 0) {
       const defaultAddress = addresses.find(addr => addr.isDefault) || addresses[0];
@@ -401,40 +331,22 @@ const Checkout = ({ location, history }) => {
     }
   }, [addresses]);
 
-  const handlePaymentChange = useCallback((e) => {
-    setPaymentMode(e.target.value);
-  }, []);
-
   const formatAddress = useCallback((address) => {
     if (!address) return '';
     return `${address.addressLine}, ${address.locality}, ${address.city}, ${address.state} - ${address.pincode}, ${address.country || 'India'}`;
   }, []);
 
   const handleSaveAddress = (addressData) => {
-    const payload = {
-      ...addressData,
-      customerId: profile.id
-    };
-
+    const payload = { ...addressData, customerId: profile.id };
     if (addressData.id) {
       updateAddress({ id: addressData.id, addressData: payload }, {
-        onSuccess: () => {
-          toast.success('Address updated successfully');
-          refetchAddresses();
-        },
-        onError: (error) => {
-          toast.error(error.response?.data || 'Failed to update address');
-        }
+        onSuccess: () => { toast.success('Address updated'); refetchAddresses(); },
+        onError: (error) => { toast.error(error.response?.data || 'Failed to update address'); }
       });
     } else {
       createAddress(payload, {
-        onSuccess: () => {
-          toast.success('Address created successfully');
-          refetchAddresses();
-        },
-        onError: (error) => {
-          toast.error(error.response?.data || 'Failed to create address');
-        }
+        onSuccess: () => { toast.success('Address created'); refetchAddresses(); },
+        onError: (error) => { toast.error(error.response?.data || 'Failed to create address'); }
       });
     }
   };
@@ -442,16 +354,24 @@ const Checkout = ({ location, history }) => {
   const handleDeleteAddress = (addressId) => {
     deleteAddress(addressId, {
       onSuccess: () => {
-        toast.success('Address deleted successfully');
+        toast.success('Address deleted');
         refetchAddresses();
-        if (selectedAddress?.id === addressId) {
-          setSelectedAddress(null);
-        }
+        if (selectedAddress?.id === addressId) setSelectedAddress(null);
       },
-      onError: (error) => {
-        toast.error(error.response?.data || 'Failed to delete address');
-      }
+      onError: (error) => { toast.error(error.response?.data || 'Failed to delete address'); }
     });
+  };
+
+  const handleNextStep = () => {
+    if (currentStep === 1 && !selectedAddress) {
+      toast.error('Please select a delivery address');
+      return;
+    }
+    setCurrentStep(prev => Math.min(prev + 1, 3));
+  };
+
+  const handlePrevStep = () => {
+    setCurrentStep(prev => Math.max(prev - 1, 1));
   };
 
   const submitOrder = useCallback(() => {
@@ -459,12 +379,10 @@ const Checkout = ({ location, history }) => {
       toast.error('Please select a delivery address');
       return;
     }
-
     if (!cartItems || cartItems.length === 0) {
       toast.error('Your cart is empty');
       return;
     }
-
     const orderPayload = {
       customerName: selectedAddress.name,
       contact: selectedAddress.phone,
@@ -483,7 +401,6 @@ const Checkout = ({ location, history }) => {
         quantity: item.quantity,
       })),
     };
-
     createOrder(orderPayload, {
       onSuccess: (data) => {
         if (paymentMode === 'ONLINE') {
@@ -506,138 +423,133 @@ const Checkout = ({ location, history }) => {
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <div className="shopify-checkout-root">
-      <div className="shopify-checkout-main">
-        <div className="order-summary-toggle-mobile">
-          <button
-            className="order-summary-toggle-btn"
-            onClick={() => setSummaryOpen(!summaryOpen)}
-            aria-expanded={summaryOpen}
-            aria-controls="orderSummaryMobile"
-          >
-            <span>Show order summary</span>
-            <span className="order-summary-toggle-total">
-              <span className="order-summary-toggle-currency">INR</span> ₹
-              {totalAmount.toFixed(2)}
-            </span>
-            <span className="order-summary-toggle-arrow">{summaryOpen ? '▲' : '▼'}</span>
-          </button>
-          <div
-            className={`order-summary-mobile-panel${summaryOpen ? ' open' : ''}`}
-            id="orderSummaryMobile"
-            aria-hidden={!summaryOpen}
-          >
-            <OrderSummaryContent items={cartItems} subtotal={subtotal} total={totalAmount} />
+    <div className="checkout-wrapper">
+      <div className="mobile-order-toggle">
+        <button className="toggle-button" onClick={() => setSummaryOpen(!summaryOpen)}>
+          <div className="toggle-content">
+            <span>Order Summary</span>
+            <span className="toggle-arrow">{summaryOpen ? '▲' : '▼'}</span>
           </div>
-        </div>
-        <div className="shopify-checkout-form">
-          <form>
-            <section className="section-block">
-              <div className="checkout-row between">
-                <h2 className="section-title">Contact</h2>
-                {profileLoading ? (
-                  <span>Loading...</span>
-                ) : profile?.contactNumber ? (
-                  <span className="contact-email">{profile.contactNumber}</span>
+          <div className="toggle-total">₹{totalAmount.toFixed(2)}</div>
+        </button>
+        {summaryOpen && (
+          <div className="mobile-order-panel">
+            <OrderSummaryPanel items={cartItems} subtotal={subtotal} total={totalAmount} isCompact />
+          </div>
+        )}
+      </div>
+      <div className="checkout-layout">
+        <div className="checkout-main">
+          <ProgressStepper currentStep={currentStep} />
+          <div className="step-section">
+            {currentStep === 1 && (
+              <div className="step-section">
+                <div className="section-heading">
+                  <h3 className="section-title"><MapPin size={14} className="section-icon" /> Delivery Address</h3>
+                </div>
+                <div className="contact-details">
+                  <div className="contact-row">
+                    <User size={12} className="contact-icon" />
+                    <div>
+                      <span className="contact-label">Contact:</span>
+                      <span className="contact-value">{profileLoading ? 'Loading...' : profile?.contactNumber || 'Not provided'}</span>
+                    </div>
+                  </div>
+                </div>
+                {addressesLoading ? (
+                  <div className="loading-container">
+                    <div className="loading-spinner"></div>
+                    <p>Loading addresses...</p>
+                  </div>
+                ) : selectedAddress ? (
+                  <div className="address-display">
+                    <div className="address-item selected">
+                      <div className="address-content">
+                        <div className="address-heading">
+                          <h6 className="address-name">{selectedAddress.name}</h6>
+                          {selectedAddress.isDefault && <Badge bg="success">Default</Badge>}
+                        </div>
+                        <div className="address-info">
+                          <p>{selectedAddress.addressLine}</p>
+                          <p>{selectedAddress.locality}, {selectedAddress.city}</p>
+                          <p>{selectedAddress.state} - {selectedAddress.pincode}</p>
+                          <p className="phone-info"><Phone size={10} className="phone-icon" /> {selectedAddress.phone}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <button className="change-address-button" onClick={() => setShowAddressModal(true)}>Change Address</button>
+                  </div>
                 ) : (
-                  <Link className="checkout-login-link" to="/login">
-                    Log in
-                  </Link>
+                  <div className="no-address-state">
+                    <div className="no-address-content">
+                      <MapPin size={24} className="no-address-icon" />
+                      <h5>No address selected</h5>
+                      <p>Add a delivery address to continue</p>
+                      <button className="add-address-button primary" onClick={() => setShowAddressModal(true)}>
+                        <Plus size={12} className="plus-icon" /> Add Address
+                      </button>
+                    </div>
+                  </div>
                 )}
               </div>
-              {profileLoading ? (
-                <input className="checkout-input" disabled placeholder="Loading..." />
-              ) : (
-                <input
-                  className="checkout-input"
-                  type="tel"
-                  name="contactNumber"
-                  placeholder="Contact Number"
-                  value={profile?.contactNumber || ''}
-                  disabled
-                />
-              )}
-            </section>
-
-            {/* Enhanced Address Section */}
-            <section className="section-block">
-              <div className="checkout-row between">
-                <h2 className="section-title">Delivery Address</h2>
-                <button
-                  type="button"
-                  className="checkout-add-address-btn"
-                  onClick={() => setShowAddressModal(true)}
-                >
-                  {addresses?.length ? 'Change' : 'Add Address'}
-                </button>
-              </div>
-
-              {addressesLoading ? (
-                <div className="text-center py-4">Loading addresses...</div>
-              ) : selectedAddress ? (
-                <div className="selected-address-container">
-                  <AddressView
-                    address={selectedAddress}
-                    variant="default"
-                    className="checkout-selected-address"
-                  />
+            )}
+            {currentStep === 2 && (
+              <div className="step-section">
+                <div className="section-heading">
+                  <h3 className="section-title"><ShoppingBag size={14} className="order-icon" /> Order Summary</h3>
                 </div>
-              ) : (
-                <div className="no-address-placeholder border rounded p-4 text-center">
-                  <p className="mb-3">No delivery address selected</p>
-                  <Button
-                    variant="primary"
-                    onClick={() => setShowAddressModal(true)}
-                  >
-                    Add Delivery Address
-                  </Button>
-                </div>
-              )}
-            </section>
-
-            <section className="section-block">
-              <h2 className="section-title">Payment</h2>
-              <div className="checkout-payment-hint">
-                All transactions are secure and encrypted.
+                <OrderSummaryPanel items={cartItems} subtotal={subtotal} total={totalAmount} />
               </div>
-              <div className="checkout-payment-wrapper">
-                <div className="checkout-payment-tab">
-                  <select
-                    className="checkout-input payment-select"
-                    value={paymentMode}
-                    onChange={handlePaymentChange}
-                  >
-                    <option value="ONLINE">Online Payment</option>
-                    <option value="CASH">Cash on Delivery</option>
-                  </select>
+            )}
+            {currentStep === 3 && (
+              <div className="step-section">
+                <div className="section-heading">
+                  <h3 className="section-title"><CreditCard size={14} className="section-icon" /> Payment Method</h3>
+                </div>
+                <div className="payment-area">
+                  <p className="payment-hint">All transactions are secure and encrypted.</p>
+                  <div className="payment-options">
+                    <div className="payment-option">
+                      <input type="radio" id="online" name="payment" value="ONLINE" checked={paymentMode === 'ONLINE'} onChange={(e) => setPaymentMode(e.target.value)} />
+                      <label htmlFor="online">
+                        <CreditCard size={12} className="payment-icon" /> Online Payment
+                        <span className="payment-desc">UPI, Cards, Net Banking</span>
+                      </label>
+                    </div>
+                    <div className="payment-option">
+                      <input type="radio" id="cod" name="payment" value="CASH" checked={paymentMode === 'CASH'} onChange={(e) => setPaymentMode(e.target.value)} />
+                      <label htmlFor="cod">
+                        <Home size={12} className="payment-icon" /> Cash on Delivery
+                        <span className="payment-desc">Pay on delivery</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div className="order-total-final">
+                    <div className="total-breakdown">
+                      <div className="total-row"><span>Subtotal</span><span>₹{subtotal.toFixed(2)}</span></div>
+                      <div className="total-row"><span>Shipping</span><span>FREE</span></div>
+                      <div className="total-row final"><span>Total</span><span>₹{totalAmount.toFixed(2)}</span></div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="pay-now-btn-container">
-                <button
-                  type="button"
-                  className="main-btn btn-filled pay-now-btn"
-                  onClick={submitOrder}
-                  disabled={!selectedAddress}
-                >
-                  {selectedAddress ? `Pay Now (₹${totalAmount.toFixed(2)})` : 'Select Address to Proceed'}
-                </button>
-              </div>
-            </section>
-          </form>
+            )}
+          </div>
+          <div className="step-controls">
+            {currentStep > 1 && <button className="nav-button secondary" onClick={handlePrevStep}>Back</button>}
+            {currentStep < 3 ? (
+              <button className="nav-button primary" onClick={handleNextStep} disabled={currentStep === 1 && !selectedAddress}>Continue</button>
+            ) : (
+              <button className="nav-button primary place-order" onClick={submitOrder} disabled={!selectedAddress}>
+                Place Order - ₹{totalAmount.toFixed(2)}
+              </button>
+            )}
+          </div>
         </div>
-        <div className="shopify-checkout-summary">
-          <OrderSummaryContent items={cartItems} subtotal={subtotal} total={totalAmount} />
-          <button
-            onClick={submitOrder}
-            className="main-btn btn-filled pay-now-btn"
-            disabled={!selectedAddress}
-          >
-            {selectedAddress ? `Pay Now (₹${totalAmount.toFixed(2)})` : 'Select Address to Proceed'}
-          </button>
+        <div className="checkout-aside">
+          <OrderSummaryPanel items={cartItems} subtotal={subtotal} total={totalAmount} />
         </div>
       </div>
-
-      {/* Address Modal */}
       <AddressModal
         show={showAddressModal}
         onHide={() => setShowAddressModal(false)}
@@ -652,4 +564,4 @@ const Checkout = ({ location, history }) => {
   );
 };
 
-export default withRouter(Checkout);
+export default withRouter(EnhancedCheckout);

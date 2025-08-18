@@ -61,7 +61,7 @@ function ScrollWatcher() {
 
 function App() {
   return (
-    <Router basename="/bmgjewellers/">
+    <Router basename="/">
       {/* <Preloader /> */}
       <ScrollWatcher />
       <Switch>

@@ -3,11 +3,15 @@ import { FaTag, FaAward, FaLock, FaMoneyBillWave, FaExchangeAlt, FaInfinity } fr
 import { FaFacebook, FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
 import './WhyChooseUsStyles.css'
 import Footertwo from '../../layouts/Footerthree';
+import HeaderWithAuth from '../../layouts/HeaderWithAuth';
 
 const BMGJewellers = () => {
   return (
+  <>
+      <HeaderWithAuth />
     <div className="bmg-jewellers">
-        
+
+
       {/* Header Section */}
       <header className="header">
         <div className="header-content">
@@ -103,6 +107,7 @@ const BMGJewellers = () => {
     
       <Footertwo />
     </div>
+    </>
   );
 };
 
@@ -118,6 +123,7 @@ const BenefitCard = ({ title, icon, content }) => {
         ))}
       </div>
     </div>
+ 
   );
 };
 

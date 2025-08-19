@@ -92,6 +92,10 @@ const Category1 = () => {
 
     return (
         <div className="offer-container">
+            <div className='offer-title-container'>
+                <h4 className='cat-offer-title'> Exclusive Offers </h4>
+                <span className='offer-sub-title'>Unwrap timeless elegance with special savings on our finest collections. </span>
+            </div>
             <div className="offer-grid" >
                 {banners.map((item, i) => (
                     <CategoryCard key={item.id || i} item={item} />

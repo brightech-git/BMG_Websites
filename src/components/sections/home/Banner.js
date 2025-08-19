@@ -17,37 +17,37 @@ const Banner = () => {
         dots: true,
         infinite: true,
         autoplay: true,
-        autoplaySpeed: 4000,
+        autoplaySpeed: 3000,
         speed: 1000,
         slidesToShow: 1,
         slidesToScroll: 1,
         centerMode: true,
-        centerPadding: '15%', 
-        arrows: true, 
+        centerPadding: '10%', // Reduced from 15% to show less of adjacent slides
+        arrows: true,
         swipe: true,
-        swipeToSlide: true, 
-        touchThreshold: 10, 
+        swipeToSlide: true,
+        touchThreshold: 10,
         adaptiveHeight: false,
         responsive: [
             {
                 breakpoint: 992,
                 settings: {
-                    centerPadding: '10%',
+                    centerPadding: '8%',
                 },
             },
             {
                 breakpoint: 768,
                 settings: {
                     centerPadding: '5%',
-                    arrows: true, 
+                    arrows: true,
                 },
             },
             {
                 breakpoint: 576,
                 settings: {
                     centerPadding: '0',
-                    centerMode: false, 
-                    arrows: false, 
+                    centerMode: false,
+                    arrows: false,
                 },
             },
         ],

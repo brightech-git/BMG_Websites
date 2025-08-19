@@ -1,5 +1,4 @@
 /* Hero Banner Component Styles */
-
 .hero-banner {
     position: relative;
     width: 100%;
@@ -16,7 +15,7 @@
     width: 100%;
     position: relative;
     overflow: hidden;
-    background-color: #f0f0f0;
+    background-color: var(--primary-color);
 }
 
 .hero-skeleton-placeholder {
@@ -42,8 +41,14 @@
     position: relative;
     width: 100%;
     outline: none;
-    padding: 0 15px;
-    /* Add gap between banners */
+    transition: transform 0.3s ease;
+}
+
+/* Make adjacent slides smaller and slightly transparent */
+.slick-slide:not(.slick-center) {
+    transform: scale(0.92);
+    opacity: 0.7;
+    transition: all 0.3s ease;
 }
 
 /* Media Container */
@@ -51,11 +56,10 @@
     position: relative;
     width: 100%;
     padding-top: 45%;
-    /* Maintain aspect ratio */
     height: 0;
     border-radius: 15px;
-    /* Rounded corners for a polished look */
     overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .hero-image {
@@ -83,7 +87,6 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    /* Left-aligned content like Tanishq */
     z-index: 2;
 }
 
@@ -102,6 +105,7 @@
     line-height: 1.2;
     margin-bottom: 1rem;
     color: var(--green-color);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .hero-description {
@@ -109,6 +113,7 @@
     font-size: clamp(1rem, 2vw, 1rem);
     line-height: 1.6;
     margin-bottom: 2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 /* Button */
@@ -126,6 +131,7 @@
     overflow: hidden;
     transition: all 0.4s ease;
     z-index: 1;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .hero-button::before {
@@ -144,7 +150,7 @@
     border-color: var(--primary-hover-color, #cd865c);
     color: var(--white-color, #fff);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .hero-button:hover::before {
@@ -161,12 +167,13 @@
     background: rgba(0, 0, 0, 0.5);
     border-radius: 50%;
     z-index: 2;
-    transition: background 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .slick-prev:hover,
 .slick-next:hover {
     background: var(--primary-hover-color, #cd865c);
+    transform: scale(1.1);
 }
 
 .slick-prev:before,
@@ -176,11 +183,11 @@
 }
 
 .slick-prev {
-    left: 20px;
+    left: 10px;
 }
 
 .slick-next {
-    right: 20px;
+    right: 10px;
 }
 
 /* Slick Slider Dots */
@@ -201,13 +208,6 @@
 }
 
 /* Responsive Adjustments */
-@media (min-width: 1600px) {
-    .hero-slide {
-        padding: 0 20px;
-        /* Larger gap on wide screens */
-    }
-}
-
 @media (max-width: 1300px) {
     .hero-media {
         padding-top: 50%;
@@ -231,9 +231,9 @@
         padding: 1.5rem;
     }
 
-    .hero-slide {
-        padding: 0 10px;
-        /* Smaller gap */
+    .slick-slide:not(.slick-center) {
+        transform: scale(0.95);
+        opacity: 0.8;
     }
 }
 
@@ -297,15 +297,15 @@
         font-size: 10px !important;
     }
 
-    .hero-slide {
-        padding: 10px;
-        /* No gap on mobile */
+    .slick-slide:not(.slick-center) {
+        transform: scale(1);
+        opacity: 1;
     }
 }
 
 @media (max-width: 400px) {
     .hero-media {
-        padding-top: 85%;
+        padding-top: 55%;
     }
 
     .hero-content {
@@ -330,8 +330,9 @@
 
     .hero-image,
     .hero-button,
-    .hero-button::before {
-        transition: none;
+    .hero-button::before,
+    .slick-slide {
+        transition: none !important;
     }
 
     .hero-skeleton-placeholder {

@@ -1,0 +1,136 @@
+.appointment-page {
+    font-family: var(--secondary-font);
+    background: var(--primary-color);
+    color: var(--primary-text-color);
+}
+
+.title {
+    font-family: var(--title-font);
+    font-weight: 600;
+    font-size: 2rem;
+    color: var(--primary-text-color);
+    text-shadow: var(--text-shadow);
+}
+
+.form-container {
+    background: var(--primary-card-color);
+    border: 1px solid var(--gradient-border);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px var(--shadow-color);
+}
+
+.form-label {
+    font-family: var(--secondary-font);
+    font-weight: 600;
+    color: var(--primary-text-color);
+}
+
+.form-input {
+    font-family: var(--secondary-font);
+    border-radius: 8px;
+    border: 1px solid var(--grey-color);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-input:focus {
+    border-color: var(--focus-outline);
+    box-shadow: 0 0 0 0.2rem rgba(205, 134, 92, 0.25);
+}
+
+.submit-btn {
+    font-family: var(--secondary-font);
+    font-weight: 600;
+    background: var(--button-bg) !important;
+    border: none !important;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.submit-btn:hover {
+    background: var(--gold-color) !important;
+    transform: scale(1.05);
+}
+
+.video-container {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--gradient-border);
+    transition: transform 0.3s ease;
+}
+
+.video-container:hover {
+    transform: scale(1.02);
+}
+
+.how-it-works {
+    background: var(--feature-bg-color);
+    border-radius: 8px;
+    padding: 2rem;
+}
+
+.step-card {
+    background: var(--secondary-card-color);
+    border: 1px solid var(--gradient-border);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.step-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px var(--shadow-color);
+}
+
+.step-number {
+    width: 60px;
+    height: 60px;
+    color: var(--white-color);
+    font-family: var(--secondary-font);
+    font-weight: 700;
+}
+
+.step-title {
+    font-family: var(--primary-font);
+    font-weight: 600;
+    color: var(--primary-text-color);
+}
+
+.step-text {
+    font-family: var(--secondary-font);
+    color: var(--primary-text-color);
+}
+
+.benefits-section .benefit-title {
+    font-family: var(--primary-font);
+    font-weight: 600;
+    color: var(--primary-text-color);
+}
+
+.benefits-section .benefit-text {
+    font-family: var(--secondary-font);
+    color: var(--primary-text-color);
+}
+
+@media (max-width: 768px) {
+    .appointment-page {
+        padding: 1rem;
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+
+    .form-container {
+        padding: 1.5rem;
+    }
+
+    .submit-btn {
+        font-size: 0.9rem;
+    }
+
+    .step-card {
+        padding: 1.5rem;
+    }
+}

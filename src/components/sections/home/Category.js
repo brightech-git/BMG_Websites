@@ -89,6 +89,13 @@ const Category = () => {
 
     return (
         <div className="category-container">
+            <div className='title-container'>
+                <h4 className='occ-title'> Shop By Occasoin</h4>
+                <span className='occ-sub-title'>Find the perfect piece for weddings, parties, or everyday style.
+Jewelry that makes every occasion shine. </span>
+            </div>
+
+
             <div className="category-grid">
                 {banners.map((item, i) => (
                     <CategoryCard key={i} item={item} />

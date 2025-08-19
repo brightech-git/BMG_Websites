@@ -69,7 +69,7 @@
         --grey-color: #A9A9A9;
         --black-color: #101010;
         --gold-color: #e6d710;
-        --gradient-text: linear-gradient(90deg, #cd865c, #a05f3a);
+        --gradient-text: linear-gradient(90deg, #31063a, #ff2b59);
         --shadow-color: rgba(0, 0, 0, 0.1);
         --focus-outline: var(--primary-hover-color);
         --overlay-blur: blur(2px);

@@ -199,20 +199,20 @@
     display: inline-flex;
     align-items: center;
     gap: 0.8rem;
-    padding: 14px 28px;
+    padding: 10px 20px;
     font-size: 0.9rem;
     font-weight: 600;
     text-transform: capitalize;
     letter-spacing: 0.05em;
     color: var(--white-color);
-    background: var(--gradient-text);
+    background: var(--gradient-border);
     border: none;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
     z-index: 1;
     cursor: pointer;
-    border-radius:  20px 0px;
+    border-radius:  8px 1px;
     font-family: var(--title-font);
 }
 

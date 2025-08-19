@@ -1,0 +1,139 @@
+
+
+/* Shipping Policy Styles */
+.shipping-policy {
+  width: 100vw;
+  min-height: calc(100vh - var(--header-height));
+  background: var(--primary-color);
+  padding: 5rem 0;
+  margin-top: var(--header-height);
+  font-family: var(--secondary-font);
+  color: var(--primary-text-color);
+}
+
+.policy-wrapper {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.policy-title {
+  font-family: var(--title-font);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--black-color);
+  text-align: center;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  padding-bottom: 0.75rem;
+  border-bottom: 3px solid var(--gold-color);
+  text-shadow: var(--text-shadow);
+  transition: color 0.3s ease;
+}
+
+.policy-title:hover {
+  color: var(--primary-hover-color);
+}
+
+.policy-content {
+  background: var(--white-color);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow-color);
+  border: 1px solid var(--gradient-border);
+}
+
+.policy-content h5 {
+  font-family: var(--primary-font);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-hover-color);
+  margin: 2rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--primary-card-color);
+  transition: color 0.3s ease;
+  text-align: center;
+}
+
+.policy-content h5:hover {
+  color: var(--black-color);
+}
+
+.policy-list {
+  list-style: none;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.policy-list-item {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--black-color);
+  line-height: 1.8;
+  margin-bottom: 0.75rem;
+  text-align: justify;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.policy-list-item:before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--primary-hover-color);
+  font-size: 1.2rem;
+  line-height: 1.8;
+}
+
+.policy-content b {
+  font-weight: 600;
+  color: var(--black-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .shipping-policy {
+    padding: 3rem 0;
+    margin-top: var(--mobile-header-height);
+  }
+
+  .policy-wrapper {
+    padding: 0 1rem;
+  }
+
+  .policy-title {
+    font-size: 2rem;
+  }
+
+  .policy-content {
+    padding: 1.5rem;
+  }
+
+  .policy-content h5 {
+    font-size: 1.25rem;
+  }
+
+  .policy-list-item {
+    font-size: 0.9375rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .policy-title {
+    font-size: 1.75rem;
+  }
+
+  .policy-content {
+    padding: 1rem 2rem 1rem 1rem;
+  }
+
+  .policy-content h5 {
+    font-size: 1.125rem;
+  }
+
+  .policy-list-item {
+    font-size: 0.875rem;
+  }
+}

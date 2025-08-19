@@ -119,9 +119,7 @@ const JewelryShowcase = () => {
                                 aria-label="Shop Now for best designed jewels"
                             >
                                 <span >Shop Now</span>
-                                <div className="arrow-wrapper">
-                                    <FiArrowRight className="arrow-icon" />
-                                </div>
+                            
                                 <div className="hover-effect"></div>
                             </button>
                         </div>

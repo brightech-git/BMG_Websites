@@ -13,7 +13,7 @@ const Content = () => {
     const location = useLocation();
     const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 
-    const defaultPageSize = 40;
+    const defaultPageSize = 20;
     const [pageSize, setPageSize] = useState(defaultPageSize);
     const [hideLoadMore, setHideLoadMore] = useState(false);
     const previousProductCount = useRef(0);

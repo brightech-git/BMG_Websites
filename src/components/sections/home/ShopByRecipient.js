@@ -9,9 +9,9 @@ const ShopByRecipient = () => {
     const history = useHistory();
 
     const categories = [
-        { id: 1, label: "Him", image: men, query: "itemName=Gift Ideas&subItemName=FOR HIM" },
-        { id: 2, label: "Her", image: women, query: "itemName=Gift Ideas&subItemName=FOR HER" },
-        { id: 3, label: "Kids", image: kid, query: "subItemName=FOR KIDS&itemName=Gift Ideas" },
+        { id: 1, label: "For Him", image: men, query: "itemName=Gift Ideas&subItemName=FOR HIM" },
+        { id: 2, label: "For Her", image: women, query: "itemName=Gift Ideas&subItemName=FOR HER" },
+        { id: 3, label: "For Kids", image: kid, query: "subItemName=FOR KIDS&itemName=Gift Ideas" },
     ];
 
     const handleCategoryClick = (query) => {
@@ -23,12 +23,15 @@ const ShopByRecipient = () => {
             <div className="container">
                 <div className="recipient-header">
                     <h2 className="recipient-title">
-                        Shop by Recipient
+                        Celebrate Every Bond
                     </h2>
+                    <h6 className='recipient-subtitle'>
+                        Handpicked jewelry gifts crafted to make every moment unforgettable.
+                    </h6>
                 </div>
                 <div className="recipient-grid">
                     <div className="recipient-row-top">
-                        {categories.filter(cat => cat.label !== "Her").map((category) => (
+                        {categories.filter(cat => cat.label !== "For Her").map((category) => (
                             <div key={category.id} className="recipient-card-wrapper">
                                 <div
                                     className="recipient-card"
@@ -66,7 +69,7 @@ const ShopByRecipient = () => {
                         ))}
                     </div>
                     <div className="recipient-row-bottom">
-                        {categories.filter(cat => cat.label === "Her").map((category) => (
+                        {categories.filter(cat => cat.label === "For Her").map((category) => (
                             <div key={category.id} className="recipient-card-wrapper">
                                 <div
                                     className="recipient-card"

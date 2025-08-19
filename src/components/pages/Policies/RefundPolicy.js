@@ -1,143 +1,146 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
-import './ShippingReturns.css';
-import HeaderWithAuth from '../../layouts/HeaderWithAuth';
-import Footertwo from '../../layouts/Footerthree';
+import React from "react";
+import HeaderWithAuth from "../../layouts/HeaderWithAuth";
+import Footer from "../../layouts/Footerthree";
+import "./ShippingPolicy.css";
 
-const ShippingReturns = () => {
-  const history = useHistory();
-
-  const handleContactClick = () => {
-    history.push('/contact');
-  };
-
+const ShippingPolicy = () => {
   return (
     <>
-    <HeaderWithAuth />
-    <section className="shipping-section mt-80">
-      <div className="container">
-        <div className="shipping-header text-center mb-5">
-          <h2 className="shipping-title">
-            <span className="shipping-title-line">BMG Jewellers</span>
-            <span className="shipping-title-line shipping-script">Shipping & Returns Policy</span>
-          </h2>
-          <p className="shipping-subtitle">
-            Your guide to our policies for Gold Polish Silver Jewellery Collection
-          </p>
-        </div>
-        <div className="row justify-content-center">
-          <div className="col-12 col-md-10 col-lg-8">
-            <div className="shipping-card mb-4">
-              <div className="card border-0">
-                <div className="card-body">
-                  <h3 className="shipping-card-title">Shipping</h3>
-                  <div className="shipping-card-content">
-                    <h4>Processing & Dispatch</h4>
-                    <ul>
-                      <li>Orders are typically processed and shipped within 48 hours of placement.</li>
-                      <li>Personalised or made-to-order items may take longer to process.</li>
-                      <li>If your order includes both personalised/made-to-order and ready-stock items, ready-stock items may ship first, with personalised items sent separately.</li>
-                    </ul>
-                    <h4>Shipping Charges</h4>
-                    <ul>
-                      <li>Free shipping on all orders above ₹449 within India.</li>
-                      <li>Shipping charges apply for all international orders and returns (calculated at checkout).</li>
-                    </ul>
-                    <h4>Order Tracking</h4>
-                    <ul>
-                      <li>Once shipped, tracking details will be sent via WhatsApp, Email, and SMS.</li>
-                    </ul>
-                    <h4>Split Deliveries</h4>
-                    <ul>
-                      <li>Orders containing personalised items or gold-polished premium jewellery, silver articles, or jewellery may be delivered in multiple shipments.</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="shipping-card mb-4">
-              <div className="card border-0">
-                <div className="card-body">
-                  <h3 className="shipping-card-title">Returns & Exchanges</h3>
-                  <div className="shipping-card-content">
-                    <h4>Return Policy</h4>
-                    <ul>
-                      <li>30-day return policy for unused, unworn, and undamaged products — no questions asked.</li>
-                      <li>Returns are not applicable for personalised jewellery, gift articles, utensils, religious idols, or promotional/free products unless defective or incorrect.</li>
-                      <li>Refunds processed only after the returned product passes our quality check.</li>
-                      <li>If purchased from an authorised partner or third-party store, their return policy applies.</li>
-                      <li>Shipping charges paid at the time of order are non-refundable.</li>
-                    </ul>
-                    <h4>Missing Items in Return Orders</h4>
-                    <ul>
-                      <li>If any item from a multi-product return is missing, BMG Jewellers may deduct up to the full MRP of the missing product from the refund, including promotional/free gifts.</li>
-                    </ul>
-                    <h4>Refunds</h4>
-                    <ul>
-                      <li>Refunds are initiated after we receive and verify the returned product at our warehouse.</li>
-                      <li>Refund mode will match the original payment method unless otherwise agreed.</li>
-                    </ul>
-                    <h4>Replacements & Exchanges</h4>
-                    <ul>
-                      <li>Replacements or exchanges follow the same conditions as returns.</li>
-                      <li>For gold-polished silver jewellery, silver articles, or jewellery, replacements ship only after we receive the original item.</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="shipping-card mb-4">
-              <div className="card border-0">
-                <div className="card-body">
-                  <h3 className="shipping-card-title">Return Process</h3>
-                  <div className="shipping-card-content">
-                    <ol>
-                      <li>
-                        <strong>Initiate a Return:</strong> Request a return through our website or contact our{' '}
-                        <span
-                          className="shipping-link"
-                          onClick={handleContactClick}
-                          role="button"
-                          tabIndex={0}
-                          aria-label="Contact Customer Support"
-                        >
-                          Customer Support
-                        </span>{' '}
-                        team.
-                      </li>
-                      <li>
-                        <strong>Reverse Pick-Up:</strong> Our courier partner will arrange collection from your address. Ensure availability and respond to calls from the delivery agent to avoid delays.
-                      </li>
-                      <li>
-                        <strong>Non-Serviceable Locations:</strong> If reverse pick-up is unavailable, send the product via India Post or another courier. We reimburse up to ₹70 for return shipping; extra costs beyond ₹70 will be deducted from your refund.
-                      </li>
-                    </ol>
-                    <h4>Important Notes</h4>
-                    <ul>
-                      <li>For empty parcel or missing product complaints, contact us within 48 hours of delivery with a 360° unboxing video clearly showing the package before opening.</li>
-                      <li>Tampered packaging or insufficient proof may result in claim rejection.</li>
-                      <li>Final decisions on such claims rest with BMG Jewellers.</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="text-center">
-              <button
-                className="shipping-contact-btn"
-                onClick={handleContactClick}
-                aria-label="Contact us for support"
-              >
-                Contact Us for Support
-              </button>
-            </div>
+      <HeaderWithAuth />
+      <div className="shipping-policy">
+        <div className="policy-wrapper">
+          <h2 className="policy-title">SHIPPING POLICY</h2>
+          <div className="policy-content">
+            <ul className="policy-list">
+              <li className="policy-list-item">
+                The management of <b>BMG JEWELLERS</b> is happy to provide secured
+                shipping to customers for purchased orders within the geographical
+                boundary of India. The operations team and their associates strive
+                to ensure delivery is made accurately, in perfect condition, and on
+                time. At present, delivery is available in <b>ALL towns, cities, and villages</b>. The user must provide the full name, address, and contact number of the recipient.
+              </li>
+            </ul>
+
+            <h5>Delivery Schedule</h5>
+            <ul className="policy-list">
+              <li className="policy-list-item">
+                BMG JEWELLERS aims to deliver shipments to customers within 3 to 7
+                working days, depending on the availability of products at
+                showrooms, registered warehouses, or factories.
+              </li>
+              <li className="policy-list-item">
+                In certain cases, it may take more than 3 to 7 working days for
+                designing or procuring the product. In such situations, the
+                customer will be promptly informed about the status.
+              </li>
+              <li className="policy-list-item">
+                Delivery guarantee is subject to the terms and conditions of the
+                respective courier service or shipping agent.
+              </li>
+              <li className="policy-list-item">
+                If there are any errors in the recipient's name, contact number, or
+                address, or if the recipient is not available at the time of
+                delivery, the product may not be delivered.
+              </li>
+              <li className="policy-list-item">
+                The estimated delivery time mentioned in the terms and conditions
+                begins from the date of dispatch. This is for guidance purposes
+                only and may vary depending on circumstances.
+              </li>
+              <li className="policy-list-item">
+                The order will be processed for shipping only after the
+                credit/debit card details provided are approved by the bank.
+              </li>
+            </ul>
+
+            <h5>Shipment Procedure</h5>
+            <ul className="policy-list">
+              <li className="policy-list-item">
+                The shipment shall be delivered only to the specified delivery
+                address confirmed by the user. Customers have the option of
+                changing the delivery address any number of times before the order
+                is processed for shipment. Once the shipment is processed, neither
+                the specified receiver nor the delivery address can be changed. Any
+                number of products ordered for a single delivery address will be
+                bundled together and shipped as a single shipment.
+              </li>
+              <li className="policy-list-item">
+                In case of shipping gifts, the recipient must provide their
+                signature. The recipient's signature serves as acknowledgment and
+                verification of delivery.
+              </li>
+              <li className="policy-list-item">
+                The support team of BMG JEWELLERS may contact you to confirm your
+                address, availability, etc., before shipping the product. The
+                shipment can be tracked by the customer by checking with the
+                courier agent. We are not responsible for any delays caused by
+                courier agencies or due to time required for statutory clearances
+                during the delivery process.
+              </li>
+            </ul>
+
+            <h5>Force Majeure</h5>
+            <ul className="policy-list">
+              <li className="policy-list-item">
+                Any delay or failure in delivery shall be excused, and BMG
+                Jewellery Ltd is not responsible if and to the extent caused by a
+                Force Majeure event. For the purposes of this Agreement, Force
+                Majeure shall mean a cause or event that is not reasonably
+                foreseeable or caused by or under the control of the Parties
+                (including bmgjewellers.com and the courier company) claiming Force
+                Majeure, including acts of God, natural disasters or emergencies
+                like fires, floods, explosions, riots, wars, hurricanes, sabotage,
+                terrorism, vandalism, accidents, governmental restrictions,
+                prohibitions, enactments on import or export regulations, foreign
+                or domestic exchange regulations, injunctions, unavailability of
+                transit, labor strikes (other than those of the Seller, BMG
+                Jewellery, or its courier agent), or other eventslue beyond the
+                reasonable anticipation and control of the company affected,
+                despite reasonable efforts to prevent, avoid, delay, or mitigate
+                such events or their effects, and which are not attributable to a
+                failure to deliver its obligations under this Agreement.
+              </li>
+            </ul>
+
+            <h5>Return Shipments</h5>
+            <ul className="policy-list">
+              <li className="policy-list-item">
+                If you suspect that the shipment delivered is 'not in good
+                condition,' shows signs of tampering, or if the package is
+                tampered, you shall refuse to acknowledge receipt and return the
+                package before accepting it.
+              </li>
+              <li className="policy-list-item">
+                If the authorized recipient is unavailable to receive and
+                acknowledge the package, the courier agent may attempt delivery
+                twice after the first attempt, as per their policy. If the
+                recipient does not receive the package after all three attempts,
+                the package will be shipped back to the office of BMG JEWELLERS
+                PVT Ltd, and all costs incurred through the shipment shall be borne
+                by the customer along with handling charges. The customer shall
+                also bear the shipping charges when the package is shipped again.
+                Refer to the 'Cancellation Terms' section if the customer cancels
+                after a failed delivery.
+              </li>
+            </ul>
+
+            <h5>Packaging</h5>
+            <ul className="policy-list">
+              <li className="policy-list-item">
+                BMG Jewellery takes special care in packaging your precious
+                purchase. The jewels purchased are secured in a shockproof box,
+                layered with a durable and tamper-proof seal from BMGJL. Every
+                package is video-recorded for security reasons. If a user requests
+                a special gift pack, bmgjewellers.com will gift-wrap it along with
+                the words you wish the recipient to receive.
+              </li>
+            </ul>
           </div>
         </div>
       </div>
-    </section>
-    <Footertwo />
+      <Footer />
     </>
   );
 };
 
-export default ShippingReturns;
+export default ShippingPolicy;

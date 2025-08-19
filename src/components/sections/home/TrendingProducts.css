@@ -30,7 +30,7 @@
 }
 
 .premium-hero-title {
-    font-size: clamp(1.2rem, 4vw, 3rem);
+    font-size: clamp(1rem, 3vw, 2rem);
     font-weight: 400;
     color: var(--primary-text-color);
     font-family: var(--primary-font);
@@ -43,8 +43,8 @@
 }
 
 .premium-script {
-    font-family: var(--script-font);
-    font-weight: 600;
+    font-family: var(--title-font);
+    font-weight: 800;
     font-style: italic;
     margin-left: 0.5rem;
 }

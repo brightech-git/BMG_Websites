@@ -4,7 +4,30 @@
     font-family: var(--secondary-font);
     width: 100%;
 }
+.offer-title-container {
+    margin: 1rem 0;
+    text-align: center;
+}
 
+.cat-offer-title {
+    background: var(--gradient-border);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: var(--text-shadow);
+    font-family: var(--title-font);
+    font-weight: bolder;
+    font-size: 40px;
+}
+
+.offer-sub-title {
+    margin: 10px auto;
+    color: var(--primary-text-color);
+    font-family: var(--secondary-font);
+    font-size: 16px;
+    font-weight: 500;
+    opacity: 0.7;
+}
 .offer-grid {
     display: flex;
     flex-wrap: nowrap;
@@ -161,6 +184,13 @@
         font-size: calc(0.65rem + 0.15vw);
         padding: calc(0.35rem + 0.15vw) calc(0.7rem + 0.3vw);
     }
+         .cat-offer-title {
+             font-size: 25px;
+         }
+    
+         .offer-sub-title {
+             font-size: 12px;
+         }
 }
 
 @media (max-width: 576px) {
@@ -199,5 +229,12 @@
         font-size: calc(0.6rem + 0.1vw);
         padding: calc(0.3rem + 0.1vw) calc(0.6rem + 0.2vw);
     }
+        .cat-offer-title {
+            font-size: 20px;
+        }
+    
+        .offer-sub-title {
+            font-size: 10px;
+        }
 }
 

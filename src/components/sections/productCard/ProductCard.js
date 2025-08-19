@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 const ProductCard = ({ item }) => {
-    
     const { data: favorites, isFavoritesLoading } = useFavorites();
     const addFavorite = useAddFavorite();
     const removeFavorite = useRemoveFavorite();
@@ -19,11 +18,10 @@ const ProductCard = ({ item }) => {
     const [isWishlisted, setIsWishlisted] = useState(false);
     const [heartAnimation, setHeartAnimation] = useState(false);
     const [cartAnimation, setCartAnimation] = useState(false);
-    const [imageIndex, setImageIndex] = useState(0);
+    const [showSecondImage, setShowSecondImage] = useState(false);
     const [hoverState, setHoverState] = useState(false);
     const [isTouchActive, setIsTouchActive] = useState(false);
     const [loadingState, setLoadingState] = useState(true);
-    const [imageFade, setImageFade] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(() => setLoadingState(false), 500);
@@ -34,11 +32,16 @@ const ProductCard = ({ item }) => {
         try {
             const imageData = item?.ImagePath;
             if (!imageData) return ['https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop'];
+
             const parsedImages = typeof imageData === 'string' ? JSON.parse(imageData) : imageData;
             if (!Array.isArray(parsedImages)) return ['https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop'];
-            return parsedImages.length > 0
+
+            const validImages = parsedImages.length > 0
                 ? parsedImages.map(img => img.startsWith('http') ? img : `https://app.bmgjewellers.com${img}`)
                 : ['https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop'];
+
+            // Only return first 2 images
+            return validImages.slice(0, 2);
         } catch (error) {
             console.error('Error parsing product images:', error);
             return ['https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop'];
@@ -46,16 +49,11 @@ const ProductCard = ({ item }) => {
     };
 
     const productImages = getProductImages();
-    const multipleImages = productImages.length > 1;
-    const mainImage = productImages[imageIndex];
+    const hasMultipleImages = productImages.length > 1;
     const productName = (item?.SUBITEMNAME || item?.ITEMNAME || 'Jewelry Item').toLowerCase();
-
-
     const currentPrice = parseFloat(item?.GrandTotal) > 0
         ? parseFloat(item.GrandTotal)
         : parseFloat(item?.RATE || 0);
-
-  
 
     useEffect(() => {
         if (!isFavoritesLoading && favorites?.data && item?.SNO) {
@@ -63,31 +61,22 @@ const ProductCard = ({ item }) => {
         }
     }, [favorites, item?.SNO, isFavoritesLoading]);
 
+    // Handle door animation timing
     useEffect(() => {
-        let timer;
-        if ((hoverState || isTouchActive) && multipleImages) {
-            timer = setInterval(() => {
-                setImageFade(true);
-                setTimeout(() => {
-                    setImageIndex((prev) => {
-                        const next = (prev + 1) % productImages.length;
-                        return next;
-                    });
-                    setImageFade(false);
-                }, 300);
-            }, 2500);
+        let hoverTimer;
+
+        if ((hoverState || isTouchActive) && hasMultipleImages) {
+            hoverTimer = setTimeout(() => {
+                setShowSecondImage(true);
+            }, 100); // Faster trigger for smoother animation
+        } else if (!(hoverState || isTouchActive) && hasMultipleImages) {
+            setShowSecondImage(false);
         }
+
         return () => {
-            if (timer) clearInterval(timer);
-            if (!(hoverState || isTouchActive) && multipleImages) {
-                setImageFade(true);
-                setTimeout(() => {
-                    setImageIndex(0);
-                    setImageFade(false);
-                }, 300);
-            }
+            if (hoverTimer) clearTimeout(hoverTimer);
         };
-    }, [hoverState, isTouchActive, multipleImages, productImages.length]);
+    }, [hoverState, isTouchActive, hasMultipleImages]);
 
     const addItemToCart = (e) => {
         e.preventDefault();
@@ -126,11 +115,13 @@ const ProductCard = ({ item }) => {
     const toggleWishlist = (e) => {
         e.preventDefault();
         e.stopPropagation();
+
         if (!isAuthenticated) {
             toast.info('🔐 Please log in to add items to your favorite.');
             history.push('/login', { from: location.pathname });
             return;
         }
+
         if (!item?.SNO) return;
 
         setHeartAnimation(true);
@@ -189,7 +180,8 @@ const ProductCard = ({ item }) => {
         setIsTouchActive((prev) => !prev);
     };
 
-    const isInCart = Array.isArray(cartItems?.data) && cartItems.data.some(cartItem => cartItem.itemTagSno === item?.SNO);
+    const isInCart = Array.isArray(cartItems?.data) &&
+        cartItems.data.some(cartItem => cartItem.itemTagSno === item?.SNO);
 
     if (loadingState || !item) {
         return (
@@ -217,17 +209,70 @@ const ProductCard = ({ item }) => {
                 onTouchStart={handleTouchToggle}
             >
                 <div className="image-wrapper">
-                    <img
-                        src={mainImage}
-                        alt={productName}
-                        className={`item-image ${imageFade ? 'hide-image' : 'show-image'}`}
-                        onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = '/fallback-image.jpg';
-                        }}
-                    />
+                    <div className="image-container">
+                        {/* Main Image (Always visible, splits on hover) */}
+                        <img
+                            src={productImages[0]}
+                            alt={productName}
+                            className="main-image"
+                            onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = '/fallback-image.jpg';
+                            }}
+                        />
 
-                   
+                        {/* Door Animation Container (Only active on hover) */}
+                        {hasMultipleImages && (
+                            <div className={`door-container ${showSecondImage ? 'doors-open' : 'doors-closed'}`}>
+                                {/* Left Door (Left Half of First Image) */}
+                                <div className="door left-door">
+                                    <img
+                                        src={productImages[0]}
+                                        alt={productName}
+                                        className="door-image left-image"
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = '/fallback-image.jpg';
+                                        }}
+                                    />
+                                </div>
+
+                                {/* Right Door (Right Half of First Image) */}
+                                <div className="door right-door">
+                                    <img
+                                        src={productImages[0]}
+                                        alt={productName}
+                                        className="door-image right-image"
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = '/fallback-image.jpg';
+                                        }}
+                                    />
+                                </div>
+
+                                {/* Second Image (Behind doors) */}
+                                <div className="background-image">
+                                    <img
+                                        src={productImages[1]}
+                                        alt={productName}
+                                        className="second-image"
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = productImages[0];
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Image Indicator Dots */}
+                        {hasMultipleImages && (
+                            <div className="image-indicator">
+                                <div className={`indicator-dot ${!showSecondImage ? 'active' : ''}`}></div>
+                                <div className={`indicator-dot ${showSecondImage ? 'active' : ''}`}></div>
+                            </div>
+                        )}
+                    </div>
 
                     <div className={`quick-actions ${hoverState || isTouchActive ? 'show-actions' : ''}`}>
                         <button
@@ -238,6 +283,7 @@ const ProductCard = ({ item }) => {
                         >
                             <RefreshCw size={14} />
                         </button>
+
                         <button
                             className={`action-buttons add-cart-btn ${cartAnimation ? 'cart-animation' : ''}`}
                             onClick={addItemToCart}
@@ -246,6 +292,7 @@ const ProductCard = ({ item }) => {
                         >
                             <span className="add-button-text">{isInCart ? 'In Cart' : 'Add to Cart'}</span>
                         </button>
+
                         <button
                             className={`action-button wish-btn ${heartAnimation ? 'heart-animation' : ''}`}
                             onClick={toggleWishlist}
@@ -267,13 +314,14 @@ const ProductCard = ({ item }) => {
                         <span className="new-price">
                             ₹{currentPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                         </span>
-                       
                     </div>
                 </div>
             </div>
-            <style >{`
+
+            <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&display=swap');
                 @import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
+                
                 .card-container {
                     width: 100%;
                     max-width: 300px;
@@ -311,40 +359,134 @@ const ProductCard = ({ item }) => {
                     overflow: hidden;
                 }
 
-                .item-image {
+                .image-container {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                }
+
+                /* Main Image (Default state) */
+                .main-image {
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
-                    transition: opacity 0.3s ease, transform 0.6s ease;
                     filter: brightness(1.02);
+                    transition: all 0.3s ease;
                 }
 
-                .item-image.show-image {
+                /* Door Animation Styles */
+                .door-container {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden;
+                    opacity: 0;
+                    transition: opacity 0.2s ease;
+                }
+
+                .doors-open {
                     opacity: 1;
                 }
 
-                .item-image.hide-image {
-                    opacity: 0;
+                .background-image {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 1;
                 }
 
-                .product-item:hover .item-image {
-                    transform: scale(1.08);
+                .second-image {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
                     filter: brightness(1.05);
                 }
 
-                .sale-tag {
+                .door {
                     position: absolute;
-                    top: 8px;
-                    left: 8px;
-                    background: linear-gradient(135deg, #dc3545, #c82333);
-                    color: white;
-                    padding: 4px 8px;
-                    border-radius: 8px;
-                    font-family: 'Inter', sans-serif;
-                    font-size: 0.75rem;
-                    font-weight: 600;
-                    z-index: 4;
-                    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+                    top: 0;
+                    width: 50%;
+                    height: 100%;
+                    overflow: hidden;
+                    z-index: 2;
+                    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                }
+
+                .left-door {
+                    left: 0;
+                    transform-origin: left center;
+                }
+
+                .right-door {
+                    right: 0;
+                    transform-origin: right center;
+                }
+
+                .door-image {
+                    width: 200%; /* Double width to show full image */
+                    height: 100%;
+                    object-fit: cover;
+                    filter: brightness(1.02);
+                }
+
+                .left-image {
+                    object-position: left center;
+                }
+
+                .right-image {
+                    object-position: right center;
+                    transform: translateX(-50%); /* Shift to show right half */
+                }
+
+                /* Door States */
+                .doors-closed .left-door {
+                    transform: translateX(0);
+                }
+
+                .doors-closed .right-door {
+                    transform: translateX(0);
+                }
+
+                .doors-open .left-door {
+                    transform: translateX(-100%);
+                }
+
+                .doors-open .right-door {
+                    transform: translateX(100%);
+                }
+
+                .product-item:hover .main-image,
+                .product-item:hover .door-image,
+                .product-item:hover .second-image {
+                    filter: brightness(1.05);
+                }
+
+                /* Image Indicator */
+                .image-indicator {
+                    position: absolute;
+                    bottom: 8px;
+                    right: 8px;
+                    display: flex;
+                    gap: 4px;
+                    z-index: 10;
+                }
+
+                .indicator-dot {
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.6);
+                    transition: all 0.3s ease;
+                    backdrop-filter: blur(4px);
+                }
+
+                .indicator-dot.active {
+                    background: #ffffff;
+                    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
                 }
 
                 .quick-actions {
@@ -356,7 +498,7 @@ const ProductCard = ({ item }) => {
                     gap: 8px;
                     opacity: 0;
                     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                    z-index: 3;
+                    z-index: 10;
                 }
 
                 .show-actions {
@@ -374,9 +516,11 @@ const ProductCard = ({ item }) => {
                     color: #444;
                     border-radius: 18px;
                     padding: 0 10px;
+                    background: #ffffff;
                     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                     cursor: pointer;
-                    touch-action: manipulation; /* Prevent default touch behaviors like scrolling */
+                    touch-action: manipulation;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
                 }
 
                 .action-buttons {
@@ -393,11 +537,12 @@ const ProductCard = ({ item }) => {
                     cursor: pointer;
                     font-size: clamp(0.4rem, 1vw, 0.2rem) !important;
                     touch-action: manipulation;
+                    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 }
 
                 .add-cart-btn {
                     color: #303030;
-                    font-family: 'Gloock';
+                    font-family: 'Gloock', serif;
                     font-weight: bolder;
                     min-width: auto;
                     border: none !important;
@@ -412,6 +557,7 @@ const ProductCard = ({ item }) => {
 
                 .add-cart-btn:hover {
                     color: #cd865c;
+                    background: #f6f5f0;
                 }
 
                 .action-button:disabled {
@@ -487,23 +633,6 @@ const ProductCard = ({ item }) => {
                     color: #1a202c;
                 }
 
-                .old-price {
-                    font-family: 'Montserrat', sans-serif;
-                    font-size: 0.85rem;
-                    font-weight: 400;
-                    color: #a0aec0;
-                    text-decoration: line-through;
-                }
-
-                .click-overlay {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    z-index: 1;
-                }
-
                 /* Touch Device Optimizations */
                 @media (hover: none) and (pointer: coarse) {
                     .quick-actions {
@@ -540,9 +669,6 @@ const ProductCard = ({ item }) => {
                     .new-price {
                         font-size: 0.8rem;
                     }
-                    .old-price {
-                        font-size: 0.8rem;
-                    }
                     .action-button {
                         min-width: 32px;
                         height: 32px;
@@ -552,13 +678,6 @@ const ProductCard = ({ item }) => {
                         min-width: 32px;
                         height: 32px;
                         padding: 0 8px;
-                    }
-                    .button-text {
-                        font-size: 0.7rem;
-                    }
-                    .sale-tag {
-                        font-size: 0.7rem;
-                        padding: 3px 6px;
                     }
                     .quick-actions {
                         bottom: 8px;
@@ -583,9 +702,6 @@ const ProductCard = ({ item }) => {
                     .new-price {
                         font-size: 0.7rem;
                     }
-                    .old-price {
-                        font-size: 0.75rem;
-                    }
                     .action-button {
                         min-width: 26px;
                         height: 26px;
@@ -598,15 +714,6 @@ const ProductCard = ({ item }) => {
                     }
                     .add-cart-btn {
                         padding: 0 6px;
-                    }
-                    .button-text {
-                        font-size: 0.65rem;
-                    }
-                    .sale-tag {
-                        font-size: 0.65rem;
-                        padding: 2px 5px;
-                        top: 6px;
-                        left: 6px;
                     }
                 }
 
@@ -630,9 +737,6 @@ const ProductCard = ({ item }) => {
                     .action-buttons {
                         min-width: 24px;
                         height: 24px;
-                    }
-                    .button-text {
-                        font-size: 0.6rem;
                     }
                 }
             `}</style>

@@ -77,6 +77,15 @@ const OurCategory = () => {
 
     return (
         <section className="elegant-category-section">
+             <div className=' cat-content-container'>
+                <h2 className='content-title'>
+                        BMG WORLD
+                </h2>
+                <span className='content-subtitle'>  Where heritage meets design — explore by category. </span>
+              
+                </div>   
+
+
             <div className="elegant-container">
                 <div
                     className="elegant-scroll-container"

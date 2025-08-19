@@ -24,6 +24,8 @@ import ShopByRecipient from './ShopByRecipient';
 import './HomeContent.css';
 import JewelryShowcase from './jewelleryShowCase';
 import RecentlyViewedWrapper from '../../layouts/RecentlyViewedWrapper';
+import Testimonials from '../../Testimonials/Testimonials';
+// import Blog from './Blog'
 
 class Content extends Component {
     render() {
@@ -49,8 +51,9 @@ class Content extends Component {
                 <Onsale/>
                 <Video/>
                 <RecentlyViewedWrapper/>
-               
-                
+                <Testimonials />
+            
+
             </Fragment>
         );
     }

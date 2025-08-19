@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
 import Backtotop from "./Backtotop";
-import logo from "../../assets/img/logo1.jpg";
+import logo from "./logo.png";
 import './Footer.css'
 
 class Footertwo extends Component {
@@ -26,21 +26,61 @@ class Footertwo extends Component {
                       aliqua.
                     </p> */}
                     <div className="social-links mt-40">
-                      <Link to="#">
+                      <a href="https://www.facebook.com/bmgjewellersmadurai?mibextid=ZbWKwL" target="_blank" rel="noopener noreferrer">
                         <i className="fab fa-facebook-f" />
-                      </Link>
-                      <Link to="#">
+                      </a>
+                      <a href="https://x.com/BMGjewellers24?t=bMxPT0NbhA5RzvLl5pCdLA&s=09" target="_blank" rel="noopener noreferrer">
                         <i className="fab fa-twitter" />
-                      </Link>
-                      <Link to="#">
-                        <i className="fab fa-behance" />
-                      </Link>
-                      <Link to="#">
+                      </a>
+                      <a href="https://www.instagram.com/bmgjewellers_madurai?igsh=MWxyZGIxbnl5aDc5Nw==" target="_blank" rel="noopener noreferrer">
+                        <i className="fab fa-instagram" />
+                      </a>
+                      {/* <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
                         <i className="fab fa-linkedin" />
-                      </Link>
-                      <Link to="#">
+                      </a> */}
+                      <a href="https://youtube.com/@bmgjewellersmadurai?si=FvRFbXc7tEAkzSUu" target="_blank" rel="noopener noreferrer">
                         <i className="fab fa-youtube" />
-                      </Link>
+                      </a>
+                    </div>
+                    
+                    {/* Download App Section */}
+                    <div className="download-app-section mt-30">
+                      <h6 className="mb-3" style={{fontWeight: '600', color: '#000'}}>Download Our App</h6>
+                      <div className="app-download-links">
+                        <a 
+                          href="https://play.google.com/store/apps/details?id=com.jk_08.newapp&pcampaignid=web_share" 
+                          className="app-download-link"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            display: 'inline-block',
+                            marginRight: '10px',
+                            marginBottom: '10px'
+                          }}
+                        >
+                          <img 
+                            src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" 
+                            alt="Download on App Store" 
+                            style={{height: '40px'}}
+                          />
+                        </a>
+                        <a 
+                          href="https://play.google.com/store/apps/details?id=com.jk_08.newapp&pcampaignid=web_share" 
+                          className="app-download-link"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            display: 'inline-block',
+                            marginBottom: '10px'
+                          }}
+                        >
+                          <img 
+                            src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" 
+                            alt="Get it on Google Play" 
+                            style={{height: '40px'}}
+                          />
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>

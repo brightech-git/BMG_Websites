@@ -25,6 +25,8 @@ import './HomeContent.css';
 import JewelryShowcase from './jewelleryShowCase';
 import RecentlyViewedWrapper from '../../layouts/RecentlyViewedWrapper';
 //import AppointmentPage from '../../pages/virtualShop/VirtualShop';
+import Testimonials from '../../Testimonials/Testimonials';
+// import Blog from './Blog'
 
 class Content extends Component {
     render() {
@@ -54,6 +56,9 @@ class Content extends Component {
                 {/* <AppointmentPage /> */}
                
                 
+                <Testimonials />
+            
+
             </Fragment>
         );
     }

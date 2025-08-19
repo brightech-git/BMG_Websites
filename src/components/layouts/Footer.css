@@ -28,13 +28,15 @@
 
 .social-links {
   margin-top: 40px;
+  
 }
 
 .social-links a {
-  color: var(--footer-text-color);
+  color: #fff!important;
   margin-right: 16px;
   font-size: 18px;
   transition: color 0.2s;
+  background-color: rgb(112, 111, 109)!important;
 }
 
 .social-links a:hover {

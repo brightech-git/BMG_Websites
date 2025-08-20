@@ -327,7 +327,7 @@ const Header = ({ isAuthenticated }) => {
         <div className="auth-actions">
           {isAuthenticated ? (
             <div className="auth-button logout-trigger" onClick={handleLogout}>
-              <span className="auth-icon logout-icon">🚪</span>
+              <span className="auth-icon logout-icon"></span>
               <span className="auth-text">Log Out</span>
             </div>
           ) : (

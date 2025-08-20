@@ -85,7 +85,7 @@
 .ticker-content {
   display: flex;
   white-space: nowrap;
-  animation: tickerScroll 25s linear infinite;
+  animation: tickerScroll 15s linear infinite;
   will-change: transform;
 }
 
@@ -191,7 +191,7 @@
 }
 
 .logout-trigger {
-  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  background: linear-gradient(135deg, #d48e87, #da8f86);
   color: white;
 }
 

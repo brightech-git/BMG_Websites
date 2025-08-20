@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
 import Backtotop from "./Backtotop";
 import logo from "./logo.png";
-import './Footer.css'
+import "./Footer.css";
 
 class Footertwo extends Component {
   render() {
@@ -26,58 +26,79 @@ class Footertwo extends Component {
                       aliqua.
                     </p> */}
                     <div className="social-links mt-40">
-                      <a href="https://www.facebook.com/bmgjewellersmadurai?mibextid=ZbWKwL" target="_blank" rel="noopener noreferrer">
+                      <a
+                        href="https://www.facebook.com/bmgjewellersmadurai?mibextid=ZbWKwL"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         <i className="fab fa-facebook-f" />
                       </a>
-                      <a href="https://x.com/BMGjewellers24?t=bMxPT0NbhA5RzvLl5pCdLA&s=09" target="_blank" rel="noopener noreferrer">
+                      <a
+                        href="https://x.com/BMGjewellers24?t=bMxPT0NbhA5RzvLl5pCdLA&s=09"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         <i className="fab fa-twitter" />
                       </a>
-                      <a href="https://www.instagram.com/bmgjewellers_madurai?igsh=MWxyZGIxbnl5aDc5Nw==" target="_blank" rel="noopener noreferrer">
+                      <a
+                        href="https://www.instagram.com/bmgjewellers_madurai?igsh=MWxyZGIxbnl5aDc5Nw=="
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         <i className="fab fa-instagram" />
                       </a>
                       {/* <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
                         <i className="fab fa-linkedin" />
                       </a> */}
-                      <a href="https://youtube.com/@bmgjewellersmadurai?si=FvRFbXc7tEAkzSUu" target="_blank" rel="noopener noreferrer">
+                      <a
+                        href="https://youtube.com/@bmgjewellersmadurai?si=FvRFbXc7tEAkzSUu"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         <i className="fab fa-youtube" />
                       </a>
                     </div>
-                    
+
                     {/* Download App Section */}
                     <div className="download-app-section mt-30">
-                      <h6 className="mb-3" style={{fontWeight: '600', color: '#000'}}>Download Our App</h6>
+                      <h6
+                        className="mb-3"
+                        style={{ fontWeight: "600", color: "#000" }}
+                      >
+                        Download Our App
+                      </h6>
                       <div className="app-download-links">
-                        <a 
-                          href="https://play.google.com/store/apps/details?id=com.jk_08.newapp&pcampaignid=web_share" 
+                        <a
+                          href="https://play.google.com/store/apps/details?id=com.jk_08.newapp&pcampaignid=web_share"
                           className="app-download-link"
                           target="_blank"
                           rel="noopener noreferrer"
                           style={{
-                            display: 'inline-block',
-                            marginRight: '10px',
-                            marginBottom: '10px'
+                            display: "inline-block",
+                            marginRight: "10px",
+                            marginBottom: "10px",
                           }}
                         >
-                          <img 
-                            src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" 
-                            alt="Download on App Store" 
-                            style={{height: '40px'}}
+                          <img
+                            src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg"
+                            alt="Download on App Store"
+                            style={{ height: "40px" }}
                           />
                         </a>
-                        <a 
-                          href="https://play.google.com/store/apps/details?id=com.jk_08.newapp&pcampaignid=web_share" 
+                        <a
+                          href="https://play.google.com/store/apps/details?id=com.jk_08.newapp&pcampaignid=web_share"
                           className="app-download-link"
                           target="_blank"
                           rel="noopener noreferrer"
                           style={{
-                            display: 'inline-block',
-                            marginBottom: '10px'
+                            display: "inline-block",
+                            marginBottom: "10px",
                           }}
                         >
-                          <img 
-                            src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" 
-                            alt="Get it on Google Play" 
-                            style={{height: '40px'}}
+                          <img
+                            src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                            alt="Get it on Google Play"
+                            style={{ height: "40px" }}
                           />
                         </a>
                       </div>
@@ -90,7 +111,9 @@ class Footertwo extends Component {
                   <div className="widget nav-widget mb-50">
                     <h4 className="widget-title">Useful Links</h4>
                     <ul className="useful-links">
-                     
+                      <li>
+                        <Link to="/about">About Us</Link>
+                      </li>
                       <li>
                         <Link to="/privacypolicy">Privacy Policy</Link>
                       </li>
@@ -101,7 +124,9 @@ class Footertwo extends Component {
                         <Link to="/delivery&shipping">Delivery-Shiiping Policy</Link>
                       </li> */}
                       <li>
-                        <Link to="/cancellation-return-policy">Cancellation & Return Policy</Link>
+                        <Link to="/cancellation-return-policy">
+                          Cancellation & Return Policy
+                        </Link>
                       </li>
                       <li>
                         <Link to="/refund-policy">Shipping and Returns</Link>
@@ -109,11 +134,13 @@ class Footertwo extends Component {
                       <li>
                         <Link to="/why-choose-us">why choose us</Link>
                       </li>
-                    
-                    
+                      <li>
+                        <Link to="/bangle-size-guide">Bangle Size Guide</Link>
+                      </li>
+                      <li>
+                        <Link to="/ring-size-guide">Ring Size Guide</Link>
+                      </li>
                     </ul>
-
-                  
                   </div>
                 </div>
 
@@ -511,79 +538,79 @@ class Footertwo extends Component {
                 </div>
               </div>
 
-             {/* Third Row */}
-<div className="row mt-3">
-  <div className="col-lg-3 col-sm-6 mb-3">
-    <h6 className="text-dark font-weight-bold">
-      Festival Specials
-    </h6>
-    <ul className="footer-links">
-      <li>
-        <Link to="/shop-left?itemName=FESTIVAL&subItemName=NAVARATRI">
-          Navaratri
-        </Link>
-      </li>
-      <li>
-        <Link to="/shop-left?itemName=FESTIVAL&subItemName=DIWALI">
-          Diwali
-        </Link>
-      </li>
-      <li>
-        <Link to="/shop-left?itemName=FESTIVAL&subItemName=WEDDING SEASON">
-          Wedding Season Picks
-        </Link>
-      </li>
-    </ul>
-  </div>
+              {/* Third Row */}
+              <div className="row mt-3">
+                <div className="col-lg-3 col-sm-6 mb-3">
+                  <h6 className="text-dark font-weight-bold">
+                    Festival Specials
+                  </h6>
+                  <ul className="footer-links">
+                    <li>
+                      <Link to="/shop-left?itemName=FESTIVAL&subItemName=NAVARATRI">
+                        Navaratri
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=FESTIVAL&subItemName=DIWALI">
+                        Diwali
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=FESTIVAL&subItemName=WEDDING SEASON">
+                        Wedding Season Picks
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
 
-  <div className="col-lg-3 col-sm-6 mb-3">
-    <h6 className="text-dark font-weight-bold">Clearance Sale</h6>
-    <ul className="footer-links">
-      <li>
-        <Link to="/shop-left?itemName=CLEARANCE&subItemName=HEAVY DISCOUNT">
-          Heavy Discount
-        </Link>
-      </li>
-      <li>
-        <Link to="/shop-left?itemName=CLEARANCE&subItemName=LAST STOCK">
-          Last Stock Items
-        </Link>
-      </li>
-    </ul>
-  </div>
+                <div className="col-lg-3 col-sm-6 mb-3">
+                  <h6 className="text-dark font-weight-bold">Clearance Sale</h6>
+                  <ul className="footer-links">
+                    <li>
+                      <Link to="/shop-left?itemName=CLEARANCE&subItemName=HEAVY DISCOUNT">
+                        Heavy Discount
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=CLEARANCE&subItemName=LAST STOCK">
+                        Last Stock Items
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
 
-  <div className="col-lg-3 col-sm-6 mb-3">
-    <h6 className="text-dark font-weight-bold">Offers</h6>
-    <ul className="footer-links">
-      <li>
-        <Link to="/shop-left?itemName=OFFERS&subItemName=BUY 2 GET 1">
-          Buy 2 Get 1
-        </Link>
-      </li>
-      <li>
-        <Link to="/shop-left?itemName=OFFERS&subItemName=50% OFF">
-          50% Off
-        </Link>
-      </li>
-    </ul>
-  </div>
+                <div className="col-lg-3 col-sm-6 mb-3">
+                  <h6 className="text-dark font-weight-bold">Offers</h6>
+                  <ul className="footer-links">
+                    <li>
+                      <Link to="/shop-left?itemName=OFFERS&subItemName=BUY 2 GET 1">
+                        Buy 2 Get 1
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=OFFERS&subItemName=50% OFF">
+                        50% Off
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
 
-  <div className="col-lg-3 col-sm-6 mb-3">
-    <h6 className="text-dark font-weight-bold">New Arrivals</h6>
-    <ul className="footer-links">
-      <li>
-        <Link to="/shop-left?itemName=NEW&subItemName=TRENDING">
-          Trending Now
-        </Link>
-      </li>
-      <li>
-        <Link to="/shop-left?itemName=NEW&subItemName=JUST IN">
-          Just In
-        </Link>
-      </li>
-    </ul>
-  </div>
-</div>
+                <div className="col-lg-3 col-sm-6 mb-3">
+                  <h6 className="text-dark font-weight-bold">New Arrivals</h6>
+                  <ul className="footer-links">
+                    <li>
+                      <Link to="/shop-left?itemName=NEW&subItemName=TRENDING">
+                        Trending Now
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/shop-left?itemName=NEW&subItemName=JUST IN">
+                        Just In
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -598,25 +625,30 @@ class Footertwo extends Component {
                 </div>
                 <div className="col-lg-6 col-md-7 order-1 order-md-2">
                   <div className="footer-menu text-center text-md-right py-3">
-                    <span style={{ color: '#cd865c', fontSize: '16px', fontWeight: 'bold' }}>
+                    <span
+                      style={{
+                        color: "#cd865c",
+                        fontSize: "14px",
+                        fontWeight: "bold",
+                      }}
+                    >
                       Powered By
-                    </span>{' '}
+                    </span>{" "}
                     <a
                       href="https://www.brightechsoftware.com/"
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
-                        color: '#404040',
-                        fontSize: '16px',
-                        textDecoration: 'none',
-                        fontWeight: '600',
-                        marginLeft: '4px',
+                        color: "#404040",
+                        fontSize: "14px",
+                        textDecoration: "none",
+                        fontWeight: "500",
+                        marginLeft: "4px",
                       }}
                     >
                       BrightechSoftwareSolution
                     </a>
                   </div>
-
                 </div>
               </div>
             </div>

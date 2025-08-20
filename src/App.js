@@ -45,6 +45,8 @@ import DeliveryShippingPolicy from './components/pages/Policies/DeliveryAndShipp
 import ForgotPassword from './components/pages/ForgotPassword';
 import PaymentSuccess from './components/pages/PaymentSuccess';
 import WhyChooseUs from "./components/pages/Policies/WhyChooseUs";
+import BangleSizeGuide from './components/pages/SizeGuide/BangleSize';
+import RingSizeGuide from './components/pages/SizeGuide/RingSize';
 
 
 function ScrollWatcher() {
@@ -117,6 +119,8 @@ function App() {
         <Route exact path="/refund-policy" component={RefundPolicy} />
         <Route exact path="/terms-conditions" component={TermsConditions} />
         <Route exact path="/why-choose-us" component={WhyChooseUs} />
+        <Route exact path="/bangle-size-guide" component={BangleSizeGuide} />
+        <Route exact path="/ring-size-guide" component={RingSizeGuide} />
 
         <Route exact path="/payment-success/:orderId" component={PaymentSuccess} />
         

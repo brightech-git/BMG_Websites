@@ -68,3 +68,30 @@ export const resetPasswordService = async ({ contactNumber, otp, newPassword }) 
 
     return data; // { message: "Password reset successful" }
 };
+
+// Change Password
+export const changePasswordService = async ({ oldPassword, newPassword }) => {
+    const token = localStorage.getItem("user_token");
+
+    if (!token) {
+        throw new Error("No token found. Please login again.");
+    }
+
+    try {
+        const response = await PublicUrl.post(
+            "/user/change-password", // ✅ ensure leading slash
+            {
+                oldPassword: oldPassword,   // ✅ correctly passed in body
+                newPassword: newPassword,
+            },
+           
+        );
+
+        return response.data; // e.g. { message: "Password changed successfully" }
+    } catch (error) {
+        throw new Error(
+            error.response?.data?.message || error.message || "Failed to change password"
+        );
+    }
+};
+

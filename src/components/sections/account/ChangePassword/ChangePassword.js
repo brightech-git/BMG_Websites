@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
 import { FiLock, FiEye, FiEyeOff, FiCheckCircle } from 'react-icons/fi';
+import { useDispatch, useSelector } from 'react-redux';
+import { changePassword } from '../../../../redux/slices/userSlice';
 import AccountSideBar from '../AccountSidebar/AccountSideBar';
 import './ChangePassword.css';
 
 const ChangePassword = () => {
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.user);
+
   const [formData, setFormData] = useState({
     currentPassword: '',
     newPassword: '',
     confirmPassword: ''
   });
+
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
@@ -22,7 +27,7 @@ const ChangePassword = () => {
       ...formData,
       [name]: value
     });
-    
+
     if (errors[name]) {
       setErrors({
         ...errors,
@@ -33,11 +38,11 @@ const ChangePassword = () => {
 
   const validate = () => {
     const newErrors = {};
-    
+
     if (!formData.currentPassword) {
       newErrors.currentPassword = 'Current password is required';
     }
-    
+
     if (!formData.newPassword) {
       newErrors.newPassword = 'New password is required';
     } else if (formData.newPassword.length < 8) {
@@ -49,61 +54,67 @@ const ChangePassword = () => {
     } else if (!/[^A-Za-z0-9]/.test(formData.newPassword)) {
       newErrors.newPassword = 'Password must contain at least one special character';
     }
-    
+
     if (formData.newPassword !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (validate()) {
-      setIsSubmitting(true);
-      
-      // Simulate API call
-      setTimeout(() => {
-        setIsSubmitting(false);
+      try {
+        await dispatch(
+          changePassword({
+            oldPassword: formData.currentPassword, // backend expects oldPassword
+            newPassword: formData.newPassword
+          })
+        ).unwrap();
+
         setSuccess(true);
         setFormData({
           currentPassword: '',
           newPassword: '',
           confirmPassword: ''
         });
-        
+
         setTimeout(() => setSuccess(false), 5000);
-      }, 1500);
+      } catch (err) {
+        console.error('Password change failed:', err);
+      }
     }
   };
 
   return (
     <div className="change-password-page">
       <AccountSideBar />
-      
+
       <main className="change-password-main">
         <div className="change-password-container">
           <div className="change-password-header">
             <h1 className="page-title">Change Password</h1>
             <p className="page-subtitle">Secure your account with a new password</p>
           </div>
-          
+
           {success && (
             <div className="success-message">
               <FiCheckCircle className="success-icon" />
               <span>Your password has been updated successfully!</span>
             </div>
           )}
-          
+
           <form onSubmit={handleSubmit} className="password-form">
+            {/* Current Password */}
             <div className={`form-group ${errors.currentPassword ? 'error' : ''}`}>
               <label htmlFor="currentPassword">Current Password</label>
               <div className="input-wrapper">
                 <FiLock className="input-icon" />
                 <input
-                  type={showCurrentPassword ? "text" : "password"}
+                  type={showCurrentPassword ? 'text' : 'password'}
                   id="currentPassword"
                   name="currentPassword"
                   value={formData.currentPassword}
@@ -115,7 +126,7 @@ const ChangePassword = () => {
                   type="button"
                   className="toggle-password"
                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                  aria-label={showCurrentPassword ? "Hide password" : "Show password"}
+                  aria-label={showCurrentPassword ? 'Hide password' : 'Show password'}
                 >
                   {showCurrentPassword ? <FiEyeOff /> : <FiEye />}
                 </button>
@@ -124,13 +135,14 @@ const ChangePassword = () => {
                 <p className="error-message">{errors.currentPassword}</p>
               )}
             </div>
-            
+
+            {/* New Password */}
             <div className={`form-group ${errors.newPassword ? 'error' : ''}`}>
               <label htmlFor="newPassword">New Password</label>
               <div className="input-wrapper">
                 <FiLock className="input-icon" />
                 <input
-                  type={showNewPassword ? "text" : "password"}
+                  type={showNewPassword ? 'text' : 'password'}
                   id="newPassword"
                   name="newPassword"
                   value={formData.newPassword}
@@ -142,7 +154,7 @@ const ChangePassword = () => {
                   type="button"
                   className="toggle-password"
                   onClick={() => setShowNewPassword(!showNewPassword)}
-                  aria-label={showNewPassword ? "Hide password" : "Show password"}
+                  aria-label={showNewPassword ? 'Hide password' : 'Show password'}
                 >
                   {showNewPassword ? <FiEyeOff /> : <FiEye />}
                 </button>
@@ -165,13 +177,14 @@ const ChangePassword = () => {
                 </div>
               </div>
             </div>
-            
+
+            {/* Confirm Password */}
             <div className={`form-group ${errors.confirmPassword ? 'error' : ''}`}>
               <label htmlFor="confirmPassword">Confirm New Password</label>
               <div className="input-wrapper">
                 <FiLock className="input-icon" />
                 <input
-                  type={showConfirmPassword ? "text" : "password"}
+                  type={showConfirmPassword ? 'text' : 'password'}
                   id="confirmPassword"
                   name="confirmPassword"
                   value={formData.confirmPassword}
@@ -183,7 +196,7 @@ const ChangePassword = () => {
                   type="button"
                   className="toggle-password"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                  aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
                 >
                   {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
                 </button>
@@ -192,14 +205,15 @@ const ChangePassword = () => {
                 <p className="error-message">{errors.confirmPassword}</p>
               )}
             </div>
-            
+
+            {/* Submit */}
             <div className="form-footer">
               <button
                 type="submit"
                 className="submit-btn"
-                disabled={isSubmitting}
+                disabled={loading}
               >
-                {isSubmitting ? (
+                {loading ? (
                   <span className="loading-spinner"></span>
                 ) : (
                   'Update Password'

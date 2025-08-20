@@ -22,7 +22,9 @@ import ImageGallery from "./ImageGallery";
 import { useRecentlyViewed } from "../../../hook/recentlyViewed/useRecentlyViewedQuery";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PriceBreakup from "./PriceBreakUp";
 
+// ProductSkeleton remains unchanged
 const ProductSkeleton = () => (
   <div className="product-skeleton">
     <div className="container">
@@ -102,7 +104,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
     history.push("/login", { from: location.pathname + location.search });
   };
 
-  //share icons data
+  // Share icons data
   const useClickOutside = (ref, callback) => {
     useEffect(() => {
       const handleClickOutside = (event) => {
@@ -121,7 +123,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
     if (showShare) setShowShare(false);
   });
 
-  // Check if product is in wishlist on mount or when favorites/product changes
+  // Check if product is in wishlist
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (product?.SNO && Array.isArray(favorites?.data)) {
@@ -151,24 +153,19 @@ const Shopinfo = ({ sno, Authenticated }) => {
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("add to cart is triggered");
-
     if (!isAuthenticated) {
       showAuthToast("add items to cart");
-      history.push("/login");
       return;
     }
-
     if (!product?.SNO) return;
 
     if (isInCart) {
-      // Optionally show info toast if you want
       toast.info(`${product.ITEMNAME} is already in cart`, {
         position: "top-right",
         autoClose: 2000,
         theme: "colored",
       });
-      return; // Prevent duplicate add
+      return;
     }
 
     const cartItem = {
@@ -189,7 +186,6 @@ const Shopinfo = ({ sno, Authenticated }) => {
   };
 
   const handleBuyNow = (e) => {
-    console.log("buy now triggered");
     e.preventDefault();
     e.stopPropagation();
     if (!isAuthenticated) {
@@ -225,9 +221,6 @@ const Shopinfo = ({ sno, Authenticated }) => {
       ],
       totalAmount: getPrice(product),
     };
-    console.log("checkout", checkoutPayload.items[0].imagePath);
-
-    console.log("Image URL:", encodedImageUrl || "No image found");
 
     history.push("/checkout", checkoutPayload);
   };
@@ -235,7 +228,6 @@ const Shopinfo = ({ sno, Authenticated }) => {
   const handleWishlistToggle = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("add to whislist is triggered");
     if (!isAuthenticated) {
       showAuthToast("manage your wishlist");
       return;
@@ -253,7 +245,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
           });
         },
         onError: () => {
-          setIsWishlisted(true); // Revert optimistic update
+          setIsWishlisted(true);
           toast.error("Failed to remove from wishlist", {
             position: "top-right",
             autoClose: 2000,
@@ -271,7 +263,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
           });
         },
         onError: () => {
-          setIsWishlisted(false); // Revert optimistic update
+          setIsWishlisted(false);
           toast.error("Failed to add to wishlist", {
             position: "top-right",
             autoClose: 2000,
@@ -294,30 +286,29 @@ const Shopinfo = ({ sno, Authenticated }) => {
   if (!product) return <div className="error-message">Product not found</div>;
 
   const images = product.ImagePath
-    ? JSON.parse(product.ImagePath).map(getEncodedImageUrl)
+    ? JSON.parse(product.ImagePath).map(getEncodedImageUrl).filter(Boolean)
     : [];
   const smallsliderpost = images.map((img) => ({ img }));
 
-  const originalPrice = product.GrandTotal * 1.25;
-  const discountPercentage = Math.round(
-    ((originalPrice - product.GrandTotal) / originalPrice) * 100
-  );
+  const originalPrice = product.GrandTotal ? product.GrandTotal * 1.25 : 0;
+  const discountPercentage =
+    originalPrice && product.GrandTotal
+      ? Math.round(((originalPrice - product.GrandTotal) / originalPrice) * 100)
+      : 0;
 
   const currentUrl = window.location.href;
-  const shareText = `Check out this product: ${
-    product.ITEMNAME
-  }\nPrice: ₹${getPrice(product).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-  })}\nDescription: ${
-    product.Description || "Expertly crafted jewelry."
-  }\nImage: ${images[0] || ""}\nLink: ${currentUrl}`;
+  const shareText = `Check out this product: ${product.ITEMNAME || "Unknown Product"
+    }\nPrice: ₹${getPrice(product).toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+    })}\nDescription: ${product.Description || "Expertly crafted jewelry."
+    }\nImage: ${images[0] || ""}\nLink: ${currentUrl}`;
   const encodedText = encodeURIComponent(shareText);
   const encodedUrl = encodeURIComponent(currentUrl);
 
   const whatsappUrl = `https://wa.me/?text=${encodedText}`;
   const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
   const twitterUrl = `https://twitter.com/intent/tweet?text=${encodedText}`;
-  const instagramUrl = `https://www.instagram.com/`; // Note: Instagram web does not support direct sharing; this opens Instagram (on mobile, may prompt app). For full sharing, use app manually with copied link.
+  const instagramUrl = `https://www.instagram.com/`;
 
   return (
     <section className="modern-product-section">
@@ -325,32 +316,39 @@ const Shopinfo = ({ sno, Authenticated }) => {
         <div className="row product-detail-row g-4">
           <div className="col-lg-6 col-md-12">
             <div className="product-gallery-container">
-              <div className="product-badges">
-                {product.NewArrival && (
-                  <span className="badge new-arrival">New</span>
-                )}
-                {product.Top_Trending && (
-                  <span className="badge trending">Trending</span>
-                )}
-                {discountPercentage > 0 && (
-                  <span className="badge discount">-{discountPercentage}%</span>
-                )}
-              </div>
-              <ImageGallery images={smallsliderpost} />
+              {/* Only show badges if their conditions are met */}
+              {(product.NewArrival || product.Top_Trending || discountPercentage > 0) && (
+                <div className="product-badges">
+                  {product.NewArrival && (
+                    <span className="badge new-arrival">New</span>
+                  )}
+                  {product.Top_Trending && (
+                    <span className="badge trending">Trending</span>
+                  )}
+                  {discountPercentage > 0 && (
+                    <span className="badge discount">-{discountPercentage}%</span>
+                  )}
+                </div>
+              )}
+              {smallsliderpost.length > 0 && <ImageGallery images={smallsliderpost} />}
             </div>
           </div>
           <div className="col-lg-6 col-md-12">
             <div className="product-info-container">
               <div className="product-header">
                 <h1 className="product-title">
-                  {product.SUBITEMNAME}{" "}
-                  <span className="sub-product-title">{product.ITEMNAME}</span>
+                  {product.SUBITEMNAME && (
+                    <>
+                      {product.SUBITEMNAME}{" "}
+                      <span className="sub-product-title">{product.ITEMNAME}</span>
+                    </>
+                  )}
+                  {!product.SUBITEMNAME && product.ITEMNAME}
                 </h1>
                 <div className="header-buttons">
                   <button
-                    className={`wishlist-btn ${
-                      isWishlisted ? "wishlisted" : ""
-                    } ${animateHeart ? "animate" : ""}`}
+                    className={`wishlist-btn ${isWishlisted ? "wishlisted" : ""
+                      } ${animateHeart ? "animate" : ""}`}
                     onClick={handleWishlistToggle}
                     aria-label={
                       isWishlisted ? "Remove from wishlist" : "Add to wishlist"
@@ -406,6 +404,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
                   </div>
                 </div>
               )}
+              {/* Hardcoded rating; replace with dynamic data if available */}
               <div className="product-rating">
                 <div className="stars">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -419,15 +418,15 @@ const Shopinfo = ({ sno, Authenticated }) => {
               </div>
               <div className="product-pricing">
                 <div className="price-row">
-                  <span className="current-price">
-                    ₹
-                    {(parseFloat(product?.GrandTotal) > 0
-                      ? parseFloat(product.GrandTotal)
-                      : parseFloat(product?.RATE || 0)
-                    ).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-                  </span>
-
-                  {discountPercentage > 0 && (
+                  {getPrice(product) > 0 && (
+                    <span className="current-price">
+                      ₹
+                      {getPrice(product).toLocaleString("en-IN", {
+                        minimumFractionDigits: 2,
+                      })}
+                    </span>
+                  )}
+                  {discountPercentage > 0 && originalPrice > 0 && (
                     <span className="original-price">
                       ₹
                       {originalPrice.toLocaleString("en-IN", {
@@ -436,43 +435,53 @@ const Shopinfo = ({ sno, Authenticated }) => {
                     </span>
                   )}
                 </div>
-                <div className="price-details">
-                  <small>Inclusive of all taxes • GST {product.GSTPer}</small>
-                </div>
+                {product.GSTPer && (
+                  <div className="price-details">
+                    <small>Inclusive of all taxes • GST {product.GSTPer}</small>
+                  </div>
+                )}
               </div>
-              <div className="product-meta-grid">
-                <div className="meta-item">
-                  <span className="meta-label">Weight</span>
-                  <span className="meta-value">{product.NETWT} grams</span>
+              {(product.NETWT || product.PURITY || product.MaterialFinish || product.ITEMID || product.TAGNO) && (
+                <div className="product-meta-grid">
+                  {product.NETWT && (
+                    <div className="meta-item">
+                      <span className="meta-label">Weight</span>
+                      <span className="meta-value">{product.NETWT} grams</span>
+                    </div>
+                  )}
+                  {product.PURITY && (
+                    <div className="meta-item">
+                      <span className="meta-label">Purity</span>
+                      <span className="meta-value">{product.PURITY}%</span>
+                    </div>
+                  )}
+                  {product.MaterialFinish && (
+                    <div className="meta-item">
+                      <span className="meta-label">Material</span>
+                      <span className="meta-value">{product.MaterialFinish}</span>
+                    </div>
+                  )}
+                  {(product.ITEMID || product.TAGNO) && (
+                    <div className="meta-item">
+                      <span className="meta-label">SKU</span>
+                      <span className="meta-value">
+                        {product.ITEMID}-{product.TAGNO}
+                      </span>
+                    </div>
+                  )}
                 </div>
-                <div className="meta-item">
-                  <span className="meta-label">Purity</span>
-                  <span className="meta-value">{product.PURITY}%</span>
+              )}
+              {product.Description && (
+                <div className="product-description">
+                  <p>{product.Description}</p>
                 </div>
-                <div className="meta-item">
-                  <span className="meta-label">Material</span>
-                  <span className="meta-value">{product.MaterialFinish}</span>
-                </div>
-                <div className="meta-item">
-                  <span className="meta-label">SKU</span>
-                  <span className="meta-value">
-                    {product.ITEMID}-{product.TAGNO}
-                  </span>
-                </div>
-              </div>
-              <div className="product-description">
-                <p>
-                  {product.Description ||
-                    "Expertly crafted jewelry piece designed for modern elegance."}
-                </p>
-              </div>
+              )}
               <div className="product-actions">
                 <button
-                  className={`action-btn add-to-cart ${
-                    isInCart ? "in-cart" : ""
-                  }`}
+                  className={`action-btn add-to-cart ${isInCart ? "in-cart" : ""
+                    }`}
                   onClick={handleAddToCart}
-                  // disabled={isCartLoading}
+                // disabled={isCartLoading}
                 >
                   <i className="fas fa-shopping-cart"></i>
                   {isInCart ? "In Cart" : "Add to Cart"}
@@ -480,142 +489,197 @@ const Shopinfo = ({ sno, Authenticated }) => {
                 <button
                   className="action-btn buy-now"
                   onClick={handleBuyNow}
-                  // disabled={isCartLoading}
+                // disabled={isCartLoading}
                 >
                   <i className="fas fa-bolt"></i>
                   Buy Now
                 </button>
               </div>
-              <div className="product-categories">
-                <div className="category-item">
-                  <span className="category-label">Category:</span>
-                  <Link to="#" className="category-link">
-                    {product.CATNAME}
-                  </Link>
-                  {product.SUBITEMNAME && (
-                    <Link to="#" className="category-link">
-                      {product.SUBITEMNAME}
-                    </Link>
+              {(product.CATNAME || product.SUBITEMNAME || product.CollectionType || product.Occasion) && (
+                <div className="product-categories">
+                  {(product.CATNAME || product.SUBITEMNAME) && (
+                    <div className="category-item">
+                      <span className="category-label">Category:</span>
+                      {product.CATNAME && (
+                        <Link to="#" className="category-link">
+                          {product.CATNAME}
+                        </Link>
+                      )}
+                      {product.SUBITEMNAME && (
+                        <Link to="#" className="category-link">
+                          {product.SUBITEMNAME}
+                        </Link>
+                      )}
+                    </div>
+                  )}
+                  {product.CollectionType && (
+                    <div className="category-item">
+                      <span className="category-label">Collection:</span>
+                      <span className="category-value">
+                        {product.CollectionType}
+                      </span>
+                    </div>
+                  )}
+                  {product.Occasion && (
+                    <div className="category-item">
+                      <span className="category-label">Occasion:</span>
+                      <span className="category-value">
+                        {product.Occasion.replace("_", " ")}
+                      </span>
+                    </div>
                   )}
                 </div>
-                <div className="category-item">
-                  <span className="category-label">Collection:</span>
-                  <span className="category-value">
-                    {product.CollectionType}
-                  </span>
-                </div>
-                <div className="category-item">
-                  <span className="category-label">Occasion:</span>
-                  <span className="category-value">
-                    {product.Occasion?.replace("_", " ")}
-                  </span>
-                </div>
-              </div>
+              )}
             </div>
           </div>
           <div className="col-12">
             <div className="product-details-tabs">
               <Tab.Container defaultActiveKey="description">
                 <Nav variant="pills" className="custom-tabs">
-                  <Nav.Item>
-                    <Nav.Link eventKey="description">
-                      <i className="fas fa-info-circle"></i>
-                      Description
-                    </Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link eventKey="specifications">
-                      <i className="fas fa-cog"></i>
-                      Specifications
-                    </Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link eventKey="care">
-                      <i className="fas fa-heart"></i>
-                      Care Instructions
-                    </Nav.Link>
-                  </Nav.Item>
+                  {(product.Description || product.MaterialFinish || product.NETWT || product.PURITY || product.Gender || product.CollectionType || product.ColorAccents) && (
+                    <>
+                      {product.Description && (
+                        <Nav.Item>
+                          <Nav.Link eventKey="description">
+                            <i className="fas fa-info-circle"></i>
+                            Description
+                          </Nav.Link>
+                        </Nav.Item>
+                      )}
+                      {(product.MaterialFinish || product.NETWT || product.PURITY || product.Gender || product.CollectionType || product.ColorAccents) && (
+                        <Nav.Item>
+                          <Nav.Link eventKey="specifications">
+                            <i className="fas fa-cog"></i>
+                            Specifications
+                          </Nav.Link>
+                        </Nav.Item>
+                      )}
+                      <Nav.Item>
+                        <Nav.Link eventKey="care">
+                          <i className="fas fa-heart"></i>
+                          Care Instructions
+                        </Nav.Link>
+                      </Nav.Item>
+                    </>
+                  )}
                 </Nav>
                 <Tab.Content className="tab-content-container">
-                  <Tab.Pane eventKey="description" className="tab-pane-content">
-                    <div className="description-content">
-                      <h4>Product Description</h4>
-                      <p>
-                        {product.Description ||
-                          "This exquisite piece showcases exceptional craftsmanship."}
-                      </p>
-                      <ul>
-                        <li>Premium quality materials</li>
-                        <li>Expert craftsmanship</li>
-                        <li>Elegant and versatile design</li>
-                        <li>
-                          Perfect for{" "}
-                          {product.Occasion?.replace("_", " ").toLowerCase()}
-                        </li>
-                      </ul>
-                    </div>
-                  </Tab.Pane>
-                  <Tab.Pane
-                    eventKey="specifications"
-                    className="tab-pane-content"
-                  >
-                    <div className="specifications-content">
-                      <h4>Technical Specifications</h4>
-                      <div className="spec-table">
-                        <div className="spec-row">
-                          <span className="spec-label">Material</span>
-                          <span className="spec-value">
-                            {product.MaterialFinish}
-                          </span>
-                        </div>
-                        <div className="spec-row">
-                          <span className="spec-label">Weight</span>
-                          <span className="spec-value">
-                            {product.NETWT} grams
-                          </span>
-                        </div>
-                        <div className="spec-row">
-                          <span className="spec-label">Purity</span>
-                          <span className="spec-value">{product.PURITY}%</span>
-                        </div>
-                        <div className="spec-row">
-                          <span className="spec-label">Gender</span>
-                          <span className="spec-value">{product.Gender}</span>
-                        </div>
-                        <div className="spec-row">
-                          <span className="spec-label">Collection</span>
-                          <span className="spec-value">
-                            {product.CollectionType}
-                          </span>
-                        </div>
-                        <div className="spec-row">
-                          <span className="spec-label">Color Accent</span>
-                          <span className="spec-value">
-                            {product.ColorAccents}
-                          </span>
+                  {product.Description && (
+                    <Tab.Pane eventKey="description" className="tab-pane-content">
+                      <div className="description-content">
+                        <h4>Product Description</h4>
+                        <p>{product.Description}</p>
+                        <ul>
+                          <li>Premium quality materials</li>
+                          <li>Expert craftsmanship</li>
+                          <li>Elegant and versatile design</li>
+                          {product.Occasion && (
+                            <li>
+                              Perfect for{" "}
+                              {product.Occasion.replace("_", " ").toLowerCase()}
+                            </li>
+                          )}
+                        </ul>
+                      </div>
+                    </Tab.Pane>
+                  )}
+                  {(product.MaterialFinish || product.NETWT || product.PURITY || product.Gender || product.CollectionType || product.ColorAccents) && (
+                    <Tab.Pane
+                      eventKey="specifications"
+                      className="tab-pane-content"
+                    >
+                      <div className="specifications-content">
+                        <h4>Product Specifications</h4>
+                        <div className="spec-single-line">
+                          {(() => {
+                            const specParts = [];
+
+                            if (product.MaterialFinish) {
+                              specParts.push(
+                                <span key="material" className="spec-item">
+                                  <span className="spec-label">Crafted from </span>
+                                  <span className="spec-value">{product.MaterialFinish.toLowerCase()}</span>
+                                </span>
+                              );
+                            }
+
+                            if (product.NETWT) {
+                              const weightText = product.PURITY
+                                ? `${product.NETWT} grams with ${product.PURITY}% purity`
+                                : `${product.NETWT} grams`;
+
+                              specParts.push(
+                                <span key="weight" className="spec-item">
+                                  <span className="spec-label">weighing </span>
+                                  <span className="spec-value">{weightText}</span>
+                                </span>
+                              );
+                            }
+
+                            if (product.Gender) {
+                              specParts.push(
+                                <span key="gender" className="spec-item">
+                                  <span className="spec-label">designed for </span>
+                                  <span className="spec-value">{product.Gender.toLowerCase()}</span>
+                                </span>
+                              );
+                            }
+
+                            if (product.CollectionType) {
+                              specParts.push(
+                                <span key="collection" className="spec-item">
+                                  <span className="spec-label">from our </span>
+                                  <span className="spec-value">{product.CollectionType.toLowerCase()}</span>
+                                  <span className="spec-label"> collection</span>
+                                </span>
+                              );
+                            }
+
+                            if (product.ColorAccents) {
+                              specParts.push(
+                                <span key="color" className="spec-item">
+                                  <span className="spec-label">with </span>
+                                  <span className="spec-value">{product.ColorAccents.toLowerCase()}</span>
+                                  <span className="spec-label"> accents</span>
+                                </span>
+                              );
+                            }
+
+                            return specParts.map((part, index) => (
+                              <React.Fragment key={index}>
+                                {part}
+                                {index < specParts.length - 1 && (
+                                  <span className="spec-separator"> • </span>
+                                )}
+                              </React.Fragment>
+                            ));
+                          })()}
                         </div>
                       </div>
-                    </div>
-                  </Tab.Pane>
+                    </Tab.Pane>
+                  )}
                   <Tab.Pane eventKey="care" className="tab-pane-content">
                     <div className="care-content">
-                      <h4>Jewellery Care</h4>
-                      <div className="care-tips">
-                        <div className="care-tip">
-                          <i className="fas fa-box-open"></i>
-                          <p>Store separately in a box or pouch.</p>
-                        </div>
-                        <div className="care-tip">
-                          <i className="fas fa-tint-slash"></i>
-                          <p>Avoid perfumes and water.</p>
-                        </div>
-                        <div className="care-tip">
-                          <i className="fas fa-cloth"></i>
-                          <p>Wipe with soft dry cloth.</p>
-                        </div>
-                        <div className="care-tip">
-                          <i className="fas fa-sun"></i>
-                          <p>Keep away from sunlight.</p>
+                      <h4>Jewellery Care Guide</h4>
+                      <div className="care-paragraphs">
+                        <p>To maintain the beauty and longevity of your jewelry, follow these care instructions:</p>
+                        <div className="care-tips">
+                          <div className="care-tip">
+                            <i className="fas fa-box-open"></i>
+                            <p>Store your jewelry separately in a soft pouch or box to prevent scratches and tangling.</p>
+                          </div>
+                          <div className="care-tip">
+                            <i className="fas fa-tint-slash"></i>
+                            <p>Avoid contact with perfumes, chemicals, and water to preserve the finish and prevent damage.</p>
+                          </div>
+                          <div className="care-tip">
+                            <i className="fas fa-cloth"></i>
+                            <p>Gently wipe with a soft, dry cloth after each use to remove oils and maintain its shine.</p>
+                          </div>
+                          <div className="care-tip">
+                            <i className="fas fa-sun"></i>
+                            <p>Keep away from direct sunlight and extreme temperatures to prevent discoloration.</p>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -623,6 +687,9 @@ const Shopinfo = ({ sno, Authenticated }) => {
                 </Tab.Content>
               </Tab.Container>
             </div>
+          </div>
+          <div className="col-12">
+            <PriceBreakup product={product} />
           </div>
         </div>
       </div>

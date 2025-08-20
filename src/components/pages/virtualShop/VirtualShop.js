@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Form, Button, Alert, Spinner } from 'react-bootstrap';
-import { FaShoppingCart, FaHome, FaHeadset } from 'react-icons/fa';
+import { Container, Row, Col, Form, Button, Alert, Spinner, Modal } from 'react-bootstrap';
+import { FaShoppingCart, FaHome, FaHeadset, FaArrowRight, FaCalendarAlt, FaClock, FaCheckCircle, FaTimes } from 'react-icons/fa';
 import { useCreateAppointment } from '../../../hook/virtualVideo/useVideoAppointment';
-import './AppointmentPage.css'; // Assuming CSS is in a separate file
+import './AppointmentPage.css';
 
 const AppointmentPage = () => {
     const [formData, setFormData] = useState({
@@ -20,39 +20,42 @@ const AppointmentPage = () => {
 
     const [formErrors, setFormErrors] = useState({});
     const [showSuccess, setShowSuccess] = useState(false);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     const { mutate: createAppointment, isLoading, isError, error } = useCreateAppointment();
 
     const categories = ['Gold', 'Gold Polished', 'Silver'];
+
     const subCategories = {
         Gold: [
-            'RINGS',
-            'EARRINGS',
-            'NECKLACES_AND_SETS',
-            'BANGLES_AND_BRACELETS',
-            'ANKLES_AND_TOE_RINGS',
-            'PENDENTS_AND_CHAINS',
-            'MAANG_TIKKA_AND_HAIR_ACCESS',
+            'Rings',
+            'Earrings',
+            'Necklaces and Sets',
+            'Bangles and Bracelets',
+            'Ankles and Toe Rings',
+            'Pendents and Chains',
+            'Maang Tikka and Hair Access',
         ],
         'Gold Polished': [
-            'RINGS',
-            'EARRINGS',
-            'NECKLACES_AND_SETS',
-            'BANGLES_AND_BRACELETS',
-            'ANKLES_AND_TOE_RINGS',
-            'PENDENTS_AND_CHAINS',
-            'MAANG_TIKKA_AND_HAIR_ACCESS',
+            'Rings',
+            'Earrings',
+            'Necklaces and Sets',
+            'Bangles and Bracelets',
+            'Ankles and Toe Rings',
+            'Pendents and Chains',
+            'Maang Tikka and Hair Access',
         ],
         Silver: [
-            'RINGS',
-            'EARRINGS',
-            'NECKLACES_AND_SETS',
-            'BANGLES_AND_BRACELETS',
-            'ANKLES_AND_TOE_RINGS',
-            'PENDENTS_AND_CHAINS',
-            'MAANG_TIKKA_AND_HAIR_ACCESS',
+            'Rings',
+            'Earrings',
+            'Necklaces and Sets',
+            'Bangles and Bracelets',
+            'Ankles and Toe Rings',
+            'Pendents and Chains',
+            'Maang Tikka and Hair Access',
         ],
     };
+
     const languages = ['Tamil', 'English', 'Hindi', 'Telugu', 'Malayalam'];
 
     const handleChange = (e) => {
@@ -102,7 +105,7 @@ const AppointmentPage = () => {
 
         createAppointment(appointmentData, {
             onSuccess: () => {
-                setShowSuccess(true);
+                setShowSuccessModal(true);
                 setFormData({
                     name: '',
                     email: '',
@@ -115,17 +118,20 @@ const AppointmentPage = () => {
                     appointmentDate: '',
                     appointmentTime: '',
                 });
-                setTimeout(() => setShowSuccess(false), 5000);
             },
         });
     };
 
+    const handleCloseModal = () => {
+        setShowSuccessModal(false);
+    };
+
     return (
-        <Container className="my-5 appointment-page">
+        <Container className="my-4 appointment-page">
             {showSuccess && (
                 <Alert
                     variant="success"
-                    className="mb-4 rounded-3 shadow-sm"
+                    className="mb-3 success-alert"
                     onClose={() => setShowSuccess(false)}
                     dismissible
                 >
@@ -134,105 +140,111 @@ const AppointmentPage = () => {
             )}
 
             {isError && (
-                <Alert variant="danger" className="mb-4 rounded-3 shadow-sm" dismissible>
+                <Alert variant="danger" className="mb-3 error-alert" dismissible>
                     {error?.message || 'Failed to book appointment. Please try again.'}
                 </Alert>
             )}
 
-            <Row className="mb-5">
-                <Col lg={6} className="mb-4 mb-lg-0">
-                    <div className="video-container ratio ratio-16x9 shadow">
+            <Row className="mb-4 main-content-row">
+                <Col lg={6} className="mb-3 mb-lg-0">
+                    <div className="video-container ratio ratio-16x9">
                         <iframe
                             src="https://www.youtube.com/embed/dQw4w9WgXcQ"
                             title="Virtual Shopping Demo"
                             allowFullScreen
                             aria-label="Virtual shopping demo video"
+                            className="video-iframe"
                         ></iframe>
                     </div>
                 </Col>
 
                 <Col lg={6}>
-                    <Form
-                        onSubmit={handleSubmit}
-                        className="p-4 rounded-3 shadow form-container"
-                        style={{ background: 'var(--primary-card-color)' }}
-                    >
-                        <h3 className="mb-4 text-center title">Book Your Virtual Appointment</h3>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label className="form-label">Full Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleChange}
-                                isInvalid={!!formErrors.name}
-                                className="form-input"
-                                aria-required="true"
-                            />
-                            <Form.Control.Feedback type="invalid">{formErrors.name}</Form.Control.Feedback>
-                        </Form.Group>
+                    <Form onSubmit={handleSubmit} className="professional-form compact-form">
+                        <h3 className="form-title mb-3">Book Your Virtual Appointment</h3>
 
                         <Row>
                             <Col md={6}>
-                                <Form.Group className="mb-3">
-                                    <Form.Label className="form-label">Email</Form.Label>
+                                <Form.Group className="mb-2 form-group">
+                                    <Form.Label className="professional-label">Full Name</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                        isInvalid={!!formErrors.name}
+                                        className="professional-input compact-input"
+                                        placeholder="Your full name"
+                                        aria-required="true"
+                                    />
+                                    <Form.Control.Feedback type="invalid">{formErrors.name}</Form.Control.Feedback>
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group className="mb-2 form-group">
+                                    <Form.Label className="professional-label">Email Address</Form.Label>
                                     <Form.Control
                                         type="email"
                                         name="email"
                                         value={formData.email}
                                         onChange={handleChange}
                                         isInvalid={!!formErrors.email}
-                                        className="form-input"
+                                        className="professional-input compact-input"
+                                        placeholder="your@email.com"
                                         aria-required="true"
                                     />
                                     <Form.Control.Feedback type="invalid">{formErrors.email}</Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
+                        </Row>
+
+                        <Row>
                             <Col md={6}>
-                                <Form.Group className="mb-3">
-                                    <Form.Label className="form-label">Mobile Number</Form.Label>
+                                <Form.Group className="mb-2 form-group">
+                                    <Form.Label className="professional-label">Mobile Number</Form.Label>
                                     <Form.Control
                                         type="tel"
                                         name="mobileNumber"
                                         value={formData.mobileNumber}
                                         onChange={handleChange}
                                         isInvalid={!!formErrors.mobileNumber}
-                                        className="form-input"
+                                        className="professional-input compact-input"
+                                        placeholder="+91 12345 67890"
                                         aria-required="true"
                                     />
                                     <Form.Control.Feedback type="invalid">{formErrors.mobileNumber}</Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
+                            <Col md={6}>
+                                <Form.Group className="mb-2 form-group">
+                                    <Form.Label className="professional-label">City/Country</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="cityOrCountry"
+                                        value={formData.cityOrCountry}
+                                        onChange={handleChange}
+                                        isInvalid={!!formErrors.cityOrCountry}
+                                        className="professional-input compact-input"
+                                        placeholder="e.g., Chennai"
+                                        aria-required="true"
+                                    />
+                                    <Form.Control.Feedback type="invalid">{formErrors.cityOrCountry}</Form.Control.Feedback>
+                                </Form.Group>
+                            </Col>
                         </Row>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label className="form-label">City/Country</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="cityOrCountry"
-                                value={formData.cityOrCountry}
-                                onChange={handleChange}
-                                isInvalid={!!formErrors.cityOrCountry}
-                                className="form-input"
-                                aria-required="true"
-                            />
-                            <Form.Control.Feedback type="invalid">{formErrors.cityOrCountry}</Form.Control.Feedback>
-                        </Form.Group>
 
                         <Row>
                             <Col md={6}>
-                                <Form.Group className="mb-3">
-                                    <Form.Label className="form-label">Category</Form.Label>
+                                <Form.Group className="mb-2 form-group">
+                                    <Form.Label className="professional-label">Category</Form.Label>
                                     <Form.Select
                                         name="category"
                                         value={formData.category}
                                         onChange={handleChange}
                                         isInvalid={!!formErrors.category}
-                                        className="form-input"
+                                        className="professional-input compact-input professional-select"
                                         aria-required="true"
                                     >
-                                        <option value="">Select a category</option>
+                                        <option value="">Select category</option>
                                         {categories.map((cat) => (
                                             <option key={cat} value={cat}>
                                                 {cat}
@@ -243,22 +255,22 @@ const AppointmentPage = () => {
                                 </Form.Group>
                             </Col>
                             <Col md={6}>
-                                <Form.Group className="mb-3">
-                                    <Form.Label className="form-label">Subcategory</Form.Label>
+                                <Form.Group className="mb-2 form-group">
+                                    <Form.Label className="professional-label">Subcategory</Form.Label>
                                     <Form.Select
                                         name="subCategory"
                                         value={formData.subCategory}
                                         onChange={handleChange}
                                         disabled={!formData.category}
                                         isInvalid={!!formErrors.subCategory}
-                                        className="form-input"
+                                        className="professional-input compact-input professional-select"
                                         aria-required="true"
                                     >
-                                        <option value="">Select a subcategory</option>
+                                        <option value="">Select subcategory</option>
                                         {formData.category &&
                                             subCategories[formData.category].map((sub) => (
                                                 <option key={sub} value={sub}>
-                                                    {sub.replace('_', ' ')}
+                                                    {sub.replace(/_/g, ' ')}
                                                 </option>
                                             ))}
                                     </Form.Select>
@@ -267,67 +279,77 @@ const AppointmentPage = () => {
                             </Col>
                         </Row>
 
-                        <Form.Group className="mb-3">
-                            <Form.Label className="form-label">Preferred Language</Form.Label>
-                            <Form.Select
-                                name="preferredLanguage"
-                                value={formData.preferredLanguage}
-                                onChange={handleChange}
-                                isInvalid={!!formErrors.preferredLanguage}
-                                className="form-input"
-                                aria-required="true"
-                            >
-                                <option value="">Select a language</option>
-                                {languages.map((lang) => (
-                                    <option key={lang} value={lang}>
-                                        {lang}
-                                    </option>
-                                ))}
-                            </Form.Select>
-                            <Form.Control.Feedback type="invalid">{formErrors.preferredLanguage}</Form.Control.Feedback>
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label className="form-label">Message (Optional)</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                rows={3}
-                                name="message"
-                                value={formData.message}
-                                onChange={handleChange}
-                                className="form-input"
-                            />
-                        </Form.Group>
+                        <Row>
+                            <Col md={6}>
+                                <Form.Group className="mb-2 form-group">
+                                    <Form.Label className="professional-label">Preferred Language</Form.Label>
+                                    <Form.Select
+                                        name="preferredLanguage"
+                                        value={formData.preferredLanguage}
+                                        onChange={handleChange}
+                                        isInvalid={!!formErrors.preferredLanguage}
+                                        className="professional-input compact-input professional-select"
+                                        aria-required="true"
+                                    >
+                                        <option value="">Select language</option>
+                                        {languages.map((lang) => (
+                                            <option key={lang} value={lang}>
+                                                {lang}
+                                            </option>
+                                        ))}
+                                    </Form.Select>
+                                    <Form.Control.Feedback type="invalid">{formErrors.preferredLanguage}</Form.Control.Feedback>
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group className="mb-2 form-group">
+                                    <Form.Label className="professional-label">Message (Optional)</Form.Label>
+                                    <Form.Control
+                                        as="textarea"
+                                        rows={2}
+                                        name="message"
+                                        value={formData.message}
+                                        onChange={handleChange}
+                                        className="professional-input compact-input professional-textarea"
+                                        placeholder="Your preferences..."
+                                    />
+                                </Form.Group>
+                            </Col>
+                        </Row>
 
                         <Row>
                             <Col md={6}>
-                                <Form.Group className="mb-3">
-                                    <Form.Label className="form-label">Appointment Date</Form.Label>
-                                    <Form.Control
-                                        type="date"
-                                        name="appointmentDate"
-                                        value={formData.appointmentDate}
-                                        onChange={handleChange}
-                                        min={new Date().toISOString().split('T')[0]}
-                                        isInvalid={!!formErrors.appointmentDate}
-                                        className="form-input"
-                                        aria-required="true"
-                                    />
+                                <Form.Group className="mb-3 form-group">
+                                    <Form.Label className="professional-label">Appointment Date</Form.Label>
+                                    <div className="input-with-icon">
+                                        <Form.Control
+                                            type="date"
+                                            name="appointmentDate"
+                                            value={formData.appointmentDate}
+                                            onChange={handleChange}
+                                            min={new Date().toISOString().split('T')[0]}
+                                            isInvalid={!!formErrors.appointmentDate}
+                                            className="professional-input compact-input with-icon"
+                                            aria-required="true"
+                                        />
+                                    </div>
                                     <Form.Control.Feedback type="invalid">{formErrors.appointmentDate}</Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
                             <Col md={6}>
-                                <Form.Group className="mb-3">
-                                    <Form.Label className="form-label">Appointment Time</Form.Label>
-                                    <Form.Control
-                                        type="time"
-                                        name="appointmentTime"
-                                        value={formData.appointmentTime}
-                                        onChange={handleChange}
-                                        isInvalid={!!formErrors.appointmentTime}
-                                        className="form-input"
-                                        aria-required="true"
-                                    />
+                                <Form.Group className="mb-3 form-group">
+                                    <Form.Label className="professional-label">Appointment Time</Form.Label>
+                                    <div className="input-with-icon">
+                                        <Form.Control
+                                            type="time"
+                                            name="appointmentTime"
+                                            value={formData.appointmentTime}
+                                            onChange={handleChange}
+                                            isInvalid={!!formErrors.appointmentTime}
+                                            className="professional-input compact-input with-icon"
+                                            aria-required="true"
+                                        />
+                                    </div>
                                     <Form.Control.Feedback type="invalid">{formErrors.appointmentTime}</Form.Control.Feedback>
                                 </Form.Group>
                             </Col>
@@ -336,9 +358,8 @@ const AppointmentPage = () => {
                         <Button
                             variant="primary"
                             type="submit"
-                            className="w-100 py-2 submit-btn"
+                            className="professional-submit-btn compact-submit"
                             disabled={isLoading}
-                            style={{ background: 'var(--button-bg)', border: 'none' }}
                         >
                             {isLoading ? (
                                 <>
@@ -360,19 +381,13 @@ const AppointmentPage = () => {
                 </Col>
             </Row>
 
-            <section className="py-5 how-it-works rounded-3" style={{ background: 'var(--feature-bg-color)' }}>
-                <h2 className="text-center mb-5 title">How It Works</h2>
-                <Row>
-                    <Col md={4} className="text-center mb-4 mb-md-0">
-                        <div
-                            className="p-4 rounded-3 shadow-sm step-card"
-                            style={{ background: 'var(--secondary-card-color)' }}
-                        >
-                            <div
-                                className="rounded-circle d-inline-flex align-items-center justify-content-center mb-3 step-number"
-                                style={{ background: 'var(--primary-hover-color)' }}
-                            >
-                                <span className="h4 mb-0">1</span>
+            <section className="how-it-works-section">
+                <h2 className="section-title">How It Works</h2>
+                <Row className="steps-row">
+                    <Col lg={4} md={12} className="step-col">
+                        <div className="step-card">
+                            <div className="step-number">
+                                <span>1</span>
                             </div>
                             <h4 className="step-title">Sign Up Online</h4>
                             <p className="step-text">
@@ -380,16 +395,10 @@ const AppointmentPage = () => {
                             </p>
                         </div>
                     </Col>
-                    <Col md={4} className="text-center mb-4 mb-md-0">
-                        <div
-                            className="p-4 rounded-3 shadow-sm step-card"
-                            style={{ background: 'var(--secondary-card-color)' }}
-                        >
-                            <div
-                                className="rounded-circle d-inline-flex align-items-center justify-content-center mb-3 step-number"
-                                style={{ background: 'var(--primary-hover-color)' }}
-                            >
-                                <span className="h4 mb-0">2</span>
+                    <Col lg={4} md={12} className="step-col">
+                        <div className="step-card">
+                            <div className="step-number">
+                                <span>2</span>
                             </div>
                             <h4 className="step-title">Confirm Appointment</h4>
                             <p className="step-text">
@@ -397,16 +406,10 @@ const AppointmentPage = () => {
                             </p>
                         </div>
                     </Col>
-                    <Col md={4} className="text-center">
-                        <div
-                            className="p-4 rounded-3 shadow-sm step-card"
-                            style={{ background: 'var(--secondary-card-color)' }}
-                        >
-                            <div
-                                className="rounded-circle d-inline-flex align-items-center justify-content-center mb-3 step-number"
-                                style={{ background: 'var(--primary-hover-color)' }}
-                            >
-                                <span className="h4 mb-0">3</span>
+                    <Col lg={4} md={12} className="step-col">
+                        <div className="step-card">
+                            <div className="step-number">
+                                <span>3</span>
                             </div>
                             <h4 className="step-title">Shop via Live Video</h4>
                             <p className="step-text">
@@ -417,31 +420,73 @@ const AppointmentPage = () => {
                 </Row>
             </section>
 
-            <section className="py-5 benefits-section">
-                <Row>
-                    <Col md={4} className="text-center mb-4 mb-md-0">
-                        <div className="p-3">
-                            <FaShoppingCart size={48} className="text-primary mb-3" style={{ color: 'var(--primary-hover-color)' }} />
+            <section className="benefits-section">
+                <Row className="benefits-row">
+                    <Col lg={4} md={6} sm={12} className="benefit-col">
+                        <div className="benefit-cards">
+                            <FaShoppingCart size={40} className="benefit-icon" />
                             <h4 className="benefit-title">Shop from Anywhere</h4>
-                            <p className="benefit-text">Access our store from any location with an internet connection.</p>
                         </div>
                     </Col>
-                    <Col md={4} className="text-center mb-4 mb-md-0">
-                        <div className="p-3">
-                            <FaHome size={48} className="text-primary mb-3" style={{ color: 'var(--primary-hover-color)' }} />
+                    <Col lg={4} md={6} sm={12} className="benefit-col">
+                        <div className="benefit-cards">
+                            <FaHome size={40} className="benefit-icon" />
                             <h4 className="benefit-title">Comfort of Your Home</h4>
-                            <p className="benefit-text">Enjoy personalized shopping without leaving your house.</p>
                         </div>
                     </Col>
-                    <Col md={4} className="text-center">
-                        <div className="p-3">
-                            <FaHeadset size={48} className="text-primary mb-3" style={{ color: 'var(--primary-hover-color)' }} />
+                    <Col lg={4} md={12} sm={12} className="benefit-col">
+                        <div className="benefit-cards">
+                            <FaHeadset size={40} className="benefit-icon" />
                             <h4 className="benefit-title">Interactive Sales Team</h4>
-                            <p className="benefit-text">Get real-time answers from our experts.</p>
                         </div>
                     </Col>
                 </Row>
             </section>
+
+            {/* Success Modal - Compact Version */}
+            <Modal
+                show={showSuccessModal}
+                onHide={handleCloseModal}
+                centered
+                size="sm"
+                className="success-modal"
+                backdrop="static"
+            >
+                <div className="success-modal-header">
+                    <button
+                        type="button"
+                        className="modal-close-x"
+                        onClick={handleCloseModal}
+                        aria-label="Close"
+                    >
+                        <FaTimes />
+                    </button>
+                    <div className="success-icon">
+                        <FaCheckCircle />
+                    </div>
+                    <h2 className="success-title">Successfully Registered!</h2>
+                </div>
+                <div className="success-modal-body">
+                    <p className="success-message">
+                        Your virtual appointment has been successfully booked. Our expert team will contact you soon to confirm the details.
+                    </p>
+                    <div className="success-details">
+                        <h5>What happens next?</h5>
+                        <ul>
+                            <li>Our team will call you within 10 minutes</li>
+                            <li>We'll confirm your appointment date and time</li>
+                            <li>Get ready for a personalized jewelry shopping experience</li>
+                            <li>You'll receive a video call link before your appointment</li>
+                        </ul>
+                    </div>
+                    <Button
+                        className="close-btn"
+                        onClick={handleCloseModal}
+                    >
+                        Got it, Thanks!
+                    </Button>
+                </div>
+            </Modal>
         </Container>
     );
 };

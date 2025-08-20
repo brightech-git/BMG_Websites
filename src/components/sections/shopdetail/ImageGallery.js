@@ -1,455 +1,421 @@
-import React, { useState, useRef, useEffect } from 'react';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import { FaChevronLeft, FaChevronRight, FaSearchPlus, FaSearchMinus, FaTimes } from 'react-icons/fa';
-import styled from 'styled-components';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import './ImageGallery.css';
 
 const ImageGallery = ({ images }) => {
-    const [nav1, setNav1] = useState(null);
-    const [nav2, setNav2] = useState(null);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isZoomed, setIsZoomed] = useState(false);
-    const [zoomImgSrc, setZoomImgSrc] = useState('');
     const [zoomLevel, setZoomLevel] = useState(1);
+    const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
+    const [isDragging, setIsDragging] = useState(false);
+    const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+    const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
+    const [showZoomPreview, setShowZoomPreview] = useState(false);
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const [showArrows, setShowArrows] = useState(false);
     const zoomRef = useRef(null);
+    const imageRef = useRef(null);
+    const mainImageRef = useRef(null);
+    const zoomTimeoutRef = useRef(null);
+    const containerRef = useRef(null);
 
-    // Custom arrow components
-    const Arrow = ({ onClick, direction }) => (
-        <ArrowButton onClick={onClick} direction={direction}>
-            {direction === 'prev' ? <FaChevronLeft /> : <FaChevronRight />}
-        </ArrowButton>
-    );
-
-    const mainSettings = {
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: true,
-        fade: true,
-        asNavFor: nav2,
-        prevArrow: <Arrow onClick direction="prev" />,
-        nextArrow: <Arrow onClick direction="next" />,
-        beforeChange: (_, next) => setCurrentSlide(next),
-        lazyLoad: 'progressive',
-        speed: 300,
-        cssEase: "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+    // Navigation functions
+    const goToNext = () => {
+        setCurrentSlide(prev => (prev + 1) % images.length);
     };
 
-    const thumbSettings = {
-        slidesToShow: Math.min(images.length, 5),
-        slidesToScroll: 1,
-        asNavFor: nav1,
-        focusOnSelect: true,
-        swipeToSlide: true,
-        arrows: images.length > 5,
-        dots: false,
-        centerMode: images.length > 5,
-        infinite: images.length > 5,
-        prevArrow: <Arrow onClick direction="prev" />,
-        nextArrow: <Arrow onClick direction="next" />,
-        responsive: [
-            {
-                breakpoint: 992,
-                settings: { slidesToShow: Math.min(images.length, 5), centerMode: images.length > 4 }
-            },
-            {
-                breakpoint: 768,
-                settings: { slidesToShow: Math.min(images.length, 3), centerMode: images.length > 3, arrows: false }
-            },
-            {
-                breakpoint: 576,
-                settings: { slidesToShow: Math.min(images.length, 3), centerMode: false, arrows: false }
-            }
-        ]
+    const goToPrev = () => {
+        setCurrentSlide(prev => (prev - 1 + images.length) % images.length);
     };
 
-    const handleImageClick = (imgSrc) => {
-        setZoomImgSrc(imgSrc);
+    const goToSlide = (index) => {
+        setCurrentSlide(index);
+    };
+
+    // Hover zoom functionality - Fixed
+    const handleMouseMove = useCallback((e) => {
+        if (!mainImageRef.current || !containerRef.current) return;
+
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const imageRect = mainImageRef.current.getBoundingClientRect();
+
+        // Calculate relative position within the container
+        const x = ((e.clientX - containerRect.left) / containerRect.width) * 100;
+        const y = ((e.clientY - containerRect.top) / containerRect.height) * 100;
+
+        // Check if mouse is within the main image container
+        const isInside = e.clientX >= containerRect.left && e.clientX <= containerRect.right &&
+            e.clientY >= containerRect.top && e.clientY <= containerRect.bottom;
+
+        if (isInside) {
+            setShowArrows(true);
+            setShowZoomPreview(true);
+
+            // Calculate zoom preview position relative to viewport
+            const previewSize = 200; // Reduced size for better UX
+            let previewX = e.clientX - previewSize / 2;
+            let previewY = e.clientY - previewSize / 2;
+
+            // Constrain zoom preview within viewport
+            previewX = Math.max(10, Math.min(previewX, window.innerWidth - previewSize - 10));
+            previewY = Math.max(10, Math.min(previewY, window.innerHeight - previewSize - 10));
+
+            setMousePosition({ x: previewX, y: previewY });
+            setZoomPosition({
+                x: Math.max(0, Math.min(100, x)),
+                y: Math.max(0, Math.min(100, y))
+            });
+        } else {
+            setShowArrows(false);
+            setShowZoomPreview(false);
+        }
+    }, []);
+
+    const handleMouseEnter = () => {
+        setShowArrows(true);
+        zoomTimeoutRef.current = setTimeout(() => {
+            setShowZoomPreview(true);
+        }, 200); // Reduced delay for better UX
+    };
+
+    const handleMouseLeave = () => {
+        if (zoomTimeoutRef.current) {
+            clearTimeout(zoomTimeoutRef.current);
+        }
+        setShowZoomPreview(false);
+        setShowArrows(false);
+    };
+
+    // Zoom modal functions - Fixed to open smaller
+    const openZoom = useCallback((imgSrc, index) => {
+        setCurrentSlide(index);
         setIsZoomed(true);
         setZoomLevel(1);
+        setZoomPosition({ x: 50, y: 50 });
+        setImagePosition({ x: 0, y: 0 });
         document.body.style.overflow = 'hidden';
-    };
+    }, []);
 
-    const handleWheelZoom = (e) => {
-        e.preventDefault();
-        const delta = e.deltaY * -0.01;
-        setZoomLevel(prev => Math.min(Math.max(1, prev + delta), 3));
-    };
-
-    const closeZoom = () => {
+    const closeZoom = useCallback(() => {
         setIsZoomed(false);
+        setZoomLevel(1);
+        setZoomPosition({ x: 50, y: 50 });
+        setImagePosition({ x: 0, y: 0 });
+        setIsDragging(false);
         document.body.style.overflow = 'auto';
+    }, []);
+
+    // Zoom controls
+    const zoomIn = () => {
+        setZoomLevel(prev => Math.min(prev + 0.3, 3)); // Reduced max zoom
     };
 
+    const zoomOut = () => {
+        if (zoomLevel <= 1.3) {
+            setZoomLevel(1);
+            setImagePosition({ x: 0, y: 0 });
+        } else {
+            setZoomLevel(prev => Math.max(prev - 0.3, 1));
+        }
+    };
+
+    const resetZoom = () => {
+        setZoomLevel(1);
+        setImagePosition({ x: 0, y: 0 });
+        setZoomPosition({ x: 50, y: 50 });
+    };
+
+    // Mouse wheel zoom
+    const handleWheelZoom = useCallback((e) => {
+        e.preventDefault();
+        const rect = imageRef.current?.getBoundingClientRect();
+        if (!rect) return;
+
+        const mouseX = ((e.clientX - rect.left) / rect.width) * 100;
+        const mouseY = ((e.clientY - rect.top) / rect.height) * 100;
+
+        const delta = e.deltaY * -0.001; // Slower zoom
+        const newZoomLevel = Math.min(Math.max(1, zoomLevel + delta), 3);
+
+        if (newZoomLevel > 1) {
+            setZoomPosition({ x: mouseX, y: mouseY });
+        } else {
+            setZoomPosition({ x: 50, y: 50 });
+            setImagePosition({ x: 0, y: 0 });
+        }
+
+        setZoomLevel(newZoomLevel);
+    }, [zoomLevel]);
+
+    // Mouse drag functionality
+    const handleMouseDown = (e) => {
+        if (zoomLevel > 1) {
+            setIsDragging(true);
+            setDragStart({ x: e.clientX - imagePosition.x, y: e.clientY - imagePosition.y });
+        }
+    };
+
+    const handleMouseMoveZoom = useCallback((e) => {
+        if (isDragging && zoomLevel > 1) {
+            const newX = e.clientX - dragStart.x;
+            const newY = e.clientY - dragStart.y;
+
+            // Constrain movement based on zoom level
+            const maxMovement = (zoomLevel - 1) * 150;
+            const constrainedX = Math.max(-maxMovement, Math.min(maxMovement, newX));
+            const constrainedY = Math.max(-maxMovement, Math.min(maxMovement, newY));
+
+            setImagePosition({ x: constrainedX, y: constrainedY });
+        }
+    }, [isDragging, dragStart, zoomLevel]);
+
+    const handleMouseUp = useCallback(() => {
+        setIsDragging(false);
+    }, []);
+
+    // Keyboard navigation
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (isZoomed) {
+                switch (e.key) {
+                    case 'Escape':
+                        closeZoom();
+                        break;
+                    case 'ArrowLeft':
+                        goToPrev();
+                        break;
+                    case 'ArrowRight':
+                        goToNext();
+                        break;
+                    case '+':
+                    case '=':
+                        zoomIn();
+                        break;
+                    case '-':
+                        zoomOut();
+                        break;
+                    case '0':
+                        resetZoom();
+                        break;
+                }
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [isZoomed, closeZoom]);
+
+    // Mouse events for zoom modal
+    useEffect(() => {
+        if (isZoomed) {
+            document.addEventListener('mousemove', handleMouseMoveZoom);
+            document.addEventListener('mouseup', handleMouseUp);
+
+            return () => {
+                document.removeEventListener('mousemove', handleMouseMoveZoom);
+                document.removeEventListener('mouseup', handleMouseUp);
+            };
+        }
+    }, [isZoomed, handleMouseMoveZoom, handleMouseUp]);
+
+    // Zoom modal wheel event
     useEffect(() => {
         if (isZoomed && zoomRef.current) {
-            zoomRef.current.addEventListener('wheel', handleWheelZoom, { passive: false });
+            const zoomElement = zoomRef.current;
+            zoomElement.addEventListener('wheel', handleWheelZoom, { passive: false });
+
+            return () => {
+                zoomElement.removeEventListener('wheel', handleWheelZoom);
+            };
         }
+    }, [isZoomed, handleWheelZoom]);
+
+    // Cleanup on unmount
+    useEffect(() => {
         return () => {
-            if (zoomRef.current) {
-                zoomRef.current.removeEventListener('wheel', handleWheelZoom);
-            }
             document.body.style.overflow = 'auto';
+            if (zoomTimeoutRef.current) {
+                clearTimeout(zoomTimeoutRef.current);
+            }
         };
-    }, [isZoomed]);
+    }, []);
+
+    if (!images || images.length === 0) {
+        return <div className="gallery-container">No images available</div>;
+    }
 
     return (
-        <GalleryContainer>
-            {/* Main Image Slider */}
-            <MainContainer>
-                <SlideCounter>
-                    {currentSlide + 1} / {images.length}
-                </SlideCounter>
-                <Slider {...mainSettings} ref={setNav1}>
-                    {images.map((item, index) => (
-                        <Slide key={`main-${index}`}>
-                            <ImageWrapper onClick={() => handleImageClick(item.img)}>
-                                <img
-                                    src={item.img}
-                                    alt={`Product view ${index + 1}`}
-                                    loading={index < 3 ? "eager" : "lazy"}
-                                />
-                                <ZoomOverlay>
-                                    <FaSearchPlus />
-                                    <span>Click to zoom</span>
-                                </ZoomOverlay>
-                            </ImageWrapper>
-                        </Slide>
-                    ))}
-                </Slider>
-            </MainContainer>
+        <>
+            <div className="gallery-container">
+                {/* Main Image Display */}
+                <div className="main-image-container">
+                    <div className="image-counter">
+                        {currentSlide + 1} / {images.length}
+                    </div>
 
-            {/* Thumbnail Slider */}
-            <ThumbnailContainer>
-                <Slider {...thumbSettings} ref={setNav2}>
-                    {images.map((item, index) => (
-                        <ThumbSlide key={`thumb-${index}`}>
-                            <ThumbWrapper $active={currentSlide === index}>
-                                <img
-                                    src={item.img}
-                                    alt={`Thumbnail ${index + 1}`}
-                                    loading="lazy"
-                                />
-                                <ThumbOverlay>
-                                    <FaSearchPlus />
-                                </ThumbOverlay>
-                            </ThumbWrapper>
-                        </ThumbSlide>
-                    ))}
-                </Slider>
-            </ThumbnailContainer>
+                    <div
+                        ref={containerRef}
+                        className="main-image-wrapper"
+                        onMouseMove={handleMouseMove}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                    >
+                        <img
+                            ref={mainImageRef}
+                            src={images[currentSlide]?.img || images[currentSlide]}
+                            alt={`Product view ${currentSlide + 1}`}
+                            className="main-image"
+                            onClick={() => openZoom(images[currentSlide]?.img || images[currentSlide], currentSlide)}
+                        />
 
-            {/* Zoom Modal */}
+                        {/* Hover Zoom Preview */}
+                        {showZoomPreview && (
+                            <div
+                                className="zoom-preview"
+                                style={{
+                                    left: mousePosition.x,
+                                    top: mousePosition.y,
+                                }}
+                            >
+                                <div className="zoom-preview-inner">
+                                    <img
+                                        src={images[currentSlide]?.img || images[currentSlide]}
+                                        alt={`Zoom preview ${currentSlide + 1}`}
+                                        style={{
+                                            transform: `scale(2) translate(-${zoomPosition.x}%, -${zoomPosition.y}%)`,
+                                            transformOrigin: 'top left',
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        )}
+
+                        {images.length > 1 && (
+                            <>
+                                <button
+                                    className={`nav-arrow nav-prev ${showArrows ? 'visible' : ''}`}
+                                    onClick={goToPrev}
+                                    aria-label="Previous image"
+                                >
+                                    &#8249;
+                                </button>
+                                <button
+                                    className={`nav-arrow nav-next ${showArrows ? 'visible' : ''}`}
+                                    onClick={goToNext}
+                                    aria-label="Next image"
+                                >
+                                    &#8250;
+                                </button>
+                            </>
+                        )}
+                    </div>
+                </div>
+
+                {/* Thumbnail Gallery */}
+                {images.length > 1 && (
+                    <div className="thumbnail-container">
+                        <div className="thumbnail-wrapper">
+                            {images.map((item, index) => (
+                                <div
+                                    key={index}
+                                    className={`thumbnail ${index === currentSlide ? 'active' : ''}`}
+                                    onClick={() => goToSlide(index)}
+                                >
+                                    <img
+                                        src={item?.img || item}
+                                        alt={`Thumbnail ${index + 1}`}
+                                        loading="lazy"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            {/* Zoom Modal - Made smaller */}
             {isZoomed && (
-                <ZoomModal>
-                    <ZoomContent ref={zoomRef}>
-                        <CloseButton onClick={closeZoom}>
-                            <FaTimes />
-                        </CloseButton>
-                        <ZoomImageContainer style={{ transform: `scale(${zoomLevel})` }}>
+                <div className="zoom-modal" onClick={(e) => e.target === e.currentTarget && closeZoom()}>
+                    <div className="zoom-modal-content" ref={zoomRef}>
+                        {/* Close Button */}
+                        <button className="zoom-close" onClick={closeZoom} aria-label="Close zoom">
+                            ✕
+                        </button>
+
+                        {/* Image Counter */}
+                        <div className="zoom-counter">
+                            {currentSlide + 1} / {images.length}
+                        </div>
+
+                        {/* Navigation Arrows */}
+                        {images.length > 1 && (
+                            <>
+                                <button
+                                    className="zoom-nav zoom-nav-prev"
+                                    onClick={goToPrev}
+                                    aria-label="Previous image"
+                                >
+                                    &#8249;
+                                </button>
+                                <button
+                                    className="zoom-nav zoom-nav-next"
+                                    onClick={goToNext}
+                                    aria-label="Next image"
+                                >
+                                    &#8250;
+                                </button>
+                            </>
+                        )}
+
+                        {/* Zoomed Image Container - Made smaller */}
+                        <div className="zoom-image-container">
                             <img
-                                src={zoomImgSrc}
-                                alt="Zoomed product view"
+                                ref={imageRef}
+                                src={images[currentSlide]?.img || images[currentSlide]}
+                                alt={`Zoomed view ${currentSlide + 1}`}
+                                className={`zoom-image ${isDragging ? 'dragging' : ''}`}
+                                style={{
+                                    transform: `scale(${zoomLevel}) translate(${imagePosition.x / zoomLevel}px, ${imagePosition.y / zoomLevel}px)`,
+                                    transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
+                                    cursor: zoomLevel > 1 ? (isDragging ? 'grabbing' : 'grab') : 'zoom-in'
+                                }}
+                                onMouseDown={handleMouseDown}
+                                draggable={false}
                             />
-                        </ZoomImageContainer>
-                        <ZoomControls>
-                            <ZoomButton onClick={() => setZoomLevel(prev => Math.max(1, prev - 0.2))}>
-                                <FaSearchMinus />
-                            </ZoomButton>
-                            <ZoomLevel>{(zoomLevel * 100).toFixed(0)}%</ZoomLevel>
-                            <ZoomButton onClick={() => setZoomLevel(prev => Math.min(3, prev + 0.2))}>
-                                <FaSearchPlus />
-                            </ZoomButton>
-                        </ZoomControls>
-                    </ZoomContent>
-                </ZoomModal>
+                        </div>
+
+                        {/* Zoom Controls */}
+                        <div className="zoom-controls">
+                            <button
+                                className="zoom-control-btn"
+                                onClick={zoomOut}
+                                disabled={zoomLevel <= 1}
+                                aria-label="Zoom out"
+                            >
+                                −
+                            </button>
+                            <span className="zoom-level">{Math.round(zoomLevel * 100)}%</span>
+                            <button
+                                className="zoom-control-btn"
+                                onClick={zoomIn}
+                                disabled={zoomLevel >= 3}
+                                aria-label="Zoom in"
+                            >
+                                +
+                            </button>
+                            <button
+                                className="zoom-reset-btn"
+                                onClick={resetZoom}
+                                disabled={zoomLevel === 1}
+                                aria-label="Reset zoom"
+                            >
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
-        </GalleryContainer>
+        </>
     );
 };
-
-// Styled Components
-const GalleryContainer = styled.div`
-    width: 85%;
-    max-width: 85%;
-    margin: 0 auto;
-    background: var(--primary-card-color);
-    border-radius: 8px;
-    overflow: hidden;
-    transition: box-shadow 0.3s ease;
-    
-    &:hover {
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    }
-`;
-
-const MainContainer = styled.div`
-    position: relative;
-    background: var(--primary-card-color);
-`;
-
-const SlideCounter = styled.div`
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: rgba(0, 0, 0, 0.7);
-    color: var(--primary-color);
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    font-family: var(--secondary-font);
-    font-weight: 500;
-    z-index: 10;
-    backdrop-filter: blur(10px);
-`;
-
-const Slide = styled.div`
-    outline: none;
-`;
-
-const ImageWrapper = styled.div`
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1/1;
-    overflow: hidden;
-    cursor: zoom-in;
-    
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-        transition: transform 0.3s ease;
-        background: var(--primary-card-color);
-    }
-    
-    &:hover img {
-        transform: scale(1.02);
-    }
-`;
-
-const ZoomOverlay = styled.div`
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    color: white;
-    backdrop-filter: blur(2px);
-    
-    ${ImageWrapper}:hover & {
-        opacity: 1;
-    }
-    
-    svg {
-        font-size: 2rem;
-    }
-    
-    span {
-        font-size: 0.875rem;
-        font-family: var(--secondary-font);
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-`;
-
-const ArrowButton = styled.button`
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 3rem;
-    height: 3rem;
-    border: none;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    color: var(--primary-text-color);
-    cursor: pointer;
-    z-index: 10;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    left: ${props => props.direction === 'prev' ? '1rem' : 'auto'};
-    right: ${props => props.direction === 'next' ? '1rem' : 'auto'};
-    
-    &:hover {
-        background: rgba(255, 255, 255, 1);
-        transform: translateY(-50%) scale(1.1);
-    }
-    
-    &:active {
-        transform: translateY(-50%) scale(0.95);
-    }
-    
-    .slick-slider:hover & {
-        opacity: 1;
-        visibility: visible;
-    }
-`;
-
-const ThumbnailContainer = styled.div`
-    background: var(--primary-card-color);
-    padding: 0.5rem;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-`;
-
-const ThumbSlide = styled.div`
-    padding: 0 0.375rem;
-    outline: none;
-`;
-
-const ThumbWrapper = styled.div`
-    position: relative;
-    aspect-ratio: 1/1;
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 2px solid ${props => props.$active ? 'var(--primary-hover-color)' : 'transparent'};
-    border-radius: 4px;
-    
-    &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    }
-    
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-        transition: all 0.3s ease;
-        opacity: ${props => props.$active ? '1' : '0.8'};
-    }
-    
-    &:hover img {
-        opacity: 1;
-        transform: scale(1.05);
-    }
-`;
-
-const ThumbOverlay = styled.div`
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    color: white;
-    
-    ${ThumbWrapper}:hover & {
-        opacity: 1;
-    }
-    
-    svg {
-        font-size: 1rem;
-    }
-`;
-
-const ZoomModal = styled.div`
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.9);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-`;
-
-const ZoomContent = styled.div`
-    position: relative;
-    max-width: 90%;
-    max-height: 90%;
-    width: auto;
-    height: auto;
-`;
-
-const CloseButton = styled.button`
-    position: absolute;
-    top: -40px;
-    right: 0;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    
-    &:hover {
-        transform: scale(1.2);
-    }
-`;
-
-const ZoomImageContainer = styled.div`
-    position: relative;
-    max-width: 100%;
-    max-height: 80vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s ease-out;
-    transform-origin: center center;
-    
-    img {
-        max-width: 100%;
-        max-height: 80vh;
-        object-fit: contain;
-        border-radius: 8px;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-    }
-`;
-
-const ZoomControls = styled.div`
-    position: absolute;
-    bottom: -50px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 0.5rem 1rem;
-    border-radius: 30px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-`;
-
-const ZoomButton = styled.button`
-    background: none;
-    border: none;
-    width: 2.5rem;
-    height: 2.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    color: var(--primary-text-color);
-    cursor: pointer;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-    
-    &:hover {
-        background: rgba(0, 0, 0, 0.05);
-    }
-`;
-
-const ZoomLevel = styled.span`
-    font-family: var(--secondary-font);
-    font-weight: 600;
-    min-width: 50px;
-    text-align: center;
-`;
 
 export default ImageGallery;

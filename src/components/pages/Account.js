@@ -13,7 +13,7 @@ class Account extends Component {
                 <MetaTags>
                     <title> BMG- My Account</title>
                     <meta
-                        name="description"
+                        name="account"
                         content="#"
                     />
                 </MetaTags>

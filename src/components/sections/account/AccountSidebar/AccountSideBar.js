@@ -27,7 +27,7 @@ const AccountSidebar = () => {
     { path: "/AddressManager", icon: <FiMapPin size={18} />, label: "Addresses" },
     // { path: "/wishlist", icon: <FiHeart size={18} />, label: "Wishlist" },
     // { path: "/cart", icon: <FiShoppingCart size={18} />, label: "Cart" },
-    // { path: "/change-password", icon: <FiLock size={18} />, label: "Security" },
+    { path: "/change-password", icon: <FiLock size={18} />, label: "Security" },
   ];
 
   // Function to generate user initials

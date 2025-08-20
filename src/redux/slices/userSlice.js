@@ -1,6 +1,6 @@
 // src/redux/slices/userSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { loginUser, registerUser, verifyOtpService, forgotPasswordService, resetPasswordService } from '../../service/AuthService';
+import { loginUser, registerUser, verifyOtpService, forgotPasswordService, resetPasswordService, changePasswordService } from '../../service/AuthService';
 import { toast } from 'react-toastify';
 
 // Safely parse localStorage user
@@ -129,6 +129,29 @@ export const resetPassword = createAsyncThunk(
     }
 );
 
+// Change Password
+export const changePassword = createAsyncThunk(
+    "user/changePassword",
+    async ({ oldPassword, newPassword }, thunkAPI) => {
+        try {
+            const response = await changePasswordService({ oldPassword, newPassword });
+
+            // Show success toast
+            toast.success(response.message || "Password changed successfully!", {
+                position: "top-right",
+                autoClose: 2500,
+            });
+
+            return response;
+        } catch (error) {
+            toast.error(error.message || "Failed to change password", {
+                position: "top-right",
+                autoClose: 2500,
+            });
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+);
 
 const userSlice = createSlice({
     name: 'user',
@@ -225,7 +248,19 @@ const userSlice = createSlice({
             .addCase(resetPassword.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
-            });
+            })
+               .addCase(changePassword.pending, (state) => {
+                   state.loading = true;
+                   state.error = null;
+               })
+        .addCase(changePassword.fulfilled, (state) => {
+            state.loading = false;
+            state.error = null;
+        })
+        .addCase(changePassword.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
     },
 });
 

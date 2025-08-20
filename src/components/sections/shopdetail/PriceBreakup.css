@@ -1,0 +1,122 @@
+/* Price Breakup Styles */
+.price-breakup-container {
+    margin: 1.5rem 0;
+    border: 1px solid var(--grey-color);
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
+}
+
+.price-breakup-summary {
+    padding: 1rem;
+    background: var(--primary-card-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.final-price {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+}
+
+.final-price .label {
+    font-size: 0.9rem;
+    color: var(--grey-color);
+    font-family: var(--secondary-font);
+    margin: 0 5px ;
+}
+
+.final-price .value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary-text-color);
+    font-family: var(--secondary-font);
+}
+
+.toggle-breakup {
+    background: none;
+    border: none;
+    color: var(--primary-hover-color);
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    font-family: var(--secondary-font);
+    font-weight: 500;
+}
+
+.toggle-breakup:hover {
+    text-decoration: underline;
+}
+
+.price-breakup-details {
+    padding: 1rem;
+    background: var(--white-color);
+}
+
+.price-table {
+    width: 100%;
+    font-family: var(--secondary-font);
+}
+
+.price-table th,
+.price-table td {
+    padding: 0.75rem;
+    text-align: left;
+}
+
+.price-table th {
+    font-weight: 600;
+    color: var(--primary-text-color);
+}
+
+
+.price-table .subtotal {
+    font-weight: 600;
+}
+
+.price-table .grand-total {
+    font-weight: 700;
+    color: var(--primary-text-color);
+    background: var(--primary-card-color);
+}
+
+.price-table .grand-total td {
+    border-bottom: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .price-breakup-summary {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.55rem;
+    }
+
+    .price-table {
+        font-size: 0.85rem;
+    }
+
+    .price-table th,
+    .price-table td {
+        padding: 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .price-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .final-price .value {
+        font-size: 0.9rem;
+    }
+}

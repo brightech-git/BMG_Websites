@@ -22,32 +22,32 @@ const Banner = () => {
         slidesToShow: 1,
         slidesToScroll: 1,
         centerMode: true,
-        centerPadding: '10%', // Reduced from 15% to show less of adjacent slides
-        arrows: true,
+        centerPadding: '15%', 
+        arrows: true, 
         swipe: true,
-        swipeToSlide: true,
-        touchThreshold: 10,
+        swipeToSlide: true, 
+        touchThreshold: 10, 
         adaptiveHeight: false,
         responsive: [
             {
                 breakpoint: 992,
                 settings: {
-                    centerPadding: '8%',
+                    centerPadding: '10%',
                 },
             },
             {
                 breakpoint: 768,
                 settings: {
                     centerPadding: '5%',
-                    arrows: true,
+                    arrows: true, 
                 },
             },
             {
                 breakpoint: 576,
                 settings: {
                     centerPadding: '0',
-                    centerMode: false,
-                    arrows: false,
+                    centerMode: false, 
+                    arrows: false, 
                 },
             },
         ],

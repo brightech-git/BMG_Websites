@@ -252,7 +252,7 @@
     }
 
     .hero-description {
-        font-size: clamp(0.9rem, 2vw, 1rem);
+        font-size: clamp(0.7rem, 2vw, 0.8rem) !important;
         margin-bottom: 1.5rem;
     }
 
@@ -284,11 +284,11 @@
     }
 
     .hero-title {
-        font-size: clamp(1.2rem, 3vw, 1.8rem);
+        font-size: clamp(1.2rem, 2vw, 1.8rem) ;
     }
 
     .hero-description {
-        font-size: clamp(0.8rem, 2vw, 0.9rem);
+        font-size: clamp(0.6rem, 1vw, 0.5rem) !important;
         margin-bottom: 1rem;
     }
 

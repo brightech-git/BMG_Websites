@@ -80,6 +80,7 @@
         --shimmer-color: rgba(255, 255, 255, 0.2);
         --overlay-bg: rgba(0, 0, 0, 0.3);
         --gradient-bg-color: linear-gradient(145deg, #edebe7, #ebe8c5);
+        --virtual-shop-card:#f6ebd5;
     }
 .texture-1 {
     position: absolute;

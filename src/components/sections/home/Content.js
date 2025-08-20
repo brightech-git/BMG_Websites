@@ -24,7 +24,7 @@ import ShopByRecipient from './ShopByRecipient';
 import './HomeContent.css';
 import JewelryShowcase from './jewelleryShowCase';
 import RecentlyViewedWrapper from '../../layouts/RecentlyViewedWrapper';
-//import AppointmentPage from '../../pages/virtualShop/VirtualShop';
+import Appointment from '../../pages/virtualShop/Appointment';
 import Testimonials from '../../Testimonials/Testimonials';
 // import Blog from './Blog'
 

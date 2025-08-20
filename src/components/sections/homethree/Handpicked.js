@@ -89,11 +89,12 @@ const Handpicked = () => {
         history.push(`/shop-left?${queryParams.toString()}`);
     };
 
-    const sliderSettings = {
+    const sliderSettingss = {
         slidesToShow: 3,
         slidesToScroll: 1,
         infinite: true,
         arrows: true,
+        fade: false,
         centerMode: false,
         autoplay: true,
         autoplaySpeed: 4000,
@@ -163,7 +164,7 @@ const Handpicked = () => {
                     </p>
                 </div>
 
-                <Slider className="gem-slider-container" {...sliderSettings}>
+                <Slider className="gem-slider-container" {...sliderSettingss}>
                     {data?.data?.map((banner, index) => (
                         <div key={`banner-${index}`} className="gem-slide">
                             <div className="gem-main-product">
@@ -180,6 +181,7 @@ const Handpicked = () => {
                                         loading="lazy"
                                     />
                                 </div>
+                                
                                 <HighlightedProducts
                                     itemName={banner.itemName}
                                     subItemName={banner.subItemName}

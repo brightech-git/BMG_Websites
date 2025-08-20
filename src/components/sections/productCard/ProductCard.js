@@ -265,13 +265,7 @@ const ProductCard = ({ item }) => {
                             </div>
                         )}
 
-                        {/* Image Indicator Dots */}
-                        {hasMultipleImages && (
-                            <div className="image-indicator">
-                                <div className={`indicator-dot ${!showSecondImage ? 'active' : ''}`}></div>
-                                <div className={`indicator-dot ${showSecondImage ? 'active' : ''}`}></div>
-                            </div>
-                        )}
+                   
                     </div>
 
                     <div className={`quick-actions ${hoverState || isTouchActive ? 'show-actions' : ''}`}>

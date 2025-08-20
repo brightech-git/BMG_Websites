@@ -8,9 +8,13 @@ import Wishlist from "../wishlist/Content";
 import Cart from "../cart/Content";
 import ChangePassword from "./ChangePassword/ChangePassword";
 import "./AccountStyles.css";
+import HeaderWithAuth from "../../layouts/HeaderWithAuth";
+import Footertwo from "../../layouts/Footerthree";
 
 const AccountPage = () => {
   return (
+    <section className="account-with-header">
+
     <div className="account-container">
       <div className="account-layout">
         <div className="account-sidebar">
@@ -33,6 +37,7 @@ const AccountPage = () => {
         </main>
       </div>
     </div>
+    </section>
   );
 };
 

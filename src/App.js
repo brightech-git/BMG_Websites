@@ -45,7 +45,7 @@ import DeliveryShippingPolicy from './components/pages/Policies/DeliveryAndShipp
 import ForgotPassword from './components/pages/ForgotPassword';
 import PaymentSuccess from './components/pages/PaymentSuccess';
 import WhyChooseUs from "./components/pages/Policies/WhyChooseUs";
-
+import Appointment from './components/pages/virtualShop/Appointment';
 
 function ScrollWatcher() {
   const location = useLocation();
@@ -68,7 +68,6 @@ function App() {
       <Switch>
 
 
-        <Route exact path="/" component={Home} />
         <Route exact path="/" component={Home} />
         <Route exact path="/about" component={About} />
         <PrivateRoute exact path="/account" component={Account} />
@@ -118,7 +117,8 @@ function App() {
         <Route exact path="/terms-conditions" component={TermsConditions} />
         <Route exact path="/why-choose-us" component={WhyChooseUs} />
 
-        <Route exact path="/payment-success/:orderId" component={PaymentSuccess} />
+        <Route exact path="/payment-success" component={PaymentSuccess} />
+        <Route exact path="/appointment" component={Appointment} />
         
         {/* Catch-all route for 404 errors */}
         

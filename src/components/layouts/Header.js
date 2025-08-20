@@ -2,7 +2,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { Link, useHistory } from "react-router-dom";
 import classNames from "classnames";
-import { ChevronDown, ShoppingCart, Menu, User, Heart } from "lucide-react";
+import { ChevronDown, ShoppingCart, Menu, User, Heart ,Video} from "lucide-react";
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import "../../assets/css/header.css";
 import Canvas from "./Canvas";
@@ -261,9 +261,19 @@ const Header = ({ isAuthenticated }) => {
   <div className="header-top">
     <div className="container-fluid container-custom-three">
       <div className="header-top-content">
-        <div className="welcome-section">
-          <span className="welcome-text">Free Shipping For All Products</span>
-        </div>
+        
+                <div className="welcome-section">
+
+                  
+                  <Video size={22} />
+                  <span
+                    className="welcome-text"
+                    onClick={() => history.push("/appointment")}
+                  >
+                    BMG Live
+                  </span>
+
+                </div>
 
         {/* Enhanced Precious Metals Ticker */}
         <div className="precious-metals-ticker-wrapper">
@@ -313,7 +323,7 @@ const Header = ({ isAuthenticated }) => {
             </div>
           </div>
         </div>
-
+                
         <div className="auth-actions">
           {isAuthenticated ? (
             <div className="auth-button logout-trigger" onClick={handleLogout}>
@@ -330,6 +340,7 @@ const Header = ({ isAuthenticated }) => {
             </div>
           )}
         </div>
+        
       </div>
     </div>
   </div>

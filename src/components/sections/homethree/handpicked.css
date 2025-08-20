@@ -74,7 +74,7 @@
 
 .gem-main-product {
     position: relative;
-    margin-bottom: 6rem;
+    margin-bottom: 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -329,7 +329,7 @@
     }
 
     .gem-main-product {
-        margin-bottom: 5rem;
+        margin-bottom: 2rem;
     }
 
     .gem-title {
@@ -363,7 +363,7 @@
     }
 
     .gem-main-product {
-        margin-bottom: 4rem;
+        margin-bottom: 2rem;
     }
 }
 

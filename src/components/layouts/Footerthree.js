@@ -561,7 +561,7 @@ class Footertwo extends Component {
         </Link>
       </li>
       <li>
-        <Link to="/shop-left?itemName=OFFERS&subItemName=50% OFF">
+                      <Link to="/shop-left?itemName=OFFER&subItemName=50%25OFFER">
           50% Off
         </Link>
       </li>

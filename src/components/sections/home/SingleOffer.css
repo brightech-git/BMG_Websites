@@ -1,0 +1,451 @@
+/* Minimal SingleOffer - Pure Image Focus */
+
+.minimal-offer-container {
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+/* Main Card */
+.minimal-offer-card {
+    position: relative;
+    padding: 1rem;
+    width: 100%;
+    overflow: hidden;
+    background: #f5f5f5;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    isolation: isolate;
+}
+
+/* Clickable variant */
+.minimal-offer-card.clickable {
+    cursor: pointer;
+}
+
+
+
+/* Image Container */
+.minimal-image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.minimal-image-container.loaded {
+    opacity: 1;
+}
+
+/* Main Image */
+.minimal-offer-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 12px;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Loading Skeleton */
+.minimal-image-skeleton {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #e8e8e8;
+    border-radius: inherit;
+}
+
+.skeleton-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg,
+            rgba(255, 255, 255, 0) 30%,
+            rgba(255, 255, 255, 0.5) 50%,
+            rgba(255, 255, 255, 0) 70%);
+    animation: skeleton-slide 2s infinite ease-in-out;
+}
+
+.skeleton-pulse {
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    animation: pulse 2s infinite ease-in-out alternate;
+}
+
+@keyframes skeleton-slide {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Minimal Interaction Overlay */
+.minimal-interaction-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.02);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.minimal-offer-card.clickable:hover .minimal-interaction-overlay {
+    opacity: 1;
+}
+
+.interaction-ripple {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    transform: translate(-50%, -50%);
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.minimal-offer-card.clickable:hover .interaction-ripple {
+    width: 100px;
+    height: 100px;
+}
+
+/* Minimal Corner Badge */
+.minimal-corner-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+}
+
+.badge-dot {
+    width: 8px;
+    height: 8px;
+    background: #007bff;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
+    animation: badge-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes badge-glow {
+    0% {
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8), 0 0 0 4px rgba(0, 123, 255, 0.2);
+    }
+
+    100% {
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8), 0 0 0 6px rgba(0, 123, 255, 0.4);
+    }
+}
+
+/* Focus Ring */
+.minimal-focus-ring {
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border: 2px solid transparent;
+    border-radius: 15px;
+    pointer-events: none;
+    transition: border-color 0.2s ease;
+}
+
+.minimal-offer-card.clickable:focus .minimal-focus-ring {
+    border-color: #007bff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .minimal-offer-container {
+        margin-bottom: 1.25rem;
+    }
+        .minimal-offer-card{
+            padding: 0.5rem;
+        }
+    .minimal-offer-card.with-hover:hover {
+        transform: none;
+    }
+
+    .minimal-offer-card.with-hover:hover .minimal-offer-image {
+        transform: none;
+    }
+
+    .skeleton-overlay,
+    .skeleton-pulse,
+    .interaction-ripple,
+    .badge-dot {
+        animation: none;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .minimal-offer-card {
+        border: 1px solid #000;
+    }
+
+    .minimal-focus-ring {
+        border-width: 3px;
+    }
+
+    .minimal-offer-card.clickable:focus .minimal-focus-ring {
+        border-color: #000;
+    }
+
+    .badge-dot {
+        background: #000;
+        box-shadow: 0 0 0 2px #fff;
+    }
+}
+
+/* Print styles */
+@media print {
+    .minimal-offer-card {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+
+    .minimal-interaction-overlay,
+    .minimal-corner-badge {
+        display: none;
+    }
+
+    .minimal-offer-image {
+        filter: grayscale(100%);
+    }
+}
+
+/* Performance optimizations */
+.minimal-offer-card {
+    contain: layout style paint;
+    will-change: transform;
+}
+
+.minimal-offer-image {
+    contain: layout;
+}
+
+/* Additional utility classes */
+.minimal-offer-container.small {
+    margin-bottom: 1rem;
+}
+
+.minimal-offer-container.large {
+    margin-bottom: 2rem;
+}
+
+.minimal-offer-card.rounded-none {
+    border-radius: 0;
+}
+
+.minimal-offer-card.rounded-small {
+    border-radius: 6px;
+}
+
+.minimal-offer-card.rounded-large {
+    border-radius: 16px;
+}
+
+.minimal-offer-card.no-shadow {
+    box-shadow: none;
+}
+
+.minimal-offer-card.elevated {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.minimal-offer-card.border {
+    border: 1px solid #e0e0e0;
+}
+
+.minimal-offer-card.border-thick {
+    border: 2px solid #e0e0e0;
+}
+
+/* Aspect ratio variants */
+.minimal-offer-card.aspect-square {
+    aspect-ratio: 1 / 1;
+}
+
+.minimal-offer-card.aspect-wide {
+    aspect-ratio: 16 / 9;
+}
+
+.minimal-offer-card.aspect-ultra-wide {
+    aspect-ratio: 21 / 9;
+}
+
+.minimal-offer-card.aspect-portrait {
+    aspect-ratio: 3 / 4;
+}
+
+/* Image fit variants */
+.minimal-offer-image.fit-contain {
+    object-fit: contain;
+}
+
+.minimal-offer-image.fit-fill {
+    object-fit: fill;
+}
+
+.minimal-offer-image.fit-scale-down {
+    object-fit: scale-down;
+}
+
+/* Position variants */
+.minimal-offer-image.position-top {
+    object-position: center top;
+}
+
+.minimal-offer-image.position-bottom {
+    object-position: center bottom;
+}
+
+.minimal-offer-image.position-left {
+    object-position: left center;
+}
+
+.minimal-offer-image.position-right {
+    object-position: right center;
+}
+
+d {
+    border-radius: 10px;
+}
+
+.minimal-corner-badge {
+    top: 10px;
+    right: 10px;
+}
+
+.badge-dot {
+    width: 6px;
+    height: 6px;
+}
+
+.minimal-focus-ring {
+    border-radius: 13px;
+}
+
+
+@media (max-width: 480px) {
+    .minimal-offer-card {
+        border-radius: 8px;
+    }
+
+    .minimal-corner-badge {
+        top: 8px;
+        right: 8px;
+    }
+
+    .minimal-focus-ring {
+        border-radius: 11px;
+    }
+}
+
+/* Touch Devices */
+@media (hover: none) and (pointer: coarse) {
+    .minimal-offer-card.with-hover:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .minimal-offer-card.with-hover:hover .minimal-offer-image {
+        transform: none;
+    }
+
+    .minimal-offer-card.clickable:active {
+        transform: scale(0.98);
+        transition-duration: 0.1s;
+    }
+
+    .interaction-ripple {
+        display: none;
+    }
+}
+
+/* High-resolution displays */
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+    .minimal-offer-image {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    .minimal-offer-card {
+        background: #2a2a2a;
+    }
+
+    .minimal-image-skeleton {
+        background: #333;
+    }
+
+    .skeleton-overlay {
+        background: linear-gradient(45deg,
+                rgba(255, 255, 255, 0) 30%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0) 70%);
+    }
+
+    .skeleton-pulse {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .minimal-interaction-overlay {
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .interaction-ripple {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .badge-dot {
+        box-shadow: 0 0 0 2px rgba(42, 42, 42, 0.9);
+    }
+
+    .minimal-focus-ring {
+        border-color: #66b3ff;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .minimal-offer-card,
+    .minimal-image-container,
+    .minimal-offer-image,
+    .minimal-interaction-overlay,
+    .interaction-ripple,
+    .minimal-focus-ring {
+        transition: none;
+    }
+
+}

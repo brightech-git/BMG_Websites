@@ -14,7 +14,7 @@ import Footertwo from "../../layouts/Footerthree";
 const AccountPage = () => {
   return (
     <section className="account-with-header">
-
+ 
     <div className="account-container">
       <div className="account-layout">
         <div className="account-sidebar">
@@ -37,6 +37,7 @@ const AccountPage = () => {
         </main>
       </div>
     </div>
+
     </section>
   );
 };

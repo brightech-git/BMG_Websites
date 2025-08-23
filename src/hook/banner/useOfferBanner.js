@@ -6,3 +6,9 @@ export const useOfferBanners = () =>
         queryKey: ["offerBanners"],
         queryFn: OfferBannerService.getAllOfferBanners,
     }); 
+export const useInstantOffer = () => {
+    return useQuery({
+        queryKey: ["instantOffer"],
+        queryFn: OfferBannerService.getInstantOffer,
+    });
+};

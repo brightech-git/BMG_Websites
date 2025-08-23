@@ -9,7 +9,7 @@ export const useCategoryBanner = ({ itemName, subItemName }) => {
         enabled: !!itemName && !!subItemName, // only fetch if both exist
         select: (res) => {
             // return null if no images
-            if (res?.data?.images?.length > 0) {
+            if (res) {
                 return res.data;
             } else {
                 return null;
@@ -17,3 +17,5 @@ export const useCategoryBanner = ({ itemName, subItemName }) => {
         },
     });
 };
+
+

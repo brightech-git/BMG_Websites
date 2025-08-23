@@ -78,8 +78,8 @@ h6,
 }
 
 /* Compact Buttons */
-.main-btn {
-    display: inline-flex;
+.main-button {
+    display: inline-flex ;
     align-items: center;
     justify-content: center;
     font-weight: 500;
@@ -96,18 +96,18 @@ h6,
     font-family: var(--secondary-font);
 }
 
-.main-btn.btn-filled {
+.main-button.button-filled{
     background-color: var(--primary-hover-color);
     color: var(--white-color);
 }
 
-.main-btn.btn-filled:hover:not(:disabled) {
+.main-button.button-filled:hover:not(:disabled) {
     background-color: #b8734f;
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(205, 134, 92, 0.3);
 }
 
-.main-btn:disabled {
+.main-button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }

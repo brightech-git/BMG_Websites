@@ -48,7 +48,8 @@ import WhyChooseUs from "./components/pages/Policies/WhyChooseUs";
 import Appointment from './components/pages/virtualShop/Appointment';
 import BangleSizeGuide from './components/pages/SizeGuide/BangleSize';
 import RingSizeGuide from './components/pages/SizeGuide/RingSize';
-
+import RouteTracker from './routes/RouteTracker';
+import ScrollToTop from './components/layouts/ScrolltoTop';
 
 function ScrollWatcher() {
   const location = useLocation();
@@ -68,10 +69,12 @@ function App() {
     <Router basename="/">
       {/* <Preloader /> */}
       <ScrollWatcher />
+      <ScrollToTop />
       <Switch>
 
-
+        
         <Route exact path="/" component={Home} />
+       
         <Route exact path="/about" component={About} />
         <PrivateRoute exact path="/account" component={Account} />
         <Route exact path="/blog-detail" component={Blogdetail} />
@@ -104,7 +107,6 @@ function App() {
 
    
         <PrivateRoute exact path="/payment/:orderId" component={PaymentPage} />
-        <PrivateRoute exact path="/payment/success" component={Home} />
 
         <Route exact path="/AddressManager" component={AddressManager} />
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
@@ -128,6 +130,8 @@ function App() {
         {/* Catch-all route for 404 errors */}
         
         <Route component={Error} />
+        <RouteTracker />
+        
       </Switch>
     </Router>
   );

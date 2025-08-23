@@ -37,10 +37,7 @@ const Content = () => {
                 })
             ).unwrap();
 
-            if (resultAction?.token) {
-                const redirectTo = location.state?.from || '/'; // fallback to homepage
-                history.push(redirectTo);
-            }
+          
             if (resultAction?.token) {
                 // Clear form and errors
                 setContactOrEmailOrUsername('');
@@ -48,8 +45,24 @@ const Content = () => {
                 setLocalError(null);
 
                 // Redirect
-                const lastVisited = localStorage.getItem('lastVisited');
-                history.push(lastVisited || '/');
+                const lastVisited = localStorage.getItem("lastVisited");
+                let parsedLastVisited = null;
+
+                try {
+                    parsedLastVisited = lastVisited ? JSON.parse(lastVisited) : null;
+                } catch (e) {
+                    console.error("Error parsing lastVisited from localStorage", e);
+                }
+
+                const redirectTo =
+                    parsedLastVisited?.from ||
+                    location.state?.from ||
+                    "/";
+
+                console.log("Final redirect target:", redirectTo);
+
+                history.push(redirectTo);
+
             }
           
         } catch (err) {
@@ -73,6 +86,8 @@ const Content = () => {
     useEffect(() => {
         if (error) setLocalError(error);
     }, [error]);
+
+
     useEffect(() => {
         if (isAuthenticated) {
             const lastVisited = localStorage.getItem("lastVisited");

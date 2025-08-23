@@ -346,52 +346,7 @@ const Header = ({ isAuthenticated }) => {
   </div>
 )}
 
-{/* Mobile Header Top for smaller screens */}
-{width < 992 && (
-  <div className="header-top mobile-header-top">
-    <div className="container-fluid">
-      <div className="mobile-ticker-container">
-        <div className="mobile-precious-metals-ticker">
-          {ratesData && !ratesLoading && !ratesError ? (
-            <div className="mobile-ticker-content">
-              {[...Array(2)].map((_, duplicateIndex) => 
-                Object.entries(ratesData).map(([key, value], index) => (
-                  <div 
-                    key={`mobile-${duplicateIndex}-${key}-${index}`} 
-                    className="mobile-ticker-item"
-                  >
-                    <span className={`mobile-metal-badge ${
-                      key.toLowerCase().includes("silver") ? "silver" : "gold"
-                    }`}>
-                      {key.toLowerCase().includes("silver") ? "Ag" : "Au"}
-                    </span>
-                    <span className="mobile-ticker-value">₹{value}</span>
-                  </div>
-                ))
-              )}
-            </div>
-          ) : (
-            <div className="mobile-ticker-loading">Loading rates...</div>
-          )}
-        </div>
-        <div className="mobile-auth">
-          {isAuthenticated ? (
-            <button className="mobile-auth-btn logout" onClick={handleLogout}>
-              Log Out
-            </button>
-          ) : (
-            <button 
-              className="mobile-auth-btn login" 
-              onClick={() => history.push("/login")}
-            >
-              Log In
-            </button>
-          )}
-        </div>
-      </div>
-    </div>
-  </div>
-)}
+
         <div className="main-menu-area sticky-header">
           <div className="container-fluid p-0">
             <div className="nav-container d-flex align-items-center justify-content-between">

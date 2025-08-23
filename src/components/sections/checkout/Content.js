@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Modal, Button, Badge, Form } from 'react-bootstrap';
-import { Check, Plus, Edit2, Trash2, Phone, Home, ShoppingBag, MapPin, User, CreditCard } from 'lucide-react';
+import { Check, Plus, Edit, Trash2, Phone, Home, ShoppingBag, MapPin, User, CreditCard } from 'lucide-react';
 import { useCreateOrder } from '../../../hook/order/useOrderMutation';
 import { useCurrentProfile } from '../../../hook/userProfile/useUserProfileQuery';
 import { useCreateAddress, useUpdateAddress, useAddressesByCustomer, useDeleteAddress } from '../../../hook/address/useNewAddress';
 import { toast } from 'react-toastify';
 import './Checkout.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen, faTrash, faPhone } from '@fortawesome/free-solid-svg-icons';
 
 // Progress Stepper Component
 const ProgressStepper = ({ currentStep }) => {
@@ -142,12 +144,12 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
                       {address.isDefault && <Badge bg="success" className="default-badge">Default</Badge>}
                     </div>
                     <div className="address-actions">
-                      <button className="action-button edit-button" onClick={() => handleEdit(address)} title="Edit address">
-                        <Edit2 size={12} />
+                      <button className="action-button edit-buttons" onClick={() => handleEdit(address)} title="Edit address">
+                        <FontAwesomeIcon icon={faPen} size="sm" />
                       </button>
                       {!address.isDefault && (
                         <button className="action-button delete-button" onClick={() => handleDelete(address.id)} title="Delete address">
-                          <Trash2 size={12} />
+                          <FontAwesomeIcon icon={faTrash} size="sm" />
                         </button>
                       )}
                     </div>
@@ -157,7 +159,9 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
                     <p className="address-line">{[address.locality, address.city].filter(Boolean).join(', ')}</p>
                     <p className="address-line">{address.state} - {address.pincode}, {address.country || 'India'}</p>
                     {address.landmark && <p className="landmark-line">Landmark: {address.landmark}</p>}
-                    <p className="phone-info"><Phone size={10} className="phone-icon" /> {address.phone}</p>
+                    <p className="phone-info">
+                      <FontAwesomeIcon icon={faPhone} size="sm" className="phone-icon" /> {address.phone}
+                    </p>
                   </div>
                 </div>
                 <div className="address-select-area">
@@ -258,6 +262,8 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
 
 // Order Summary Panel
 const OrderSummaryPanel = ({ items, subtotal, total, isCompact = false }) => {
+
+  console.log(items , 'ordersummary')
   return (
     <div className={`order-panel ${isCompact ? 'compact' : ''}`}>
       <div className="order-header">
@@ -271,11 +277,10 @@ const OrderSummaryPanel = ({ items, subtotal, total, isCompact = false }) => {
               <img src={item.imagePath || 'https://via.placeholder.com/40x40'} alt={item.productName || item.name} onError={(e) => { e.target.src = 'https://via.placeholder.com/40x40'; }} />
             </div>
             <div className="item-details">
-              <h6 className="item-name">{item.productName || item.name}</h6>
+              <h6 className="order-item-name">{item.productName || item.name}</h6>
               <p className="item-variant">SKU: {item.sno || item.tagNo}</p>
-              <p className="item-quantity">Qty: {item.quantity}</p>
             </div>
-            <div className="item-price">₹{(item.price * item.quantity).toFixed(2)}</div>
+            <div className="item-price">₹{(item?.price).toFixed(2)}</div>
           </div>
         ))}
       </div>

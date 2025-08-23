@@ -222,17 +222,17 @@ const Content = () => {
                                                 <div className="invalid-feedback">{errors.password}</div>
                                             )}
                                         </div>
-
+                                        <div className='button'>
                                         <button
                                             type="submit"
-                                            className="main-btn btn-filled mt-20 login-btn"
+                                            className="btn-main main-filled mt-20 login-btn"
                                             style={{ width: '150px' }}
                                             disabled={loading}
                                             aria-label="Register new account"
                                         >
                                             {loading ? 'Registering...' : 'Register'}
                                         </button>
-
+                                        </div>
                                         <p className="register-link" style={{ color: '#404040', fontFamily: 'Montserrat', marginTop: '20px' }}>
                                             Already have an Account?
                                             <Link to="/login" className="login-redirect" style={{ marginLeft: '10px' }}>
@@ -259,17 +259,17 @@ const Content = () => {
                                             />
                                             {errors.otp && <div className="invalid-feedback">{errors.otp}</div>}
                                         </div>
-
+                                                <div className='button'>
                                         <button
                                             type="submit"
-                                            className="main-btn btn-filled mt-20 login-btn"
+                                            className="btn-main main-filled mt-20 login-btn"
                                             style={{ width: '150px' }}
                                             disabled={loading}
                                             aria-label="Verify OTP"
                                         >
                                             {loading ? 'Verifying...' : 'Verify OTP'}
                                         </button>
-
+                                            </div>
                                         <p className="register-link" style={{ color: '#404040', fontFamily: 'Montserrat', marginTop: '20px' }}>
                                             Back to
                                             <button

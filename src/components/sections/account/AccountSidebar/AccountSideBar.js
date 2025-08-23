@@ -11,9 +11,11 @@ import {
   FiLock,
   FiLogOut,
   FiMenu,
-  FiX
+  FiX,
+  FiHome
 } from "react-icons/fi";
 import "./AccountSideBarStyles.css";
+
 
 const AccountSidebar = () => {
   const dispatch = useDispatch();
@@ -22,11 +24,12 @@ const AccountSidebar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const menuItems = [
+    
     { path: "/dashboard", icon: <FiUser size={18} />, label: "Dashboard" },
     { path: "/orders", icon: <FiShoppingBag size={18} />, label: "Orders" },
     { path: "/AddressManager", icon: <FiMapPin size={18} />, label: "Addresses" },
     // { path: "/wishlist", icon: <FiHeart size={18} />, label: "Wishlist" },
-    // { path: "/cart", icon: <FiShoppingCart size={18} />, label: "Cart" },
+    { path: "/", icon: <FiHome size={18} />, label: "Home" },
     { path: "/change-password", icon: <FiLock size={18} />, label: "Security" },
   ];
 
@@ -49,6 +52,7 @@ const AccountSidebar = () => {
   };
 
   return (
+    <section > 
     <div className="account-navigation-panel">
       {/* Mobile menu header */}
       <div className="mobile-menu-header" onClick={toggleMobileMenu}>
@@ -103,6 +107,7 @@ const AccountSidebar = () => {
         </nav>
       </div>
     </div>
+    </section>
   );
 };
 

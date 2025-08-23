@@ -100,8 +100,9 @@ const Shopinfo = ({ sno, Authenticated }) => {
       draggable: true,
       theme: "colored",
     });
-
-    history.push("/login", { from: location.pathname + location.search });
+    const redirectState = { from: location.pathname + location.search };
+    localStorage.setItem("lastVisited", JSON.stringify(redirectState));
+    history.push("/login", redirectState);
   };
 
   // Share icons data
@@ -198,14 +199,6 @@ const Shopinfo = ({ sno, Authenticated }) => {
       ? JSON.parse(product.ImagePath)[0]
       : "";
     const encodedImageUrl = getEncodedImageUrl(firstImagePath);
-
-    const cartItem = {
-      itemSno: product.SNO,
-      itemTagSno: product.SNO,
-      itemName: product.ITEMNAME,
-      price: getPrice(product),
-      image: encodedImageUrl,
-    };
 
     const checkoutPayload = {
       items: [
@@ -310,13 +303,45 @@ const Shopinfo = ({ sno, Authenticated }) => {
   const twitterUrl = `https://twitter.com/intent/tweet?text=${encodedText}`;
   const instagramUrl = `https://www.instagram.com/`;
 
+  // Jewelry care instructions
+  const careInstructions = [
+    {
+      title: "Avoid Moisture",
+      description:
+        "Keep away from water, sweat, and perfumes. Moisture can dull the gold polish.",
+    },
+    {
+      title: "Store Properly",
+      description:
+        "Use a soft cloth pouch or airtight box. Don’t store multiple pieces together to avoid scratches.",
+    },
+    {
+      title: "Clean Gently",
+      description:
+        "Use a soft, dry cloth to wipe. Don’t use harsh chemicals or silver dips.",
+    },
+    {
+      title: "No Sprays or Cosmetics",
+      description: "Wear jewellery last after applying makeup or perfume.",
+    },
+    {
+      title: "Remove While Doing Chores",
+      description:
+        "Take off jewellery during cooking, cleaning, or washing to avoid damage.",
+    },
+    {
+      title: "Regular Check",
+      description:
+        "Check for loose stones or fittings and get them fixed if needed.",
+    },
+  ];
+
   return (
     <section className="modern-product-section">
       <div className="container">
         <div className="row product-detail-row g-4">
           <div className="col-lg-6 col-md-12">
             <div className="product-gallery-container">
-              {/* Only show badges if their conditions are met */}
               {(product.NewArrival || product.Top_Trending || discountPercentage > 0) && (
                 <div className="product-badges">
                   {product.NewArrival && (
@@ -347,8 +372,8 @@ const Shopinfo = ({ sno, Authenticated }) => {
                 </h1>
                 <div className="header-buttons">
                   <button
-                    className={`wishlist-btn ${isWishlisted ? "wishlisted" : ""
-                      } ${animateHeart ? "animate" : ""}`}
+                    className={`wishlist-btn ${isWishlisted ? "wishlisted" : ""} ${animateHeart ? "animate" : ""
+                      }`}
                     onClick={handleWishlistToggle}
                     aria-label={
                       isWishlisted ? "Remove from wishlist" : "Add to wishlist"
@@ -404,7 +429,6 @@ const Shopinfo = ({ sno, Authenticated }) => {
                   </div>
                 </div>
               )}
-              {/* Hardcoded rating; replace with dynamic data if available */}
               <div className="product-rating">
                 <div className="stars">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -478,10 +502,8 @@ const Shopinfo = ({ sno, Authenticated }) => {
               )}
               <div className="product-actions">
                 <button
-                  className={`action-btn add-to-cart ${isInCart ? "in-cart" : ""
-                    }`}
+                  className={`action-btn add-to-cart ${isInCart ? "in-cart" : ""}`}
                   onClick={handleAddToCart}
-                // disabled={isCartLoading}
                 >
                   <i className="fas fa-shopping-cart"></i>
                   {isInCart ? "In Cart" : "Add to Cart"}
@@ -489,7 +511,6 @@ const Shopinfo = ({ sno, Authenticated }) => {
                 <button
                   className="action-btn buy-now"
                   onClick={handleBuyNow}
-                // disabled={isCartLoading}
                 >
                   <i className="fas fa-bolt"></i>
                   Buy Now
@@ -533,163 +554,34 @@ const Shopinfo = ({ sno, Authenticated }) => {
             </div>
           </div>
           <div className="col-12">
-            <div className="product-details-tabs">
-              <Tab.Container defaultActiveKey="description">
-                <Nav variant="pills" className="custom-tabs">
-                  {(product.Description || product.MaterialFinish || product.NETWT || product.PURITY || product.Gender || product.CollectionType || product.ColorAccents) && (
-                    <>
-                      {product.Description && (
-                        <Nav.Item>
-                          <Nav.Link eventKey="description">
-                            <i className="fas fa-info-circle"></i>
-                            Description
-                          </Nav.Link>
-                        </Nav.Item>
-                      )}
-                      {(product.MaterialFinish || product.NETWT || product.PURITY || product.Gender || product.CollectionType || product.ColorAccents) && (
-                        <Nav.Item>
-                          <Nav.Link eventKey="specifications">
-                            <i className="fas fa-cog"></i>
-                            Specifications
-                          </Nav.Link>
-                        </Nav.Item>
-                      )}
-                      <Nav.Item>
-                        <Nav.Link eventKey="care">
-                          <i className="fas fa-heart"></i>
-                          Care Instructions
-                        </Nav.Link>
-                      </Nav.Item>
-                    </>
-                  )}
-                </Nav>
-                <Tab.Content className="tab-content-container">
-                  {product.Description && (
-                    <Tab.Pane eventKey="description" className="tab-pane-content">
-                      <div className="description-content">
-                        <h4>Product Description</h4>
-                        <p>{product.Description}</p>
-                        <ul>
-                          <li>Premium quality materials</li>
-                          <li>Expert craftsmanship</li>
-                          <li>Elegant and versatile design</li>
-                          {product.Occasion && (
-                            <li>
-                              Perfect for{" "}
-                              {product.Occasion.replace("_", " ").toLowerCase()}
-                            </li>
-                          )}
-                        </ul>
-                      </div>
-                    </Tab.Pane>
-                  )}
-                  {(product.MaterialFinish || product.NETWT || product.PURITY || product.Gender || product.CollectionType || product.ColorAccents) && (
-                    <Tab.Pane
-                      eventKey="specifications"
-                      className="tab-pane-content"
-                    >
-                      <div className="specifications-content">
-                        <h4>Product Specifications</h4>
-                        <div className="spec-single-line">
-                          {(() => {
-                            const specParts = [];
-
-                            if (product.MaterialFinish) {
-                              specParts.push(
-                                <span key="material" className="spec-item">
-                                  <span className="spec-label">Crafted from </span>
-                                  <span className="spec-value">{product.MaterialFinish.toLowerCase()}</span>
-                                </span>
-                              );
-                            }
-
-                            if (product.NETWT) {
-                              const weightText = product.PURITY
-                                ? `${product.NETWT} grams with ${product.PURITY}% purity`
-                                : `${product.NETWT} grams`;
-
-                              specParts.push(
-                                <span key="weight" className="spec-item">
-                                  <span className="spec-label">weighing </span>
-                                  <span className="spec-value">{weightText}</span>
-                                </span>
-                              );
-                            }
-
-                            if (product.Gender) {
-                              specParts.push(
-                                <span key="gender" className="spec-item">
-                                  <span className="spec-label">designed for </span>
-                                  <span className="spec-value">{product.Gender.toLowerCase()}</span>
-                                </span>
-                              );
-                            }
-
-                            if (product.CollectionType) {
-                              specParts.push(
-                                <span key="collection" className="spec-item">
-                                  <span className="spec-label">from our </span>
-                                  <span className="spec-value">{product.CollectionType.toLowerCase()}</span>
-                                  <span className="spec-label"> collection</span>
-                                </span>
-                              );
-                            }
-
-                            if (product.ColorAccents) {
-                              specParts.push(
-                                <span key="color" className="spec-item">
-                                  <span className="spec-label">with </span>
-                                  <span className="spec-value">{product.ColorAccents.toLowerCase()}</span>
-                                  <span className="spec-label"> accents</span>
-                                </span>
-                              );
-                            }
-
-                            return specParts.map((part, index) => (
-                              <React.Fragment key={index}>
-                                {part}
-                                {index < specParts.length - 1 && (
-                                  <span className="spec-separator"> • </span>
-                                )}
-                              </React.Fragment>
-                            ));
-                          })()}
-                        </div>
-                      </div>
-                    </Tab.Pane>
-                  )}
-                  <Tab.Pane eventKey="care" className="tab-pane-content">
-                    <div className="care-content">
-                      <h4>Jewellery Care Guide</h4>
-                      <div className="care-paragraphs">
-                        <p>To maintain the beauty and longevity of your jewelry, follow these care instructions:</p>
-                        <div className="care-tips">
-                          <div className="care-tip">
-                            <i className="fas fa-box-open"></i>
-                            <p>Store your jewelry separately in a soft pouch or box to prevent scratches and tangling.</p>
+            <Tab.Container defaultActiveKey="price-breakup">
+              <Nav variant="tabs" className="custom-tabs">
+                <Nav.Item>
+                  <Nav.Link eventKey="price-breakup">Price Breakup & Care</Nav.Link>
+                </Nav.Item>
+              </Nav>
+              <Tab.Content className="tab-content-container">
+                <Tab.Pane eventKey="price-breakup">
+                  <div className="price-care-container">
+                    <PriceBreakup product={product} />
+                    <div className="care-instructions">
+                      <h3 className="care-title">Jewellery Care Instructions</h3>
+                      <p className="care-description">
+                        Follow these tips to preserve the shine and extend the life of your jewellery's polish:
+                      </p>
+                      <div className="care-tips">
+                        {careInstructions.map((tip, index) => (
+                          <div key={index} className="care-tip-item">
+                            <h4 className="care-tip-title">{tip.title}</h4>
+                            <p className="care-tip-description">{tip.description}</p>
                           </div>
-                          <div className="care-tip">
-                            <i className="fas fa-tint-slash"></i>
-                            <p>Avoid contact with perfumes, chemicals, and water to preserve the finish and prevent damage.</p>
-                          </div>
-                          <div className="care-tip">
-                            <i className="fas fa-cloth"></i>
-                            <p>Gently wipe with a soft, dry cloth after each use to remove oils and maintain its shine.</p>
-                          </div>
-                          <div className="care-tip">
-                            <i className="fas fa-sun"></i>
-                            <p>Keep away from direct sunlight and extreme temperatures to prevent discoloration.</p>
-                          </div>
-                        </div>
+                        ))}
                       </div>
                     </div>
-                  </Tab.Pane>
-                </Tab.Content>
-              </Tab.Container>
-            </div>
-          </div>
-          <div className="col-12">
-            <PriceBreakup product={product} />
+                  </div>
+                </Tab.Pane>
+              </Tab.Content>
+            </Tab.Container>
           </div>
         </div>
       </div>

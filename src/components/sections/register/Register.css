@@ -59,8 +59,12 @@
 .is-invalid {
     border-color: var(--error-color, #dc3545) !important;
 }
+.button{
+    text-align: center ;
+    margin: 0;
+}
 
-.main-btn {
+.main-btns {
     width: 100%;
     padding: 12px;
     background-color: var(--button-bg, var(--primary-hover-color));
@@ -71,6 +75,7 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    
 }
 
 .main-btn:hover {

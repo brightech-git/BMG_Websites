@@ -33,29 +33,6 @@
   }
 }
 
-@key/* ProductCard.css */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
-
-/* Root Variables */
-:root {
-  --primary-color: #2d3748;
-  --secondary-color: #4a5568;
-  --accent-color: #e53e3e;
-  --success-color: #38a169;
-  --warning-color: #d69e2e;
-  --light-gray: #f7fafc;
-  --medium-gray: #e2e8f0;
-  --dark-gray: #2d3748;
-  --white: #ffffff;
-  --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.07);
-  --shadow-medium: 0 10px 25px rgba(0, 0, 0, 0.15);
-  --shadow-heavy: 0 20px 40px rgba(0, 0, 0, 0.2);
-  --border-radius: 12px;
-  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
 /* Card Container */
 .card-container {
   width: 100%;
@@ -75,10 +52,7 @@
   will-change: transform, box-shadow;
 }
 
-.product-item:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-}
+
 
 /* Loading State */
 .product-item.loading {
@@ -123,10 +97,6 @@
   transform: translateX(30px);
 }
 
-.product-item:hover .item-image {
-  transform: scale(1.08);
-  filter: brightness(1.05);
-}
 
 /* Image Indicator */
 .image-indicator {
@@ -287,9 +257,6 @@
   transition: all 0.3s ease;
 }
 
-.product-item:hover .item-name {
-  color: #4a5568;
-}
 
 /* Price Section */
 .price-section {
@@ -436,10 +403,7 @@
 
 /* Touch Device Optimizations */
 @media (hover: none) and (pointer: coarse) {
-  .product-item:hover {
-    transform: none;
-    box-shadow: var(--shadow-light);
-  }
+
 
   .quick-actions {
     opacity: 1;

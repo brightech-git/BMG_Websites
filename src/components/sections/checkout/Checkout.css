@@ -61,14 +61,6 @@
   transition: all 0.3s ease;
 }
 
-.step-item.active {
-  background: rgba(205, 134, 92, 0.1);
-}
-
-.step-item.completed {
-  background: rgba(2, 73, 8, 0.1);
-}
-
 .step-number {
   width: 24px;
   height: 24px;
@@ -221,17 +213,17 @@
   transition: all 0.3s ease;
 }
 
-.edit-button {
-  background: rgba(25, 118, 210, 0.1);
-  color: #1976d2;
+.edit-buttons {
+  background: rgba(228, 230, 233) !important;
+  color: #023a72 !important;
 }
 
 .edit-button:hover {
-  background: rgba(25, 118, 210, 0.2);
+  background: rgb(224, 225, 226) !important;
 }
 
 .delete-button {
-  background: rgba(211, 47, 47, 0.1);
+  background: rgb(236, 232, 232);
   color: #d32f2f;
 }
 
@@ -243,6 +235,7 @@
   margin: 0.25rem 0;
   font-weight: 400;
   font-size: clamp(11px, 2vw, 12px);
+  font-family: var(--secondary-font);
 }
 
 .phone-info {
@@ -278,7 +271,7 @@
 /* No Address State */
 .no-address-state {
   min-height: 200px;
-  background: var(--primary-card-color);
+  background: var(--primary-card-color) !important;
   border-radius: 8px;
   margin: 1rem 0;
   display: flex;
@@ -330,7 +323,7 @@
 .order-title {
   display: flex;
   align-items: center;
-  font-size: clamp(12px, 2.2vw, 16px) !important;
+  font-size: clamp(12px, 2vw, 14px) !important;
   font-weight: 500 ;
 }
 
@@ -379,8 +372,8 @@
   overflow: hidden;
 }
 
-.item-name {
-  font-size: clamp(11px, 2.5vw, 12px);
+.order-item-name {
+  font-size: clamp(10px, 2vw, 10px) ;
   font-weight: 500;
   margin: 0 0 0.25rem 0;
   white-space: nowrap;
@@ -590,11 +583,12 @@
 .address-modal .modal-content {
   border-radius: 8px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  background: var(--primary-card-color) !important;
 }
 
 .modal-header-styled {
   padding: 0.75rem;
-  background: var(--primary-card-color);
+  background: var(--primary-card-color) !important;
 }
 
 .modal-title-styled {
@@ -616,7 +610,7 @@
 }
 
 .address-list::-webkit-scrollbar-track {
-  background: var(--primary-card-color);
+  background: var(--black-color) !important;
 }
 
 .address-list::-webkit-scrollbar-thumb {
@@ -633,6 +627,7 @@
 .address-content {
   flex: 1;
   padding: 0.75rem;
+  background-color: var(--primary-color) !important;
 }
 
 .address-select-area {
@@ -886,6 +881,15 @@
     width: 100%;
     font-size: clamp(9px, 2vw, 10px);
   }
+ .order-item-name {
+   font-size: 10px;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   max-width: 120px;
+   display: inline-block;
+   vertical-align: middle;
+ }
 }
 
 /* Print Styles */
@@ -911,3 +915,5 @@
     border: none;
   }
 } 
+
+

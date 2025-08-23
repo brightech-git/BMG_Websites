@@ -7,13 +7,13 @@ import './handpicked.css';
 
 const BASE_URL = "https://app.bmgjewellers.com";
 
-const NavButton = ({ direction, onClick }) => {
+const NoBlurNavButton = ({ direction, onClick }) => {
     const iconClass = direction === 'next' ? 'fal fa-arrow-right' : 'fal fa-arrow-left';
     const ariaLabel = direction === 'next' ? 'Next slide' : 'Previous slide';
 
     return (
         <button
-            className={`gem-nav-btn ${direction}-btn`}
+            className={`noblur-nav-btn ${direction}-btn`}
             onClick={onClick}
             aria-label={ariaLabel}
         >
@@ -22,8 +22,8 @@ const NavButton = ({ direction, onClick }) => {
     );
 };
 
-const ProductCard = ({ product }) => {
-    console.log(product, 'productcard');
+const NoBlurProductCard = ({ product }) => {
+    console.log(product, 'productcard in handpick');
 
     const handleProductClick = (e, sno) => {
         e.preventDefault();
@@ -33,52 +33,64 @@ const ProductCard = ({ product }) => {
 
     // Handle multiple images (array or comma-separated string)
     const getFirstImage = () => {
+        if (!product || !product.ImagePath) return null;
+
+        let first = null;
+
         if (Array.isArray(product.ImagePath)) {
-            return product.ImagePath[0]; // first element if it's an array
+            first = product.ImagePath.length > 0 ? product.ImagePath[0] : null;
+        } else if (typeof product.ImagePath === "string") {
+            first = product.ImagePath.split(",")[0].trim();
         }
-        if (typeof product.ImagePath === "string") {
-            return product.ImagePath.split(",")[0]; // first part if comma-separated string
+
+        if (!first) return null;
+
+        // check if it already looks like a full URL
+        if (first.startsWith("http://") || first.startsWith("https://")) {
+            return first;
         }
-        return null;
+
+        return `${BASE_URL}${first}`;
     };
+
 
     const firstImage = getFirstImage();
 
     return (
-        <div className="gem-product-card">
-            <div className="product-img-container">
+        <div className="noblur-product-card">
+            <div className="noblur-product-img-container">
                 {firstImage ? (
                     <img
-                        src={`${BASE_URL}${product.firstImage}`}
+                        src={firstImage}
                         alt={product.ITEMNAME}
                         onClick={(e) => handleProductClick(e, product.SNO)}
                     />
                 ) : (
-                    <div className="no-image">No Image</div>
+                    <div className="noblur-no-image">No Image</div>
                 )}
             </div>
         </div>
     );
 };
 
-const HighlightedProducts = ({ itemName, subItemName }) => {
+const NoBlurHighlightedProducts = ({ itemName, subItemName }) => {
     const { data, loading, error } = useFilterProducts({ itemName, subItemName }, 0, 3);
 
-    console.log('productsdata',data)
+    console.log('productsdata', data)
 
-    if (loading) return <div className="text-center">Loading products...</div>;
-    if (error) return <div className="text-center text-danger">Error loading products</div>;
+    if (loading) return <div className="noblur-text-center">Loading products...</div>;
+    if (error) return <div className="noblur-text-center noblur-text-danger">Error loading products</div>;
 
     return (
-        <div className="gem-products-grid">
+        <div className="noblur-products-grid">
             {data?.data?.map((product, index) => (
-                <ProductCard key={`product-${index}`} product={product} />
+                <NoBlurProductCard key={`product-${index}`} product={product} />
             ))}
         </div>
     );
 };
 
-const Handpicked = () => {
+const NoBlurHandpicked = () => {
     const history = useHistory();
     const { data, isLoading, error } = useCategoryBanner();
 
@@ -99,31 +111,31 @@ const Handpicked = () => {
         autoplay: true,
         autoplaySpeed: 4000,
         speed: 800,
-        nextArrow: <NavButton direction="next" />,
-        prevArrow: <NavButton direction="prev" />,
+        nextArrow: <NoBlurNavButton direction="next" />,
+        prevArrow: <NoBlurNavButton direction="prev" />,
         responsive: [
             {
                 breakpoint: 1400,
                 settings: {
                     slidesToShow: 2,
-                    centerMode: true,
-                    centerPadding: '10%',
+                    centerMode: false,
+                    centerPadding: '0',
                 }
             },
             {
                 breakpoint: 992,
                 settings: {
                     slidesToShow: 2,
-                    centerMode: true,
-                    centerPadding: '15%',
+                    centerMode: false,
+                    centerPadding: '0',
                 }
             },
             {
                 breakpoint: 768,
                 settings: {
                     slidesToShow: 2,
-                    centerMode: true,
-                    centerPadding: '5%',
+                    centerMode: false,
+                    centerPadding: '0',
                     arrows: false
                 }
             },
@@ -131,7 +143,7 @@ const Handpicked = () => {
                 breakpoint: 576,
                 settings: {
                     slidesToShow: 2,
-                    centerMode: true,
+                    centerMode: false,
                     centerPadding: '0',
                     arrows: false
                 }
@@ -140,7 +152,7 @@ const Handpicked = () => {
                 breakpoint: 520,
                 settings: {
                     slidesToShow: 1,
-                    centerMode: true,
+                    centerMode: false,
                     centerPadding: '0',
                     arrows: false
                 }
@@ -148,28 +160,28 @@ const Handpicked = () => {
         ],
     };
 
-    if (isLoading) return <div className="gem-loading">Loading banners...</div>;
-    if (error) return <div className="gem-error">Error loading banners: {error.message}</div>;
+    if (isLoading) return <div className="noblur-loading">Loading banners...</div>;
+    if (error) return <div className="noblur-error">Error loading banners: {error.message}</div>;
 
     return (
-        <section className="gem-display">
+        <section className="noblur-display">
             <div className="container-fluid">
-                <div className="gem-header">
-                    <h2 className="gem-title">
-                        <span className="gem-gradient-text">Exclusive</span>
-                        <span className="gem-subtitle"> Collection</span>
+                <div className="noblur-header">
+                    <h2 className="noblur-title">
+                        <span className="noblur-gradient-text">Exclusive</span>
+                        <span className="noblur-subtitle"> Collection</span>
                     </h2>
-                    <p className="gem-description">
+                    <p className="noblur-description">
                         Hand-selected premium pieces for the discerning collector
                     </p>
                 </div>
 
-                <Slider className="gem-slider-container" {...sliderSettingss}>
+                <Slider className="noblur-slider-container" {...sliderSettingss}>
                     {data?.data?.map((banner, index) => (
-                        <div key={`banner-${index}`} className="gem-slide">
-                            <div className="gem-main-product">
+                        <div key={`banner-${index}`} className="noblur-slide">
+                            <div className="noblur-main-product">
                                 <div
-                                    className="gem-main-img"
+                                    className="noblur-main-img"
                                     onClick={() => handleShopNow(banner.itemName, banner.subItemName)}
                                     role="button"
                                     tabIndex={0}
@@ -181,8 +193,8 @@ const Handpicked = () => {
                                         loading="lazy"
                                     />
                                 </div>
-                                
-                                <HighlightedProducts
+
+                                <NoBlurHighlightedProducts
                                     itemName={banner.itemName}
                                     subItemName={banner.subItemName}
                                 />
@@ -195,4 +207,4 @@ const Handpicked = () => {
     );
 };
 
-export default Handpicked;
+export default NoBlurHandpicked;

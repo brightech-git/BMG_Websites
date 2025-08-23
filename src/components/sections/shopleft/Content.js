@@ -8,6 +8,35 @@ import { useSelector } from 'react-redux';
 
 const baseUrl = 'https://app.bmgjewellers.com';
 
+// Bootstrap Loading Placeholder Component
+const ProductCardPlaceholder = () => (
+    <div className="product-card-placeholder">
+        <div className="placeholder-glow">
+            <div className="product-thumb">
+                <div className="placeholder bg-secondary w-100 h-100"></div>
+            </div>
+            <div className="product-desc">
+                <div className="placeholder bg-secondary mb-2" style={{ height: '20px', width: '80%' }}></div>
+                <div className="placeholder bg-secondary mb-2" style={{ height: '16px', width: '60%' }}></div>
+                <div className="placeholder bg-secondary mb-2" style={{ height: '18px', width: '40%' }}></div>
+                <div className="d-flex justify-content-between align-items-center mt-3">
+                    <div className="placeholder bg-secondary" style={{ height: '20px', width: '50px' }}></div>
+                    <div className="placeholder bg-secondary rounded-circle" style={{ height: '32px', width: '32px' }}></div>
+                </div>
+            </div>
+        </div>
+    </div>
+);
+
+// Loading Grid Component
+const LoadingGrid = ({ count = 8 }) => (
+    <div className="product-grid">
+        {Array.from({ length: count }, (_, index) => (
+            <ProductCardPlaceholder key={index} />
+        ))}
+    </div>
+);
+
 const Content = () => {
     const history = useHistory();
     const location = useLocation();
@@ -16,12 +45,14 @@ const Content = () => {
     const defaultPageSize = 20;
     const [pageSize, setPageSize] = useState(defaultPageSize);
     const [hideLoadMore, setHideLoadMore] = useState(false);
+    const [lastAttemptTriggered, setLastAttemptTriggered] = useState(false);
     const previousProductCount = useRef(0);
+    const observerRef = useRef(null);
+    const loadMoreRef = useRef(null);
 
     const page = 0;
     const searchParams = new URLSearchParams(location.search);
     const queryFilters = Object.fromEntries(searchParams);
-    const [loadTriggered, setLoadTriggered] = useState(false);
     const {
         data,
         loading: isLoading,
@@ -57,32 +88,97 @@ const Content = () => {
         window.scrollTo(0, 0);
     }, [location]);
 
-    const handleLoadMore = () => {
-        previousProductCount.current = products.length;
-        setLoadTriggered(true);
-        setPageSize((prevSize) => prevSize + 10);
-    };
-
     const products = Array.isArray(data?.data)
         ? data.data
         : Array.isArray(data)
             ? data
             : [];
 
-    const totalItems = data?.totalItems || products.length;
+    const handleLoadMore = useCallback(() => {
+        if (lastAttemptTriggered) return; // Prevent further triggers after last attempt
+        console.log('handleLoadMore triggered, previous count:', previousProductCount.current);
+        previousProductCount.current = products.length; // Set before fetch
+        setPageSize((prevSize) => {
+            if (prevSize === defaultPageSize) return prevSize + 30; // First load: 20 + 30
+            return prevSize + 10; // Subsequent loads: +10
+        });
+    }, [defaultPageSize, lastAttemptTriggered, products.length]);
 
-    // 🔍 Detect if load more fetched anything new
+    // Detect if no new products were fetched
     useEffect(() => {
-        if (loadTriggered) {
-            if (products.length === previousProductCount.current) {
-                // No new products were loaded
-                setHideLoadMore(true);
-            }
-            setLoadTriggered(false); // Reset flag after checking
+        console.log('products.length current:', previousProductCount.current);
+        console.log('product length:', products.length);
+        console.log('products.length === previousProductCount.current:', products.length === previousProductCount.current);
+        if (!isLoading && previousProductCount.current > 0 && products.length === previousProductCount.current || products.length === 0)  {
+            // No new products were loaded after a fetch attempt
+            setHideLoadMore(true);
+            setLastAttemptTriggered(true); // Mark that the last attempt was made
+        } else if (!isLoading && products.length > previousProductCount.current) {
+            // New products were loaded, reset flags
+            setHideLoadMore(false);
+            setLastAttemptTriggered(false);
         }
-    }, [products.length, loadTriggered]);
+    }, [products.length, isLoading]);
 
-    if (isLoading) return <div className="loading-spinner">Loading...</div>;
+    // Reset states when filters change
+    useEffect(() => {
+        // Only reset if queryFilters change significantly
+        setHideLoadMore(false);
+        setLastAttemptTriggered(false);
+        setPageSize(defaultPageSize); // Reset pageSize to initial value
+        previousProductCount.current = 0; // Reset product count
+    }, [location.search, defaultPageSize]);
+
+    // Set up IntersectionObserver for infinite scroll
+    useEffect(() => {
+        if (isLoading || hideLoadMore || lastAttemptTriggered) {
+            // Unobserve if no more products to load
+            if (observerRef.current && loadMoreRef.current) {
+                observerRef.current.unobserve(loadMoreRef.current);
+            }
+            return;
+        }
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && !isLoading) {
+                    console.log('IntersectionObserver triggered');
+                    handleLoadMore();
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        if (loadMoreRef.current) {
+            observer.observe(loadMoreRef.current);
+        }
+
+        observerRef.current = observer;
+
+        return () => {
+            if (observerRef.current && loadMoreRef.current) {
+                observerRef.current.unobserve(loadMoreRef.current);
+            }
+        };
+    }, [isLoading, hideLoadMore, handleLoadMore, lastAttemptTriggered]);
+
+    // Show loading placeholders for initial load
+    if (isLoading && products.length === 0) {
+        return (
+            <section className="shop-container">
+                <ProductFilterBar />
+                <div className="product-area">
+                    <div className="product-header">
+                        <div className="placeholder-glow">
+                            <div className="placeholder bg-secondary" style={{ height: '20px', width: '200px' }}></div>
+                        </div>
+                    </div>
+                    <LoadingGrid count={8} />
+                </div>
+            </section>
+        );
+    }
+
     if (isError)
         return (
             <p className="error-message">
@@ -97,7 +193,8 @@ const Content = () => {
             <div className="product-area">
                 <div className="product-header">
                     <p>
-                        Showing {products.length ? 1 : 0} to {products.length} of {totalItems} results
+                        Showing {products.length ? 1 : 0} to {products.length} of{' '}
+                        {data?.totalItems ?? 'many'} results
                     </p>
                 </div>
                 <div className="product-grid">
@@ -131,14 +228,29 @@ const Content = () => {
                     )}
                 </div>
 
-                {/* ✅ Show Load More only if more products are available */}
-          
-                    <div className="load-more-container">
-                        <button className="load-more-btn" onClick={handleLoadMore}>
-                            Load More
-                        </button>
+                {/* Loading indicator or no more products message */}
+                {!hideLoadMore ? (
+                    <div ref={loadMoreRef} className="load-more-container">
+                        {isLoading ? (
+                            <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '60px' }}>
+                                <div className="placeholder-glow d-flex gap-2">
+                                    <div className="spinner-border text-secondary" role="status">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </div>
+                                    <div className="placeholder bg-secondary align-self-center" style={{ height: '20px', width: '120px' }}></div>
+                                </div>
+                            </div>
+                        ) : (
+                            <div style={{ height: '20px' }} /> // Invisible trigger for observer
+                        )}
                     </div>
-           
+                ) : (
+                    products.length > 0 && (
+                        <div className="load-more-container">
+                            <p>No more products to load</p>
+                        </div>
+                    )
+                )}
             </div>
         </section>
     );

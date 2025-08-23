@@ -318,24 +318,20 @@ const ProductCard = ({ item }) => {
                 
                 .card-container {
                     width: 100%;
-                    max-width: 300px;
+                    max-width: 320px;
                     margin: 0 auto;
                 }
 
                 .product-item {
                     position: relative;
                     background: transparent;
-                    border-radius: 12px;
+                    border-radius: 0px;
                     overflow: hidden;
                     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                     cursor: pointer;
                     border: 1px solid #ebebebff;
                 }
 
-                .product-item:hover {
-                    transform: translateY(-8px);
-                    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-                }
 
                 .product-item.loading {
                     animation: pulse 1.5s ease-in-out infinite;
@@ -453,11 +449,7 @@ const ProductCard = ({ item }) => {
                     transform: translateX(100%);
                 }
 
-                .product-item:hover .main-image,
-                .product-item:hover .door-image,
-                .product-item:hover .second-image {
-                    filter: brightness(1.05);
-                }
+               
 
                 /* Image Indicator */
                 .image-indicator {
@@ -597,7 +589,7 @@ const ProductCard = ({ item }) => {
                 .item-info {
                     padding: 10px 8px;
                     text-align: center;
-                    background: transparent;
+                    background: var(--primary-card-color);
                 }
 
                 .item-name {

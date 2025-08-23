@@ -112,14 +112,14 @@ const ChangePassword = () => {
             <div className={`form-group ${errors.currentPassword ? 'error' : ''}`}>
               <label htmlFor="currentPassword">Current Password</label>
               <div className="input-wrapper">
-                <FiLock className="input-icon" />
+              
                 <input
                   type={showCurrentPassword ? 'text' : 'password'}
                   id="currentPassword"
                   name="currentPassword"
                   value={formData.currentPassword}
                   onChange={handleChange}
-                  placeholder="Enter current password"
+                  placeholder=  "Enter current password"
                   className="password-input"
                 />
                 <button
@@ -140,7 +140,7 @@ const ChangePassword = () => {
             <div className={`form-group ${errors.newPassword ? 'error' : ''}`}>
               <label htmlFor="newPassword">New Password</label>
               <div className="input-wrapper">
-                <FiLock className="input-icon" />
+             
                 <input
                   type={showNewPassword ? 'text' : 'password'}
                   id="newPassword"
@@ -182,7 +182,7 @@ const ChangePassword = () => {
             <div className={`form-group ${errors.confirmPassword ? 'error' : ''}`}>
               <label htmlFor="confirmPassword">Confirm New Password</label>
               <div className="input-wrapper">
-                <FiLock className="input-icon" />
+              
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
                   id="confirmPassword"

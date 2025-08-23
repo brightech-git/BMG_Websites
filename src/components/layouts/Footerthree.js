@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Backtotop from "./Backtotop";
 import logo from "./logo.png";
 import "./Footer.css";
+import btsLogo from './btsLogo.jpg'
 
 class Footertwo extends Component {
   render() {
@@ -156,7 +157,7 @@ class Footertwo extends Component {
                         <div className="desc">
                           <h6 className="title">Phone Number</h6>
                           <span> +91-95143 33601,</span>
-                          <span> +91-95143 336097</span>
+                          <span> +91-95143 33609</span>
                         </div>
                       </div>
                       <div className="contact-box">
@@ -583,12 +584,12 @@ class Footertwo extends Component {
                   <h6 className="text-dark font-weight-bold">Offers</h6>
                   <ul className="footer-links">
                     <li>
-                      <Link to="/shop-left?itemName=OFFERS&subItemName=BUY 2 GET 1">
+                      <Link to="/shop-left?itemName=OFFER&subItemName=BUY 2 GET 1">
                         Buy 2 Get 1
                       </Link>
                     </li>
                     <li>
-                      <Link to="/shop-left?itemName=OFFERS&subItemName=50% OFF">
+                      <Link to="/shop-left?itemName=OFFER&subItemName=50% OFF">
                         50% Off
                       </Link>
                     </li>
@@ -634,6 +635,7 @@ class Footertwo extends Component {
                     >
                       Powered By
                     </span>{" "}
+                    <img src={btsLogo} style={{width:'25px' , height:'25px', margin:'0 5px'}} />
                     <a
                       href="https://www.brightechsoftware.com/"
                       target="_blank"
@@ -642,7 +644,7 @@ class Footertwo extends Component {
                         color: "#404040",
                         fontSize: "14px",
                         textDecoration: "none",
-                        fontWeight: "500",
+                        fontWeight: "800",
                         marginLeft: "4px",
                       }}
                     >

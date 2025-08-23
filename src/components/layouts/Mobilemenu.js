@@ -31,17 +31,18 @@ const Mobilemenu = () => {
             icon: 'fa-shopping-bag',
         },
         { id: 3, linkText: 'About', link: '/about', icon: 'fa-info-circle' },
-        {
-            id: 4,
-            linkText: 'Pages',
-            child: true,
-            submenu: [
-                { id: 41, link: '/blog-grid', linkText: 'Blog', icon: 'fa-blog' },
-                { id: 42, link: '/faq', linkText: 'FAQ', icon: 'fa-question-circle' },
-            ],
-            icon: 'fa-file-alt',
-        },
-        { id: 5, linkText: 'Contact', link: '/contact', icon: 'fa-envelope' },
+        // {
+        //     id: 4,
+        //     linkText: 'Pages',
+        //     child: true,
+        //     submenu: [
+        //         { id: 41, link: '/blog-grid', linkText: 'Blog', icon: 'fa-blog' },
+        //         { id: 42, link: '/faq', linkText: 'FAQ', icon: 'fa-question-circle' },
+        //     ],
+        //     icon: 'fa-file-alt',
+        // },
+        { id: 5, linkText: 'Bmg Live', link: '/appointment', icon: 'fa-video '},
+        { id: 6, linkText: 'Contact', link: '/contact', icon: 'fa-envelope' },
     ];
 
     const handleClick = (keyName, keyValue) => {

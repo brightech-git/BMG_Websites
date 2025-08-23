@@ -11,7 +11,7 @@ class Account extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title> BMG- My Account</title>
+                    <title> Bmg- My Account</title>
                     <meta
                         name="account"
                         content="#"
@@ -20,6 +20,7 @@ class Account extends Component {
                 <Header/>
                 <Breadcrumb breadcrumb={{pagename:'My Account'}} />
                 <Content/>
+                
                 <Instafeeds/>
                 <Footer/>
             </Fragment>

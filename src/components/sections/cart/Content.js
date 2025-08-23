@@ -430,7 +430,7 @@ const Cart = ({ history }) => {
                                 )}
 
                                 <button
-                                    className="main-btn btn-filled w-100 mt-3"
+                                    className="main-button button-filled w-100 mt-3"
                                     onClick={handleOnCheckout}
                                     disabled={!isDataComplete || isRemoving || selectedItems.length === 0}
                                 >

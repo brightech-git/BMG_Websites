@@ -499,7 +499,7 @@ const ProductCard = ({ item }) => {
                     min-width: 36px;
                     height: 36px;
                     border: none;
-                    color: #444;
+                    color: #041f60;
                     border-radius: 18px;
                     padding: 0 10px;
                     background: #ffffff;
@@ -516,7 +516,7 @@ const ProductCard = ({ item }) => {
                     min-width: 36px;
                     height: 36px;
                     border: none;
-                    color: #404040;
+                    color: #041f60;
                     border-radius: 18px;
                     padding: 0 10px;
                     background: #f6f5f0;
@@ -527,7 +527,7 @@ const ProductCard = ({ item }) => {
                 }
 
                 .add-cart-btn {
-                    color: #303030;
+                    color: #041f60;
                     font-family: 'Gloock', serif;
                     font-weight: bolder;
                     min-width: auto;
@@ -596,7 +596,7 @@ const ProductCard = ({ item }) => {
                     font-family: 'Montserrat', sans-serif;
                     font-size: 1rem;
                     font-weight: 400;
-                    color: #2d3748;
+                    color: #041f60;
                     margin: 0 auto;
                     text-transform: capitalize;
                     overflow: hidden;
@@ -616,7 +616,7 @@ const ProductCard = ({ item }) => {
                     font-family: 'Montserrat', sans-serif;
                     font-size: 0.9rem;
                     font-weight: 400;
-                    color: #1a202c;
+                    color: #041f60;
                 }
 
                 /* Touch Device Optimizations */

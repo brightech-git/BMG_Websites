@@ -1,42 +1,35 @@
 import React, { useState } from "react";
-import { NavLink, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { logout } from "../../../../redux/slices/userSlice";
 import {
   FiUser,
   FiShoppingBag,
   FiMapPin,
-  FiHeart,
-  FiShoppingCart,
   FiLock,
   FiLogOut,
   FiMenu,
   FiX,
-  FiHome
+  FiHome,
 } from "react-icons/fi";
 import "./AccountSideBarStyles.css";
 
-
-const AccountSidebar = () => {
+const AccountSidebar = ({ activeComponent, setActiveComponent, openLogoutModal }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const history = useHistory();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const menuItems = [
-    
-    { path: "/dashboard", icon: <FiUser size={18} />, label: "Dashboard" },
-    { path: "/orders", icon: <FiShoppingBag size={18} />, label: "Orders" },
-    { path: "/AddressManager", icon: <FiMapPin size={18} />, label: "Addresses" },
-    // { path: "/wishlist", icon: <FiHeart size={18} />, label: "Wishlist" },
-    { path: "/", icon: <FiHome size={18} />, label: "Home" },
-    { path: "/change-password", icon: <FiLock size={18} />, label: "Security" },
+    { key: "Dashboard", icon: <FiUser size={18} />, label: "Dashboard" },
+    { key: "Orders", icon: <FiShoppingBag size={18} />, label: "Orders" },
+    { key: "Addresses", icon: <FiMapPin size={18} />, label: "Addresses" },
+    { key: "Security", icon: <FiLock size={18} />, label: "Security" },
   ];
 
-  // Function to generate user initials
   const getUserInitials = () => {
     if (!user?.username) return "GU"; // Guest User
-    const names = user.username.split(' ');
+    const names = user.username.split(" ");
     if (names.length === 1) return names[0].charAt(0).toUpperCase();
     return `${names[0].charAt(0)}${names[names.length - 1].charAt(0)}`.toUpperCase();
   };
@@ -51,62 +44,65 @@ const AccountSidebar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  return (
-    <section > 
-    <div className="account-navigation-panel">
-      {/* Mobile menu header */}
-      <div className="mobile-menu-header" onClick={toggleMobileMenu}>
-        <div className="mobile-menu-toggle">
-          {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-        </div>
-        <div className="mobile-profile-info">
-          <h3 className="profile-name">{user?.username || "Guest User"}</h3>
-          {/* <p className="user-email">{user?.email || "No email provided"}</p> */}
-        </div>
-      </div>
+  const handleMenuClick = (key) => {
+    if (key === "Home") {
+      history.push("/");
+    } else {
+      setActiveComponent(key);
+      setIsMobileMenuOpen(false);
+    }
+  };
 
-      {/* Content that will be collapsible on mobile */}
-      <div className={`sidebar-content ${isMobileMenuOpen ? "mobile-open" : ""}`}>
-        <div className="user-profile-card">
-          <div className="profile-avatar-container">
-            <div className="profile-avatar">
-              {getUserInitials()}
+  return (
+    <section>
+      <div className="account-navigation-panel">
+        <div className="mobile-menu-header" onClick={toggleMobileMenu}>
+          <div className="mobile-menu-toggle">
+            {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+          </div>
+          <div className="mobile-profile-info">
+            <h3 className="profile-name">{user?.username || "Guest User"}</h3>
+          </div>
+        </div>
+
+        <div className={`sidebar-content ${isMobileMenuOpen ? "mobile-open" : ""}`}>
+          <div className="user-profile-card">
+            <div className="profile-avatar-container">
+              <div className="profile-avatar">{getUserInitials()}</div>
+            </div>
+            <div className="profile-info">
+              <h3 className="profile-name">{user?.username || "Guest User"}</h3>
             </div>
           </div>
-          <div className="profile-info">
-            <h3 className="profile-name">{user?.username || "Guest User"}</h3>
-            {/* <p className="user-email">{user?.email || "No email provided"}</p> */}
-          </div>
-        </div>
 
-        <nav className="account-navigation">
-          <ul className="navigation-list">
-            {menuItems.map((item) => (
-              <li key={item.path} className="navigation-item">
-                <NavLink
-                  to={item.path}
-                  exact={item.path === "/dashboard"}
-                  activeClassName="current-route"
-                  className="navigation-link"
-                  onClick={() => setIsMobileMenuOpen(false)}
+          <nav className="account-navigation">
+            <ul className="navigation-list">
+              {menuItems.map((item) => (
+                <li key={item.key} className="navigation-item">
+                  <button
+                    className={`navigation-link ${activeComponent === item.key ? "current-route" : ""}`}
+                    onClick={() => handleMenuClick(item.key)}
+                  >
+                    <span className="link-icon">{item.icon}</span>
+                    <span className="link-text">{item.label}</span>
+                  </button>
+                </li>
+              ))}
+              <li className="navigation-item">
+                <button
+                  className="navigation-link sign-out-btn"
+                  onClick={() => openLogoutModal()}
                 >
-                  <span className="link-icon">{item.icon}</span>
-                  <span className="link-text">{item.label}</span>
-                </NavLink>
+                  <span className="link-icon">
+                    <FiLogOut size={18} />
+                  </span>
+                  <span className="link-text">Logout</span>
+                </button>
               </li>
-            ))}
-            <li className="navigation-item">
-              <button className="navigation-link sign-out-btn" onClick={handleLogout}>
-                <span className="link-icon">
-                  <FiLogOut size={18} />
-                </span>
-                <span className="link-text">Logout</span>
-              </button>
-            </li>
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        </div>
       </div>
-    </div>
     </section>
   );
 };

@@ -88,11 +88,11 @@ const Banner = () => {
                         </div>
                         <div className="hero-content-container">
                             <div className="hero-content">
-                                <h1 className="hero-title">{img.title || 'Explore Our Collection'}</h1>
-                                <p className="hero-description">{img.subtitle || 'Discover our latest collection.'}</p>
+                                <h1 className="banner-hero-title">{img.title || 'Explore Our Collection'}</h1>
+                                <p className="banner-hero-description">{img.subtitle || 'Discover our latest collection.'}</p>
                                 {(img.itemname || img.gender) && (
                                     <button
-                                        className="hero-buttons"
+                                        className="banner-hero-buttons"
                                         onClick={() => handleExploreNow(img.itemname, img.gender)}
                                         aria-label={`Explore ${img.title || 'collection'}`}
                                     >

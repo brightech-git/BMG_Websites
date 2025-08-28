@@ -21,3 +21,14 @@ export const getPaymentRedirectUrl = async (redirectURI, tranCtx) => {
         throw error?.response?.data || error;
     }
 };
+
+export const getPaymentStatus = async (orderId)=>{
+    try{
+        const response = await PublicUrl.post(`/payment/status`, { merchantTxnNo: orderId, originalTxnNo: orderId, transactionType :"STATUS"});
+        return response.data;
+    }
+    catch (err) {
+        console.error("Error checking payment status:", err);
+        throw err;
+    }
+} 

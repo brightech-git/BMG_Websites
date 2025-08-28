@@ -14,25 +14,23 @@ import {
   FiUser,
 } from "react-icons/fi";
 import "./Dashboard.css";
-import AccountSideBar from "../AccountSidebar/AccountSideBar";
 import { useOrderHistory } from "../../../../hook/order/useOrderHistoryQuery";
 import { useCart } from "../../../../hook/cart/useCartQuery";
 import { useFavorites } from "../../../../hook/favorites/useFavoritesQuery";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom/cjs/react-router-dom";
 
-const Dashboard = () => {
+const Dashboard = ({ setActiveComponent, setSelectedOrder }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const history = useHistory();
 
   const {
-    data: ordersData,
+    data: ordersData = [],
     isLoading: ordersLoading,
     error: ordersError,
   } = useOrderHistory({ page: 0, size: 3, status: "" });
 
   const {
-    cartItems: cartData,
+    cartItems: cartData = { data: [] },
     isLoading: cartLoading,
     error: cartError,
   } = useCart();
@@ -66,7 +64,7 @@ const Dashboard = () => {
     return null;
   };
 
-  const calculateStats = () => {
+  const calculateMetrics = () => {
     const orders = Array.isArray(ordersData) ? ordersData : [];
     const totalOrders = orders.length;
     const wishlistItems = wishlistResponse?.data?.length || 0;
@@ -74,33 +72,33 @@ const Dashboard = () => {
 
     return [
       {
-        icon: <FiShoppingBag size={28} />,
+        icon: <FiShoppingBag size={24} />,
         value: totalOrders,
         label: "Total Orders",
-        link: "/orders",
+        key: "Orders",
         color: "blue",
-        description: "All time orders",
+        description: "All your orders",
       },
       {
-        icon: <FiHeart size={28} />,
+        icon: <FiHeart size={24} />,
         value: wishlistItems,
         label: "Wishlist",
-        link: "/wishlist",
+        key: "Wishlist",
         color: "rose",
-        description: "Saved items",
+        description: "Your saved items",
       },
       {
-        icon: <FiShoppingCart size={28} />,
+        icon: <FiShoppingCart size={24} />,
         value: cartItems,
         label: "Cart Items",
-        link: "/cart",
+        key: "Cart",
         color: "purple",
-        description: "Ready to checkout",
+        description: "Items ready to checkout",
       },
     ];
   };
 
-  const stats = calculateStats();
+  const metrics = calculateMetrics();
 
   const getStatusBadge = (status) => {
     switch (status?.toUpperCase()) {
@@ -177,23 +175,22 @@ const Dashboard = () => {
     };
   };
 
+  const handleOrderRowClick = (order) => {
+    setSelectedOrder(order);
+    setActiveComponent("OrderDetail");
+  };
+
   const isLoading = ordersLoading || cartLoading || wishlistLoading;
   const hasError = ordersError || cartError || wishlistError;
   const orders = Array.isArray(ordersData) ? ordersData : [];
 
   if (isLoading) {
     return (
-      <div className="dashboard-layout">
-        <AccountSideBar
-          isMobileMenuOpen={isMobileMenuOpen}
-          toggleMobileMenu={toggleMobileMenu}
-        />
-        <main
-          className={`dashboard-main ${isMobileMenuOpen ? "menu-open" : ""}`}
-        >
-          <div className="loading-container">
-            <FiLoader className="loading-spinner" size={32} />
-            <p>Loading your dashboard...</p>
+      <div className="dashboard">
+        <main className={`dashboard__content ${isMobileMenuOpen ? "menu-open" : ""}`}>
+          <div className="loading">
+            <FiLoader className="loading__spinner" size={24} />
+            <p className="loading__text">Loading your dashboard...</p>
           </div>
         </main>
       </div>
@@ -202,31 +199,24 @@ const Dashboard = () => {
 
   if (hasError) {
     return (
-      <div className="dashboard-layout">
-        <AccountSideBar
-          isMobileMenuOpen={isMobileMenuOpen}
-          toggleMobileMenu={toggleMobileMenu}
-        />
-        <main
-          className={`dashboard-main ${isMobileMenuOpen ? "menu-open" : ""}`}
-        >
-          <div className="error-container">
-            <FiAlertCircle size={24} className="error-icon" />
-            <h3>Error Loading Dashboard</h3>
-            <p>We couldn't load your dashboard data. Please try again later.</p>
+      <div className="dashboard">
+        <main className={`dashboard__content ${isMobileMenuOpen ? "menu-open" : ""}`}>
+          <div className="error">
+            <FiAlertCircle size={24} className="error__icon" />
+            <h3 className="error__title">Error Loading Dashboard</h3>
+            <p className="error__message">
+              We couldn't load your dashboard data. Please try again later.
+            </p>
             {ordersError && (
-              <p className="error-detail">Orders: {ordersError.message}</p>
+              <p className="error__detail">Orders: {ordersError.message}</p>
             )}
             {cartError && (
-              <p className="error-detail">Cart: {cartError.message}</p>
+              <p className="error__detail">Cart: {cartError.message}</p>
             )}
             {wishlistError && (
-              <p className="error-detail">Wishlist: {wishlistError.message}</p>
+              <p className="error__detail">Wishlist: {wishlistError.message}</p>
             )}
-            <button
-              onClick={() => window.location.reload()}
-              className="retry-button"
-            >
+            <button onClick={() => window.location.reload()} className="error__retry">
               Retry
             </button>
           </div>
@@ -236,110 +226,105 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="dashboard-layout">
-      {windowWidth <= 768 && <div className="mobile-header"></div>}
-
-      <AccountSideBar
-        isMobileMenuOpen={isMobileMenuOpen}
-        toggleMobileMenu={toggleMobileMenu}
-      />
-
-      <main className={`dashboard-main ${isMobileMenuOpen ? "menu-open" : ""}`}>
-        <div className="dashboard-container">
-          <div className="dashboard-header">
-            <p className="dashboard-subtitle">
-              Welcome back! Here's what's happening with your account.
+    <div className="dashboard">
+      {windowWidth <= 768 && (
+        <header className="dashboard__mobile-header">
+          <h1 className="dashboard__mobile-title">Dashboard</h1>
+        </header>
+      )}
+      <main className={`dashboard__content ${isMobileMenuOpen ? "menu-open" : ""}`}>
+        <div className="dashboard__container">
+          <header className="dashboard__header">
+            <h1 className="dashboard__title">Dashboard</h1>
+            <p className="dashboard__subtitle">
+              Welcome back! Here's an overview of your account activity.
             </p>
-          </div>
+          </header>
 
-          <div className="stats-grid">
-            {stats.map((stat, index) => (
-              <Link
-                to={stat.link}
+          <section className="metrics">
+            {metrics.map((metric, index) => (
+              <button
                 key={index}
-                className={`stat-card stat-${stat.color}`}
+                className={`metric-card metric-card--${metric.color}`}
+                onClick={() => setActiveComponent(metric.key)}
+                aria-label={`View ${metric.label}`}
               >
-                <div className="stat-icon">{stat.icon}</div>
-                <div className="stat-content">
-                  <h3 className="stat-value">{stat.value}</h3>
-                  <p className="stat-label">{stat.label}</p>
-                  <p className="stat-description">{stat.description}</p>
+                <div className="metric-card__icon">{metric.icon}</div>
+                <div className="metric-card__content">
+                  <h3 className="metric-card__value">{metric.value}</h3>
+                  <p className="metric-card__label">{metric.label}</p>
+                  <p className="metric-card__description">{metric.description}</p>
                 </div>
-                <div className="stat-arrow">
-                  <FiChevronRight size={18} />
+                <div className="metric-card__arrow">
+                  <FiChevronRight size={16} />
                 </div>
-              </Link>
+              </button>
             ))}
-          </div>
+          </section>
 
-          <div className="recent-orders-section">
-            <div className="section-header">
-              <div className="section-title-group">
-                <h2 className="section-title">Recent Orders</h2>
-                <p className="section-subtitle">Your latest order activity</p>
+          <section className="order-history">
+            <div className="order-history__header">
+              <div className="order-history__title-group">
+                <h2 className="order-history__title">Recent Orders</h2>
+                <p className="order-history__subtitle">Your latest order activity</p>
               </div>
-              <Link to="/orders" className="view-all-link">
-                View All Orders <FiChevronRight size={16} />
-              </Link>
+              <button
+                className="order-history__view-all"
+                onClick={() => setActiveComponent("Orders")}
+                aria-label="View all orders"
+              >
+                View All Orders <FiChevronRight size={14} />
+              </button>
             </div>
 
             {orders.length > 0 ? (
-              <div className="orders-table-container">
-                <div className="orders-table">
-                  <div className="table-header">
-                    <div className="header-cell">Order Details</div>
-                    <div className="header-cell">Customer</div>
-                    <div className="header-cell">Items</div>
-                    <div className="header-cell">Total</div>
-                    <div className="header-cell">Status</div>
-                    <div className="header-cell">Actions</div>
+              <div className="order-history__table-container">
+                <div className="order-history__table">
+                  <div className="order-history__table-header">
+                    <div className="order-history__header-cell">Order Details</div>
+                    <div className="order-history__header-cell">Items</div>
+                    <div className="order-history__header-cell">Total</div>
+                    <div className="order-history__header-cell">Status</div>
                   </div>
 
-                  <div className="table-body">
+                  <div className="order-history__table-body">
                     {orders.map((order, index) => {
                       const firstItem = order.orderItems?.[0];
-                      const firstImage = firstItem
-                        ? getFirstImage(firstItem.image_path)
-                        : null;
-                      const itemsSummary = getOrderItemsSummary(
-                        order.orderItems
-                      );
+                      const firstImage = firstItem ? getFirstImage(firstItem.image_path) : null;
+                      const itemsSummary = getOrderItemsSummary(order.orderItems);
 
                       return (
-                        <div key={order.orderId || index} className="table-row">
-                          <div className="table-cell order-details">
-                            <div className="order-info">
-                              <div className="order-id-group">
-                                <span className="order-id">
-                                  #{order.orderId}
+                        <div
+                          className="order-history__table-row order-history__table-row--clickable"
+                          key={index}
+                          onClick={() => handleOrderRowClick(order)}
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              handleOrderRowClick(order);
+                            }
+                          }}
+                          aria-label={`View details for order ${order.orderId}`}
+                        >
+                          <div className="order-history__cell order-history__cell--details">
+                            <div className="order-history__order-id-group">
+                              <span className="order-history__order-id">#{order.orderId}</span>
+                              <div className="order-history__order-meta">
+                                <FiCalendar size={12} />
+                                <span className="order-history__order-date">
+                                  {formatDate(order.orderTime)}
                                 </span>
-                                <div className="order-meta">
-                                  <FiCalendar size={12} />
-                                  <span className="order-date">
-                                    {formatDate(order.orderTime)}
-                                  </span>
-                                </div>
                               </div>
                             </div>
                           </div>
 
-                          <div className="table-cell customer-info">
-                            <div className="customer-details">
-                              <div className="customer-name">
-                                <FiUser size={14} />
-                                <span>{order.customerName}</span>
-                              </div>
-                              <div className="customer-contact">
-                                {order.contact}
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="table-cell order-items">
-                            <div className="items-info">
+                          <div className="order-history__cell order-history__cell--items">
+                            <div className="order-history__items-info">
                               {firstImage ? (
-                                <div className="item-image-container">
-                                  <div className="item-image">
+                                <div className="order-history__item-image-container">
+                                  <div className="order-history__item-image">
                                     <img
                                       src={getResolvedImageUrl(firstImage)}
                                       alt={firstItem?.productName || "Product"}
@@ -347,60 +332,51 @@ const Dashboard = () => {
                                         e.target.style.display = "none";
                                         const placeholder =
                                           e.target.parentNode.querySelector(
-                                            ".item-image-placeholder"
+                                            ".order-history__item-image-placeholder"
                                           );
-                                        if (placeholder)
-                                          placeholder.style.display = "flex";
+                                        if (placeholder) placeholder.style.display = "flex";
                                       }}
                                     />
                                     <div
-                                      className="item-image-placeholder"
+                                      className="order-history__item-image-placeholder"
                                       style={{ display: "none" }}
                                     >
-                                      <FiPackage size={20} />
+                                      <FiPackage size={16} />
                                     </div>
                                   </div>
-                                  {/* <div className="item-details">
-                                    <div className="item-name">
-                                      {firstItem?.productName || "Unknown Item"}
-                                    </div>
-                                    <div className="item-count">
-                                      {itemsSummary.count}
-                                    </div>
-                                  </div> */}
                                 </div>
                               ) : (
-                                <div className="item-image-container">
-                                  <div className="item-image-placeholder">
-                                    <FiPackage size={20} />
+                                <div className="order-history__item-image-container">
+                                  <div className="order-history__item-image-placeholder">
+                                    <FiPackage size={16} />
                                   </div>
-                                  {/* <div className="item-details">
-                                    <div className="item-name">
-                                      {firstItem?.productName || "Unknown Item"}
-                                    </div>
-                                    <div className="item-count">
-                                      {itemsSummary.count}
-                                    </div>
-                                  </div> */}
                                 </div>
                               )}
+                              <div className="order-history__items-details">
+                                <span className="order-history__items-text">
+                                  {itemsSummary.text}
+                                </span>
+                                <span className="order-history__items-count">
+                                  {itemsSummary.count}
+                                </span>
+                              </div>
                             </div>
                           </div>
 
-                          <div className="table-cell order-total">
-                            <span className="total-amount">
+                          <div className="order-history__cell order-history__cell--total">
+                            <span className="order-history__total-amount">
                               ₹{order.totalAmount?.toFixed(2) || "0.00"}
                             </span>
                             {order.paymentMode && (
-                              <span className="payment-mode">
+                              <span className="order-history__payment-mode">
                                 via {order.paymentMode}
                               </span>
                             )}
                           </div>
 
-                          <div className="table-cell order-status">
+                          <div className="order-history__cell order-history__cell--status">
                             <span
-                              className={`status-badge status-${getStatusBadge(
+                              className={`order-history__status-badge order-history__status-badge--${getStatusBadge(
                                 order.status
                               )}`}
                             >
@@ -408,29 +384,10 @@ const Dashboard = () => {
                               <span>{order.status}</span>
                             </span>
                             {order.courierTrackingId && (
-                              <span className="tracking-id">
+                              <span className="order-history__tracking-id">
                                 Track: {order.courierTrackingId}
                               </span>
                             )}
-                          </div>
-
-                          <div className="table-cell order-actions">
-                            <button
-                              onClick={() => {
-                                history.push({
-                                  pathname: `/orderdetail/${order.orderId}`,
-                                  state: {
-                                    orderData: order,
-                                    fromDashboard: true,
-                                  },
-                                });
-                              }}
-                              className="view-order-button"
-                              title="View Order Details"
-                              aria-label={`View details for order ${order.orderId}`}
-                            >
-                              <FiChevronRight size={16} />
-                            </button>
                           </div>
                         </div>
                       );
@@ -439,21 +396,20 @@ const Dashboard = () => {
                 </div>
               </div>
             ) : (
-              <div className="no-orders-message">
-                <div className="no-orders-icon">
-                  <FiShoppingBag size={48} />
+              <div className="order-history__empty">
+                <div className="order-history__empty-icon">
+                  <FiShoppingBag size={40} />
                 </div>
-                <h3>No Orders Yet</h3>
-                <p>
-                  You haven't placed any orders yet. Start shopping to see your
-                  orders here!
+                <h3 className="order-history__empty-title">No Orders Yet</h3>
+                <p className="order-history__empty-message">
+                  You haven't placed any orders yet. Start shopping to see your orders here!
                 </p>
-                <Link to="/shop-left" className="shop-now-button">
-                  <FiShoppingCart size={16} /> Start Shopping
+                <Link to="/shop-left" className="order-history__shop-now">
+                  <FiShoppingCart size={14} /> Start Shopping
                 </Link>
               </div>
             )}
-          </div>
+          </section>
         </div>
       </main>
     </div>

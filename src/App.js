@@ -50,6 +50,8 @@ import BangleSizeGuide from './components/pages/SizeGuide/BangleSize';
 import RingSizeGuide from './components/pages/SizeGuide/RingSize';
 import RouteTracker from './routes/RouteTracker';
 import ScrollToTop from './components/layouts/ScrolltoTop';
+import AccountPage from './components/sections/account/Content';
+import PolicyPage from './components/pages/Policies/Risk Mitigation & Compliance Policy';
 
 function ScrollWatcher() {
   const location = useLocation();
@@ -108,14 +110,15 @@ function App() {
    
         <PrivateRoute exact path="/payment/:orderId" component={PaymentPage} />
 
-        <Route exact path="/AddressManager" component={AddressManager} />
+        {/* <Route exact path="/AddressManager" component={AddressManager} />
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
         <PrivateRoute exact path="/orders" component={Order} />
         <Route exact path="/orderdetail/:orderId" component={OrderDetail} />
-        <Route exact path="/change-password" component={ChangePassword} />
-        <Route path="/account" component={AccountSidebar} />
+        <Route exact path="/change-password" component={ChangePassword} /> */}
+        <Route path="/account" component={AccountPage} />
 
         <Route exact path="/privacypolicy" component={PrivacyPolicy} />
+        <Route exact path="/risk-compliance policy" component={PolicyPage} />
         <Route exact path="/cancellation-return-policy" component={CancellationReturnPolicy} />
         <Route exact path="/delivery&shipping" component={DeliveryShippingPolicy} />
         <Route exact path="/refund-policy" component={RefundPolicy} />

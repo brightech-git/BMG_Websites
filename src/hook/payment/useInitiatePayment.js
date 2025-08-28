@@ -7,7 +7,7 @@ export const useInitiatePayment = (options = {}) => {
     return useMutation({
         mutationFn: initiatePayment,
         onSuccess: (data) => {
-            toast.success('Payment initiated successfully!');
+            
             if (options.onSuccess) options.onSuccess(data);
         },
         onError: (error) => {

@@ -1,55 +1,76 @@
-
 .footer-two {
   background: var(--footer-bg-color);
   color: var(--footer-text-color);
   font-family: var(--secondary-font);
-  font-size: 15px;
-  line-height: 1.7;
+  font-size: 16px;
+  /* Slightly larger for readability */
+  line-height: 1.8;
+  /* Improved spacing for professionalism */
+  padding: 60px 0 20px;
+  max-width: 100% !important;
+  /* Unified padding for a cleaner look */
 }
 
 .footer-widget-area {
-  padding-top: 100px;
-  padding-bottom: 50px;
+  padding-top: 80px;
+  padding-bottom: 40px;
 }
 
 .widget {
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 }
 
 .footer-logo img {
-  width: 230px;
-  height: 90px;
-  border-radius: 6px;
+  width: 200px;
+  /* Slightly smaller for balance */
+  height: auto;
+  /* Maintain aspect ratio */
+  border-radius: 8px;
+  /* Softer corners */
+  margin-bottom: 20px;
 }
 
 .site-info-widget p {
-  color: var(--black-color);
+  color: var(--footer-text-color);
+  /* Updated to match subtext color */
   font-size: 15px;
+  line-height: 1.6;
 }
 
 .social-links {
-  margin-top: 40px;
-  
+  margin-top: 30px;
+  display: flex;
+  gap: 12px;
+  /* Modern spacing */
 }
 
 .social-links a {
-  color: #fff!important;
-  margin-right: 16px;
-  font-size: 18px;
-  transition: color 0.2s;
-  background-color: rgb(112, 111, 109)!important;
+  color: var(--white-color);
+  background: var(--primary-text-color) !important;
+  /* Matches primary text color for consistency */
+  font-size: 16px;
+  border-radius: 50%;
+  /* Circular icons for a modern look */
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .social-links a:hover {
-  color: var(--footer-accent-color);
+  background: var(--footer-accent-color);
+  /* Matches title color on hover */
+  transform: translateY(-2px);
+  /* Subtle lift effect */
 }
 
 .widget-title {
+  font-family: var(--secondary-font);
+  /* Consistent with body text */
   font-weight: 700;
-  color: var(--footer-accent-color);
-  letter-spacing: 1px;
-  font-size: 17px;
-  margin-bottom: 18px;
+  color: var(--primary-hover-color) !important;
+  /* Matches primary-hover-color for titles */
+  letter-spacing: 0.5px;
+  /* Reduced for a cleaner look */
+  font-size: 16px;
+  margin-bottom: 20px;
   text-transform: uppercase;
 }
 
@@ -62,114 +83,143 @@
 
 .useful-links li,
 .footer-links li {
-  margin-bottom: 9px;
+  margin-bottom: 10px;
 }
 
 .useful-links a,
 .footer-links a {
-  color: var(--footer-text-color);
+  color: var(--primary-text-color) !important;
+  font-weight: 500;
   text-decoration: none;
-  transition: color 0.2s;
+  font-size: 15px;
+  transition: color 0.3s ease;
 }
 
 .useful-links a:hover,
 .footer-links a:hover {
-  color: var(--footer-accent-color);
+  color: var(--primary-hover-color);
+  /* Matches title color on hover */
 }
 
 .payment-icons {
-  margin-top: 16px;
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
 }
 
 .payment-icons i {
-  font-size: 30px;
+  font-size: 28px;
   color: var(--footer-text-color);
-  margin-right: 17px;
-  transition: color 0.3s;
+  transition: color 0.3s ease, transform 0.2s ease;
 }
 
 .payment-icons i:hover {
   color: var(--footer-accent-color);
+  transform: translateY(-2px);
+  /* Subtle lift effect */
 }
 
 .contact-widget .contact-lists {
-  margin-top: 14px;
+  margin-top: 15px;
 }
 
+.contact-lists 
 .contact-box {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
   display: flex;
   align-items: flex-start;
 }
 
 .contact-box .icon {
-  color: var(--footer-accent-color);
-  font-size: 22px;
-  margin-right: 14px;
-  margin-top: 2px;
+  color: var(--primary-hover-color);
+  font-size: 20px;
+  margin-right: 12px;
+  margin-top: 3px;
 }
 
-.contact-box .desc h6 {
-  margin: 0 0 4px 0;
+.contact-box .desc .title {
+  margin: 0 0 5px 0;
   font-size: 14px;
-  color: var(--footer-text-color);
-  font-weight: 700;
+  color: var(--primary-hover-color) !important;
+  /* Matches title color */
+  font-weight: 600;
 }
 
 .contact-box .desc span,
 .contact-box .desc a {
-  color: var(--black-color);
-  font-size: 15px;
+  color: var(--primary-text-color) !important;
+  /* Matches subtext color */
+  font-size: 14px;
   text-decoration: none;
   display: block;
 }
 
+/* Download App Section */
+.download-app-section h6 {
+  color: var(--primary-hover-color);
+  /* Matches title color */
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
 /* Popular Searches */
 .popular-searches {
-  background: var(--footer-text-color);
-  color: var(--footer-bg-color);
+  background: var(--primary-card-color);
+  /* Softer background for contrast */
+  color: var(--primary-text-color);
+  padding: 40px 0;
 }
 
 .popular-searches h5 {
-  color: var(--black-color);
-  font-weight: 600;
-  letter-spacing: 1px;
+  color: var(--primary-hover-color);
+  /* Matches title color */
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+  margin-bottom: 20px;
 }
 
 .popular-searches h6 {
   font-size: 15px;
   font-weight: 600;
-  margin-bottom: 9px;
-  color: var(--footer-bg-color);
+  margin-bottom: 10px;
+  color: var(--primary-hover-color);
+  /* Matches title color */
   text-transform: capitalize;
 }
 
 .popular-searches ul.footer-links li a {
-  color: var(--footer-link-color);
+  color: var(--primary-text-color);
+  font-size: 14px;
 }
 
 .popular-searches ul.footer-links li a:hover {
-  color: var(--footer-accent-color);
-  text-decoration: underline;
+  color: var(--primary-hover-color);
+  text-decoration: none;
+  /* Removed underline for a cleaner look */
 }
 
 .copyright-area {
   border-top: 1px solid var(--footer-border-color);
-  background: var(--footer-text-color);
-  font-size: 15px;
+  background: var(--footer-bg-color);
+  /* Matches footer background */
+  font-size: 14px;
   color: var(--footer-copyright-color);
+  padding: 20px 0;
+  text-align: center;
 }
 
 .copyright-text {
   margin: 0;
+  font-size: 14px;
 }
 
 .footer-menu ul {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 10px 0 0;
   display: flex;
-  gap: 16px;
+  gap: 20px;
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -177,7 +227,8 @@
 .footer-menu ul li a {
   color: var(--footer-copyright-color);
   text-decoration: none;
-  transition: color 0.2s;
+  font-size: 14px;
+  transition: color 0.3s ease;
 }
 
 .footer-menu ul li a:hover {
@@ -194,7 +245,12 @@
 
   .footer-menu ul {
     justify-content: center;
-    padding-top: 8px;
+    padding-top: 10px;
+  }
+
+  .social-links,
+  .payment-icons {
+    justify-content: center;
   }
 }
 
@@ -203,12 +259,12 @@
   .footer-widget-area,
   .popular-searches,
   .copyright-area {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
   .footer-logo img {
-    margin: 0 auto 18px auto;
+    margin: 0 auto 20px;
     display: block;
   }
 }
@@ -217,6 +273,10 @@
 
   .popular-searches .row>div,
   .footer-widget-area .row>div {
-    margin-bottom: 30px;
+    margin-bottom: 35px;
+  }
+
+  .widget-title {
+    font-size: 16px;
   }
 }

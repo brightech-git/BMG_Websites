@@ -415,7 +415,7 @@ const EnhancedCheckout = ({ location, history }) => {
             toast.error('Order created but orderId not returned.');
           }
         } else {
-          history.push('/orders', { state: { orderSuccess: true } });
+          history.push("/account", { activeComponent: "Orders" });
         }
       },
       onError: (error) => {

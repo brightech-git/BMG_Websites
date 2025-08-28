@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { FiLock, FiEye, FiEyeOff, FiCheckCircle } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import { changePassword } from '../../../../redux/slices/userSlice';
-import AccountSideBar from '../AccountSidebar/AccountSideBar';
 import './ChangePassword.css';
 
 const ChangePassword = () => {
@@ -91,7 +90,6 @@ const ChangePassword = () => {
 
   return (
     <div className="change-password-page">
-      <AccountSideBar />
 
       <main className="change-password-main">
         <div className="change-password-container">

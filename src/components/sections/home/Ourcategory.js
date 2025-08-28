@@ -2,14 +2,14 @@ import React, { useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useCategoryImages } from '../../../hook/categorywithImage/useCategoryQuery';
 import './OurCategory.css';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 const OurCategory = () => {
     const { data: categories = [], isLoading: isCategoriesLoading } = useCategoryImages();
     const history = useHistory();
     const containerRef = useRef(null);
     const baseUrl = "https://app.bmgjewellers.com";
-    const [showArrows, setShowArrows] = useState(false);
+    const [showAll, setShowAll] = useState(false);
 
     // Drag scroll functionality (only for smaller screens)
     const [isDragging, setIsDragging] = useState(false);
@@ -28,7 +28,7 @@ const OurCategory = () => {
     };
 
     const startDrag = (e) => {
-        if (window.innerWidth >= 992) return; // Disable drag on large screens
+        if (window.innerWidth >= 992 || showAll) return; // Disable drag on large screens or when showing all
         setIsDragging(true);
         setStartX(e.pageX - containerRef.current.offsetLeft);
         setScrollLeft(containerRef.current.scrollLeft);
@@ -37,25 +37,25 @@ const OurCategory = () => {
     const endDrag = () => setIsDragging(false);
 
     const handleDrag = (e) => {
-        if (!isDragging || window.innerWidth >= 992) return;
+        if (!isDragging || window.innerWidth >= 992 || showAll) return;
         e.preventDefault();
         const x = e.pageX - containerRef.current.offsetLeft;
         const walk = (x - startX) * 1.5;
         containerRef.current.scrollLeft = scrollLeft - walk;
     };
 
-    const scrollLeftHandler = () => {
-        containerRef.current.scrollBy({ left: -220, behavior: 'smooth' });
-    };
-
-    const scrollRightHandler = () => {
-        containerRef.current.scrollBy({ left: 220, behavior: 'smooth' });
+    const toggleShowAll = () => {
+        setShowAll(!showAll);
     };
 
     if (isCategoriesLoading) {
         return (
             <section className="elegant-category-section">
                 <div className="elegant-container">
+                    <div className="elegant-header">
+                        <h2 className="content-title">BMG WORLD</h2>
+                        <button className="see-all-button" disabled>Loading...</button>
+                    </div>
                     <div className="elegant-scroll-container">
                         {[...Array(5)].map((_, index) => (
                             <div key={index} className="elegant-card">
@@ -77,25 +77,20 @@ const OurCategory = () => {
 
     return (
         <section className="elegant-category-section">
-             <div className=' cat-content-container'>
-                <h2 className='content-title'>
-                        BMG WORLD
-                </h2>
-                <span className='content-subtitle'>  Where heritage meets design — explore by category. </span>
-              
-                </div>   
-
-
             <div className="elegant-container">
+                <div className="elegant-header">
+                    <h2 className="content-title">BMG WORLD</h2>
+                    <button className="see-all-button" onClick={toggleShowAll}>
+                        See All {showAll ? <FaChevronUp /> : <FaChevronDown />}
+                    </button>
+                </div>
                 <div
-                    className="elegant-scroll-container"
+                    className={`elegant-scroll-container ${showAll ? 'grid-view' : ''}`}
                     ref={containerRef}
                     onMouseDown={startDrag}
                     onMouseLeave={endDrag}
                     onMouseUp={endDrag}
                     onMouseMove={handleDrag}
-                    onMouseEnter={() => setShowArrows(true)}
-                    onMouseLeave={() => setShowArrows(false)}
                 >
                     {categories.map((category) => (
                         <div
@@ -119,20 +114,6 @@ const OurCategory = () => {
                         </div>
                     ))}
                 </div>
-                <button
-                    className={`elegant-arrow elegant-arrow-left ${showArrows ? 'visible' : ''}`}
-                    onClick={scrollLeftHandler}
-                    aria-label="Scroll Left"
-                >
-                    <FaChevronLeft />
-                </button>
-                <button
-                    className={`elegant-arrow elegant-arrow-right ${showArrows ? 'visible' : ''}`}
-                    onClick={scrollRightHandler}
-                    aria-label="Scroll Right"
-                >
-                    <FaChevronRight />
-                </button>
             </div>
         </section>
     );

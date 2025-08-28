@@ -4,14 +4,13 @@ import { useOrderHistory } from '../../../hook/order/useOrderHistoryQuery';
 import { useInitiatePayment } from '../../../hook/payment/useInitiatePayment';
 import './PaymentPage.css';
 import { getPaymentRedirectUrl } from '../../../service/paymentServiceicici';
-import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 const PaymentPage = () => {
     const { orderId } = useParams();
     const history = useHistory();
     const [retryCount, setRetryCount] = useState(0);
     const maxRetries = 3;
-    const toast = ToastContainer;
 
     const { mutate: initiatePayment } = useInitiatePayment();
     const { data: orders = [], isLoading, isError, refetch } = useOrderHistory({ page: 0, size: 10 });
@@ -23,16 +22,18 @@ const PaymentPage = () => {
 
         if (redirectURI && tranCtx) {
             try {
+                toast.success('Payment initiated successfully!');
                 const redirectUrl = await getPaymentRedirectUrl(redirectURI, tranCtx);
                 window.location.href = redirectUrl;
             } catch (err) {
                 console.error(err);
                 toast.error("Something went wrong while redirecting to payment page.");
-                history.push("/orders");
+                history.push("/account", { activeComponent: "Orders" });
             }
         } else {
+            history.push("/account", { activeComponent: "Orders" });
             toast.warning("Payment initiation successful but redirect details are missing.");
-            history.push("/orders");
+            
         }
     };
 
@@ -40,7 +41,7 @@ const PaymentPage = () => {
     const onError = (error) => {
         console.error('Payment initiation failed:', error);
         alert('Payment failed. Please try again.');
-        history.push('/orders');
+        history.push("/account", { activeComponent: "Orders" });
     };
 
     useEffect(() => {
@@ -65,7 +66,7 @@ const PaymentPage = () => {
         if (!matchedOrder && retryCount >= maxRetries) {
             alert("Order not found");
             localStorage.removeItem("pendingOrderId");
-            history.push("/orders");
+            history.push("/account", { activeComponent: "Orders" });
             return;
         }
 

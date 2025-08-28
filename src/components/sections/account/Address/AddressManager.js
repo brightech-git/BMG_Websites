@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
-import AccountSideBar from "../AccountSidebar/AccountSideBar";
 import {
   FiPlus,
   FiEdit2,
@@ -221,7 +220,6 @@ const AddressManager = () => {
   if (!customerId) {
     return (
       <div className="address-page-layout">
-        <AccountSideBar />
         <main className="address-manager-container">
           <div className="error-container">
             <div className="error-icon">⚠️</div>
@@ -237,7 +235,6 @@ const AddressManager = () => {
   if (isLoading) {
     return (
       <div className="address-page-layout">
-        <AccountSideBar />
         <main className="address-manager-container">
           <div className="loading-container">
             <div className="loading-spinner"></div>
@@ -252,7 +249,6 @@ const AddressManager = () => {
   if (isError) {
     return (
       <div className="address-page-layout">
-        <AccountSideBar />
         <main className="address-manager-container">
           <div className="error-container">
             <div className="error-icon">⚠️</div>
@@ -269,7 +265,7 @@ const AddressManager = () => {
 
   return (
     <div className="address-page-layout">
-      <AccountSideBar />
+  
 
       <main className="address-manager-container">
         <div className="address-manager">

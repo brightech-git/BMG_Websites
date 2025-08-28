@@ -15,7 +15,7 @@ import { logout } from "../../redux/slices/userSlice";
 import { useFavorites } from "../../hook/favorites/useFavoritesQuery";
 import { useCart } from "../../hook/cart/useCartQuery";
 import { useRatesQuery } from "../../hook/rate/useRatesQuery"; // Add this import
-import './Header.css'
+import './Header.css';
 
 const Header = ({ isAuthenticated }) => {
   const width = useScreenWidth();
@@ -248,6 +248,21 @@ const Header = ({ isAuthenticated }) => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+   const [animationType, setAnimationType] = useState('pulse'); // Default animation
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Optional: Cycle through animations for demonstration
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAnimationType(prev => {
+        const animations = ['pulse', 'glow', 'bounce', 'shake', 'color-change'];
+        const currentIndex = animations.indexOf(prev);
+        return animations[(currentIndex + 1) % animations.length];
+      });
+    }, 3000);
+    
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <Fragment>
@@ -262,17 +277,16 @@ const Header = ({ isAuthenticated }) => {
     <div className="container-fluid container-custom-three">
       <div className="header-top-content">
         
-                <div className="welcome-section">
-
-                  
+                <div
+                  className={`welcome-section welcome-${animationType} ${isHovered ? 'welcome-hover' : ''}`}
+                  onClick={() => history.push("/appointment")}
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                >
                   <Video size={22} />
-                  <span
-                    className="welcome-text"
-                    onClick={() => history.push("/appointment")}
-                  >
+                  <span className="welcome-text">
                     BMG Live
                   </span>
-
                 </div>
 
         {/* Enhanced Precious Metals Ticker */}
@@ -648,6 +662,115 @@ const Header = ({ isAuthenticated }) => {
           <Canvas />
         </div>
       </div>
+      <style jsx>{`
+        :root {
+          --primary-hover-color: #cd865c;
+          --primary-text-color: #041f60;
+        }
+        
+        .welcome-section {
+          flex: 0 0 auto;
+          background-color: var(--primary-hover-color);
+          padding: 0.2rem 1rem;
+          border-radius: 30px;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .welcome-text {
+          color: var(--primary-text-color);
+          font-size: 12px;
+          font-weight: 600;
+          opacity: 0.9;
+          margin-left: 5px;
+        }
+
+        /* Pulse Animation */
+        .welcome-pulse {
+          animation: welcomePulse 2s infinite;
+        }
+
+        @keyframes welcomePulse {
+          0% {
+            box-shadow: 0 0 0 0 rgba(205, 134, 92, 0.4);
+          }
+          70% {
+            box-shadow: 0 0 0 10px rgba(205, 134, 92, 0);
+          }
+          100% {
+            box-shadow: 0 0 0 0 rgba(205, 134, 92, 0);
+          }
+        }
+
+        /* Glow Animation */
+        .welcome-glow {
+          animation: welcomeGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes welcomeGlow {
+          from {
+            box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px var(--primary-hover-color), 0 0 20px var(--primary-hover-color);
+          }
+          to {
+            box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px var(--primary-hover-color), 0 0 40px var(--primary-hover-color);
+          }
+        }
+
+        /* Bounce Animation */
+        .welcome-bounce {
+          animation: welcomeBounce 2s infinite;
+        }
+
+        @keyframes welcomeBounce {
+          0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0);
+          }
+          40% {
+            transform: translateY(-5px);
+          }
+          60% {
+            transform: translateY(-3px);
+          }
+        }
+
+        /* Shake Animation */
+        .welcome-shake {
+          animation: welcomeShake 2s infinite;
+        }
+
+        @keyframes welcomeShake {
+          0% { transform: translateX(0); }
+          25% { transform: translateX(-2px); }
+          50% { transform: translateX(2px); }
+          75% { transform: translateX(-2px); }
+          100% { transform: translateX(0); }
+        }
+
+        /* Color Change Animation */
+        .welcome-color-change {
+          animation: welcomeColorChange 4s infinite alternate;
+        }
+
+        @keyframes welcomeColorChange {
+          0% {
+            background-color: var(--primary-hover-color);
+          }
+          100% {
+            background-color: #e39f7b;
+          }
+        }
+
+        /* Hover Effects */
+        .welcome-section:hover {
+          transform: scale(1.05);
+        }
+
+        .welcome-hover {
+          animation: none !important; /* Stop animation on hover */
+        }
+      `}</style>
     </Fragment>
   );
 };

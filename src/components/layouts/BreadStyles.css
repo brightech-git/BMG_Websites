@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap');
 
 :root {
 
@@ -48,13 +47,13 @@
 /* Banner Image */
 .category-hero-image {
     width: 100%;
-    height: clamp(200px, 25vh, 400px) !important;
+    height: clamp(250px, 30vh, 450px) !important;
     object-fit: cover;
-    object-position: center center;
+    object-position: center ;
     display: block;
     border-radius: 0;
     transition: transform 0.3s ease;
-    min-height: 180px;
+    min-height: 250px ;
 }
 
 /* Subtle zoom effect on hover */
@@ -66,7 +65,7 @@
 .hero-content-overlay {
     position: absolute;
     top: 50%;
-    left: 50%;
+    left: 20%;
     transform: translate(-50%, -50%);
     color: var(--white-text);
     z-index: 10;
@@ -202,6 +201,7 @@
     }
 
     .hero-content-overlay {
+        margin-left: 50px !important;
         padding: 0 25px;
     }
 }
@@ -233,6 +233,7 @@
     .hero-content-overlay {
         padding: 0 20px;
         max-width: 95%;
+        margin-left: 90px !important;
     }
 }
 
@@ -265,6 +266,7 @@
     .hero-content-overlay {
         padding: 0 15px;
         max-width: 90%;
+        margin-left: 80px !important;
     }
 
     /* Reduce animation intensity on mobile */

@@ -20,7 +20,6 @@ class Account extends Component {
                 <Header/>
                 <Breadcrumb breadcrumb={{pagename:'My Account'}} />
                 <Content/>
-                
                 <Instafeeds/>
                 <Footer/>
             </Fragment>

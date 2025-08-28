@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import './Backtotop.css';
 
 class Backtotop extends Component {
   constructor(props) {
@@ -42,14 +43,15 @@ class Backtotop extends Component {
     return (
       <Link
         to="#"
-        className={`back-to-top ${isTop ? 'active' : ''}`}
+        className={`back-to-top-btn ${isTop ? 'back-to-top-visible' : ''}`}
         id="backToTop"
         onClick={(e) => {
           e.preventDefault(); // Prevent jumping
           this.scrollToTop();
         }}
+        aria-label="Scroll to top"
       >
-        <i className="fal fa-angle-double-up" />
+        <i className="fas fa-angle-double-up back-to-top-icon" />
       </Link>
     );
   }

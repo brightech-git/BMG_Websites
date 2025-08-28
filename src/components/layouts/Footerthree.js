@@ -62,10 +62,7 @@ class Footertwo extends Component {
 
                     {/* Download App Section */}
                     <div className="download-app-section mt-30">
-                      <h6
-                        className="mb-3"
-                        style={{ fontWeight: "600", color: "#000" }}
-                      >
+                      <h6 className="mb-3">
                         Download Our App
                       </h6>
                       <div className="app-download-links">
@@ -121,9 +118,9 @@ class Footertwo extends Component {
                       <li>
                         <Link to="/terms-conditions">Terms & Conditions</Link>
                       </li>
-                      {/* <li>
-                        <Link to="/delivery&shipping">Delivery-Shiiping Policy</Link>
-                      </li> */}
+                      <li>
+                        <Link to="/risk-compliance policy">Mitigation & Compliance Policy</Link>
+                      </li>
                       <li>
                         <Link to="/cancellation-return-policy">
                           Cancellation & Return Policy
@@ -175,8 +172,9 @@ class Footertwo extends Component {
                         </div>
                         <div className="desc">
                           <h6 className="title">Office Address</h6>
-                          M/s. BMG Jewellers Pvt Ltd, 160, Melamasi St,
+                          <span>M/s. BMG Jewellers Pvt Ltd, 160, Melamasi St,
                           Madurai-625001
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -194,7 +192,7 @@ class Footertwo extends Component {
             <div className="container">
               <h5
                 className="mb-4 text-uppercase"
-                style={{ fontWeight: 600, color: "#000000" }}
+                style={{ fontWeight: 600 }}
               >
                 Popular Searches
               </h5>
@@ -202,7 +200,7 @@ class Footertwo extends Component {
               <div className="row">
                 {/* Column 1 */}
                 <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="text-dark font-weight-bold">Rings</h6>
+                  <h6 className="font-weight-bold">Rings</h6>
                   <ul className="footer-links">
                     <li>
                       <Link to="/shop-left?itemName=RINGS&subItemName=DAILY WEAR">
@@ -231,7 +229,7 @@ class Footertwo extends Component {
                     </li>
                   </ul>
 
-                  <h6 className="text-dark font-weight-bold mt-3">Earrings</h6>
+                  <h6 className="font-weight-bold mt-3">Earrings</h6>
                   <ul className="footer-links">
                     <li>
                       <Link to="/shop-left?itemName=EARRINGS&subItemName=JHUMAKAS">
@@ -258,7 +256,7 @@ class Footertwo extends Component {
 
                 {/* Column 2 */}
                 <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="text-dark font-weight-bold">
+                  <h6 className="font-weight-bold">
                     Necklaces & Sets
                   </h6>
                   <ul className="footer-links">
@@ -284,7 +282,7 @@ class Footertwo extends Component {
                     </li>
                   </ul>
 
-                  <h6 className="text-dark font-weight-bold mt-3">
+                  <h6 className="font-weight-bold mt-3">
                     Bangles & Bracelets
                   </h6>
                   <ul className="footer-links">
@@ -313,7 +311,7 @@ class Footertwo extends Component {
 
                 {/* Column 3 */}
                 <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="text-dark font-weight-bold">
+                  <h6 className="font-weight-bold">
                     Ankles & Toe Rings
                   </h6>
                   <ul className="footer-links">
@@ -334,7 +332,7 @@ class Footertwo extends Component {
                     </li>
                   </ul>
 
-                  <h6 className="text-dark font-weight-bold mt-3">
+                  <h6 className="font-weight-bold mt-3">
                     Pendants & Chains
                   </h6>
                   <ul className="footer-links">
@@ -355,7 +353,7 @@ class Footertwo extends Component {
                     </li>
                   </ul>
 
-                  <h6 className="text-dark font-weight-bold mt-3">
+                  <h6 className="font-weight-bold mt-3">
                     Maang Tikka & Hair
                   </h6>
                   <ul className="footer-links">
@@ -374,7 +372,7 @@ class Footertwo extends Component {
 
                 {/* Column 4 */}
                 <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="text-dark font-weight-bold">
+                  <h6 className="font-weight-bold">
                     Bridal Collection
                   </h6>
                   <ul className="footer-links">
@@ -395,7 +393,7 @@ class Footertwo extends Component {
                     </li>
                   </ul>
 
-                  <h6 className="text-dark font-weight-bold mt-3">
+                  <h6 className="font-weight-bold mt-3">
                     Temple Jewellery
                   </h6>
                   <ul className="footer-links">
@@ -411,7 +409,7 @@ class Footertwo extends Component {
                     </li>
                   </ul>
 
-                  <h6 className="text-dark font-weight-bold mt-3">
+                  <h6 className="font-weight-bold mt-3">
                     Men's Jewellery
                   </h6>
                   <ul className="footer-links">
@@ -438,7 +436,7 @@ class Footertwo extends Component {
               <div className="row mt-3">
                 {/* Column 1 */}
                 <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="text-dark font-weight-bold">Kids Jewellery</h6>
+                  <h6 className="font-weight-bold">Kids Jewellery</h6>
                   <ul className="footer-links">
                     <li>
                       <Link to="/shop-left?itemName=KIDS&subItemName=CUTE NECKPIECES">
@@ -460,7 +458,7 @@ class Footertwo extends Component {
 
                 {/* Column 2 */}
                 <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="text-dark font-weight-bold">
+                  <h6 className="font-weight-bold">
                     Oxidised Jewellery
                   </h6>
                   <ul className="footer-links">
@@ -479,7 +477,7 @@ class Footertwo extends Component {
 
                 {/* Column 3 */}
                 <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="text-dark font-weight-bold">
+                  <h6 className="font-weight-bold">
                     Customised Jewellery
                   </h6>
                   <ul className="footer-links">
@@ -503,7 +501,7 @@ class Footertwo extends Component {
 
                 {/* Column 4 */}
                 <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="text-dark font-weight-bold">Gift Ideas</h6>
+                  <h6 className="font-weight-bold">Gift Ideas</h6>
                   <ul className="footer-links">
                     <li>
                       <Link to="/shop-left?maxGrandTotal=999">
@@ -542,7 +540,7 @@ class Footertwo extends Component {
               {/* Third Row */}
               <div className="row mt-3">
                 <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="text-dark font-weight-bold">
+                  <h6 className="font-weight-bold">
                     Festival Specials
                   </h6>
                   <ul className="footer-links">
@@ -565,7 +563,7 @@ class Footertwo extends Component {
                 </div>
 
                 <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="text-dark font-weight-bold">Clearance Sale</h6>
+                  <h6 className="font-weight-bold">Clearance Sale</h6>
                   <ul className="footer-links">
                     <li>
                       <Link to="/shop-left?itemName=CLEARANCE&subItemName=HEAVY DISCOUNT">
@@ -581,7 +579,7 @@ class Footertwo extends Component {
                 </div>
 
                 <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="text-dark font-weight-bold">Offers</h6>
+                  <h6 className="font-weight-bold">Offers</h6>
                   <ul className="footer-links">
                     <li>
                       <Link to="/shop-left?itemName=OFFER&subItemName=BUY 2 GET 1">
@@ -597,7 +595,7 @@ class Footertwo extends Component {
                 </div>
 
                 <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="text-dark font-weight-bold">New Arrivals</h6>
+                  <h6 className="font-weight-bold">New Arrivals</h6>
                   <ul className="footer-links">
                     <li>
                       <Link to="/shop-left?itemName=NEW&subItemName=TRENDING">
@@ -628,20 +626,20 @@ class Footertwo extends Component {
                   <div className="footer-menu text-center text-md-right py-3">
                     <span
                       style={{
-                        color: "#cd865c",
+                        color: "var(--primary-hover-color)",
                         fontSize: "14px",
                         fontWeight: "bold",
                       }}
                     >
                       Powered By
                     </span>{" "}
-                    <img src={btsLogo} style={{width:'25px' , height:'25px', margin:'0 5px'}} />
+                    <img src={btsLogo} style={{ width: '25px', height: '25px', margin: '0 5px' }} />
                     <a
                       href="https://www.brightechsoftware.com/"
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
-                        color: "#404040",
+                        color: "var(--primary-text-color)",
                         fontSize: "14px",
                         textDecoration: "none",
                         fontWeight: "800",

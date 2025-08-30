@@ -68,7 +68,7 @@ const Content = () => {
                     setTempContactNumber(contactNumber);
                 })
                 .catch(() => {
-                    // Error toast handled by userSlice.js
+                    
                 });
         }
     };
@@ -93,7 +93,7 @@ const Content = () => {
                 history.push('/');
             })
             .catch(() => {
-                // Error toast handled by userSlice.js
+               
             });
     };
 

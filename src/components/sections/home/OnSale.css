@@ -5,6 +5,7 @@
     background: var(--primary-color);
     position: relative;
     overflow: hidden;
+    width: 100%;
     
 }
 
@@ -40,13 +41,15 @@
     width: 80px;
     height: 3px;
     background: linear-gradient(90deg, var(--primary-hover-color, #cd865c), var(--gold-color, #d4a373));
-    margin: 15px auto 0;
+    margin: 15px auto  ;
     border-radius: 2px;
+    
 }
 
 /* Collections Grid */
 .collections-grid {
     display: grid;
+    padding: 10px ;
     grid-template-columns: 1fr 1fr;
     gap: 30px;
     align-items: start;
@@ -73,6 +76,7 @@
 
 /* Secondary Collections */
 .secondary-collections {
+    
     display: grid;
     grid-template-columns: 1fr;
     gap: 20px;
@@ -141,7 +145,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 40px;
+    padding: 30px;
     background: linear-gradient(to top,
             rgba(0, 0, 0, 0.5) 0%,
             rgba(0, 0, 0, 0.4) 50%,

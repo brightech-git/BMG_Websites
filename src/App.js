@@ -52,7 +52,8 @@ import RouteTracker from './routes/RouteTracker';
 import ScrollToTop from './components/layouts/ScrolltoTop';
 import AccountPage from './components/sections/account/Content';
 import PolicyPage from './components/pages/Policies/Risk Mitigation & Compliance Policy';
-
+import ReturnOrderFlow from './components/sections/account/orderReturn/ReturnOrder';
+import { requestForToken } from './notification/firebase';
 function ScrollWatcher() {
   const location = useLocation();
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
@@ -67,6 +68,10 @@ function ScrollWatcher() {
 }
 
 function App() {
+
+  useEffect(()=>{
+    requestForToken()
+  },[])
   return (
     <Router basename="/">
       {/* <Preloader /> */}
@@ -116,6 +121,8 @@ function App() {
         <Route exact path="/orderdetail/:orderId" component={OrderDetail} />
         <Route exact path="/change-password" component={ChangePassword} /> */}
         <Route path="/account" component={AccountPage} />
+        <Route path="/return" component={ReturnOrderFlow} />
+
 
         <Route exact path="/privacypolicy" component={PrivacyPolicy} />
         <Route exact path="/risk-compliance policy" component={PolicyPage} />

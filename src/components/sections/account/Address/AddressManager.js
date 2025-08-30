@@ -275,14 +275,15 @@ const AddressManager = () => {
               <p className="header-subtitle">
                 Manage your shipping and billing addresses
               </p>
+              <button
+                className="add-address-btn"
+                onClick={handleAddAddress}
+                disabled={createMutation.isPending}
+              >
+                <FiPlus className="btn-icon" /> Add New Address
+              </button>
             </div>
-            <button
-              className="add-address-btn"
-              onClick={handleAddAddress}
-              disabled={createMutation.isPending}
-            >
-              <FiPlus className="btn-icon" /> Add New Address
-            </button>
+           
           </div>
 
           {error && (

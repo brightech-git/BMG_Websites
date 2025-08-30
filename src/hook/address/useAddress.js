@@ -54,29 +54,49 @@ export const useAddressById = (id) => {
 // Update Address
 export const useUpdateAddress = () => {
     const queryClient = useQueryClient();
+
     return useMutation({
         mutationFn: ({ id, address }) => addressService.updateAddress(id, address),
+
         onMutate: async ({ id, address }) => {
-            await queryClient.cancelQueries({ queryKey: ["addresses", address.customerId] });
+            await queryClient.cancelQueries({
+                queryKey: ["addresses", address.customerId],
+            });
+
             const previousAddresses = queryClient.getQueryData([
                 "addresses",
                 address.customerId,
             ]);
-            queryClient.setQueryData(["addresses", address.customerId], (old) =>
-                old.map((addr) => (addr.id === id ? { ...addr, ...address } : addr))
+
+            // ✅ Safe fallback if old is undefined
+            queryClient.setQueryData(
+                ["addresses", address.customerId],
+                (old = []) =>
+                    old.map((addr) =>
+                        addr.id === id ? { ...addr, ...address } : addr
+                    )
             );
+
             return { previousAddresses, customerId: address.customerId };
         },
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: ["addresses"] });
-            // Toast is handled in component
+
+        onSuccess: async (_, { address }) => {
+            // ✅ Invalidate only this customer's addresses
+            await queryClient.invalidateQueries({
+                queryKey: ["addresses", address.customerId],
+            });
         },
+
         onError: (error, { address }, context) => {
+            // Rollback to previous cache on failure
             queryClient.setQueryData(
                 ["addresses", context.customerId],
                 context.previousAddresses
             );
-            toast.error(error.response?.data || "Failed to update address");
+
+            toast.error(
+                error?.response?.data || "Failed to update address"
+            );
         },
     });
 };

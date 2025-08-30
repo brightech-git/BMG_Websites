@@ -1,0 +1,133 @@
+/* Professional Logout Confirmation Modal */
+.logout-modal-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.logout-modal {
+    background-color: var(--primary-card-color);
+    border-radius: var(--radius-md);
+    box-shadow: 0 28px 72px rgba(0, 0, 0, 0.3);
+    padding: clamp(1.5rem, 4vw, 2rem);
+    width: 100%;
+    max-width: clamp(320px, 80vw, 480px);
+    transform: scale(0.8);
+    animation: scaleIn 0.3s ease forwards;
+}
+
+.logout-modal-header {
+    margin-bottom: clamp(1rem, 3vw, 1.5rem);
+}
+
+.logout-modal-header h2 {
+    font-size: clamp(1.25rem, 4vw, 1.5rem);
+    font-weight: 700;
+    color: var(--primary-text-color);
+    font-family: var(--secondary-font);
+    margin: 0;
+}
+
+.logout-modal-body {
+    margin-bottom: clamp(1.25rem, 4vw, 2rem);
+}
+
+.logout-modal-body p {
+    font-size: clamp(0.875rem, 3vw, 0.95rem);
+    color: var(--primary-text-color);
+    font-family: var(--secondary-font);
+    line-height: 1.6;
+}
+
+.logout-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: clamp(0.5rem, 2vw, 1rem);
+}
+
+.cancel-btn {
+    background-color: var(--primary-color);
+    color: var(--primary-text-color);
+    border: 1px solid var(--primary-text-color);
+    padding: clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 2rem);
+    border-radius: var(--radius-sm);
+    font-size: clamp(0.875rem, 2.5vw, 0.95rem);
+    font-weight: 600;
+    font-family: var(--secondary-font);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cancel-btn:hover {
+    background-color: #dcdad3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.logout-btn {
+    background-color: var(--red-color);
+    color: #ffffff;
+    border: none;
+    padding: clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 2rem);
+    border-radius: var(--radius-sm);
+    font-size: clamp(0.875rem, 2.5vw, 0.95rem);
+    font-weight: 600;
+    font-family: var(--secondary-font);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: var(--primary-hover-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.8);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 640px) {
+    .logout-modal {
+        max-width: 90vw;
+        padding: clamp(1rem, 3vw, 1.5rem);
+    }
+
+    .logout-modal-header h2 {
+        font-size: clamp(1.125rem, 3.5vw, 1.25rem);
+    }
+
+    .logout-modal-body p {
+        font-size: clamp(0.75rem, 2.5vw, 0.875rem);
+    }
+
+    .cancel-btn,
+    .logout-btn {
+        padding: clamp(0.4rem, 1.5vw, 0.6rem) clamp(0.75rem, 2.5vw, 1.5rem);
+        font-size: clamp(0.75rem, 2vw, 0.875rem);
+    }
+}

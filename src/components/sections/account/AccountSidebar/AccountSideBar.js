@@ -34,11 +34,7 @@ const AccountSidebar = ({ activeComponent, setActiveComponent, openLogoutModal }
     return `${names[0].charAt(0)}${names[names.length - 1].charAt(0)}`.toUpperCase();
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
-    history.push("/login");
-    window.location.reload();
-  };
+ 
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);

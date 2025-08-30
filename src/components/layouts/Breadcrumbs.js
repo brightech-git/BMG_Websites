@@ -1,32 +1,52 @@
-// Breadcrumbs.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCategoryBanner } from '../../hook/banner/useCategoryBanner';
 import fallbackImage from '../../assets/img/banner/footer.webp';
 import './BreadStyles.css';
 
 const Breadcrumbs = ({ itemName, subItemName }) => {
-    
-    console.log('itemand subitem name', itemName, subItemName);
-    const { data: bannerData } = useCategoryBanner({ itemName, subItemName });
-    
-    console.log(bannerData, 'breadcrumb data');
-    
-    const imageSrc = bannerData 
+    const [isImageLoaded, setIsImageLoaded] = useState(false);
+    const { data: bannerData, isLoading, error } = useCategoryBanner({ itemName, subItemName });
+
+    // Construct image source safely
+    const imageSrc = bannerData?.image
         ? `https://app.bmgjewellers.com${bannerData.image}`
         : fallbackImage;
 
+    // Handle image loading errors
+    const handleImageError = (e) => {
+        console.error('Failed to load banner image:', imageSrc);
+        e.target.src = fallbackImage;
+    };
+
+    // Reset loading state when image source changes
+    useEffect(() => {
+        setIsImageLoaded(false);
+    }, [imageSrc]);
+
     return (
-        <section className="hero-banner-section w-100">
-            <div className="banner-container p-0 position-relative w-100">
+        <section className="hero-banner-section" aria-label="Category banner">
+            <div className="banner-container">
                 <img
                     src={imageSrc}
-                    alt="Category Banner"
-                    className="img-fluid w-100 category-hero-image"
-                    onError={(e) => { e.target.src = fallbackImage; }}
+                    alt={bannerData?.title || "Category Banner"}
+                    className={`img-fluid category-hero-image ${isImageLoaded ? 'loaded' : 'loading'}`}
+                    onLoad={() => setIsImageLoaded(true)}
+                    onError={handleImageError}
+                    loading="lazy"
                 />
+
+                {/* Show loading skeleton while image is loading */}
+                {!isImageLoaded && (
+                    <div className="image-placeholder"></div>
+                )}
+
                 <div className="hero-content-overlay">
-                    <h2 className="hero-main-title">{bannerData?.title}</h2>
-                    <p className="hero-description">{bannerData?.subtitle}</p>
+                    <h1 className="hero-main-title">
+                        {isLoading ? "Loading..." : (bannerData?.title || itemName || "Category")}
+                    </h1>
+                    <p className="hero-description">
+                        {bannerData?.subtitle || subItemName || "Explore our collection"}
+                    </p>
                 </div>
             </div>
         </section>

@@ -69,10 +69,7 @@ const MobileOrderCard = ({ order, onClick }) => {
         </div>
         <div className="order-product-details-mobile">
           <div className="order-product-name-mobile">{order.orderItems?.[0]?.productName}</div>
-          <div className="order-date-mobile">
-            <FontAwesomeIcon icon={faCalendarAlt} />{" "}
-            {new Date(order.orderTime || order.createdAt).toLocaleDateString()}
-          </div>
+       
           <div className="order-total-mobile">
             Total: {formatCurrency(order.totalAmount || order.amount)}
           </div>
@@ -103,12 +100,9 @@ const DesktopOrderCard = ({ order, onClick }) => {
         </div>
         <div className="order-meta-desktop">
           <div className="order-id-desktop">
-            <FontAwesomeIcon icon={faReceipt} /> #{order.orderId || order.id}
+            <FontAwesomeIcon icon={faReceipt} /> {order.orderId || order.id}
           </div>
-          <div className="order-date-desktop">
-            <FontAwesomeIcon icon={faCalendarAlt} />{" "}
-            {new Date(order.orderTime || order.createdAt).toLocaleDateString()}
-          </div>
+        
         </div>
         <div className="order-total-desktop">{formatCurrency(order.totalAmount || order.amount)}</div>
         <div

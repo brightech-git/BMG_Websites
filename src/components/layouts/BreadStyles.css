@@ -1,19 +1,21 @@
-
 :root {
-
     /* Base font sizes */
-    --title-size-xs: 1.5rem;
-    --title-size-sm: 1.8rem;
-    --title-size-md: 2rem;
-    --title-size-lg: 2.5rem;
+    --title-size-xs: 1.4rem;
+    --title-size-sm: 1.7rem;
+    --title-size-md: 1.8rem;
+    --title-size-lg: 2.3rem;
     --title-size-xl: 3rem;
-    --title-size-xxl: 3.5rem;
+    --title-size-xxl: 3.3rem;
 
-    --text-size-xs: 0.8rem;
-    --text-size-sm: 0.9rem;
-    --text-size-md: 1rem;
-    --text-size-lg: 1.1rem;
-    --text-size-xl: 1.2rem;
+    --text-size-xs: 0.7rem;
+    --text-size-sm: 0.8rem;
+    --text-size-md: 0.9rem;
+    --text-size-lg: 1rem;
+    --text-size-xl: 1.1rem;
+    
+    /* New variables for better control */
+    --overlay-horizontal-position: 10%;
+    --overlay-max-width: 80%;
 }
 
 /* Base container */
@@ -39,39 +41,66 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: var(--overlay-gradient);
+   
     z-index: 2;
     pointer-events: none;
 }
 
 /* Banner Image */
 .category-hero-image {
-    width: 100%;
+    width: 100% !important;
     height: clamp(250px, 30vh, 450px) !important;
     object-fit: cover;
-    object-position: center ;
+    object-position: center;
     display: block;
     border-radius: 0;
-    transition: transform 0.3s ease;
-    min-height: 250px ;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    min-height: 300px;
+    opacity: 0;
 }
 
-/* Subtle zoom effect on hover */
-.hero-banner-section:hover .category-hero-image {
-    transform: scale(1.02);
+.category-hero-image.loaded {
+    opacity: 1;
 }
 
-/* Text Overlay */
+.category-hero-image.loading {
+    opacity: 0;
+}
+
+/* Image placeholder for loading state */
+.image-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: clamp(250px, 30vh, 450px);
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    z-index: 1;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+
+
+/* Text Overlay - FIXED POSITIONING */
 .hero-content-overlay {
     position: absolute;
     top: 50%;
-    left: 20%;
-    transform: translate(-50%, -50%);
+    left: var(--overlay-horizontal-position);
+    transform: translateY(-50%); /* Removed horizontal translation */
     color: var(--white-text);
     z-index: 10;
-    text-align: center;
-    max-width: 90%;
-    width: 100%;
+    text-align: left;
+    max-width: var(--overlay-max-width);
     padding: 0 20px;
 }
 
@@ -104,7 +133,6 @@
     animation: slideInFromBottom 0.8s ease forwards;
     animation-delay: 0.4s;
     max-width: 600px;
-    margin: 0 auto;
 }
 
 /* Animations */
@@ -113,7 +141,6 @@
         opacity: 0;
         transform: translateY(30px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
@@ -137,6 +164,11 @@
     .hero-description {
         font-size: var(--text-size-xl);
     }
+    
+    .hero-content-overlay {
+        --overlay-horizontal-position: 12%;
+        --overlay-max-width: 70%;
+    }
 }
 
 /* Desktop (1200px - 1919px) */
@@ -151,6 +183,11 @@
 
     .hero-description {
         font-size: var(--text-size-lg);
+    }
+    
+    .hero-content-overlay {
+        --overlay-horizontal-position: 10%;
+        --overlay-max-width: 75%;
     }
 }
 
@@ -175,6 +212,8 @@
 
     .hero-content-overlay {
         padding: 0 30px;
+        --overlay-horizontal-position: 8%;
+        --overlay-max-width: 80%;
     }
 }
 
@@ -201,8 +240,10 @@
     }
 
     .hero-content-overlay {
-        margin-left: 50px !important;
         padding: 0 25px;
+        --overlay-horizontal-position: 8%;
+        --overlay-max-width: 85%;
+        text-align: center;
     }
 }
 
@@ -232,8 +273,9 @@
 
     .hero-content-overlay {
         padding: 0 20px;
-        max-width: 95%;
-        margin-left: 90px !important;
+        --overlay-horizontal-position: 5%;
+        --overlay-max-width: 90%;
+        text-align: center;
     }
 }
 
@@ -245,9 +287,9 @@
 
     .category-hero-image {
         height: clamp(150px, 22vh, 180px) !important;
-        object-position: center 20%;
-        min-height: 150px;
-        max-height: 180px;
+        object-position: center ;
+        min-height: 150px ;
+        max-height: 180px ;
     }
 
     .hero-main-title {
@@ -265,8 +307,9 @@
 
     .hero-content-overlay {
         padding: 0 15px;
-        max-width: 90%;
-        margin-left: 80px !important;
+        --overlay-horizontal-position: 5%;
+        --overlay-max-width: 90%;
+        text-align: center;
     }
 
     /* Reduce animation intensity on mobile */
@@ -283,7 +326,7 @@
 
     .category-hero-image {
         height: clamp(130px, 20vh, 160px) !important;
-        object-position: center 15%;
+        object-position: center ;
         min-height: 130px;
         max-height: 160px;
     }
@@ -302,7 +345,9 @@
 
     .hero-content-overlay {
         padding: 0 12px;
-        max-width: 88%;
+        --overlay-horizontal-position: 5%;
+        --overlay-max-width: 90%;
+        text-align: center;
     }
 }
 
@@ -333,7 +378,9 @@
 
     .hero-content-overlay {
         padding: 0 10px;
-        max-width: 85%;
+        --overlay-horizontal-position: 5%;
+        --overlay-max-width: 90%;
+        text-align: center;
     }
 
     /* Disable hover effects on very small screens */
@@ -360,7 +407,6 @@
 
 /* Reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
-
     .hero-main-title,
     .hero-description {
         animation: none;
@@ -373,6 +419,11 @@
 
     .hero-banner-section:hover .category-hero-image {
         transform: none;
+    }
+    
+    .image-placeholder {
+        animation: none;
+        background: #f0f0f0;
     }
 }
 
@@ -390,6 +441,11 @@
 
     .category-hero-image {
         height: 150px;
+        filter: grayscale(100%);
+    }
+    
+    .banner-container::before {
+        display: none;
     }
 
     .hero-content-overlay {
@@ -408,5 +464,9 @@
     .hero-description {
         font-size: 12pt;
         color: black;
+    }
+    
+    .image-placeholder {
+        display: none;
     }
 }

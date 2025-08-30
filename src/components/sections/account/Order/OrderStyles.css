@@ -70,10 +70,10 @@
 }
 
 .order-card-desktop {
-  background-color: var(--white-color);
+  background-color: var(--primary-card-color);
   border-radius: var(--radius-md);
   padding: 1.5rem;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
   cursor: pointer;
   transition: var(--transition-base);
   width: 100%;
@@ -82,7 +82,7 @@
 .order-card-desktop:hover,
 .order-card-desktop:focus {
   transform: translateY(-4px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
 .order-card-content-desktop {
@@ -123,6 +123,13 @@
   color: var(--text-primary);
   font-size: clamp(0.95rem, 2vw, 1.05rem);
   line-height: 1.5;
+  text-transform: lowercase;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+    max-width: 200px;
+    display: block;
+  
 }
 
 .order-meta-desktop {
@@ -297,6 +304,7 @@
   color: var(--text-primary);
   font-size: clamp(0.95rem, 2vw, 1.05rem);
   line-height: 1.5;
+  text-transform: lowercase;
 }
 
 .order-date-mobile {

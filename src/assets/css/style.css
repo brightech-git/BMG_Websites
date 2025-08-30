@@ -56,7 +56,7 @@
         --title-font: 'Dancing Script';
         --primary-color: #f6f5f0;
         --primary-text-color: #041f60;
-        --primary-card-color: #e9e7e0;
+        --primary-card-color: #eeece8;
         --primary-hover-color: #cd865c;
         --secondary-card-color: rgb(238, 246, 247);
         --feature-bg-color:#ece6d3;
@@ -81,7 +81,31 @@
         --overlay-bg: rgba(0, 0, 0, 0.3);
         --gradient-bg-color: linear-gradient(145deg, #edebe7, #ebe8c5);
         --virtual-shop-card:#f6ebd5;
+        --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --transition: all 0.3s ease;
+            --transition-fast: all 0.15s ease;
+            --blue-color: #3498db;
+            --purple-color: #9b59b6;
+            --orange-color: #f39c12;
+            --red-color: #e74c3c;
     }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary-card-color: #2d2d2d;
+                --secondary-card-color: #1a1a1a;
+                --primary-text-color: #ffffff;
+                --primary-color: #404040;
+                --grey-color: #555;
+            }
+        }
 .texture-1 {
     position: absolute;
     bottom: -250px;

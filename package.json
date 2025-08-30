@@ -26,6 +26,7 @@
     "axios": "^1.10.0",
     "bootstrap": "^5.3.7",
     "classnames": "^2.3.1",
+    "firebase": "^12.2.1",
     "font-awesome": "^4.7.0",
     "framer-motion": "^12.23.6",
     "install": "^0.13.0",
@@ -88,7 +89,10 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.28.3",
+    "@babel/preset-env": "^7.28.3",
     "autoprefixer": "^10.3.2",
+    "babel-loader": "^10.0.0",
     "cross-env": "^10.0.0",
     "postcss-cli": "^8.3.1"
   }

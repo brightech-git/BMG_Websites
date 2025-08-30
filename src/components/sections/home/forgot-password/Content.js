@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import { forgotPassword, resetPassword } from '../../../../redux/slices/userSlice';
-import { toast } from 'react-toastify';
 import loginbg from '../../../../assets/img/bg/sign.webp';
 import './ForgotPassword.css';
 

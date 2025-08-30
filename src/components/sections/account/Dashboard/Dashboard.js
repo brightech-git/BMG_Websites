@@ -278,122 +278,90 @@ const Dashboard = ({ setActiveComponent, setSelectedOrder }) => {
             </div>
 
             {orders.length > 0 ? (
-              <div className="order-history__table-container">
-                <div className="order-history__table">
-                  <div className="order-history__table-header">
-                    <div className="order-history__header-cell">Order Details</div>
-                    <div className="order-history__header-cell">Items</div>
-                    <div className="order-history__header-cell">Total</div>
-                    <div className="order-history__header-cell">Status</div>
-                  </div>
+              <div className="order-history__cards">
+                {orders.map((order, index) => {
+                  const firstItem = order.orderItems?.[0];
+                  const firstImage = firstItem ? getFirstImage(firstItem.image_path) : null;
+                  const itemsSummary = getOrderItemsSummary(order.orderItems);
 
-                  <div className="order-history__table-body">
-                    {orders.map((order, index) => {
-                      const firstItem = order.orderItems?.[0];
-                      const firstImage = firstItem ? getFirstImage(firstItem.image_path) : null;
-                      const itemsSummary = getOrderItemsSummary(order.orderItems);
-
-                      return (
-                        <div
-                          className="order-history__table-row order-history__table-row--clickable"
-                          key={index}
-                          onClick={() => handleOrderRowClick(order)}
-                          role="button"
-                          tabIndex={0}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                              e.preventDefault();
-                              handleOrderRowClick(order);
-                            }
-                          }}
-                          aria-label={`View details for order ${order.orderId}`}
-                        >
-                          <div className="order-history__cell order-history__cell--details">
-                            <div className="order-history__order-id-group">
-                              <span className="order-history__order-id">#{order.orderId}</span>
-                              <div className="order-history__order-meta">
-                                <FiCalendar size={12} />
-                                <span className="order-history__order-date">
-                                  {formatDate(order.orderTime)}
-                                </span>
+                  return (
+                    <div
+                      className="order-history__card"
+                      key={index}
+                      onClick={() => handleOrderRowClick(order)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          handleOrderRowClick(order);
+                        }
+                      }}
+                      aria-label={`View details for order ${order.orderId}`}
+                    >
+                      <div className="order-history__card-content">
+                        <div className="order-history__items-info">
+                          {firstImage ? (
+                            <div className="order-history__item-image-container">
+                              <div className="order-history__item-image">
+                                <img
+                                  src={getResolvedImageUrl(firstImage)}
+                                  alt={firstItem?.productName || "Product"}
+                                  onError={(e) => {
+                                    e.target.style.display = "none";
+                                    const placeholder = e.target.parentNode.querySelector(
+                                      ".order-history__item-image-placeholder"
+                                    );
+                                    if (placeholder) placeholder.style.display = "flex";
+                                  }}
+                                />
+                                <div
+                                  className="order-history__item-image-placeholder"
+                                  style={{ display: "none" }}
+                                >
+                                  <FiPackage size={16} />
+                                </div>
                               </div>
                             </div>
-                          </div>
-
-                          <div className="order-history__cell order-history__cell--items">
-                            <div className="order-history__items-info">
-                              {firstImage ? (
-                                <div className="order-history__item-image-container">
-                                  <div className="order-history__item-image">
-                                    <img
-                                      src={getResolvedImageUrl(firstImage)}
-                                      alt={firstItem?.productName || "Product"}
-                                      onError={(e) => {
-                                        e.target.style.display = "none";
-                                        const placeholder =
-                                          e.target.parentNode.querySelector(
-                                            ".order-history__item-image-placeholder"
-                                          );
-                                        if (placeholder) placeholder.style.display = "flex";
-                                      }}
-                                    />
-                                    <div
-                                      className="order-history__item-image-placeholder"
-                                      style={{ display: "none" }}
-                                    >
-                                      <FiPackage size={16} />
-                                    </div>
-                                  </div>
-                                </div>
-                              ) : (
-                                <div className="order-history__item-image-container">
-                                  <div className="order-history__item-image-placeholder">
-                                    <FiPackage size={16} />
-                                  </div>
-                                </div>
-                              )}
-                              <div className="order-history__items-details">
-                                <span className="order-history__items-text">
-                                  {itemsSummary.text}
-                                </span>
-                                <span className="order-history__items-count">
-                                  {itemsSummary.count}
-                                </span>
+                          ) : (
+                            <div className="order-history__item-image-container">
+                              <div className="order-history__item-image-placeholder">
+                                <FiPackage size={16} />
                               </div>
                             </div>
-                          </div>
-
-                          <div className="order-history__cell order-history__cell--total">
-                            <span className="order-history__total-amount">
-                              ₹{order.totalAmount?.toFixed(2) || "0.00"}
-                            </span>
-                            {order.paymentMode && (
-                              <span className="order-history__payment-mode">
-                                via {order.paymentMode}
-                              </span>
-                            )}
-                          </div>
-
-                          <div className="order-history__cell order-history__cell--status">
-                            <span
-                              className={`order-history__status-badge order-history__status-badge--${getStatusBadge(
-                                order.status
-                              )}`}
-                            >
-                              {getStatusIcon(order.status)}
-                              <span>{order.status}</span>
-                            </span>
-                            {order.courierTrackingId && (
-                              <span className="order-history__tracking-id">
-                                Track: {order.courierTrackingId}
-                              </span>
-                            )}
+                          )}
+                          <div className="order-history__items-details">
+                            <span className="order-history__items-text">{itemsSummary.text}</span>
+                            <span className="order-history__items-count">{itemsSummary.count}</span>
                           </div>
                         </div>
-                      );
-                    })}
-                  </div>
-                </div>
+                        <div className="order-history__status">
+                          <span
+                            className={`order-history__status-badge order-history__status-badge--${getStatusBadge(
+                              order.status
+                            )}`}
+                          >
+                            {getStatusIcon(order.status)}
+                            <span>{order.status}</span>
+                          </span>
+                          {order.courierTrackingId && (
+                            <span className="order-history__tracking-id">
+                              Track: {order.courierTrackingId}
+                            </span>
+                          )}
+                        </div>
+                        <div className="order-history__total">
+                          <span className="order-history__total-amount">
+                            ₹{order.totalAmount?.toFixed(2) || "0.00"}
+                          </span>
+                          {order.paymentMode && (
+                            <span className="order-history__payment-mode">via {order.paymentMode}</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             ) : (
               <div className="order-history__empty">

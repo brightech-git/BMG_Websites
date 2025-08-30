@@ -1,48 +1,25 @@
-/* AddressStyles.css */
 
-/* Root Variables */
-:root {
-  --primary-font: 'Gloock', serif;
-  --secondary-font: 'Montserrat', sans-serif;
-  --primary-color: #f6f5f0;
-  --primary-text-color: #404040;
-  --primary-card-color: #edebe7;
-  --primary-hover-color: #cd865c;
-  --secondary-card-color: #cfdcdd;
-  --white-color: #ffffff;
-  --btn-color: #cecdeb;
-}
 
 /* Base Styles */
 .address-page-layout {
-  display: flex;
-  min-height: 100vh;
   background-color: var(--primary-color);
   font-family: var(--secondary-font);
 }
 
 .address-manager-container {
   flex: 1;
-  padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .address-manager {
-  background-color: var(--white-color);
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  padding: 2rem;
+  background-color: var(--primary-color);
 }
 
 /* Header Styles */
 .address-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  background-color: var(--white-color);
   margin-bottom: 2rem;
-  flex-wrap: wrap;
-  gap: 1rem;
 }
 
 .header-content {

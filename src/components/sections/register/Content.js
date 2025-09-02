@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { signup, verifyOtp } from '../../../redux/slices/userSlice';
+import { signup, verifyOtp, clearError } from '../../../redux/slices/userSlice';
 import loginbg from '../../../assets/img/bg/sign.webp';
 import GoogleLoginButton from './GoogleLoginButton';
 import './Register.css';
@@ -58,7 +58,7 @@ const Content = () => {
 
     const handleRegister = (e) => {
         e.preventDefault();
-        if (loading) return; // Prevent multiple submissions
+        if (loading) return;
         if (validateForm()) {
             console.log('Dispatching signup with:', { username, email, contactNumber, password, roles });
             dispatch(signup({ username, email, contactNumber, password, roles }))
@@ -67,15 +67,13 @@ const Content = () => {
                     setShowOtpModal(true);
                     setTempContactNumber(contactNumber);
                 })
-                .catch(() => {
-                    
-                });
+                .catch(() => { });
         }
     };
 
     const handleVerifyOtp = (e) => {
         e.preventDefault();
-        if (loading) return; // Prevent multiple submissions
+        if (loading) return;
         if (otp.length !== 6 || !/^\d{6}$/.test(otp)) {
             setErrors({ ...errors, otp: 'Please enter a valid 6-digit OTP' });
             return;
@@ -92,12 +90,9 @@ const Content = () => {
                 setShowOtpModal(false);
                 history.push('/');
             })
-            .catch(() => {
-               
-            });
+            .catch(() => { });
     };
 
-    // Redirect if authenticated and OTP modal is not shown
     useEffect(() => {
         if (isAuthenticated && !showOtpModal) {
             const lastVisited = localStorage.getItem('lastVisited') || '/';
@@ -109,53 +104,41 @@ const Content = () => {
         }
     }, [isAuthenticated, showOtpModal, history]);
 
-    // Clear errors on page navigation
+    useEffect(() => {
+        if (errors) {
+            const timer = setTimeout(() => {
+                dispatch(clearError());
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [errors, dispatch]);
+
     useEffect(() => {
         setErrors({});
-    }, [location]);
+        dispatch(clearError());
+    }, [location.pathname, dispatch]);
 
     return (
-        <section className="register-section pt-120 pb-120">
+        <section className="signup-section pt-120 pb-120">
             <div className="container">
-                <div className="account-wrapper">
+                <div className="signup-container">
                     <div className="row no-gutters">
                         <div className="col-lg-6 col-md-6 col-sm-12">
-                            <div
-                                className="login-content"
-                                style={{
-                                    backgroundImage: `url(${loginbg})`,
-                                    backgroundSize: 'cover',
-                                    backgroundPosition: 'center',
-                                    height: '100%',
-                                    borderRadius: '10px 0 0 10px',
-                                    backgroundColor: '#f0f0f0', // Fallback color
-                                }}
-                            />
+                            <div className="signup-background" />
                         </div>
                         <div className="col-lg-6 col-md-6 col-sm-12">
-                            <div
-                                className="register-form"
-                                style={{
-                                    borderRadius: '0 10px 10px 0',
-                                    padding: '40px',
-                                    height: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    justifyContent: 'center',
-                                    backgroundColor: '#fff',
-                                }}
-                            >
+                            <div className="signup-form">
                                 <h2>{showOtpModal ? 'Verify OTP' : 'Create Account'}</h2>
 
                                 {error && !showOtpModal && (
-                                    <div className="alert alert-danger" style={{ fontSize: '14px' }}>
+                                    <div className="alert alert-danger">
                                         {error}
                                     </div>
                                 )}
 
                                 {!showOtpModal ? (
                                     <form onSubmit={handleRegister} autoComplete="off">
-                                        <div className="input-group input-group-two mb-20">
+                                        <div className="input-field input-field-styled mb-20">
                                             <input
                                                 type="text"
                                                 placeholder="Username"
@@ -168,11 +151,11 @@ const Content = () => {
                                                 aria-label="Username"
                                             />
                                             {errors.username && (
-                                                <div className="invalid-feedback">{errors.username}</div>
+                                                <div className="error-feedback">{errors.username}</div>
                                             )}
                                         </div>
 
-                                        <div className="input-group input-group-two mb-20">
+                                        <div className="input-field input-field-styled mb-20">
                                             <input
                                                 type="email"
                                                 placeholder="Email"
@@ -184,10 +167,10 @@ const Content = () => {
                                                 className={errors.email ? 'is-invalid' : ''}
                                                 aria-label="Email"
                                             />
-                                            {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+                                            {errors.email && <div className="error-feedback">{errors.email}</div>}
                                         </div>
 
-                                        <div className="input-group input-group-two mb-20">
+                                        <div className="input-field input-field-styled mb-20">
                                             <input
                                                 type="text"
                                                 placeholder="Mobile Number"
@@ -202,11 +185,11 @@ const Content = () => {
                                                 aria-label="Mobile Number"
                                             />
                                             {errors.contactNumber && (
-                                                <div className="invalid-feedback">{errors.contactNumber}</div>
+                                                <div className="error-feedback">{errors.contactNumber}</div>
                                             )}
                                         </div>
 
-                                        <div className="input-group input-group-two mb-20">
+                                        <div className="input-field input-field-styled mb-20">
                                             <input
                                                 type="password"
                                                 placeholder="Password"
@@ -219,31 +202,32 @@ const Content = () => {
                                                 aria-label="Password"
                                             />
                                             {errors.password && (
-                                                <div className="invalid-feedback">{errors.password}</div>
+                                                <div className="error-feedback">{errors.password}</div>
                                             )}
                                         </div>
-                                        <div className='button'>
-                                        <button
-                                            type="submit"
-                                            className="btn-main main-filled mt-20 login-btn"
-                                            style={{ width: '150px' }}
-                                            disabled={loading}
-                                            aria-label="Register new account"
-                                        >
-                                            {loading ? 'Registering...' : 'Register'}
-                                        </button>
+
+                                        <div className="btn-container">
+                                            <button
+                                                type="submit"
+                                                className="primary-btn"
+                                                disabled={loading}
+                                                aria-label="Register new account"
+                                            >
+                                                {loading ? 'Registering...' : 'Register'}
+                                            </button>
                                         </div>
-                                        <p className="register-link" style={{ color: '#404040', fontFamily: 'Montserrat', marginTop: '20px' }}>
+
+                                        <p className="login-prompt">
                                             Already have an Account?
-                                            <Link to="/login" className="login-redirect" style={{ marginLeft: '10px' }}>
+                                            <Link to="/login" className="login-link">
                                                 Login
                                             </Link>
                                         </p>
-                                        {/* <GoogleLoginButton /> */}
+                                        <GoogleLoginButton />
                                     </form>
                                 ) : (
                                     <form onSubmit={handleVerifyOtp} autoComplete="off">
-                                        <div className="input-group input-group-two mb-20">
+                                        <div className="input-field input-field-styled mb-20">
                                             <input
                                                 type="text"
                                                 placeholder="Enter 6-digit OTP"
@@ -257,26 +241,29 @@ const Content = () => {
                                                 className={errors.otp ? 'is-invalid' : ''}
                                                 aria-label="OTP"
                                             />
-                                            {errors.otp && <div className="invalid-feedback">{errors.otp}</div>}
+                                            {errors.otp && <div className="error-feedback">{errors.otp}</div>}
                                         </div>
-                                                <div className='button'>
-                                        <button
-                                            type="submit"
-                                            className="btn-main main-filled mt-20 login-btn"
-                                            style={{ width: '150px' }}
-                                            disabled={loading}
-                                            aria-label="Verify OTP"
-                                        >
-                                            {loading ? 'Verifying...' : 'Verify OTP'}
-                                        </button>
-                                            </div>
-                                        <p className="register-link" style={{ color: '#404040', fontFamily: 'Montserrat', marginTop: '20px' }}>
+
+                                        <div className="btn-container">
+                                            <button
+                                                type="submit"
+                                                className="primary-btn"
+                                                disabled={loading}
+                                                aria-label="Verify OTP"
+                                            >
+                                                {loading ? 'Verifying...' : 'Verify OTP'}
+                                            </button>
+                                        </div>
+
+                                        <p className="login-prompt">
                                             Back to
                                             <button
                                                 type="button"
-                                                className="back-to-register"
-                                                onClick={() => setShowOtpModal(false)}
-                                                style={{ marginLeft: '10px', background: 'none', border: 'none', color: '#007bff', cursor: 'pointer' }}
+                                                className="back-to-signup"
+                                                onClick={() => {
+                                                    setShowOtpModal(false);
+                                                    dispatch(clearError());
+                                                }}
                                             >
                                                 Register
                                             </button>

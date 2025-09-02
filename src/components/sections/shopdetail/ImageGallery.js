@@ -246,6 +246,7 @@ const ImageGallery = ({ images }) => {
     return (
         <>
             <div className="gallery-container">
+                <div className='container'>
                 {/* Main Image Display */}
                 <div className="main-image-container">
                     <div className="image-counter">
@@ -308,6 +309,7 @@ const ImageGallery = ({ images }) => {
                             </>
                         )}
                     </div>
+                </div>
                 </div>
 
                 {/* Thumbnail Gallery */}

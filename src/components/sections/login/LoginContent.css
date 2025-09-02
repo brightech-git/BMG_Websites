@@ -1,0 +1,95 @@
+
+.login-sec {
+    padding-top: 120px;
+    padding-bottom: 120px;
+    background-color: var(--primary-color);
+}
+
+.account-wrapper {
+    background-color: var(--primary-card-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.login-content {
+    background-image: url('../../../assets/img/bg/sign.webp');
+    background-size: cover;
+    background-position: center;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-form {
+    padding: 40px;
+    font-family: var(--secondary-font);
+    color: var(--primary-text-color);
+}
+
+.login-form h4 {
+    font-family: var(--title-font);
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: var(--primary-text-color) !important;
+    font-weight: bolder;
+}
+
+.alert.alert-danger {
+    font-size: 14px;
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+
+.input-group-two input {
+    width: 100%;
+    padding: 10px;
+    font-family: var(--secondary-font);
+    font-size: 1rem;
+    border-radius: 4px;
+    outline: none;
+}
+
+.input-group-two input:focus {
+    border-color: var(--primary-hover-color);
+}
+
+
+.login-form a {
+    color: var(--primary-hover-color);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.login-form a:hover {
+    text-decoration: underline;
+}
+
+.forgot{
+    color:var(--primary-text-color) !important
+}
+.forgot:hover{
+    color: var(--primary-hover-color) !important;
+}
+
+.register-prompt {
+    color: var(--primary-text-color) !important;
+    font-family: var(--secondary-font);
+    font-size: 1rem;
+    margin-top: 20px;
+}
+
+.create-account-link {
+    margin-left: 10px;
+    display: inline-block !important;
+    color: var(--primary-text-color) !important;
+}
+.create-account-link:hover {
+    color: var(--primary-hover-color) !important;
+}

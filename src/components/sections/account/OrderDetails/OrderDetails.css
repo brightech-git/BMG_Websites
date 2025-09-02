@@ -156,7 +156,7 @@
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--primary-text-color);
-  margin: 0 ;
+  margin: 0;
   padding: 1.25rem 1.5rem;
   background: var(--secondary-card-color);
   border-bottom: 1px solid var(--grey-color);
@@ -359,6 +359,7 @@
   padding-top: 0.75rem;
   border-top: 1px solid var(--grey-color);
 }
+
 /* Professional Status Modal */
 .status-modal-overlay {
   position: fixed;
@@ -449,6 +450,16 @@
   text-align: center;
 }
 
+.status-badge-large {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-xl);
+  color: var(--white-color);
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+}
+
 .status-details {
   width: 100%;
 }
@@ -481,52 +492,62 @@
   gap: 0.5rem;
 }
 
+/* Fixed Timeline Structure */
 .status-timeline {
   position: relative;
-  padding-left: 4.5rem;
+  padding: 1rem 0;
+  margin: 1rem 0;
 }
 
+/* Main Timeline Connector */
 .timeline-connector {
   position: absolute;
-  left: 1.8rem;
-  top: 1rem;
-  bottom: 3rem;
+  left: 30px;
+  top: 60px;
   width: 4px;
-  border-radius: 4px;
+  height: calc(100% - 130px);
   background: var(--grey-color);
+  border-radius: 2px;
+  z-index: 1;
 }
 
-/* Dynamic connector color based on current status */
-.status-timeline[data-current-status="PENDING"] .timeline-connector {
-  background: var(--grey-color);
-}
+/* Progressive fill for timeline connector */
 .status-timeline[data-current-status="PLACED"] .timeline-connector {
-  background: linear-gradient(to bottom, var(--green-color) 10%, var(--grey-color) 10%);
+  background: linear-gradient(to bottom, #27ae60 14%, var(--grey-color) 14%);
 }
+
 .status-timeline[data-current-status="IN_PROCESSING"] .timeline-connector {
-  background: linear-gradient(to bottom, var(--green-color) 30%, var(--grey-color) 30%);
+  background: linear-gradient(to bottom, #27ae60 28%, var(--grey-color) 28%);
 }
+
 .status-timeline[data-current-status="PACKED"] .timeline-connector {
-  background: linear-gradient(to bottom, var(--green-color) 50%, var(--grey-color) 50%);
+  background: linear-gradient(to bottom, #27ae60 42%, var(--grey-color) 42%);
 }
+
 .status-timeline[data-current-status="SHIPPED"] .timeline-connector {
-  background: linear-gradient(to bottom, var(--green-color) 70%, var(--grey-color) 70%);
+  background: linear-gradient(to bottom, #27ae60 56%, var(--grey-color) 56%);
 }
+
 .status-timeline[data-current-status="IN_TRANSIT"] .timeline-connector {
-  background: linear-gradient(to bottom, var(--green-color) 90%, var(--grey-color) 90%);
+  background: linear-gradient(to bottom, #27ae60 70%, var(--grey-color) 70%);
 }
+
 .status-timeline[data-current-status="DELIVERED"] .timeline-connector {
-  background: var(--green-color);
+  background: #27ae60;
 }
+
 .status-timeline[data-current-status="CANCELLED"] .timeline-connector {
   background: var(--red-color);
 }
 
+/* Status Steps */
 .status-step {
   position: relative;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   display: flex;
+  align-items: flex-start;
   gap: 1.5rem;
+  padding-left: 4rem;
 }
 
 .status-step:last-child {
@@ -534,30 +555,45 @@
 }
 
 .step-icon-container {
-  width: 3.75rem;
-  height: 3.75rem;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--white-color);
-  border: 3px solid var(--grey-color);
+  border: 4px solid var(--grey-color);
   z-index: 2;
   flex-shrink: 0;
   position: absolute;
-  left: -4.5rem;
+  left: 0;
   top: 0;
-  transition: var(--transition);
+  transition: all 0.3s ease;
 }
 
+/* Step States */
 .status-step.completed .step-icon-container {
-  background-color: var(--green-color);
-  border-color: var(--green-color);
+  background-color: #27ae60;
+  border-color: #27ae60;
+}
+
+.status-step.completed .section-icon {
+  color: var(--white-color);
 }
 
 .status-step.current .step-icon-container {
-  transform: scale(1.15);
-  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.15);
+  transform: scale(1.1);
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1);
+  animation: pulse 2s infinite;
+}
+
+.status-step.future .step-icon-container {
+  background-color: var(--secondary-card-color);
+  border-color: var(--grey-color);
+}
+
+.status-step.future .section-icon {
+  color: var(--grey-color);
 }
 
 .status-step.cancelled .step-icon-container {
@@ -565,33 +601,53 @@
   border-color: var(--red-color);
 }
 
+.status-step.cancelled .section-icon {
+  color: var(--white-color);
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1);
+  }
+
+  50% {
+    box-shadow: 0 0 0 8px rgba(0, 0, 0, 0.05);
+  }
+
+  100% {
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
 .section-icon {
   font-size: 1.5rem;
+  color: var(--primary-hover-color);
 }
 
 .step-content {
   flex: 1;
-  padding-bottom: 1.5rem;
+  padding-top: 0.5rem;
 }
 
 .step-title {
-  margin: 0.5rem 0 0.75rem 0;
+  margin: 0 0 0.75rem 0;
   font-size: 1.15rem;
   display: flex;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 0.75rem;
   color: var(--primary-text-color);
   font-weight: 600;
   font-family: var(--secondary-font);
+  flex-wrap: wrap;
 }
 
 .current-indicator {
-  background: var(--green-color);
+  background: #27ae60;
   color: var(--white-color);
-  padding: 0.3rem 0.8rem;
+  padding: 0.25rem 0.75rem;
   border-radius: var(--radius-sm);
-  font-size: 0.75rem;
-  font-weight: 400;
-  align-self: flex-start;
+  font-size: 0.7rem;
+  font-weight: 500;
   font-family: var(--secondary-font);
 }
 
@@ -610,6 +666,74 @@
   align-items: center;
   gap: 0.5rem;
   font-family: var(--secondary-font);
+}
+
+/* DTDC Tracking Details */
+.dtdc-tracking-details {
+  margin: 1rem 0 0 4rem;
+  padding: 1rem 0 0 2rem;
+  border-left: 2px solid #e0e0e0;
+  position: relative;
+}
+
+.dtdc-tracking-details::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 0;
+  width: 10px;
+  height: 2px;
+  background: #e0e0e0;
+}
+
+.tracking-substep {
+  margin-bottom: 1.5rem;
+  padding-left: 3rem;
+  position: relative;
+}
+
+.tracking-substep:last-child {
+  margin-bottom: 0;
+}
+
+.tracking-substep .step-icon-container {
+  width: 40px;
+  height: 40px;
+  left: -3rem;
+  border-width: 3px;
+}
+
+.tracking-substep .step-content {
+  padding-top: 0.25rem;
+}
+
+.tracking-substep .step-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.tracking-substep .step-description {
+  font-size: 0.85rem;
+  color: var(--grey-color);
+  margin-bottom: 0.5rem;
+}
+
+.tracking-substep .step-updated {
+  font-size: 0.8rem;
+}
+
+.tracking-loading,
+.tracking-empty,
+.tracking-error {
+  padding: 1rem;
+  text-align: center;
+  font-style: italic;
+  color: var(--grey-color);
+}
+
+.tracking-error {
+  color: var(--red-color);
 }
 
 /* Cancel Order Section */
@@ -647,6 +771,7 @@
   cursor: not-allowed;
   transform: none;
 }
+
 /* Continue Shopping Button */
 .continue-shopping-btn {
   background: var(--primary-hover-color);
@@ -715,6 +840,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  text-decoration: none;
 }
 
 .order-shop-button:hover {
@@ -779,6 +905,36 @@
     width: 55px;
     height: 55px;
   }
+
+  .status-timeline {
+    padding-left: 3.5rem;
+  }
+
+  .timeline-connector {
+    left: 80px;
+  }
+
+  .step-icon-container {
+    width: 50px;
+    height: 50px;
+    left: 0;
+  }
+
+  .dtdc-tracking-details {
+    margin-left: 3.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .tracking-substep {
+    padding-left: 1.5rem;
+  }
+
+  .tracking-substep .step-icon-container {
+    width: 35px;
+    height: 35px;
+    left: -2.5rem;
+  }
+
 }
 
 /* Mobile (up to 767px) */
@@ -814,13 +970,11 @@
     flex: 1;
   }
 
- 
-
   .view-status-btn {
     width: 50%;
-    justify-content: center ;
-    align-items: center ;
-    margin: 0 auto !important;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
     font-size: 16px;
   }
 
@@ -850,14 +1004,17 @@
   }
 
   .item-name-compact {
-
     font-size: 0.8rem;
     text-transform: lowercase;
-    
+    max-width: 120px;
   }
 
   .item-price-compact {
     font-size: 0.85rem;
+  }
+
+  .item-details-compact {
+    gap: 0.5rem;
   }
 
   .status-modal {
@@ -877,18 +1034,66 @@
     padding: 1.25rem;
   }
 
+  /* Mobile Timeline Adjustments */
   .status-timeline {
     padding-left: 3rem;
   }
 
-  .step-icon-container {
-    width: 3rem;
-    height: 3rem;
-    left: -3rem;
+  .timeline-connector {
+    left: 65px;
+    width: 3px;
   }
 
-  .timeline-connector {
-    left: 1.4rem;
+  .step-icon-container {
+    width: 40px;
+    height: 40px;
+    left: 0;
+    border-width: 3px;
+  }
+
+  .section-icon {
+    font-size: 1.2rem;
+  }
+
+  .step-title {
+    font-size: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .current-indicator {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .dtdc-tracking-details {
+    margin-left: 3rem;
+    padding-left: 1.5rem;
+  }
+
+  .tracking-substep {
+    padding-left: 2.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .tracking-substep .step-icon-container {
+    width: 32px;
+    height: 32px;
+    left: -2.5rem;
+    border-width: 2px;
+  }
+
+  .tracking-substep .section-icon {
+    font-size: 1rem;
+  }
+
+  .tracking-substep .step-title {
+    font-size: 0.85rem;
+  }
+
+  .tracking-substep .step-description {
+    font-size: 0.8rem;
   }
 
   .continue-shopping-btn {
@@ -901,10 +1106,16 @@
   }
 
   .status-badge {
-    padding: 0.5rem 1rem ;
-    font-size: 0.8rem ;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
   }
-  .order-id{
+
+  .status-badge-large {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .order-id {
     font-size: 1rem;
   }
 }
@@ -923,6 +1134,7 @@
 
   .section-title {
     padding: 0.875rem 1rem;
+    font-size: 0.95rem;
   }
 
   .order-items-content,
@@ -953,22 +1165,102 @@
   .current-status-summary {
     padding: 0.875rem;
   }
-        .view-status-btn {
-          width: 100%;
-          font-size: 12px;
-        }
-                 .item-name-compact {
-                  font-size: 0.7rem;
-                  max-width: 60px;
-                  text-overflow: hidden;
-        
-                 }
-                 .item-price-compact{
-                  font-size: 0.7rem;
-                 }
-                                 .item-details-compact{
-                                  gap:0.5rem
-                                 }
+
+  .view-status-btn {
+    width: 100%;
+    font-size: 14px;
+    padding: 0.7rem 1rem;
+  }
+
+  .item-name-compact {
+    font-size: 0.75rem;
+    max-width: 80px;
+  }
+
+  .item-price-compact {
+    font-size: 0.75rem;
+  }
+
+  .item-details-compact {
+    gap: 0.25rem;
+  }
+
+  /* Extra small mobile timeline */
+  .status-timeline {
+    padding-left: 2.5rem;
+  }
+
+  .timeline-connector {
+    left: 55px;
+    width: 2px;
+    top: 50px;
+    height: calc(100% - 150px);
+  }
+
+  .step-icon-container {
+    width: 30px;
+    height: 30px;
+    left: 0;
+    border-width: 2px;
+  }
+
+  .section-icon {
+    font-size: 1rem;
+    margin-left: 7px;
+  }
+
+  .step-title {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .step-description {
+    font-size: 0.8rem;
+  }
+
+  .step-updated {
+    font-size: 0.75rem;
+  }
+
+  .dtdc-tracking-details {
+    margin-left: 1.5rem;
+    padding-left: 1rem;
+  }
+
+  .tracking-substep {
+    padding-left: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .tracking-substep .step-icon-container {
+    width: 24px;
+    height: 24px;
+    left: -2rem;
+    border-width: 2px;
+  }
+
+  .tracking-substep .section-icon {
+    font-size: 0.8rem;
+  }
+
+  .tracking-substep .step-title {
+    font-size: 0.75rem;
+  }
+
+  .tracking-substep .step-description,
+  .tracking-substep .step-updated {
+    font-size: 0.7rem;
+  }
+
+  .status-badge-large {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .current-indicator {
+    font-size: 0.6rem;
+    padding: 0.15rem 0.5rem;
+  }
 }
 
 /* Focus Styles for Accessibility */

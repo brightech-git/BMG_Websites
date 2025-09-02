@@ -110,6 +110,7 @@ const OurCategory = () => {
                                 <h3 className="elegant-title">
                                     {formatItemName(category.item_name)}
                                 </h3>
+                               
                             </div>
                         </div>
                     ))}

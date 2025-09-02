@@ -1,26 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory ,useLocation} from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import loginbg from '../../../assets/img/bg/sign.webp';
-
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../../../redux/slices/userSlice';
+import { login, clearError } from '../../../redux/slices/userSlice';
+import './LoginContent.css';
 
 const Content = () => {
     const [contactOrEmailOrUsername, setContactOrEmailOrUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [localError, setLocalError] = useState(null); // for field errors
+    const [localError, setLocalError] = useState(null);
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const location=useLocation();
+    const location = useLocation();
 
-    // Redux state
-    const user = useSelector((state) => state.user.user);
     const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
     const error = useSelector((state) => state.user.error);
 
-
-    // Handle login submit
     const handleLogin = async (e) => {
         e.preventDefault();
 
@@ -33,18 +29,15 @@ const Content = () => {
             const resultAction = await dispatch(
                 login({
                     contactOrEmailOrUsername: contactOrEmailOrUsername,
-                    password: password, // adjust field name based on your AuthService
+                    password: password,
                 })
             ).unwrap();
 
-          
             if (resultAction?.token) {
-                // Clear form and errors
                 setContactOrEmailOrUsername('');
                 setPassword('');
                 setLocalError(null);
 
-                // Redirect
                 const lastVisited = localStorage.getItem("lastVisited");
                 let parsedLastVisited = null;
 
@@ -62,13 +55,12 @@ const Content = () => {
                 console.log("Final redirect target:", redirectTo);
 
                 history.push(redirectTo);
-
             }
-          
         } catch (err) {
             setLocalError(err || 'Login failed');
         }
     };
+
     useEffect(() => {
         if (localError) {
             const timer = setTimeout(() => setLocalError(null), 3000);
@@ -78,15 +70,14 @@ const Content = () => {
 
     useEffect(() => {
         if (contactOrEmailOrUsername || password) {
-            setLocalError(null); // reset error when user types again
+            setLocalError(null);
         }
     }, [contactOrEmailOrUsername, password]);
 
-    // Clear local error if Redux error appears
     useEffect(() => {
-        if (error) setLocalError(error);
-    }, [error]);
-
+        setLocalError(null);
+        dispatch(clearError());
+    }, [location.pathname, dispatch]);
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -99,37 +90,29 @@ const Content = () => {
         }
     }, [isAuthenticated, history]);
 
-
     return (
         <section className="login-sec pt-120 pb-120">
             <div className="container">
                 <div className="account-wrapper">
                     <div className="row no-gutters">
                         <div className="col-lg-6">
-                            <div
-                                className="login-content"
-                                style={{
-                                    backgroundImage: `url(${loginbg})`,
-                                    backgroundSize: 'cover',
-                                    backgroundPosition: 'center',
-                                }}
-                            >
+                            <div className="login-content">
                                 <div className="description text-center"></div>
                             </div>
                         </div>
 
                         <div className="col-lg-6">
                             <div className="login-form">
-                                <h2>Log in</h2>
+                                <h4 >Log in</h4>
 
                                 {localError && (
-                                    <div className="alert alert-danger" style={{ fontSize: '14px' }}>
+                                    <div className="alert alert-danger">
                                         {localError}
                                     </div>
                                 )}
 
                                 <form onSubmit={handleLogin}>
-                                    <div className="input-group input-group-two mb-20">
+                                    <div className="input-group input-group-two mb-10">
                                         <input
                                             type="text"
                                             placeholder="Mobile Number"
@@ -138,7 +121,7 @@ const Content = () => {
                                             required
                                         />
                                     </div>
-                                    <div className="input-group input-group-two mb-30">
+                                    <div className="input-group input-group-two mb-20">
                                         <input
                                             type="password"
                                             placeholder="Password"
@@ -148,15 +131,15 @@ const Content = () => {
                                         />
                                     </div>
 
-                                    <Link to="/forgot-password">Forgot Password?</Link>
+                                    <Link to="/forgot-password" className='forgot'>Forgot Password?</Link>
 
-                                    <button type="submit" className="main-btn btn-filled mt-20 login-btn">
+                                    <button type="submit" className="main-btn btn-filled  login-btn">
                                         Login
                                     </button>
 
-                                    <p style={{ color: '#404040', fontFamily: 'Montserrat' }}>
+                                    <p className="register-prompt">
                                         Don't have an Account?
-                                        <Link to="/register" className="d-inline-block" style={{ marginLeft: '10px' }}>
+                                        <Link to="/register" className="d-inline-block create-account-link">
                                             Create One
                                         </Link>
                                     </p>

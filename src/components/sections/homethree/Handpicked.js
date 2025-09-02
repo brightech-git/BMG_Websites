@@ -117,7 +117,7 @@ const NoBlurHandpicked = () => {
             {
                 breakpoint: 1400,
                 settings: {
-                    slidesToShow: 2,
+                    slidesToShow: 3,
                     centerMode: false,
                     centerPadding: '0',
                 }
@@ -149,7 +149,7 @@ const NoBlurHandpicked = () => {
                 }
             },
             {
-                breakpoint: 520,
+                breakpoint: 420,
                 settings: {
                     slidesToShow: 1,
                     centerMode: false,

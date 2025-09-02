@@ -171,9 +171,12 @@ const userSlice = createSlice({
             localStorage.removeItem('userMobileNumber');
             toast.error('Logged out successfully!', {
                 position: 'top-right',
-                autoClose: 2000,
+                autoClose: 3000,
             });
         },
+        clearError(state) {
+            state.error = null;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -268,5 +271,5 @@ const userSlice = createSlice({
     },
 });
 
-export const { logout } = userSlice.actions;
+export const { logout, clearError } = userSlice.actions;
 export default userSlice.reducer;

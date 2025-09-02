@@ -12,6 +12,7 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useLocation } from "react-router-dom";
 import './logout.css';
 
+
 const AccountPage = () => {
   const location = useLocation();
   const [activeComponent, setActiveComponent] = useState("Dashboard");

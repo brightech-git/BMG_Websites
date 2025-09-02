@@ -6,13 +6,14 @@ import { useBanners } from '../../../hook/banner/useBannerQueries';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './Banner.css';
+import { useNotification } from '../../../context/notification/NotificationContext';
 
 const Banner = () => {
     const { data: bannerResponse = {}, isLoading } = useBanners();
     const banners = bannerResponse?.data ?? [];
     const history = useHistory();
     const baseUrl = "https://app.bmgjewellers.com";
-
+    const { askNotification } = useNotification();
     const settings = {
         dots: true,
         infinite: true,
@@ -59,7 +60,14 @@ const Banner = () => {
         if (gender) queryParams.append('gender', gender);
         const fixedQuery = queryParams.toString().replace(/\+/g, '%20');
         history.push(`/shop-left?${fixedQuery}`);
+
+        // ✅ Only show permission modal if needed
+        askNotification(
+            "To Get Exclusive Offer",
+            "Enable notifications to get real-time updates and offers."
+        );
     };
+
 
     if (isLoading) {
         return (

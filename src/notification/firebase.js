@@ -1,6 +1,5 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getMessaging } from "firebase/messaging";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 const firebaseConfig = {
     apiKey: "AIzaSyD9Vdc-aM_Efiftxq9XqBgSVki2i2j-ofw",
@@ -14,9 +13,40 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const messaging = getMessaging(app);
 
-export const requestForToken = async() => {
-  const permission = await Notification.requestPermission();
-    console.log(permission);
-}
+export const messaging = getMessaging(app);
+
+export const requestForToken = async () => {
+    try {
+        const permission = Notification.permission;
+        console.log("Current Notification Permission:", permission);
+
+        if (permission === "granted") {
+            return await getToken(messaging, {
+                vapidKey: "BHeUX3InTYDr1VTBkxOUPDxi8iZw6Zy7liHO4Gu3SfGIXSLQYRUFQdgulSAQd7FyIQIfU3UoIV6z3-P10H-zJvo",
+            });
+        
+        } else if (permission === "default") {
+            const newPermission = await Notification.requestPermission();
+            if (newPermission === "granted") {
+                return await getToken(messaging, {
+                    vapidKey: "BHeUX3InTYDr1VTBkxOUPDxi8iZw6Zy7liHO4Gu3SfGIXSLQYRUFQdgulSAQd7FyIQIfU3UoIV6z3-P10H-zJvo",
+                });
+            }
+         }
+        } catch (err) {
+        console.error("An error occurred while retrieving token: ", err);
+    }
+};
+
+// 👇 Add this helper so you can import in your context
+export const onMessageListener = () =>
+    new Promise((resolve, reject) => {
+        try {
+            onMessage(messaging, (payload) => {
+                resolve(payload);
+            });
+        } catch (err) {
+            reject(err);
+        }
+    });

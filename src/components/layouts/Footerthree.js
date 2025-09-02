@@ -587,7 +587,7 @@ class Footertwo extends Component {
                       </Link>
                     </li>
                     <li>
-                      <Link to="/shop-left?itemName=OFFER&subItemName=50% OFF">
+                      <Link to="/shop-left?itemName=OFFER&subItemName=50 OFF">
                         50% Off
                       </Link>
                     </li>
@@ -616,43 +616,48 @@ class Footertwo extends Component {
           {/* Copyright Section */}
           <div className="copyright-area pt-30 pb-30">
             <div className="container">
-              <div className="row align-items-center">
-                <div className="col-lg-6 col-md-5 order-2 order-md-1">
-                  <p className="copyright-text copyright-two">
-                    © 2025, <Link to="#">BMG Jewellers Pvt Ltd</Link>
-                  </p>
-                </div>
-                <div className="col-lg-6 col-md-7 order-1 order-md-2">
-                  <div className="footer-menu text-center text-md-right py-3">
-                    <span
-                      style={{
-                        color: "var(--primary-hover-color)",
-                        fontSize: "14px",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Powered By
-                    </span>{" "}
-                    <img src={btsLogo} style={{ width: '25px', height: '25px', margin: '0 5px' }} />
-                    <a
-                      href="https://www.brightechsoftware.com/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        color: "var(--primary-text-color)",
-                        fontSize: "14px",
-                        textDecoration: "none",
-                        fontWeight: "800",
-                        marginLeft: "4px",
-                      }}
-                    >
-                      BrightechSoftwareSolution
-                    </a>
-                  </div>
-                </div>
+            <div className="d-flex justify-content-between align-items-center flex-wrap copy-right">
+
+              {/* Left Side */}
+              <p className="copyright-text copyright-two mb-0">
+                © 2025, <Link to="#" className="bmg">BMG Jewellers Pvt Ltd</Link>
+              </p>
+
+              {/* Right Side */}
+              <div className="footer-menu d-flex align-items-center">
+                <span
+                  style={{
+                    color: "var(--primary-hover-color)",
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Powered By
+                </span>
+                <img
+                  src={btsLogo}
+                  alt="Brightech Logo"
+                  style={{ width: "25px", height: "25px", margin: "0 5px" }}
+                />
+                <a
+                  href="https://www.brightechsoftware.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: "var(--primary-text-color)",
+                    fontSize: "14px",
+                    textDecoration: "none",
+                    fontWeight: "800",
+                    marginLeft: "4px",
+                  }}
+                >
+                  BrightechSoftwareSolution
+                </a>
               </div>
             </div>
+            </div>
           </div>
+
         </footer>
       </Fragment>
     );

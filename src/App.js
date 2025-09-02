@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect ,useState} from 'react';
 import { BrowserRouter as Router, Route, Switch, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -18,7 +18,6 @@ import Classification from './components/pages/Classification';
 import Comingsoon from './components/pages/Comingsoon';
 import Contact from './components/pages/Contact';
 import Error from './components/pages/Error';
-import Faq from './components/pages/Faq';
 import Gallery from './components/pages/Gallery';
 import Gallerytwo from './components/pages/Gallerytwo';
 import Legal from './components/pages/Legal';
@@ -31,12 +30,7 @@ import Typography from './components/pages/Typography';
 import Wishlist from './components/pages/Wishlist';
 import PrivacyPolicy from './components/pages/Policies/Privacy';
 import PaymentPage from './components/pages/payment/Payment';
-import AddressManager from './components/sections/account/Address/AddressManager';
-import AccountSidebar from './components/sections/account/AccountSidebar/AccountSideBar';
-import ChangePassword from './components/sections/account/ChangePassword/ChangePassword';
-import Dashboard from './components/sections/account/Dashboard/Dashboard';
-import Order from './components/sections/account/Order/Order';
-import OrderDetail from './components/sections/account/OrderDetails/OrderDetails';
+
 import CancellationReturnPolicy from './components/pages/Policies/CancellationReturnPolicy';
 import RefundPolicy from './components/pages/Policies/RefundPolicy';
 import TermsConditions from './components/pages/Policies/TermsConditions';
@@ -53,7 +47,11 @@ import ScrollToTop from './components/layouts/ScrolltoTop';
 import AccountPage from './components/sections/account/Content';
 import PolicyPage from './components/pages/Policies/Risk Mitigation & Compliance Policy';
 import ReturnOrderFlow from './components/sections/account/orderReturn/ReturnOrder';
-import { requestForToken } from './notification/firebase';
+import { requestForToken, messaging } from './notification/firebase';
+import { onMessage } from 'firebase/messaging';
+import NotificationModal from './components/pages/notificationModal/NotificationModal';
+
+
 function ScrollWatcher() {
   const location = useLocation();
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
@@ -69,14 +67,32 @@ function ScrollWatcher() {
 
 function App() {
 
-  useEffect(()=>{
-    requestForToken()
-  },[])
+  const [showNotifModal, setShowNotifModal] = useState(false);
+  const [notifData, setNotifData] = useState({ title: "", message: "" });
+
+  // 🔑 Function to trigger modal from anywhere
+   const askNotification = (title, message) => {
+    if (Notification.permission === "default") {
+      setNotifData({ title, message });
+      setShowNotifModal(true);
+    }
+  };
+
+
+
+
+  
   return (
     <Router basename="/">
       {/* <Preloader /> */}
       <ScrollWatcher />
       <ScrollToTop />
+      <NotificationModal
+        show={showNotifModal}
+        title={notifData.title}
+        message={notifData.message}
+        onClose={() => setShowNotifModal(false)}
+      />
       <Switch>
 
         

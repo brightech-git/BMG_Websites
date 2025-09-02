@@ -1,4 +1,5 @@
 import publicUrl from '../api/publicUrl'; // axios instance with token
+import axios from 'axios';
 
 // Create a new order
 export const createOrder = async (orderData) => {
@@ -22,5 +23,34 @@ export const cancelOrder = async (payload) => {
         return response.data;
     } catch (error) {
         throw new Error(error.response?.data?.message || 'Failed to cancel order');
+    }
+};
+
+//track order 
+export const trackOrder = async (refNumber) => {
+    const payload = {
+        trkType:"cnno",
+        strcnno:refNumber,
+        addtnlDtl:"Y",
+    };
+    console.log(payload ,'tracking');
+
+    try {
+        const response = await axios.post(
+            "https://blktracksvc.dtdc.com/dtdc-api/rest/JSONCnTrk/getTrackDetails",
+            payload,
+            {
+                headers: {
+                    "X-Access-Token": "EO2243_trk_json:5ed7b55505284e87b57202bba5adcc56",
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+
+        return response.data;
+    } catch (error) {
+        throw new Error(
+            error.response?.data?.message || "Failed to track order"
+        );
     }
 };

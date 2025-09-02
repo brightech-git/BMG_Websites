@@ -28,6 +28,8 @@ const Header = ({ isAuthenticated }) => {
   const [showRates, setShowRates] = useState(false); // State to toggle rates display
   const dispatch = useDispatch();
 
+  
+
   // Add rates query
   const {
     data: ratesData,
@@ -276,7 +278,7 @@ const Header = ({ isAuthenticated }) => {
   <div className="header-top">
     <div className="container-fluid container-custom-three">
       <div className="header-top-content">
-        
+               
                 <div
                   className={`welcome-section welcome-${animationType} ${isHovered ? 'welcome-hover' : ''}`}
                   onClick={() => history.push("/appointment")}
@@ -287,7 +289,10 @@ const Header = ({ isAuthenticated }) => {
                   <span className="welcome-text">
                     BMG Live
                   </span>
+                 
                 </div>
+               
+               
 
         {/* Enhanced Precious Metals Ticker */}
         <div className="precious-metals-ticker-wrapper">
@@ -337,6 +342,9 @@ const Header = ({ isAuthenticated }) => {
             </div>
           </div>
         </div>
+        <div>
+                 
+        </div>
                 
         <div className="auth-actions">
           {isAuthenticated ? (
@@ -352,9 +360,10 @@ const Header = ({ isAuthenticated }) => {
               <span className="auth-icon login-icon">🔐</span>
               <span className="auth-text">Log In</span>
             </div>
+           
           )}
         </div>
-        
+                
       </div>
     </div>
   </div>
@@ -379,6 +388,7 @@ const Header = ({ isAuthenticated }) => {
                           <li className="menu-item">
                             <Link to="/">Home</Link>
                           </li>
+                        
                           <li className="menu-item menu-item-has-children menu-item-has-megamenu">
                             <Link to="#">
                               Categories{" "}

@@ -217,8 +217,8 @@
 /* Responsive Styles */
 @media (max-width: 87.5em) {
     .noblur-main-img {
-        width: 28rem;
-        height: 28rem;
+        width: 24rem;
+        height: 24rem;
     }
 
     .noblur-product-card {
@@ -237,8 +237,8 @@
     }
 
     .noblur-main-img {
-        width: 24rem;
-        height: 25rem;
+        width: 20rem;
+        height: 20rem;
     }
 
     .noblur-title {
@@ -269,8 +269,8 @@
 
 @media (max-width: 68em) {
     .noblur-main-img {
-        width: 22rem;
-        height: 22rem;
+        width: 17rem;
+        height: 18rem;
     }
 }
 
@@ -280,8 +280,8 @@
     }
 
     .noblur-main-img {
-        width: 18rem;
-        height: 18rem;
+        width: 25rem;
+        height: 25rem;
     }
 
     .noblur-product-card {
@@ -309,8 +309,8 @@
     }
 
     .noblur-main-img {
-        width: 15.2rem;
-        height: 16rem;
+        width: 22rem;
+        height: 22rem;
     }
 
     .noblur-product-card {
@@ -342,8 +342,8 @@
     }
 
     .noblur-main-img {
-        width: 15rem;
-        height: 16rem;
+        width: 17rem;
+        height: 17rem;
     }
 
     .noblur-product-card {
@@ -376,8 +376,8 @@
     }
 
     .noblur-main-img {
-        width: 15rem;
-        height: 16rem;
+        width: 13rem;
+        height: 13rem;
     }
 
     .noblur-product-card {
@@ -398,8 +398,8 @@
 
 @media (max-width: 30em) {
     .noblur-main-img {
-        width: 15rem;
-        height: 15rem;
+        width: 12rem;
+        height: 12rem;
     }
 
     .noblur-product-card {

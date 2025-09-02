@@ -1,0 +1,148 @@
+/* src/components/pages/notificationModal/NotificationModal.css */
+
+/* Overlay */
+.notif-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--overlay-bg);
+    backdrop-filter: var(--overlay-blur);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+/* Modal box */
+.notif-modal {
+    background: var(--white-color);
+    padding: 2rem;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    animation: fadeIn var(--transition);
+}
+
+/* Title */
+.notif-title {
+    font-family: var(--title-font);
+    font-size: 2.5rem;
+    background: var(--gradient-text);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    margin-bottom: 0.5rem;
+    text-shadow: var(--text-shadow);
+    font-weight: bolder;
+}
+
+/* Message */
+.notif-message {
+    font-family: var(--secondary-font);
+    font-size: 0.9rem;
+    color: var(--primary-text-color);
+    margin-bottom: 1.5rem;
+}
+
+/* Buttons */
+.notif-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.notif-btn {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: var(--secondary-font);
+    min-width: 120px;
+}
+
+.notif-allow {
+    background: var(--button-bg);
+    color: var(--white-color);
+    box-shadow: var(--shadow-md);
+}
+
+.notif-allow:hover {
+    background: var(--primary-text-color);
+}
+
+.notif-cancel {
+    background: var(--grey-color);
+    color: var(--white-color);
+}
+
+.notif-cancel:hover {
+    background: var(--black-color);
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================= */
+/* Responsive Styles */
+/* ============================= */
+
+/* Tablets */
+@media (max-width: 768px) {
+    .notif-modal {
+        padding: 1.5rem;
+        max-width: 340px;
+    }
+
+    .notif-title {
+        font-size: 2rem;
+    }
+
+    .notif-message {
+        font-size: 0.85rem;
+    }
+
+    .notif-btn {
+        font-size: 0.8rem;
+        padding: 0.5rem 1rem;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .notif-modal {
+        padding: 1.2rem;
+        max-width: 300px;
+    }
+
+    .notif-title {
+        font-size: 1.6rem;
+    }
+
+    .notif-message {
+        font-size: 0.8rem;
+    }
+
+    .notif-btn {
+        font-size: 0.65rem;
+        padding: 0.45rem 0.9rem;
+        min-width: 100px;
+    }
+}

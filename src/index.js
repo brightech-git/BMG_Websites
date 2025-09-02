@@ -24,14 +24,14 @@ import './assets/css/style.css';
 
 import { Provider } from 'react-redux';
 import { store } from './store/index'; // adjust path
-
+import { NotificationProvider } from './context/notification/NotificationContext';
 const queryClient = new QueryClient();
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-
+      <NotificationProvider>
           <BrowserRouter>
             <App />
             <ToastContainer // ✅ Add this below App to show toasts anywhere
@@ -44,7 +44,7 @@ ReactDOM.render(
               draggable
             />
           </BrowserRouter>
- 
+    </NotificationProvider>
       </QueryClientProvider>
     </Provider>
   </React.StrictMode>,

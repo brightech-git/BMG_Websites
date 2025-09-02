@@ -6,6 +6,8 @@ import ProductFilterBar from './ProductFilterBar';
 import './ShopContent.css';
 import { useSelector } from 'react-redux';
 
+import { useNotification } from '../../../context/notification/NotificationContext';
+
 const baseUrl = 'https://app.bmgjewellers.com';
 
 // Bootstrap Loading Placeholder Component
@@ -59,6 +61,12 @@ const Content = () => {
         error: isError,
         refetch,
     } = useFilterProducts(queryFilters, page, pageSize);
+
+    const {askNotification}=useNotification();
+
+    useEffect(()=>{
+        askNotification('Welcome to BMG Jewellers','Stay updated with important updates.')
+    },[])
 
     const handleWishlistToggle = useCallback(
         (e, itemSno, isWishlisted) => {

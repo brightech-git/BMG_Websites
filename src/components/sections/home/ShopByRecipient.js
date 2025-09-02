@@ -4,6 +4,7 @@ import './ShopByRecipient.css';
 import men from './image/Men.png';
 import women from './image/Women.png';
 import kid from './image/kids.png';
+import { useTrackOrder } from '../../../hook/order/useOrderTracking';
 
 const ShopByRecipient = () => {
     const history = useHistory();
@@ -18,7 +19,9 @@ const ShopByRecipient = () => {
         history.push(`/shop-left?${query}`);
     };
 
-    return (
+    const { trackOrder } = useTrackOrder('7D116046113');
+    console.log(trackOrder ,'trackorder');
+       return (
         <section className="recipient-section">
             <div className="container">
                 <div className="recipient-header">

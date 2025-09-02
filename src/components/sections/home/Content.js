@@ -29,7 +29,6 @@ import SingleOffer from './SingleOffer';
 import MultipleOffers from './MultipleOffers';
 import { useInstantOffer } from '../../../hook/banner/useOfferBanner';
 
-
 const Content = () => {
     const { data: instantOffer, isLoading, error } = useInstantOffer() || {};
 
@@ -38,6 +37,7 @@ const Content = () => {
     // Safe now
     const firstOffer = instantOffer[2];
     const otherOffers = instantOffer.slice(0,2);
+   
 
     console.log('first', firstOffer);
     console.log('second', otherOffers);

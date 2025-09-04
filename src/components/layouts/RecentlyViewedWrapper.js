@@ -3,9 +3,10 @@ import { useSelector } from 'react-redux';
 import RecentlyViewed from './RecentlyViewed';
 
 const RecentlyViewedWrapper = () => {
-    const user = useSelector((state) => state.user?.user); // adjust if your slice is named differently
+    const isAuthenticated = useSelector((state) => state.user?.isAuthenticated); 
+    console.log(isAuthenticated,'recentlyViewed');
 
-    if (!user) return null; // User not logged in
+    if (!isAuthenticated) return null; // User not logged in
 
     return <RecentlyViewed />;
 };

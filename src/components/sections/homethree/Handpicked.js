@@ -23,6 +23,7 @@ const NoBlurNavButton = ({ direction, onClick }) => {
 };
 
 const NoBlurProductCard = ({ product }) => {
+    const baseUrl = "https://app.bmgjewellers.com";
     console.log(product, 'productcard in handpick');
 
     const handleProductClick = (e, sno) => {
@@ -45,16 +46,20 @@ const NoBlurProductCard = ({ product }) => {
 
         if (!first) return null;
 
+        // Clean unwanted characters like [" and "]
+        first = first.replace(/[\[\]"]/g, "").trim();
+
         // check if it already looks like a full URL
         if (first.startsWith("http://") || first.startsWith("https://")) {
             return first;
         }
 
-        return `${BASE_URL}${first}`;
+        return `${baseUrl}${first.startsWith("/") ? "" : "/"}${first}`;
     };
 
-
     const firstImage = getFirstImage();
+    console.log(firstImage, "firstImage");
+
 
     return (
         <div className="noblur-product-card">
@@ -93,6 +98,7 @@ const NoBlurHighlightedProducts = ({ itemName, subItemName }) => {
 const NoBlurHandpicked = () => {
     const history = useHistory();
     const { data, isLoading, error } = useCategoryBanner();
+    const baseUrl = "https://app.bmgjewellers.com";
 
     const handleShopNow = (itemName, subItemName) => {
         const queryParams = new URLSearchParams();
@@ -188,7 +194,7 @@ const NoBlurHandpicked = () => {
                                     aria-label={`View ${banner.itemName} collection`}
                                 >
                                     <img
-                                        src={`${BASE_URL}${banner.image_path}`}
+                                        src={`${baseUrl}${banner.image_path}`}
                                         alt={banner.title}
                                         loading="lazy"
                                     />

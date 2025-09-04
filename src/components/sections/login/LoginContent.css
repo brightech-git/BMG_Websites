@@ -1,7 +1,6 @@
 
 .login-sec {
-    padding-top: 120px;
-    padding-bottom: 120px;
+    padding-top: 140px ;
     background-color: var(--primary-color);
 }
 
@@ -22,7 +21,7 @@
 }
 
 .login-form {
-    padding: 40px;
+    padding: 30px;
     font-family: var(--secondary-font);
     color: var(--primary-text-color);
 }

@@ -8,11 +8,13 @@ export const createOrder = async (orderData) => {
 };
 
 // Get order history
-export const getOrderHistory = async ({ page = 0, size = 10, status = '' }) => {
+export const getOrderHistory = async () => {
+    const payload = {
+        page:'0',
+        size:'100',
+    };
     const response = await publicUrl.get('/order/history', {
-        page,
-        size,
-        status,
+        params:payload
     });
     return response.data;
 };
@@ -36,15 +38,9 @@ export const trackOrder = async (refNumber) => {
     console.log(payload ,'tracking');
 
     try {
-        const response = await axios.post(
-            "https://blktracksvc.dtdc.com/dtdc-api/rest/JSONCnTrk/getTrackDetails",
+        const response = await publicUrl.post(
+            "/dtdc/track",
             payload,
-            {
-                headers: {
-                    "X-Access-Token": "EO2243_trk_json:5ed7b55505284e87b57202bba5adcc56",
-                    "Content-Type": "application/json",
-                },
-            }
         );
 
         return response.data;
@@ -53,4 +49,18 @@ export const trackOrder = async (refNumber) => {
             error.response?.data?.message || "Failed to track order"
         );
     }
+};
+//track ordr by id 
+export const trackOrderById = async (orderId) => {
+    if (!orderId) throw new Error("Order ID is required");
+
+    const { data } = await publicUrl.get(`/order/track-order`, {
+        params: { orderId },
+    });
+
+    // We only need current_status and history
+    return {
+        current_status: data.current_status,
+        history: data.history || [],
+    };
 };

@@ -94,4 +94,27 @@ export const changePasswordService = async ({ oldPassword, newPassword }) => {
         );
     }
 };
+// Google Login Service
+export const googleLoginService = async (idToken) => {
+    try {
+        if (!idToken) {
+            throw new Error("Google ID token is missing");
+        }
+
+        const response = await PublicUrl.post(
+            "/auth/google-login", // ✅ ensure proper endpoint
+            { idToken }
+        );
+
+        return response.data; // Expected to include user + token
+    } catch (error) {
+        throw new Error(
+            error.response?.data?.error ||
+            error.response?.data?.message ||
+            error.message ||
+            "Google login failed"
+        );
+    }
+};
+
 

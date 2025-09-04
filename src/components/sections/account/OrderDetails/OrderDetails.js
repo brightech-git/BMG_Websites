@@ -21,64 +21,92 @@ import { formatCurrency } from '../../../../assets/utills/formatters';
 import './OrderDetails.css';
 import { Link } from 'react-router-dom';
 import { useCancelOrder } from '../../../../hook/order/useOrderMutation';
-import { useTrackOrder } from '../../../../hook/order/useOrderTracking';
+import { useTrackOrderById } from '../../../../hook/order/useOrderTracking';
 import { toast } from 'react-toastify';
 
 const OrderDetail = ({ order, setActiveComponent }) => {
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const { mutate: cancelOrder, isLoading: isCancelling } = useCancelOrder();
 
-  console.log(order?.dtdcRefNumber,'orders')
-  const { data: trackData, refetch: fetchTrackData, isLoading: isTracking } = useTrackOrder(order?.dtdcRefNumber || '');
+  const { data: trackData, refetch: fetchTrackData, isLoading: isTracking } = useTrackOrderById(order?.orderId);
 
-  // Trigger DTDC API when status is SHIPPED or beyond
+  // Trigger tracking API when order exists
   useEffect(() => {
-    if (['SHIPPED', 'IN_TRANSIT', 'DELIVERED'].includes(order?.status) && order?.dtdcRefNumber) {
+    if (order?.orderId) {
       fetchTrackData();
     }
-  }, [order?.status, order?.dtdcRefNumber, fetchTrackData]);
+  }, [order?.orderId, fetchTrackData]);
 
-  const mapDtdcStatusToComponentStatus = (dtdcAction) => {
-    const action = dtdcAction.toLowerCase();
-    if (action.includes('delivered')) return 'DELIVERED';
-    if (action.includes('in transit') || action.includes('out for delivery')) return 'IN_TRANSIT';
-    return 'SHIPPED'; // Default for pickup-related statuses
+  const getStatusIcon = (status) => {
+    const iconMap = {
+      'PENDING': faReceipt,
+      'PLACED': faReceipt,
+      'IN_PROCESSING': faSpinner,
+      'PACKED': faBox,
+      'SHIPPED': faTruck,
+      'SHIPPING': faTruck,
+      'Booked': faTruck,
+      'OUT_FOR_DELIVERY': faTruck,
+      'IN_TRANSIT': faTruck,
+      'DELIVERED': faCheckCircle,
+      'DELIVERY_FAILED': faExclamationCircle,
+      'CANCELLED': faTimesCircle,
+    };
+    return iconMap[status] || faInfoCircle;
   };
 
-  const getStatusSteps = () => {
-    const allSteps = [
-      { id: 'PENDING', label: 'Pending', icon: faReceipt, description: 'Your order has been confirmed within 10 minutes', color: '#3498db' },
-      { id: 'PLACED', label: 'Placed', icon: faReceipt, description: 'Your order has been confirmed', color: '#3498db' },
-      { id: 'IN_PROCESSING', label: 'Processing', icon: faSpinner, description: 'Preparing your items', color: '#9b59b6' },
-      { id: 'PACKED', label: 'Packed', icon: faTruck, description: 'Order has been packed', color: '#f39c12' },
-      { id: 'SHIPPED', label: 'Shipped', icon: faHome, description: 'Order has been dispatched successfully', color: '#1abc9c' },
-      { id: 'IN_TRANSIT', label: 'Out For Delivery', icon: faTruck, description: 'Order is out for delivery', color: '#e67e22' },
-      { id: 'DELIVERED', label: 'Delivered', icon: faCheckCircle, description: 'Order has been delivered successfully', color: '#27ae60' },
-      { id: 'CANCELLED', label: 'Cancelled', icon: faTimesCircle, description: 'Order was cancelled', color: '#e74c3c' },
-    ];
+  const getStatusLabel = (status) => {
+    const labelMap = {
+      'PENDING': 'Order Pending',
+      'PLACED': 'Order Placed',
+      'IN_PROCESSING': 'Order Processing',
+      'PACKED': 'Order Packed',
+      'SHIPPED': 'Order Shipped',
+      'SHIPPING': 'Shipping',
+      'Booked': 'Booked for Delivery',
+      'OUT_FOR_DELIVERY': 'Out for Delivery',
+      'IN_TRANSIT': 'In Transit',
+      'DELIVERED': 'Delivered',
+      'DELIVERY_FAILED': 'Delivery Failed',
+      'CANCELLED': 'Cancelled',
+    };
+    return labelMap[status] || status;
+  };
 
-    if (!order) return allSteps;
+  const processTrackingHistory = () => {
+    if (!trackData?.history) return [];
 
-    const curStatusIdx = allSteps.findIndex((st) => st.id === order.status);
+    // Group by status to remove duplicates but keep all meaningful remarks
+    const statusGroups = {};
 
-    if (order.status === 'CANCELLED') {
-      return allSteps.map((step) => ({
-        ...step,
-        active: step.id === 'CANCELLED',
-        completed: false,
-        isCancelled: step.id === 'CANCELLED',
-      }));
-    }
+    trackData.history.forEach(entry => {
+      const status = entry.status;
+      if (!statusGroups[status]) {
+        statusGroups[status] = {
+          ...entry,
+          remarks: []
+        };
+      }
 
-    return allSteps
-      .map((step, idx) => ({
-        ...step,
-        completed: idx < curStatusIdx,
-        active: idx === curStatusIdx,
-        future: idx > curStatusIdx,
-        isCancelled: false,
-      }))
-      .filter((step) => step.id !== 'CANCELLED' || order.status === 'CANCELLED');
+      // Add meaningful remarks
+      if (entry.remarks && entry.remarks.trim()) {
+        let remark = entry.remarks.trim();
+
+        // Clean up DTDC remarks
+        if (remark.includes('DTDC update:')) {
+          remark = remark.replace('DTDC update:', '').trim();
+        }
+
+        // Only add if it's meaningful (not empty)
+        if (remark && !statusGroups[status].remarks.includes(remark)) {
+          statusGroups[status].remarks.push(remark);
+        }
+      }
+    });
+
+    // Convert back to array and sort by timestamp
+    return Object.values(statusGroups)
+      .sort((a, b) => new Date(a.updated_at) - new Date(b.updated_at));
   };
 
   const handleCancelOrder = () => {
@@ -109,202 +137,97 @@ const OrderDetail = ({ order, setActiveComponent }) => {
     }
   };
 
-
   const renderStatusModal = () => {
-    const statusSteps = getStatusSteps();
-    const currentStatus = statusSteps.find((step) => step.id === order.status);
+    const currentStatus = trackData?.current_status || order.status;
+    const trackingHistory = processTrackingHistory();
 
-    const statusColors = {
-      PENDING: '#3498db',
-      PLACED: '#3498db',
-      IN_PROCESSING: '#9b59b6',
-      PACKED: '#f39c12',
-      SHIPPED: '#1abc9c',
-      IN_TRANSIT: '#e67e22',
-      DELIVERED: '#27ae60',
-      CANCELLED: '#e74c3c',
+    const canCancel = !['SHIPPED', 'SHIPPING', 'OUT_FOR_DELIVERY', 'IN_TRANSIT', 'DELIVERED', 'CANCELLED', 'Booked'].includes(currentStatus);
+
+    const formatDate = (dateString) => {
+      return new Date(dateString).toLocaleDateString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
     };
-
-    const canCancel = !['SHIPPED', 'IN_TRANSIT', 'DELIVERED', 'CANCELLED'].includes(order.status);
-
-    // Process DTDC tracking details
-    const trackingDetails = trackData?.trackDetails?.map((detail) => ({
-      ...detail,
-      mappedStatus: mapDtdcStatusToComponentStatus(detail.strAction),
-      formattedDate: `${detail.strActionDate.slice(0, 2)}-${detail.strActionDate.slice(2, 4)}-${detail.strActionDate.slice(4)} ${detail.strActionTime.slice(0, 2)}:${detail.strActionTime.slice(2)}`,
-    })) || [];
 
     return (
       <div className="status-modal-overlay">
         <div className="status-modal">
           <div className="status-modal-header">
-            <h3>Order #{order.orderId} Status</h3>
+            <h3>Order #{order.orderId} Tracking</h3>
             <button onClick={() => setIsStatusModalOpen(false)} className="close-modal">
               &times;
             </button>
           </div>
           <div className="status-modal-body">
-            <div className="current-status-summary">
-              <div
-                className="status-badge-large"
-                style={{
-                  backgroundColor: statusColors[order.status] || currentStatus?.color,
-                  boxShadow: `0 0 10px ${statusColors[order.status] || currentStatus?.color}33`,
-                }}
-              >
-                {currentStatus?.label || order.status}
+
+            {/* Current Status Banner */}
+            <div className="current-status-banner">
+              <div className="status-icon">
+                <FontAwesomeIcon icon={getStatusIcon(currentStatus)} />
               </div>
-              <div className="status-details">
-                <p className="status-description">
-                  <FontAwesomeIcon icon={faInfoCircle} className="meta-icon" />
-                  {currentStatus?.description}
-                </p>
-                <div className="status-meta">
-                  <span>
-                    <FontAwesomeIcon icon={faCalendarAlt} className="meta-icon" />
-                    Ordered on: {new Date(order.orderTime).toLocaleDateString()}
-                  </span>
-                  {order.status === 'DELIVERED' && (
-                    <span>
-                      <FontAwesomeIcon icon={faCheckCircle} className="meta-icon" />
-                      Delivered on: {trackData?.trackDetails?.find((d) => d.strAction.toLowerCase().includes('delivered'))?.strActionDate
-                        ? `${trackData.trackDetails.find((d) => d.strAction.toLowerCase().includes('delivered')).strActionDate.slice(0, 2)}-${trackData.trackDetails.find((d) => d.strAction.toLowerCase().includes('delivered')).strActionDate.slice(2, 4)}-${trackData.trackDetails.find((d) => d.strAction.toLowerCase().includes('delivered')).strActionDate.slice(4)}`
-                        : new Date().toLocaleDateString()}
-                    </span>
-                  )}
-                </div>
+              <div className="status-info">
+                <h4>{getStatusLabel(currentStatus)}</h4>
+                <p>Order placed on {new Date(order.orderTime).toLocaleDateString('en-IN')}</p>
               </div>
             </div>
 
-            <div className="status-timeline" data-current-status={order.status}>
-              <div className="timeline-connector"></div>
-              {statusSteps.map((step) => {
-                const isCurrent = step.id === order.status;
-                const isShippedOrBeyond = ['SHIPPED', 'IN_TRANSIT', 'DELIVERED'].includes(step.id) && ['SHIPPED', 'IN_TRANSIT', 'DELIVERED'].includes(order.status);
-                return (
-                  <React.Fragment key={step.id}>
-                    <div
-                      className={`status-step 
-                      ${isCurrent ? 'current' : ''} 
-                      ${step.completed ? 'completed' : ''} 
-                      ${step.future ? 'future' : ''} 
-                      ${step.isCancelled ? 'cancelled' : ''}`}
-                    >
-                      <div
-                        className="step-icon-container"
-                        style={{
-                          borderColor: statusColors[step.id],
-                          boxShadow: isCurrent ? `0 0 0 3px ${statusColors[step.id]}33` : 'none',
-                        }}
-                      >
-                        {step.completed ? (
-                          <FontAwesomeIcon
-                            icon={faCheckCircle}
-                            className="section-icon"
-                            style={{ color: statusColors[step.id] }}
-                          />
-                        ) : step.isCancelled ? (
-                          <FontAwesomeIcon
-                            icon={faTimesCircle}
-                            className="section-icon"
-                            style={{ color: statusColors[step.id] }}
-                          />
-                        ) : isCurrent ? (
-                          <FontAwesomeIcon
-                            icon={step.icon}
-                            className="section-icon"
-                            spin={step.id === 'IN_PROCESSING'}
-                            style={{ color: statusColors[step.id] }}
-                          />
-                        ) : (
-                          <FontAwesomeIcon
-                            icon={step.icon}
-                            className="section-icon"
-                            style={{
-                              color: step.future ? '#ccc' : statusColors[step.id],
-                            }}
-                          />
-                        )}
+            {/* Timeline - Only show completed statuses */}
+            <div className="flipkart-timeline">
+              {isTracking ? (
+                <div className="timeline-loading">
+                  <FontAwesomeIcon icon={faSpinner} spin /> Loading tracking details...
+                </div>
+              ) : (
+                trackingHistory.map((step, index) => {
+                  const isLast = index === trackingHistory.length - 1;
+                  const isCurrent = step.status === currentStatus;
+
+                  return (
+                    <div key={`${step.status}-${index}`} className={`timeline-step ${isCurrent ? 'current' : 'completed'}`}>
+                      <div className="timeline-dot">
+                        <FontAwesomeIcon
+                          icon={step.status === 'CANCELLED' || step.status === 'DELIVERY_FAILED' ? getStatusIcon(step.status) : faCheckCircle}
+                          className={`step-icon ${isCurrent ? 'pulse' : ''}`}
+                        />
                       </div>
-                      <div className="step-content">
-                        <h4
-                          className="step-title"
-                          style={{
-                            color: isCurrent ? statusColors[step.id] : 'inherit',
-                          }}
-                        >
-                          {step.label}
-                          {isCurrent && <span className="current-indicator">Current Status</span>}
-                        </h4>
-                        <p className="step-description">{step.description}</p>
-                        {(isCurrent || step.completed) && (
-                          <div className="step-updated">
-                            <FontAwesomeIcon icon={faClock} className="meta-icon" />
-                            {isCurrent ? 'Last updated: ' : 'Completed on: '}
-                            {new Date().toLocaleDateString()}
+
+                      {!isLast && <div className="timeline-line"></div>}
+
+                      <div className="timeline-content">
+                        <div className="step-header">
+                          <h5>{getStatusLabel(step.status)}</h5>
+                          <span className="step-time">{formatDate(step.updated_at)}</span>
+                        </div>
+
+                        {step.remarks && step.remarks.length > 0 && (
+                          <div className="step-remarks-simple">
+                            {step.remarks.map((remark, idx) => (
+                              <p key={idx}>{remark}</p>
+                            ))}
                           </div>
                         )}
                       </div>
                     </div>
-                    {/* Insert DTDC tracking details after SHIPPED step */}
-                    {step.id === 'SHIPPED' && isShippedOrBeyond && (
-                      <div className="dtdc-tracking-details">
-                        {isTracking ? (
-                          <div className="tracking-loading">
-                            <FontAwesomeIcon icon={faSpinner} spin className="meta-icon" />
-                            Loading tracking details...
-                          </div>
-                        ) : trackingDetails.length > 0 ? (
-                          trackingDetails.map((detail, idx) => (
-                            <div key={idx} className="status-step tracking-substep">
-                              <div
-                                className="step-icon-container"
-                                style={{
-                                  borderColor: statusColors[detail.mappedStatus],
-                                  boxShadow: detail.mappedStatus === order.status ? `0 0 0 3px ${statusColors[detail.mappedStatus]}33` : 'none',
-                                }}
-                              >
-                                <FontAwesomeIcon
-                                  icon={detail.mappedStatus === 'DELIVERED' ? faCheckCircle : faTruck}
-                                  className="section-icon"
-                                  style={{ color: statusColors[detail.mappedStatus] }}
-                                />
-                              </div>
-                              <div className="step-content">
-                                <h4 className="step-title">{detail.strAction}</h4>
-                                <p className="step-description">
-                                  {detail.sTrRemarks || `At ${detail.strOrigin}`}
-                                </p>
-                                <div className="step-updated">
-                                  <FontAwesomeIcon icon={faClock} className="meta-icon" />
-                                  Updated on: {detail.formattedDate}
-                                </div>
-                              </div>
-                            </div>
-                          ))
-                        ) : (
-                          <div className="tracking-empty">
-                            <FontAwesomeIcon icon={faExclamationCircle} className="meta-icon" />
-                            No tracking details available
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </React.Fragment>
-                );
-              })}
+                  );
+                })
+              )}
             </div>
 
             {canCancel && (
-              <div className="cancel-order-section">
+              <div className="cancel-section">
                 <button
-                  className="cancel-order-btn"
+                  className="cancel-btn"
                   onClick={handleCancelOrder}
                   disabled={isCancelling}
                 >
                   {isCancelling ? (
                     <>
-                      <FontAwesomeIcon icon={faSpinner} spin className="meta-icon" />
+                      <FontAwesomeIcon icon={faSpinner} spin />
                       Cancelling...
                     </>
                   ) : (
@@ -334,8 +257,8 @@ const OrderDetail = ({ order, setActiveComponent }) => {
     );
   }
 
-  const statusSteps = getStatusSteps();
-  const currentStatus = statusSteps.find((step) => step.active || step.id === order.status);
+  const currentStatus = trackData?.current_status || order.status;
+  const orderItems = trackData?.items || order.orderItems || [];
 
   return (
     <div className="account-container">
@@ -352,14 +275,14 @@ const OrderDetail = ({ order, setActiveComponent }) => {
         <div className="status-summary-container">
           <div className="status-summary-content">
             <div className="status-meta">
-              <span className="order-id"> {order.orderId}</span>
+              <span className="order-id">{trackData?.order_id || order.orderId}</span>
             </div>
-            <div className="status-badge" style={{ backgroundColor: currentStatus?.color }}>
-              {currentStatus?.label || order.status}
+            <div className="status-badge-simple">
+              {getStatusLabel(currentStatus)}
             </div>
           </div>
-          <button className="view-status-btn" onClick={() => setIsStatusModalOpen(true)}>
-            View all updates
+          <button className="track-btn" onClick={() => setIsStatusModalOpen(true)}>
+            Track Order
           </button>
         </div>
 
@@ -372,10 +295,8 @@ const OrderDetail = ({ order, setActiveComponent }) => {
               Items in your order
             </h3>
             <div className="order-items-content">
-              <div
-                className={`order-items-list ${order.orderItems?.length > 2 ? 'scrollable-items' : ''}`}
-              >
-                {order.orderItems?.map((item) => (
+              <div className={`order-items-list ${orderItems?.length > 2 ? 'scrollable-items' : ''}`}>
+                {orderItems?.map((item) => (
                   <div key={item.id} className="order-item-compact">
                     <div className="item-image-compact">
                       {item.image_path ? (
@@ -406,23 +327,7 @@ const OrderDetail = ({ order, setActiveComponent }) => {
               </div>
             </div>
           </div>
-          <div className="order-section">
-            <h3 className="section-title">
-              <FontAwesomeIcon icon={faTruck} className="section-icon" />
-              Shipping Information
-            </h3>
-            <div className="shipping-content">
-              <div className="info-card">
-                <div className="address-details">
-                  <div className="address-name">{order.customerName}</div>
-                  <p className='address-line'>{order.address}</p>
-                  <div className="address-phone">
-                    <strong>Phone:</strong> {order.contact}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+
           {/* Order Summary */}
           <div className="order-section">
             <h3 className="section-title">
@@ -433,7 +338,7 @@ const OrderDetail = ({ order, setActiveComponent }) => {
               <div className="order-summary-card">
                 <div className="summary-header">
                   <span>Order Summary</span>
-                  <span className="product-count">{order.orderItems?.length || 0} items</span>
+                  <span className="product-count">{orderItems?.length || 0} items</span>
                 </div>
                 <div className="summary-row">
                   <span>Subtotal</span>
@@ -450,6 +355,25 @@ const OrderDetail = ({ order, setActiveComponent }) => {
                 <div className="summary-row total">
                   <span>Total</span>
                   <span>{formatCurrency(order.totalAmount)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Shipping Information */}
+          <div className="order-section">
+            <h3 className="section-title">
+              <FontAwesomeIcon icon={faTruck} className="section-icon" />
+              Shipping Information
+            </h3>
+            <div className="shipping-content">
+              <div className="info-card">
+                <div className="address-details">
+                  <div className="address-name">{order.customerName}</div>
+                  <p className="address-line">{order.address}</p>
+                  <div className="address-phone">
+                    <strong>Phone:</strong> {order.contact}
+                  </div>
                 </div>
               </div>
             </div>

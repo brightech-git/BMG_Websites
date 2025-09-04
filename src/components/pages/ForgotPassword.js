@@ -18,7 +18,7 @@ class ForgotPassword extends Component {
                     />
                 </MetaTags>
                 <Header />
-                <Breadcrumb breadcrumb={{ pagename: 'Forgot Password' }} />
+                {/* <Breadcrumb breadcrumb={{ pagename: 'Forgot Password' }} /> */}
                 <ForgotPasswordContent />
                 <Footer />
             </Fragment>

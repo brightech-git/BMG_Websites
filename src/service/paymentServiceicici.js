@@ -31,4 +31,4 @@ export const getPaymentStatus = async (orderId)=>{
         console.error("Error checking payment status:", err);
         throw err;
     }
-} 
+}

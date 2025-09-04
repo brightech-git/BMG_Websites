@@ -50,25 +50,21 @@ const MobileOrderCard = ({ order, onClick }) => {
       onKeyDown={(e) => e.key === "Enter" && onClick(order)}
       aria-label={`View order ${order.orderId || order.id}`}
     >
-      <div className="order-card-header">
-        <span className="order-id-mobile">
-          <FontAwesomeIcon icon={faReceipt} /> #{order.orderId || order.id}
-        </span>
-        <span
-          className={classNames(
-            "order-status-mobile",
-            order.status?.toLowerCase().replace(/\s/g, "-")
-          )}
-        >
-          {order.status}
-        </span>
-      </div>
+     
       <div className="order-product-info-mobile">
         <div className="order-product-image-mobile">
           <img src={imageUrl} alt={order.orderItems?.[0]?.productName || "Product"} />
         </div>
         <div className="order-product-details-mobile">
           <div className="order-product-name-mobile">{order.orderItems?.[0]?.productName}</div>
+          <span
+            className={classNames(
+              "order-status-mobile",
+              order.status?.toLowerCase().replace(/\s/g, "-")
+            )}
+          >
+            {order.status}
+          </span>
        
           <div className="order-total-mobile">
             Total: {formatCurrency(order.totalAmount || order.amount)}
@@ -95,16 +91,13 @@ const DesktopOrderCard = ({ order, onClick }) => {
         <div className="order-product-image-desktop">
           <img src={imageUrl} alt={order.orderItems?.[0]?.productName || "Product"} />
         </div>
+
         <div className="order-product-details-desktop">
           <div className="order-product-name-desktop">{order.orderItems?.[0]?.productName}</div>
         </div>
-        <div className="order-meta-desktop">
-          <div className="order-id-desktop">
-            <FontAwesomeIcon icon={faReceipt} /> {order.orderId || order.id}
-          </div>
-        
-        </div>
-        <div className="order-total-desktop">{formatCurrency(order.totalAmount || order.amount)}</div>
+     
+        <div className="order-total-desktop">{formatCurrency(order.totalAmount || order.amount)} </div>
+
         <div
           className={classNames(
             "order-status-desktop",
@@ -112,6 +105,7 @@ const DesktopOrderCard = ({ order, onClick }) => {
           )}
         >
           {order.status}
+        
         </div>
       </div>
     </div>
@@ -120,7 +114,7 @@ const DesktopOrderCard = ({ order, onClick }) => {
 
 const Orders = ({ setActiveComponent, setSelectedOrder }) => {
   const [currentPage, setCurrentPage] = useState(0);
-  const { data, isLoading, error } = useOrderHistory({ page: currentPage, size: 10 });
+  const { data, isLoading, error } = useOrderHistory();
 
   const orders = useMemo(() => {
     if (Array.isArray(data?.content)) return data.content;

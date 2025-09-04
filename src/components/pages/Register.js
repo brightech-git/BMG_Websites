@@ -18,7 +18,7 @@ class Register extends Component {
                     />
                 </MetaTags>
                 <Header/>
-                <Breadcrumb breadcrumb={{pagename:'Register'}}/>
+                {/* <Breadcrumb breadcrumb={{pagename:'Register'}}/> */}
                 <Content/>
                 <Instafeeds/>
                 <Footer/>

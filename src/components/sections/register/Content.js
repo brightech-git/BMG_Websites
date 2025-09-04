@@ -119,7 +119,7 @@ const Content = () => {
     }, [location.pathname, dispatch]);
 
     return (
-        <section className="signup-section pt-120 pb-120">
+        <section className="signup-section ">
             <div className="container">
                 <div className="signup-container">
                     <div className="row no-gutters">
@@ -209,7 +209,7 @@ const Content = () => {
                                         <div className="btn-container">
                                             <button
                                                 type="submit"
-                                                className="primary-btn"
+                                                className="btn-main main-filled"
                                                 disabled={loading}
                                                 aria-label="Register new account"
                                             >

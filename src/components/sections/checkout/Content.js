@@ -522,7 +522,7 @@ const EnhancedCheckout = ({ location, history }) => {
                       </label>
                     </div>
                     <div className="payment-option">
-                      <input type="radio" id="cod" name="payment" value="CASH" checked={paymentMode === 'CASH'} onChange={(e) => setPaymentMode(e.target.value)} />
+                      <input type="radio" id="cod" name="payment" value="COD" checked={paymentMode === 'COD'} onChange={(e) => setPaymentMode(e.target.value)} />
                       <label htmlFor="cod">
                         <Home size={12} className="payment-icon" /> Cash on Delivery
                         <span className="payment-desc">Pay on delivery</span>

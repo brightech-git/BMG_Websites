@@ -18,7 +18,7 @@ class Login extends Component {
                     />
                 </MetaTags>
                 <Header/>
-                <Breadcrumb breadcrumb={{pagename:'Login'}}/>
+                {/* <Breadcrumb breadcrumb={{pagename:'Login'}}/> */}
                 <Content/>
                 <Instafeeds/>
                 <Footer/>

@@ -18,7 +18,7 @@ const AccountSidebar = ({ activeComponent, setActiveComponent, openLogoutModal }
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const history = useHistory();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(true);
 
   const menuItems = [
     { key: "Dashboard", icon: <FiUser size={18} />, label: "Dashboard" },
@@ -37,7 +37,7 @@ const AccountSidebar = ({ activeComponent, setActiveComponent, openLogoutModal }
  
 
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+    setIsMobileMenuOpen(true);
   };
 
   const handleMenuClick = (key) => {
@@ -45,23 +45,14 @@ const AccountSidebar = ({ activeComponent, setActiveComponent, openLogoutModal }
       history.push("/");
     } else {
       setActiveComponent(key);
-      setIsMobileMenuOpen(false);
     }
   };
 
   return (
     <section>
       <div className="account-navigation-panel">
-        <div className="mobile-menu-header" onClick={toggleMobileMenu}>
-          <div className="mobile-menu-toggle">
-            {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-          </div>
-          <div className="mobile-profile-info">
-            <h3 className="profile-name">{user?.username || "Guest User"}</h3>
-          </div>
-        </div>
-
-        <div className={`sidebar-content ${isMobileMenuOpen ? "mobile-open" : ""}`}>
+        
+        <div className={`sidebar-content mobile-open`}>
           <div className="user-profile-card">
             <div className="profile-avatar-container">
               <div className="profile-avatar">{getUserInitials()}</div>

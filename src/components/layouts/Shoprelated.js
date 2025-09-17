@@ -5,12 +5,12 @@ import ProductCard from '../sections/productCard/ProductCard';
 import useFilterProducts from '../../hook/product/useFilterProducts';
 import './ShopRelated.css';
 
-const ShopRelated = () => {
+const ShopRelatedUpdated = () => {
     const sliderRef = useRef(null);
 
     // Fetch related products using useFilterProducts hook
     const { data, loading, error } = useFilterProducts(
-        {}, // No specific filters for related products (can customize)
+        {}, // No specific filters for related products
         1,  // Page 1
         10  // Fetch up to 10 products
     );
@@ -24,10 +24,10 @@ const ShopRelated = () => {
         sliderRef.current.slickPrev();
     };
 
-    const settings = {
+    const sliderSettings = {
         slidesToShow: 4,
         slidesToScroll: 1,
-        fade: false,
+        fade: false, // Ensure no fade effect
         infinite: true,
         autoplay: true,
         autoplaySpeed: 4000,
@@ -55,29 +55,28 @@ const ShopRelated = () => {
         ],
     };
 
-    // Map API data to match ProductCard props based on actual API response
-    const relatedProducts = data?.data;
+    // Map API data to match ProductCard props
+    const relatedProducts = data?.data || [];
 
     console.log('Mapped products:', relatedProducts); // Debug mapped products
 
     return (
-        <section className="related-products-section">
-            <div className="related-products-container">
-                <div className="related-products-header">
-                    <div className="related-products-title">
-                        <span className="title-tag">Shop</span>
-                        <h2>Related Products</h2>
+        <section className="products-showcase-section">
+            <div className="products-showcase-container">
+                <div className="products-showcase-header">
+                    <div className="products-showcase-title">
+                        <h2 className="showcase-title">Related Products</h2>
                     </div>
-                    <div className="related-products-nav">
+                    <div className="products-showcase-nav">
                         <button
-                            className="related-products-nav-arrow"
+                            className="products-showcase-nav-arrow"
                             onClick={previous}
                             aria-label="Previous products"
                         >
                             <i className="fal fa-arrow-left" />
                         </button>
                         <button
-                            className="related-products-nav-arrow"
+                            className="products-showcase-nav-arrow"
                             onClick={next}
                             aria-label="Next products"
                         >
@@ -97,9 +96,9 @@ const ShopRelated = () => {
                 )}
 
                 <Slider
-                    className="related-products-slider"
+                    className="products-showcase-slider"
                     ref={sliderRef}
-                    {...settings}
+                    {...sliderSettings}
                 >
                     {relatedProducts.map((item, i) => (
                         <div key={i}>
@@ -114,4 +113,4 @@ const ShopRelated = () => {
     );
 };
 
-export default ShopRelated;
+export default ShopRelatedUpdated;

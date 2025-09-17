@@ -24,7 +24,7 @@ const Banner = () => {
         slidesToScroll: 1,
         centerMode: true,
         centerPadding: '15%', 
-        arrows: true, 
+        arrows: false, 
         swipe: true,
         swipeToSlide: true, 
         touchThreshold: 10, 
@@ -40,7 +40,7 @@ const Banner = () => {
                 breakpoint: 768,
                 settings: {
                     centerPadding: '5%',
-                    arrows: true, 
+                    arrows: false, 
                 },
             },
             {

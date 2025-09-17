@@ -24,6 +24,7 @@ const AccountPage = () => {
     if (location.state?.activeComponent) {
       setActiveComponent(location.state.activeComponent);
     }
+   
   }, [location.state]);
 
   const renderActiveComponent = () => {
@@ -44,7 +45,7 @@ const AccountPage = () => {
         );
       case "Addresses":
         return <AddressManager />;
-      case "Security":
+      case "Change Password":
         return <ChangePassword />;
       case "OrderDetail":
         return (

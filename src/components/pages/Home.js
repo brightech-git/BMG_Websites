@@ -17,9 +17,9 @@ class Home extends Component {
                     />
                 </MetaTags>
                 {/* <Newsletter/> */}
-                <Header/>
+        
                 <Content/>
-                <Footer/>
+        
             </Fragment>
         );
     }

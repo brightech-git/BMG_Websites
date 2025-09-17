@@ -7,15 +7,12 @@ import {
   faSpinner,
   faImage,
   faAngleLeft,
-  faCalendarAlt,
   faReceipt,
   faCheckCircle,
   faTimesCircle,
   faTruck,
-  faHome,
-  faClock,
-  faInfoCircle,
   faShoppingBag,
+  faInfoCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { formatCurrency } from '../../../../assets/utills/formatters';
 import './OrderDetails.css';
@@ -23,90 +20,92 @@ import { Link } from 'react-router-dom';
 import { useCancelOrder } from '../../../../hook/order/useOrderMutation';
 import { useTrackOrderById } from '../../../../hook/order/useOrderTracking';
 import { toast } from 'react-toastify';
+import { useAdminAddress } from '../../../../hook/address/useAdminAddress';
+import { useLocation } from 'react-router-dom/cjs/react-router-dom';
 
-const OrderDetail = ({ order, setActiveComponent }) => {
+const OrderDetail = ({ order: initialOrder, setActiveComponent }) => {
+  const location = useLocation();
+  const { orderId } = location.state || {};
+
+  const [order, setOrder] = useState(initialOrder || null);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+
   const { mutate: cancelOrder, isLoading: isCancelling } = useCancelOrder();
+  const {
+    data: trackData,
+    refetch: fetchTrackData,
+    isLoading: isTracking,
+  } = useTrackOrderById(order?.orderId || orderId);
 
-  const { data: trackData, refetch: fetchTrackData, isLoading: isTracking } = useTrackOrderById(order?.orderId);
+  const id = 10019;
+  const {
+    data: adminAddress,
+    isError,
+    isLoading,
+  } = useAdminAddress(id);
 
-  // Trigger tracking API when order exists
+  // ✅ If only orderId is present (from PaymentSuccess), fetch full order
   useEffect(() => {
-    if (order?.orderId) {
+    if (!order && orderId) {
+      fetchTrackData(orderId).then(() => {
+        setOrder();
+      });
+    }
+  }, [orderId, order]);
+
+  // ✅ Track order when ID is ready
+  useEffect(() => {
+    if (order?.orderId || orderId) {
       fetchTrackData();
     }
-  }, [order?.orderId, fetchTrackData]);
+  }, [order?.orderId, orderId, fetchTrackData]);
 
   const getStatusIcon = (status) => {
     const iconMap = {
-      'PENDING': faReceipt,
-      'PLACED': faReceipt,
-      'IN_PROCESSING': faSpinner,
-      'PACKED': faBox,
-      'SHIPPED': faTruck,
-      'SHIPPING': faTruck,
-      'Booked': faTruck,
-      'OUT_FOR_DELIVERY': faTruck,
-      'IN_TRANSIT': faTruck,
-      'DELIVERED': faCheckCircle,
-      'DELIVERY_FAILED': faExclamationCircle,
-      'CANCELLED': faTimesCircle,
+      PLACED: faReceipt,
+      IN_PROCESSING: faSpinner,
+      PACKED: faBox,
+      SHIPPED: faTruck,
+      SHIPPING: faTruck,
+      Booked: faTruck,
+      OUT_FOR_DELIVERY: faTruck,
+      IN_TRANSIT: faTruck,
+      DELIVERED: faCheckCircle,
+      DELIVERY_FAILED: faExclamationCircle,
+      CANCELLED: faTimesCircle,
     };
     return iconMap[status] || faInfoCircle;
   };
 
   const getStatusLabel = (status) => {
     const labelMap = {
-      'PENDING': 'Order Pending',
-      'PLACED': 'Order Placed',
-      'IN_PROCESSING': 'Order Processing',
-      'PACKED': 'Order Packed',
-      'SHIPPED': 'Order Shipped',
-      'SHIPPING': 'Shipping',
-      'Booked': 'Booked for Delivery',
-      'OUT_FOR_DELIVERY': 'Out for Delivery',
-      'IN_TRANSIT': 'In Transit',
-      'DELIVERED': 'Delivered',
-      'DELIVERY_FAILED': 'Delivery Failed',
-      'CANCELLED': 'Cancelled',
+      PENDING: 'Order Pending',
+      PLACED: 'Order Placed',
+      IN_PROCESSING: 'Order Processing',
+      PACKED: 'Order Packed',
+      SHIPPED: 'Order Shipped',
+      SHIPPING: 'Shipping',
+      Booked: 'Booked for Delivery',
+      OUT_FOR_DELIVERY: 'Out for Delivery',
+      IN_TRANSIT: 'In Transit',
+      DELIVERED: 'Delivered',
+      DELIVERY_FAILED: 'Delivery Failed',
+      CANCELLED: 'Cancelled',
     };
     return labelMap[status] || status;
   };
 
   const processTrackingHistory = () => {
-    if (!trackData?.history) return [];
-
-    // Group by status to remove duplicates but keep all meaningful remarks
-    const statusGroups = {};
-
-    trackData.history.forEach(entry => {
-      const status = entry.status;
-      if (!statusGroups[status]) {
-        statusGroups[status] = {
-          ...entry,
-          remarks: []
-        };
-      }
-
-      // Add meaningful remarks
-      if (entry.remarks && entry.remarks.trim()) {
-        let remark = entry.remarks.trim();
-
-        // Clean up DTDC remarks
-        if (remark.includes('DTDC update:')) {
-          remark = remark.replace('DTDC update:', '').trim();
-        }
-
-        // Only add if it's meaningful (not empty)
-        if (remark && !statusGroups[status].remarks.includes(remark)) {
-          statusGroups[status].remarks.push(remark);
-        }
-      }
-    });
-
-    // Convert back to array and sort by timestamp
-    return Object.values(statusGroups)
-      .sort((a, b) => new Date(a.updated_at) - new Date(b.updated_at));
+    if (!trackData?.timeline || trackData.timeline.length === 0) {
+      // Fallback to current_status if timeline is empty or undefined
+      return [{
+        label: getStatusLabel(trackData?.current_status || order.status),
+        updated_at: order.orderTime,
+        remarks: trackData?.current_status ? `Order is currently ${getStatusLabel(trackData.current_status).toLowerCase()}.` : 'No tracking details available.'
+      }];
+    }
+    // Sort timeline by updated_at
+    return trackData.timeline.sort((a, b) => new Date(a.updated_at) - new Date(b.updated_at));
   };
 
   const handleCancelOrder = () => {
@@ -138,10 +137,11 @@ const OrderDetail = ({ order, setActiveComponent }) => {
   };
 
   const renderStatusModal = () => {
+    console.log(trackData, 'raw-track-data');
     const currentStatus = trackData?.current_status || order.status;
     const trackingHistory = processTrackingHistory();
-
-    const canCancel = !['SHIPPED', 'SHIPPING', 'OUT_FOR_DELIVERY', 'IN_TRANSIT', 'DELIVERED', 'CANCELLED', 'Booked'].includes(currentStatus);
+    const currentLabel = trackingHistory[trackingHistory.length - 1]?.label || getStatusLabel(currentStatus);
+    const canCancel = trackData?.canCancel ?? !['SHIPPED', 'SHIPPING', 'OUT_FOR_DELIVERY', 'IN_TRANSIT', 'DELIVERED', 'CANCELLED', 'Booked'].includes(currentStatus);
 
     const formatDate = (dateString) => {
       return new Date(dateString).toLocaleDateString('en-IN', {
@@ -150,7 +150,7 @@ const OrderDetail = ({ order, setActiveComponent }) => {
         year: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-        hour12: true
+        hour12: true,
       });
     };
 
@@ -158,25 +158,24 @@ const OrderDetail = ({ order, setActiveComponent }) => {
       <div className="status-modal-overlay">
         <div className="status-modal">
           <div className="status-modal-header">
-            <h3>Order #{order.orderId} Tracking</h3>
+            <h3>Order    # {order.orderId}  Tracking</h3>
             <button onClick={() => setIsStatusModalOpen(false)} className="close-modal">
               &times;
             </button>
           </div>
           <div className="status-modal-body">
-
             {/* Current Status Banner */}
-            <div className="current-status-banner">
+            <div className={`current-status-banner ${currentStatus === 'DELIVERED' ? 'delivered' : ''}`}>
               <div className="status-icon">
                 <FontAwesomeIcon icon={getStatusIcon(currentStatus)} />
               </div>
               <div className="status-info">
-                <h4>{getStatusLabel(currentStatus)}</h4>
+                <h4>{currentLabel}</h4>
                 <p>Order placed on {new Date(order.orderTime).toLocaleDateString('en-IN')}</p>
               </div>
             </div>
 
-            {/* Timeline - Only show completed statuses */}
+            {/* Timeline */}
             <div className="flipkart-timeline">
               {isTracking ? (
                 <div className="timeline-loading">
@@ -185,30 +184,26 @@ const OrderDetail = ({ order, setActiveComponent }) => {
               ) : (
                 trackingHistory.map((step, index) => {
                   const isLast = index === trackingHistory.length - 1;
-                  const isCurrent = step.status === currentStatus;
+                  const isCurrent = index === trackingHistory.length - 1;
+                  const isDelivered = currentStatus === 'DELIVERED' && isCurrent;
 
                   return (
-                    <div key={`${step.status}-${index}`} className={`timeline-step ${isCurrent ? 'current' : 'completed'}`}>
+                    <div key={`${step.label}-${index}`} className={`timeline-step ${isCurrent ? 'current' : 'completed'} ${isDelivered ? 'delivered' : ''}`}>
                       <div className="timeline-dot">
                         <FontAwesomeIcon
-                          icon={step.status === 'CANCELLED' || step.status === 'DELIVERY_FAILED' ? getStatusIcon(step.status) : faCheckCircle}
+                          icon={currentStatus === 'CANCELLED' || currentStatus === 'DELIVERY_FAILED' ? getStatusIcon(currentStatus) : faCheckCircle}
                           className={`step-icon ${isCurrent ? 'pulse' : ''}`}
                         />
                       </div>
-
                       {!isLast && <div className="timeline-line"></div>}
-
                       <div className="timeline-content">
                         <div className="step-header">
-                          <h5>{getStatusLabel(step.status)}</h5>
+                          <h5>{step.label}</h5>
                           <span className="step-time">{formatDate(step.updated_at)}</span>
                         </div>
-
-                        {step.remarks && step.remarks.length > 0 && (
+                        {step.remarks && (
                           <div className="step-remarks-simple">
-                            {step.remarks.map((remark, idx) => (
-                              <p key={idx}>{remark}</p>
-                            ))}
+                            <p>{step.remarks}</p>
                           </div>
                         )}
                       </div>
@@ -258,28 +253,44 @@ const OrderDetail = ({ order, setActiveComponent }) => {
   }
 
   const currentStatus = trackData?.current_status || order.status;
-  const orderItems = trackData?.items || order.orderItems || [];
+  const currentLabel = trackData?.timeline?.length > 0 ? trackData.timeline[trackData.timeline.length - 1].label : getStatusLabel(currentStatus);
+  const orderItems = order.orderItems || trackData?.items || [];
+  console.log(order, 'order-items')
+  const admin = adminAddress
+
+  // const formatAddress = (address) => {
+  //   if (!address) return '';
+  //   return [
+  //     address.addressLine1,
+  //     address.addressLine2,
+  //     `${address.city}, ${address.state} - ${address.pincode}`,
+  //     address.country
+  //   ]
+  //     .filter(Boolean) // remove undefined/empty parts
+  //     .join(', ');
+  // };
+
+
+
 
   return (
     <div className="account-container">
       <div className="order-content">
         {/* Order Header */}
         <div className="order-header-simplified">
-          <h1 className="order-title">Order Details</h1>
+          <h1 className="order-detail-title">Order Details</h1>
           <button onClick={() => setActiveComponent('Orders')} className="back-btn-right">
             <FontAwesomeIcon icon={faAngleLeft} className="meta-icon" /> Back to Orders
           </button>
         </div>
 
         {/* Status Summary */}
-        <div className="status-summary-container">
+        <div className={`status-summary-container ${currentStatus === 'DELIVERED' ? 'delivered' : ''}`}>
           <div className="status-summary-content">
             <div className="status-meta">
               <span className="order-id">{trackData?.order_id || order.orderId}</span>
             </div>
-            <div className="status-badge-simple">
-              {getStatusLabel(currentStatus)}
-            </div>
+            <div className="status-badge-simple">{currentLabel}</div>
           </div>
           <button className="track-btn" onClick={() => setIsStatusModalOpen(true)}>
             Track Order
@@ -290,7 +301,7 @@ const OrderDetail = ({ order, setActiveComponent }) => {
         <div className="order-sections-container">
           {/* Ordered Items */}
           <div className="order-section">
-            <h3 className="section-title">
+            <h3 className="order-section-title">
               <FontAwesomeIcon icon={faBox} className="section-icon" />
               Items in your order
             </h3>
@@ -299,12 +310,12 @@ const OrderDetail = ({ order, setActiveComponent }) => {
                 {orderItems?.map((item) => (
                   <div key={item.id} className="order-item-compact">
                     <div className="item-image-compact">
-                      {item.image_path ? (
+                      {item.imagePath ? (
                         <img
                           src={
-                            item.image_path.startsWith('http')
-                              ? item.image_path
-                              : `https://app.bmgjewellers.com${item.image_path}`
+                            item.imagePath.startsWith('http')
+                              ? item.imagePath
+                              : `https://app.bmgjewellers.com${item.imagePath}`
                           }
                           alt={item.productName}
                           className="item-img"
@@ -320,7 +331,7 @@ const OrderDetail = ({ order, setActiveComponent }) => {
                     </div>
                     <div className="item-details-compact">
                       <h4 className="item-name-compact">{item.productName}</h4>
-                      <p className="item-price-compact">{formatCurrency(item.price)}</p>
+                      <p className="item-price-compact">{item.price.toFixed(2)}</p>
                     </div>
                   </div>
                 ))}
@@ -330,16 +341,14 @@ const OrderDetail = ({ order, setActiveComponent }) => {
 
           {/* Order Summary */}
           <div className="order-section">
-            <h3 className="section-title">
+            <h3 className="order-section-title">
               <FontAwesomeIcon icon={faReceipt} className="section-icon" />
               Order Summary
             </h3>
+           
             <div className="order-summary-content">
               <div className="order-summary-card">
-                <div className="summary-header">
-                  <span>Order Summary</span>
-                  <span className="product-count">{orderItems?.length || 0} items</span>
-                </div>
+              
                 <div className="summary-row">
                   <span>Subtotal</span>
                   <span>{formatCurrency(order.totalAmount)}</span>
@@ -352,6 +361,10 @@ const OrderDetail = ({ order, setActiveComponent }) => {
                   <span>Paid by</span>
                   <span>{order.paymentMode}</span>
                 </div>
+                <div className="summary-row">
+                  <span>Payment Stauts</span>
+                  <span>{order.paymentStatus}</span>
+                </div>
                 <div className="summary-row total">
                   <span>Total</span>
                   <span>{formatCurrency(order.totalAmount)}</span>
@@ -361,23 +374,65 @@ const OrderDetail = ({ order, setActiveComponent }) => {
           </div>
 
           {/* Shipping Information */}
-          <div className="order-section">
-            <h3 className="section-title">
-              <FontAwesomeIcon icon={faTruck} className="section-icon" />
-              Shipping Information
-            </h3>
+          <div className="order-section two-column-layout">
             <div className="shipping-content">
+              {/* Left Side - Delivery From */}
               <div className="info-card">
+                <h3 className="order-section-title">
+                  <FontAwesomeIcon icon={faTruck} className="section-icon" />
+                  Delivery From
+                </h3>
+                <div className="address-details">
+                  {isLoading ? (
+                    <p>Loading address details...</p>
+                  ) : isError ? (
+                    <p>Error loading address details.</p>
+                  ) : adminAddress ? (
+                    <>
+                      <div className="address-name">{adminAddress.name}</div>
+                      {adminAddress.addressLine1 && <p className="address-line">{adminAddress.addressLine1}</p>}
+                      {adminAddress.addressLine2 && <p className="address-line">{adminAddress.addressLine2}</p>}
+                      <p className="address-line">
+                        {adminAddress.city}, {adminAddress.state} - {adminAddress.pincode}
+                      </p>
+                      <p className="address-line">{adminAddress.country}</p>
+                      <div className="address-phone">
+                        <strong>Phone:</strong> {adminAddress.phone}
+                      </div>
+                      {adminAddress.alternatePhone && (
+                        <div className="address-phone">
+                          <strong>Alt:</strong> {adminAddress.alternatePhone}
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <p>No address details available.</p>
+                  )}
+                </div>
+              </div>
+              {/* Right Side - Shipping To */}
+              <div className="info-card">
+                <h3 className="order-section-title">
+                  <FontAwesomeIcon icon={faTruck} className="section-icon" />
+                  Shipping To
+                </h3>
                 <div className="address-details">
                   <div className="address-name">{order.customerName}</div>
-                  <p className="address-line">{order.address}</p>
+                  <p className="address-line">{order.address.addressLine}</p>
+                  <p className="address-line">{order.address.locality}</p>
+                  <p className="address-line">
+                    {order.address.city}, {order.address.state} - {order.address.pincode}
+                  </p>
+                  {order.address.landmark && <p className="address-line">Landmark: {order.address.landmark}</p>}
                   <div className="address-phone">
                     <strong>Phone:</strong> {order.contact}
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
+
         </div>
 
         <button onClick={() => setActiveComponent('Shop')} className="continue-shopping-btn">

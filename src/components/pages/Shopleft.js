@@ -24,7 +24,7 @@ class Shopleft extends Component {
                 </MetaTags>
                 <Header />
                 {/* Pass query params to Breadcrumb */}
-                <Breadcrumb itemName={itemName} subItemName={subItemName} />
+                <Breadcrumb itemName={itemName} subItemName={subItemName}  pages={"Shop-left"} />
                 <Content />
                 {/* <Instafeeds /> */}
                 <Footer />

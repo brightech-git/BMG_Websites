@@ -522,14 +522,14 @@ const Shopinfo = ({ sno, Authenticated }) => {
                     <div className="category-item">
                       <span className="category-label">Category:</span>
                       {product.CATNAME && (
-                        <Link to="#" className="category-link">
+                        <h6 to="#" className="category-link">
                           {product.CATNAME}
-                        </Link>
+                        </h6>
                       )}
                       {product.SUBITEMNAME && (
-                        <Link to="#" className="category-link">
+                        <h6 to="#" className="category-link">
                           {product.SUBITEMNAME}
-                        </Link>
+                        </h6>
                       )}
                     </div>
                   )}

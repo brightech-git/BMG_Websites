@@ -22,13 +22,29 @@ export const getPaymentRedirectUrl = async (redirectURI, tranCtx) => {
     }
 };
 
-export const getPaymentStatus = async (orderId)=>{
-    try{
-        const response = await PublicUrl.post(`/payment/status`, { merchantTxnNo: orderId, originalTxnNo: orderId, transactionType :"STATUS"});
-        return response.data;
-    }
-    catch (err) {
+export const getPaymentStatus = async (orderId) => {
+    try {
+        const payload = {
+            merchantTxnNo: orderId,
+            originalTxnNo: orderId,
+            transactionType: "STATUS",
+        };
+
+        const response = await PublicUrl.post(`/payment/status`, payload, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (response?.data) {
+            return response.data; // ✅ return only the useful data
+        } else {
+            throw new Error("Empty response from payment status API");
+        }
+    } catch (err) {
         console.error("Error checking payment status:", err);
         throw err;
     }
-}
+};
+
+

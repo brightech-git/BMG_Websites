@@ -54,7 +54,7 @@
     --primary-font: 'Gloock', 'serif';
         --secondary-font: 'Montserrat', 'sans-serif';
         --title-font: 'Dancing Script';
-        --primary-color: #f6f5f0;
+        --primary-color: #f6f6f6;
         --primary-text-color: #041f60;
         --primary-card-color: #eeece8;
         --primary-hover-color: #cd865c;
@@ -102,7 +102,7 @@
             --primary-font: 'Gloock', 'serif';
                 --secondary-font: 'Montserrat', 'sans-serif';
                 --title-font: 'Dancing Script';
-                --primary-color: #f6f5f0;
+                --primary-color: #f6f6f6;
                 --primary-text-color: #041f60;
                 --primary-card-color: #eeece8;
                 --primary-hover-color: #cd865c;
@@ -473,31 +473,12 @@ select {
 
 /*=======  COMMON CLASS  =======*/
 
-@media (min-width: 1600px) {
-    .container-custom-one {
-        max-width: 1600px;
-    }
+@media(min-width:2000px){
     .container{
-        max-width: 1600px;
+        width:100%
     }
 }
 
-@media (min-width: 1600px) {
-    .container-custom-two {
-        max-width: 1400px;
-    }
-    .container{
-        max-width: 1400px;
-    }
-}
-
-@media (min-width: 1600px) {
-    header .container-fluid.container-custom-three {
-        padding-left: 0px;
-        padding-right: 0px;
-        max-width: 100% !important;
-    }
-}
 
 .slick-slide img {
     display: inline-block;
@@ -1937,8 +1918,8 @@ header.header-three .main-menu-area {
 }
 
 header.header-three .main-menu-area.sticky-header.sticky-active {
-    position: fixed;
-    top: 0;
+    position: relative;
+    top: 0 ;
     left: 0;
     right: 0;
     bottom: auto;
@@ -2666,9 +2647,6 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     padding: 10px 0;
 }
 
-.sigm-megamenu-nav .nav-item {
-    margin-bottom: 5px;
-}
 
 .sigm-megamenu-nav .nav-link {
     padding: 8px 15px !important;
@@ -2735,36 +2713,10 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 .sigma-header .sigma-main-menu .menu-item-has-children.menu-item-has-megamenu>.sub-menu .sigm-megamenu-nav {
     border-bottom: 0;
     border-right: 1px solid rgb(117 117 117 / 70%);
-    padding: 30px 20px;
+    padding: 10px 10px;
     display: block;
     padding-right: 0;
     height: 100%;
-}
-
-.sigma-header .sigma-main-menu .menu-item-has-children.menu-item-has-megamenu>.sub-menu .sigm-megamenu-nav>.nav-item {
-    margin-bottom: 0;
-}
-
-.sigma-header .sigma-main-menu .menu-item-has-children.menu-item-has-megamenu>.sub-menu .sigm-megamenu-nav>.nav-item>.nav-link {
-    border: none;
-    background: #f6f5f0;
-    color: #404040;
-    font-weight: 500;
-    padding: 10px;
-    border-radius: 0;
-    font-family: "Montserrat", sans-serif;
-}
-
-.sigma-header .sigma-main-menu .menu-item-has-children.menu-item-has-megamenu>.sub-menu .sigm-megamenu-nav>.nav-item>.nav-link>i {
-    font-size: 18px;
-    margin-right: 10px;
-    width: 10px;
-    text-align: center;
-}
-
-.sigma-header .sigma-main-menu .menu-item-has-children.menu-item-has-megamenu>.sub-menu .sigm-megamenu-nav>.nav-item>.nav-link.active {
-    border-right: 3px solid #cd865c;
-    color: #cd865c;
 }
 
 .sigma-header .sigma-main-menu .menu-item-has-children.menu-item-has-megamenu>.sub-menu .sigma-megamenu-img,
@@ -4613,45 +4565,8 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     padding: 0;
 }
 
-.room-type-section .room-filter .nav-item .nav-link {
-    display: inline-block;
-    font-size: 16px;
-    font-weight: 700;
-    text-transform: capitalize;
-    border: 2px solid transparent;
-    padding: 20px 25px;
-    cursor: pointer;
-    color: #a3a3a3;
-    -webkit-transition: all 0.3s ease-out 0s;
-    transition: all 0.3s ease-out 0s;
-    border-radius: 0;
-}
 
-@media only screen and (min-width: 992px) and (max-width: 1199px) {
-    .room-type-section .room-filter .nav-item .nav-link {
-        padding: 10px 20px;
-    }
-}
 
-@media only screen and (min-width: 576px) and (max-width: 767px) {
-    .room-type-section .room-filter .nav-item .nav-link {
-        padding: 10px 20px;
-    }
-}
-
-@media (max-width: 575px) {
-    .room-type-section .room-filter .nav-item .nav-link {
-        padding: 8px 15px;
-        font-size: 14px;
-    }
-}
-
-.room-type-section .room-filter .nav-item .nav-link.active,
-.room-type-section .room-filter .nav-item .nav-link:hover {
-    color: #fff;
-    border-color: #e6e6e6;
-    background-color: transparent;
-}
 
 .room-type-section .room-items .row {
     margin-left: -7.5px;
@@ -5299,7 +5214,6 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     width: 100%;
     height: 100%;
     z-index: 1;
-    background-image: url(../img/icon/pattern-03.png);
     background-size: cover;
     background-position: right;
 }
@@ -11421,16 +11335,6 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     border-bottom: 0;
 }
 
-.product-description .product-description .nav-tabs .nav-item .nav-link,
-.product-description .nav-tabs .nav-link.active,
-.product-description .nav-tabs .nav-item .nav-link:not(.active):hover {
-    border-top: 1px solid transparent;
-    border-right: 1px solid transparent;
-    border-left: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-    background-color: transparent;
-}
-
 .product-description .nav-tabs .nav-link.active {
     color: #fcd462;
 }
@@ -11892,34 +11796,6 @@ td.has-title {
 
 /*------ Account  ------*/
 
-.account-tabs .nav-tabs .nav-item .nav-link {
-    background-color: #353530;
-    border: 0;
-    color: #fff;
-    padding: 14px 20px;
-    border-radius: 0;
-}
-
-.account-tabs .nav-tabs .nav-item+.nav-item .nav-link {
-    margin-top: 15px;
-}
-
-.account-tabs .nav-tabs .nav-item .nav-link.active,
-.account-tabs .nav-tabs .nav-item .nav-link:hover {
-    background-color: #fcd462;
-}
-
-.account-tabs .nav-tabs .nav-item .nav-link.logout {
-    background-color: #ff4764;
-    color: #fff;
-    border-color: #ff4764;
-}
-
-.account-tabs .nav-tabs .nav-item .nav-link.logout i {
-    color: #fff;
-    font-size: 18px;
-    margin-right: 5px;
-}
 
 .tab-content .tab-pane {
     width: 100%;
@@ -13174,5 +13050,36 @@ footer .copyright-area.light-theme .footer-menu ul li::before {
     .custom-horizontal-padding {
         padding-left: 20px;
         padding-right: 20px;
+    }
+}
+
+
+
+
+@media (min-width: 2000px) {
+    .container-custom-one {
+        max-width: 1600px;
+    }
+
+    .container {
+        max-width: 1600px !important;
+    }
+}
+
+@media (min-width: 1600px) {
+    .container-custom-two {
+        max-width: 1400px;
+    }
+
+    .container {
+        max-width: 1400px;
+    }
+}
+
+@media (min-width: 1600px) {
+    header .container-fluid.container-custom-three {
+        padding-left: 0px;
+        padding-right: 0px;
+        max-width: 100% !important;
     }
 }

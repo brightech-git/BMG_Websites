@@ -332,7 +332,7 @@ const Cart = ({ history }) => {
                             </div>
                             <h3>Failed to load cart</h3>
                             <p>Please try again later</p>
-                            <Link to="/" className="btn-primary">
+                            <Link to="/home" className="btn-primary">
                                 Return Home
                             </Link>
                         </div>

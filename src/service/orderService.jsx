@@ -11,7 +11,7 @@ export const createOrder = async (orderData) => {
 export const getOrderHistory = async () => {
     const payload = {
         page:'0',
-        size:'100',
+        size:'200',
     };
     const response = await publicUrl.get('/order/history', {
         params:payload
@@ -50,17 +50,24 @@ export const trackOrder = async (refNumber) => {
         );
     }
 };
-//track ordr by id 
 export const trackOrderById = async (orderId) => {
     if (!orderId) throw new Error("Order ID is required");
 
-    const { data } = await publicUrl.get(`/order/track-order`, {
-        params: { orderId },
-    });
+    try {
+        const { data } = await publicUrl.get(`/order/track/user`, {
+            params: { orderId },
+        });
 
-    // We only need current_status and history
-    return {
-        current_status: data.current_status,
-        history: data.history || [],
-    };
+        // Map API response to expected structure
+        return {
+            current_status: data.current_status,
+            timeline: data.timeline || data.history || [], // Handle both timeline and history
+            order_id: data.order_id,
+            items: data.items || [],
+            canCancel: data.canCancel ?? true, // Default to true if undefined
+        };
+    } catch (error) {
+        console.error('Error fetching tracking data:', error);
+        throw new Error(error.message || 'Failed to fetch tracking data');
+    }
 };

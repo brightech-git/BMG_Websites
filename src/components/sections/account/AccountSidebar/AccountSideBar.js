@@ -24,7 +24,7 @@ const AccountSidebar = ({ activeComponent, setActiveComponent, openLogoutModal }
     { key: "Dashboard", icon: <FiUser size={18} />, label: "Dashboard" },
     { key: "Orders", icon: <FiShoppingBag size={18} />, label: "Orders" },
     { key: "Addresses", icon: <FiMapPin size={18} />, label: "Addresses" },
-    { key: "Security", icon: <FiLock size={18} />, label: "Security" },
+    { key: "Change Password", icon: <FiLock size={18} />, label: "Change Password" },
   ];
 
   const getUserInitials = () => {

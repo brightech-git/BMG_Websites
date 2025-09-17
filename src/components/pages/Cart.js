@@ -18,7 +18,7 @@ class Cart extends Component {
                     />
                 </MetaTags>
                 <Header/>
-                <Breadcrumb breadcrumb={{pagename:'Cart'}}/>
+                <Breadcrumb pages={"Cart"} />
                 <Content/>
                 <Instafeeds/>
                 <Footer/>

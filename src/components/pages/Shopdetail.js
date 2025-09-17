@@ -18,7 +18,7 @@ class Shopdetail extends Component {
                     />
                 </MetaTags>
                 <Header/>
-                <Breadcrumb breadcrumb={{pagename:'Shop Detail'}}/>
+                <Breadcrumb pages={"Shop-Detail"}/>
                 <Content/>
                 <Instafeeds/>
                 <Footer/>

@@ -47,10 +47,12 @@ import ScrollToTop from './components/layouts/ScrolltoTop';
 import AccountPage from './components/sections/account/Content';
 import PolicyPage from './components/pages/Policies/Risk Mitigation & Compliance Policy';
 import ReturnOrderFlow from './components/sections/account/orderReturn/ReturnOrder';
-import { requestForToken, messaging } from './notification/firebase';
-import { onMessage } from 'firebase/messaging';
 import NotificationModal from './components/pages/notificationModal/NotificationModal';
 
+
+import MaintenanceLogin from './components/pages/MaintenanceLogin';
+import PaymentFailure from './components/pages/PaymentFailure';
+import PaymentStatus from './components/pages/paymentStatus';
 
 function ScrollWatcher() {
   const location = useLocation();
@@ -70,6 +72,8 @@ function App() {
   const [showNotifModal, setShowNotifModal] = useState(false);
   const [notifData, setNotifData] = useState({ title: "", message: "" });
 
+  const [hasAccess, setHasAccess] = useState(false);
+
   // 🔑 Function to trigger modal from anywhere
    const askNotification = (title, message) => {
     if (Notification.permission === "default") {
@@ -80,7 +84,16 @@ function App() {
 
 
 
+  useEffect(() => {
+    const access = localStorage.getItem("maintenance_access");
+    if (access === "true") {
+      setHasAccess(true);
+    }
+  }, []);
 
+  if (!hasAccess) {
+    return <MaintenanceLogin onAccess={() => setHasAccess(true)} />;
+  }
   
   return (
     <Router basename="/">
@@ -95,8 +108,8 @@ function App() {
       />
       <Switch>
 
-        
         <Route exact path="/" component={Home} />
+        <Route exact path="/home" component={Home} />
        
         <Route exact path="/about" component={About} />
         <PrivateRoute exact path="/account" component={Account} />
@@ -150,7 +163,8 @@ function App() {
         <Route exact path="/bangle-size-guide" component={BangleSizeGuide} />
         <Route exact path="/ring-size-guide" component={RingSizeGuide} />
 
-        <Route exact path="/payment-success" component={PaymentSuccess} />
+        <Route exact path="/payment-success" component={PaymentStatus} />
+        <Route exact path="/payment-failure" component={PaymentFailure} />
         <Route exact path="/appointment" component={Appointment} />
         
         {/* Catch-all route for 404 errors */}

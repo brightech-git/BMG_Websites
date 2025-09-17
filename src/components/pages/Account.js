@@ -18,7 +18,7 @@ class Account extends Component {
                     />
                 </MetaTags>
                 <Header/>
-                <Breadcrumb breadcrumb={{pagename:'My Account'}} />
+                <Breadcrumb pages={"Account"} />
                 <Content/>
                 <Instafeeds/>
                 <Footer/>

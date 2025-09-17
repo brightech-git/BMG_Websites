@@ -32,7 +32,7 @@ const PaymentPage = () => {
             }
         } else {
             history.push("/account", { activeComponent: "Orders" });
-            toast.warning("Payment initiation successful but redirect details are missing.");
+            toast.warning(" order redirect details are missing.");
             
         }
     };

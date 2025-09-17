@@ -18,11 +18,12 @@ import { useOrderHistory } from "../../../../hook/order/useOrderHistoryQuery";
 import { useCart } from "../../../../hook/cart/useCartQuery";
 import { useFavorites } from "../../../../hook/favorites/useFavoritesQuery";
 import { Link } from "react-router-dom/cjs/react-router-dom";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const Dashboard = ({ setActiveComponent, setSelectedOrder }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
+  const history=useHistory();
   const {
     data: ordersData = [],
     isLoading: ordersLoading,
@@ -102,15 +103,19 @@ const Dashboard = ({ setActiveComponent, setSelectedOrder }) => {
 
   const getStatusBadge = (status) => {
     switch (status?.toUpperCase()) {
+      case "PLACED":
+        return "yellow";
       case "DELIVERED":
         return "green";
       case "SHIPPED":
         return "blue";
-      case "PENDING":
       case "PROCESSING":
         return "amber";
       case "CANCELLED":
         return "red";
+        case "REFUNDED":
+        return "red";
+      
       default:
         return "gray";
     }
@@ -122,7 +127,8 @@ const Dashboard = ({ setActiveComponent, setSelectedOrder }) => {
         return <FiCheckCircle size={14} />;
       case "SHIPPED":
         return <FiTruck size={14} />;
-      case "PENDING":
+      case "PLACED":
+        return <FiPackage size={14} />;
       case "PROCESSING":
         return <FiClock size={14} />;
       default:
@@ -235,18 +241,25 @@ const Dashboard = ({ setActiveComponent, setSelectedOrder }) => {
       <main className={`dashboard__content ${isMobileMenuOpen ? "menu-open" : ""}`}>
         <div className="dashboard__container">
           <header className="dashboard__header">
-            <h1 className="dashboard__title">Dashboard</h1>
+            <h1 className="dashboard__title">Dashboard</h1> 
             <p className="dashboard__subtitle">
               Welcome back! Here's an overview of your account activity.
             </p>
           </header>
-
           <section className="metrics">
             {metrics.map((metric, index) => (
               <button
                 key={index}
                 className={`metric-card metric-card--${metric.color}`}
-                onClick={() => setActiveComponent(metric.key)}
+                onClick={() => {
+                  if (metric.key === "Orders") {
+                    setActiveComponent("Orders"); // switch inside dashboard
+                  } else if (metric.key === "Cart") {
+                    history.push("/cart"); // go to cart page
+                  } else if (metric.key === "Wishlist") {
+                    history.push("/wishlist"); // go to wishlist page
+                  }
+                }}
                 aria-label={`View ${metric.label}`}
               >
                 <div className="metric-card__icon">{metric.icon}</div>
@@ -261,6 +274,7 @@ const Dashboard = ({ setActiveComponent, setSelectedOrder }) => {
               </button>
             ))}
           </section>
+
 
           <section className="order-history">
             <div className="order-history__header">
@@ -281,7 +295,8 @@ const Dashboard = ({ setActiveComponent, setSelectedOrder }) => {
               <div className="order-history__cards">
                 {orders.map((order, index) => {
                   const firstItem = order.orderItems?.[0];
-                  const firstImage = firstItem ? getFirstImage(firstItem.image_path) : null;
+                  console.log("First Item:", firstItem);
+                  const firstImage = firstItem ? getFirstImage(firstItem.imagePath) : null;
                   const itemsSummary = getOrderItemsSummary(order.orderItems);
 
                   return (

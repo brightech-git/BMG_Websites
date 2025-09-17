@@ -156,8 +156,9 @@
 
 @media (max-width: 992px) {
     .jewel-search-container {
-        height: 42px;
-        width: 100%;
+        margin-left: 20px;
+        height: 40px;
+        width: 90%;
         padding: 10px;
     }
 
@@ -184,5 +185,12 @@
 
     .jewel-search-container:has(.jewel-voice-button) .jewel-search-icon {
         right: 20px;
+    }
+}
+@media (max-width: 768px){
+.jewel-search-container {
+   margin:0 ;
+        width: 100%;
+     
     }
 }

@@ -16,6 +16,8 @@ import { useFavorites } from "../../hook/favorites/useFavoritesQuery";
 import { useCart } from "../../hook/cart/useCartQuery";
 import { useRatesQuery } from "../../hook/rate/useRatesQuery"; // Add this import
 import './Header.css';
+import { useHeaderData } from "../../hook/header/useNavData";
+
 
 const Header = ({ isAuthenticated }) => {
   const width = useScreenWidth();
@@ -27,8 +29,11 @@ const Header = ({ isAuthenticated }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [showRates, setShowRates] = useState(false); // State to toggle rates display
   const dispatch = useDispatch();
+  const { data} = useHeaderData();
+  const NavData = data
+  console.log('NacData',NavData)
 
-  
+  const baseUrl= "https://app.bmgjewellers.com"
 
   // Add rates query
   const {
@@ -69,7 +74,7 @@ const Header = ({ isAuthenticated }) => {
   const toggleClass = () => setTogglemethod((prev) => !prev);
   const toggleCartm = () => setTogglecart((prev) => !prev);
 
-  const headerNavData = {
+  const headerNavData = NavData || {
     shopId: 2,
     menuSections: [
       {
@@ -223,15 +228,10 @@ const Header = ({ isAuthenticated }) => {
           },
         ],
       },
-      // {
-      //     label: "Gift Ideas",
-      //     items: [
-      //         { name: "For Him", keyName: "giftIdeas", keyValue: "for_him", image: "/images/giftIdeas/for_him.jpg" },
-      //         { name: "For Her", keyName: "giftIdeas", keyValue: "for_her", image: "/images/giftIdeas/for_her.jpg" }
-      //     ]
-      // }
     ],
   };
+
+  
   const handleLogout = () => {
     dispatch(logout()); // Clear user state
     history.push("/login"); // Navigate to login
@@ -368,17 +368,12 @@ const Header = ({ isAuthenticated }) => {
     </div>
   </div>
 )}
-
-
         <div className="main-menu-area sticky-header">
           <div className="container-fluid p-0">
             <div className="nav-container d-flex align-items-center justify-content-between">
               <div className="nav-menu d-lg-flex align-items-center justify-content-between">
                 <div className="navbar-close">
-                  <div className="cross-wrap">
-                    <span className="top" />
-                    <span className="bottom" />
-                  </div>
+                
                 </div>
                 <div className="sigma-header-nav">
                   <div className="container">
@@ -386,116 +381,90 @@ const Header = ({ isAuthenticated }) => {
                       <nav>
                         <ul className="sigma-main-menu">
                           <li className="menu-item">
-                            <Link to="/">Home</Link>
+                            <Link to="/home">Home</Link>
                           </li>
                         
+
                           <li className="menu-item menu-item-has-children menu-item-has-megamenu">
                             <Link to="#">
                               Categories{" "}
-                              <ChevronDown
-                                size={16}
-                                className="dropdown-icon"
-                              />
+                              <ChevronDown size={16} className="dropdown-icon" />
                             </Link>
+
                             <div className="sub-menu">
                               <div className="container">
                                 <div className="row">
+                                  {/* Left side nav tabs */}
                                   <div className="col-lg-3">
                                     <ul className="sigm-megamenu-nav nav nav-tabs">
-                                      {headerNavData.menuSections.map(
-                                        (section, index) => (
-                                          <li
-                                            className="nav-item"
-                                            key={section.label}
-                                          >
-                                            <Link
-                                              to="#"
-                                              className={`nav-link ${
-                                                activeTab === index
-                                                  ? "active"
-                                                  : ""
+                                      {headerNavData?.menuSections?.map((section, index) => (
+                                        <li className="nav-item" key={section.label}>
+                                          <Link
+                                            to="#"
+                                            className={`nav-link ${activeTab === index ? "active" : ""
                                               }`}
-                                              onClick={() =>
-                                                setActiveTab(index)
-                                              }
-                                              onMouseEnter={() =>
-                                                setActiveTab(index)
-                                              }
-                                            >
-                                              {section.label}
-                                            </Link>
-                                          </li>
-                                        )
-                                      )}
+                                            onClick={() => setActiveTab(index)}
+                                            onMouseEnter={() => setActiveTab(index)}
+                                          >
+                                            {section.label}
+                                          </Link>
+                                        </li>
+                                      ))}
                                     </ul>
                                   </div>
+
+                                  {/* Right side tab content */}
                                   <div className="col-lg-9">
                                     <div className="tab-content">
-                                      {headerNavData.menuSections.map(
-                                        (section, index) => (
-                                          <div
-                                            className={`tab-pane fade ${
-                                              activeTab === index
-                                                ? "show active"
-                                                : ""
+                                      {headerNavData?.menuSections?.map((section, index) => (
+                                        <div
+                                          className={`tab-pane fade ${activeTab === index ? "show active" : ""
                                             }`}
-                                            id={`tab${index + 1}`}
-                                            key={section.label}
-                                          >
-                                            <div className="row g-2">
-                                              {" "}
-                                              {/* Use g-2 or g-1 for tighter spacing */}
-                                              {section.items.map(
-                                                (item, idx) => (
-                                                  <div
-                                                    className="col-6 col-sm-3 col-md-2"
-                                                    key={idx}
-                                                  >
-                                                    <div
-                                                      className="enhanced-card"
-                                                      onClick={() =>
-                                                        handleClick(
-                                                          item.keyName,
-                                                          item.keyValue
-                                                        )
-                                                      }
-                                                    >
-                                                      {item.image && (
-                                                        <div className="menu-card-img-wrapper">
-                                                          <img
-                                                            src={item.image}
-                                                            alt={
-                                                              item.name ||
-                                                              item.label
-                                                            }
-                                                            className="menu-card-img"
-                                                            onError={(e) => {
-                                                              e.target.onerror =
-                                                                null;
-                                                              e.target.src =
-                                                                "/fallback-image.jpg";
-                                                            }}
-                                                          />
-                                                        </div>
-                                                      )}
-                                                      <p className="menu-card-label">
-                                                        {item.name ||
-                                                          item.label}
-                                                      </p>
+                                          id={`tab${index + 1}`}
+                                          key={section.label}
+                                        >
+                                          <div className="row g-2">
+                                            {section.items?.map((item, idx) => (
+                                              <div
+                                                className="col-6 col-sm-3 col-md-2"
+                                                key={idx}
+                                              >
+                                                <div
+                                                  className="enhanced-card"
+                                                  onClick={() =>
+                                                    handleClick(item.keyName, item.keyValue)
+                                                  }
+                                                >
+                                                  {item.image && (
+                                                    <div className="menu-card-img-wrapper">
+                                                      <img
+                                                        src={`${baseUrl}${item.image}`}
+                                                        alt={item.name || item.label}
+                                                        className="menu-card-img"
+                                                        onError={(e) => {
+                                                          e.target.onerror = null;
+                                                          e.target.src = "/fallback-image.jpg";
+                                                        }}
+                                                      />
+
                                                     </div>
-                                                  </div>
-                                                )
-                                              )}
-                                            </div>
+                                                  )}
+                                                  <p className="menu-card-label">
+                                                    {item.name || item.label}
+                                                  </p>
+                                                </div>
+                                              </div>
+                                            ))}
                                           </div>
-                                        )
-                                      )}
+                                        </div>
+                                      ))}
                                     </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </li>
+
 
                           <li className="menu-item menu-item-has-children">
                             <Link to="/shop-left">Shop</Link>
@@ -569,7 +538,7 @@ const Header = ({ isAuthenticated }) => {
         <div className="sigma-mobile-header">
           <div className="sigma-mobile-header-inner">
             <div className="site-logo site-logo-text">
-              <Link to="/">
+              <Link to="/home">
                 <img
                   src={Logo}
                   alt="Diamond Icon"
@@ -648,11 +617,11 @@ const Header = ({ isAuthenticated }) => {
             <ItemSearch />
           </div>
         )}
-        <aside
-          className={classNames("sigma-mobile-menu", { active: togglemethod })}
-        >
-          <Mobilemenu />
-        </aside>
+        {togglemethod && (
+          <aside className="s active">
+            <Mobilemenu onClose={() => setTogglemethod(false)} />
+          </aside>
+        )}
       </header>
       <div
         className={classNames("offcanvas-wrapper", {

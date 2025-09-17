@@ -1,20 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;500;600;700&display=swap');
-
-:root {
-    --primary-font: 'Gloock', serif;
-    --secondary-font: 'Montserrat', sans-serif;
-    --primary-color: #f6f5f0;
-    --primary-text-color: #404040;
-    --primary-card-color: #edebe7;
-    --primary-hover-color: #cd865c;
-    --secondary-card-color: #cfdcdd;
-    --white-color: #ffffff;
-    --header-height: 80px;
-    --mobile-header-height: 60px;
-    --green-color: #024908;
-    --grey-color: #A9A9A9;
-    --black-color: #000000;
-}
 
 /* Filter Container */
 .filter-bar-container {
@@ -238,7 +221,6 @@
     cursor: grab;
     transition: all 0.2s ease;
     opacity: 1;
-    z-index: 2;
 }
 
 .rc-slider-handle:hover {

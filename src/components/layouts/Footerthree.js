@@ -651,7 +651,7 @@ class Footertwo extends Component {
                     marginLeft: "4px",
                   }}
                 >
-                  BrightechSoftwareSolution
+                  BrightechSoftware Solutions
                 </a>
               </div>
             </div>

@@ -12,10 +12,12 @@ import {
   faAngleRight,
   faShoppingBag,
   faUndo,
-  faCalendarAlt,
-  faReceipt,
+  faSearch,
+  faTimes,
+  faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 import "./OrderStyles.css";
+
 
 // Util to get the image URL from different formats
 const getFirstImageUrl = (imagePath) => {
@@ -37,10 +39,10 @@ const getFirstImageUrl = (imagePath) => {
 
   return "https://via.placeholder.com/150";
 };
-
 // Mobile Order Card
 const MobileOrderCard = ({ order, onClick }) => {
-  const imageUrl = useMemo(() => getFirstImageUrl(order.orderItems?.[0]?.image_path), [order]);
+  console.log(order,'order first');
+  const imageUrl = useMemo(() => getFirstImageUrl(order.orderItems?.[0]?.imagePath), [order]);
   return (
     <div
       className="order-card-mobile"
@@ -77,7 +79,7 @@ const MobileOrderCard = ({ order, onClick }) => {
 
 // Desktop Order Card
 const DesktopOrderCard = ({ order, onClick }) => {
-  const imageUrl = useMemo(() => getFirstImageUrl(order.orderItems?.[0]?.image_path), [order]);
+  const imageUrl = useMemo(() => getFirstImageUrl(order.orderItems?.[0]?.imagePath), [order]);
   return (
     <div
       className="order-card-desktop"
@@ -115,6 +117,9 @@ const DesktopOrderCard = ({ order, onClick }) => {
 const Orders = ({ setActiveComponent, setSelectedOrder }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const { data, isLoading, error } = useOrderHistory();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [timeFilter, setTimeFilter] = useState('');
 
   const orders = useMemo(() => {
     if (Array.isArray(data?.content)) return data.content;
@@ -139,6 +144,51 @@ const Orders = ({ setActiveComponent, setSelectedOrder }) => {
     },
     [setSelectedOrder, setActiveComponent]
   );
+  const isWithinTimeFrame = (orderDate, days) => {
+    if (!days) return true;
+
+    const orderDateTime = new Date(orderDate).getTime();
+    const currentTime = new Date().getTime();
+    const timeDiff = currentTime - orderDateTime;
+    const daysDiff = timeDiff / (1000 * 3600 * 24);
+
+    return daysDiff <= days;
+  };
+
+  const filteredOrders = orders.filter(order => {
+    // Search filter
+    const matchesSearch =
+      searchQuery === '' ||
+      (order.orderId || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (order.items || []).some(item =>
+        (item.name || '').toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+
+    // Status filter
+    const matchesStatus = statusFilter === '' ||
+      order.status.toLowerCase() === statusFilter.toLowerCase();
+
+    // Time filter
+    const matchesTime = timeFilter === '' || isWithinTimeFrame(order.orderDate, parseInt(timeFilter));
+
+    return matchesSearch && matchesStatus && matchesTime;
+  });
+
+ 
+
+  // Helper function to get time filter label
+  const getTimeFilterLabel = (value) => {
+    switch (value) {
+      case '7': return 'Last 7 Days';
+      case '30': return 'Last 30 Days';
+      case '90': return 'Last 3 Months';
+      case '180': return 'Last 6 Months';
+      case '365': return 'Last Year';
+      default: return '';
+    }
+  };
+  // Helper function to check if order is within time frame
 
   return (
     <div className="order-content">
@@ -147,6 +197,116 @@ const Orders = ({ setActiveComponent, setSelectedOrder }) => {
           <FontAwesomeIcon icon={faBox} /> Order History
         </h1>
         <p className="order-subtitle">View and manage your past orders</p>
+      </div>
+
+      {/* Search and Filter Section */}
+      <div className="order-filter-container">
+        <div className="search-filter-wrapper">
+          {/* Search Input */}
+          <div className="search-container">
+            <FontAwesomeIcon icon={faSearch} className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search by order ID..."
+              className="search-input"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            {searchQuery && (
+              <button
+                className="clear-search-btn"
+                onClick={() => setSearchQuery('')}
+                aria-label="Clear search"
+              >
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
+            )}
+          </div>
+
+          {/* Filter Dropdowns */}
+          <div className="filter-dropdowns">
+            {/* Status Filter */}
+            <div className="filter-group">
+              <select
+                className="filter-select"
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+              >
+                <option value="">All Statuses</option>
+                <option value="Placed">Placed</option>
+                <option value="in_processing">Processing</option>
+                <option value="packed">Packed</option>
+                <option value="shipped">Shipped</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancelled">Cancelled</option>
+                <option value="returned">Cancelled</option>
+              </select>
+              <FontAwesomeIcon icon={faChevronDown} className="select-arrow" />
+            </div>
+
+            {/* Time Filter
+            <div className="filter-group">
+              <select
+                className="filter-select"
+                value={timeFilter}
+                onChange={(e) => setTimeFilter(e.target.value)}
+              >
+                <option value="">All Time</option>
+                <option value="7">Last 7 Days</option>
+                <option value="30">Last 30 Days</option>
+                <option value="90">Last 3 Months</option>
+                <option value="180">Last 6 Months</option>
+                <option value="365">Last Year</option>
+              </select>
+              <FontAwesomeIcon icon={faChevronDown} className="select-arrow" />
+            </div> */}
+
+            {/* Clear Filters Button */}
+            {(statusFilter || timeFilter || searchQuery) && (
+              <button
+                className="clear-filters-btn"
+                onClick={() => {
+                  setStatusFilter('');
+                  setTimeFilter('');
+                  setSearchQuery('');
+                }}
+              >
+                <FontAwesomeIcon icon={faTimes} /> Clear Filters
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Active Filters Display */}
+        {(statusFilter || timeFilter || searchQuery) && (
+          <div className="active-filters">
+            <span className="active-filters-label">Active filters:</span>
+            {statusFilter && (
+              <span className="filter-tag">
+                Status: {statusFilter}
+                <button onClick={() => setStatusFilter('')}>
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+              </span>
+            )}
+            {timeFilter && (
+              <span className="filter-tag">
+                Time: {getTimeFilterLabel(timeFilter)}
+                <button onClick={() => setTimeFilter('')}>
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+              </span>
+            )}
+            {searchQuery && (
+              <span className="filter-tag">
+                Search: "{searchQuery}"
+                <button onClick={() => setSearchQuery('')}>
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Conditional Rendering */}
@@ -166,25 +326,47 @@ const Orders = ({ setActiveComponent, setSelectedOrder }) => {
             </button>
           </div>
         </div>
-      ) : !orders.length ? (
+      ) : !filteredOrders.length ? (
         <div className="order-empty-state">
           <FontAwesomeIcon icon={faBoxOpen} className="order-empty-illustration" size="5x" />
-          <h3 className="empty-title">No orders yet</h3>
+          <h3 className="empty-title">
+            {searchQuery || statusFilter || timeFilter ? "No matching orders" : "No orders yet"}
+          </h3>
           <p className="empty-message">
-            Your order history will appear here once you make a purchase.
+            {searchQuery || statusFilter || timeFilter
+              ? "Try adjusting your search or filters to find what you're looking for."
+              : "Your order history will appear here once you make a purchase."}
           </p>
-          <button
-            className="order-shop-button"
-            onClick={() => setActiveComponent("Shop")}
-          >
-            <FontAwesomeIcon icon={faShoppingBag} /> Start Shopping
-          </button>
+          {(searchQuery || statusFilter || timeFilter) ? (
+            <button
+              className="order-shop-button"
+              onClick={() => {
+                setStatusFilter('');
+                setTimeFilter('');
+                setSearchQuery('');
+              }}
+            >
+              <FontAwesomeIcon icon={faUndo} /> Clear Filters
+            </button>
+          ) : (
+            <button
+              className="order-shop-button"
+              onClick={() => setActiveComponent("Shop")}
+            >
+              <FontAwesomeIcon icon={faShoppingBag} /> Start Shopping
+            </button>
+          )}
         </div>
       ) : (
         <>
+          {/* Results Count */}
+          <div className="results-count">
+            Showing {filteredOrders.length} of {orders.length} orders
+          </div>
+
           {/* Desktop View */}
           <div className="desktop-view">
-            {orders.map((order) => (
+            {filteredOrders.map((order) => (
               <DesktopOrderCard
                 key={order.orderId || order.id}
                 order={order}
@@ -195,7 +377,7 @@ const Orders = ({ setActiveComponent, setSelectedOrder }) => {
 
           {/* Mobile View */}
           <div className="mobile-view">
-            {orders.map((order) => (
+            {filteredOrders.map((order) => (
               <MobileOrderCard
                 key={order.orderId || order.id}
                 order={order}

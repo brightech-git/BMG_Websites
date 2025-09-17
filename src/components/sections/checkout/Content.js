@@ -10,6 +10,8 @@ import './Checkout.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrash, faPhone } from '@fortawesome/free-solid-svg-icons';
 
+
+
 // Progress Stepper Component
 const ProgressStepper = ({ currentStep }) => {
   const steps = [
@@ -30,7 +32,7 @@ const ProgressStepper = ({ currentStep }) => {
             <div key={step.id} className="tracker-step">
               <div className={`step-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`}>
                 <div className="step-number-container">
-                  <div className="step-number">{isCompleted ? <Check size={10} /> : step.id}</div>
+                  <div className="step-number">{isCompleted ? <Check size={12} /> : step.id}</div>
                 </div>
                 <div className="step-info">
                   <span className="step-label">{step.name}</span>
@@ -47,10 +49,12 @@ const ProgressStepper = ({ currentStep }) => {
 
 // Address Modal
 const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddress, onSaveAddress, onDeleteAddress, customerProfile }) => {
+
+  console.log(customerProfile,'cust')
   const [mode, setMode] = useState('list');
   const [currentAddress, setCurrentAddress] = useState(null);
   const [formData, setFormData] = useState({
-    name: customerProfile?.name || '',
+    name: customerProfile?.username || customerProfile?.name || '',
     phone: customerProfile?.contactNumber || '',
     addressLine: '',
     city: '',
@@ -59,6 +63,9 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
     country: 'India',
     locality: '',
     landmark: '',
+    gstNumber: '',
+    companyName: '',
+    alternatePhone: '',
     isDefault: false
   });
 
@@ -70,7 +77,7 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
   const handleAddNew = () => {
     setCurrentAddress(null);
     setFormData({
-      name: customerProfile?.name || '',
+      name: customerProfile?.name || customerProfile?.username || '',
       phone: customerProfile?.contactNumber || '',
       addressLine: '',
       city: '',
@@ -79,7 +86,10 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
       country: 'India',
       locality: '',
       landmark: '',
-      isDefault: false
+      gstNumber: '',
+      companyName: '',
+      alternatePhone: '',
+      isDefault: false, 
     });
     setMode('add');
   };
@@ -96,7 +106,11 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
       country: address.country || 'India',
       locality: address.locality || '',
       landmark: address.landmark || '',
-      isDefault: address.isDefault
+      gstNumber: address.gstNumber || '',
+      companyName: address.companyName || '',
+      alternatePhone: address.alternatePhone || '',
+      isDefault: address.isDefault,
+      
     });
     setMode('edit');
   };
@@ -172,7 +186,7 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
                   >
                     {selectedAddress?.id === address.id ? (
                       <>
-                        <Check size={10} className="check-icon" /> Selected
+                        <Check size={15} className="check-icon" /> Selected
                       </>
                     ) : (
                       'Deliver Here'
@@ -203,7 +217,7 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
             </div>
             <Form.Group className="mb-2">
               <Form.Label className="form-label">Address Line*</Form.Label>
-              <Form.Control as="textarea" name="addressLine" value={formData.addressLine} onChange={handleChange} className="form-control" rows={2} required />
+              <Form.Control as="textarea" name="addressLine" value={formData.addressLine} onChange={handleChange} className="form-control" rows={3} required />
             </Form.Group>
             <div className="row mb-2">
               <div className="col-12 col-md-6 mb-2 mb-md-0">
@@ -238,6 +252,25 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
                   <Form.Control type="text" name="pincode" value={formData.pincode} onChange={handleChange} className="form-control" pattern="[0-9]{6}" required />
                 </Form.Group>
               </div>
+                
+                <div className="col-12 col-md-4">
+                  <Form.Group>
+                    <Form.Label className="form-label">gstNumber</Form.Label>
+                    <Form.Control type="text" name="gstNumber" value={formData.gstNumber} onChange={handleChange} className="form-control" />
+                  </Form.Group>
+                </div>
+                <div className="col-12 col-md-4">
+                  <Form.Group>
+                    <Form.Label className="form-label">companyName</Form.Label>
+                    <Form.Control type="text" name="companyName" value={formData.companyName} onChange={handleChange} className="form-control" />
+                  </Form.Group>
+                </div>
+                <div className="col-12 col-md-4">
+                  <Form.Group>
+                    <Form.Label className="form-label">alternatePhone</Form.Label>
+                    <Form.Control type="text" name="alternatePhone" value={formData.alternatePhone} onChange={handleChange} className="form-control" pattern="[0-9]{10}" />
+                  </Form.Group>
+                </div>
             </div>
             <Form.Group className="mb-2">
               <Form.Check 
@@ -336,10 +369,10 @@ const EnhancedCheckout = ({ location, history }) => {
     }
   }, [addresses]);
 
-  const formatAddress = useCallback((address) => {
-    if (!address) return '';
-    return `${address.addressLine}, ${address.locality}, ${address.city}, ${address.state} - ${address.pincode}, ${address.country || 'India'}`;
-  }, []);
+  // const formatAddress = useCallback((address) => {
+  //   if (!address) return '';
+  //   return `${address.addressLine}, ${address.locality}, ${address.city}, ${address.state} - ${address.pincode}, ${address.country || 'India'}`;
+  // }, []);
 
   const handleSaveAddress = (addressData) => {
     const payload = { ...addressData, customerId: profile.id };
@@ -393,7 +426,23 @@ const EnhancedCheckout = ({ location, history }) => {
       contact: selectedAddress.phone,
       email: profile?.email,
       totalAmount,
-      address: formatAddress(selectedAddress),
+      address: {
+        addressLine: selectedAddress.addressLine,
+        locality: selectedAddress.locality,
+        landmark: selectedAddress.landmark,
+        name: selectedAddress.name,
+        phone: selectedAddress.phone,
+        alternatePhone: selectedAddress.alternatePhone,
+        isDefault: selectedAddress.isDefault,
+        id: selectedAddress.id,
+        customerId: selectedAddress.customerId,
+        gstNumber:selectedAddress.gstNumber,
+        companyName:selectedAddress.companyName,
+        city: selectedAddress.city,
+        state: selectedAddress.state,
+        country: selectedAddress.country || "India",
+        pincode: selectedAddress.pincode,
+      },
       paymentMode,
       items: cartItems.map((item) => ({
         productId: item.itemId - item.tagNo,
@@ -406,24 +455,33 @@ const EnhancedCheckout = ({ location, history }) => {
         quantity: item.quantity,
       })),
     };
+    console.log('Order Payload:', orderPayload);
     createOrder(orderPayload, {
       onSuccess: (data) => {
-        if (paymentMode === 'ONLINE') {
+        console.log("Order created successfully:", data, "Payload:", orderPayload);
+
+        if (paymentMode === "ONLINE") {
           if (data.orderId) {
             history.push(`/payment/${data.orderId}`);
           } else {
-            toast.error('Order created but orderId not returned.');
+            toast.error("Order created but orderId not returned.");
           }
-        } else {
-          history.push("/account", { activeComponent: "Orders" });
+        } else if (paymentMode === "COD") {
+          if (data.orderId) {
+            history.push(`/payment-success?orderId=${data.orderId}&mode=COD`);
+          } else {
+            toast.error("Order created but orderId not returned.");
+          }
         }
-      },
+      }, // ✅ close onSuccess here
+
       onError: (error) => {
-        console.error('Order creation failed:', error);
-        toast.error('Failed to create order: ' + error.message);
+        console.error("Order creation failed:", error);
+        toast.error("Failed to create order: " + error.message);
       },
     });
-  }, [cartItems, totalAmount, selectedAddress, profile?.email, paymentMode, history, createOrder, formatAddress]);
+
+  }, [cartItems, totalAmount, selectedAddress, profile?.email, paymentMode, history, createOrder]);
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 

@@ -18,7 +18,7 @@ class Contact extends Component {
                     />
                 </MetaTags>
                 <Header/>
-                <Breadcrumb breadcrumb={{pagename:'Contact Us'}}/>
+                <Breadcrumb pages={"ContactUs"}/>
                 <Content/>
                 <Instafeeds/>
                 <Footer/>

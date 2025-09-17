@@ -22,7 +22,7 @@ class Appointment extends Component {
                 </MetaTags>
                 <Header />
                 {/* Pass query params into breadcrumb just like ShopLeft */}
-                <Breadcrumbs itemName={itemName || "Virtual"} subItemName={subItemName || "Appointment"} />
+                <Breadcrumbs pages={"Virtual Appointment"} />
                 <AppointmentPage />
                 <Footer />
             </Fragment>

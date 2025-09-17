@@ -85,11 +85,11 @@
 }
 
 .product-title {
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 1.2rem;
+    font-weight: 600;
     color: var(--primary-text-color);
     margin: 0;
-    line-height: 1.3;
+    line-height: 1.2;
     font-family: var(--primary-font);
     flex: 1;
     
@@ -339,16 +339,11 @@
 }
 
 .category-link {
-    color: var(--primary-hover-color);
+    color: var(--primary-text-color);
     text-decoration: none;
     font-weight: 500;
     transition: var(--transition);
     font-family: var(--secondary-font);
-}
-
-.category-link:hover {
-    color: var(--primary-text-color);
-    text-decoration: underline;
 }
 
 .category-value {
@@ -626,7 +621,7 @@
 /* Responsive Design */
 @media (max-width: 1200px) {
     .product-title {
-        font-size: 1.5rem;
+        font-size: 1.1rem;
     }
 
     .current-price {
@@ -659,7 +654,7 @@
     }
 
     .product-title {
-        font-size: 1.25rem;
+        font-size: 1rem;
     }
 
     .current-price {
@@ -718,7 +713,7 @@
     }
 
     .product-title {
-        font-size: 1.1rem;
+        font-size: 0.9rem;
         width: 100%;
     }
 
@@ -805,7 +800,7 @@
     }
 
     .product-title {
-        font-size: 1rem;
+        font-size: 0.8rem;
         line-height: 1.4;
     }
 
@@ -980,9 +975,9 @@
 
 .tab-content-container {
     padding: 1.5rem;
-    background: var(--white-color);
+    background: var(--primary-color);
     border-radius: var(--border-radius);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md);
 }
 
 /* Care Instructions */
@@ -993,14 +988,14 @@
 .care-title {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--primary-text-color);
+    color: var(--primary-hover-color);
     margin-bottom: 0.75rem;
-    font-family: var(--primary-font);
+    font-family: var(--secondary-font);
 }
 
 .care-description {
     font-size: 0.9rem;
-    color: var(--grey-color);
+    color: var(--primary-text-color);
     line-height: 1.6;
     margin-bottom: 1.25rem;
     font-family: var(--secondary-font);
@@ -1012,13 +1007,6 @@
     gap: 1rem;
 }
 
-.care-tip-item {
-    background: var(--white-color);
-    padding: 1rem;
-    border-radius: var(--border-radius-sm);
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition);
-}
 
 .care-tip-item:hover {
     box-shadow: var(--shadow-md);
@@ -1028,14 +1016,14 @@
 .care-tip-title {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--primary-text-color);
+    color: var(--primary-hover-color);
     margin-bottom: 0.5rem;
     font-family: var(--secondary-font);
 }
 
 .care-tip-description {
     font-size: 0.85rem;
-    color: var(--grey-color);
+    color: var(--primary-text-color);
     line-height: 1.5;
     margin: 0;
     font-family: var(--secondary-font);
@@ -1151,12 +1139,6 @@
     background: rgba(205, 134, 92, 0.1);
 }
 
-.tab-content-container {
-    padding: 1.5rem;
-    background: var(--white-color);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-sm);
-}
 
 /* Price and Care Container */
 .price-care-container {
@@ -1168,25 +1150,10 @@
 /* Care Instructions */
 .care-instructions {
     padding: 1rem;
+  
 }
 
-.care-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--primary-text-color);
-    margin-bottom: 0.75rem;
-    font-family: 'Gloock', serif;
-    /* Distinct font for care title */
-}
 
-.care-description {
-    font-size: 0.9rem;
-    color: var(--grey-color);
-    line-height: 1.6;
-    margin-bottom: 1.25rem;
-    font-family: 'Montserrat', sans-serif;
-    /* Distinct font for description */
-}
 
 .care-tips {
     display: grid;
@@ -1195,7 +1162,7 @@
 }
 
 .care-tip-item {
-    background: var(--white-color);
+    background: var(--primary-card-color);
     padding: 1rem;
     border-radius: var(--border-radius-sm);
     box-shadow: var(--shadow-sm);
@@ -1207,23 +1174,6 @@
     transform: translateY(-2px);
 }
 
-.care-tip-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--primary-text-color);
-    margin-bottom: 0.5rem;
-    font-family: 'Gloock', serif;
-    /* Distinct font for care tip titles */
-}
-
-.care-tip-description {
-    font-size: 0.85rem;
-    color: var(--grey-color);
-    line-height: 1.5;
-    margin: 0;
-    font-family: 'Montserrat', sans-serif;
-    /* Distinct font for care tip descriptions */
-}
 
 /* Responsive adjustments for tabs and care instructions */
 @media (max-width: 992px) {

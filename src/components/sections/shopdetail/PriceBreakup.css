@@ -57,7 +57,7 @@
 
 .price-breakup-details {
     padding: 1rem;
-    background: var(--white-color);
+    background: var(--primary-card-color);
 }
 
 .price-table {
@@ -69,6 +69,9 @@
 .price-table td {
     padding: 0.75rem;
     text-align: left;
+}
+.price-table thead tr th{
+    color: var(--primary-hover-color);
 }
 
 .price-table th {

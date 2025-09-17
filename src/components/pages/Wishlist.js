@@ -18,7 +18,7 @@ class Wishlist extends Component {
                     />
                 </MetaTags>
                 <Header/>
-                <Breadcrumb breadcrumb={{pagename:'Wishlist'}}/>
+                <Breadcrumb pages={"Whislist"}/>
                 <Content/>
                 <Instafeeds/>
                 <Footer/>

@@ -19,7 +19,7 @@ class Content extends Component {
                         <h1>404</h1>
                         <h2>Ooops! That page doesn't exist!</h2>
                         <p>Nulla quis lorem ut libero malesuada feugiat. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi.</p>
-                        <Link to="/" className="main-btn btn-filled">Back to Home</Link>
+                        <Link to="/home" className="main-btn btn-filled">Back to Home</Link>
                     </div>
                 </div>
             </section>

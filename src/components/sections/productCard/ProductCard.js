@@ -5,6 +5,7 @@ import { useCart } from '../../../hook/cart/useCartQuery';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import fallbackImage from './fallback-image.jpg'
 
 const ProductCard = ({ item }) => {
     const { data: favorites, isFavoritesLoading } = useFavorites();
@@ -31,22 +32,30 @@ const ProductCard = ({ item }) => {
     const getProductImages = () => {
         try {
             const imageData = item?.ImagePath;
-            if (!imageData) return ['https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop'];
+            if (!imageData) return [fallbackImage];
 
-            const parsedImages = typeof imageData === 'string' ? JSON.parse(imageData) : imageData;
-            if (!Array.isArray(parsedImages)) return ['https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop'];
+            const parsedImages =
+                typeof imageData === "string" ? JSON.parse(imageData) : imageData;
 
-            const validImages = parsedImages.length > 0
-                ? parsedImages.map(img => img.startsWith('http') ? img : `https://app.bmgjewellers.com${img}`)
-                : ['https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop'];
+            if (!Array.isArray(parsedImages)) return [fallbackImage];
+
+            const validImages =
+                parsedImages.length > 0
+                    ? parsedImages.map((img) =>
+                        img.startsWith("http")
+                            ? img
+                            : `https://app.bmgjewellers.com${img}`
+                    )
+                    : [fallbackImage];
 
             // Only return first 2 images
             return validImages.slice(0, 2);
         } catch (error) {
-            console.error('Error parsing product images:', error);
-            return ['https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop'];
+            console.error("Error parsing product images:", error);
+            return [fallbackImage];
         }
     };
+
 
     const productImages = getProductImages();
     const hasMultipleImages = productImages.length > 1;
@@ -269,14 +278,14 @@ const ProductCard = ({ item }) => {
                     </div>
 
                     <div className={`quick-actions ${hoverState || isTouchActive ? 'show-actions' : ''}`}>
-                        <button
+                        {/* <button
                             className="action-button exchange-btn"
                             onClick={refreshProduct}
                             aria-label="Exchange Product"
                             title="Exchange"
                         >
                             <RefreshCw size={14} />
-                        </button>
+                        </button> */}
 
                         <button
                             className={`action-buttons add-cart-btn ${cartAnimation ? 'cart-animation' : ''}`}
@@ -537,6 +546,7 @@ const ProductCard = ({ item }) => {
 
                 .action-button:hover {
                     background: #ffffff;
+                    color: #cd865c;
                     transform: translateY(-2px) scale(1.05);
                     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
                 }

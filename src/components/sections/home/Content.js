@@ -28,32 +28,35 @@ import Testimonials from '../../Testimonials/Testimonials';
 import SingleOffer from './SingleOffer';
 import MultipleOffers from './MultipleOffers';
 import { useInstantOffer } from '../../../hook/banner/useOfferBanner';
+import Header from '../../layouts/HeaderWithAuth';
+import Footer from '../../layouts/Footerthree';
 
 const Content = () => {
-    const { data: instantOffer, isLoading, error } = useInstantOffer() || {};
+    // const { data: instantOffer} = useInstantOffer() || {};
 
-    if (!instantOffer || instantOffer.length === 0) return ;
+    // if (!instantOffer || instantOffer.length === 0) return ;
 
-    // Safe now
-    const firstOffer = instantOffer[2];
-    const otherOffers = instantOffer.slice(0,2);
+    // // Safe now
+    // const firstOffer = instantOffer[2];
+    // const otherOffers = instantOffer.slice(0,2);
    
 
-    console.log('first', firstOffer);
-    console.log('second', otherOffers);
+    // console.log('first', firstOffer);
+    // console.log('second', otherOffers);
 
     return (
         <Fragment>
+            <Header/>
             <Banner />
             <Category />
-            <SingleOffer offer={firstOffer} />
+            {/* <SingleOffer offer={firstOffer} /> */}
             <Ourcategory />
             <Category1 />
             <Condos />
             <Handpicked />
             <ShopByRecipient />
             <Ourproducts />
-            <MultipleOffers offers={otherOffers} />
+            {/* <MultipleOffers offers={otherOffers} /> */}
             <TrendingProducts />
             <JewelryShowcase />
             <FeaturedBanners />
@@ -62,6 +65,7 @@ const Content = () => {
             <RecentlyViewedWrapper />
             {/* <Appointment /> */}
             <Testimonials />
+            <Footer />
         </Fragment>
     );
 };

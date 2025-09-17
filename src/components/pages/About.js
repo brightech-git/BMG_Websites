@@ -18,7 +18,7 @@ class About extends Component {
                     />
                 </MetaTags>
                 <Header/>
-                <Breadcrumb breadcrumb={{pagename:'About Us'}} />
+                <Breadcrumb pages={"About Us"} />
                 <Content/>
                 <Instafeeds/>
                 <Footer/>

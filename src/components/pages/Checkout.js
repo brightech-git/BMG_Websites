@@ -18,9 +18,9 @@ class Checkout extends Component {
                     />
                 </MetaTags>
                 <Header/>
-                <Breadcrumb breadcrumb={{pagename:'Checkout'}}/>
+                <Breadcrumb pages={"Checkout"}/>
                 <Content/>
-                <Instafeeds/>
+                {/* <Instafeeds/> */}
                 <Footer/>
             </Fragment>
         );

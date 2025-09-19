@@ -12,12 +12,15 @@ const PaymentStatus = () => {
     const searchParams = new URLSearchParams(location.search);
     const orderId = searchParams.get("orderId");
     const mode = searchParams.get("mode");
-    const paymentMode = mode === "cod" ? "COD" : "ONLINE";
+    console.log("payment Order ID:", mode);
+    const paymentMode = mode === "COD" ? "COD" : "ONLINE";
+    console.log("Payment Mode:", paymentMode);
 
     const [status, setStatus] = useState(null);
     const [isSuccess, setIsSuccess] = useState(null);
     const [showConfetti, setShowConfetti] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    console.log(isSuccess ,'success')
 
     useEffect(() => {
         // Trigger animations for UI elements
@@ -193,7 +196,7 @@ const PaymentStatus = () => {
                         ? "We're confirming your payment details. This will just take a moment."
                         : isSuccess
                             ? paymentMode === "COD"
-                                ? "Your order has been confirmed with Cash on Delivery. You'll receive a confirmation email shortly."
+                                ? "Your order has been confirmed with Cash on Delivery. You'll receive a confirmation  shortly."
                                 : "Your payment has been processed successfully. Thank you for your purchase!"
                             : isSuccess === false
                                 ? "We encountered an issue processing your payment. Please try again or contact support."
@@ -234,11 +237,11 @@ const PaymentStatus = () => {
                 </div>
 
                 {/* Additional Information for successful payments */}
-                {isSuccess &&  (
+                {isSuccess && (
                     <div className="order-details" data-animate="fade-up">
                         <h3>Next Steps</h3>
                         <ul>
-                            <li>Order confirmation  will be sent within 5 minutes</li>
+                            <li>Order confirmation will be sent within 5 minutes</li>
                             <li>Shipping notification within 24 hours</li>
                             <li>Estimated delivery: 3-5 business days</li>
                             <li>Track your order from your account dashboard</li>
@@ -246,8 +249,7 @@ const PaymentStatus = () => {
                     </div>
                 )}
 
-                {/* Additional Information for failed payments */}
-                {isSuccess === false && isLoading && status?.payphiResponse && (
+                {isSuccess === false && status?.payphiResponse && (
                     <div className="order-details" data-animate="fade-up">
                         <h3>What happened?</h3>
                         <ul>
@@ -255,11 +257,15 @@ const PaymentStatus = () => {
                             <li>No amount has been deducted from your account</li>
                             <li>You can try again with the same or a different payment method</li>
                             {status.payphiResponse.txnRespDescription && (
-                                <li className="reason">Reason: {status.payphiResponse.txnRespDescription}</li>
+                                <li className="reason">
+                                    Reason: {status.payphiResponse.txnRespDescription}
+                                </li>
                             )}
                         </ul>
                     </div>
                 )}
+
+
 
                 {/* Action Buttons - Only show when not loading */}
               

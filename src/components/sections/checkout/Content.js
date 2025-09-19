@@ -456,6 +456,7 @@ const EnhancedCheckout = ({ location, history }) => {
       })),
     };
     console.log('Order Payload:', orderPayload);
+    localStorage.setItem('order' ,orderPayload);
     createOrder(orderPayload, {
       onSuccess: (data) => {
         console.log("Order created successfully:", data, "Payload:", orderPayload);

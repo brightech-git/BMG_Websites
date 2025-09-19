@@ -15,18 +15,21 @@ const Breadcrumbs = ({ itemName, subItemName, pages, occasion, gender }) => {
         gender: "",
     };
 
-    if (itemName) {
-        params = { itemName, subItemName:"", pages:"", occasion: "", gender: "" };
-    }
-    else if (itemName && subItemName) {
+    
+     if (itemName && subItemName) {
         params = { itemName, subItemName, pages:"", occasion: "", gender: "" };
-    } else if (gender) {
+    } 
+     else if (itemName) {
+         params = { itemName, subItemName: "", pages: "", occasion: "", gender: "" };
+     } else if (gender) {
         params = { gender };
     } else if (occasion) {
         params = { occasion };
     } else if (pages) {
         params = { pages };
     }
+
+    console.log(params,'params')
 
     const { data: bannerData, isLoading, isError } = useCategoryBanner(params);
 

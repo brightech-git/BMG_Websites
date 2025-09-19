@@ -423,10 +423,10 @@ const Header = ({ isAuthenticated }) => {
                                           id={`tab${index + 1}`}
                                           key={section.label}
                                         >
-                                          <div className="row g-2">
+                                          <div className="row g-1">
                                             {section.items?.map((item, idx) => (
                                               <div
-                                                className="col-6 col-sm-3 col-md-2"
+                                                className="col-6 col-sm-4 col-md-3 col-lg-2"
                                                 key={idx}
                                               >
                                                 <div
@@ -449,9 +449,9 @@ const Header = ({ isAuthenticated }) => {
 
                                                     </div>
                                                   )}
-                                                  <p className="menu-card-label">
+                                                  <span className="menu-card-label">
                                                     {item.name || item.label}
-                                                  </p>
+                                                  </span>
                                                 </div>
                                               </div>
                                             ))}

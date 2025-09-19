@@ -12,7 +12,9 @@ const PaymentSuccess = () => {
     const searchParams = new URLSearchParams(location.search);
     const orderId = searchParams.get("orderId");
     const mode = searchParams.get("mode");
+    console.log("payment Order ID:", orderId);
     const paymentMode = mode === "COD" ? "COD" : "ONLINE";
+    console.log("Payment Mode:", paymentMode);
 
     const [status, setStatus] = useState(null);
     const [showConfetti, setShowConfetti] = useState(true);

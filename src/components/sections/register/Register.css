@@ -4,6 +4,9 @@
     padding: 140px 0;
     background-color: var(--primary-color);
 }
+.signup-section .container{
+max-width: 1200px;
+}
 
 .signup-container {
     box-shadow: 0 0 20px var(--shadow-color);
@@ -173,7 +176,12 @@
     margin: 15px 0;
     text-align: center;
 }
-
+.google-login-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
 .login-link,
 .back-to-signup {
     margin-left: 10px;

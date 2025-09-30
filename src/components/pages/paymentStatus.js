@@ -116,7 +116,8 @@ const PaymentStatus = () => {
         return "Processing...";
     };
 
-    console.log(isSuccess,'suc');
+    console.log(isSuccess,'success');
+    console.log(isLoading,'loadingdata');
 
     return (
         <>
@@ -159,21 +160,6 @@ const PaymentStatus = () => {
                     </div>
                 )}
 
-                {/* Status Icon with Ring Animation */}
-                <div className="status-icon-container" data-animate="zoom-in">
-                    <div className={`icon-ring ${isSuccess ? "success-ring" : isSuccess === false ? "failure-ring" : "pending-ring"}`}></div>
-                    <div className="status-icon">
-                        {!isLoading ? (
-                            <div className="loading-spinner"></div>
-                        ) : isSuccess ? (
-                            <CheckCircle size={80} color="var(--green-color)" aria-hidden="true" />
-                        ) : isSuccess === false ? (
-                            <XCircle size={80} color="var(--red-color)" aria-hidden="true" />
-                        ) : (
-                            <Clock size={80} color="var(--orange-color)" aria-hidden="true" />
-                        )}
-                    </div>
-                </div>
 
                 {/* Title with Text Animation */}
                 <h1 className="payment-title" data-animate="fade-up">
@@ -237,7 +223,7 @@ const PaymentStatus = () => {
                 </div>
 
                 {/* Additional Information for successful payments */}
-                {isSuccess && (
+                {isLoading === false && isSuccess && (
                     <div className="order-details" data-animate="fade-up">
                         <h3>Next Steps</h3>
                         <ul>

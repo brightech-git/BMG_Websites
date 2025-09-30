@@ -84,16 +84,7 @@ function App() {
 
 
 
-  useEffect(() => {
-    const access = localStorage.getItem("maintenance_access");
-    if (access === "true") {
-      setHasAccess(true);
-    }
-  }, []);
 
-  if (!hasAccess) {
-    return <MaintenanceLogin onAccess={() => setHasAccess(true)} />;
-  }
   
   return (
     <Router basename="/">

@@ -296,7 +296,7 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
 // Order Summary Panel
 const OrderSummaryPanel = ({ items, subtotal, total, isCompact = false }) => {
 
-  console.log(items , 'ordersummary')
+  console.log(items , 'ordersummary');
   return (
     <div className={`order-panel ${isCompact ? 'compact' : ''}`}>
       <div className="order-header">
@@ -312,8 +312,10 @@ const OrderSummaryPanel = ({ items, subtotal, total, isCompact = false }) => {
             <div className="item-details">
               <h6 className="order-item-name">{item.productName || item.name}</h6>
               <p className="item-variant">SKU: {item.sno || item.tagNo}</p>
+              <p className="item-variant">Weight: {item?.weight.toFixed(3) || item?.tagNo}</p>
             </div>
             <div className="item-price">₹{(item?.price).toFixed(2)}</div>
+      
           </div>
         ))}
       </div>
@@ -339,7 +341,14 @@ const EnhancedCheckout = ({ location, history }) => {
   const [summaryOpen, setSummaryOpen] = useState(false);
 
   const { data: profile, isLoading: profileLoading } = useCurrentProfile();
+
+
+
   const { data: addresses, isLoading: addressesLoading, refetch: refetchAddresses } = useAddressesByCustomer(profile?.id);
+
+  console.log('Profile:', profile);
+  console.log('Addresses:', addresses);
+  console.log('Selected Address:', selectedAddress);
   const { mutate: createOrder } = useCreateOrder();
   const { mutate: createAddress } = useCreateAddress();
   const { mutate: updateAddress } = useUpdateAddress();
@@ -378,12 +387,12 @@ const EnhancedCheckout = ({ location, history }) => {
     const payload = { ...addressData, customerId: profile.id };
     if (addressData.id) {
       updateAddress({ id: addressData.id, addressData: payload }, {
-        onSuccess: () => { toast.success('Address updated'); refetchAddresses(); },
+        onSuccess: () => {refetchAddresses(); },
         onError: (error) => { toast.error(error.response?.data || 'Failed to update address'); }
       });
     } else {
       createAddress(payload, {
-        onSuccess: () => { toast.success('Address created'); refetchAddresses(); },
+        onSuccess: () => { refetchAddresses(); },
         onError: (error) => { toast.error(error.response?.data || 'Failed to create address'); }
       });
     }
@@ -392,7 +401,6 @@ const EnhancedCheckout = ({ location, history }) => {
   const handleDeleteAddress = (addressId) => {
     deleteAddress(addressId, {
       onSuccess: () => {
-        toast.success('Address deleted');
         refetchAddresses();
         if (selectedAddress?.id === addressId) setSelectedAddress(null);
       },
@@ -485,7 +493,9 @@ const EnhancedCheckout = ({ location, history }) => {
   }, [cartItems, totalAmount, selectedAddress, profile?.email, paymentMode, history, createOrder]);
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentStep]);
   return (
     <div className="checkout-wrapper">
       <div className="mobile-order-toggle">

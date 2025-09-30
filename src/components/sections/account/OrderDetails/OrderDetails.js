@@ -330,7 +330,10 @@ const OrderDetail = ({ order: initialOrder, setActiveComponent }) => {
                       </div>
                     </div>
                     <div className="item-details-compact">
+                      <div className='item-info-compact'>
                       <h4 className="item-name-compact">{item.productName}</h4>
+                      {item.weight && <p>Weight: {item.weight}</p>}
+                      </div>
                       <p className="item-price-compact">{item.price.toFixed(2)}</p>
                     </div>
                   </div>

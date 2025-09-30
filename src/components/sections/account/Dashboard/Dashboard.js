@@ -69,7 +69,8 @@ const Dashboard = ({ setActiveComponent, setSelectedOrder }) => {
     const orders = Array.isArray(ordersData) ? ordersData : [];
     const totalOrders = orders.length;
     const wishlistItems = wishlistResponse?.data?.length || 0;
-    const cartItems = cartData?.data?.length || 0;
+    const cartItems = Array.isArray(cartData?.data) ? cartData.data.length : 0;
+    console.log("Cart Items:", cartData?.data);
 
     return [
       {

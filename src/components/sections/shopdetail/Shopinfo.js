@@ -23,6 +23,7 @@ import { useRecentlyViewed } from "../../../hook/recentlyViewed/useRecentlyViewe
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PriceBreakup from "./PriceBreakUp";
+import { Weight } from "lucide-react";
 
 // ProductSkeleton remains unchanged
 const ProductSkeleton = () => (
@@ -70,6 +71,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
   const [animateHeart, setAnimateHeart] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const { data: product, isLoading, error } = useSingleProductQuery(sno);
+  console.log("Fetched product data:", product, "for SNO:", sno);
   const { addItem } = useRecentlyViewed();
   const { cartItems, addToCartHandler, isLoading: isCartLoading } = useCart();
   const { data: favorites, isLoading: isFavoritesLoading } = useFavorites();
@@ -207,6 +209,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
           itemId: product.ITEMID || null,
           tagNo: product.TAGNO || null,
           productName: product.ITEMNAME || "Unknown Product",
+          weight: product.NETWT || 0,
           quantity: 1,
           price: getPrice(product),
           imagePath: encodedImageUrl,
@@ -470,7 +473,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
                   {product.NETWT && (
                     <div className="meta-item">
                       <span className="meta-label">Weight</span>
-                      <span className="meta-value">{product.NETWT} grams</span>
+                      <span className="meta-value">{product.NETWT.toFixed(3)} grams</span>
                     </div>
                   )}
                   {product.PURITY && (

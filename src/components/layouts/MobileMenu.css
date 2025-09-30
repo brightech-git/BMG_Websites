@@ -135,13 +135,17 @@
 
 /* Section Title Wrapper */
 .jewelry-mobile-nav .section-title-wrapper {
+    
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 14px;
+    align-items: flex-start ;
+    align-self: flex-start ;
+    align-content: flex-start ;
+    text-align: start ;
+    padding: 10px 14px ;
     cursor: pointer;
     transition: all 0.3s ease;
     border-radius: 4px;
+    width: '100%';  
 }
 
 .jewelry-mobile-nav .section-title-wrapper:hover {
@@ -149,13 +153,17 @@
 }
 
 .jewelry-mobile-nav .section-title {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 500;
     color: var(--primary-text-color);
     text-transform: capitalize;
     letter-spacing: 0.4px;
     font-family: var(--secondary-font);
-    background-color: var(--primary-color);
+    align-items: flex-start !important;
+        align-self: flex-start !important;
+        align-content: flex-start !important;
+        text-align: start !important;
+        background-color: aqua;
 }
 
 .jewelry-mobile-nav .section-dropdown-icon {
@@ -229,9 +237,10 @@
 .jewelry-mobile-nav .mega-menu {
     display: flex;
     flex-wrap: wrap;
-    padding: 16px;
+    padding: 16px 0px;
     background: var(--primary-color);
     border-radius: 8px;
+    align-items: start !important;
 }
 
 .jewelry-mobile-nav .mega-menu-section {
@@ -335,4 +344,36 @@
         display: none;
     }
 
+}
+
+
+.mega-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--primary-color);
+    /* your theme primary */
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.mega-section-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--primary-text-color);
+    /* theme text color */
+    flex: 1;
+    text-align: left;
+}
+
+.mega-section-icon {
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+    color: var(--primary-text-color);
+}
+
+.mega-section-icon.rotate {
+    transform: rotate(180deg);
 }

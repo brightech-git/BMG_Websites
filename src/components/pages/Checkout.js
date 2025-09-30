@@ -18,7 +18,7 @@ class Checkout extends Component {
                     />
                 </MetaTags>
                 <Header/>
-                <Breadcrumb pages={"Checkout"}/>
+                {/* <Breadcrumb pages={"Checkout"}/> */}
                 <Content/>
                 {/* <Instafeeds/> */}
                 <Footer/>

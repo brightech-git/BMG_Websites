@@ -119,7 +119,7 @@ const Content = () => {
     }, [location.pathname, dispatch]);
 
     return (
-        <section className="signup-section ">
+        <section className="signup-section">
             <div className="container">
                 <div className="signup-container">
                     <div className="row no-gutters">
@@ -223,7 +223,9 @@ const Content = () => {
                                                 Login
                                             </Link>
                                         </p>
+                                        <p className='google-login-btn'>
                                         <GoogleLoginButton />
+                                        </p>
                                     </form>
                                 ) : (
                                     <form onSubmit={handleVerifyOtp} autoComplete="off">

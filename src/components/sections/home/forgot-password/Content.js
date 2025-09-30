@@ -87,7 +87,7 @@ const ForgotPassword = () => {
     }, [errors, dispatch]);
 
     return (
-        <section className="auth-section pt-120 pb-120">
+        <section className="auth-section">
             <div className="container">
                 <div className="auth-container">
                     <div className="row no-gutters">

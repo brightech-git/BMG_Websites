@@ -498,27 +498,11 @@ header.header-three.header-absolute {
 }
 
 
-header.header-three .header-top {
-    padding: 0px 0 15px 0;
-    font-family: var(--secondary-font);
-  
-}
 
-header.header-three .header-top,
-header.header-three .header-top a {
-    color: var(--primary-text-color);
-}
 
-header.header-three .header-top ul.header-top-info li {
-    display: inline-block;
-    margin-left: 15px;
-    cursor: pointer;
-}
 
-header.header-three .header-top ul.header-top-info li i {
-    margin-right: 10px;
-    color: #fcd462;
-}
+
+
 
 header.header-three .nav-container {
     background-color: var(--primary-color);
@@ -1295,9 +1279,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
         padding: 10px;
     }
 
-    header.header-three .header-top {
-        padding-bottom: 20px;
-    }
+  
 
     header.header-three .search .search-form {
         top: calc(100% + 17px);
@@ -1311,9 +1293,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
         padding: 10px 0;
     }
 
-    header.sticky-header.sticky-active .header-top {
-        display: none;
-    }
+  
 
     header.sticky-header.sticky-active .nav-container .site-logo img {
         max-width: 200px;
@@ -1391,10 +1371,6 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
         padding: 10px;
     }
 
-    header.header-three .header-top {
-        display: none;
-    }
-
     header.header-three .nav-container .menu-right-buttons>div {
         margin-left: 5px;
     }
@@ -1453,9 +1429,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
         font-size: 12px;
     }
 
-    header.header-three .header-top ul.header-top-info li {
-        margin-left: 5px;
-    }
+    
 
     header.header-three .nav-container .menu-right-buttons .navbar-toggler {
         padding: 5px 10px;
@@ -1501,9 +1475,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
         max-width: 150px;
     }
 
-    header.header-three .header-top {
-        display: none;
-    }
+   
 
     header.header-three .search .search-form {
         right: -100%;

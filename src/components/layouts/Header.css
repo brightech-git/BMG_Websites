@@ -1,17 +1,20 @@
 /* Header Ticker Styles */
 
-/* Desktop Styles */
-.header-top {
-  background:var(--primary-color);
-  padding: 0px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+header.header-three .header-top {
+  padding: 0px 0 20px 0;
+  font-family: var(--secondary-font);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+
 }
 
 .header-top-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 15px 10px;
 }
 
 .welcome-section {

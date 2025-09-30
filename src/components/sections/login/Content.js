@@ -91,7 +91,7 @@ const Content = () => {
     }, [isAuthenticated, history]);
 
     return (
-        <section className="login-sec ">
+        <section className="login-sec">
             <div className="container">
                 <div className="account-wrapper">
                     <div className="row no-gutters">

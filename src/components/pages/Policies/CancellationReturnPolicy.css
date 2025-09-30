@@ -4,7 +4,7 @@
   background-color: var(--primary-color);
   font-family: var(--secondary-font);
   color: var(--primary-text-color);
-  margin-top: 100px;
+  margin-top: 150px !important;
   max-width:1200px;
   margin: 100px auto;
 }

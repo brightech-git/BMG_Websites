@@ -232,11 +232,17 @@ const Header = ({ isAuthenticated }) => {
   };
 
   
-  const handleLogout = () => {
+  const handleLogout = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     dispatch(logout()); // Clear user state
-    history.push("/login"); // Navigate to login
-    window.location.reload(); // Force reload to reset app state
+    history.push("/login"); // Navigate to login page
+    window.location.reload(); // Reset app state (optional)
   };
+
+
+
   const handleClick = (keyName, keyValue) => {
     const queryParams = new URLSearchParams();
     queryParams.append(keyName, keyValue);
@@ -348,10 +354,10 @@ const Header = ({ isAuthenticated }) => {
                 
         <div className="auth-actions">
           {isAuthenticated ? (
-            <div className="auth-button logout-trigger" onClick={handleLogout}>
-              <span className="auth-icon logout-icon"></span>
-              <span className="auth-text">Log Out</span>
-            </div>
+                    <div className="auth-button logout-trigger" onClick={handleLogout}>
+                      <span className="auth-icon logout-icon"></span>
+                      <span className="auth-text">Log Out</span>
+                    </div>
           ) : (
             <div
               className="auth-button login-trigger"
@@ -367,7 +373,7 @@ const Header = ({ isAuthenticated }) => {
       </div>
     </div>
   </div>
-)}
+)}      <div className="header-main">
         <div className="main-menu-area sticky-header">
           <div className="container-fluid p-0">
             <div className="nav-container d-flex align-items-center justify-content-between">
@@ -535,6 +541,7 @@ const Header = ({ isAuthenticated }) => {
             </div>
           </div>
         </div>
+       </div> 
         <div className="sigma-mobile-header">
           <div className="sigma-mobile-header-inner">
             <div className="site-logo site-logo-text">

@@ -9,7 +9,7 @@
     align-items: center;
     justify-content: center;
     max-width: 800px;
-    margin: 125px auto 0;
+    margin: 150px auto 0;
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
@@ -163,7 +163,7 @@
 /* Status icon with ring animation */
 .status-icon-container {
     position: relative;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     z-index: 2;
 }
 
@@ -246,7 +246,7 @@
 /* Title */
 .payment-title {
     font-family: var(--primary-font);
-    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-size: clamp(1.5rem, 2vw, 2.5rem);
     font-weight: 700;
     margin-bottom: 1rem;
     opacity: 0;
@@ -268,8 +268,8 @@
 
 /* Subtitle */
 .payment-subtitle {
-    font-size: clamp(1rem, 2.5vw, 1.2rem);
-    margin-bottom: 1.5rem;
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
+    margin-bottom: 1rem;
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.5s ease 0.1s;
@@ -322,7 +322,7 @@
 
 /* Status info */
 .status-info {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.5s ease 0.3s;
@@ -418,7 +418,7 @@
 /* Order details */
 .order-details {
     font-size: clamp(0.9rem, 2vw, 1rem);
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     max-width: 600px;
     opacity: 0;
     transform: translateY(20px);
@@ -440,7 +440,7 @@
 }
 
 .order-details h3 {
-    margin-bottom: 1.2rem;
+    margin-bottom: 0.5rem;
     font-family: var(--primary-font);
     text-align: center;
     color: var(--primary-text-color);
@@ -453,7 +453,7 @@
 }
 
 .order-details li {
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.5rem;
     padding-left: 2rem;
     position: relative;
     color: var(--primary-text-color);
@@ -480,7 +480,7 @@
     gap: 1rem;
     flex-wrap: wrap;
     justify-content: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 1rem;
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.5s ease 0.5s;
@@ -661,14 +661,14 @@
 /* Responsive Design */
 @media (max-width: 992px) {
     .payment-status-container {
-        margin-top: 100px;
+        margin-top: 150px;
     }
 }
 
 @media (max-width: 768px) {
     .payment-status-container {
         padding: clamp(1.5rem, 4vw, 2rem) 1rem;
-        margin-top: 80px;
+        margin-top: 120px;
         min-height: calc(100vh - var(--mobile-header-height) - 100px);
         border-radius: var(--radius-lg);
     }
@@ -696,7 +696,7 @@
 @media (max-width: 576px) {
     .payment-status-container {
         padding: clamp(1rem, 3vw, 1.5rem) 0.8rem;
-        margin: 80px 0.5rem 0;
+        margin: 120px 0.5rem 0;
     }
 
     .payment-title {

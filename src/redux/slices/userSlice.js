@@ -16,14 +16,15 @@ const getInitialUser = () => {
 
 // Get user and token from localStorage if exists
 const initialUser = getInitialUser();
+console.log('Initial User:', initialUser); // Debug
 const initialToken = localStorage.getItem('user_token') || null;
 
 // Async thunk: login
 export const login = createAsyncThunk('user/login', async (loginData, thunkAPI) => {
     try {
-        const response = await loginUser(loginData);
-        localStorage.setItem('user', JSON.stringify(response));
+        const response = await loginUser(loginData); 
         localStorage.setItem('user_token', response.token);
+        localStorage.setItem('user', JSON.stringify(response));
         localStorage.setItem('userMobileNumber', response.contact || response.contactNumber);
         return response;
     } catch (error) {
@@ -55,7 +56,7 @@ export const signup = createAsyncThunk(
 
 
 // Async thunk: verifyOtp
-export const verifyOtp = createAsyncThunk(
+export const verifyOtp = createAsyncThunk( 
     'auth/user/verify-otp',
     async ({ contactNumber, otp }, thunkAPI) => {
         try {
@@ -184,7 +185,7 @@ const userSlice = createSlice({
     name: 'user',
     initialState: {
         user: initialUser,
-        isAuthenticated: !!(initialUser && initialToken),
+        isAuthenticated: !!(initialToken&&initialUser),
         loading: false,
         error: null,
     },
@@ -232,6 +233,7 @@ const userSlice = createSlice({
                 state.user = action.payload;
                 state.isAuthenticated = true;
                 state.error = null;
+                localStorage.setItem('user', JSON.stringify(action.payload));
                 toast.success('✅ Login successful!', {
                     position: 'top-right',
                     autoClose: 2000,

@@ -10,7 +10,9 @@ import {
 
 // 🔹 Get current logged-in user profile
 export const useCurrentProfile = () =>{
+// Debug
     const token = localStorage.getItem('user_token');
+    console.log('useCurrentProfile called',token); // Debug
     return useQuery({
         queryKey: ['currentProfile'],
         queryFn: getProfile,

@@ -10,6 +10,8 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
     const [imageError, setImageError] = useState(false);
     const { data: product, isLoading: productLoading, error: productError } = useSingleProductQuery(item.itemTagSno);
 
+    console.log("CartItem rendering for item:", item, "Product data:", product, "Error:", productError);
+
     // Calculate pricing with discount (15% markup for strikethrough effect)
     const calculatePricing = useCallback((currentPrice) => {
         const price = Number(currentPrice) || 0;
@@ -30,7 +32,7 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
             onProductData(item.sno, {
                 itemId: item.itemId || null,
                 tagNo: item.tagNo || null,
-                productName: item.itemTagSno || 'Unknown Product',
+                productName: item.ITEMNAME || item.SUBITEMNAME || item.itemTagSno || 'Unknown Product',
                 price: pricing.current,
                 originalPrice: pricing.original,
                 discount: pricing.discount,
@@ -81,6 +83,7 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
             ? Number(data.GrandTotal)
             : Number(data?.RATE || data?.amount || 0);
     };
+ 
 
   
     return (
@@ -142,7 +145,7 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
                         {(product?.NETWT || item.netWt) && (
                             <div className="cart-item-spec">
                                 <span className="spec-label">Weight:</span>
-                                <span className="spec-value">{product?.NETWT || item.netWt}g</span>
+                                <span className="spec-value">{product?.NETWT.toFixed(3) || item.netWt }g</span>
                             </div>
                         )}
                         {(product?.PURITY || item.purity) && (
@@ -181,9 +184,8 @@ const Cart = ({ history }) => {
             const initialItems = (Array.isArray(cartItems.data) ? cartItems.data : Object.values(cartItems.data))
                 .map((item) => item.sno)
                 .filter((sno) => !selectedItems.includes(sno));
-            if (initialItems.length > 0) {
-                setSelectedItems((prev) => [...prev, ...initialItems]);
-            }
+                setSelectedItems((prev) => Array.from(new Set([...prev, ...initialItems])));
+
         }
     }, [cartItems, selectedItems.length]);
 
@@ -221,7 +223,7 @@ const Cart = ({ history }) => {
             }
         }
     }, [deleteCart]);
-
+    console.log(selectedItems, 'selecterd items')
     const items = useMemo(() => {
         if (!cartItems?.data) return [];
         if (typeof cartItems.data === 'string') return [];
@@ -405,7 +407,7 @@ const Cart = ({ history }) => {
                                      
                                         <div className="summary-row">
                                             <span>Subtotal</span>
-                                            <span>₹{subtotal.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
+                                            <span>₹{subtotal.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</span>
                                         </div>
                                         <div className="summary-row">
                                             <span>Shipping</span>
@@ -415,7 +417,7 @@ const Cart = ({ history }) => {
                                         <div className="summary-row total-row">
                                             <span>Total</span>
                                             <span className="total-amount">
-                                                ₹{total.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                                                ₹{total.toLocaleString('en-IN', { maximumFractionDigits: 2 })}
                                             </span>
                                         </div>
                                     

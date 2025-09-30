@@ -1,6 +1,7 @@
 /* Base checkout container */
 .checkout-wrapper {
   min-height: 100vh;
+  margin-top: 150px;
   background: var(--primary-color);
   font-family: var(--secondary-font);
   color: var(--primary-text-color);
@@ -34,7 +35,9 @@
 
 /* Progress Stepper */
 .progress-tracker {
-  padding: clamp(0.5rem, 2vw, 0.75rem);
+  padding-top: clamp(0.5rem, 2vw, 0.75rem);
+  padding-left: clamp(0.5rem, 2vw, 0.75rem);
+  padding-right: clamp(0.5rem, 2vw, 0.75rem);
   background: var(--white-color);
   border-bottom: 1px solid var(--primary-card-color);
 }
@@ -56,7 +59,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem;
+  padding: 0.5rem 0.5rem 0rem  0.5rem;
   border-radius: 8px;
   transition: all 0.3s ease;
 }
@@ -99,7 +102,7 @@
 
 .step-divider {
   width: 100%;
-  height: 1px;
+  height: 2px;
   background: var(--grey-color);
   margin: 0 0.5rem;
   opacity: 0.5;
@@ -107,8 +110,7 @@
 
 /* Step Content */
 .step-section {
-  padding: clamp(0.5rem, 2vw, 0.75rem);
-  min-height: 300px;
+  padding: clamp(0.5rem, 2vw, 0.55rem);
 }
 
 .section-heading {
@@ -825,9 +827,7 @@
     flex: 1 1 30%;
   }
 
-  .step-divider {
-    display: none;
-  }
+ 
 
   .section-title {
     font-size: clamp(11px, 2.5vw, 13px);
@@ -856,13 +856,20 @@
 @media (max-width: 576px) {
   .step-item {
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    gap:0.1rem !important;
+    padding: 1rem 0.25rem 0.5rem 2.25rem; 
   }
 
   .step-label {
-    font-size: clamp(9px, 2vw, 10px);
+    font-size: clamp(10px, 2vw, 10px);
   }
+    .step-divider {
+        width: 100%;
+          height: 2px;
+          background: var(--grey-color);
+          margin: 0rem;
+          opacity: 1;
+    }
 
   .section-title {
     font-size: clamp(10px, 2.5vw, 12px);
@@ -895,8 +902,21 @@
    display: inline-block;
    vertical-align: middle;
  }
+ .order-totals {
+   border-top: 1px solid var(--primary-card-color);
+   padding-top: 0rem;
+   background: var(--white-color);
+   border-radius: 8px;
+ }
+ .total-row {
+  margin-bottom: 0rem !important;
+  font-weight: 400;
+  font-size: clamp(11px, 2.5vw, 12px);
 }
-
+.total-breakdown .total-row {
+  margin-bottom: 0rem !important;
+}
+}
 /* Print Styles */
 @media print {
   .checkout-wrapper {

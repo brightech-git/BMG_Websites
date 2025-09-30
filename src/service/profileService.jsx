@@ -5,11 +5,13 @@ import publicUrl from '../api/publicUrl'
 export const getProfile = async () => {
     const response = await publicUrl.get('/user/profile');
     return response.data;
+
 };
 
 // Get user profile by ID (for admin use)
 export const getUserById = async (id) => {
     const response = await publicUrl.get(`/auth/user/getUserMasterDataById/${id}`);
+    
     return response.data;
 };
 

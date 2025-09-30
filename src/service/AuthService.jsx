@@ -7,6 +7,8 @@ export const registerUser = async (userData) => {
     return response.data;
 };
 
+
+
 // Login
 export const loginUser = async (loginData) => {
     const response = await PublicUrl.post("auth/user/login", loginData);

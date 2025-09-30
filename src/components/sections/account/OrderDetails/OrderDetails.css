@@ -212,6 +212,10 @@
   gap: 1rem;
   flex: 1;
 }
+.item-info-compact {
+  display: flex;
+  flex-direction: column;
+}
 
 .item-name-compact {
   font-size: 1rem;

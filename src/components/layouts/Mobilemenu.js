@@ -20,16 +20,17 @@ const Mobilemenu = ({ onClose }) => {
     };
 
     const navigationmenu = [
-        { id: 1, linkText: 'Home', link: '/', icon: 'fa-home' },
+        { id: 1, linkText: 'Home', link: '/', icon: 'fa-home' }, 
         {
             id: 2,
-            linkText: 'Shop',
+            linkText: 'Categories',
             child: true,
             mega: true,
             submenu: headerNavData.menuSections || [],
             icon: 'fa-shopping-bag',
         },
-        { id: 3, linkText: 'About', link: '/about', icon: 'fa-info-circle' },
+        { id: 3, linkText: 'Shop', link: '/shop-left', icon: 'fa-shopping-bag' },
+        { id: 4, linkText: 'About', link: '/about', icon: 'fa-info-circle' },
         { id: 5, linkText: 'Bmg Live', link: '/appointment', icon: 'fa-video' },
         { id: 6, linkText: 'Contact', link: '/contact', icon: 'fa-envelope' },
     ];
@@ -81,15 +82,16 @@ const Mobilemenu = ({ onClose }) => {
                                         {item.submenu.map((section, secIdx) => (
                                             <li key={secIdx} className="nav-item mega-menu-section">
                                                 <div
-                                                    className="section-title-wrapper"
+                                                    className="mega-section-header"
                                                     onClick={() => toggleSection(secIdx)}
                                                 >
-                                                    <strong className="section-title">{section.label}</strong>
+                                                    <strong className="mega-section-title">{section.label}</strong>
                                                     <ChevronDown
                                                         size={16}
-                                                        className={`section-dropdown-icon ${activeSectionIndex === secIdx ? 'rotate' : ''}`}
+                                                        className={`mega-section-icon ${activeSectionIndex === secIdx ? 'rotate' : ''}`}
                                                     />
                                                 </div>
+
                                                 {activeSectionIndex === secIdx && (
                                                     <ul className="submenu">
                                                         {section.items.map((child, idx) => (

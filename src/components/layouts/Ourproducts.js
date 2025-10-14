@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FiArrowRight } from 'react-icons/fi';
-import img1 from './feature.jpg';
-import img2 from './feature2.jpg';
+import img1 from '../../assets/img/bmg/bmg-4.jpg';
+import img2 from '../../assets/img/bmg/bmg-2.jpg';
 import { useHistory } from 'react-router-dom';
 import './NewArrival.css';
 

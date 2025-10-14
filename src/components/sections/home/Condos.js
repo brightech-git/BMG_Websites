@@ -44,11 +44,11 @@ const PriceUnderSection = () => {
           Discover curated collections tailored to your budget for every style and occasion
         </p>
         <div className="pus-card-container">
-          <div className="row row-cols-2 pus-row-cols-2">
+          <div className="row row-cols-2 row-cols-lg-4 g-3">
             {budgetBanners.map((category, index) => (
               <div
                 key={index}
-                className="col"
+                className="row pus-img-container"
                 data-aos="fade-up"
                 data-aos-delay={150 * index}
               >

@@ -514,7 +514,8 @@ const Header = ({ isAuthenticated }) => {
                       <Heart size={20} strokeWidth={1.8} />
                     )}
                     {wishlistCount > 0 && (
-                      <span className="icon-badge">{wishlistCount}</span>
+                        <span className={`icon-badge ${isTop ? "sticky-active" : ""
+                          }`}>{wishlistCount}</span>
                     )}
                   </Link>
                 </div>
@@ -527,7 +528,8 @@ const Header = ({ isAuthenticated }) => {
                       <ShoppingCart size={20} strokeWidth={1.8} />
                     )}
                     {cartCount > 0 && (
-                      <span className="cart-icon-badge">{cartCount}</span>
+                        <span className={`cart-icon-badge ${isTop ? "sticky-active" : ""
+                          }`}>{cartCount}</span>
                     )}
                   </Link>
                 </div>
@@ -580,7 +582,8 @@ const Header = ({ isAuthenticated }) => {
                   <Heart size={20} strokeWidth={1.8} />
                 )}
                 {wishlistCount > 0 && (
-                  <span className="icon-badge">{wishlistCount}</span>
+                  <span className={`icon-badge ${isTop ? "sticky-active" : ""
+                    }`}>{wishlistCount}</span>
                 )}
               </Link>
             </div>
@@ -593,7 +596,8 @@ const Header = ({ isAuthenticated }) => {
                   <ShoppingCart size={20} strokeWidth={1.8} />
                 )}
                 {cartCount > 0 && (
-                  <span className="cart-icon-badge">{cartCount}</span>
+                  <span className={`cart-icon-badge ${isTop ? "sticky-active" : ""
+                    }`}>{cartCount}</span>
                 )}
               </Link>
             </div>

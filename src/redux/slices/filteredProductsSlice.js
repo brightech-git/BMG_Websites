@@ -10,7 +10,7 @@ export const fetchFilteredProducts = createAsyncThunk(
             const response = await PublicUrl.post('/product/items/filter', null, { params: filters });
             console.log(response.data,'response');
             return response.data;
-            console.log(response.data,);
+            
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
-import { useOrderHistory } from '../../../hook/order/useOrderHistoryQuery';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import { useInitiatePayment } from '../../../hook/payment/useInitiatePayment';
 import './PaymentPage.css';
 import { getPaymentRedirectUrl } from '../../../service/paymentServiceicici';
@@ -9,11 +8,19 @@ import { toast } from 'react-toastify';
 const PaymentPage = () => {
     const { orderId } = useParams();
     const history = useHistory();
+    const location = useLocation();
+    const { mutate: initiatePayment } = useInitiatePayment();
+
     const [retryCount, setRetryCount] = useState(0);
     const maxRetries = 3;
 
-    const { mutate: initiatePayment } = useInitiatePayment();
-    const { data: orders = [], isLoading, isError, refetch } = useOrderHistory({ page: 0, size: 10 });
+    // ✅ Get order payload from router state or fallback to localStorage
+    let orderPayload = location.state?.orderPayload;
+    if (!orderPayload) {
+        orderPayload = JSON.parse(localStorage.getItem("order"));
+    }
+
+    console.log("Order Payload:", orderPayload);
 
     const onSuccess = async (response) => {
         console.log("Payment initiated successfully:", response);
@@ -32,60 +39,45 @@ const PaymentPage = () => {
             }
         } else {
             history.push("/account", { activeComponent: "Orders" });
-            toast.warning(" order redirect details are missing.");
-            
+            toast.warning("Order redirect details are missing.");
         }
     };
 
-
     const onError = (error) => {
         console.error('Payment initiation failed:', error);
-        alert('Payment failed. Please try again.');
+        toast.error('Payment failed. Please try again.');
         history.push("/account", { activeComponent: "Orders" });
     };
 
     useEffect(() => {
-        if (!orderId || isLoading || isError) return;
+        if (!orderId) return;
         if (!localStorage.getItem("user_token")) {
-            alert("Please login");
+            toast.error("Please login");
             history.push("/login");
             return;
         }
 
-        const matchedOrder = orders.find(order => order.orderId === orderId);
-        console.log(matchedOrder,'orderdetail');
-
-        if (!matchedOrder && retryCount < maxRetries) {
-            const timer = setTimeout(() => {
-                setRetryCount(prev => prev + 1);
-                refetch();
-            }, 1000);
-            return () => clearTimeout(timer);
-        }
-
-        if (!matchedOrder && retryCount >= maxRetries) {
-            alert("Order not found");
-            localStorage.removeItem("pendingOrderId");
+        if (!orderPayload) {
+            toast.error("Order details not found");
             history.push("/account", { activeComponent: "Orders" });
             return;
         }
 
-        if (matchedOrder) {
-            initiatePayment({
-                merchantTxnNo: orderId,
-                amount: matchedOrder.totalAmount,
-                currencyCode: 356,
-                payType: 0,
-                transactionType: "SALE",
-                addlParam1:'',
-                addlParam2:'',
-                returnURL:"https://bmgjewellers.com",
-                customerEmailID:matchedOrder.email,
-                customerMobileNo:matchedOrder.contact
-            }, { onSuccess, onError });
-        }
-    }, [orderId, orders, isLoading, isError, retryCount]);
+        // ✅ Trigger payment directly from passed payload
+        initiatePayment({
+            merchantTxnNo: orderId,
+            amount: orderPayload.totalAmount,
+            currencyCode: 356,
+            payType: 0,
+            transactionType: "SALE",
+            addlParam1: '',
+            addlParam2: '',
+            returnURL: "https://bmgjewellers.com",
+            customerEmailID: orderPayload.email,
+            customerMobileNo: orderPayload.contact
+        }, { onSuccess, onError });
 
+    }, [orderId, orderPayload, history, initiatePayment]);
 
     return (
         <div className="payment-loading-page">

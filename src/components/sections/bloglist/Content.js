@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import Sidebar from '../../layouts/Blogsidebar';
 import Pagination from '../../layouts/Pagination';
 
-import img1 from '../../../assets/img/blog/01.jpg';
-import img2 from '../../../assets/img/blog/02.jpg';
-import img3 from '../../../assets/img/blog/03.jpg';
-import img4 from '../../../assets/img/blog/06.jpg';
+import img1 from '../../../assets/img/404.png';
+import img2 from '../../../assets/img/404.png';
+import img3 from '../../../assets/img/texture-1.png';
+import img4 from '../../../assets/img/texture-1.png';
 import author from '../../../assets/img/author-small.png';
 
 class Content extends Component {

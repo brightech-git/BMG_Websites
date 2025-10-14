@@ -255,19 +255,19 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
                 
                 <div className="col-12 col-md-4">
                   <Form.Group>
-                    <Form.Label className="form-label">gstNumber</Form.Label>
+                    <Form.Label className="form-label">GstNumber</Form.Label>
                     <Form.Control type="text" name="gstNumber" value={formData.gstNumber} onChange={handleChange} className="form-control" />
                   </Form.Group>
                 </div>
                 <div className="col-12 col-md-4">
                   <Form.Group>
-                    <Form.Label className="form-label">companyName</Form.Label>
+                    <Form.Label className="form-label">CompanyName</Form.Label>
                     <Form.Control type="text" name="companyName" value={formData.companyName} onChange={handleChange} className="form-control" />
                   </Form.Group>
                 </div>
                 <div className="col-12 col-md-4">
                   <Form.Group>
-                    <Form.Label className="form-label">alternatePhone</Form.Label>
+                    <Form.Label className="form-label">Mobile 2</Form.Label>
                     <Form.Control type="text" name="alternatePhone" value={formData.alternatePhone} onChange={handleChange} className="form-control" pattern="[0-9]{10}" />
                   </Form.Group>
                 </div>
@@ -429,6 +429,7 @@ const EnhancedCheckout = ({ location, history }) => {
       toast.error('Your cart is empty');
       return;
     }
+
     const orderPayload = {
       customerName: selectedAddress.name,
       contact: selectedAddress.phone,
@@ -444,8 +445,8 @@ const EnhancedCheckout = ({ location, history }) => {
         isDefault: selectedAddress.isDefault,
         id: selectedAddress.id,
         customerId: selectedAddress.customerId,
-        gstNumber:selectedAddress.gstNumber,
-        companyName:selectedAddress.companyName,
+        gstNumber: selectedAddress.gstNumber,
+        companyName: selectedAddress.companyName,
         city: selectedAddress.city,
         state: selectedAddress.state,
         country: selectedAddress.country || "India",
@@ -453,7 +454,7 @@ const EnhancedCheckout = ({ location, history }) => {
       },
       paymentMode,
       items: cartItems.map((item) => ({
-        productId: item.itemId - item.tagNo,
+        productId: `${item.itemId}-${item.tagNo}`, // fixed, string concat not subtraction
         productName: item.productName,
         price: parseFloat(item.price),
         itemId: item.itemId,
@@ -463,34 +464,40 @@ const EnhancedCheckout = ({ location, history }) => {
         quantity: item.quantity,
       })),
     };
+
     console.log('Order Payload:', orderPayload);
-    localStorage.setItem('order' ,orderPayload);
+
+    // ✅ Store in localStorage (with JSON.stringify)
+    localStorage.setItem('order', JSON.stringify(orderPayload));
+
     createOrder(orderPayload, {
       onSuccess: (data) => {
         console.log("Order created successfully:", data, "Payload:", orderPayload);
 
-        if (paymentMode === "ONLINE") {
-          if (data.orderId) {
-            history.push(`/payment/${data.orderId}`);
-          } else {
-            toast.error("Order created but orderId not returned.");
+        if (data.orderId) {
+          if (paymentMode === "ONLINE") {
+            history.push({
+              pathname: `/payment/${data.orderId}`,
+              state: { orderPayload }, // ✅ pass in router state
+            });
+          } else if (paymentMode === "COD") {
+            history.push({
+              pathname: `/payment-success`,
+              search: `?orderId=${data.orderId}&mode=COD`,
+              state: { orderPayload }, // ✅ pass here too
+            });
           }
-        } else if (paymentMode === "COD") {
-          if (data.orderId) {
-            history.push(`/payment-success?orderId=${data.orderId}&mode=COD`);
-          } else {
-            toast.error("Order created but orderId not returned.");
-          }
+        } else {
+          toast.error("Order created but orderId not returned.");
         }
-      }, // ✅ close onSuccess here
-
+      },
       onError: (error) => {
         console.error("Order creation failed:", error);
         toast.error("Failed to create order: " + error.message);
       },
     });
-
   }, [cartItems, totalAmount, selectedAddress, profile?.email, paymentMode, history, createOrder]);
+
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   useEffect(() => {

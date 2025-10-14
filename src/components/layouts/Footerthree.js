@@ -632,7 +632,7 @@ class Footertwo extends Component {
                     fontWeight: "bold",
                   }}
                 >
-                  Powered By
+                  Crafted By
                 </span>
                 <img
                   src={btsLogo}

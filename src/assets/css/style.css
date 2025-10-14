@@ -2209,7 +2209,7 @@ header.sticky-header.sticky-active {
     -webkit-animation: sticky 1.2s;
     animation: sticky 1.2s;
     box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.04);
-        margin-top: -32px !important;
+    margin-top: -32px !important;
 }
 
 header.sticky-header.sticky-active .lr-topbar {
@@ -2888,9 +2888,9 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     padding: 0 0px 0 6px;
 }
 
-.sigma-mobile-header {
+.sigma-mobile-header.active {
     background-color: var(--primary-color);
-    padding-top: -50px;
+    padding-top: 10px;
 }
 
 @media (max-width: 991px) {
@@ -7957,7 +7957,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     width: 100%;
     height: 100%;
     content: '';
-    background-image: url(../img/blog/04.jpg);
+    background-image: url(../img/texture-1.5da6b882.png);
     background-size: cover;
     background-position: center;
     z-index: -1;

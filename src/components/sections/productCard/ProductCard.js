@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import fallbackImage from './fallback-image.jpg'
 
 const ProductCard = ({ item }) => {
+    console.log("Rendering ProductCard for item:", item);
     const { data: favorites, isFavoritesLoading } = useFavorites();
     const addFavorite = useAddFavorite();
     const removeFavorite = useRemoveFavorite();
@@ -110,6 +111,13 @@ const ProductCard = ({ item }) => {
         const cartItem = {
             itemSno: item.SNO,
             itemTagSno: item.SNO,
+            itemId: item.ITEMID,
+            tagNo: item.TAGNO,
+            grsWt: item.GRSWT,
+            netWt: item.NETWT,
+            stnWt: item?.STNWT||0,
+            amount: item.GrandTotal||item.RATE,
+            stnAmount: item?.STNAMT||0,
             itemName: item.ITEMNAME || item.SUBITEMNAME,
             price: item.GrandTotal,
             image: productImages[0],

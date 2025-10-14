@@ -4,8 +4,8 @@ import { useHistory } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import './JewelleryShowCAse.css';
-import img1 from './image/Men.png';
-import img2 from './image/Women.png';
+import img1 from '../../../assets/img/bmg/bmg-22.jpg';
+import img2 from '../../../assets/img/bmg/bmg-17.jpg';
 import { FiArrowRight, FiShield, FiTruck, FiRefreshCw, FiAward } from 'react-icons/fi';
 
 const JewelryShowcase = () => {

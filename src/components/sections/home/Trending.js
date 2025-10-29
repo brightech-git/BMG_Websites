@@ -45,7 +45,7 @@ class Trending extends Component {
                         <h2>Trending Collection</h2>
                     </div>
                     <div className="text-center mb-20">
-                        <Link to="/shop-left" className="view-more">
+                        <Link to="/products-page" className="view-more">
                             View more
                             <i className="fal fa-arrow-right ml-2" />
                         </Link> tr
@@ -55,14 +55,14 @@ class Trending extends Component {
                             <div key={i} className="col-lg-3 col-md-6 mb-4">
                                 <div className="apartment-box">
                                     <div className="image-box">
-                                       
-                                        <Link to="/shop-detail" className="d-block">
+
+                                        <Link to="/product-detail" className="d-block">
                                             <img src={item.img} alt={item.title} />
                                         </Link>
                                     </div>
                                     <div className="content-box-2">
                                         <h3>
-                                            <Link to="/shop-detail" className="tren-title">
+                                            <Link to="/product-detail" className="tren-title">
                                                 {item.title}
                                             </Link>
                                         </h3>

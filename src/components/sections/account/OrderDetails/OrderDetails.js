@@ -244,7 +244,7 @@ const OrderDetail = ({ order: initialOrder, setActiveComponent }) => {
           <FontAwesomeIcon icon={faBoxOpen} size="5x" className="empty-icon" />
           <h3 className="empty-title">Order not found</h3>
           <p className="empty-message">We couldn't find details for this order.</p>
-          <Link to="/shop-left" className="order-shop-button">
+          <Link to="/products-page" className="order-shop-button">
             <FontAwesomeIcon icon={faShoppingBag} className="meta-icon" /> Continue Shopping
           </Link>
         </div>
@@ -331,8 +331,8 @@ const OrderDetail = ({ order: initialOrder, setActiveComponent }) => {
                     </div>
                     <div className="item-details-compact">
                       <div className='item-info-compact'>
-                      <h4 className="item-name-compact">{item.productName}</h4>
-                      {item.weight && <p>Weight: {item.weight}</p>}
+                        <h4 className="item-name-compact">{item.productName}</h4>
+                        {item.weight && <p>Weight: {item.weight}</p>}
                       </div>
                       <p className="item-price-compact">{item.price.toFixed(2)}</p>
                     </div>
@@ -348,10 +348,10 @@ const OrderDetail = ({ order: initialOrder, setActiveComponent }) => {
               <FontAwesomeIcon icon={faReceipt} className="section-icon" />
               Order Summary
             </h3>
-           
+
             <div className="order-summary-content">
               <div className="order-summary-card">
-              
+
                 <div className="summary-row">
                   <span>Subtotal</span>
                   <span>{formatCurrency(order.totalAmount)}</span>

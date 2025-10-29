@@ -17,11 +17,11 @@ class Shopdetail extends Component {
                         content="#"
                     />
                 </MetaTags>
-                <Header/>
-                <Breadcrumb pages={"Shop-Detail"}/>
-                <Content/>
-                <Instafeeds/>
-                <Footer/>
+                <Header />
+                <Breadcrumb pages={"product-detail"} />
+                <Content />
+                <Instafeeds />
+                <Footer />
             </Fragment>
         );
     }

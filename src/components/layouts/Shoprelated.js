@@ -5,12 +5,13 @@ import ProductCard from '../sections/productCard/ProductCard';
 import useFilterProducts from '../../hook/product/useFilterProducts';
 import './ShopRelated.css';
 
-const ShopRelatedUpdated = () => {
+const ShopRelatedUpdated = ({itemName}) => {
+    console.log('Received itemName:', itemName);
     const sliderRef = useRef(null);
 
     // Fetch related products using useFilterProducts hook
     const { data, loading, error } = useFilterProducts(
-        {}, // No specific filters for related products
+        {itemName}, // No specific filters for related products
         1,  // Page 1
         10  // Fetch up to 10 products
     );
@@ -27,12 +28,21 @@ const ShopRelatedUpdated = () => {
     const sliderSettings = {
         slidesToShow: 4,
         slidesToScroll: 1,
-        fade: false, // Ensure no fade effect
+        fade: false,
         infinite: true,
         autoplay: true,
         autoplaySpeed: 4000,
         arrows: false,
         dots: false,
+        swipeToSlide: true,
+        touchThreshold: 10, // makes taps more responsive
+        pauseOnHover: true,
+        accessibility: true,
+        swipeToSlide: true,
+        touchThreshold: 10,
+        focusOnSelect: true,
+        pauseOnHover: true,
+        focusOnSelect: true, // ✅ allow tapping slides to trigger link clicks
         responsive: [
             {
                 breakpoint: 992,
@@ -43,17 +53,18 @@ const ShopRelatedUpdated = () => {
             {
                 breakpoint: 768,
                 settings: {
-                    slidesToShow: 4,
+                    slidesToShow: 3,
                 },
             },
             {
                 breakpoint: 576,
                 settings: {
-                    slidesToShow: 3,
+                    slidesToShow: 2,
                 },
             },
         ],
     };
+
 
     // Map API data to match ProductCard props
     const relatedProducts = data?.data || [];

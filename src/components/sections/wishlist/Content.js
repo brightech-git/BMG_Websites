@@ -61,7 +61,7 @@ const Wishlist = () => {
           <Heart className="wl-empty-icon" size={64} strokeWidth={1.5} />
           <h2>Your wishlist is empty</h2>
           <p>Discover and save your favorite items</p>
-          <Link to="/shop-left" className="wl-explore-btn">
+          <Link to="/products-page" className="wl-explore-btn">
             Explore Collection
           </Link>
         </div>
@@ -84,7 +84,7 @@ const Wishlist = () => {
 
 const WishlistItem = ({ sno, onRemove, cartItems, addToCartHandler }) => {
   const { data: item, isLoading } = useSingleProductQuery(sno);
-  const isAuthenticated  = useSelector((state)=>state.user.isAuthenticated);
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
   const location = useLocation();
   const history = useHistory();
 
@@ -151,7 +151,7 @@ const WishlistItem = ({ sno, onRemove, cartItems, addToCartHandler }) => {
   return (
     <div className="wl-item">
       <div className="wl-item-img-container">
-        <Link to={`/shop-detail/${sno}`}>
+        <Link to={`/product-detail/${sno}`}>
           <img
             src={firstImage}
             alt={item.SUBITEMNAME}
@@ -171,7 +171,7 @@ const WishlistItem = ({ sno, onRemove, cartItems, addToCartHandler }) => {
       <div className="wl-item-details">
         <div className="wl-items-wrap">
           <h3 className="wl-item-title">
-            <Link to={`/shop-detail/${sno}`}>{item.SUBITEMNAME}</Link>
+            <Link to={`/product-detail/${sno}`}>{item.SUBITEMNAME}</Link>
           </h3>
 
           <h4 className="wl-item-price">₹{item.GrandTotal.toLocaleString()}</h4>

@@ -5,7 +5,7 @@ import ProductCard from '../productCard/ProductCard';
 import ProductFilterBar from './ProductFilterBar';
 import './ShopContent.css';
 import { useSelector } from 'react-redux';
-
+import Breadcrumb from '../../layouts/Breadcrumb';
 import { useNotification } from '../../../context/notification/NotificationContext';
 
 const baseUrl = 'https://app.bmgjewellers.com';
@@ -197,6 +197,7 @@ const Content = () => {
 
     return (
         <section className="shop-container">
+            <Breadcrumb />
             <ProductFilterBar />
             <div className="product-area">
                 <div className="product-header">

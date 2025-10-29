@@ -16,7 +16,7 @@ const TrendingProducts = () => {
     ];
 
     const handleCategoryClick = (query) => {
-        history.push(`/shop-left?${query}`);
+        history.push(`/products-page?${query}`);
     };
 
     return (
@@ -70,10 +70,10 @@ const TrendingProducts = () => {
                                                             />
                                                             {/* Overlay Gradient */}
                                                             <div className="premium-overlay"></div>
-                                                     
+
                                                             <div className="premium-action-bar">
                                                                 <button
-                                                                    className="btn premium-action-btn btn-sm px-1 py-1"
+                                                                    className="premium-action-btn btn-sm px-1 py-1"
                                                                     onClick={(e) => {
                                                                         e.stopPropagation();
                                                                         handleCategoryClick(category.query);

@@ -29,7 +29,7 @@ const NoBlurProductCard = ({ product }) => {
     const handleProductClick = (e, sno) => {
         e.preventDefault();
         e.stopPropagation();
-        window.location.href = `/shop-detail/${sno}`;
+        window.location.href = `/product-detail/${sno}`;
     };
 
     // Handle multiple images (array or comma-separated string)
@@ -104,7 +104,7 @@ const NoBlurHandpicked = () => {
         const queryParams = new URLSearchParams();
         if (itemName) queryParams.append('itemName', itemName);
         if (subItemName) queryParams.append('subItemName', subItemName);
-        history.push(`/shop-left?${queryParams.toString()}`);
+        history.push(`/products-page?${queryParams.toString()}`);
     };
 
     const sliderSettingss = {

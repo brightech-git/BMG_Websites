@@ -16,25 +16,25 @@ const BestDesign = () => {
             image: img1,
             title: "Artisan Crafted",
             tagline: "Handmade Perfection",
-            link: "/shop-left?best_design=true"
+            link: "/products-page?best_design=true"
         },
         {
             id: 2,
             image: img2,
             title: "Modern Elegance",
             tagline: "Contemporary Designs",
-            link: "/shop-left?best_design=true"
+            link: "/products-page?best_design=true"
         },
         {
             id: 3,
             image: img3,
             title: "Vintage Charm",
             tagline: "Timeless Beauty",
-            link: "/shop-left?best_design=true"
+            link: "/products-page?best_design=true"
         }
     ];
 
-    const handleSeeAll = () => history.push('/shop-left?best_design=true');
+    const handleSeeAll = () => history.push('/products-page?best_design=true');
     const handleItemClick = (link) => history.push(link);
 
     return (

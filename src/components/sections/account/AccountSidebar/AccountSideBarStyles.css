@@ -1,12 +1,9 @@
 
 
 .account-navigation-panel {
-  width: 280px;
   background-color: var(--primary-color);
-  padding: 1.5rem;
+  padding: 1rem;
   position: sticky;
-  top: 1rem;
-  margin-top: 120px ;
 }
 
 .user-profile-card {

@@ -13,7 +13,7 @@ const SingleOffer = ({
     const [imageLoaded, setImageLoaded] = useState(false);
     const baseUrl = "https://app.bmgjewellers.com";
 
-    const history=useHistory();
+    const history = useHistory();
 
     if (!offer) return null;
 
@@ -33,7 +33,7 @@ const SingleOffer = ({
         if (itemName) queryParams.append('itemName', itemName);
         if (subItemName) queryParams.append('subItemName', subItemName);
         const fixedQuery = queryParams.toString().replace(/\+/g, '%20');
-        history.push(`/shop-left?${fixedQuery}`);
+        history.push(`/products-page?${fixedQuery}`);
     };
 
     return (
@@ -53,7 +53,7 @@ const SingleOffer = ({
                 {/* Main Image */}
                 <div
                     className={`minimal-image-container ${imageLoaded ? 'loaded' : ''}`}
-                    onClick={ () => handleClick(offer.title , offer.subtitle)}
+                    onClick={() => handleClick(offer.title, offer.subtitle)}
                 >
 
                     <img

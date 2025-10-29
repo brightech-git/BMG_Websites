@@ -63,7 +63,7 @@ const PaymentFailure = () => {
                 <div className="failure-actions">
                     <button
                         className="btn-secondary"
-                        onClick={() => history.push("/shop-left")}
+                        onClick={() => history.push("/products-page")}
                     >
                         <Home size={20} className="button-icon" /> Back to Shop
                     </button>

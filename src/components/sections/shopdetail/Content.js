@@ -14,7 +14,6 @@ const Content = () => {
     return (
         <Fragment>
             <Shopinfo sno={sno} Authenticated={isAuthenticated} />
-            <Shoprelated />
         </Fragment>
     );
 };

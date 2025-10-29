@@ -264,27 +264,12 @@ const AddressManager = () => {
   }
 
   return (
-    <div className="address-page-layout">
+    <div className="account-address-page-layout">
   
 
-      <main className="address-manager-container">
+      <main className="account-address-manager-container">
         <div className="address-manager">
-          <div className="address-header">
-            <div className="header-content">
-              <h1 className="header-title">My Addresses</h1>
-              <p className="header-subtitle">
-                Manage your shipping and billing addresses
-              </p>
-              <button
-                className="add-address-btn"
-                onClick={handleAddAddress}
-                disabled={createMutation.isPending}
-              >
-                <FiPlus className="btn-icon" /> Add New Address
-              </button>
-            </div>
-           
-          </div>
+          
 
           {error && (
             <div className="error-message">
@@ -323,6 +308,13 @@ const AddressManager = () => {
               onClick={() => handleTabChange("work")}
             >
               <FiBriefcase className="tab-icon" /> Work
+            </button>
+            <button
+              className="add-address-btn"
+              onClick={handleAddAddress}
+              disabled={createMutation.isPending}
+            >
+              <FiPlus className="btn-icon" /> Add New Address
             </button>
           </div>
 

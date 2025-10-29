@@ -2,7 +2,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { Link, useHistory } from "react-router-dom";
 import classNames from "classnames";
-import { ChevronDown, ShoppingCart, Menu, User, Heart ,Video} from "lucide-react";
+import { ChevronDown, ShoppingCart, Menu, User, Heart, Video } from "lucide-react";
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import "../../assets/css/header.css";
 import Canvas from "./Canvas";
@@ -29,11 +29,11 @@ const Header = ({ isAuthenticated }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [showRates, setShowRates] = useState(false); // State to toggle rates display
   const dispatch = useDispatch();
-  const { data} = useHeaderData();
+  const { data } = useHeaderData();
   const NavData = data
-  console.log('NacData',NavData)
+  console.log('NacData', NavData)
 
-  const baseUrl= "https://app.bmgjewellers.com"
+  const baseUrl = "https://app.bmgjewellers.com"
 
   // Add rates query
   const {
@@ -60,14 +60,14 @@ const Header = ({ isAuthenticated }) => {
   const wishlistCount = favoritesLoading
     ? 0
     : isAuthenticated && Array.isArray(favoritesData?.data)
-    ? favoritesData.data.length
-    : 0;
+      ? favoritesData.data.length
+      : 0;
 
   const cartCount = cartLoading
     ? 0
     : isAuthenticated && Array.isArray(cartItems?.data)
-    ? cartItems.data.length
-    : 0;
+      ? cartItems.data.length
+      : 0;
 
   const addClass = () => setClassmethod(true);
   const removeClass = () => setClassmethod(false);
@@ -231,7 +231,7 @@ const Header = ({ isAuthenticated }) => {
     ],
   };
 
-  
+
   const handleLogout = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -246,7 +246,7 @@ const Header = ({ isAuthenticated }) => {
   const handleClick = (keyName, keyValue) => {
     const queryParams = new URLSearchParams();
     queryParams.append(keyName, keyValue);
-    history.push(`/shop-left?${queryParams.toString()}`);
+    history.push(`/products-page?${queryParams.toString()}`);
   };
 
   useEffect(() => {
@@ -256,7 +256,7 @@ const Header = ({ isAuthenticated }) => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-   const [animationType, setAnimationType] = useState('pulse'); // Default animation
+  const [animationType, setAnimationType] = useState('pulse'); // Default animation
   const [isHovered, setIsHovered] = useState(false);
 
   // Optional: Cycle through animations for demonstration
@@ -268,23 +268,22 @@ const Header = ({ isAuthenticated }) => {
         return animations[(currentIndex + 1) % animations.length];
       });
     }, 3000);
-    
+
     return () => clearInterval(interval);
   }, []);
 
   return (
     <Fragment>
       <header
-        className={`header-three header-absolute sticky-header sigma-header ${
-          isTop ? "sticky-active" : ""
-        }`}
+        className={`header-three header-absolute sticky-header sigma-header ${isTop ? "sticky-active" : ""
+          }`}
         id="header"
       >
-{width >= 992 && (
-  <div className="header-top">
-    <div className="container-fluid container-custom-three">
-      <div className="header-top-content">
-               
+        {width >= 992 && (
+          <div className="header-top">
+            <div className="container-fluid container-custom-three">
+              <div className="header-top-content">
+
                 <div
                   className={`welcome-section welcome-${animationType} ${isHovered ? 'welcome-hover' : ''}`}
                   onClick={() => history.push("/appointment")}
@@ -295,255 +294,255 @@ const Header = ({ isAuthenticated }) => {
                   <span className="welcome-text">
                     BMG Live
                   </span>
-                 
-                </div>
-               
-               
 
-        {/* Enhanced Precious Metals Ticker */}
-        <div className="precious-metals-ticker-wrapper">
-          <div className="precious-metals-ticker">
-            <div className="ticker-header">
-              <span className="ticker-title">Live Rates</span>
-            </div>
-            <div className="ticker-container">
-              {ratesData && !ratesLoading && !ratesError ? (
-                <div className="ticker-content">
-                  {/* Duplicate content for seamless loop */}
-                  {[...Array(2)].map((_, duplicateIndex) => 
-                    Object.entries(ratesData).map(([key, value], index) => (
-                      <div 
-                        key={`${duplicateIndex}-${key}-${index}`} 
-                        className="ticker-item"
-                      >
-                        <span
-                          className={`metal-badge ${
-                            key.toLowerCase().includes("silver") ? "silver" : "gold"
-                          }`}
-                        >
-                          {/* {key.toLowerCase().includes("silver") ? "Ag" : "Au"} */}
-                        </span>
-                        <span className="ticker-name">
-                          {key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                        </span>
-                        <span className="ticker-value">₹{value}</span>
-                      </div>
-                    ))
-                  )}
                 </div>
-              ) : ratesLoading ? (
-                <div className="ticker-loading">
-                  <div className="loading-dots">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+
+
+
+                {/* Enhanced Precious Metals Ticker */}
+                <div className="precious-metals-ticker-wrapper">
+                  <div className="precious-metals-ticker">
+                    <div className="ticker-header">
+                      <span className="ticker-title">Live Rates</span>
+                    </div>
+                    <div className="ticker-container">
+                      {ratesData && !ratesLoading && !ratesError ? (
+                        <div className="ticker-content">
+                          {/* Duplicate content for seamless loop */}
+                          {[...Array(2)].map((_, duplicateIndex) =>
+                            Object.entries(ratesData).map(([key, value], index) => (
+                              <div
+                                key={`${duplicateIndex}-${key}-${index}`}
+                                className="ticker-item"
+                              >
+                                <span
+                                  className={`metal-badge ${key.toLowerCase().includes("silver") ? "silver" : "gold"
+                                    }`}
+                                >
+                                  {/* {key.toLowerCase().includes("silver") ? "Ag" : "Au"} */}
+                                </span>
+                                <span className="ticker-name">
+                                  {key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                                </span>
+                                <span className="ticker-value">₹{value}</span>
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      ) : ratesLoading ? (
+                        <div className="ticker-loading">
+                          <div className="loading-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                          </div>
+                          <span>Loading rates...</span>
+                        </div>
+                      ) : (
+                        <div className="ticker-error">
+                          <span>⚠️ Unable to load rates</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <span>Loading rates...</span>
                 </div>
-              ) : (
-                <div className="ticker-error">
-                  <span>⚠️ Unable to load rates</span>
+                <div>
+
                 </div>
-              )}
-            </div>
-          </div>
-        </div>
-        <div>
-                 
-        </div>
-                
-        <div className="auth-actions">
-          {isAuthenticated ? (
-                    <div className="auth-button logout-trigger" onClick={handleLogout}>
+
+                <div className="auth-actions">
+                  {isAuthenticated ? (
+                    <div className="authLogin-button logout-trigger" onClick={handleLogout}>
                       <span className="auth-icon logout-icon"></span>
                       <span className="auth-text">Log Out</span>
                     </div>
-          ) : (
-            <div
-              className="auth-button login-trigger"
-              onClick={() => history.push("/login")}
-            >
-              <span className="auth-icon login-icon">🔐</span>
-              <span className="auth-text">Log In</span>
-            </div>
-           
-          )}
-        </div>
-                
-      </div>
-    </div>
-  </div>
-)}      <div className="header-main">
-        <div className="main-menu-area sticky-header">
-          <div className="container-fluid p-0">
-            <div className="nav-container d-flex align-items-center justify-content-between">
-              <div className="nav-menu d-lg-flex align-items-center justify-content-between">
-                <div className="navbar-close">
-                
+                  ) : (
+                    <div
+                      className="authLogin-button login-trigger"
+                      onClick={() => history.push("/login")}
+                    >
+                      <span className="auth-icon login-icon">🔐</span>
+                      <span className="auth-text">Log In</span>
+                    </div>
+
+                  )}
                 </div>
-                <div className="sigma-header-nav">
-                  <div className="container">
-                    <div className="sigma-header-nav-inner">
-                      <nav>
-                        <ul className="sigma-main-menu">
-                          <li className="menu-item">
-                            <Link to="/home">Home</Link>
-                          </li>
-                        
 
-                          <li className="menu-item menu-item-has-children menu-item-has-megamenu">
-                            <Link to="#">
-                              Categories{" "}
-                              <ChevronDown size={16} className="dropdown-icon" />
-                            </Link>
+              </div>
+            </div>
+          </div>
+        )}
+        <div className="header-main">
+          <div className="main-menu-area sticky-header">
+            <div className="container-fluid p-0">
+              <div className="nav-container d-flex align-items-center justify-content-between">
+                <div className="nav-menu d-lg-flex align-items-center justify-content-between">
+                  <div className="navbar-close">
 
-                            <div className="sub-menu">
-                              <div className="container">
-                                <div className="row">
-                                  {/* Left side nav tabs */}
-                                  <div className="col-lg-3">
-                                    <ul className="sigm-megamenu-nav nav nav-tabs">
-                                      {headerNavData?.menuSections?.map((section, index) => (
-                                        <li className="nav-item" key={section.label}>
-                                          <Link
-                                            to="#"
-                                            className={`nav-link ${activeTab === index ? "active" : ""
+                  </div>
+                  <div className="sigma-header-nav">
+                    <div className="container">
+                      <div className="sigma-header-nav-inner">
+                        <nav>
+                          <ul className="sigma-main-menu">
+                            <li className="menu-item">
+                              <Link to="/home">Home</Link>
+                            </li>
+
+
+                            <li className="menu-item menu-item-has-children menu-item-has-megamenu">
+                              <Link to="#">
+                                Categories{" "}
+                                <ChevronDown size={16} className="dropdown-icon" />
+                              </Link>
+
+                              <div className="sub-menu">
+                                <div className="container">
+                                  <div className="row">
+                                    {/* Left side nav tabs */}
+                                    <div className="col-lg-3">
+                                      <ul className="sigm-megamenu-nav nav nav-tabs">
+                                        {headerNavData?.menuSections?.map((section, index) => (
+                                          <li className="nav-item" key={section.label}>
+                                            <Link
+                                              to="#"
+                                              className={`nav-link ${activeTab === index ? "active" : ""
+                                                }`}
+                                              onClick={() => setActiveTab(index)}
+                                              onMouseEnter={() => setActiveTab(index)}
+                                            >
+                                              {section.label}
+                                            </Link>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+
+                                    {/* Right side tab content */}
+                                    <div className="col-lg-9">
+                                      <div className="tab-content">
+                                        {headerNavData?.menuSections?.map((section, index) => (
+                                          <div
+                                            className={`tab-pane fade ${activeTab === index ? "show active" : ""
                                               }`}
-                                            onClick={() => setActiveTab(index)}
-                                            onMouseEnter={() => setActiveTab(index)}
+                                            id={`tab${index + 1}`}
+                                            key={section.label}
                                           >
-                                            {section.label}
-                                          </Link>
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  </div>
-
-                                  {/* Right side tab content */}
-                                  <div className="col-lg-9">
-                                    <div className="tab-content">
-                                      {headerNavData?.menuSections?.map((section, index) => (
-                                        <div
-                                          className={`tab-pane fade ${activeTab === index ? "show active" : ""
-                                            }`}
-                                          id={`tab${index + 1}`}
-                                          key={section.label}
-                                        >
-                                          <div className="row g-1">
-                                            {section.items?.map((item, idx) => (
-                                              <div
-                                                className="col-6 col-sm-4 col-md-3 col-lg-2"
-                                                key={idx}
-                                              >
+                                            <div className="row g-1">
+                                              {section.items?.map((item, idx) => (
                                                 <div
-                                                  className="enhanced-card"
-                                                  onClick={() =>
-                                                    handleClick(item.keyName, item.keyValue)
-                                                  }
+                                                  className="col-6 col-sm-4 col-md-3 col-lg-2"
+                                                  key={idx}
                                                 >
-                                                  {item.image && (
-                                                    <div className="menu-card-img-wrapper">
-                                                      <img
-                                                        src={`${baseUrl}${item.image}`}
-                                                        alt={item.name || item.label}
-                                                        className="menu-card-img"
-                                                        onError={(e) => {
-                                                          e.target.onerror = null;
-                                                          e.target.src = "/fallback-image.jpg";
-                                                        }}
-                                                      />
+                                                  <div
+                                                    className="enhanced-card"
+                                                    onClick={() =>
+                                                      handleClick(item.keyName, item.keyValue)
+                                                    }
+                                                  >
+                                                    {item.image && (
+                                                      <div className="menu-card-img-wrapper">
+                                                        <img
+                                                          src={`${baseUrl}${item.image}`}
+                                                          alt={item.name || item.label}
+                                                          className="menu-card-img"
+                                                          onError={(e) => {
+                                                            e.target.onerror = null;
+                                                            e.target.src = "/fallback-image.jpg";
+                                                          }}
+                                                        />
 
-                                                    </div>
-                                                  )}
-                                                  <span className="menu-card-label">
-                                                    {item.name || item.label}
-                                                  </span>
+                                                      </div>
+                                                    )}
+                                                    <span className="menu-card-label">
+                                                      {item.name || item.label}
+                                                    </span>
+                                                  </div>
                                                 </div>
-                                              </div>
-                                            ))}
+                                              ))}
+                                            </div>
                                           </div>
-                                        </div>
-                                      ))}
+                                        ))}
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          </li>
+                            </li>
 
 
-                          <li className="menu-item menu-item-has-children">
-                            <Link to="/shop-left">Shop</Link>
-                          </li>
-                          <li className="menu-item">
-                            <Link to="/contact">Contact</Link>
-                          </li>
-                        </ul>
-                      </nav>
+                            <li className="menu-item menu-item-has-children">
+                              <Link to="/products-page">Shop</Link>
+                            </li>
+                            <li className="menu-item">
+                              <Link to="/contact">Contact</Link>
+                            </li>
+                          </ul>
+                        </nav>
+                      </div>
                     </div>
                   </div>
+                  <div className="site-logo site-logo-text">
+                    <Link to="/">
+                      <img
+                        src={Logo}
+                        alt="Diamond Icon"
+                        style={{
+                          width: "100px",
+                          height: "auto",
+                          marginRight: "10px",
+                        }}
+                      />
+                    </Link>
+                  </div>
+                  <div style={{ marginLeft: "20px" }} className="headersearch">
+                    <ItemSearch />
+                  </div>
                 </div>
-                <div className="site-logo site-logo-text">
-                  <Link to="/">
-                    <img
-                      src={Logo}
-                      alt="Diamond Icon"
-                      style={{
-                        width: "100px",
-                        height: "auto",
-                        marginRight: "10px",
-                      }}
-                    />
-                  </Link>
-                </div>
-                <div style={{ marginLeft: "20px" }} className="headersearch">
-                  <ItemSearch />
-                </div>
-              </div>
-              <div className="menu-right-buttons">
-                <div className="login-btn">
-                  <Link to="/account">
-                    <User size={20} strokeWidth={1.8} />
-                  </Link>
-                </div>
-                <div className="login-btn">
-                  <Link to="/wishlist">
-                    {wishlistCount > 0 ? (
-                      <FaHeart size={20} color={"#fa858fff"} />
-                    ) : (
-                      <Heart size={20} strokeWidth={1.8} />
-                    )}
-                    {wishlistCount > 0 && (
+                <div className="menu-right-buttons">
+                  <div className="login-btn">
+                    <Link to="/account">
+                      <User size={20} strokeWidth={1.8} />
+                    </Link>
+                  </div>
+                  <div className="login-btn">
+                    <Link to="/wishlist">
+                      {wishlistCount > 0 ? (
+                        <FaHeart size={20} color={"#fa858fff"} />
+                      ) : (
+                        <Heart size={20} strokeWidth={1.8} />
+                      )}
+                      {wishlistCount > 0 && (
                         <span className={`icon-badge ${isTop ? "sticky-active" : ""
                           }`}>{wishlistCount}</span>
-                    )}
-                  </Link>
-                </div>
+                      )}
+                    </Link>
+                  </div>
 
-                <div className="login-btn">
-                  <Link to="/cart">
-                    {cartCount > 0 ? (
-                      <FaShoppingCart size={20} color={"#f78790ff"} />
-                    ) : (
-                      <ShoppingCart size={20} strokeWidth={1.8} />
-                    )}
-                    {cartCount > 0 && (
+                  <div className="login-btn">
+                    <Link to="/cart">
+                      {cartCount > 0 ? (
+                        <FaShoppingCart size={20} color={"#f78790ff"} />
+                      ) : (
+                        <ShoppingCart size={20} strokeWidth={1.8} />
+                      )}
+                      {cartCount > 0 && (
                         <span className={`cart-icon-badge ${isTop ? "sticky-active" : ""
                           }`}>{cartCount}</span>
-                    )}
-                  </Link>
-                </div>
+                      )}
+                    </Link>
+                  </div>
 
-                <div className="navbar-toggler" onClick={toggleClass}>
-                  <span />
-                  <span />
-                  <span />
+                  <div className="navbar-toggler" onClick={toggleClass}>
+                    <span />
+                    <span />
+                    <span />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-       </div> 
         <div className="sigma-mobile-header">
           <div className="sigma-mobile-header-inner">
             <div className="site-logo site-logo-text">

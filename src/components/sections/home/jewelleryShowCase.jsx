@@ -45,7 +45,7 @@ const JewelryShowcase = () => {
         return () => clearInterval(timer);
     }, []);
 
-    const handleSeeAll = () => history.push('/shop-left?best_design=true');
+    const handleSeeAll = () => history.push('/products-page?best_design=true');
 
     return (
         <section className="jewelry-showcase" data-aos="fade-up">
@@ -81,8 +81,8 @@ const JewelryShowcase = () => {
                                     <FiArrowRight className="arrow-icon" />
                                 </div>
                             </div>
-                            
-                           
+
+
                         </div>
                     </div>
                     <div className="col-lg-6 ps-lg-5">
@@ -119,7 +119,7 @@ const JewelryShowcase = () => {
                                 aria-label="Shop Now for best designed jewels"
                             >
                                 <span >Shop Now</span>
-                            
+
                                 <div className="hover-effect"></div>
                             </button>
                         </div>

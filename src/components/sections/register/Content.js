@@ -119,160 +119,243 @@ const Content = () => {
     }, [location.pathname, dispatch]);
 
     return (
-        <section className="signup-section">
+        <section className="auth-section">
             <div className="container">
-                <div className="signup-container">
-                    <div className="row no-gutters">
-                        <div className="col-lg-6 col-md-6 col-sm-12">
-                            <div className="signup-background" />
+                <div className="auth-wrapper">
+                    <div className="auth-grid">
+                        <div className="auth-visual">
+                           
                         </div>
-                        <div className="col-lg-6 col-md-6 col-sm-12">
-                            <div className="signup-form">
-                                <h2>{showOtpModal ? 'Verify OTP' : 'Create Account'}</h2>
 
-                                {error && !showOtpModal && (
-                                    <div className="alert alert-danger">
-                                        {error}
-                                    </div>
-                                )}
-
-                                {!showOtpModal ? (
-                                    <form onSubmit={handleRegister} autoComplete="off">
-                                        <div className="input-field input-field-styled mb-20">
-                                            <input
-                                                type="text"
-                                                placeholder="Username"
-                                                value={username}
-                                                onChange={(e) => {
-                                                    setUsername(e.target.value);
-                                                    if (errors.username) setErrors({ ...errors, username: '' });
-                                                }}
-                                                className={errors.username ? 'is-invalid' : ''}
-                                                aria-label="Username"
-                                            />
-                                            {errors.username && (
-                                                <div className="error-feedback">{errors.username}</div>
-                                            )}
-                                        </div>
-
-                                        <div className="input-field input-field-styled mb-20">
-                                            <input
-                                                type="email"
-                                                placeholder="Email"
-                                                value={email}
-                                                onChange={(e) => {
-                                                    setEmail(e.target.value);
-                                                    if (errors.email) setErrors({ ...errors, email: '' });
-                                                }}
-                                                className={errors.email ? 'is-invalid' : ''}
-                                                aria-label="Email"
-                                            />
-                                            {errors.email && <div className="error-feedback">{errors.email}</div>}
-                                        </div>
-
-                                        <div className="input-field input-field-styled mb-20">
-                                            <input
-                                                type="text"
-                                                placeholder="Mobile Number"
-                                                value={contactNumber}
-                                                onChange={(e) => {
-                                                    const value = e.target.value.replace(/\D/g, '');
-                                                    setContactNumber(value);
-                                                    if (errors.contactNumber) setErrors({ ...errors, contactNumber: '' });
-                                                }}
-                                                maxLength={10}
-                                                className={errors.contactNumber ? 'is-invalid' : ''}
-                                                aria-label="Mobile Number"
-                                            />
-                                            {errors.contactNumber && (
-                                                <div className="error-feedback">{errors.contactNumber}</div>
-                                            )}
-                                        </div>
-
-                                        <div className="input-field input-field-styled mb-20">
-                                            <input
-                                                type="password"
-                                                placeholder="Password"
-                                                value={password}
-                                                onChange={(e) => {
-                                                    setPassword(e.target.value);
-                                                    if (errors.password) setErrors({ ...errors, password: '' });
-                                                }}
-                                                className={errors.password ? 'is-invalid' : ''}
-                                                aria-label="Password"
-                                            />
-                                            {errors.password && (
-                                                <div className="error-feedback">{errors.password}</div>
-                                            )}
-                                        </div>
-
-                                        <div className="btn-container">
-                                            <button
-                                                type="submit"
-                                                className="btn-main main-filled"
-                                                disabled={loading}
-                                                aria-label="Register new account"
-                                            >
-                                                {loading ? 'Registering...' : 'Register'}
-                                            </button>
-                                        </div>
-
-                                        <p className="login-prompt">
-                                            Already have an Account?
-                                            <Link to="/login" className="login-link">
-                                                Login
-                                            </Link>
-                                        </p>
-                                        <p className='google-login-btn'>
-                                        <GoogleLoginButton />
-                                        </p>
-                                    </form>
-                                ) : (
-                                    <form onSubmit={handleVerifyOtp} autoComplete="off">
-                                        <div className="input-field input-field-styled mb-20">
-                                            <input
-                                                type="text"
-                                                placeholder="Enter 6-digit OTP"
-                                                value={otp}
-                                                onChange={(e) => {
-                                                    const value = e.target.value.replace(/\D/g, '');
-                                                    setOtp(value);
-                                                    if (errors.otp) setErrors({ ...errors, otp: '' });
-                                                }}
-                                                maxLength={6}
-                                                className={errors.otp ? 'is-invalid' : ''}
-                                                aria-label="OTP"
-                                            />
-                                            {errors.otp && <div className="error-feedback">{errors.otp}</div>}
-                                        </div>
-
-                                        <div className="btn-container">
-                                            <button
-                                                type="submit"
-                                                className="primary-btn"
-                                                disabled={loading}
-                                                aria-label="Verify OTP"
-                                            >
-                                                {loading ? 'Verifying...' : 'Verify OTP'}
-                                            </button>
-                                        </div>
-
-                                        <p className="login-prompt">
-                                            Back to
-                                            <button
-                                                type="button"
-                                                className="back-to-signup"
-                                                onClick={() => {
-                                                    setShowOtpModal(false);
-                                                    dispatch(clearError());
-                                                }}
-                                            >
-                                                Register
-                                            </button>
-                                        </p>
-                                    </form>
-                                )}
+                        <div className="auth-form-container">
+                            <div className="form-header">
+                                <h1 className="form-title">
+                                    {showOtpModal ? 'Verify Your Account' : 'Create Your Account'}
+                                </h1>
+                                <p className="form-subtitle">
+                                    {showOtpModal
+                                        ? 'Enter the 6-digit code sent to your mobile'
+                                        : 'Fill in your details to get started'
+                                    }
+                                </p>
                             </div>
+
+                            {error && !showOtpModal && (
+                                <div className="error-message">
+                                    <svg className="error-icon" viewBox="0 0 24 24">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v2h-2v-2zm0-8h2v6h-2V9z" />
+                                    </svg>
+                                    <span>{error}</span>
+                                </div>
+                            )}
+
+                            {!showOtpModal ? (
+                                <form onSubmit={handleRegister} className="auth-form" autoComplete="off">
+                                    <div className="form-field">
+                                        <label htmlFor="username" className="field-label">
+                                            Username
+                                        </label>
+                                        <input
+                                            id="username"
+                                            type="text"
+                                            placeholder="Enter your username"
+                                            value={username}
+                                            onChange={(e) => {
+                                                setUsername(e.target.value);
+                                                if (errors.username) setErrors({ ...errors, username: '' });
+                                            }}
+                                            className={`field-input ${errors.username ? 'field-error' : ''}`}
+                                            aria-describedby={errors.username ? "username-error" : undefined}
+                                        />
+                                        {errors.username && (
+                                            <div id="username-error" className="field-error-message">
+                                                <svg className="error-icon-sm" viewBox="0 0 24 24">
+                                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v2h-2v-2zm0-8h2v6h-2V9z" />
+                                                </svg>
+                                                {errors.username}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="form-field">
+                                        <label htmlFor="email" className="field-label">
+                                            Email Address
+                                        </label>
+                                        <input
+                                            id="email"
+                                            type="email"
+                                            placeholder="Enter your email"
+                                            value={email}
+                                            onChange={(e) => {
+                                                setEmail(e.target.value);
+                                                if (errors.email) setErrors({ ...errors, email: '' });
+                                            }}
+                                            className={`field-input ${errors.email ? 'field-error' : ''}`}
+                                            aria-describedby={errors.email ? "email-error" : undefined}
+                                        />
+                                        {errors.email && (
+                                            <div id="email-error" className="field-error-message">
+                                                <svg className="error-icon-sm" viewBox="0 0 24 24">
+                                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v2h-2v-2zm0-8h2v6h-2V9z" />
+                                                </svg>
+                                                {errors.email}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="form-field">
+                                        <label htmlFor="mobile" className="field-label">
+                                            Mobile Number
+                                        </label>
+                                        <input
+                                            id="mobile"
+                                            type="text"
+                                            placeholder="Enter 10-digit mobile number"
+                                            value={contactNumber}
+                                            onChange={(e) => {
+                                                const value = e.target.value.replace(/\D/g, '');
+                                                setContactNumber(value);
+                                                if (errors.contactNumber) setErrors({ ...errors, contactNumber: '' });
+                                            }}
+                                            maxLength={10}
+                                            className={`field-input ${errors.contactNumber ? 'field-error' : ''}`}
+                                            aria-describedby={errors.contactNumber ? "mobile-error" : undefined}
+                                        />
+                                        {errors.contactNumber && (
+                                            <div id="mobile-error" className="field-error-message">
+                                                <svg className="error-icon-sm" viewBox="0 0 24 24">
+                                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v2h-2v-2zm0-8h2v6h-2V9z" />
+                                                </svg>
+                                                {errors.contactNumber}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="form-field">
+                                        <label htmlFor="password" className="field-label">
+                                            Password
+                                        </label>
+                                        <input
+                                            id="password"
+                                            type="password"
+                                            placeholder="Create a strong password"
+                                            value={password}
+                                            onChange={(e) => {
+                                                setPassword(e.target.value);
+                                                if (errors.password) setErrors({ ...errors, password: '' });
+                                            }}
+                                            className={`field-input ${errors.password ? 'field-error' : ''}`}
+                                            aria-describedby={errors.password ? "password-error" : undefined}
+                                        />
+                                        {errors.password && (
+                                            <div id="password-error" className="field-error-message">
+                                                <svg className="error-icon-sm" viewBox="0 0 24 24">
+                                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v2h-2v-2zm0-8h2v6h-2V9z" />
+                                                </svg>
+                                                {errors.password}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        className="auth-button primary"
+                                        disabled={loading}
+                                    >
+                                        {loading ? (
+                                            <>
+                                                <svg className="spinner" viewBox="0 0 24 24">
+                                                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" />
+                                                </svg>
+                                                Creating Account...
+                                            </>
+                                        ) : (
+                                            <>
+                                                Create Account
+                                                <svg className="button-arrow" viewBox="0 0 24 24">
+                                                    <path d="M5 12h14m-7-7l7 7-7 7" />
+                                                </svg>
+                                            </>
+                                        )}
+                                    </button>
+
+                                    <div className="auth-divider">
+                                        <span>or</span>
+                                    </div>
+
+                                    <div className="social-auth">
+                                        <GoogleLoginButton />
+                                    </div>
+
+                                    <div className="auth-redirect">
+                                        <span className="redirect-text">Already have an account?</span>
+                                        <Link to="/login" className="redirect-link">
+                                            Sign In
+                                        </Link>
+                                    </div>
+                                </form>
+                            ) : (
+                                <form onSubmit={handleVerifyOtp} className="auth-form" autoComplete="off">
+                                    <div className="form-field">
+                                        <label htmlFor="otp" className="field-label">
+                                            Verification Code
+                                        </label>
+                                        <input
+                                            id="otp"
+                                            type="text"
+                                            placeholder="Enter 6-digit OTP"
+                                            value={otp}
+                                            onChange={(e) => {
+                                                const value = e.target.value.replace(/\D/g, '');
+                                                setOtp(value);
+                                                if (errors.otp) setErrors({ ...errors, otp: '' });
+                                            }}
+                                            maxLength={6}
+                                            className={`field-input ${errors.otp ? 'field-error' : ''}`}
+                                            aria-describedby={errors.otp ? "otp-error" : undefined}
+                                        />
+                                        {errors.otp && (
+                                            <div id="otp-error" className="field-error-message">
+                                                <svg className="error-icon-sm" viewBox="0 0 24 24">
+                                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v2h-2v-2zm0-8h2v6h-2V9z" />
+                                                </svg>
+                                                {errors.otp}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        className="auth-button primary"
+                                        disabled={loading}
+                                    >
+                                        {loading ? (
+                                            <>
+                                                <svg className="spinner" viewBox="0 0 24 24">
+                                                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" />
+                                                </svg>
+                                                Verifying...
+                                            </>
+                                        ) : (
+                                            'Verify OTP'
+                                        )}
+                                    </button>
+
+                                    <div className="auth-redirect">
+                                        <span className="redirect-text">Back to</span>
+                                        <button
+                                            type="button"
+                                            className="redirect-link"
+                                            onClick={() => {
+                                                setShowOtpModal(false);
+                                                dispatch(clearError());
+                                            }}
+                                        >
+                                            Registration
+                                        </button>
+                                    </div>
+                                </form>
+                            )}
                         </div>
                     </div>
                 </div>

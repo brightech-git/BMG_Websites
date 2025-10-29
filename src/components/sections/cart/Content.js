@@ -77,15 +77,15 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
     const baseUrl = "https://app.bmgjewellers.com";
     const firstImage = imageUrls.length > 0 ? baseUrl + imageUrls[0] : fallbackImage;
 
-   
+
     const getPrice = (data) => {
         return Number(data?.GrandTotal) > 0
             ? Number(data.GrandTotal)
             : Number(data?.RATE || data?.amount || 0);
     };
- 
 
-  
+
+
     return (
         <div className="cart-item">
             <input
@@ -130,12 +130,12 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
                 <div className="cart-item-price">
                     {!productLoading && (
                         <>
-                          
+
                             <div className="price-current">
                                 <span className="price-label">Price</span> : ₹
                                 {getPrice(product).toFixed(2)}
                             </div>
-                           
+
                         </>
                     )}
                 </div>
@@ -145,7 +145,7 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
                         {(product?.NETWT || item.netWt) && (
                             <div className="cart-item-spec">
                                 <span className="spec-label">Weight:</span>
-                                <span className="spec-value">{product?.NETWT.toFixed(3) || item.netWt }g</span>
+                                <span className="spec-value">{product?.NETWT.toFixed(3) || item.netWt}g</span>
                             </div>
                         )}
                         {(product?.PURITY || item.purity) && (
@@ -184,7 +184,7 @@ const Cart = ({ history }) => {
             const initialItems = (Array.isArray(cartItems.data) ? cartItems.data : Object.values(cartItems.data))
                 .map((item) => item.sno)
                 .filter((sno) => !selectedItems.includes(sno));
-                setSelectedItems((prev) => Array.from(new Set([...prev, ...initialItems])));
+            setSelectedItems((prev) => Array.from(new Set([...prev, ...initialItems])));
 
         }
     }, [cartItems, selectedItems.length]);
@@ -365,7 +365,7 @@ const Cart = ({ history }) => {
                                 </div>
                                 <h2>Your cart is empty</h2>
                                 <p>Discover our amazing jewelry collection</p>
-                                <Link to="/shop-left" className="btn-primary">
+                                <Link to="/products-page" className="btn-primary">
                                     Continue Shopping
                                 </Link>
                             </div>
@@ -376,7 +376,7 @@ const Cart = ({ history }) => {
                         <div className="cart-items-section">
                             {/* Select All Controls */}
                             <div className="d-flex align-items-center justify-center ">
-                                
+
                                 <span className="text-muted" style={{ fontSize: '0.75rem' }}>
                                     {selectedItems.length} out of {items.length} selected
                                 </span>
@@ -402,9 +402,9 @@ const Cart = ({ history }) => {
                                     <>
                                         <div className="summary-row">
                                             <span>Items ({selectedItems.length})</span>
-                                           
+
                                         </div>
-                                     
+
                                         <div className="summary-row">
                                             <span>Subtotal</span>
                                             <span>₹{subtotal.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</span>
@@ -420,7 +420,7 @@ const Cart = ({ history }) => {
                                                 ₹{total.toLocaleString('en-IN', { maximumFractionDigits: 2 })}
                                             </span>
                                         </div>
-                                    
+
                                     </>
                                 ) : (
                                     <div className="summary-loading">

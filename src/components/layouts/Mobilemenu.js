@@ -14,13 +14,13 @@ const Mobilemenu = ({ onClose }) => {
         setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
         setActiveSectionIndex(null);
     };
-    const baseurl= "https://app.bmgjewellers.com"
+    const baseurl = "https://app.bmgjewellers.com"
     const toggleSection = (secIdx) => {
         setActiveSectionIndex((prevIndex) => (prevIndex === secIdx ? null : secIdx));
     };
 
     const navigationmenu = [
-        { id: 1, linkText: 'Home', link: '/', icon: 'fa-home' }, 
+        { id: 1, linkText: 'Home', link: '/', icon: 'fa-home' },
         {
             id: 2,
             linkText: 'Categories',
@@ -29,7 +29,7 @@ const Mobilemenu = ({ onClose }) => {
             submenu: headerNavData.menuSections || [],
             icon: 'fa-shopping-bag',
         },
-        { id: 3, linkText: 'Shop', link: '/shop-left', icon: 'fa-shopping-bag' },
+        { id: 3, linkText: 'Shop', link: '/products-page', icon: 'fa-shopping-bag' },
         { id: 4, linkText: 'About', link: '/about', icon: 'fa-info-circle' },
         { id: 5, linkText: 'Bmg Live', link: '/appointment', icon: 'fa-video' },
         { id: 6, linkText: 'Contact', link: '/contact', icon: 'fa-envelope' },
@@ -38,7 +38,7 @@ const Mobilemenu = ({ onClose }) => {
     const handleClick = (keyName, keyValue) => {
         const queryParams = new URLSearchParams();
         queryParams.append(keyName, keyValue);
-        history.push(`/shop-left?${queryParams.toString()}`);
+        history.push(`/products-page?${queryParams.toString()}`);
         onClose();
     };
 

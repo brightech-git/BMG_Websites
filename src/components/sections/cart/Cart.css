@@ -528,7 +528,7 @@
 
     .cart-summary-section {
         position: static;
-        order: -1;
+        order: 1;
     }
 
     .summary-card {
@@ -541,7 +541,10 @@
         padding: 1rem;
     }
 
-    
+    .cart-item-price{
+        gap: 0.175rem;
+        margin: 0.2rem 0;
+    }
 
     .cart-header h1 {
         font-size: 2.15rem;
@@ -574,9 +577,9 @@
         font-size: 0.9rem;
     }
 
-    .cart-item-specs {
-        gap: 0.5rem;
-    }
+        .cart-item-specs {
+            gap: 0.45rem;
+        }
 
     .cart-item-spec {
         font-size: 0.7rem;
@@ -657,7 +660,7 @@
     }
 
     .cart-item-specs {
-        margin-top: 0.25rem;
+        margin-top: 0.125rem;
     }
 
     .cart-item-spec {

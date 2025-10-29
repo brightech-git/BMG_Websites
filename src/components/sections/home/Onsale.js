@@ -15,7 +15,7 @@ const Onsale = () => {
         const queryParams = new URLSearchParams();
         if (itemName) queryParams.append('itemName', itemName);
         if (subItemName) queryParams.append('subItemName', subItemName);
-        window.location.href = `/shop-left?${queryParams.toString()}`;
+        window.location.href = `/products-page?${queryParams.toString()}`;
     };
 
     if (isLoading) {
@@ -99,7 +99,7 @@ const Onsale = () => {
                                         }}
                                     />
                                 </div>
-                                <div className="collection-overlay">
+                                <div className="collection-overlay always-visible-mobile">
                                     <div className="collection-badge">Featured</div>
                                     <div className="collection-content">
                                         <h3 className="collection-name">{mainBanner.title}</h3>
@@ -136,7 +136,7 @@ const Onsale = () => {
                                                 }}
                                             />
                                         </div>
-                                        <div className="collection-overlay">
+                                        <div className="collection-overlay always-visible-mobile">
                                             <div className="collection-content">
                                                 <h4 className="collection-name">{banner.title}</h4>
                                                 <button className="explore-button">

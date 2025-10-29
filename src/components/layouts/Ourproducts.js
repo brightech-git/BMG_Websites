@@ -88,7 +88,7 @@ const NewArrival = () => {
     }, [bannerImages.length]);
 
     const handleExplore = () => {
-        history.push('/shop-left?new_arrival=Y');
+        history.push('/products-page?new_arrival=true');
     };
 
     return (

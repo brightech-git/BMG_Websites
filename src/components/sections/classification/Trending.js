@@ -54,9 +54,9 @@ class Trending extends Component {
                                         <div className="menu-img" style={{ backgroundImage: "url(" + item.img + ")" }}>
                                         </div>
                                         <div className="menu-desc">
-                                            <h4><Link to="/shop-detail">{item.title}</Link></h4>
+                                            <h4><Link to="/product-detail">{item.title}</Link></h4>
                                             <p>{item.text}</p>
-                                            <Link to="/shop-detail" className="menu-link"><i className="fal fa-long-arrow-right" /></Link>
+                                            <Link to="/product-detail" className="menu-link"><i className="fal fa-long-arrow-right" /></Link>
                                         </div>
                                     </div>
                                 ))}
@@ -67,9 +67,9 @@ class Trending extends Component {
                                         <div className="menu-img" style={{ backgroundImage: "url(" + item.img + ")" }}>
                                         </div>
                                         <div className="menu-desc">
-                                            <h4><Link to="/shop-detail">{item.title}</Link></h4>
+                                            <h4><Link to="/product-detail">{item.title}</Link></h4>
                                             <p>{item.text}</p>
-                                            <Link to="/shop-detail" className="menu-link"><i className="fal fa-long-arrow-right" /></Link>
+                                            <Link to="/product-detail" className="menu-link"><i className="fal fa-long-arrow-right" /></Link>
                                         </div>
                                     </div>
                                 ))}

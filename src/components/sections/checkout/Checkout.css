@@ -34,7 +34,7 @@
 }
 
 /* Progress Stepper */
-.progress-tracker {
+/* .progress-tracker {
   padding-top: clamp(0.5rem, 2vw, 0.75rem);
   padding-left: clamp(0.5rem, 2vw, 0.75rem);
   padding-right: clamp(0.5rem, 2vw, 0.75rem);
@@ -108,7 +108,7 @@
   opacity: 0.5;
 }
 
-/* Step Content */
+Step Content */
 .step-section {
   padding: clamp(0.5rem, 2vw, 0.55rem);
 }
@@ -122,16 +122,196 @@
 .section-title {
   display: flex;
   align-items: center;
-  font-size: clamp(13px, 2.5vw, 15px);
+  font-size: clamp(12px, 2vw, 14px);
   font-weight: 500;
   color: var(--primary-text-color);
+  font-family: var(--secondary-font);
   margin: 0;
 }
 
 .section-icon {
   margin-right: 0.5rem;
   color: var(--primary-hover-color);
+} 
+
+/* Professional Progress Stepper with Icon-Centered Dividers */
+.progress-stepper {
+  width: 100%;
+  padding: 2rem 0;
+  background: transparent;
 }
+
+.stepper-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.stepper-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  flex: 1;
+}
+
+.step-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  position: relative;
+  z-index: 3;
+}
+
+.step-icon-container {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s ease;
+  border: 2px solid #e5e7eb;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  z-index: 4;
+}
+
+/* Connector positioned at icon level */
+.step-connector {
+  position: absolute;
+  top: 24px;
+  /* Half of icon container height */
+  left: calc(50% + 24px);
+  /* Start from right edge of current icon */
+  right: calc(-50% + 24px);
+  /* Extend to left edge of next icon */
+  height: 2px;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.connector-line {
+  height: 2px;
+  background: #e5e7eb;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.step-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+/* Rest of your existing CSS remains the same */
+.step-number {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.step-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  white-space: nowrap;
+}
+
+/* Active State */
+.stepper-step.active .step-icon-container {
+  border-color: #cd856c;
+  background: #cd856c;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.stepper-step.active .step-default-icon svg {
+  color: white;
+}
+
+.stepper-step.active .step-number {
+  color: #cd856c;
+  font-weight: 600;
+}
+
+.stepper-step.active .step-label {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+/* Completed State */
+.stepper-step.completed .step-icon-container {
+  border-color: #10b981;
+  background: #10b981;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.stepper-step.completed .step-number {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.stepper-step.completed .step-label {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.connector-line.completed {
+  background: #10b981;
+}
+
+/* Responsive adjustments for connector positioning */
+@media (max-width: 767px) {
+  .step-connector {
+    top: 20px;
+    /* Half of mobile icon container height */
+    left: calc(50% + 20px);
+    right: calc(-50% + 20px);
+  }
+
+  .step-icon-container {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 575px) {
+  .step-connector {
+    top: 18px;
+    left: calc(50% + 18px);
+    right: calc(-50% + 18px);
+  }
+
+  .step-icon-container {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 375px) {
+  .step-connector {
+    top: 16px;
+    left: calc(50% + 16px);
+    right: calc(-50% + 16px);
+  }
+
+  .step-icon-container {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+
 
 /* Contact Info */
 .contact-details {
@@ -183,7 +363,6 @@
 
 .address-item.selected {
   border-color: var(--primary-hover-color);
-  background: rgba(205, 134, 92, 0.05);
 }
 
 .address-heading {
@@ -273,7 +452,7 @@
 /* No Address State */
 .no-address-state {
   min-height: 200px;
-  background: var(--primary-card-color) !important;
+  background: var(--primary-card-color);
   border-radius: 8px;
   margin: 1rem 0;
   display: flex;
@@ -399,16 +578,13 @@
 
 .order-totals {
   border-top: 1px solid var(--primary-card-color);
-  padding-top: 1rem;
   background: var(--white-color);
   border-radius: 8px;
-  padding: 0.75rem;
 }
 
 .total-row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 0.5rem;
   font-weight: 400;
   font-size: clamp(11px, 2.5vw, 12px);
 }
@@ -493,14 +669,6 @@
   margin-top: 1rem;
 }
 
-.total-breakdown .total-row {
-  margin-bottom: 0.5rem;
-}
-
-.total-breakdown .total-row.final {
-  font-size: clamp(12px, 2.5vw, 13px);
-  font-weight: 600;
-}
 
 /* Step Navigation */
 .step-controls {
@@ -609,16 +777,9 @@
 }
 
 .address-list::-webkit-scrollbar {
-  width: 4px;
+  width: 3px;
 }
 
-.address-list::-webkit-scrollbar-track {
-  background: var(--black-color) !important;
-}
-
-.address-list::-webkit-scrollbar-thumb {
-  background: var(--primary-hover-color);
-}
 
 .address-item {
   display: flex;
@@ -630,14 +791,12 @@
 .address-content {
   flex: 1;
   padding: 0.75rem;
-  background-color: var(--primary-color) !important;
 }
 
 .address-select-area {
   display: flex;
   align-items: center;
   padding: 0.75rem;
-  background: var(--primary-card-color);
   border-left: 1px solid rgba(205, 134, 92, 0.2);
 }
 
@@ -902,20 +1061,9 @@
    display: inline-block;
    vertical-align: middle;
  }
- .order-totals {
-   border-top: 1px solid var(--primary-card-color);
-   padding-top: 0rem;
-   background: var(--white-color);
-   border-radius: 8px;
- }
- .total-row {
-  margin-bottom: 0rem !important;
-  font-weight: 400;
-  font-size: clamp(11px, 2.5vw, 12px);
-}
-.total-breakdown .total-row {
-  margin-bottom: 0rem !important;
-}
+ 
+ 
+
 }
 /* Print Styles */
 @media print {

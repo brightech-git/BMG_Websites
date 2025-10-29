@@ -12,41 +12,58 @@ import { faPen, faTrash, faPhone } from '@fortawesome/free-solid-svg-icons';
 
 
 
-// Progress Stepper Component
+// Enhanced Progress Stepper with Icon-Centered Dividers
 const ProgressStepper = ({ currentStep }) => {
   const steps = [
-    { id: 1, name: 'Address', icon: MapPin },
-    { id: 2, name: 'Order', icon: ShoppingBag },
-    { id: 3, name: 'Payment', icon: CreditCard }
+    { id: 1, name: 'Delivery Address', icon: MapPin },
+    { id: 2, name: 'Order Summary', icon: ShoppingBag },
+    { id: 3, name: 'Payment Method', icon: CreditCard }
   ];
 
   return (
-    <div className="progress-tracker">
-      <div className="tracker-container">
+    <div className="progress-stepper">
+      <div className="stepper-container">
         {steps.map((step, index) => {
           const Icon = step.icon;
           const isActive = currentStep === step.id;
           const isCompleted = currentStep > step.id;
+          const isLastStep = index === steps.length - 1;
 
           return (
-            <div key={step.id} className="tracker-step">
-              <div className={`step-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`}>
-                <div className="step-number-container">
-                  <div className="step-number">{isCompleted ? <Check size={12} /> : step.id}</div>
+            <React.Fragment key={step.id}>
+              <div className={`stepper-step ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`}>
+                <div className="step-indicator">
+                  <div className="step-icon-container">
+                    {isCompleted ? (
+                      <div className="step-completed-icon">
+                        <Check size={14} />
+                      </div>
+                    ) : (
+                      <div className="step-default-icon">
+                        <Icon size={14} />
+                      </div>
+                    )}
+                  </div>
+                  <div className="step-content">
+                    {/* <span className="step-number">Step {step.id}</span> */}
+                    <span className="step-label">{step.name}</span>
+                  </div>
                 </div>
-                <div className="step-info">
-                  <span className="step-label">{step.name}</span>
-                </div>
+
+                {/* Connector Line positioned at icon level */}
+                {!isLastStep && (
+                  <div className="step-connector">
+                    <div className={`connector-line ${isCompleted ? 'completed' : ''}`}></div>
+                  </div>
+                )}
               </div>
-              {index < steps.length - 1 && <div className="step-divider"></div>}
-            </div>
+            </React.Fragment>
           );
         })}
       </div>
     </div>
   );
 };
-
 // Address Modal
 const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddress, onSaveAddress, onDeleteAddress, customerProfile }) => {
 
@@ -545,7 +562,7 @@ const EnhancedCheckout = ({ location, history }) => {
                 ) : selectedAddress ? (
                   <div className="address-display">
                     <div className="address-item selected">
-                      <div className="address-content">
+                        <div className="address-content" onClick={() => setShowAddressModal(true)}>
                         <div className="address-heading">
                           <h6 className="address-name">{selectedAddress.name}</h6>
                           {selectedAddress.isDefault && <Badge bg="success">Default</Badge>}

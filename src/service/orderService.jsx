@@ -71,3 +71,8 @@ export const trackOrderById = async (orderId) => {
         throw new Error(error.message || 'Failed to fetch tracking data');
     }
 };
+
+export const getAllOrders = async () => {
+    const response = await publicUrl.get('/order/all-ordersCount');
+    return response.data;
+}

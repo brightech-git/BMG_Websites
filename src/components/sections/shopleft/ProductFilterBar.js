@@ -14,10 +14,11 @@ const FILTER_OPTIONS = {
   materialFinish: ['GOLDCOATED', 'SILVERCOATED'],
   stoneUnit: ['Carat', 'Gram', 'Piece'],
   sortBy: [
-    { label: 'Most Relevant', value: 'relevance_DESC' },
-    { label: 'Price – Low to High', value: 'price_ASC' },
-    { label: 'Price – High to Low', value: 'price_DESC' },
+    // { label: 'Most Relevant', value: 'relevance_DESC' },
+    { label: 'Price – Low to High', value: 'priceLowToHigh_ASC' },
+    { label: 'Price – High to Low', value: 'priceHighToLow_DESC' },
   ],
+  sortDirection : ['ASC', 'DESC'],
 };
 
 const FILTER_VALIDATION = {
@@ -27,7 +28,7 @@ const FILTER_VALIDATION = {
   colorAccent: ['Silver', 'Gold'],
   materialFinish: ['GOLDCOATED', 'SILVERCOATED'],
   stoneUnit: ['Carat', 'Gram', 'Piece'],
-  sortBy: ['relevance', 'price'],
+  sortBy: ['priceLowToHigh', 'priceHighToLow'],
   sortDirection: ['ASC', 'DESC'],
 };
 
@@ -70,11 +71,29 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
   });
   const [inputValues, setInputValues] = useState({ min: '', max: '' });
   const priceInputRef = useRef({ min: null, max: null });
+  const searchParams = new URLSearchParams(location.search);
+  const itemName = searchParams.get('itemName') || '';
+
+  useEffect(() => {
+    // Normalize item name: lowercase + singular
+    const normalizedName = itemName?.toLowerCase().trim();
+
+    // Allow both singular & plural (ring/rings, bangle/bangles)
+    const shouldShowSize = ['ring', 'rings', 'bangle', 'bangles'].includes(normalizedName);
+
+    setExpandedSections((prev) => ({
+      ...prev,
+      sizeName: shouldShowSize,
+    }));
+  }, [itemName]);
 
   // Filter extraction and validation
   const filters = useMemo(() => {
     const searchParams = new URLSearchParams(location.search);
+
+   
     const extractedFilters = {
+      
       gender: searchParams.get('gender') || '',
       occasion: searchParams.get('occasion') || '',
       sizeName: searchParams.get('sizeName') || '',
@@ -98,6 +117,7 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
 
     return validatedFilters;
   }, [location.search]);
+
 
   // Sync price range with URL parameters
   useEffect(() => {
@@ -465,7 +485,7 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
                       className="remove-tag"
                       aria-label={`Remove ${displayValue} filter`}
                     >
-                      <X size={12} />
+                      <X size={12}  />
                     </button>
                   </div>
                 );
@@ -492,48 +512,68 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
         </div>
 
         <div className="filter-panel-content">
-          {Object.entries(FILTER_LABELS).map(([key, label]) => (
-            <div key={key} className="filter-section">
-              <button
-                className="section-toggle"
-                onClick={() => toggleSection(key)}
-                aria-expanded={!!expandedSections[key]}
-                aria-label={`Toggle ${label} filter section`}
-                style={{ fontFamily: 'var(--secondary-font)' }}
-              >
-                <span style={{ color: 'var(--primary-text-color)' }}>{label}</span>
-                {expandedSections[key] ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-              </button>
-              {expandedSections[key] && (
-                <div className="filter-options">
-                  {key === 'priceRange' ? (
-                    <PriceRangeSlider />
-                  ) : (
-                    <div className="options-grid">
-                      {(key === 'sortBy' ? FILTER_OPTIONS.sortBy : FILTER_OPTIONS[key === 'sizeName' ? 'size' : key] || []).map(
-                        (option) => {
+          {Object.entries(FILTER_LABELS).map(([key, label]) => {
+            // Hide "sizeName" filter unless itemName is ring/bangle
+            const normalizedName = itemName?.toLowerCase().trim();
+            const shouldShowSize = ['ring', 'rings', 'bangle', 'bangles'].includes(normalizedName);
+
+            if (key === 'sizeName' && !shouldShowSize) {
+              return null; // 👈 skip rendering size filter
+            }
+
+            return (
+              <div key={key} className="filter-section">
+                <button
+                  className="section-toggle"
+                  onClick={() => toggleSection(key)}
+                  aria-expanded={!!expandedSections[key]}
+                  aria-label={`Toggle ${label} filter section`}
+                  style={{ fontFamily: 'var(--secondary-font)' }}
+                >
+                  <span style={{ color: 'var(--primary-text-color)' }}>{label}</span>
+                  {expandedSections[key] ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                </button>
+
+                {expandedSections[key] && (
+                  <div className="filter-options">
+                    {key === 'priceRange' ? (
+                      <PriceRangeSlider />
+                    ) : (
+                      <div className="options-grid">
+                        {(key === 'sortBy'
+                          ? FILTER_OPTIONS.sortBy
+                          : FILTER_OPTIONS[key === 'sizeName' ? 'size' : key] || []
+                        ).map((option) => {
                           const value = typeof option === 'object' ? option.value : option;
                           const optionLabel = typeof option === 'object' ? option.label : option;
-                          const isChecked = filters[key] === value || (key === 'sortBy' && `${filters[key]}_${filters.sortDirection}` === value);
+                          const isChecked =
+                            filters[key] === value ||
+                            (key === 'sortBy' && `${filters[key]}_${filters.sortDirection}` === value);
+
                           return (
                             <label key={value} className="filter-option">
                               <input
                                 type="checkbox"
                                 checked={isChecked}
-                                onChange={() => (key === 'sortBy' ? handleSortChange(isChecked ? '' : value) : handleFilterChange(key, isChecked ? '' : value))}
+                                onChange={() =>
+                                  key === 'sortBy'
+                                    ? handleSortChange(isChecked ? '' : value)
+                                    : handleFilterChange(key, isChecked ? '' : value)
+                                }
                                 className="filter-checkbox"
                               />
                               <span className="filter-label">{optionLabel}</span>
                             </label>
                           );
-                        }
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
         </div>
 
         {activeFiltersCount > 0 && (
@@ -548,8 +588,8 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
 
       {(isLoading || isLoaded) && (
         <div className="loading-state">
-          <div className="spinner" />
-          <span>{isLoading ? 'Applying...' : 'Loading...'}</span>
+          {/* <div className="spinner" />
+          <span>{isLoading ? 'Applying...' : 'Loading...'}</span> */}
         </div>
       )}
 
@@ -648,12 +688,12 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
         .remove-tag {
           background: none;
           border: none;
-          color: var(--primary-hover-color);
+          color: var(--primary-hover-color) !important;
           cursor: pointer;
           padding: 0;
           display: flex;
           align-items: center;
-          opacity: 0.7;
+          opacity: 0.8;
           transition: opacity 0.2s ease;
         }
 

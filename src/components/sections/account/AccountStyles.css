@@ -1,42 +1,39 @@
 /* Layout */
 .account-container {
   display: flex;
-  min-height: 100vh;
 }
 
 .account-layout {
   display: flex;
   width: 100%;
   flex-direction: row;
-  /* Side-by-side on desktop */
+
 }
 
 /* Fixed Sidebar */
 .account-sidebar {
-  position: absolute;
-  top: 60%;
+  position: sticky;
+  top: 10%;
   left: 0;
-  width: 250px;
 
 }
 
 /* Content Area */
 .account-content {
   flex: 1;
-  margin-left: 250px;
   /* Offset by sidebar width */
-  padding: 2rem;
+  padding: 1rem;
   overflow-y: auto;
   /* Allow content to scroll */
 }
 
 /* Header (if used) */
 .order-header {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .order-header h1 {
-  font-size: 2rem;
+  font-size: 1.25rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;

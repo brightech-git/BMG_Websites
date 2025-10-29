@@ -17,7 +17,7 @@ class Banner extends Component {
                                 <div className="banner-content">
                                     <span className="promo-tag" data-animation="fadeInDown" data-delay=".6s"> Jewelry Design With Love</span>
                                     <h1 className="title" data-animation="fadeInLeft" data-delay=".9s">Vintage And Modern <br /> Estate Jewelry</h1>
-                                    <div className="book-wrapper"> <Link to="/shop-left" className="menu-btn" data-animation="fadeInUp" data-delay="1.1s">Shop Now<span className="book-arrow">
+                                    <div className="book-wrapper"> <Link to="/products-page" className="menu-btn" data-animation="fadeInUp" data-delay="1.1s">Shop Now<span className="book-arrow">
                                         <i className="fal fa-arrow-right" />
                                     </span>
                                     </Link>
@@ -30,7 +30,7 @@ class Banner extends Component {
                         <span>+123 456 789</span>
                     </div>
                     {/* banner bg */}
-                    <div className="banner-bg" style={{ backgroundImage: "url("+ bannerimg +")" }} />
+                    <div className="banner-bg" style={{ backgroundImage: "url(" + bannerimg + ")" }} />
                     <div className="banner-overly" />
                 </div>
             </section>

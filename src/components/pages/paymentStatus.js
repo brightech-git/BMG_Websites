@@ -12,7 +12,6 @@ const PaymentStatus = () => {
     const searchParams = new URLSearchParams(location.search);
     const orderId = searchParams.get("orderId");
     const mode = searchParams.get("mode");
-    console.log("payment Order ID:", mode);
     const paymentMode = mode === "COD" ? "COD" : "ONLINE";
     console.log("Payment Mode:", paymentMode);
 
@@ -20,7 +19,7 @@ const PaymentStatus = () => {
     const [isSuccess, setIsSuccess] = useState(null);
     const [showConfetti, setShowConfetti] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    console.log(isSuccess ,'success')
+    console.log(isSuccess, 'success')
 
     useEffect(() => {
         // Trigger animations for UI elements
@@ -39,38 +38,23 @@ const PaymentStatus = () => {
             setIsSuccess(false);
             return;
         }
-
         const fetchStatus = async () => {
             try {
                 if (paymentMode === "COD") {
-                    // For COD orders, we don't need to check payment status
                     setStatus({ txnStatus: "Cash on Delivery", message: "Order confirmed" });
                     setIsSuccess(true);
                     setShowConfetti(true);
                 } else {
-                    // Fetch payment status for online payments
                     const res = await getPaymentStatus(orderId);
                     console.log("Payment API response:", res);
 
                     setStatus(res);
 
-                    // Determine success based on payphiResponse
-                    if (res.payphiResponse) {
-                        const txnStatus = res.payphiResponse.txnStatus;
-                        console.log("Transaction Status:", txnStatus);
-
-                        // Check if transaction was successful
-                        const isPaymentSuccess = txnStatus === "SUC" ||
-                            txnStatus === "APPROVED" ||
-                            txnStatus === "000" || // Some systems use "000" for success
-                            txnStatus === "SUCCESS";
-
-                        setIsSuccess(isPaymentSuccess);
-                        if (isPaymentSuccess) {
-                            setShowConfetti(true);
-                        }
+                    // Check payment status directly from API response, not state
+                    if (res?.paymentStatus?.toLowerCase() === "paid") {
+                        setIsSuccess(true);
+                        setShowConfetti(true);
                     } else {
-                        // If no payphiResponse, assume failure
                         setIsSuccess(false);
                     }
                 }
@@ -82,6 +66,7 @@ const PaymentStatus = () => {
                 setIsLoading(false);
             }
         };
+
 
         fetchStatus();
 
@@ -102,11 +87,12 @@ const PaymentStatus = () => {
             return "Cash on Delivery";
         }
 
-        if (status?.payphiResponse) {
-            const { txnStatus, txnRespDescription, respDescription } = status.payphiResponse;
+        if (status) {
+            const txnStatus = status?.paymentStatus;
+            console.log(txnStatus)
 
             // Return the most descriptive message available
-            return txnRespDescription || respDescription || txnStatus || "Unknown Status";
+            return txnStatus || "Unknown Status";
         }
 
         if (status?.error) {
@@ -116,8 +102,8 @@ const PaymentStatus = () => {
         return "Processing...";
     };
 
-    console.log(isSuccess,'success');
-    console.log(isLoading,'loadingdata');
+    console.log(isSuccess, 'success');
+    console.log(isLoading, 'loadingdata');
 
     return (
         <>
@@ -242,11 +228,11 @@ const PaymentStatus = () => {
                             <li>Your payment was not processed successfully</li>
                             <li>No amount has been deducted from your account</li>
                             <li>You can try again with the same or a different payment method</li>
-                            {status.payphiResponse.txnRespDescription && (
+                            {/* {status.payphiResponse.txnRespDescription && (
                                 <li className="reason">
                                     Reason: {status.payphiResponse.txnRespDescription}
                                 </li>
-                            )}
+                            )} */}
                         </ul>
                     </div>
                 )}
@@ -254,46 +240,46 @@ const PaymentStatus = () => {
 
 
                 {/* Action Buttons - Only show when not loading */}
-              
-                    <div className="payment-actions" data-animate="fade-up">
-                        {isSuccess ? (
-                            <>
-                                <button className="btn btn-primary" onClick={() => history.push("/shop-left")}>
-                                    <Home size={20} className="button-icon" />
-                                    <span>Continue Shopping</span>
-                                </button>
-                                <button
-                                    className="btn btn-secondary"
-                                    onClick={() => history.push("/account", { activeComponent: "Orders" })}
-                                >
-                                    <ShoppingBag size={20} className="button-icon" />
-                                    <span>View Orders</span>
-                                </button>
-                                <button className="btn btn-tertiary" onClick={handleDownloadInvoice}>
-                                    <Download size={20} className="button-icon" />
-                                    <span>Download Invoice</span>
-                                </button>
-                            </>
-                        ) : (
-                            <>
-                                <button className="btn btn-secondary" onClick={() => history.push("/shop-left")}>
-                                    <Home size={20} className="button-icon" />
-                                    <span>Back to Shop</span>
-                                </button>
-                                <button
-                                    className="btn btn-primary"
-                                    onClick={() => history.push(`/checkout?retryOrder=${orderId}`)}
-                                >
-                                    <RotateCcw size={20} className="button-icon" />
-                                    <span>Retry Payment</span>
-                                </button>
-                                <button className="btn btn-tertiary" onClick={() => history.push("/contact")}>
-                                    <span>Contact Support</span>
-                                </button>
-                            </>
-                        )}
-                    </div>
-             
+
+                <div className="payment-actions" data-animate="fade-up">
+                    {isSuccess ? (
+                        <>
+                            <button className="btn btn-primary" onClick={() => history.push("/products-page")}>
+                                <Home size={20} className="button-icon" />
+                                <span>Continue Shopping</span>
+                            </button>
+                            <button
+                                className="btn btn-secondary"
+                                onClick={() => history.push("/account", { activeComponent: "Orders" })}
+                            >
+                                <ShoppingBag size={20} className="button-icon" />
+                                <span>View Orders</span>
+                            </button>
+                            <button className="btn btn-tertiary" onClick={handleDownloadInvoice}>
+                                <Download size={20} className="button-icon" />
+                                <span>Download Invoice</span>
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <button className="btn btn-secondary" onClick={() => history.push("/products-page")}>
+                                <Home size={20} className="button-icon" />
+                                <span>Back to Shop</span>
+                            </button>
+                            <button
+                                className="btn btn-primary"
+                                onClick={() => history.push(`/checkout?retryOrder=${orderId}`)}
+                            >
+                                <RotateCcw size={20} className="button-icon" />
+                                <span>Retry Payment</span>
+                            </button>
+                            <button className="btn btn-tertiary" onClick={() => history.push("/contact")}>
+                                <span>Contact Support</span>
+                            </button>
+                        </>
+                    )}
+                </div>
+
 
                 {/* Help Text */}
                 <div className="help-section" data-animate="fade-up">

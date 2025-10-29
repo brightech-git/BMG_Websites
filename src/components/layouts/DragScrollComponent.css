@@ -1,0 +1,115 @@
+/* Drag Scroll Component Styles */
+.drag-scroll-container {
+    position: relative;
+    margin: 0 auto;
+}
+
+.scroll-content {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 15px;
+    padding: 10px;
+    cursor: grab;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    user-select: none;
+}
+
+.scroll-content.no-scroll {
+    overflow-x: hidden;
+    cursor: default;
+    justify-content: center;
+}
+
+.scroll-content::-webkit-scrollbar {
+    display: none;
+}
+
+.scroll-content.dragging {
+    cursor: grabbing;
+    scroll-behavior: auto;
+}
+
+.scroll-content.no-scroll.dragging {
+    cursor: default;
+}
+
+/* Scroll Controls */
+.scroll-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 0;
+}
+
+/* Auto Scroll Toggle */
+.auto-scroll-toggle {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: #10b981;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.auto-scroll-toggle:hover {
+    transform: scale(1.1);
+}
+
+.auto-scroll-toggle.playing {
+    background: #10b981;
+}
+
+.auto-scroll-toggle.paused {
+    background: #ef4444;
+}
+
+.auto-scroll-toggle.paused:hover {
+    background: #dc2626;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .scroll-content {
+        gap: 12px;
+        padding: 8px;
+    }
+
+    .auto-scroll-toggle {
+        width: 35px;
+        height: 35px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .scroll-content {
+        gap: 10px;
+        padding: 5px;
+    }
+
+    .auto-scroll-toggle {
+        width: 32px;
+        height: 32px;
+        font-size: 13px;
+    }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .scroll-content {
+        scroll-behavior: auto;
+    }
+
+    .auto-scroll-toggle {
+        transition: none;
+    }
+}

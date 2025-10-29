@@ -6,50 +6,47 @@
     position: relative;
     overflow: hidden;
     width: 100%;
-    
 }
-
 
 .collections-showcase .container {
     position: relative;
     z-index: 2;
     max-width: 1400px;
     margin: 0 auto;
-    padding:  4rem;
-    background-color: var(--secondary-card-color) ;
+    padding: 4rem;
+    background-color: var(--secondary-card-color);
     border-radius: 20px;
 }
 
 /* Section Header */
 .section-header {
-   align-items: center;
-} 
+    align-items: center;
+}
 
 .section-title {
     font-family: var(--primary-font, 'Playfair Display', serif);
     font-size: 42px;
-    color: var(--primary-text-color, #333) ;
+    color: var(--primary-text-color, #333);
     font-weight: 400;
-    margin: 0 auto  !important;
+    margin: 0 auto !important;
     line-height: 1.2;
     align-items: center;
     justify-content: center;
-
+    text-align: center;
 }
 
 .title-decoration {
     width: 80px;
     height: 3px;
     background: linear-gradient(90deg, var(--primary-hover-color, #cd865c), var(--gold-color, #d4a373));
-    margin: 15px auto  ;
+    margin: 15px auto;
     border-radius: 2px;
-    
 }
 
 /* Collections Grid */
 .collections-grid {
     display: grid;
-    padding: 10px ;
+    padding: 10px;
     grid-template-columns: 1fr 1fr;
     gap: 30px;
     align-items: start;
@@ -61,7 +58,7 @@
 }
 
 .collection-card {
-    height: 500px;
+    height: 700px;
     position: relative;
     border-radius: 15px;
     overflow: hidden;
@@ -76,14 +73,13 @@
 
 /* Secondary Collections */
 .secondary-collections {
-    
     display: grid;
     grid-template-columns: 1fr;
     gap: 20px;
 }
 
 .secondary-collection .collection-card {
-    height: 230px;
+    height: 330px;
 }
 
 .secondary-collection .collection-card:hover {
@@ -147,15 +143,19 @@
     right: 0;
     padding: 30px;
     background: linear-gradient(to top,
-            rgba(0, 0, 0, 0.5) 0%,
-            rgba(0, 0, 0, 0.4) 50%,
+            rgba(0, 0, 0, 0.8) 0%,
+            rgba(0, 0, 0, 0.6) 50%,
             transparent 100%);
     z-index: 2;
     color: var(--white-color, #fff);
+    transition: all 0.3s ease;
 }
 
 .secondary-collection .collection-content {
+    display: flex;
+    align-items: center;
     padding: 20px;
+    gap:1rem
 }
 
 .collection-name {
@@ -222,8 +222,8 @@
 }
 
 .arrow-icon {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
@@ -248,6 +248,76 @@
 
 .collection-card:hover .arrow-icon path {
     transform: translateX(2px);
+}
+
+/* ========================================= */
+/* MOBILE & TOUCH SCREEN FIXES */
+/* ========================================= */
+
+/* Always show content on mobile and touch devices */
+@media (max-width: 991px) {
+    .collection-content {
+        background: linear-gradient(to top,
+                rgba(0, 0, 0, 0.9) 0%,
+                rgba(0, 0, 0, 0.7) 50%,
+                rgba(0, 0, 0, 0.4) 100%);
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .secondary-collection .explore-button {
+        opacity: 1 !important;
+        transform: translateX(0) !important;
+    }
+
+    .collection-card:hover .collection-image img {
+        transform: none;
+    }
+
+    /* Reduce hover effects on mobile */
+    .collection-card:hover {
+        transform: none;
+    }
+
+    .secondary-collection .collection-card:hover {
+        transform: none;
+    }
+}
+
+/* Touch device detection - always show content */
+@media (hover: none) and (pointer: coarse) {
+    .collection-content {
+        background: linear-gradient(to top,
+                rgba(0, 0, 0, 0.9) 0%,
+                rgba(0, 0, 0, 0.7) 50%,
+                rgba(0, 0, 0, 0.4) 100%) !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .secondary-collection .explore-button {
+        opacity: 1 !important;
+        transform: translateX(0) !important;
+    }
+
+    .explore-button {
+        opacity: 1 !important;
+    }
+
+    /* Disable hover transformations on touch devices */
+    .collection-card:hover {
+        transform: none;
+    }
+
+    .collection-card:hover .collection-image img {
+        transform: none;
+    }
+
+    .collection-card:hover .arrow-icon {
+        transform: none;
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
 }
 
 /* Loading, Error, and Empty States */
@@ -316,11 +386,11 @@
     }
 
     .collection-card {
-        height: 550px;
+        height: 650px;
     }
 
     .secondary-collection .collection-card {
-        height: 260px;
+        height: 360px;
     }
 }
 
@@ -368,12 +438,34 @@
     }
 
     .secondary-collection .collection-card {
-        height: 180 Junkpx;
+        height: 180px;
     }
+
+    /* Ensure content is always visible on tablets */
+    .collection-content {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .explore-button {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+         .secondary-collection .collection-content {
+             display: flex;
+             align-items: center;
+             gap: 0.5rem;
+             padding: 15px;
+    
+         }
 }
 
 /* Mobile screens (576px to 767px) */
 @media (max-width: 767px) {
+    .collections-showcase .container {
+        padding: 2rem !important;
+    }
+
     .collections-showcase {
         padding: 50px 0;
     }
@@ -384,6 +476,11 @@
 
     .collection-card {
         height: 350px;
+    }
+
+    .secondary-collections {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 15px;
     }
 
     .main-collection .collection-content {
@@ -398,8 +495,13 @@
         height: 160px;
     }
 
+   
     .secondary-collection .collection-content {
-        padding: 20px;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding: 15px;
+        
     }
 
     .secondary-collection .collection-name {
@@ -418,10 +520,22 @@
     .arrow-icon path {
         stroke-width: 1.5;
     }
+
+    /* Force content visibility on mobile */
+    .collection-content {
+        background: linear-gradient(to top,
+                rgba(0, 0, 0, 0.75) 0%,
+                rgba(0, 0, 0, 0.5) 50%,
+                rgba(0, 0, 0, 0.7) 100%) !important;
+    }
 }
 
 /* Small mobile screens (575px and below) */
 @media (max-width: 575px) {
+    .collections-showcase .container {
+        padding: 1.5rem !important;
+    }
+
     .collections-showcase {
         padding: 40px 0;
     }
@@ -438,6 +552,11 @@
         gap: 20px;
     }
 
+    .secondary-collections {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 15px;
+    }
+
     .collection-card {
         height: 300px;
     }
@@ -450,19 +569,19 @@
         font-size: 20px;
     }
 
-    .secondary-collections {
-        grid-template-columns: 1fr;
-    }
-
     .secondary-collection .collection-card {
         height: 140px;
     }
 
     .secondary-collection .collection-content {
-        padding: 15px;
+        display: flex;
+        align-items: center;
+        gap:0.5rem;
+        padding: 10px;
     }
 
     .secondary-collection .collection-name {
+        margin-top: 5px;
         font-size: 14px;
     }
 
@@ -472,12 +591,12 @@
     }
 
     .explore-button {
-        font-size: 12px;
+        font-size: 10px;
     }
 
     .arrow-icon {
-        width: 30px;
-        height: 30px;
+        width: 20px;
+        height: 20px;
     }
 
     .arrow-icon path {
@@ -489,6 +608,15 @@
         font-size: 10px;
         top: 15px;
         right: 15px;
+    }
+
+    /* Enhanced visibility for very small screens */
+    .collection-content {
+        padding: 15px !important;
+        background: linear-gradient(to top,
+                rgba(0, 0, 0, 0.6) 0%,
+                rgba(0, 0, 0, 0.4)100%,
+                rgba(0, 0, 0, 0.6) 100%) !important;
     }
 }
 
@@ -511,7 +639,7 @@
     }
 
     .collection-content {
-        padding: 15px !important;
+        padding: 12px !important;
     }
 
     .main-collection .collection-name {
@@ -521,15 +649,53 @@
     .secondary-collection .collection-name {
         font-size: 13px;
     }
+
+    .collection-description {
+        font-size: 11px;
+        margin-bottom: 10px;
+    }
+
+    .explore-button {
+        font-size: 11px;
+    }
 }
 
-/* Hover effects and animations */
-@media (hover: hover) {
+/* Hover effects only for devices that support hover */
+@media (hover: hover) and (pointer: fine) {
     .collection-card:hover .collection-overlay {
         background: linear-gradient(135deg,
                 rgba(0, 0, 0, 0.3) 0%,
-                rgba(0, 0, 0, 0.2) 30%,
-                rgba(0, 0, 0, 0.1) 100%);
+                rgba(0, 0, 0, 0.2) 0%,
+                rgba(0, 0, 0, 0.1) 0%);
+    }
+
+    /* Only apply hover transformations on non-touch devices */
+    .collection-card:hover {
+        transform: translateY(-8px);
+    }
+
+    .secondary-collection .collection-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .collection-card:hover .collection-image img {
+        transform: scale(1.05);
+    }
+
+    .collection-card:hover .arrow-icon {
+        background: var(--primary-hover-color, #cd865c);
+        border-color: var(--primary-hover-color, #cd865c);
+        transform: scale(1.1);
+    }
+
+    .secondary-collection .explore-button {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    .collection-card:hover .explore-button {
+        opacity: 1;
+        transform: translateX(0);
     }
 }
 

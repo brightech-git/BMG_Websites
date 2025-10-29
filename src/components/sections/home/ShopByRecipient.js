@@ -16,12 +16,12 @@ const ShopByRecipient = () => {
     ];
 
     const handleCategoryClick = (query) => {
-        history.push(`/shop-left?${query}`);
+        history.push(`/products-page?${query}`);
     };
 
     const { trackOrder } = useTrackOrder('7D116046113');
-    console.log(trackOrder ,'trackorder');
-       return (
+    console.log(trackOrder, 'trackorder');
+    return (
         <section className="recipient-section">
             <div className="container">
                 <div className="recipient-header">

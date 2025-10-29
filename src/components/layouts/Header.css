@@ -179,7 +179,7 @@ header.header-three .header-top {
   flex: 0 0 auto;
 }
 
-.auth-button {
+.authLogin-button {
   display: flex;
   align-items: center;
   gap: 6px;

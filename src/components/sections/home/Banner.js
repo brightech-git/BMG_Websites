@@ -23,11 +23,11 @@ const Banner = () => {
         slidesToShow: 1,
         slidesToScroll: 1,
         centerMode: true,
-        centerPadding: '15%', 
-        arrows: false, 
+        centerPadding: '15%',
+        arrows: false,
         swipe: true,
-        swipeToSlide: true, 
-        touchThreshold: 10, 
+        swipeToSlide: true,
+        touchThreshold: 10,
         adaptiveHeight: false,
         responsive: [
             {
@@ -40,15 +40,15 @@ const Banner = () => {
                 breakpoint: 768,
                 settings: {
                     centerPadding: '5%',
-                    arrows: false, 
+                    arrows: false,
                 },
             },
             {
                 breakpoint: 576,
                 settings: {
                     centerPadding: '0',
-                    centerMode: false, 
-                    arrows: false, 
+                    centerMode: false,
+                    arrows: false,
                 },
             },
         ],
@@ -59,7 +59,7 @@ const Banner = () => {
         if (itemName) queryParams.append('itemName', itemName);
         if (gender) queryParams.append('gender', gender);
         const fixedQuery = queryParams.toString().replace(/\+/g, '%20');
-        history.push(`/shop-left?${fixedQuery}`);
+        history.push(`/products-page?${fixedQuery}`);
 
         // ✅ Only show permission modal if needed
         askNotification(

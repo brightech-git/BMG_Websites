@@ -51,7 +51,7 @@ class Headertwo extends Component {
             });
         }, false);
     }
-    render() { 
+    render() {
         const stickyheader = this.state.isTop ? 'sticky-active' : '';
         return (
             <Fragment>
@@ -65,7 +65,7 @@ class Headertwo extends Component {
                                             <li>
                                                 <Link to="#">
                                                     Need Help? Call 1234 567 890
-                  </Link>
+                                                </Link>
                                             </li>
                                         </ul>
                                     </div>
@@ -76,27 +76,27 @@ class Headertwo extends Component {
                                             <li>
                                                 <Link to="/account">
                                                     My Account
-                  </Link>
+                                                </Link>
                                             </li>
                                             <li>
                                                 <Link to="/blog-grid">
                                                     Blog
-                  </Link>
+                                                </Link>
                                             </li>
                                             <li>
                                                 <Link to="/contact">
                                                     Support
-                  </Link>
+                                                </Link>
                                             </li>
                                             <li>
                                                 <Link to="/register">
                                                     Signup
-                  </Link>
+                                                </Link>
                                             </li>
                                             <li>
                                                 <Link to="/login">
                                                     Login
-                  </Link>
+                                                </Link>
                                             </li>
                                             <li>
                                                 <select className="nice-select">
@@ -130,7 +130,7 @@ class Headertwo extends Component {
                                                 <li className="menu-item menu-item-has-children">
                                                     <Link to="#">
                                                         Home
-                    </Link>
+                                                    </Link>
                                                     <ul className="sub-menu">
                                                         <li className="menu-item">
                                                             <Link to="/">Home 1</Link>
@@ -149,7 +149,7 @@ class Headertwo extends Component {
                                                 <li className="menu-item menu-item-has-children menu-item-has-megamenu">
                                                     <Link to="#">
                                                         Categories
-                    </Link>
+                                                    </Link>
                                                     <div className="sub-menu">
                                                         <div className="container">
                                                             <div className="row">
@@ -181,10 +181,10 @@ class Headertwo extends Component {
                                                                                         <h5 className="sigma-title">Shop Pages</h5>
                                                                                         <ul className="sub-menu">
                                                                                             <li className="menu-item">
-                                                                                                <Link to="/shop-left">Shop Left Sidebar</Link>
+                                                                                                <Link to="/products-page">Shop Left Sidebar</Link>
                                                                                             </li>
                                                                                             <li className="menu-item">
-                                                                                                <Link to="/shop-left-two">Shop Left Sidebar v2</Link>
+                                                                                                <Link to="/products-page-two">Shop Left Sidebar v2</Link>
                                                                                             </li>
                                                                                             <li className="menu-item">
                                                                                                 <Link to="/shop-right">Shop Right Sidebar</Link>
@@ -193,7 +193,7 @@ class Headertwo extends Component {
                                                                                                 <Link to="/shop-right-two">Shop Right Sidebar v2</Link>
                                                                                             </li>
                                                                                             <li className="menu-item">
-                                                                                                <Link to="/shop-detail">Product Details</Link>
+                                                                                                <Link to="/product-detail">Product Details</Link>
                                                                                             </li>
                                                                                         </ul>
                                                                                     </div>
@@ -236,19 +236,19 @@ class Headertwo extends Component {
                                                                                         <h5 className="sigma-title">Type Of Earrings</h5>
                                                                                         <ul className="sub-menu">
                                                                                             <li className="menu-item">
-                                                                                                <Link to="/shop-left">Ruby Earrings</Link>
+                                                                                                <Link to="/products-page">Ruby Earrings</Link>
                                                                                             </li>
                                                                                             <li className="menu-item">
-                                                                                                <Link to="/shop-left-two">Emareld Earrings</Link>
+                                                                                                <Link to="/products-page-two">Emareld Earrings</Link>
                                                                                             </li>
                                                                                             <li className="menu-item">
-                                                                                                <Link to="/shop-left">Saphire Earrings</Link>
+                                                                                                <Link to="/products-page">Saphire Earrings</Link>
                                                                                             </li>
                                                                                             <li className="menu-item">
-                                                                                                <Link to="/shop-left-two">Diamond Earrings</Link>
+                                                                                                <Link to="/products-page-two">Diamond Earrings</Link>
                                                                                             </li>
                                                                                             <li className="menu-item">
-                                                                                                <Link to="/shop-left">Gold Earrings</Link>
+                                                                                                <Link to="/products-page">Gold Earrings</Link>
                                                                                             </li>
                                                                                         </ul>
                                                                                     </div>
@@ -260,26 +260,26 @@ class Headertwo extends Component {
                                                                                             <div className="col-md-6 menu-item-has-children">
                                                                                                 <ul className="sub-menu">
                                                                                                     <li className="menu-item">
-                                                                                                        <Link to="/shop-left">Hoop Earrings</Link>
+                                                                                                        <Link to="/products-page">Hoop Earrings</Link>
                                                                                                     </li>
                                                                                                     <li className="menu-item">
-                                                                                                        <Link to="/shop-left-two">Dangle Earrings</Link>
+                                                                                                        <Link to="/products-page-two">Dangle Earrings</Link>
                                                                                                     </li>
                                                                                                     <li className="menu-item">
-                                                                                                        <Link to="/shop-left">Stud Earrings</Link>
+                                                                                                        <Link to="/products-page">Stud Earrings</Link>
                                                                                                     </li>
                                                                                                 </ul>
                                                                                             </div>
                                                                                             <div className="col-md-6 menu-item-has-children">
                                                                                                 <ul className="sub-menu">
                                                                                                     <li className="menu-item">
-                                                                                                        <Link to="/shop-left-two">Barbell Earrings</Link>
+                                                                                                        <Link to="/products-page-two">Barbell Earrings</Link>
                                                                                                     </li>
                                                                                                     <li className="menu-item">
-                                                                                                        <Link to="/shop-left">Huggy Earrings</Link>
+                                                                                                        <Link to="/products-page">Huggy Earrings</Link>
                                                                                                     </li>
                                                                                                     <li className="menu-item">
-                                                                                                        <Link to="/shop-left-two">Ear Thread Earrings</Link>
+                                                                                                        <Link to="/products-page-two">Ear Thread Earrings</Link>
                                                                                                     </li>
                                                                                                 </ul>
                                                                                             </div>
@@ -289,26 +289,26 @@ class Headertwo extends Component {
                                                                                             <div className="col-md-6 menu-item-has-children">
                                                                                                 <ul className="sub-menu">
                                                                                                     <li className="menu-item">
-                                                                                                        <Link to="/shop-detail">Jiara Blessing</Link>
+                                                                                                        <Link to="/product-detail">Jiara Blessing</Link>
                                                                                                     </li>
                                                                                                     <li className="menu-item">
-                                                                                                        <Link to="/shop-detail">Hentry Firana</Link>
+                                                                                                        <Link to="/product-detail">Hentry Firana</Link>
                                                                                                     </li>
                                                                                                     <li className="menu-item">
-                                                                                                        <Link to="/shop-detail">Lucrative Li</Link>
+                                                                                                        <Link to="/product-detail">Lucrative Li</Link>
                                                                                                     </li>
                                                                                                 </ul>
                                                                                             </div>
                                                                                             <div className="col-md-6 menu-item-has-children">
                                                                                                 <ul className="sub-menu">
                                                                                                     <li className="menu-item">
-                                                                                                        <Link to="/shop-detail">Mirana Go</Link>
+                                                                                                        <Link to="/product-detail">Mirana Go</Link>
                                                                                                     </li>
                                                                                                     <li className="menu-item">
-                                                                                                        <Link to="/shop-detail">Fira Diamond Ring</Link>
+                                                                                                        <Link to="/product-detail">Fira Diamond Ring</Link>
                                                                                                     </li>
                                                                                                     <li className="menu-item">
-                                                                                                        <Link to="/shop-detail">Fanir Lo</Link>
+                                                                                                        <Link to="/product-detail">Fanir Lo</Link>
                                                                                                     </li>
                                                                                                 </ul>
                                                                                             </div>
@@ -332,7 +332,7 @@ class Headertwo extends Component {
                                                                                         <div className="row">
                                                                                             <div className="col-md-3">
                                                                                                 <div className="sigma-megamenu-image">
-                                                                                                    <Link to="/shop-left">
+                                                                                                    <Link to="/products-page">
                                                                                                         <img src="assets/img/others/b-1.png" alt="img" />
                                                                                                         <span>Ruby</span>
                                                                                                     </Link>
@@ -340,7 +340,7 @@ class Headertwo extends Component {
                                                                                             </div>
                                                                                             <div className="col-md-3">
                                                                                                 <div className="sigma-megamenu-image">
-                                                                                                    <Link to="/shop-left">
+                                                                                                    <Link to="/products-page">
                                                                                                         <img src="assets/img/others/b-2.png" alt="img" />
                                                                                                         <span>Emarald</span>
                                                                                                     </Link>
@@ -348,7 +348,7 @@ class Headertwo extends Component {
                                                                                             </div>
                                                                                             <div className="col-md-3">
                                                                                                 <div className="sigma-megamenu-image">
-                                                                                                    <Link to="/shop-left-two">
+                                                                                                    <Link to="/products-page-two">
                                                                                                         <img src="assets/img/others/b-3.png" alt="img" />
                                                                                                         <span>Saphire</span>
                                                                                                     </Link>
@@ -356,7 +356,7 @@ class Headertwo extends Component {
                                                                                             </div>
                                                                                             <div className="col-md-3">
                                                                                                 <div className="sigma-megamenu-image">
-                                                                                                    <Link to="/shop-left">
+                                                                                                    <Link to="/products-page">
                                                                                                         <img src="assets/img/others/b-4.png" alt="img" />
                                                                                                         <span>Diamond</span>
                                                                                                     </Link>
@@ -364,7 +364,7 @@ class Headertwo extends Component {
                                                                                             </div>
                                                                                             <div className="col-md-3">
                                                                                                 <div className="sigma-megamenu-image">
-                                                                                                    <Link to="/shop-left-two">
+                                                                                                    <Link to="/products-page-two">
                                                                                                         <img src="assets/img/others/b-5.png" alt="img" />
                                                                                                         <span>Topaz</span>
                                                                                                     </Link>
@@ -372,7 +372,7 @@ class Headertwo extends Component {
                                                                                             </div>
                                                                                             <div className="col-md-3">
                                                                                                 <div className="sigma-megamenu-image">
-                                                                                                    <Link to="/shop-left">
+                                                                                                    <Link to="/products-page">
                                                                                                         <img src="assets/img/others/b-6.png" alt="img" />
                                                                                                         <span>Amber</span>
                                                                                                     </Link>
@@ -380,7 +380,7 @@ class Headertwo extends Component {
                                                                                             </div>
                                                                                             <div className="col-md-3">
                                                                                                 <div className="sigma-megamenu-image">
-                                                                                                    <Link to="/shop-left-two">
+                                                                                                    <Link to="/products-page-two">
                                                                                                         <img src="assets/img/others/b-7.png" alt="img" />
                                                                                                         <span>Gold</span>
                                                                                                     </Link>
@@ -388,7 +388,7 @@ class Headertwo extends Component {
                                                                                             </div>
                                                                                             <div className="col-md-3">
                                                                                                 <div className="sigma-megamenu-image">
-                                                                                                    <Link to="/shop-left">
+                                                                                                    <Link to="/products-page">
                                                                                                         <img src="assets/img/others/b-8.png" alt="img" />
                                                                                                         <span>Silver</span>
                                                                                                     </Link>
@@ -404,26 +404,26 @@ class Headertwo extends Component {
                                                                                             <div className="col-md-6 menu-item-has-children">
                                                                                                 <ul className="sub-menu">
                                                                                                     <li className="menu-item">
-                                                                                                        <Link to="/shop-detail">Jiara Blessing</Link>
+                                                                                                        <Link to="/product-detail">Jiara Blessing</Link>
                                                                                                     </li>
                                                                                                     <li className="menu-item">
-                                                                                                        <Link to="/shop-detail">Hentry Firana</Link>
+                                                                                                        <Link to="/product-detail">Hentry Firana</Link>
                                                                                                     </li>
                                                                                                     <li className="menu-item">
-                                                                                                        <Link to="/shop-detail">Lucrative Li</Link>
+                                                                                                        <Link to="/product-detail">Lucrative Li</Link>
                                                                                                     </li>
                                                                                                 </ul>
                                                                                             </div>
                                                                                             <div className="col-md-6 menu-item-has-children">
                                                                                                 <ul className="sub-menu">
                                                                                                     <li className="menu-item">
-                                                                                                        <Link to="/shop-detail">Mirana Go</Link>
+                                                                                                        <Link to="/product-detail">Mirana Go</Link>
                                                                                                     </li>
                                                                                                     <li className="menu-item">
-                                                                                                        <Link to="/shop-detail">Fira Diamond Ring</Link>
+                                                                                                        <Link to="/product-detail">Fira Diamond Ring</Link>
                                                                                                     </li>
                                                                                                     <li className="menu-item">
-                                                                                                        <Link to="/shop-detail">Fanir Lo</Link>
+                                                                                                        <Link to="/product-detail">Fanir Lo</Link>
                                                                                                     </li>
                                                                                                 </ul>
                                                                                             </div>
@@ -433,10 +433,10 @@ class Headertwo extends Component {
                                                                                             <div className="col-md-12 menu-item-has-children">
                                                                                                 <ul className="sub-menu">
                                                                                                     <li className="menu-item">
-                                                                                                        <Link to="/shop-detail">Lira Jo</Link>
+                                                                                                        <Link to="/product-detail">Lira Jo</Link>
                                                                                                     </li>
                                                                                                     <li className="menu-item">
-                                                                                                        <Link to="/shop-detail">Fandi Hambi</Link>
+                                                                                                        <Link to="/product-detail">Fandi Hambi</Link>
                                                                                                     </li>
                                                                                                 </ul>
                                                                                             </div>
@@ -549,14 +549,14 @@ class Headertwo extends Component {
                                                     </div>
                                                 </li>
                                                 <li className="menu-item">
-                                                    <Link to="/shop-left">
+                                                    <Link to="/products-page">
                                                         Diamond
-                    </Link>
+                                                    </Link>
                                                 </li>
                                                 <li className="menu-item menu-item-has-children">
                                                     <Link to="#">
                                                         Blog
-                    </Link>
+                                                    </Link>
                                                     <ul className="sub-menu">
                                                         <li className="menu-item"> <Link to="/blog-grid-sidebar">Blog Grid Sidebar</Link>
                                                         </li>
@@ -584,14 +584,14 @@ class Headertwo extends Component {
                                                     </Link>
                                                 </li>
                                                 <li className="menu-item">
-                                                    <Link to="/shop-left">
+                                                    <Link to="/products-page">
                                                         Accessories
-                    </Link>
+                                                    </Link>
                                                 </li>
                                                 <li className="menu-item menu-item-has-children">
                                                     <Link to="#">
                                                         Pages
-                    </Link>
+                                                    </Link>
                                                     <ul className="sub-menu">
                                                         <li className="menu-item">
                                                             <Link to="/about">About</Link>
@@ -630,13 +630,13 @@ class Headertwo extends Component {
                                                 <li className="menu-item menu-item-has-children">
                                                     <Link to="/about">
                                                         Shop
-                    </Link>
+                                                    </Link>
                                                     <ul className="sub-menu">
                                                         <li className="menu-item">
-                                                            <Link to="/shop-left">Shop Left Sidebar</Link>
+                                                            <Link to="/products-page">Shop Left Sidebar</Link>
                                                         </li>
                                                         <li className="menu-item">
-                                                            <Link to="/shop-left-two">Shop Left Sidebar v2</Link>
+                                                            <Link to="/products-page-two">Shop Left Sidebar v2</Link>
                                                         </li>
                                                         <li className="menu-item">
                                                             <Link to="/shop-right">Shop Right Sidebar</Link>
@@ -645,14 +645,14 @@ class Headertwo extends Component {
                                                             <Link to="/shop-right-two">Shop Right Sidebar v2</Link>
                                                         </li>
                                                         <li className="menu-item">
-                                                            <Link to="/shop-detail">Product Details</Link>
+                                                            <Link to="/product-detail">Product Details</Link>
                                                         </li>
                                                     </ul>
                                                 </li>
                                                 <li className="menu-item">
                                                     <Link to="/contact">
                                                         Contact
-                    </Link>
+                                                    </Link>
                                                 </li>
                                             </ul>
                                         </nav>

@@ -1,7 +1,6 @@
 /* Base Styles */
 .account-container {
   display: flex;
-  min-height: 100vh;
   background-color: var(--primary-color);
   font-family: var(--secondary-font);
 }
@@ -9,8 +8,6 @@
 .order-content {
   flex: 1;
   padding: 1.5rem;
-  max-width: 1200px;
-  margin: 0 auto;
   background-color: var(--primary-color);
 }
 

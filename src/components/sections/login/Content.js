@@ -4,6 +4,7 @@ import loginbg from '../../../assets/img/bg/sign.webp';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, clearError } from '../../../redux/slices/userSlice';
 import './LoginContent.css';
+import GoogleLoginButton from '../register/GoogleLoginButton';
 
 const Content = () => {
     const [contactOrEmailOrUsername, setContactOrEmailOrUsername] = useState('');
@@ -91,60 +92,85 @@ const Content = () => {
     }, [isAuthenticated, history]);
 
     return (
-        <section className="login-sec">
+        <section className="login-section">
             <div className="container">
-                <div className="account-wrapper">
-                    <div className="row no-gutters">
-                        <div className="col-lg-6">
-                            <div className="login-content">
-                                <div className="description text-center"></div>
-                            </div>
+                <div className="login-wrapper">
+                    <div className="login-grid">
+                        <div className="login-visual">  
                         </div>
 
-                        <div className="col-lg-6">
-                            <div className="login-form">
-                                <h4 >Log in</h4>
+                        <div className="signin-form-container">
+                           
 
-                                {localError && (
-                                    <div className="alert alert-danger">
-                                        {localError}
-                                    </div>
-                                )}
+                            {localError && (
+                                <div className="error-alert">
+                                    <svg className="error-icon" viewBox="0 0 24 24">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v2h-2v-2zm0-8h2v6h-2V9z" />
+                                    </svg>
+                                    <span>{localError}</span>
+                                </div>
+                            )}
 
-                                <form onSubmit={handleLogin}>
-                                    <div className="input-group input-group-two mb-10">
-                                        <input
-                                            type="text"
-                                            placeholder="Mobile Number"
-                                            value={contactOrEmailOrUsername}
-                                            onChange={(e) => setContactOrEmailOrUsername(e.target.value)}
-                                            required
-                                        />
-                                    </div>
-                                    <div className="input-group input-group-two mb-20">
-                                        <input
-                                            type="password"
-                                            placeholder="Password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            required
-                                        />
-                                    </div>
+                            <form onSubmit={handleLogin} className="signin-form">
+                                <div className="signin-form-header">
+                                    <h1 className="signin-form-title">
+                                        Signin to Your Account
+                                    </h1>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="mobile" className="form-label">
+                                        Mobile Number
+                                    </label>
+                                    <input
+                                        id="mobile"
+                                        type="text"
+                                        placeholder="Enter your mobile number"
+                                        value={contactOrEmailOrUsername}
+                                        onChange={(e) => setContactOrEmailOrUsername(e.target.value)}
+                                        required
+                                        className="signin-input"
+                                    />
+                                </div>
 
-                                    <Link to="/forgot-password" className='forgot'>Forgot Password?</Link>
+                                <div className="form-group">
+                                    <label htmlFor="password" className="form-label">
+                                        Password
+                                    </label>
+                                    <input
+                                        id="password"
+                                        type="password"
+                                        placeholder="Enter your password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                        className="signin-input"
+                                    />
+                                </div>
 
-                                    <button type="submit" className="main-btn btn-filled  login-btn">
-                                        Login
-                                    </button>
+                                <div className="form-options">
+                                    <Link to="/forgot-password" className="forgot-link">
+                                        Forgot Password?
+                                    </Link>
+                                </div>
 
-                                    <p className="register-prompt">
-                                        Don't have an Account?
-                                        <Link to="/register" className="d-inline-block create-account-link">
-                                            Create One
-                                        </Link>
-                                    </p>
-                                </form>
-                            </div>
+                                <button type="submit" className="login-button">
+                                    <span className="button-text">Sign In</span>
+                                    <svg className="button-icon" viewBox="0 0 24 24">
+                                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                                    </svg>
+                                </button>
+                                <div style={{marginBottom:'5px'}}>
+                                    <GoogleLoginButton />
+                                </div>
+                                
+
+                                <div className="register-section">
+                                    <span className="register-text">Don't have an account?</span>
+                                    <Link to="/register" className="register-link">
+                                        Create Account
+                                    </Link>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import { Tab, Nav } from "react-bootstrap";
+import { Tab, Nav,  } from "react-bootstrap";
 import {
   FaHeart,
   FaRegHeart,
@@ -23,7 +23,10 @@ import { useRecentlyViewed } from "../../../hook/recentlyViewed/useRecentlyViewe
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PriceBreakup from "./PriceBreakUp";
-import { Weight } from "lucide-react";
+import Shoprelated from '../../layouts/Shoprelated';
+import Breadcrumb from "../../layouts/Breadcrumb";
+import JewelleryBrandAssurance from "../../layouts/JewelleryBrandAssurance";
+import { Gem, ShieldCheck, RefreshCw } from "lucide-react";
 
 // ProductSkeleton remains unchanged
 const ProductSkeleton = () => (
@@ -340,9 +343,13 @@ const Shopinfo = ({ sno, Authenticated }) => {
   ];
 
   return (
+    <section>
     <section className="modern-product-section">
-      <div className="container">
+      <div className="shopdetail-container">
         <div className="row product-detail-row g-4">
+            <div className="breadcrumb-mobile-wrapper">
+              <Breadcrumb />
+            </div>
           <div className="col-lg-6 col-md-12">
             <div className="product-gallery-container">
               {(product.NewArrival || product.Top_Trending || discountPercentage > 0) && (
@@ -363,16 +370,17 @@ const Shopinfo = ({ sno, Authenticated }) => {
           </div>
           <div className="col-lg-6 col-md-12">
             <div className="product-info-container">
+              <div className="breadcrumb-wrapper">
+                  <Breadcrumb />
+              </div>
+            
               <div className="product-header">
-                <h1 className="product-title">
-                  {product.SUBITEMNAME && (
-                    <>
-                      {product.SUBITEMNAME}{" "}
-                      <span className="sub-product-title">{product.ITEMNAME}</span>
-                    </>
-                  )}
-                  {!product.SUBITEMNAME && product.ITEMNAME}
-                </h1>
+
+                  <div style={{display:'flex' , alignItems:'center' ,gap:'10px'}}>
+                      <h1 className="product-title">{product.ITEMNAME || "Unknown Product"}</h1>
+                      <p className="sub-product-titles">{product.SUBITEMNAME || "Expertly crafted jewelry."}</p>
+                  </div>
+         
                 <div className="header-buttons">
                   <button
                     className={`wishlist-btn ${isWishlisted ? "wishlisted" : ""} ${animateHeart ? "animate" : ""
@@ -498,6 +506,21 @@ const Shopinfo = ({ sno, Authenticated }) => {
                   )}
                 </div>
               )}
+                <div className="jewellery-description">
+                 <JewelleryBrandAssurance
+                    bgColor="var(--brand-bg-color)"
+                  textColor="var(--primary-text-color)"
+                    iconColor="var(--green-color)"
+                    backgroundColor="var(--primary-card-color)"
+                  backGroundColor="var(--brand-background-color)"
+                  assurances={[
+                    { icon: <Gem size={22} />, label: "Sterling Silver Jewellery" },
+                    { icon: <ShieldCheck size={22} />, label: "Certified Authentic" },
+                    { icon: <RefreshCw size={22} />, label: "Free & Safe Shipping" },
+                  ]}
+                /> 
+              </div>
+
               {product.Description && (
                 <div className="product-description">
                   <p>{product.Description}</p>
@@ -588,6 +611,11 @@ const Shopinfo = ({ sno, Authenticated }) => {
           </div>
         </div>
       </div>
+    </section>
+    <section>
+
+    </section>
+      <Shoprelated itemName={product.ITEMNAME} />
     </section>
   );
 };

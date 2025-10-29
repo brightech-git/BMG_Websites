@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Slider from 'react-slick'
 
 import img1 from '../../../assets/img/room-slider/01.jpg';
@@ -102,7 +102,7 @@ class Productslider extends Component {
                                                 <div className="icon">
                                                     <i className={item.icon} />
                                                 </div>
-                                                <h3><Link to="/shop-detail">{item.title}</Link></h3>
+                                                <h3><Link to="/product-detail">{item.title}</Link></h3>
                                                 <p>{item.text}</p>
                                             </div>
                                         ))}

@@ -23,7 +23,7 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 const Dashboard = ({ setActiveComponent, setSelectedOrder }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const history=useHistory();
+  const history = useHistory();
   const {
     data: ordersData = [],
     isLoading: ordersLoading,
@@ -114,9 +114,9 @@ const Dashboard = ({ setActiveComponent, setSelectedOrder }) => {
         return "amber";
       case "CANCELLED":
         return "red";
-        case "REFUNDED":
+      case "REFUNDED":
         return "red";
-      
+
       default:
         return "gray";
     }
@@ -242,7 +242,7 @@ const Dashboard = ({ setActiveComponent, setSelectedOrder }) => {
       <main className={`dashboard__content ${isMobileMenuOpen ? "menu-open" : ""}`}>
         <div className="dashboard__container">
           <header className="dashboard__header">
-            <h1 className="dashboard__title">Dashboard</h1> 
+            <h1 className="dashboard__title">Dashboard</h1>
             <p className="dashboard__subtitle">
               Welcome back! Here's an overview of your account activity.
             </p>
@@ -388,7 +388,7 @@ const Dashboard = ({ setActiveComponent, setSelectedOrder }) => {
                 <p className="order-history__empty-message">
                   You haven't placed any orders yet. Start shopping to see your orders here!
                 </p>
-                <Link to="/shop-left" className="order-history__shop-now">
+                <Link to="/products-page" className="order-history__shop-now">
                   <FiShoppingCart size={14} /> Start Shopping
                 </Link>
               </div>

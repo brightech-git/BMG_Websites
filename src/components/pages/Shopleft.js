@@ -14,7 +14,7 @@ class Shopleft extends Component {
     render() {
         const { location } = this.props;
         const { itemName, subItemName } = queryString.parse(location.search); // ⬅️ parse query params
-        console.log(itemName, subItemName,'datas')
+        console.log(itemName, subItemName, 'datas')
 
         return (
             <Fragment>
@@ -24,7 +24,7 @@ class Shopleft extends Component {
                 </MetaTags>
                 <Header />
                 {/* Pass query params to Breadcrumb */}
-                <Breadcrumb itemName={itemName} subItemName={subItemName}  pages={"Shop-left"} />
+                <Breadcrumb itemName={itemName} subItemName={subItemName} pages={"products-page"} />
                 <Content />
                 {/* <Instafeeds /> */}
                 <Footer />

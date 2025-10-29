@@ -32,7 +32,7 @@ const braceletposts = [
     { img: img2, tag1: 'New', title: 'Stud Earrings', price1: '$290', price2: '$300' },
     { img: img3, tag1: 'New', tag2: '-10%', title: 'Crumpled Ring', price1: '$450', price2: '$510' },
     { img: img1, tag1: 'Sale', tag2: '-15%', title: 'Golden Pendant', price1: '$780', price2: '$800' },
-]; 
+];
 const armletsposts = [
     { img: img1, tag1: 'Sale', tag2: '-15%', title: 'Ankle Bracelet', price1: '$390', price2: '$480' },
     { img: img2, tag1: 'New', title: 'Stud Earrings', price1: '$290', price2: '$300' },
@@ -110,10 +110,10 @@ class Category extends Component {
                                                 </div>
                                                 <div className="desc">
                                                     <h4>
-                                                        <Link to="/shop-detail">{item.title}</Link>
+                                                        <Link to="/product-detail">{item.title}</Link>
                                                     </h4>
                                                     <span className="price">{item.price1} <span >{item.price2}</span></span>
-                                                    <Link to="/shop-detail" className="link"><i className="fal fa-arrow-right" /></Link>
+                                                    <Link to="/product-detail" className="link"><i className="fal fa-arrow-right" /></Link>
                                                 </div>
                                             </div>
                                         </div>
@@ -139,10 +139,10 @@ class Category extends Component {
                                                 </div>
                                                 <div className="desc">
                                                     <h4>
-                                                        <Link to="/shop-detail">{item.title}</Link>
+                                                        <Link to="/product-detail">{item.title}</Link>
                                                     </h4>
                                                     <span className="price">{item.price1} <span >{item.price2}</span></span>
-                                                    <Link to="/shop-detail" className="link"><i className="fal fa-arrow-right" /></Link>
+                                                    <Link to="/product-detail" className="link"><i className="fal fa-arrow-right" /></Link>
                                                 </div>
                                             </div>
                                         </div>
@@ -168,10 +168,10 @@ class Category extends Component {
                                                 </div>
                                                 <div className="desc">
                                                     <h4>
-                                                        <Link to="/shop-detail">{item.title}</Link>
+                                                        <Link to="/product-detail">{item.title}</Link>
                                                     </h4>
                                                     <span className="price">{item.price1} <span >{item.price2}</span></span>
-                                                    <Link to="/shop-detail" className="link"><i className="fal fa-arrow-right" /></Link>
+                                                    <Link to="/product-detail" className="link"><i className="fal fa-arrow-right" /></Link>
                                                 </div>
                                             </div>
                                         </div>
@@ -197,10 +197,10 @@ class Category extends Component {
                                                 </div>
                                                 <div className="desc">
                                                     <h4>
-                                                        <Link to="/shop-detail">{item.title}</Link>
+                                                        <Link to="/product-detail">{item.title}</Link>
                                                     </h4>
                                                     <span className="price">{item.price1} <span >{item.price2}</span></span>
-                                                    <Link to="/shop-detail" className="link"><i className="fal fa-arrow-right" /></Link>
+                                                    <Link to="/product-detail" className="link"><i className="fal fa-arrow-right" /></Link>
                                                 </div>
                                             </div>
                                         </div>
@@ -226,10 +226,10 @@ class Category extends Component {
                                                 </div>
                                                 <div className="desc">
                                                     <h4>
-                                                        <Link to="/shop-detail">{item.title}</Link>
+                                                        <Link to="/product-detail">{item.title}</Link>
                                                     </h4>
                                                     <span className="price">{item.price1} <span >{item.price2}</span></span>
-                                                    <Link to="/shop-detail" className="link"><i className="fal fa-arrow-right" /></Link>
+                                                    <Link to="/product-detail" className="link"><i className="fal fa-arrow-right" /></Link>
                                                 </div>
                                             </div>
                                         </div>
@@ -255,10 +255,10 @@ class Category extends Component {
                                                 </div>
                                                 <div className="desc">
                                                     <h4>
-                                                        <Link to="/shop-detail">{item.title}</Link>
+                                                        <Link to="/product-detail">{item.title}</Link>
                                                     </h4>
                                                     <span className="price">{item.price1} <span >{item.price2}</span></span>
-                                                    <Link to="/shop-detail" className="link"><i className="fal fa-arrow-right" /></Link>
+                                                    <Link to="/product-detail" className="link"><i className="fal fa-arrow-right" /></Link>
                                                 </div>
                                             </div>
                                         </div>

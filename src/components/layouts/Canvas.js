@@ -18,7 +18,7 @@ class Canvas extends Component {
                 <div className="widget about-widget">
                     <h5 className="widget-title">About us</h5>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia reiciendis illo ipsa asperiores, perspiciatis corrupti veritatis assumenda architecto commodi provident quas necessitatibus consequatur praesentium magnam optio deserunt fugiat repellat
-      culpa.</p>
+                        culpa.</p>
                 </div>
                 {/* Nav Widget */}
                 <div className="widget nav-widget">
@@ -29,17 +29,17 @@ class Canvas extends Component {
                         <li><Link to="/classification">Classification</Link>
                         </li>
                         <li>
-                            <Link to="/shop-left">Shop</Link>
+                            <Link to="/products-page">Shop</Link>
                             <ul className="submenu">
-                                <li><Link to="/shop-left">Shop Left Sidebar</Link>
+                                <li><Link to="/products-page">Shop Left Sidebar</Link>
                                 </li>
-                                <li><Link to="/shop-left-two">Shop Left Sidebar v2</Link>
+                                <li><Link to="/products-page-two">Shop Left Sidebar v2</Link>
                                 </li>
                                 <li><Link to="/shop-right">Shop Right Sidebar</Link>
                                 </li>
                                 <li><Link to="/shop-right-two">Shop Right Sidebar v2</Link>
                                 </li>
-                                <li><Link to="/shop-detail">Shop Detail</Link>
+                                <li><Link to="/product-detail">Shop Detail</Link>
                                 </li>
                             </ul>
                         </li>

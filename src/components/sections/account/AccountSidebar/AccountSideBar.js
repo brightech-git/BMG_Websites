@@ -16,7 +16,8 @@ import "./AccountSideBarStyles.css";
 
 const AccountSidebar = ({ activeComponent, setActiveComponent, openLogoutModal }) => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.user.user.user);
+  console.log('user in sidebar', user);
   const history = useHistory();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(true);
 

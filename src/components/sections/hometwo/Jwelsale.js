@@ -54,47 +54,47 @@ class Jwelsale extends Component {
                                             <div className="row">
                                                 <div className="col-12">
                                                     <div className="room-box extra-wide">
-                                                        <div className="room-bg" style={{ backgroundImage: "url("+ tbimg4 +")" }} />
+                                                        <div className="room-bg" style={{ backgroundImage: "url(" + tbimg4 + ")" }} />
                                                         <div className="room-content">
                                                             <span className="room-count"><i className="fal fa-th" />03 Products</span>
-                                                            <h3><Link to="/shop-detail">Gold Bracelet Hall Of Fame</Link></h3>
+                                                            <h3><Link to="/product-detail">Gold Bracelet Hall Of Fame</Link></h3>
                                                         </div>
-                                                        <Link to="/shop-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
+                                                        <Link to="/product-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-6 col-sm-6">
                                                     <div className="room-box">
-                                                        <div className="room-bg" style={{ backgroundImage: "url("+ tbimg1 +")" }}>
+                                                        <div className="room-bg" style={{ backgroundImage: "url(" + tbimg1 + ")" }}>
                                                         </div>
                                                         <div className="room-content">
                                                             <span className="room-count"><i className="fal fa-th" />05 Products</span>
-                                                            <h3><Link to="/shop-detail">Agonfly Jewelry</Link></h3>
+                                                            <h3><Link to="/product-detail">Agonfly Jewelry</Link></h3>
                                                         </div>
-                                                        <Link to="/shop-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
+                                                        <Link to="/product-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-6 col-sm-6">
                                                     <div className="room-box">
-                                                        <div className="room-bg" style={{ backgroundImage: "url("+ tbimg2 +")" }}>
+                                                        <div className="room-bg" style={{ backgroundImage: "url(" + tbimg2 + ")" }}>
                                                         </div>
                                                         <div className="room-content">
                                                             <span className="room-count"><i className="fal fa-th" />10 Products</span>
-                                                            <h3><Link to="/shop-detail">Coin Gold Necklace</Link></h3>
+                                                            <h3><Link to="/product-detail">Coin Gold Necklace</Link></h3>
                                                         </div>
-                                                        <Link to="/shop-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
+                                                        <Link to="/product-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="col-lg-4">
                                             <div className="room-box extra-height">
-                                                <div className="room-bg" style={{ backgroundImage: "url("+ tbimg3 +")" }}>
+                                                <div className="room-bg" style={{ backgroundImage: "url(" + tbimg3 + ")" }}>
                                                 </div>
                                                 <div className="room-content">
                                                     <span className="room-count"><i className="fal fa-th" />12 Products</span>
-                                                    <h3><Link to="/shop-detail">Ariel Ring</Link></h3>
+                                                    <h3><Link to="/product-detail">Ariel Ring</Link></h3>
                                                 </div>
-                                                <Link to="/shop-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
+                                                <Link to="/product-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
                                             </div>
                                         </div>
                                     </div>
@@ -106,47 +106,47 @@ class Jwelsale extends Component {
                                     <div className="row">
                                         <div className="col-lg-4">
                                             <div className="room-box extra-height">
-                                                <div className="room-bg" style={{ backgroundImage: "url("+ tbimg3 +")" }}>
+                                                <div className="room-bg" style={{ backgroundImage: "url(" + tbimg3 + ")" }}>
                                                 </div>
                                                 <div className="room-content">
                                                     <span className="room-count"><i className="fal fa-th" />12 Products</span>
-                                                    <h3><Link to="/shop-detail">Ariel Ring</Link></h3>
+                                                    <h3><Link to="/product-detail">Ariel Ring</Link></h3>
                                                 </div>
-                                                <Link to="/shop-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
+                                                <Link to="/product-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
                                             </div>
                                         </div>
                                         <div className="col-lg-8">
                                             <div className="row">
                                                 <div className="col-lg-6 col-sm-6">
                                                     <div className="room-box">
-                                                        <div className="room-bg" style={{ backgroundImage: "url("+ tbimg2 +")" }}>
+                                                        <div className="room-bg" style={{ backgroundImage: "url(" + tbimg2 + ")" }}>
                                                         </div>
                                                         <div className="room-content">
                                                             <span className="room-count"><i className="fal fa-th" />10 Products</span>
-                                                            <h3><Link to="/shop-detail">Coin Gold Necklace</Link></h3>
+                                                            <h3><Link to="/product-detail">Coin Gold Necklace</Link></h3>
                                                         </div>
-                                                        <Link to="/shop-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
+                                                        <Link to="/product-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-6 col-sm-6">
                                                     <div className="room-box">
-                                                        <div className="room-bg" style={{ backgroundImage: "url("+ tbimg1 +")" }}>
+                                                        <div className="room-bg" style={{ backgroundImage: "url(" + tbimg1 + ")" }}>
                                                         </div>
                                                         <div className="room-content">
                                                             <span className="room-count"><i className="fal fa-th" />05 Products</span>
-                                                            <h3><Link to="/shop-detail">Agonfly Jewelry</Link></h3>
+                                                            <h3><Link to="/product-detail">Agonfly Jewelry</Link></h3>
                                                         </div>
-                                                        <Link to="/shop-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
+                                                        <Link to="/product-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
                                                     </div>
                                                 </div>
                                                 <div className="col-12">
                                                     <div className="room-box extra-wide">
-                                                        <div className="room-bg" style={{ backgroundImage: "url("+ tbimg4 +")" }} />
+                                                        <div className="room-bg" style={{ backgroundImage: "url(" + tbimg4 + ")" }} />
                                                         <div className="room-content">
                                                             <span className="room-count"><i className="fal fa-th" />03 Products</span>
-                                                            <h3><Link to="/shop-detail">Gold Bracelet Hall Of Fame</Link></h3>
+                                                            <h3><Link to="/product-detail">Gold Bracelet Hall Of Fame</Link></h3>
                                                         </div>
-                                                        <Link to="/shop-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
+                                                        <Link to="/product-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
                                                     </div>
                                                 </div>
                                             </div>
@@ -160,47 +160,47 @@ class Jwelsale extends Component {
                                     <div className="row">
                                         <div className="col-lg-4">
                                             <div className="room-box extra-height">
-                                                <div className="room-bg" style={{ backgroundImage: "url("+ tbimg3 +")" }}>
+                                                <div className="room-bg" style={{ backgroundImage: "url(" + tbimg3 + ")" }}>
                                                 </div>
                                                 <div className="room-content">
                                                     <span className="room-count"><i className="fal fa-th" />12 Products</span>
-                                                    <h3><Link to="/shop-detail">Ariel Ring</Link></h3>
+                                                    <h3><Link to="/product-detail">Ariel Ring</Link></h3>
                                                 </div>
-                                                <Link to="/shop-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
+                                                <Link to="/product-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
                                             </div>
                                         </div>
                                         <div className="col-lg-8">
                                             <div className="row">
                                                 <div className="col-12">
                                                     <div className="room-box extra-wide">
-                                                        <div className="room-bg" style={{ backgroundImage: "url("+ tbimg4 +")" }} />
+                                                        <div className="room-bg" style={{ backgroundImage: "url(" + tbimg4 + ")" }} />
                                                         <div className="room-content">
                                                             <span className="room-count"><i className="fal fa-th" />03 Products</span>
-                                                            <h3><Link to="/shop-detail">Gold Bracelet Hall Of Fame</Link></h3>
+                                                            <h3><Link to="/product-detail">Gold Bracelet Hall Of Fame</Link></h3>
                                                         </div>
-                                                        <Link to="/shop-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
+                                                        <Link to="/product-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-6 col-sm-6">
                                                     <div className="room-box">
-                                                        <div className="room-bg" style={{ backgroundImage: "url("+ tbimg1 +")" }}>
+                                                        <div className="room-bg" style={{ backgroundImage: "url(" + tbimg1 + ")" }}>
                                                         </div>
                                                         <div className="room-content">
                                                             <span className="room-count"><i className="fal fa-th" />05 Products</span>
-                                                            <h3><Link to="/shop-detail">Agonfly Jewelry</Link></h3>
+                                                            <h3><Link to="/product-detail">Agonfly Jewelry</Link></h3>
                                                         </div>
-                                                        <Link to="/shop-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
+                                                        <Link to="/product-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-6 col-sm-6">
                                                     <div className="room-box">
-                                                        <div className="room-bg" style={{ backgroundImage: "url("+ tbimg2 +")" }}>
+                                                        <div className="room-bg" style={{ backgroundImage: "url(" + tbimg2 + ")" }}>
                                                         </div>
                                                         <div className="room-content">
                                                             <span className="room-count"><i className="fal fa-th" />10 Products</span>
-                                                            <h3><Link to="/shop-detail">Coin Gold Necklace</Link></h3>
+                                                            <h3><Link to="/product-detail">Coin Gold Necklace</Link></h3>
                                                         </div>
-                                                        <Link to="/shop-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
+                                                        <Link to="/product-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
                                                     </div>
                                                 </div>
                                             </div>
@@ -216,47 +216,47 @@ class Jwelsale extends Component {
                                             <div className="row">
                                                 <div className="col-lg-6 col-sm-6">
                                                     <div className="room-box">
-                                                        <div className="room-bg" style={{ backgroundImage: "url("+ tbimg1 +")" }}>
+                                                        <div className="room-bg" style={{ backgroundImage: "url(" + tbimg1 + ")" }}>
                                                         </div>
                                                         <div className="room-content">
                                                             <span className="room-count"><i className="fal fa-th" />05 Products</span>
-                                                            <h3><Link to="/shop-detail">Agonfly Jewelry</Link></h3>
+                                                            <h3><Link to="/product-detail">Agonfly Jewelry</Link></h3>
                                                         </div>
-                                                        <Link to="/shop-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
+                                                        <Link to="/product-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-6 col-sm-6">
                                                     <div className="room-box">
-                                                        <div className="room-bg" style={{ backgroundImage: "url("+ tbimg2 +")" }}>
+                                                        <div className="room-bg" style={{ backgroundImage: "url(" + tbimg2 + ")" }}>
                                                         </div>
                                                         <div className="room-content">
                                                             <span className="room-count"><i className="fal fa-th" />10 Products</span>
-                                                            <h3><Link to="/shop-detail">Coin Gold Necklace</Link></h3>
+                                                            <h3><Link to="/product-detail">Coin Gold Necklace</Link></h3>
                                                         </div>
-                                                        <Link to="/shop-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
+                                                        <Link to="/product-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
                                                     </div>
                                                 </div>
                                                 <div className="col-12">
                                                     <div className="room-box extra-wide">
-                                                        <div className="room-bg" style={{ backgroundImage: "url("+ tbimg4 +")" }} />
+                                                        <div className="room-bg" style={{ backgroundImage: "url(" + tbimg4 + ")" }} />
                                                         <div className="room-content">
                                                             <span className="room-count"><i className="fal fa-th" />03 Products</span>
-                                                            <h3><Link to="/shop-detail">Gold Bracelet Hall Of Fame</Link></h3>
+                                                            <h3><Link to="/product-detail">Gold Bracelet Hall Of Fame</Link></h3>
                                                         </div>
-                                                        <Link to="/shop-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
+                                                        <Link to="/product-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="col-lg-4">
                                             <div className="room-box extra-height">
-                                                <div className="room-bg" style={{ backgroundImage: "url("+ tbimg3 +")" }}>
+                                                <div className="room-bg" style={{ backgroundImage: "url(" + tbimg3 + ")" }}>
                                                 </div>
                                                 <div className="room-content">
                                                     <span className="room-count"><i className="fal fa-th" />12 Products</span>
-                                                    <h3><Link to="/shop-detail">Ariel Ring</Link></h3>
+                                                    <h3><Link to="/product-detail">Ariel Ring</Link></h3>
                                                 </div>
-                                                <Link to="/shop-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
+                                                <Link to="/product-detail" className="room-link"><i className="fal fa-arrow-right" /></Link>
                                             </div>
                                         </div>
                                     </div>

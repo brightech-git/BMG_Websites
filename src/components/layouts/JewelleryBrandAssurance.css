@@ -1,0 +1,160 @@
+.brand-assurance-wrapper {
+}
+
+.brand-assurance-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    padding: 0.5rem;
+    align-items: center;
+   
+}
+
+.brand-assurance-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    min-width: 120px;
+    padding: 0.75rem;
+    border-radius: 8px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.brand-assurance-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.brand-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(192, 160, 96, 0.1);
+    padding: 0.5rem;
+}
+
+.brand-text {
+    font-size: 0.85rem;
+    text-align: center;
+    line-height: 1.3;
+    font-weight: 500;
+    max-width: 120px;
+    word-wrap: break-word;
+    margin-top: 0.25rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .brand-assurance-container {
+        gap: 1rem;
+        padding: 0.75rem;
+    }
+
+    .brand-assurance-item {
+        min-width: 110px;
+        padding: 0.5rem;
+        gap: 0.4rem;
+    }
+
+    .brand-icon {
+        width: 44px;
+        height: 44px;
+        padding: 0.4rem;
+    }
+
+    .brand-text {
+        font-size: 0.8rem;
+        max-width: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .brand-assurance-container {
+        gap: 0.75rem;
+        padding: 0.5rem;
+    }
+
+    .brand-assurance-item {
+        min-width: 100px;
+        padding: 0.4rem;
+        gap: 0.3rem;
+    }
+
+    .brand-icon {
+        width: 40px;
+        height: 40px;
+        padding: 0.35rem;
+    }
+
+    .brand-text {
+        font-size: 0.75rem;
+        max-width: 90px;
+    }
+}
+
+@media (max-width: 360px) {
+    .brand-assurance-container {
+        gap: 0.5rem;
+        padding: 0.4rem;
+    }
+
+    .brand-assurance-item {
+        min-width: 90px;
+        padding: 0.3rem;
+    }
+
+    .brand-icon {
+        width: 36px;
+        height: 36px;
+        padding: 0.3rem;
+    }
+
+    .brand-text {
+        font-size: 0.7rem;
+        max-width: 80px;
+    }
+}
+
+/* For very small screens, ensure items don't get too cramped */
+@media (max-width: 320px) {
+    .brand-assurance-container {
+        gap: 0.4rem;
+        padding: 0.3rem;
+    }
+
+    .brand-assurance-item {
+        min-width: 85px;
+        padding: 0.25rem;
+    }
+
+    .brand-text {
+        font-size: 0.65rem;
+        max-width: 75px;
+    }
+}
+
+/* Optional: Hide scroll on mobile when not needed */
+@media (max-width: 480px) {
+    .brand-assurance-container:not(.needs-scroll) {
+        justify-content: center;
+    }
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+    .brand-assurance-item:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .brand-assurance-item:active {
+        transform: scale(0.98);
+        background: rgba(192, 160, 96, 0.05);
+    }
+}

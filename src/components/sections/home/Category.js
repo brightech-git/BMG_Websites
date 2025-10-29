@@ -11,7 +11,7 @@ const CategoryCard = ({ item }) => {
         const queryParams = new URLSearchParams();
         if (occasion) queryParams.append('occasion', occasion);
         if (gender) queryParams.append('gender', gender);
-        history.push(`/shop-left?${queryParams.toString()}`);
+        history.push(`/products-page?${queryParams.toString()}`);
     };
 
     const capitalizeWords = (str) => {
@@ -92,7 +92,7 @@ const Category = () => {
             <div className='title-container'>
                 <h4 className='occ-title'> Shop By Occasoin</h4>
                 <span className='occ-sub-title'>Find the perfect piece for weddings, parties, or everyday style.
-Jewelry that makes every occasion shine. </span>
+                    Jewelry that makes every occasion shine. </span>
             </div>
 
 

@@ -69,11 +69,11 @@ class Content extends Component {
                                                     </div>
                                                     <div className="desc">
                                                         <h4>
-                                                            <Link to="/shop-detail">{item.title}</Link>
+                                                            <Link to="/product-detail">{item.title}</Link>
                                                         </h4>
                                                         <span className="price">${item.price}
                                                             {item.discount > 0 || item.discount !== '' ? <span> ${Math.ceil(item.price * (item.discount / 100))} </span> : ''}</span>
-                                                        <Link to="/shop-detail" className="link"><i className="fal fa-arrow-right" /></Link>
+                                                        <Link to="/product-detail" className="link"><i className="fal fa-arrow-right" /></Link>
                                                     </div>
                                                 </div>
                                             </div>

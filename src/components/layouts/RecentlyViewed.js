@@ -143,7 +143,7 @@ const ProductCard = ({ item, isMain }) => {
     const clickProduct = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        navigate.push(`/shop-detail/${item?.SNO}`);
+        navigate.push(`/product-detail/${item?.SNO}`);
     };
 
     const isInCart = Array.isArray(cartItems?.data) && cartItems.data.some(cartItem => cartItem.itemTagSno === item?.SNO);
@@ -220,7 +220,7 @@ const ProductCard = ({ item, isMain }) => {
                         <span className="product-card__current-price">
                             ₹{currentPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                         </span>
-                        
+
                     </div>
                 </div>
             </div>
@@ -369,7 +369,7 @@ const ProductCarousel = () => {
                                 <p>No recently viewed products.</p>
                                 <button
                                     className="jewel-carousel__cta"
-                                    onClick={() => navigate.push('/shop-left')}
+                                    onClick={() => navigate.push('/products-page')}
                                     aria-label="Browse Products"
                                 >
                                     Browse Products

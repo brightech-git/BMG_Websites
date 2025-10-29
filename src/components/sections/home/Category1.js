@@ -12,7 +12,7 @@ const CategoryCard = ({ item }) => {
         if (itemName) queryParams.append('itemName', itemName);
         if (subItemName) queryParams.append('subItemName', subItemName);
         const fixedQuery = queryParams.toString().replace(/\+/g, '%20');
-        history.push(`/shop-left?${fixedQuery}`);
+        history.push(`/products-page?${fixedQuery}`);
     };
 
     if (!item) {
@@ -28,12 +28,12 @@ const CategoryCard = ({ item }) => {
     }
 
     const imgSrc = item?.image_path
-  ? item.image_path.startsWith('http')
-    ? item.image_path
-    : `${baseUrl}${item.image_path.startsWith('/') ? '' : '/'}${item.image_path}`
-  : '/fallback-image.jpg';
+        ? item.image_path.startsWith('http')
+            ? item.image_path
+            : `${baseUrl}${item.image_path.startsWith('/') ? '' : '/'}${item.image_path}`
+        : '/fallback-image.jpg';
 
-    console.log(imgSrc,'images')
+    console.log(imgSrc, 'images')
 
     return (
         <div className="offer-card" onClick={() => handleShopNow(item.item_name, item.sub_item_name)} >
@@ -66,7 +66,7 @@ const CategoryCard = ({ item }) => {
 
 const Category1 = () => {
     const { data, isLoading, error } = useOfferBanners();
-    
+
     const banners = data?.data || [];
     console.log(banners, 'banner');
 

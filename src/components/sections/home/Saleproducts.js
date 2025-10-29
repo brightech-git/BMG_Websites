@@ -7,10 +7,10 @@ import img3 from '../../../assets/img/shop/03.jpg';
 import img4 from '../../../assets/img/shop/04.jpg';
 
 const latestposts = [
-  { img: img1, title: 'Ankle Bracelet', price: '$390' },
-  { img: img2, title: 'Stud Earrings', price: '$480' },
-  { img: img3, title: 'Crumpled Ring', price: '$290' },
-  { img: img4, title: 'Moon Necklace', price: '$390' },
+    { img: img1, title: 'Ankle Bracelet', price: '$390' },
+    { img: img2, title: 'Stud Earrings', price: '$480' },
+    { img: img3, title: 'Crumpled Ring', price: '$290' },
+    { img: img4, title: 'Moon Necklace', price: '$390' },
 ];
 class Saleproducts extends Component {
     render() {
@@ -32,28 +32,28 @@ class Saleproducts extends Component {
                     </div>
                     <div className="row">
                         {latestposts.map((item, i) => (
-                        <div key={i} className="col-lg-3 col-6">
-                            <div className="food-box shop-box shop-box-2">
-                                <div className="thumb">
-                                    <img src={item.img} alt="images" />
-                                    <div className="button-group">
-                                        <Link to="#"><i className="far fa-heart" /></Link>
-                                        <Link to="#"><i className="far fa-sync-alt" /></Link>
-                                        <Link to="#"><i className="far fa-eye" /></Link>
+                            <div key={i} className="col-lg-3 col-6">
+                                <div className="food-box shop-box shop-box-2">
+                                    <div className="thumb">
+                                        <img src={item.img} alt="images" />
+                                        <div className="button-group">
+                                            <Link to="#"><i className="far fa-heart" /></Link>
+                                            <Link to="#"><i className="far fa-sync-alt" /></Link>
+                                            <Link to="#"><i className="far fa-eye" /></Link>
+                                        </div>
+                                        <div className="cart-block">
+                                            <Link to="#">Add to Cart</Link>
+                                        </div>
                                     </div>
-                                    <div className="cart-block">
-                                        <Link to="#">Add to Cart</Link>
+                                    <div className="desc">
+                                        <h4 className="mb-0">
+                                            <Link to="/product-detail">{item.title}</Link>
+                                        </h4>
+                                        <span className="price">{item.price}</span>
+                                        <Link to="/product-detail" className="link"><i className="fal fa-arrow-right" /></Link>
                                     </div>
-                                </div>
-                                <div className="desc">
-                                    <h4 className="mb-0">
-                                        <Link to="/shop-detail">{item.title}</Link>
-                                    </h4>
-                                    <span className="price">{item.price}</span>
-                                    <Link to="/shop-detail" className="link"><i className="fal fa-arrow-right" /></Link>
                                 </div>
                             </div>
-                        </div>
                         ))}
                     </div>
                 </div>

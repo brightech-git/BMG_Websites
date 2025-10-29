@@ -1,0 +1,128 @@
+/* Order Notification Styles */
+.order-notification-modal {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: var(--primary-card-color);
+    box-shadow: var(--shadow-sm);
+    border-radius: 12px;
+    padding: 10px;
+    z-index: 1000;
+    border-right: 3px solid var(--green-color);
+    animation: slideInRight 0.5s ease-out;
+}
+
+.order-notification-item {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    position: relative;
+    padding: 10px;
+}
+
+.order-notification-item .product-image {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--primary-color);
+}
+
+.order-notification-item .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.orderNotification-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.product-purchased-by {
+    font-size: 11px;
+    font-weight: 900;
+    color: var(--secondary-text-color);
+    margin-bottom: 4px;
+}
+.order-notification-item .customer-name {
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--primary-text-color);
+    margin-bottom: 1px;
+}
+
+.order-notification-item .product-name {
+    font-size: 10px;
+    color: var(--primary-text-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.order-notification-item .order-time {
+    font-size: 11px;
+    color: var(--primary-text-color);
+}
+
+.order-notification-item .close-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--red-color);
+    color:var(--white-color);
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+   
+        .order-notification-item .product-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+        }
+                .order-notification-item .customer-name {
+                 
+                    font-size: 10px;
+                    
+                }
+        
+                .order-notification-item .product-name {
+                    font-size: 10px;
+                   
+                   
+                }
+        
+                .order-notification-item .order-time {
+                    font-size: 8px;
+                   
+                }
+.order-notification-modal {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+}
+}

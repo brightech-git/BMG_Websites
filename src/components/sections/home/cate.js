@@ -16,7 +16,7 @@ const Category = () => {
 
         const fixedQuery = queryParams.toString().replace(/\+/g, '%20');
 
-        history.push(`/shop-left?${fixedQuery}`);
+        history.push(`/products-page?${fixedQuery}`);
     };
 
     if (isLoading) {

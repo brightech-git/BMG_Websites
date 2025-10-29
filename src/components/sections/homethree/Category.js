@@ -16,7 +16,7 @@ class Category extends Component {
                         <div className="row">
                             {categoryposts.map((item, i) => (
                                 <div key={i} className="col-lg-3 col-sm-6">
-                                    <Link to="/shop-left" className="categories-box">
+                                    <Link to="/products-page" className="categories-box">
                                         <span className="icon">
                                             <i className={item.icon} />
                                         </span>

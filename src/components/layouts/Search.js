@@ -84,7 +84,7 @@ const ItemSearch = () => {
     if (!searchTerm.trim()) return;
     const params = new URLSearchParams();
     params.append("itemName", searchTerm.trim());
-    history.push(`/shop-left?${params.toString()}`);
+    history.push(`/products-page?${params.toString()}`);
   };
 
   const handleKeyDown = (e) => {

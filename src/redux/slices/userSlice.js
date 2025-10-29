@@ -24,7 +24,7 @@ export const login = createAsyncThunk('user/login', async (loginData, thunkAPI) 
     try {
         const response = await loginUser(loginData); 
         localStorage.setItem('user_token', response.token);
-        localStorage.setItem('user', JSON.stringify(response));
+        localStorage.setItem('user', JSON.stringify(response?.user || response));
         localStorage.setItem('userMobileNumber', response.contact || response.contactNumber);
         return response;
     } catch (error) {
@@ -161,7 +161,7 @@ export const googleLogin = createAsyncThunk(
             const response = await googleLoginService(idToken);
 
             // Save to localStorage
-            localStorage.setItem("user", JSON.stringify(response));
+            localStorage.setItem("user", JSON.stringify(response?.user || response));
             if (response.token) {
                 localStorage.setItem("user_token", response.token);
             }

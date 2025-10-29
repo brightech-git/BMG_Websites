@@ -1,23 +1,16 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useCategoryImages } from '../../../hook/categorywithImage/useCategoryQuery';
 import './OurCategory.css';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import DragScrollComponent from '../../layouts/DragScrollComponent';
 
 const OurCategory = () => {
     const { data: categories = [], isLoading: isCategoriesLoading } = useCategoryImages();
     const history = useHistory();
-    const containerRef = useRef(null);
     const baseUrl = "https://app.bmgjewellers.com";
-    const [showAll, setShowAll] = useState(false);
-
-    // Drag scroll functionality (only for smaller screens)
-    const [isDragging, setIsDragging] = useState(false);
-    const [startX, setStartX] = useState(0);
-    const [scrollLeft, setScrollLeft] = useState(0);
 
     const handleItemClick = (itemName) => {
-        history.push(`/shop-left?itemName=${encodeURIComponent(itemName)}`);
+        history.push(`/products-page?itemName=${encodeURIComponent(itemName)}`);
     };
 
     const formatItemName = (name) => {
@@ -27,34 +20,12 @@ const OurCategory = () => {
             .join(' ');
     };
 
-    const startDrag = (e) => {
-        if (window.innerWidth >= 992 || showAll) return; // Disable drag on large screens or when showing all
-        setIsDragging(true);
-        setStartX(e.pageX - containerRef.current.offsetLeft);
-        setScrollLeft(containerRef.current.scrollLeft);
-    };
-
-    const endDrag = () => setIsDragging(false);
-
-    const handleDrag = (e) => {
-        if (!isDragging || window.innerWidth >= 992 || showAll) return;
-        e.preventDefault();
-        const x = e.pageX - containerRef.current.offsetLeft;
-        const walk = (x - startX) * 1.5;
-        containerRef.current.scrollLeft = scrollLeft - walk;
-    };
-
-    const toggleShowAll = () => {
-        setShowAll(!showAll);
-    };
-
     if (isCategoriesLoading) {
         return (
             <section className="elegant-category-section">
                 <div className="elegant-container">
                     <div className="elegant-header">
                         <h2 className="content-title">BMG WORLD</h2>
-                        <button className="see-all-button" disabled>Loading...</button>
                     </div>
                     <div className="elegant-scroll-container">
                         {[...Array(5)].map((_, index) => (
@@ -80,18 +51,10 @@ const OurCategory = () => {
             <div className="elegant-container">
                 <div className="elegant-header">
                     <h2 className="content-title">BMG WORLD</h2>
-                    <button className="see-all-button" onClick={toggleShowAll}>
-                        See All {showAll ? <FaChevronUp /> : <FaChevronDown />}
-                    </button>
                 </div>
-                <div
-                    className={`elegant-scroll-container ${showAll ? 'grid-view' : ''}`}
-                    ref={containerRef}
-                    onMouseDown={startDrag}
-                    onMouseLeave={endDrag}
-                    onMouseUp={endDrag}
-                    onMouseMove={handleDrag}
-                >
+
+                <DragScrollComponent>
+
                     {categories.map((category) => (
                         <div
                             key={category.id}
@@ -110,11 +73,11 @@ const OurCategory = () => {
                                 <h3 className="elegant-title">
                                     {formatItemName(category.item_name)}
                                 </h3>
-                               
                             </div>
                         </div>
                     ))}
-                </div>
+
+                </DragScrollComponent>
             </div>
         </section>
     );

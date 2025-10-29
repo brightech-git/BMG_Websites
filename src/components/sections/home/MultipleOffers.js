@@ -8,15 +8,15 @@ const MultipleOffers = ({ offers }) => {
 
     if (!offers || offers.length < 2) return null;
 
-    
-    const handleClick=(itemName,subItemName)=>{
-    const queryParam = new URLSearchParams();
-    if (itemName) queryParam.append('itemName', itemName);
-    if (subItemName) queryParam.append('subItemName', subItemName);
-    const fixedQuery = queryParam.toString().replace(/\+/g, '%20');
-    history.push(`/shop-left?${fixedQuery}`);
 
-}
+    const handleClick = (itemName, subItemName) => {
+        const queryParam = new URLSearchParams();
+        if (itemName) queryParam.append('itemName', itemName);
+        if (subItemName) queryParam.append('subItemName', subItemName);
+        const fixedQuery = queryParam.toString().replace(/\+/g, '%20');
+        history.push(`/products-page?${fixedQuery}`);
+
+    }
 
     return (
         <div className="multiple-offers-section">
@@ -36,7 +36,7 @@ const MultipleOffers = ({ offers }) => {
                                 e.target.onerror = null;
                                 e.target.src = "/fallback-image.jpg";
                             }}
-                            onClick={()=>handleClick(offer.title , offer.subtitle)}
+                            onClick={() => handleClick(offer.title, offer.subtitle)}
                         />
                     </div>
                 ))}

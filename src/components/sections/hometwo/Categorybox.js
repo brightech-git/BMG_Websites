@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import catimg1 from '../../../assets/img/others/pr-1.png';
 import catimg2 from '../../../assets/img/others/pr-2.png';
@@ -19,8 +19,8 @@ class Categorybox extends Component {
                                 </div>
                                 <div className="category-box-content">
                                     <div className="content text-center">
-                                        <h3 className="title"><Link to="/shop-left">Diamond’s Haven</Link></h3>
-                                        <Link to="/shop-left" className="main-btn btn-filled">View Details</Link>
+                                        <h3 className="title"><Link to="/products-page">Diamond’s Haven</Link></h3>
+                                        <Link to="/products-page" className="main-btn btn-filled">View Details</Link>
                                     </div>
                                 </div>
                             </div>
@@ -32,8 +32,8 @@ class Categorybox extends Component {
                                 </div>
                                 <div className="category-box-content">
                                     <div className="content text-center">
-                                        <h3 className="title"><Link to="/shop-left">Best Summer Sale</Link></h3>
-                                        <Link to="/shop-left" className="main-btn btn-filled">View Details</Link>
+                                        <h3 className="title"><Link to="/products-page">Best Summer Sale</Link></h3>
+                                        <Link to="/products-page" className="main-btn btn-filled">View Details</Link>
                                     </div>
                                 </div>
                             </div>
@@ -42,8 +42,8 @@ class Categorybox extends Component {
                             <div className="category-box-wrap">
                                 <div className="category-box-content">
                                     <div className="content text-center">
-                                        <h3 className="title"><Link to="/shop-left">Necklaces</Link></h3>
-                                        <Link to="/shop-left" className="main-btn btn-filled">View Details</Link>
+                                        <h3 className="title"><Link to="/products-page">Necklaces</Link></h3>
+                                        <Link to="/products-page" className="main-btn btn-filled">View Details</Link>
                                     </div>
                                 </div>
                                 <div className="category-box-image">
@@ -55,8 +55,8 @@ class Categorybox extends Component {
                             <div className="category-box-wrap">
                                 <div className="category-box-content">
                                     <div className="content text-center">
-                                        <h3 className="title"><Link to="/shop-left">Diamond Chain</Link></h3>
-                                        <Link to="/shop-left" className="main-btn btn-filled">View Details</Link>
+                                        <h3 className="title"><Link to="/products-page">Diamond Chain</Link></h3>
+                                        <Link to="/products-page" className="main-btn btn-filled">View Details</Link>
                                     </div>
                                 </div>
                                 <div className="category-box-image">

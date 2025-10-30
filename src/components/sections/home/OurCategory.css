@@ -53,6 +53,7 @@
 /* Scroll Container */
 .elegant-scroll-container {
     display: flex;
+    flex-direction: row-reverse;
     gap: 1.5rem;
     overflow-x: auto;
     scroll-behavior: smooth;

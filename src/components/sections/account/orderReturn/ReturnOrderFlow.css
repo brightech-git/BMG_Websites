@@ -260,7 +260,7 @@
 }
 
 .return-flow__step-header {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .return-flow__step-indicator {
@@ -271,7 +271,7 @@
     border-radius: var(--radius-lg);
     font-size: 0.875rem;
     font-weight: 600;
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
     font-family: var(--secondary-font);
 }
 
@@ -665,7 +665,7 @@
 }
 
 .return-flow__section-label {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--primary-text-color);
     margin-bottom: 1.5rem;
@@ -769,7 +769,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.75rem 1rem;
+    padding: 0.45rem 0.5rem;
     border: 2px solid;
     border-radius: var(--radius-lg);
     font-weight: 600;
@@ -1218,11 +1218,11 @@
     }
 
     .return-flow__step-title {
-        font-size: 1.2rem;
+        font-size: 1rem;
     }
 
     .return-flow__step-description {
-        font-size: 0.95rem;
+        font-size: 0.85rem;
     }
 
     .return-flow__option-label {
@@ -1334,7 +1334,7 @@
     }
 
     .return-flow__step-description {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
     }
 
     .return-flow__option-label {
@@ -1395,11 +1395,11 @@
     }
 
     .return-flow__step-title {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 
     .return-flow__step-description {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
     }
 
     .return-flow__progress-dot {
@@ -1649,6 +1649,10 @@
         .return-flow__summary-content {
             padding: 0 0.5rem;
         }
+                 .return-flow__finalStep-option-input {
+                     width: 20px;
+                     height: 20px;
+                 }
 }
 
 /* Mobile Styles */
@@ -1668,6 +1672,10 @@
         .return-flow__summary-content {
             padding: 0 0.5rem;
         }
+                 .return-flow__finalStep-option-input {
+                     width: 35px;
+                     height: 35px;
+                 }
 }
 
 @media (max-width: 768px) {
@@ -1697,7 +1705,13 @@
         height: 70px;
     }
 
-    
+    .return-flow__section-label{
+        font-size:0.85rem;
+    }
+         .return-flow__finalStep-option-input {
+             width: 25px;
+             height: 25px;
+         }
     
 }
 
@@ -1733,7 +1747,10 @@
         height: 60px;
     }
 
-    
+    .return-flow__finalStep-option-input{
+        width: 15px;
+        height: 15px;
+    }
 
     
 
@@ -1744,6 +1761,9 @@
     .return-flow__order-item {
         padding: 0.5rem 0;
         font-size: 0.875rem;
+    }
+    .return-flow__section-label{
+        font-size: 0.75rem;
     }
 }
 

@@ -16,7 +16,8 @@ export const OrderNotification = ({ order, visible, onClose }) => {
         <div className="orderNotification-details">
           <div className="product-purchased-by ">Product Purchased By</div>
           <div className="customer-name">{order.customerName}</div>
-          <div className="product-name">{order.productName}  {new Date(order.orderTime).toLocaleString()}</div>
+          <div className="product-name">{order.productName}     </div>
+           {/* {new Date(order.orderTime).toLocaleString()} */}
         
         </div>
         <button className="close-btn" onClick={onClose}>×</button>

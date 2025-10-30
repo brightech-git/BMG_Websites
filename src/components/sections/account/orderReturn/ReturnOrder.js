@@ -450,6 +450,8 @@ const ReturnOrderFlow = () => {
                                                             value={opt.value}
                                                             checked={refundMode === opt.value}
                                                             onChange={(e) => setRefundMode(e.target.value)}
+                                                            className="return-flow__finalStep-option-input"
+
                                                         />
                                                         <div className="return-flow__refund-option-content">
                                                             <span className="return-flow__refund-option-label">{opt.label}</span>

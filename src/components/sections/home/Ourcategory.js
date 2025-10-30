@@ -6,6 +6,10 @@ import DragScrollComponent from '../../layouts/DragScrollComponent';
 
 const OurCategory = () => {
     const { data: categories = [], isLoading: isCategoriesLoading } = useCategoryImages();
+    const subcategories = categories.length ? [...categories].reverse() : [];
+
+    
+
     const history = useHistory();
     const baseUrl = "https://app.bmgjewellers.com";
 
@@ -55,7 +59,7 @@ const OurCategory = () => {
 
                 <DragScrollComponent>
 
-                    {categories.map((category) => (
+                    {subcategories.map((category) => (
                         <div
                             key={category.id}
                             className="elegant-card"

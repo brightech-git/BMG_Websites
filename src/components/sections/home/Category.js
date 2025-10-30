@@ -45,7 +45,7 @@ const CategoryCard = ({ item }) => {
                     e.target.src = '/fallback-image.jpg';
                 }}
             />
-            <div className="category-content">
+            <div className="bmg-category-content">
                 <span className="category-tag">
                     {capitalizeWords(item.occasion)}
                 </span>

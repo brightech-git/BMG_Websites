@@ -30,6 +30,7 @@
 }
 .offer-grid {
     display: flex;
+    flex-direction: row-reverse;
     flex-wrap: nowrap;
     justify-content: center;
     gap: 1rem;

@@ -121,7 +121,7 @@ function App() {
             }
             return nextIndex;
           });
-        }, 5000); // 5 seconds hidden
+        }, 10000); // 5 seconds hidden
       }, 3000); // 3 seconds visible
     };
 
@@ -133,7 +133,7 @@ function App() {
       if (flattenedOrders.length > 1) {
         startNotificationCycle();
       }
-    }, 8000); // 8 seconds per complete cycle (3s show + 5s hide)
+    }, 20000); // 8 seconds per complete cycle (3s show + 5s hide)
 
     return () => {
       clearTimeout(showTimer);

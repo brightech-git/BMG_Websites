@@ -23,6 +23,7 @@ const initialToken = localStorage.getItem('user_token') || null;
 export const login = createAsyncThunk('user/login', async (loginData, thunkAPI) => {
     try {
         const response = await loginUser(loginData); 
+        console.log('Login Response:', response); // Debug
         localStorage.setItem('user_token', response.token);
         localStorage.setItem('user', JSON.stringify(response?.user || response));
         localStorage.setItem('userMobileNumber', response.contact || response.contactNumber);
@@ -159,11 +160,23 @@ export const googleLogin = createAsyncThunk(
     async (idToken, thunkAPI) => {
         try {
             const response = await googleLoginService(idToken);
-
+            console.log('Google Login Response:', response);
+            if(response.token){
+                const user = response.user || response.user || "Not Provided";
+                console.log("User :", user);
+                localStorage.setItem("user", JSON.stringify(user));
+                console.log("Stored:user", localStorage.getItem("user"));
+            }
             // Save to localStorage
             localStorage.setItem("user", JSON.stringify(response?.user || response));
             if (response.token) {
                 localStorage.setItem("user_token", response.token);
+            }
+            if (response.user) {
+                const mobileNumber = response.user?.contactNumber || response.contactNumber || "Not Provided";
+              
+                localStorage.setItem("userMobileNumber", mobileNumber);
+                
             }
 
             toast.success("✅ Google login successful!", {

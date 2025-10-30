@@ -16,7 +16,7 @@ import "./AccountSideBarStyles.css";
 
 const AccountSidebar = ({ activeComponent, setActiveComponent, openLogoutModal }) => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user.user);
+  const user = useSelector((state) => state.user.user);
   console.log('user in sidebar', user);
   const history = useHistory();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(true);
@@ -29,11 +29,18 @@ const AccountSidebar = ({ activeComponent, setActiveComponent, openLogoutModal }
   ];
 
   const getUserInitials = () => {
-    if (!user?.username) return "GU"; // Guest User
-    const names = user.username.split(" ");
-    if (names.length === 1) return names[0].charAt(0).toUpperCase();
-    return `${names[0].charAt(0)}${names[names.length - 1].charAt(0)}`.toUpperCase();
+    if (user?.username) {
+      const names = user.username.trim().split(" ");
+      if (names.length === 1) return names[0].charAt(0).toUpperCase();
+      return `${names[0].charAt(0)}${names[names.length - 1].charAt(0)}`.toUpperCase();
+    } else if (user?.user?.username) {
+      const names = user.user.username.trim().split(" ");
+      if (names.length === 1) return names[0].charAt(0).toUpperCase();
+      return `${names[0].charAt(0)}${names[names.length - 1].charAt(0)}`.toUpperCase();
+    }
+    return "GU"; // Guest User
   };
+
 
  
 
@@ -59,7 +66,7 @@ const AccountSidebar = ({ activeComponent, setActiveComponent, openLogoutModal }
               <div className="profile-avatar">{getUserInitials()}</div>
             </div>
             <div className="profile-info">
-              <h3 className="profile-name">{user?.username || "Guest User"}</h3>
+              <h3 className="profile-name">{user?.username ||user?.user.username ||  "Guest User"}</h3>
             </div>
           </div>
 

@@ -43,7 +43,7 @@ export const NotificationProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = onMessageListener()
             .then((payload) => {
-                console.log("FCM foreground payload: ", payload);
+                //console.log("FCM foreground payload: ", payload);
                 const { title, body, image } = payload.notification;
 
                 toast.info(
@@ -80,23 +80,23 @@ export const NotificationProvider = ({ children }) => {
             .catch((err) => console.log("FCM foreground error: ", err));
 
         return () => unsubscribe;
-    }, []);
+            }, []);
 
 
-    return (
-        <NotificationContext.Provider value={{ askNotification }}>
-            {children}
+        return (
+            <NotificationContext.Provider value={{ askNotification }}>
+                {children}
 
-            {/* Permission modal (only for asking notification permission) */}
-            <NotificationModal
-                show={showPermissionModal}
-                title={notifData.title}
-                message={notifData.message}
-                image={notifData.image}
-                type="permission"
-                onClose={() => setShowPermissionModal(false)}
-                onAllow={handleEnable}
-            />
-        </NotificationContext.Provider>
-    );
-};
+                {/* Permission modal (only for asking notification permission) */}
+                <NotificationModal
+                    show={showPermissionModal}
+                    title={notifData.title}
+                    message={notifData.message}
+                    image={notifData.image}
+                    type="permission"
+                    onClose={() => setShowPermissionModal(false)}
+                    onAllow={handleEnable}
+                />
+            </NotificationContext.Provider>
+        );
+    };

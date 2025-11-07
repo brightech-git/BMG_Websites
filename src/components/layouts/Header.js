@@ -17,6 +17,7 @@ import { useCart } from "../../hook/cart/useCartQuery";
 import { useRatesQuery } from "../../hook/rate/useRatesQuery"; // Add this import
 import './Header.css';
 import { useHeaderData } from "../../hook/header/useNavData";
+import { motion, AnimatePresence } from "framer-motion";
 
 
 const Header = ({ isAuthenticated }) => {
@@ -31,7 +32,7 @@ const Header = ({ isAuthenticated }) => {
   const dispatch = useDispatch();
   const { data } = useHeaderData();
   const NavData = data
-  console.log('NacData', NavData)
+  //console.log('NacData', NavData)
 
   const baseUrl = "https://app.bmgjewellers.com"
 
@@ -83,28 +84,28 @@ const Header = ({ isAuthenticated }) => {
           {
             name: "Rings",
             value: "rings",
-            keyName: "itemName",
+            keyName: "itemCtrName",
             keyValue: "rings",
             image: "/images/categories/rings.jpg",
           },
           {
             name: "Necklaces",
             value: "necklaces",
-            keyName: "itemName",
+            keyName: "itemCtrName",
             keyValue: "necklaces",
             image: "/images/categories/necklaces.jpg",
           },
           {
             name: "Bracelets",
             value: "bracelets",
-            keyName: "itemName",
+            keyName: "itemCtrName",
             keyValue: "bracelets",
             image: "/images/categories/bracelets.jpg",
           },
           {
             name: "Earrings",
             value: "earrings",
-            keyName: "itemName",
+            keyName: "itemCtrName",
             keyValue: "earrings",
             image: "/images/categories/earrings.jpg",
           },
@@ -199,13 +200,13 @@ const Header = ({ isAuthenticated }) => {
         items: [
           {
             name: "Bridal",
-            keyName: "itemName",
+            keyName: "itemCtrName",
             keyValue: "bridal",
             image: "/images/special/bridal.jpg",
           },
           {
             name: "Clearance",
-            keyName: "itemName",
+            keyName: "itemCtrName",
             keyValue: "clearance",
             image: "/images/special/clearance.jpg",
           },
@@ -627,11 +628,39 @@ const Header = ({ isAuthenticated }) => {
             <ItemSearch />
           </div>
         )}
-        {togglemethod && (
-          <aside className="s active">
-            <Mobilemenu onClose={() => setTogglemethod(false)} />
-          </aside>
-        )}
+        <AnimatePresence>
+          {togglemethod && (
+            <>
+              {/* Background Overlay */}
+              <motion.div
+                key="overlay"
+                className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                onClick={() => setTogglemethod(false)}
+              />
+
+              {/* Sidebar */}
+              <motion.aside
+                key="mobile-menu"
+                className="fixed top-0 left-0 h-full w-[70%] sm:w-[60%]  z-[70] shadow-2xl overflow-y-auto"
+                initial={{ x: "-100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "-100%" }}
+                transition={{
+                  type: "spring",
+                  stiffness: 90,
+                  damping: 15,
+                  mass: 0.7,
+                }}
+              >
+                <Mobilemenu onClose={() => setTogglemethod(false)} />
+              </motion.aside>
+            </>
+          )}
+        </AnimatePresence>
       </header>
       <div
         className={classNames("offcanvas-wrapper", {

@@ -28,18 +28,18 @@ export const loginUser = async (loginData) => {
 };
 
 export const verifyOtpService = async (contactNumber, otp) => {
-    const response = await PublicUrl.post(
-        `auth/user/verify-otp?contactNumber=${contactNumber}&otp=${otp}`
-    );
+    try {
+        const response = await PublicUrl.post(`auth/user/verify-otp`, { contactNumber, otp });
+        const data = response.data;
 
-    const data = response.data;
+        if (data.error) throw new Error(data.error);
 
-    if (data.error) {
-        throw new Error(data.error);
+        return data;
+    } catch (err) {
+        throw new Error(err.response?.data?.error || err.message);
     }
-
-    return data; // { message, user, token }
 };
+
 
 //Forgot password
 export const forgotPasswordService = async (contactNumber) => {
@@ -119,4 +119,16 @@ export const googleLoginService = async (idToken) => {
     }
 };
 
+export const updateContactNumber = async ({ userId, contactNumber }) => {
+    console.log("🚀 updateContactNumber called with:", { userId, contactNumber });
+
+    const response = await PublicUrl.post(
+        `auth/user/update-contact-number?userId=${userId}&contactNumber=${contactNumber}`
+    );
+
+    const data = response.data;
+    if (data.error) throw new Error(data.error);
+    console.log("✅ updateContactNumber response:", data);
+    return data;
+};
 

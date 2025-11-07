@@ -62,11 +62,11 @@ const Content = () => {
         refetch,
     } = useFilterProducts(queryFilters, page, pageSize);
 
-    const {askNotification}=useNotification();
+    const { askNotification } = useNotification();
 
-    useEffect(()=>{
-        askNotification('Welcome to BMG Jewellers','Stay updated with important updates.')
-    },[])
+    useEffect(() => {
+        askNotification('Welcome to BMG Jewellers', 'Stay updated with important updates.')
+    }, [])
 
     const handleWishlistToggle = useCallback(
         (e, itemSno, isWishlisted) => {
@@ -104,7 +104,7 @@ const Content = () => {
 
     const handleLoadMore = useCallback(() => {
         if (lastAttemptTriggered) return; // Prevent further triggers after last attempt
-        console.log('handleLoadMore triggered, previous count:', previousProductCount.current);
+        //console.log('handleLoadMore triggered, previous count:', previousProductCount.current);
         previousProductCount.current = products.length; // Set before fetch
         setPageSize((prevSize) => {
             if (prevSize === defaultPageSize) return prevSize + 30; // First load: 20 + 30
@@ -114,10 +114,10 @@ const Content = () => {
 
     // Detect if no new products were fetched
     useEffect(() => {
-        console.log('products.length current:', previousProductCount.current);
-        console.log('product length:', products.length);
-        console.log('products.length === previousProductCount.current:', products.length === previousProductCount.current);
-        if (!isLoading && previousProductCount.current > 0 && products.length === previousProductCount.current || products.length === 0)  {
+        //console.log('products.length current:', previousProductCount.current);
+        //console.log('product length:', products.length);
+        //console.log('products.length === previousProductCount.current:', products.length === previousProductCount.current);
+        if (!isLoading && previousProductCount.current > 0 && products.length === previousProductCount.current || products.length === 0) {
             // No new products were loaded after a fetch attempt
             setHideLoadMore(true);
             setLastAttemptTriggered(true); // Mark that the last attempt was made
@@ -150,7 +150,7 @@ const Content = () => {
         const observer = new IntersectionObserver(
             (entries) => {
                 if (entries[0].isIntersecting && !isLoading) {
-                    console.log('IntersectionObserver triggered');
+                    //console.log('IntersectionObserver triggered');
                     handleLoadMore();
                 }
             },

@@ -37,7 +37,7 @@ const OrderDetail = ({ order: initialOrder, setActiveComponent }) => {
     isLoading: isTracking,
   } = useTrackOrderById(order?.orderId || orderId);
 
-  const id = 10019;
+  const id = 2;
   const {
     data: adminAddress,
     isError,
@@ -137,10 +137,11 @@ const OrderDetail = ({ order: initialOrder, setActiveComponent }) => {
   };
 
   const renderStatusModal = () => {
-    console.log(trackData, 'raw-track-data');
+    //console.log(trackData, 'raw-track-data');
     const currentStatus = trackData?.current_status || order.status;
     const trackingHistory = processTrackingHistory();
     const currentLabel = trackingHistory[trackingHistory.length - 1]?.label || getStatusLabel(currentStatus);
+    //console.log(currentLabel, 'current-label')
     const canCancel = trackData?.canCancel ?? !['SHIPPED', 'SHIPPING', 'OUT_FOR_DELIVERY', 'IN_TRANSIT', 'DELIVERED', 'CANCELLED', 'Booked'].includes(currentStatus);
 
     const formatDate = (dateString) => {
@@ -166,10 +167,10 @@ const OrderDetail = ({ order: initialOrder, setActiveComponent }) => {
           <div className="status-modal-body">
             {/* Current Status Banner */}
             <div className={`current-status-banner ${currentStatus === 'DELIVERED' ? 'delivered' : ''}`}>
-              <div className="status-icon">
-                <FontAwesomeIcon icon={getStatusIcon(currentStatus)} />
+              <div className="status-icons">
+                <FontAwesomeIcon icon={(currentStatus)} />
               </div>
-              <div className="status-info">
+              <div className="status-infos">
                 <h4>{currentLabel}</h4>
                 <p>Order placed on {new Date(order.orderTime).toLocaleDateString('en-IN')}</p>
               </div>
@@ -255,7 +256,7 @@ const OrderDetail = ({ order: initialOrder, setActiveComponent }) => {
   const currentStatus = trackData?.current_status || order.status;
   const currentLabel = trackData?.timeline?.length > 0 ? trackData.timeline[trackData.timeline.length - 1].label : getStatusLabel(currentStatus);
   const orderItems = order.orderItems || trackData?.items || [];
-  console.log(order, 'order-items')
+  //console.log(order, 'order-items')
   const admin = adminAddress
 
   // const formatAddress = (address) => {

@@ -125,7 +125,7 @@ const WishlistItem = ({ sno, onRemove, cartItems, addToCartHandler }) => {
     const cartItem = {
       itemSno: item.SNO,
       itemTagSno: item.SNO,
-      itemName: item.ITEMNAME || item.SUBITEMNAME,
+      itemCtrName: item.ITEMCTRNAME || item.SUBITEMNAME,
       price: item.GrandTotal,
       image: productImages[0],
     };

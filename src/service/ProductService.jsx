@@ -34,7 +34,7 @@ export const filterProducts = async (filters) => {
         });
 
         const queryString = new URLSearchParams(cleanedFilters).toString();
-        console.log('API query string:', queryString); // Debug
+        //console.log('API query string:', queryString); // Debug
 
         // Option 1: Keep POST request (as in your original code)
         const response = await PublicUrl.get(`/product/items/filter?${queryString}`);

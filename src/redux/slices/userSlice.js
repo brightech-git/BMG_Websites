@@ -1,7 +1,8 @@
 // src/redux/slices/userSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { loginUser, registerUser, verifyOtpService, forgotPasswordService, resetPasswordService, changePasswordService, googleLoginService } from '../../service/AuthService';
+import { loginUser, registerUser, verifyOtpService, forgotPasswordService, resetPasswordService, changePasswordService, googleLoginService ,updateContactNumber } from '../../service/AuthService';
 import { toast } from 'react-toastify';
+import { getProfile } from '../../service/profileService';
 
 // Safely parse localStorage user
 const getInitialUser = () => {
@@ -13,6 +14,22 @@ const getInitialUser = () => {
         return null;
     }
 };
+export const fetchUser = createAsyncThunk(
+    "user/profile",
+    async (_, thunkAPI) => {
+        console.log("🔍 fetchUser triggered");
+        try {
+            const response = await getProfile();
+            console.log("✅ fetchUser response:", response);
+            localStorage.setItem('user', JSON.stringify(response));
+            localStorage.setItem('userMobileNumber', response.contact || response.contactNumber);
+            return response;
+        } catch (error) {
+            console.error("❌ fetchUser error:", error);
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+);
 
 // Get user and token from localStorage if exists
 const initialUser = getInitialUser();
@@ -23,10 +40,13 @@ const initialToken = localStorage.getItem('user_token') || null;
 export const login = createAsyncThunk('user/login', async (loginData, thunkAPI) => {
     try {
         const response = await loginUser(loginData); 
-        console.log('Login Response:', response); // Debug
-        localStorage.setItem('user_token', response.token);
-        localStorage.setItem('user', JSON.stringify(response?.user || response));
-        localStorage.setItem('userMobileNumber', response.contact || response.contactNumber);
+        // console.log('Login Response:', response); // Debug
+         localStorage.setItem('user_token', response.token);
+        // localStorage.setItem('user', JSON.stringify(response?.user || response));
+        // localStorage.setItem('userMobileNumber', response.contact || response.contactNumber);
+      
+            await thunkAPI.dispatch(fetchUser());
+        
         return response;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message);
@@ -62,19 +82,17 @@ export const verifyOtp = createAsyncThunk(
     async ({ contactNumber, otp }, thunkAPI) => {
         try {
             const data = await verifyOtpService(contactNumber, otp);
-
+            localStorage.setItem('user_token', data.token);
             // Validate token format
             if (!data.token || data.token.split('.').length !== 3) {
                 throw new Error('Invalid token received from server');
             }
+            if (data?.token) {
+                await thunkAPI.dispatch(fetchUser());
+            }
+            localStorage.setItem('userMobileNumber', data.contact || data.contactNumber);
+           
 
-            localStorage.setItem('user', JSON.stringify(data));
-            localStorage.setItem('user_token', data.token);
-
-            toast.success('✅ OTP verified successfully!', {
-                position: 'top-right',
-                autoClose: 2000,
-            });
 
             return data;
         } catch (error) {
@@ -161,24 +179,13 @@ export const googleLogin = createAsyncThunk(
         try {
             const response = await googleLoginService(idToken);
             console.log('Google Login Response:', response);
-            if(response.token){
-                const user = response.user || response.user || "Not Provided";
-                console.log("User :", user);
-                localStorage.setItem("user", JSON.stringify(user));
-                console.log("Stored:user", localStorage.getItem("user"));
-            }
+            
             // Save to localStorage
-            localStorage.setItem("user", JSON.stringify(response?.user || response));
-            if (response.token) {
-                localStorage.setItem("user_token", response.token);
+            localStorage.setItem('user_token', response.token);
+            // localStorage.setItem('userMobileNumber', response.contact || response.contactNumber);
+            if (response) {
+                await thunkAPI.dispatch(fetchUser());
             }
-            if (response.user) {
-                const mobileNumber = response.user?.contactNumber || response.contactNumber || "Not Provided";
-              
-                localStorage.setItem("userMobileNumber", mobileNumber);
-                
-            }
-
             toast.success("✅ Google login successful!", {
                 position: "top-right",
                 autoClose: 2000,
@@ -194,6 +201,29 @@ export const googleLogin = createAsyncThunk(
         }
     }
 );
+
+export const updateMobileNumber = createAsyncThunk(
+    "user/update-mobile-number",
+    async ({ userId, contactNumber, }, thunkAPI) => {
+        try {
+            const response = await updateContactNumber({ userId,contactNumber });
+            await thunkAPI.dispatch(fetchUser());
+            return response;
+            
+        } catch (error) {
+            toast.error(error.message || "Failed to update mobile number", {
+                position: "top-right",
+                autoClose: 2500,
+            });
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+);
+
+
+
+
+
 const userSlice = createSlice({
     name: 'user',
     initialState: {
@@ -210,6 +240,7 @@ const userSlice = createSlice({
             localStorage.removeItem('user');
             localStorage.removeItem('user_token');
             localStorage.removeItem('userMobileNumber');
+            localStorage.removeItem('pendingUser');
             toast.error('Logged out successfully!', {
                 position: 'top-right',
                 autoClose: 3000,
@@ -243,14 +274,10 @@ const userSlice = createSlice({
             })
             .addCase(login.fulfilled, (state, action) => {
                 state.loading = false;
-                state.user = action.payload;
+                //state.user = action.payload;
                 state.isAuthenticated = true;
                 state.error = null;
-                localStorage.setItem('user', JSON.stringify(action.payload));
-                toast.success('✅ Login successful!', {
-                    position: 'top-right',
-                    autoClose: 2000,
-                });
+               
             })
             .addCase(login.rejected, (state, action) => {
                 state.loading = false;
@@ -262,7 +289,7 @@ const userSlice = createSlice({
             })
             .addCase(verifyOtp.fulfilled, (state, action) => {
                 state.loading = false;
-                state.user = action.payload;       // Full user data with token
+                //state.user = action.payload;       // Full user data with token
                 state.isAuthenticated = true;
                 state.error = null;
             })
@@ -317,7 +344,7 @@ const userSlice = createSlice({
             })
             .addCase(googleLogin.fulfilled, (state, action) => {
                 state.loading = false;
-                state.user = action.payload;
+                //state.user = action.payload;
                 state.isAuthenticated = true;
                 state.error = null;
             })
@@ -325,6 +352,35 @@ const userSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
+
+            .addCase(updateMobileNumber.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(updateMobileNumber.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(updateMobileNumber.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(fetchUser.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchUser.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload;
+                state.isAuthenticated = true;
+                state.error = null;
+
+            })
+            .addCase(fetchUser.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
     },
 });
 

@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Alert } from "react-bootstrap";
 import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from 'react-toastify';
@@ -22,13 +22,13 @@ const Content = () => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
-    console.log("Submitting form with data:", formData);
+    //console.log("Submitting form with data:", formData);
     const handleSubmit = (e) => {
         e.preventDefault();
         mutation.mutate(formData, {
             onSuccess: () => {
                 toast.success("Message submitted successfully!");
-                setFormData({ name: "", email: "", comment: "", mobileNumber:""});
+                setFormData({ name: "", email: "", comment: "", mobileNumber: "" });
             },
             onError: () => {
                 toast.error("Something went wrong. Please try again later.");
@@ -109,7 +109,7 @@ const Content = () => {
                                         name="email"
                                         value={formData.email}
                                         onChange={handleChange}
-                                        
+
                                     />
                                 </div>
                                 <div className="form-group">
@@ -119,7 +119,7 @@ const Content = () => {
                                         name="mobileNumber"
                                         value={formData.mobileNumber}
                                         onChange={handleChange}
-                                        
+
                                     />
                                 </div>
                                 <div className="form-group">
@@ -132,7 +132,7 @@ const Content = () => {
                                     />
                                 </div>
 
-                            
+
                                 <button
                                     type="submit"
                                     className="main-btn btn-filleds"

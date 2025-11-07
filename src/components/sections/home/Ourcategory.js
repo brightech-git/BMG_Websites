@@ -8,13 +8,13 @@ const OurCategory = () => {
     const { data: categories = [], isLoading: isCategoriesLoading } = useCategoryImages();
     const subcategories = categories.length ? [...categories].reverse() : [];
 
-    
+
 
     const history = useHistory();
     const baseUrl = "https://app.bmgjewellers.com";
 
-    const handleItemClick = (itemName) => {
-        history.push(`/products-page?itemName=${encodeURIComponent(itemName)}`);
+    const handleItemClick = (itemCtrName) => {
+        history.push(`/products-page?itemCtrName=${encodeURIComponent(itemCtrName)}`);
     };
 
     const formatItemName = (name) => {

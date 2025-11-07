@@ -19,16 +19,40 @@ import { useCart } from "../../../../hook/cart/useCartQuery";
 import { useFavorites } from "../../../../hook/favorites/useFavoritesQuery";
 import { Link } from "react-router-dom/cjs/react-router-dom";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { getOrderHistory } from "../../../../service/orderService";
 
 const Dashboard = ({ setActiveComponent, setSelectedOrder }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const history = useHistory();
   const {
-    data: ordersData = [],
+    data: ordersData,
     isLoading: ordersLoading,
     error: ordersError,
-  } = useOrderHistory({ page: 0, size: 3, status: "" });
+  } = useOrderHistory();
+
+  const [orderDetails, setOrderDetails] = useState([]);
+  const [loading, setLoading] = useState(false);
+  //console.log(orderDetails, 'orderDetails')
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      setLoading(true); // start loading
+      try {
+        const orders = await getOrderHistory();
+        //console.log(orders, 'orders');
+        setOrderDetails(orders);
+      } catch (error) {
+        console.error('Failed to load orders:', error);
+      } finally {
+        setLoading(false); // stop loading
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+
 
   const {
     cartItems: cartData = { data: [] },
@@ -66,11 +90,12 @@ const Dashboard = ({ setActiveComponent, setSelectedOrder }) => {
   };
 
   const calculateMetrics = () => {
-    const orders = Array.isArray(ordersData) ? ordersData : [];
-    const totalOrders = orders.length;
+    const orders = ordersData || [];
+    //console.log("Orders:", orders);
+    const totalOrders = orderDetails.length;
     const wishlistItems = wishlistResponse?.data?.length || 0;
     const cartItems = Array.isArray(cartData?.data) ? cartData.data.length : 0;
-    console.log("Cart Items:", cartData?.data);
+    //console.log("Cart Items:", cartData?.data);
 
     return [
       {
@@ -187,9 +212,9 @@ const Dashboard = ({ setActiveComponent, setSelectedOrder }) => {
     setActiveComponent("OrderDetail");
   };
 
-  const isLoading = ordersLoading || cartLoading || wishlistLoading;
+  const isLoading = ordersLoading || cartLoading || wishlistLoading || loading;
   const hasError = ordersError || cartError || wishlistError;
-  const orders = Array.isArray(ordersData) ? ordersData : [];
+  const orders = Array.isArray(orderDetails) ? orderDetails : [];
 
   if (isLoading) {
     return (
@@ -296,7 +321,7 @@ const Dashboard = ({ setActiveComponent, setSelectedOrder }) => {
               <div className="order-history__cards">
                 {orders.map((order, index) => {
                   const firstItem = order.orderItems?.[0];
-                  console.log("First Item:", firstItem);
+                  //console.log("First Item:", firstItem);
                   const firstImage = firstItem ? getFirstImage(firstItem.imagePath) : null;
                   const itemsSummary = getOrderItemsSummary(order.orderItems);
 

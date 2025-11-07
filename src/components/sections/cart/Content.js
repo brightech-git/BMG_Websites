@@ -10,7 +10,7 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
     const [imageError, setImageError] = useState(false);
     const { data: product, isLoading: productLoading, error: productError } = useSingleProductQuery(item.itemTagSno);
 
-    console.log("CartItem rendering for item:", item, "Product data:", product, "Error:", productError);
+    //console.log("CartItem rendering for item:", item, "Product data:", product, "Error:", productError);
 
     // Calculate pricing with discount (15% markup for strikethrough effect)
     const calculatePricing = useCallback((currentPrice) => {
@@ -32,7 +32,7 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
             onProductData(item.sno, {
                 itemId: item.itemId || null,
                 tagNo: item.tagNo || null,
-                productName: item.ITEMNAME || item.SUBITEMNAME || item.itemTagSno || 'Unknown Product',
+                productName: item.ITEMCTRNAME || item.SUBITEMNAME || item.itemTagSno || 'Unknown Product',
                 price: pricing.current,
                 originalPrice: pricing.original,
                 discount: pricing.discount,
@@ -57,7 +57,7 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
             onProductData(item.sno, {
                 itemId: product.ITEMID || item.itemId || null,
                 tagNo: product.TAGNO || item.tagNo || null,
-                productName: [product.ITEMNAME, product.SUBITEMNAME].filter(Boolean).join(' - ') || item.itemTagSno || 'Unknown Product',
+                productName: [product.ITEMCTRNAME, product.SUBITEMNAME].filter(Boolean).join(' - ') || item.itemTagSno || 'Unknown Product',
                 price: pricing.current,
                 originalPrice: pricing.original,
                 discount: pricing.discount,
@@ -93,7 +93,7 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
                 checked={isSelected}
                 onChange={() => onSelect(item.sno)}
                 className="cart-item-checkbox"
-                aria-label={`Select ${product?.ITEMNAME || item.itemTagSno}`}
+                aria-label={`Select ${product?.ITEMCTRNAME || item.itemTagSno}`}
             />
             <div className="cart-item-image-container">
                 {productLoading ? (
@@ -101,7 +101,7 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
                 ) : (
                     <img
                         src={imageError ? fallbackImage : firstImage}
-                        alt={product?.ITEMNAME || item.itemTagSno}
+                        alt={product?.ITEMCTRNAME || item.itemTagSno}
                         className="cart-item-image"
                         onError={() => setImageError(true)}
                         loading="lazy"
@@ -118,7 +118,7 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
                     <>
                         <h3 className="cart-item-title">
                             <Link to={`/product/${item.itemTagSno}`}>
-                                {product?.ITEMNAME || item.itemTagSno}
+                                {product?.ITEMCTRNAME || item.itemTagSno}
                             </Link>
                         </h3>
                         <div className="cart-item-sku">
@@ -223,12 +223,34 @@ const Cart = ({ history }) => {
             }
         }
     }, [deleteCart]);
-    console.log(selectedItems, 'selecterd items')
-    const items = useMemo(() => {
-        if (!cartItems?.data) return [];
-        if (typeof cartItems.data === 'string') return [];
-        return Array.isArray(cartItems.data) ? cartItems.data : Object.values(cartItems.data);
-    }, [cartItems]);
+    //console.log(selectedItems, 'selecterd items')
+ const items = useMemo(() => {
+    console.log(cartItems, "cartItems");
+
+    // if cartItems is the full Axios response
+    const data = cartItems?.data;
+
+    if (!data) return [];
+
+    // If backend says cart is empty
+    if (typeof data.message === "string" && data.message.toLowerCase().includes("cart is empty")) {
+        return [];
+    }
+
+    // If data is an array
+    if (Array.isArray(data)) {
+        return data;
+    }
+
+    // If data is an object with nested list
+    if (data && typeof data === "object") {
+        return Object.values(data);
+    }
+
+    // Default fallback
+    return [];
+}, [cartItems]);
+
 
     const { subtotal, originalSubtotal, totalSavings, shipping, total, isDataComplete } = useMemo(() => {
         const defaultTotals = {
@@ -302,7 +324,7 @@ const Cart = ({ history }) => {
             totalSavings: totalSavings,
         };
 
-        console.log('Navigating with payload:', checkoutPayload);
+        //console.log('Navigating with payload:', checkoutPayload);
         history.push('/checkout', checkoutPayload);
     }, [selectedItems, isDataComplete, items, productDataMap, total, originalSubtotal, totalSavings, history]);
 

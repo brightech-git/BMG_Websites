@@ -10,9 +10,9 @@ const TrendingProducts = () => {
     const history = useHistory();
 
     const categories = [
-        { id: 1, label: "For Couple", image: img2, query: "itemName=Rings&subItemName=Couple Rings" },
-        { id: 2, label: "For Engage", image: img3, query: "itemName=Rings&subItemName=Engagement Rings" },
-        { id: 3, label: "For Wedding", image: img1, query: "itemName=Rings&subItemName=Wedding Rings" },
+        { id: 1, label: "For Couple", image: img2, query: "itemCtrName=Rings&subItemName=Couple Rings" },
+        { id: 2, label: "For Engage", image: img3, query: "itemCtrName=Rings&subItemName=Engagement Rings" },
+        { id: 3, label: "For Wedding", image: img1, query: "itemCtrName=Rings&subItemName=Wedding Rings" },
     ];
 
     const handleCategoryClick = (query) => {

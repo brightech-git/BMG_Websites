@@ -40,6 +40,7 @@ const Content = () => {
                 setLocalError(null);
 
                 const lastVisited = localStorage.getItem("lastVisited");
+                console.log("Last visited:", lastVisited);
                 let parsedLastVisited = null;
 
                 try {

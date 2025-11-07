@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    itemName: '',
+    itemCtrName: '',
     subItemName: '',
     metalId: '',
     sizeId: '',
@@ -30,7 +30,7 @@ const filterSlice = createSlice({
     initialState,
     reducers: {
         setItemName: (state, action) => {
-            state.itemName = typeof action.payload === 'string' ? action.payload.replace(/^"|"$/g, '') : '';
+            state.itemCtrName = typeof action.payload === 'string' ? action.payload.replace(/^"|"$/g, '') : '';
         },
         setSubItemName: (state, action) => {
             state.subItemName = typeof action.payload === 'string' ? action.payload.replace(/^"|"$/g, '') : '';
@@ -132,7 +132,7 @@ export default filterSlice.reducer;
 // import { createSlice } from '@reduxjs/toolkit';
 
 // const initialState = {
-//     itemName: '',
+//     itemCtrName: '',
 //     subItemName: '',
 //     metalId: '',
 //     sizeId: '',

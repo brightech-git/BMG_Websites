@@ -54,6 +54,8 @@ import PageTransition from './components/layouts/PageTransition';
 import ProductOrdersModal from './components/layouts/ProductOrdersModal';
 import { useAllOrders } from './hook/order/useOrderHistoryQuery';
 import { OrderNotification } from './components/layouts/ProductOrdersModal';
+import EnchantedHero from './assets/videos/EnchantedHero';
+import UpdateMobileModal from './components/layouts/UpdateMobileModal';
 
 function ScrollWatcher() {
   const location = useLocation();
@@ -74,14 +76,14 @@ function App() {
   const [notifData, setNotifData] = useState({ title: "", message: "" });
   const [showHome, setShowHome] = useState(false);
   const [showModal, setShowModal] = useState(false);
-
+  const [hasAccess, setHasAccess] = useState(false); // track maintenance login access
   // Order notification states
   const [currentOrderIndex, setCurrentOrderIndex] = useState(0);
   const [showOrderNotification, setShowOrderNotification] = useState(false);
   const [flattenedOrders, setFlattenedOrders] = useState([]);
 
   const { data: allOrders } = useAllOrders();
-  console.log('allOrders', allOrders);
+
 
   // Flatten orders when allOrders changes
   useEffect(() => {
@@ -162,8 +164,17 @@ function App() {
 
   const currentOrder = flattenedOrders[currentOrderIndex];
 
+  // const handleAccess = () => {
+  //   setHasAccess(true);
+  // };
+
+  // if (!hasAccess) {
+  //   return <MaintenanceLogin onAccess={handleAccess} />;
+  // }
+
   return (
     <Router basename="/">
+      <UpdateMobileModal />
       <ScrollWatcher />
       <ScrollToTop />
       <NotificationModal
@@ -233,6 +244,8 @@ function App() {
             <Route exact path="/payment-success" component={PaymentStatus} />
             <Route exact path="/payment-failure" component={PaymentFailure} />
             <Route exact path="/appointment" component={Appointment} />
+            <Route exact path="/hero" component={EnchantedHero} />
+            <Route exact path="/heros" component={UpdateMobileModal} />
             <Route component={Error} />
             <RouteTracker />
           </Switch>

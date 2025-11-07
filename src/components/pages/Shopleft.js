@@ -9,12 +9,13 @@ import Breadcrumb from '../layouts/Breadcrumbs';
 import Instafeeds from '../layouts/Instafeeds';
 import Footer from '../layouts/Footerthree';
 import Content from '../sections/shopleft/Content';
+import SmoothScroll from '../layouts/SmoothScroll';
 
 class Shopleft extends Component {
     render() {
         const { location } = this.props;
-        const { itemName, subItemName } = queryString.parse(location.search); // ⬅️ parse query params
-        console.log(itemName, subItemName, 'datas')
+        const { itemCtrName, subItemName } = queryString.parse(location.search); // ⬅️ parse query params
+        //console.log(itemCtrName, subItemName, 'datas')
 
         return (
             <Fragment>
@@ -23,9 +24,13 @@ class Shopleft extends Component {
                     <meta name="description" content="#" />
                 </MetaTags>
                 <Header />
+
                 {/* Pass query params to Breadcrumb */}
-                <Breadcrumb itemName={itemName} subItemName={subItemName} pages={"products-page"} />
-                <Content />
+                <Breadcrumb itemCtrName={itemCtrName} subItemName={subItemName} pages={"products-page"} />
+                <SmoothScroll>
+                    <Content />
+                </SmoothScroll>
+
                 {/* <Instafeeds /> */}
                 <Footer />
             </Fragment>

@@ -19,13 +19,13 @@ export const messaging = getMessaging(app);
 export const requestForToken = async () => {
     try {
         const permission = Notification.permission;
-        console.log("Current Notification Permission:", permission);
+        //console.log("Current Notification Permission:", permission);
 
         if (permission === "granted") {
             return await getToken(messaging, {
                 vapidKey: "BHeUX3InTYDr1VTBkxOUPDxi8iZw6Zy7liHO4Gu3SfGIXSLQYRUFQdgulSAQd7FyIQIfU3UoIV6z3-P10H-zJvo",
             });
-        
+
         } else if (permission === "default") {
             const newPermission = await Notification.requestPermission();
             if (newPermission === "granted") {
@@ -33,8 +33,8 @@ export const requestForToken = async () => {
                     vapidKey: "BHeUX3InTYDr1VTBkxOUPDxi8iZw6Zy7liHO4Gu3SfGIXSLQYRUFQdgulSAQd7FyIQIfU3UoIV6z3-P10H-zJvo",
                 });
             }
-         }
-        } catch (err) {
+        }
+    } catch (err) {
         console.error("An error occurred while retrieving token: ", err);
     }
 };

@@ -16,8 +16,12 @@ import "./AccountSideBarStyles.css";
 
 const AccountSidebar = ({ activeComponent, setActiveComponent, openLogoutModal }) => {
   const dispatch = useDispatch();
+  
   const user = useSelector((state) => state.user.user);
-  console.log('user in sidebar', user);
+
+
+  console.log('user in sidebar', user)
+  //console.log('user in sidebar', user);
   const history = useHistory();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(true);
 
@@ -42,7 +46,7 @@ const AccountSidebar = ({ activeComponent, setActiveComponent, openLogoutModal }
   };
 
 
- 
+
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(true);
@@ -59,14 +63,14 @@ const AccountSidebar = ({ activeComponent, setActiveComponent, openLogoutModal }
   return (
     <section>
       <div className="account-navigation-panel">
-        
+
         <div className={`sidebar-content mobile-open`}>
           <div className="user-profile-card">
             <div className="profile-avatar-container">
               <div className="profile-avatar">{getUserInitials()}</div>
             </div>
             <div className="profile-info">
-              <h3 className="profile-name">{user?.username ||user?.user.username ||  "Guest User"}</h3>
+              <h3 className="profile-name">{user?.username || user?.user.username || "Guest User"}</h3>
             </div>
           </div>
 

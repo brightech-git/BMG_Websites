@@ -11,9 +11,9 @@ const Onsale = () => {
     const mainBanner = festivalBanners[0] || null;
     const secondaryBanners = festivalBanners.slice(1);
 
-    const handleProductClick = (itemName, subItemName) => {
+    const handleProductClick = (itemCtrName, subItemName) => {
         const queryParams = new URLSearchParams();
-        if (itemName) queryParams.append('itemName', itemName);
+        if (itemCtrName) queryParams.append('itemCtrName', itemCtrName);
         if (subItemName) queryParams.append('subItemName', subItemName);
         window.location.href = `/products-page?${queryParams.toString()}`;
     };

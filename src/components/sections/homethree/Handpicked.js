@@ -24,7 +24,7 @@ const NoBlurNavButton = ({ direction, onClick }) => {
 
 const NoBlurProductCard = ({ product }) => {
     const baseUrl = "https://app.bmgjewellers.com";
-    console.log(product, 'productcard in handpick');
+    //console.log(product, 'productcard in handpick');
 
     const handleProductClick = (e, sno) => {
         e.preventDefault();
@@ -58,7 +58,7 @@ const NoBlurProductCard = ({ product }) => {
     };
 
     const firstImage = getFirstImage();
-    console.log(firstImage, "firstImage");
+    //console.log(firstImage, "firstImage");
 
 
     return (
@@ -67,7 +67,7 @@ const NoBlurProductCard = ({ product }) => {
                 {firstImage ? (
                     <img
                         src={firstImage}
-                        alt={product.ITEMNAME}
+                        alt={product.itemCtrName}
                         onClick={(e) => handleProductClick(e, product.SNO)}
                     />
                 ) : (
@@ -78,10 +78,10 @@ const NoBlurProductCard = ({ product }) => {
     );
 };
 
-const NoBlurHighlightedProducts = ({ itemName, subItemName }) => {
-    const { data, loading, error } = useFilterProducts({ itemName, subItemName }, 0, 3);
+const NoBlurHighlightedProducts = ({ itemCtrName, subItemName }) => {
+    const { data, loading, error } = useFilterProducts({ itemCtrName, subItemName }, 0, 3);
 
-    console.log('productsdata', data)
+    //console.log('productsdata', data)
 
     if (loading) return <div className="noblur-text-center">Loading products...</div>;
     if (error) return <div className="noblur-text-center noblur-text-danger">Error loading products</div>;
@@ -98,11 +98,14 @@ const NoBlurHighlightedProducts = ({ itemName, subItemName }) => {
 const NoBlurHandpicked = () => {
     const history = useHistory();
     const { data, isLoading, error } = useCategoryBanner();
+    //console.log('datainhandpick')
+    //console.log(data, 'datainhandpick');
+
     const baseUrl = "https://app.bmgjewellers.com";
 
-    const handleShopNow = (itemName, subItemName) => {
+    const handleShopNow = (itemCtrName, subItemName) => {
         const queryParams = new URLSearchParams();
-        if (itemName) queryParams.append('itemName', itemName);
+        if (itemCtrName) queryParams.append('itemCtrName', itemCtrName);
         if (subItemName) queryParams.append('subItemName', subItemName);
         history.push(`/products-page?${queryParams.toString()}`);
     };
@@ -191,7 +194,7 @@ const NoBlurHandpicked = () => {
                                     onClick={() => handleShopNow(banner.itemName, banner.subItemName)}
                                     role="button"
                                     tabIndex={0}
-                                    aria-label={`View ${banner.itemName} collection`}
+                                    aria-label={`View ${banner.itemCtrName} collection`}
                                 >
                                     <img
                                         src={`${baseUrl}${banner.image_path}`}
@@ -201,7 +204,7 @@ const NoBlurHandpicked = () => {
                                 </div>
 
                                 <NoBlurHighlightedProducts
-                                    itemName={banner.itemName}
+                                    itemCtrName={banner.itemCtrName}
                                     subItemName={banner.subItemName}
                                 />
                             </div>

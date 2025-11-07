@@ -9,13 +9,11 @@ const authHeader = () => ({
 
 // ✅ Get Cart by phone number
 export const fetchCart = () => {
-    const mobileNumber = localStorage.getItem("userMobileNumber");
 
-    if (!mobileNumber) {
-        return Promise.reject("Mobile number not found in localStorage.");
-    }
+   
+    const response=  PublicUrl.get(`/cart/cart/`, authHeader());
 
-    return PublicUrl.get(`/cart/by-phone?phone=${mobileNumber}`, authHeader());
+    return response
 };
 
 // ✅ Add item to cart

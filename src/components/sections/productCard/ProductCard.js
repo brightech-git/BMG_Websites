@@ -5,7 +5,8 @@ import { useCart } from '../../../hook/cart/useCartQuery';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import fallbackImage from './fallback-image.jpg'
+import fallbackImage from './fallback-image.jpg';
+import UpdateMobileModal from '../../layouts/UpdateMobileModal';
 
 const ProductCard = ({ item }) => {
 
@@ -13,7 +14,9 @@ const ProductCard = ({ item }) => {
     const addFavorite = useAddFavorite();
     const removeFavorite = useRemoveFavorite();
     const { cartItems, addToCartHandler } = useCart();
-    const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+    const isAuthenticated = useSelector((state) => state.user.isAuthenticated)
+    
+    const mobileNumber = useSelector((state) => state.user.contactNumber);
     const history = useHistory();
     const location = useLocation();
 
@@ -23,6 +26,7 @@ const ProductCard = ({ item }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
     const [loadingState, setLoadingState] = useState(true);
+    const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(() => setLoadingState(false), 500);
@@ -67,7 +71,7 @@ const ProductCard = ({ item }) => {
 
     const productImages = getProductImages();
     const hasMultipleImages = productImages.length > 1;
-    const productName = (item?.SUBITEMNAME || item?.ITEMNAME || 'Jewelry Item').toLowerCase();
+    const productName = (item?.SUBITEMNAME || item?.ITEMCTRNAME || 'Jewelry Item').toLowerCase();
     const currentPrice = parseFloat(item?.GrandTotal) > 0
         ? parseFloat(item.GrandTotal)
         : parseFloat(item?.RATE || 0);
@@ -111,6 +115,10 @@ const ProductCard = ({ item }) => {
             history.push('/login', { from: location.pathname });
             return;
         }
+        if(!mobileNumber){
+            setModalOpen(true);
+            return;
+        }
 
         if (!item?.SNO) {
             console.warn('Missing item SNO');
@@ -132,7 +140,7 @@ const ProductCard = ({ item }) => {
             stnWt: item?.STNWT || 0,
             amount: item.GrandTotal || item.RATE,
             stnAmount: item?.STNAMT || 0,
-            itemName: item.ITEMNAME || item.SUBITEMNAME,
+            itemCtrName: item.ITEMCTRNAME || item.SUBITEMNAME,
             price: item.GrandTotal,
             image: productImages[0],
         };
@@ -196,7 +204,7 @@ const ProductCard = ({ item }) => {
 
 
     const clickProduct = (e) => {
-        console.log('productcard triggered', ` ${item?.SNO}`)
+        //console.log('productcard triggered', ` ${item?.SNO}`)
         e.preventDefault();
         e.stopPropagation();
         window.location.href = `/product-detail/${item?.SNO}`;
@@ -222,7 +230,9 @@ const ProductCard = ({ item }) => {
     }
 
     return (
+        <>
         <div className="card-container">
+                <UpdateMobileModal open={modalOpen} onClose={() => setModalOpen(false)} />
             <div
                 className="product-item"
                 onMouseEnter={handleMouseEnter}
@@ -682,6 +692,7 @@ const ProductCard = ({ item }) => {
                 }
             `}</style>
         </div>
+        </>
     );
 };
 

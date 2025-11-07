@@ -263,7 +263,7 @@
     align-items: center;
     justify-content: space-between;
     background: #f8f9fa;
-    padding: 16px 20px;
+    padding: 10px 15px;
     border-bottom: 1px solid #e9ecef;
 }
 
@@ -372,7 +372,6 @@
     justify-content: space-between;
     background: white;
     padding: 16px 20px;
-    border-top: 1px solid #e9ecef;
     gap: 16px;
 }
 
@@ -512,7 +511,7 @@
     }
 
     .zoom-header {
-        padding: 12px 16px;
+        padding: 10px 10px;
     }
 
     .zoom-nav {
@@ -609,4 +608,473 @@
     .zoom-image {
         cursor: pointer;
     }
+}
+/* Enhanced Fullscreen Zoom Modal */
+.zoom-modal.fullscreen-zoom {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(12px);
+    animation: fadeIn 0.3s ease;
+    padding: 0;
+}
+
+.zoom-modal-content.fullscreen-content {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    max-height: none;
+    background: #000;
+    border-radius: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: none;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Enhanced Header for Fullscreen */
+.zoom-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 5px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+}
+
+.zoom-header-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.zoom-counter,
+.zoom-level-display {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.zoom-level-display {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 12px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.zoom-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+}
+
+.zoom-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.header-btn {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.header-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.header-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* Enhanced Fullscreen Image Container */
+.zoom-image-container.fullscreen-image-container {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #000;
+    touch-action: none;
+    min-height: auto;
+}
+
+.zoom-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    user-select: none;
+    -webkit-user-drag: none;
+    will-change: transform;
+}
+
+/* Enhanced Navigation for Fullscreen */
+.zoom-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 56px;
+    height: 56px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1010;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.zoom-nav-prev {
+    left: 20px;
+}
+
+.zoom-nav-next {
+    right: 20px;
+}
+
+.zoom-nav:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Enhanced Control Bar */
+.zoom-controls-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    gap: 16px;
+    backdrop-filter: blur(10px);
+}
+
+.zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.zoom-control-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.zoom-control-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+.zoom-control-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.zoom-control-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.zoom-level-slider {
+    display: flex;
+    align-items: center;
+    margin: 0px;
+}
+
+.zoom-slider {
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.2);
+    outline: none;
+    appearance: none;
+    cursor: pointer;
+}
+
+.zoom-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #cd865c;
+    cursor: pointer;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+}
+
+.zoom-slider::-webkit-slider-thumb:hover {
+    background: #cd865c;
+    transform: scale(1.1);
+}
+
+.zoom-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #007bff;
+    cursor: pointer;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}   
+
+/* Zoom Hint */
+.zoom-hint {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+    animation: fadeInOut 3s ease-in-out;
+    pointer-events: none;
+}
+
+@keyframes fadeInOut {
+
+    0%,
+    100% {
+        opacity: 0;
+    }
+
+    20%,
+    80% {
+        opacity: 1;
+    }
+}
+
+/* Enhanced Thumbnails in Zoom */
+.zoom-thumbnails {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    display: flex;
+    margin:0 auto;
+    gap:1rem
+}
+
+.zoom-thumbnail-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 4px 0;
+}
+
+.zoom-thumbnail {
+    position: relative;
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.6;
+}
+
+.zoom-thumbnail.active {
+    border-color: #007bff;
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.zoom-thumbnail:hover {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.zoom-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Enhanced Mobile Responsiveness */
+@media (max-width: 768px) {
+    .zoom-modal.fullscreen-zoom {
+        padding: 0;
+    }
+
+    .zoom-modal-content.fullscreen-content {
+        width: 100vw;
+        height: 100vh;
+    }
+
+    .zoom-header {
+        padding: 10px 10px;
+    }
+
+    .zoom-nav {
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+    }
+
+    .zoom-nav-prev {
+        left: 10px;
+    }
+
+    .zoom-nav-next {
+        right: 10px;
+    }
+
+    .zoom-controls-bar {
+        padding: 6px;
+    }
+
+    .zoom-control-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+
+    .zoom-thumbnail {
+        width: 50px;
+        height: 50px;
+    }
+
+    .zoom-hint {
+        font-size: 11px;
+        padding: 6px 12px;
+        bottom: 70px;
+    }
+}
+
+@media (max-width: 480px) {
+    .zoom-header {
+        padding: 10px 10px;
+    }
+
+    .zoom-counter,
+    .zoom-level-display {
+        font-size: 12px;
+    }
+
+    .zoom-nav {
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
+    }
+
+    .zoom-controls-bar {
+        padding: 2px;
+    }
+
+    .zoom-controls {
+        gap: 12px;
+    }
+
+    .zoom-control-btn {
+        width: 16px;
+        height: 16px;
+        font-size: 12px;
+    }
+
+    
+
+    .zoom-thumbnails {
+        padding: 12px;
+    }
+
+    .zoom-thumbnail {
+        width: 44px;
+        height: 44px;
+    }
+
+    .header-btn {
+        padding: 6px 12px;
+        font-size: 11px;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) {
+    .zoom-nav {
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.6);
+    }
+
+    .zoom-control-btn {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .zoom-image {
+        cursor: default;
+    }
+}
+
+/* Prevent blue highlight on touch */
+.zoom-image-container {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
 }

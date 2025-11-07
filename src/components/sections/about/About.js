@@ -21,7 +21,7 @@ const CraftsmanshipVideo = memo(() => {
 
   useEffect(() => {
     const videoElement = videoRef.current;
-    
+
     const handleLoadStart = () => setIsLoading(true);
     const handleCanPlay = () => setIsLoading(false);
     const handleError = () => {
@@ -40,11 +40,11 @@ const CraftsmanshipVideo = memo(() => {
           await videoElement.play();
           setIsPlaying(true);
         } catch (error) {
-          console.log("Autoplay prevented:", error);
+          //console.log("Autoplay prevented:", error);
           setIsPlaying(false);
         }
       };
-      
+
       tryAutoplay();
 
       return () => {
@@ -95,7 +95,7 @@ const CraftsmanshipVideo = memo(() => {
         <source src={craftsmanshipVideo} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-      <div 
+      <div
         className={`bmg-play-button-overlay ${isPlaying ? 'bmg-play-button-overlay-playing' : ''}`}
         role="button"
         tabIndex={0}
@@ -106,7 +106,7 @@ const CraftsmanshipVideo = memo(() => {
       >
         {!isPlaying && (
           <svg className="bmg-play-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8 5V19L19 12L8 5Z" fill="currentColor"/>
+            <path d="M8 5V19L19 12L8 5Z" fill="currentColor" />
           </svg>
         )}
       </div>
@@ -214,10 +214,10 @@ const BMGAboutUs = () => {
                     At BMG Jewellers, our mission is to make high-quality, beautifully designed jewellery accessible to everyone.
                   </p>
                   <p>
-                    We believe in offering our customers genuine products without hidden costs or extra charges. 
-                    Moreover, every item in our collection is crafted using 92.5 BIS hallmark-certified silver, 
-                    ensuring purity, quality, and authenticity. This certification not only guarantees the silver's 
-                    purity but also reflects our commitment to providing products that meet the highest standards 
+                    We believe in offering our customers genuine products without hidden costs or extra charges.
+                    Moreover, every item in our collection is crafted using 92.5 BIS hallmark-certified silver,
+                    ensuring purity, quality, and authenticity. This certification not only guarantees the silver's
+                    purity but also reflects our commitment to providing products that meet the highest standards
                     in the industry.
                   </p>
                 </div>
@@ -254,12 +254,12 @@ const BMGAboutUs = () => {
               <div className="bmg-text-content">
                 <div className="bmg-vision-statement">
                   <p className="bmg-vision-highlight">
-                    As we continue to grow, our vision is to become a leading name in the jewellery industry, 
+                    As we continue to grow, our vision is to become a leading name in the jewellery industry,
                     known for our unwavering commitment to quality, transparency, and customer satisfaction.
                   </p>
                   <p>
-                    We aim to expand our reach beyond Madurai, bringing our exceptional services and products 
-                    to customers across South India and beyond, while always maintaining the same personal touch 
+                    We aim to expand our reach beyond Madurai, bringing our exceptional services and products
+                    to customers across South India and beyond, while always maintaining the same personal touch
                     that has defined us since day one.
                   </p>
                 </div>
@@ -271,8 +271,8 @@ const BMGAboutUs = () => {
             <h2 className="bmg-section-title">Our Promise</h2>
             <div className="bmg-promise-container">
               <p>
-                We promise to continue delivering exceptional value, maintaining the highest standards of craftsmanship, 
-                and upholding the trust that our customers have placed in us for generations. Your satisfaction is our 
+                We promise to continue delivering exceptional value, maintaining the highest standards of craftsmanship,
+                and upholding the trust that our customers have placed in us for generations. Your satisfaction is our
                 ultimate goal, and we strive to make every interaction with BMG Jewellers a memorable experience.
               </p>
             </div>

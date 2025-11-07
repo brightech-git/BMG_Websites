@@ -5,22 +5,24 @@ import {
     updateCartItem,
     deleteCartItem,
 } from "../../service/cartService";
+import {  useSelector } from "react-redux";
+
 
 export const useCart = () => {
     const queryClient = useQueryClient();
 
+    const mobileNumber = useSelector((state) => state.user.user?.contactNumber);
+    console.log("📱 Mobile Number from Redux:", mobileNumber);
+
     // Always get the latest values from localStorage
     const token = localStorage.getItem("user_token");
+    
 
-    const {
-        data: cartItems = [],
-        isLoading,
-        error,
-    } = useQuery({
-        queryKey: ["cart"],
-        queryFn: fetchCart,
-        enabled: !!token, // Only fetch if logged in
-        staleTime: 1000 * 60 * 5, // 5 mins
+    const { data: cartItems = [], isLoading, error } = useQuery({
+        queryKey: ["cart", mobileNumber],
+        queryFn: () => fetchCart(mobileNumber),
+        enabled: !!mobileNumber,
+        staleTime: 1000 * 60 * 5,
     });
 
     // ✅ Mutation for adding item
@@ -58,14 +60,15 @@ export const useCart = () => {
             alert("Failed to delete item.");
         },
     });
-
+    
     // ✅ Handler for checking and adding/updating cart
     const addToCartHandler = (newItem) => {
-        // console.log("🛒 Add to Cart Handler Triggered:", newItem);
+        // //console.log("🛒 Add to Cart Handler Triggered:", newItem);
 
-        const mobileNumber = localStorage.getItem("userMobileNumber");
+        
         if (!mobileNumber) {
             alert("User mobile number not found. Please login again.");
+            
             return;
         }
 
@@ -86,7 +89,7 @@ export const useCart = () => {
             });
         }
     };
-    
+
 
     return {
         cartItems,

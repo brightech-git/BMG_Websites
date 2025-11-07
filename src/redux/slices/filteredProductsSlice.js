@@ -5,12 +5,12 @@ import PublicUrl from '../../api/publicUrl';
 export const fetchFilteredProducts = createAsyncThunk(
     'products/fetchFilteredProducts',
     async (filters, { rejectWithValue }) => {
-        console.log(filters,'filter in service');
+        //console.log(filters,'filter in service');
         try {
             const response = await PublicUrl.post('/product/items/filter', null, { params: filters });
-            console.log(response.data,'response');
+            //console.log(response.data,'response');
             return response.data;
-            
+
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
         }

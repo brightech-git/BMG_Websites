@@ -16,8 +16,8 @@ export const getItemAndSubItemNames = async (metal) => {
     }
 };
 
-// ✅ New service: Fetch filtered items by itemId or itemName
-export const getItemFilter = async ({ itemId, itemName, page = 1, pageSize = 20 }) => {
+// ✅ New service: Fetch filtered items by itemId or itemCtrName
+export const getItemFilter = async ({ itemId, itemCtrName, page = 1, pageSize = 20 }) => {
     try {
         // Create URL with all parameters
         const params = new URLSearchParams();
@@ -25,7 +25,7 @@ export const getItemFilter = async ({ itemId, itemName, page = 1, pageSize = 20 
         params.append('pageSize', pageSize);
 
         if (itemId) params.append('itemId', itemId.toString());
-        if (itemName) params.append('itemName', itemName.trim());
+        if (itemCtrName) params.append('itemCtrName', itemCtrName.trim());
 
         const response = await PublicUrl.get(
             `/product/getItemFilter?${params.toString()}`
@@ -35,15 +35,15 @@ export const getItemFilter = async ({ itemId, itemName, page = 1, pageSize = 20 
         console.error("Error fetching item filters:", error);
         throw error;
     }
-  };
+};
 
-  export const getCategory = async()=>{
-    try{
+export const getCategory = async () => {
+    try {
         const response = await PublicUrl.get('/product/items/MainCategory');
         return response.data;
     }
-    catch(error){
+    catch (error) {
         console.error("Error fetching Categories List");
         throw error;
     }
-  }
+}

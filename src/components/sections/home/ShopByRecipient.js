@@ -10,9 +10,9 @@ const ShopByRecipient = () => {
     const history = useHistory();
 
     const categories = [
-        { id: 1, label: "For Him", image: men, query: "itemName=Gift Ideas&subItemName=FOR HIM" },
-        { id: 2, label: "For Her", image: women, query: "itemName=Gift Ideas&subItemName=FOR HER" },
-        { id: 3, label: "For Kids", image: kid, query: "subItemName=FOR KIDS&itemName=Gift Ideas" },
+        { id: 1, label: "For Him", image: men, query: "itemCtrName=Gift Ideas&subItemName=FOR HIM" },
+        { id: 2, label: "For Her", image: women, query: "itemCtrName=Gift Ideas&subItemName=FOR HER" },
+        { id: 3, label: "For Kids", image: kid, query: "subItemName=FOR KIDS&itemCtrName=Gift Ideas" },
     ];
 
     const handleCategoryClick = (query) => {
@@ -20,7 +20,7 @@ const ShopByRecipient = () => {
     };
 
     const { trackOrder } = useTrackOrder('7D116046113');
-    console.log(trackOrder, 'trackorder');
+    //console.log(trackOrder, 'trackorder');
     return (
         <section className="recipient-section">
             <div className="container">

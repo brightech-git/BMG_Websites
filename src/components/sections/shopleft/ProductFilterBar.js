@@ -18,7 +18,7 @@ const FILTER_OPTIONS = {
     { label: 'Price – Low to High', value: 'priceLowToHigh_ASC' },
     { label: 'Price – High to Low', value: 'priceHighToLow_DESC' },
   ],
-  sortDirection : ['ASC', 'DESC'],
+  sortDirection: ['ASC', 'DESC'],
 };
 
 const FILTER_VALIDATION = {
@@ -72,11 +72,11 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
   const [inputValues, setInputValues] = useState({ min: '', max: '' });
   const priceInputRef = useRef({ min: null, max: null });
   const searchParams = new URLSearchParams(location.search);
-  const itemName = searchParams.get('itemName') || '';
+  const itemCtrName = searchParams.get('itemCtrName') || '';
 
   useEffect(() => {
     // Normalize item name: lowercase + singular
-    const normalizedName = itemName?.toLowerCase().trim();
+    const normalizedName = itemCtrName?.toLowerCase().trim();
 
     // Allow both singular & plural (ring/rings, bangle/bangles)
     const shouldShowSize = ['ring', 'rings', 'bangle', 'bangles'].includes(normalizedName);
@@ -85,15 +85,15 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
       ...prev,
       sizeName: shouldShowSize,
     }));
-  }, [itemName]);
+  }, [itemCtrName]);
 
   // Filter extraction and validation
   const filters = useMemo(() => {
     const searchParams = new URLSearchParams(location.search);
 
-   
+
     const extractedFilters = {
-      
+
       gender: searchParams.get('gender') || '',
       occasion: searchParams.get('occasion') || '',
       sizeName: searchParams.get('sizeName') || '',
@@ -485,7 +485,7 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
                       className="remove-tag"
                       aria-label={`Remove ${displayValue} filter`}
                     >
-                      <X size={12}  />
+                      <X size={12} />
                     </button>
                   </div>
                 );
@@ -513,8 +513,8 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
 
         <div className="filter-panel-content">
           {Object.entries(FILTER_LABELS).map(([key, label]) => {
-            // Hide "sizeName" filter unless itemName is ring/bangle
-            const normalizedName = itemName?.toLowerCase().trim();
+            // Hide "sizeName" filter unless itemCtrName is ring/bangle
+            const normalizedName = itemCtrName?.toLowerCase().trim();
             const shouldShowSize = ['ring', 'rings', 'bangle', 'bangles'].includes(normalizedName);
 
             if (key === 'sizeName' && !shouldShowSize) {

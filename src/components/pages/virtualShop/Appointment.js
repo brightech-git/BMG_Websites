@@ -12,7 +12,7 @@ import AppointmentPage from './VirtualShop';
 class Appointment extends Component {
     render() {
         const { location } = this.props;
-        const { itemName, subItemName } = queryString.parse(location.search);
+        const { itemCtrName, subItemName } = queryString.parse(location.search);
 
         return (
             <Fragment>

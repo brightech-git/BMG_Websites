@@ -1,0 +1,14 @@
+html, body {
+  scroll-behavior: auto !important; /* Disable native smooth scroll */
+  overflow-x: hidden;
+}
+
+#smooth-wrapper {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+section, div {
+  transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+}

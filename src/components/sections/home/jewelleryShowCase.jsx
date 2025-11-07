@@ -75,8 +75,8 @@ const JewelryShowcase = () => {
                                     />
                                 ))}
                             </div>
-                            <div className="carousel-overlay">
-                                <div className="view-collection">
+                            <div className="carousel-overlay-best" onClick={handleSeeAll}>
+                                <div className="view-collection-best">
                                     <span>View Collection</span>
                                     <FiArrowRight className="arrow-icon" />
                                 </div>

@@ -4,8 +4,7 @@ import { createOrder ,cancelOrder } from '../../service/orderService';
 
 export const useCreateOrder = () => {
     return useMutation({
-        mutationFn: createOrder,
-        
+        mutationFn: createOrder, 
     });
 };
 

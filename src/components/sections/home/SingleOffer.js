@@ -28,9 +28,9 @@ const SingleOffer = ({
     };
 
 
-    const handleClick = (itemName, subItemName) => {
+    const handleClick = (itemCtrName, subItemName) => {
         const queryParams = new URLSearchParams();
-        if (itemName) queryParams.append('itemName', itemName);
+        if (itemCtrName) queryParams.append('itemCtrName', itemCtrName);
         if (subItemName) queryParams.append('subItemName', subItemName);
         const fixedQuery = queryParams.toString().replace(/\+/g, '%20');
         history.push(`/products-page?${fixedQuery}`);

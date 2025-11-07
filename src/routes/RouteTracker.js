@@ -6,7 +6,9 @@ export default function RouteTracker() {
     const location = useLocation();
 
     useEffect(() => {
-        localStorage.setItem("lastVisited", location.pathname + location.search);
+        const redirectState = { from: location.pathname + location.search };
+        localStorage.setItem("lastVisited", JSON.stringify(redirectState));
+        // localStorage.setItem("lastVisited", location.pathname + location.search);
     }, [location]);
 
     return null; // nothing to render

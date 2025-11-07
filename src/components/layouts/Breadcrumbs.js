@@ -15,13 +15,12 @@ const Breadcrumbs = ({ itemName, subItemName, pages, occasion, gender }) => {
         gender: "",
     };
 
-    
-     if (itemName && subItemName) {
-        params = { itemName, subItemName, pages:"", occasion: "", gender: "" };
-    } 
-     else if (itemName) {
-         params = { itemName, subItemName: "", pages: "", occasion: "", gender: "" };
-     } else if (gender) {
+
+    if (itemName && subItemName) {
+        params = { itemName, subItemName, pages: "", occasion: "", gender: "" };
+    } else if (itemName) {
+        params = { itemName, subItemName: "", pages: "", occasion: "", gender: "" };
+    } else if (gender) {
         params = { gender };
     } else if (occasion) {
         params = { occasion };
@@ -29,11 +28,14 @@ const Breadcrumbs = ({ itemName, subItemName, pages, occasion, gender }) => {
         params = { pages };
     }
 
-    console.log(params,'params')
+    //console.log(params, 'params')
 
     const { data: bannerData, isLoading, isError } = useCategoryBanner(params);
 
+
     const banners = bannerData?.results || [];
+
+    //console.log(banners, 'banners')
 
 
     // Reset loading state whenever data OR props change

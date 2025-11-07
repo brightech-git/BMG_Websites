@@ -203,27 +203,27 @@ class Footertwo extends Component {
                   <h6 className="font-weight-bold">Rings</h6>
                   <ul className="footer-links">
                     <li>
-                      <Link to="/products-page?itemName=RINGS&subItemName=DAILY WEAR">
+                      <Link to="/products-page?itemCtrName=RINGS&subItemName=DAILY WEAR">
                         Daily Wear
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=RINGS&subItemName=STATEMENT RINGS">
+                      <Link to="/products-page?itemCtrName=RINGS&subItemName=STATEMENT RINGS">
                         Statement Rings
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=RINGS&subItemName=COUPLE RINGS">
+                      <Link to="/products-page?itemCtrName=RINGS&subItemName=COUPLE RINGS">
                         Couple Rings
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=RINGS&subItemName=ENGAGEMENT RINGS">
+                      <Link to="/products-page?itemCtrName=RINGS&subItemName=ENGAGEMENT RINGS">
                         Engagement Rings
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=RINGS&subItemName=WEDDING RINGS">
+                      <Link to="/products-page?itemCtrName=RINGS&subItemName=WEDDING RINGS">
                         Wedding Rings
                       </Link>
                     </li>
@@ -232,22 +232,22 @@ class Footertwo extends Component {
                   <h6 className="font-weight-bold mt-3">Earrings</h6>
                   <ul className="footer-links">
                     <li>
-                      <Link to="/products-page?itemName=EARRINGS&subItemName=JHUMAKAS">
+                      <Link to="/products-page?itemCtrName=EARRINGS&subItemName=JHUMAKAS">
                         Jhumkas
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=EARRINGS&subItemName=STUDS">
+                      <Link to="/products-page?itemCtrName=EARRINGS&subItemName=STUDS">
                         Studs
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=EARRINGS&subItemName=CHANDBALIS">
+                      <Link to="/products-page?itemCtrName=EARRINGS&subItemName=CHANDBALIS">
                         Chandbalis
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=EARRINGS&subItemName=DANGLERS">
+                      <Link to="/products-page?itemCtrName=EARRINGS&subItemName=DANGLERS">
                         Danglers
                       </Link>
                     </li>
@@ -261,22 +261,22 @@ class Footertwo extends Component {
                   </h6>
                   <ul className="footer-links">
                     <li>
-                      <Link to="/products-page?itemName=NECKLACES&subItemName=CHOCKER SETS">
+                      <Link to="/products-page?itemCtrName=NECKLACES&subItemName=CHOCKER SETS">
                         Chocker sets
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=NECKLACES&subItemName=LONG HARAM">
+                      <Link to="/products-page?itemCtrName=NECKLACES&subItemName=LONG HARAM">
                         Long Haram
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=NECKLACES&subItemName=SHORT CHAINS">
+                      <Link to="/products-page?itemCtrName=NECKLACES&subItemName=SHORT CHAINS">
                         Short Chains
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=NECKLACES&subItemName=TEMPLE SETS">
+                      <Link to="/products-page?itemCtrName=NECKLACES&subItemName=TEMPLE SETS">
                         Temple sets
                       </Link>
                     </li>
@@ -287,22 +287,22 @@ class Footertwo extends Component {
                   </h6>
                   <ul className="footer-links">
                     <li>
-                      <Link to="/products-page?itemName=BANGLES&subItemName=KADAS">
+                      <Link to="/products-page?itemCtrName=BANGLES&subItemName=KADAS">
                         Kadas
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=BANGLES&subItemName=CLOSED BANGLES">
+                      <Link to="/products-page?itemCtrName=BANGLES&subItemName=CLOSED BANGLES">
                         Closed Bangles
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=BANGLES&subItemName=OPENABLE BANGLES">
+                      <Link to="/products-page?itemCtrName=BANGLES&subItemName=OPENABLE BANGLES">
                         Openable Bangles
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=BANGLES&subItemName=ADJUSTABLE BRACELETS">
+                      <Link to="/products-page?itemCtrName=BANGLES&subItemName=ADJUSTABLE BRACELETS">
                         Adjustable Bracelets
                       </Link>
                     </li>
@@ -316,17 +316,17 @@ class Footertwo extends Component {
                   </h6>
                   <ul className="footer-links">
                     <li>
-                      <Link to="/products-page?itemName=ANKLES&subItemName=TRADITIONAL ANKLETS">
+                      <Link to="/products-page?itemCtrName=ANKLES&subItemName=TRADITIONAL ANKLETS">
                         Traditional Anklets
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=ANKLES&subItemName=FANCY ANKLETS">
+                      <Link to="/products-page?itemCtrName=ANKLES&subItemName=FANCY ANKLETS">
                         Fancy Anklets
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=ANKLES&subItemName=TOE RINGS">
+                      <Link to="/products-page?itemCtrName=ANKLES&subItemName=TOE RINGS">
                         Toe Rings
                       </Link>
                     </li>
@@ -337,17 +337,17 @@ class Footertwo extends Component {
                   </h6>
                   <ul className="footer-links">
                     <li>
-                      <Link to="/products-page?itemName=PENDANTS&subItemName=NAME PENDANTS">
+                      <Link to="/products-page?itemCtrName=PENDANTS&subItemName=NAME PENDANTS">
                         Name Pendants
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=PENDANTS&subItemName=STONE PENDANTS">
+                      <Link to="/products-page?itemCtrName=PENDANTS&subItemName=STONE PENDANTS">
                         Stone Pendants
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=PENDANTS&subItemName=PLAIN CHAINS">
+                      <Link to="/products-page?itemCtrName=PENDANTS&subItemName=PLAIN CHAINS">
                         Plain Chains
                       </Link>
                     </li>
@@ -358,12 +358,12 @@ class Footertwo extends Component {
                   </h6>
                   <ul className="footer-links">
                     <li>
-                      <Link to="/products-page?itemName=MAANG TIKKA&subItemName=BRIDAL">
+                      <Link to="/products-page?itemCtrName=MAANG TIKKA&subItemName=BRIDAL">
                         Bridal
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=MAANG TIKKA&subItemName=FESTIVE LOOK">
+                      <Link to="/products-page?itemCtrName=MAANG TIKKA&subItemName=FESTIVE LOOK">
                         Festive Look
                       </Link>
                     </li>
@@ -377,17 +377,17 @@ class Footertwo extends Component {
                   </h6>
                   <ul className="footer-links">
                     <li>
-                      <Link to="/products-page?itemName=BRIDAL&subItemName=FULL SETS">
+                      <Link to="/products-page?itemCtrName=BRIDAL&subItemName=FULL SETS">
                         Full Sets
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=BRIDAL&subItemName=BRIDAL EARRINGS">
+                      <Link to="/products-page?itemCtrName=BRIDAL&subItemName=BRIDAL EARRINGS">
                         Bridal Earrings
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=BRIDAL&subItemName=BRIDAL BANGLES">
+                      <Link to="/products-page?itemCtrName=BRIDAL&subItemName=BRIDAL BANGLES">
                         Bridal Bangles
                       </Link>
                     </li>
@@ -398,12 +398,12 @@ class Footertwo extends Component {
                   </h6>
                   <ul className="footer-links">
                     <li>
-                      <Link to="/products-page?itemName=TEMPLE&subItemName=TRADITIONAL KEMP">
+                      <Link to="/products-page?itemCtrName=TEMPLE&subItemName=TRADITIONAL KEMP">
                         Traditional Kemp
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=TEMPLE&subItemName=MATTE GOLD FINISH">
+                      <Link to="/products-page?itemCtrName=TEMPLE&subItemName=MATTE GOLD FINISH">
                         Matte Gold Finish
                       </Link>
                     </li>
@@ -414,17 +414,17 @@ class Footertwo extends Component {
                   </h6>
                   <ul className="footer-links">
                     <li>
-                      <Link to="/products-page?itemName=MEN&subItemName=CHAINS">
+                      <Link to="/products-page?itemCtrName=MEN&subItemName=CHAINS">
                         Chains
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=MEN&subItemName=KADA">
+                      <Link to="/products-page?itemCtrName=MEN&subItemName=KADA">
                         Kada
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=MEN&subItemName=RINGS">
+                      <Link to="/products-page?itemCtrName=MEN&subItemName=RINGS">
                         Rings
                       </Link>
                     </li>
@@ -439,17 +439,17 @@ class Footertwo extends Component {
                   <h6 className="font-weight-bold">Kids Jewellery</h6>
                   <ul className="footer-links">
                     <li>
-                      <Link to="/products-page?itemName=KIDS&subItemName=CUTE NECKPIECES">
+                      <Link to="/products-page?itemCtrName=KIDS&subItemName=CUTE NECKPIECES">
                         Cute Neckpieces
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=KIDS&subItemName=MINI BANGLES">
+                      <Link to="/products-page?itemCtrName=KIDS&subItemName=MINI BANGLES">
                         Mini Bangles
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=KIDS&subItemName=STUDS">
+                      <Link to="/products-page?itemCtrName=KIDS&subItemName=STUDS">
                         Studs
                       </Link>
                     </li>
@@ -463,12 +463,12 @@ class Footertwo extends Component {
                   </h6>
                   <ul className="footer-links">
                     <li>
-                      <Link to="/products-page?itemName=OXIDISED&subItemName=GERMAN SILVER">
+                      <Link to="/products-page?itemCtrName=OXIDISED&subItemName=GERMAN SILVER">
                         German Silver
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=OXIDISED&subItemName=ANTIQUE LOOK SETS">
+                      <Link to="/products-page?itemCtrName=OXIDISED&subItemName=ANTIQUE LOOK SETS">
                         Antique Look Sets
                       </Link>
                     </li>
@@ -482,17 +482,17 @@ class Footertwo extends Component {
                   </h6>
                   <ul className="footer-links">
                     <li>
-                      <Link to="/products-page?itemName=CUSTOMISED&subItemName=NAME JEWELLERY">
+                      <Link to="/products-page?itemCtrName=CUSTOMISED&subItemName=NAME JEWELLERY">
                         Name Jewellery
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=CUSTOMISED&subItemName=ALPHABET PENDANTS">
+                      <Link to="/products-page?itemCtrName=CUSTOMISED&subItemName=ALPHABET PENDANTS">
                         Alphabet Pendants
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=CUSTOMISED&subItemName=BIRTHSTONE RINGS">
+                      <Link to="/products-page?itemCtrName=CUSTOMISED&subItemName=BIRTHSTONE RINGS">
                         BirthStone Rings
                       </Link>
                     </li>
@@ -524,12 +524,12 @@ class Footertwo extends Component {
                       </Link>
                     </li>
                     {/* <li>
-                      <Link to="/products-page?itemName=GIFTS&subItemName=FOR HIM">
+                      <Link to="/products-page?itemCtrName=GIFTS&subItemName=FOR HIM">
                         For Him
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=GIFTS&subItemName=FOR HER">
+                      <Link to="/products-page?itemCtrName=GIFTS&subItemName=FOR HER">
                         For Her
                       </Link>
                     </li> */}
@@ -545,17 +545,17 @@ class Footertwo extends Component {
                   </h6>
                   <ul className="footer-links">
                     <li>
-                      <Link to="/products-page?itemName=FESTIVAL&subItemName=NAVARATRI">
+                      <Link to="/products-page?itemCtrName=FESTIVAL&subItemName=NAVARATRI">
                         Navaratri
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=FESTIVAL&subItemName=DIWALI">
+                      <Link to="/products-page?itemCtrName=FESTIVAL&subItemName=DIWALI">
                         Diwali
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=FESTIVAL&subItemName=WEDDING SEASON">
+                      <Link to="/products-page?itemCtrName=FESTIVAL&subItemName=WEDDING SEASON">
                         Wedding Season Picks
                       </Link>
                     </li>
@@ -566,12 +566,12 @@ class Footertwo extends Component {
                   <h6 className="font-weight-bold">Clearance Sale</h6>
                   <ul className="footer-links">
                     <li>
-                      <Link to="/products-page?itemName=CLEARANCE&subItemName=HEAVY DISCOUNT">
+                      <Link to="/products-page?itemCtrName=CLEARANCE&subItemName=HEAVY DISCOUNT">
                         Heavy Discount
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=CLEARANCE&subItemName=LAST STOCK">
+                      <Link to="/products-page?itemCtrName=CLEARANCE&subItemName=LAST STOCK">
                         Last Stock Items
                       </Link>
                     </li>
@@ -582,12 +582,12 @@ class Footertwo extends Component {
                   <h6 className="font-weight-bold">Offers</h6>
                   <ul className="footer-links">
                     <li>
-                      <Link to="/products-page?itemName=OFFER&subItemName=BUY 2 GET 1">
+                      <Link to="/products-page?itemCtrName=OFFER&subItemName=BUY 2 GET 1">
                         Buy 2 Get 1
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=OFFER&subItemName=50 OFF">
+                      <Link to="/products-page?itemCtrName=OFFER&subItemName=50 OFF">
                         50% Off
                       </Link>
                     </li>
@@ -598,12 +598,12 @@ class Footertwo extends Component {
                   <h6 className="font-weight-bold">New Arrivals</h6>
                   <ul className="footer-links">
                     <li>
-                      <Link to="/products-page?itemName=NEW&subItemName=TRENDING">
+                      <Link to="/products-page?itemCtrName=NEW&subItemName=TRENDING">
                         Trending Now
                       </Link>
                     </li>
                     <li>
-                      <Link to="/products-page?itemName=NEW&subItemName=JUST IN">
+                      <Link to="/products-page?itemCtrName=NEW&subItemName=JUST IN">
                         Just In
                       </Link>
                     </li>

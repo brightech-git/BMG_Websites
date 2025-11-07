@@ -6,7 +6,7 @@ const MaintenanceLogin = ({ onAccess }) => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
-    const HARD_CODED_PASSWORD = "Bmg@123";
+    const HARD_CODED_PASSWORD = "bmg@123";
     const EXPIRY_DURATION = 1000 * 60 * 30; 
 
     useEffect(() => {

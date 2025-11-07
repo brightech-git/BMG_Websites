@@ -5,17 +5,17 @@ import ProductCard from '../sections/productCard/ProductCard';
 import useFilterProducts from '../../hook/product/useFilterProducts';
 import './ShopRelated.css';
 
-const ShopRelatedUpdated = ({itemName}) => {
-    console.log('Received itemName:', itemName);
+const ShopRelatedUpdated = ({ itemCtrName }) => {
+    //console.log('Received itemCtrName:', itemCtrName);
     const sliderRef = useRef(null);
 
     // Fetch related products using useFilterProducts hook
     const { data, loading, error } = useFilterProducts(
-        {itemName}, // No specific filters for related products
+        { itemCtrName }, // No specific filters for related products
         1,  // Page 1
         10  // Fetch up to 10 products
     );
-    console.log('API data:', data); // Debug API response
+    //console.log('API data:', data); // Debug API response
 
     const next = () => {
         sliderRef.current.slickNext();
@@ -69,7 +69,7 @@ const ShopRelatedUpdated = ({itemName}) => {
     // Map API data to match ProductCard props
     const relatedProducts = data?.data || [];
 
-    console.log('Mapped products:', relatedProducts); // Debug mapped products
+    //console.log('Mapped products:', relatedProducts); // Debug mapped products
 
     return (
         <section className="products-showcase-section">

@@ -1,5 +1,4 @@
 import publicUrl from '../api/publicUrl'; // axios instance with token
-import axios from 'axios';
 
 // Create a new order
 export const createOrder = async (orderData) => {
@@ -10,12 +9,13 @@ export const createOrder = async (orderData) => {
 // Get order history
 export const getOrderHistory = async () => {
     const payload = {
-        page:'0',
-        size:'200',
+        page: '0',
+        size: '2000',
     };
     const response = await publicUrl.get('/order/history', {
-        params:payload
+        params: payload
     });
+    // //console.log(response.data, 'history');
     return response.data;
 };
 // Cancel an order
@@ -31,11 +31,11 @@ export const cancelOrder = async (payload) => {
 //track order 
 export const trackOrder = async (refNumber) => {
     const payload = {
-        trkType:"cnno",
-        strcnno:refNumber,
-        addtnlDtl:"Y",
+        trkType: "cnno",
+        strcnno: refNumber,
+        addtnlDtl: "Y",
     };
-    console.log(payload ,'tracking');
+    //console.log(payload ,'tracking');
 
     try {
         const response = await publicUrl.post(

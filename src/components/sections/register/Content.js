@@ -60,7 +60,7 @@ const Content = () => {
         e.preventDefault();
         if (loading) return;
         if (validateForm()) {
-            console.log('Dispatching signup with:', { username, email, contactNumber, password, roles });
+            //console.log('Dispatching signup with:', { username, email, contactNumber, password, roles });
             dispatch(signup({ username, email, contactNumber, password, roles }))
                 .unwrap()
                 .then(() => {
@@ -83,7 +83,7 @@ const Content = () => {
             contactNumber: tempContactNumber || contactNumber,
             otp: otp.trim(),
         };
-        console.log('Dispatching verifyOtp with:', payload);
+        //console.log('Dispatching verifyOtp with:', payload);
         dispatch(verifyOtp(payload))
             .unwrap()
             .then(() => {
@@ -124,7 +124,7 @@ const Content = () => {
                 <div className="auth-wrapper">
                     <div className="auth-grid">
                         <div className="auth-visual">
-                           
+
                         </div>
 
                         <div className="auth-form-container">

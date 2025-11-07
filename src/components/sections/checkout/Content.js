@@ -67,7 +67,7 @@ const ProgressStepper = ({ currentStep }) => {
 // Address Modal
 const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddress, onSaveAddress, onDeleteAddress, customerProfile }) => {
 
-  console.log(customerProfile,'cust')
+  //console.log(customerProfile,'cust')
   const [mode, setMode] = useState('list');
   const [currentAddress, setCurrentAddress] = useState(null);
   const [formData, setFormData] = useState({
@@ -106,7 +106,7 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
       gstNumber: '',
       companyName: '',
       alternatePhone: '',
-      isDefault: false, 
+      isDefault: false,
     });
     setMode('add');
   };
@@ -127,7 +127,7 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
       companyName: address.companyName || '',
       alternatePhone: address.alternatePhone || '',
       isDefault: address.isDefault,
-      
+
     });
     setMode('edit');
   };
@@ -269,33 +269,33 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
                   <Form.Control type="text" name="pincode" value={formData.pincode} onChange={handleChange} className="form-control" pattern="[0-9]{6}" required />
                 </Form.Group>
               </div>
-                
-                <div className="col-12 col-md-4">
-                  <Form.Group>
-                    <Form.Label className="form-label">GstNumber</Form.Label>
-                    <Form.Control type="text" name="gstNumber" value={formData.gstNumber} onChange={handleChange} className="form-control" />
-                  </Form.Group>
-                </div>
-                <div className="col-12 col-md-4">
-                  <Form.Group>
-                    <Form.Label className="form-label">CompanyName</Form.Label>
-                    <Form.Control type="text" name="companyName" value={formData.companyName} onChange={handleChange} className="form-control" />
-                  </Form.Group>
-                </div>
-                <div className="col-12 col-md-4">
-                  <Form.Group>
-                    <Form.Label className="form-label">Mobile 2</Form.Label>
-                    <Form.Control type="text" name="alternatePhone" value={formData.alternatePhone} onChange={handleChange} className="form-control" pattern="[0-9]{10}" />
-                  </Form.Group>
-                </div>
+
+              <div className="col-12 col-md-4">
+                <Form.Group>
+                  <Form.Label className="form-label">GstNumber</Form.Label>
+                  <Form.Control type="text" name="gstNumber" value={formData.gstNumber} onChange={handleChange} className="form-control" />
+                </Form.Group>
+              </div>
+              <div className="col-12 col-md-4">
+                <Form.Group>
+                  <Form.Label className="form-label">CompanyName</Form.Label>
+                  <Form.Control type="text" name="companyName" value={formData.companyName} onChange={handleChange} className="form-control" />
+                </Form.Group>
+              </div>
+              <div className="col-12 col-md-4">
+                <Form.Group>
+                  <Form.Label className="form-label">Mobile 2</Form.Label>
+                  <Form.Control type="text" name="alternatePhone" value={formData.alternatePhone} onChange={handleChange} className="form-control" pattern="[0-9]{10}" />
+                </Form.Group>
+              </div>
             </div>
             <Form.Group className="mb-2">
-              <Form.Check 
-                type="checkbox" 
-                name="isDefault" 
-                label="Set as default address" 
-                checked={formData.isDefault} 
-                onChange={handleChange} 
+              <Form.Check
+                type="checkbox"
+                name="isDefault"
+                label="Set as default address"
+                checked={formData.isDefault}
+                onChange={handleChange}
                 className="form-check"
               />
             </Form.Group>
@@ -313,7 +313,7 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
 // Order Summary Panel
 const OrderSummaryPanel = ({ items, subtotal, total, isCompact = false }) => {
 
-  console.log(items , 'ordersummary');
+  //console.log(items , 'ordersummary');
   return (
     <div className={`order-panel ${isCompact ? 'compact' : ''}`}>
       <div className="order-header">
@@ -332,7 +332,7 @@ const OrderSummaryPanel = ({ items, subtotal, total, isCompact = false }) => {
               <p className="item-variant">Weight: {item?.weight.toFixed(3) || item?.tagNo}</p>
             </div>
             <div className="item-price">₹{(item?.price).toFixed(2)}</div>
-      
+
           </div>
         ))}
       </div>
@@ -349,6 +349,7 @@ const OrderSummaryPanel = ({ items, subtotal, total, isCompact = false }) => {
 const EnhancedCheckout = ({ location, history }) => {
   const { state: checkoutPayload = {} } = location || {};
   const { items: initialCartItems = [], totalAmount: initialTotalAmount = 0 } = checkoutPayload;
+  
   const [cartItems, setCartItems] = useState(initialCartItems);
   const [totalAmount, setTotalAmount] = useState(initialTotalAmount);
   const [currentStep, setCurrentStep] = useState(1);
@@ -364,8 +365,8 @@ const EnhancedCheckout = ({ location, history }) => {
   const { data: addresses, isLoading: addressesLoading, refetch: refetchAddresses } = useAddressesByCustomer(profile?.id);
 
   console.log('Profile:', profile);
-  console.log('Addresses:', addresses);
-  console.log('Selected Address:', selectedAddress);
+  //console.log('Addresses:', addresses);
+  //console.log('Selected Address:', selectedAddress);
   const { mutate: createOrder } = useCreateOrder();
   const { mutate: createAddress } = useCreateAddress();
   const { mutate: updateAddress } = useUpdateAddress();
@@ -404,7 +405,7 @@ const EnhancedCheckout = ({ location, history }) => {
     const payload = { ...addressData, customerId: profile.id };
     if (addressData.id) {
       updateAddress({ id: addressData.id, addressData: payload }, {
-        onSuccess: () => {refetchAddresses(); },
+        onSuccess: () => { refetchAddresses(); },
         onError: (error) => { toast.error(error.response?.data || 'Failed to update address'); }
       });
     } else {
@@ -482,14 +483,14 @@ const EnhancedCheckout = ({ location, history }) => {
       })),
     };
 
-    console.log('Order Payload:', orderPayload);
+    //console.log('Order Payload:', orderPayload);
 
     // ✅ Store in localStorage (with JSON.stringify)
     localStorage.setItem('order', JSON.stringify(orderPayload));
 
     createOrder(orderPayload, {
       onSuccess: (data) => {
-        console.log("Order created successfully:", data, "Payload:", orderPayload);
+        //console.log("Order created successfully:", data, "Payload:", orderPayload);
 
         if (data.orderId) {
           if (paymentMode === "ONLINE") {
@@ -562,7 +563,7 @@ const EnhancedCheckout = ({ location, history }) => {
                 ) : selectedAddress ? (
                   <div className="address-display">
                     <div className="address-item selected">
-                        <div className="address-content" onClick={() => setShowAddressModal(true)}>
+                      <div className="address-content" onClick={() => setShowAddressModal(true)}>
                         <div className="address-heading">
                           <h6 className="address-name">{selectedAddress.name}</h6>
                           {selectedAddress.isDefault && <Badge bg="success">Default</Badge>}

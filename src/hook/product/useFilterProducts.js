@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { filterProducts } from '../../service/ProductService';
 
-const useFilterProducts = (inputFilters = {}, page , pageSize ) => {
+const useFilterProducts = (inputFilters = {}, page, pageSize) => {
     const [data, setData] = useState({ data: [], totalItems: 0 });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -17,7 +17,7 @@ const useFilterProducts = (inputFilters = {}, page , pageSize ) => {
 
             // Parse inputFilters if it's a query string
             let filters = memoizedInputFilters;
-            console.log('Input filters:', filters); // Debug
+            //console.log('Input filters:', filters); // Debug
             if (typeof memoizedInputFilters === 'string') {
                 const searchParams = new URLSearchParams(memoizedInputFilters);
                 filters = Object.fromEntries(searchParams);
@@ -44,10 +44,10 @@ const useFilterProducts = (inputFilters = {}, page , pageSize ) => {
                 }
             });
 
-            console.log('Cleaned filters:', cleanedFilters); // Debug
+            //console.log('Cleaned filters:', cleanedFilters); // Debug
 
             const result = await filterProducts(cleanedFilters);
-            console.log('API result:', result); // Debug
+            //console.log('API result:', result); // Debug
             setData(result || { data: [], totalItems: 0 });
         } catch (err) {
             console.error('API error:', {

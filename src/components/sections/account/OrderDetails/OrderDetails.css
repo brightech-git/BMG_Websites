@@ -87,6 +87,7 @@
   font-weight: 500;
   background-color: var(--feature-bg-color);
   border: 1px solid var(--grey-color);
+  opacity: 1;
 }
 
 .track-btn {
@@ -390,8 +391,8 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
-  background: var(--secondary-card-color);
+  /* padding: 1rem;
+  background: var(--secondary-card-color); */
   border-radius: 8px;
   margin-bottom: 2rem;
   border-left: 4px solid var(--primary-hover-color);
@@ -400,23 +401,24 @@
 .status-icon {
   width: 48px;
   height: 48px;
-  background: var(--primary-hover-color);
+  background: var(--primary-hover-color) ;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--white-color);
+  color: var(--white-color) ;
   font-size: 1.2rem;
 }
 
-.status-info h4 {
+.status-infos h4 {
+  padding: 0.2rem;
   margin: 0 0 0.25rem 0;
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--primary-text-color);
 }
 
-.status-info p {
+.status-infos p {
   margin: 0;
   font-size: 0.85rem;
   color: var(--grey-color);
@@ -689,7 +691,7 @@
     font-size: 1rem;
   }
 
-  .status-info h4 {
+  .status-infos h4 {
     font-size: 1rem;
   }
 

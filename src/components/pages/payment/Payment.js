@@ -20,10 +20,10 @@ const PaymentPage = () => {
         orderPayload = JSON.parse(localStorage.getItem("order"));
     }
 
-    console.log("Order Payload:", orderPayload);
+    //console.log("Order Payload:", orderPayload);
 
     const onSuccess = async (response) => {
-        console.log("Payment initiated successfully:", response);
+        //console.log("Payment initiated successfully:", response);
 
         const { redirectURI, tranCtx } = response || {};
 

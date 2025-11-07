@@ -9,10 +9,10 @@ import {
 } from '../../service/profileService';
 
 // 🔹 Get current logged-in user profile
-export const useCurrentProfile = () =>{
-// Debug
+export const useCurrentProfile = () => {
+    // Debug
     const token = localStorage.getItem('user_token');
-    console.log('useCurrentProfile called',token); // Debug
+    //console.log('useCurrentProfile called',token); // Debug
     return useQuery({
         queryKey: ['currentProfile'],
         queryFn: getProfile,
@@ -25,7 +25,7 @@ export const useUserById = (id, enabled = true) =>
     useQuery({
         queryKey: ['user', id],
         queryFn: () => getUserById(id),
-        enabled: !!id && enabled ,
+        enabled: !!id && enabled,
         staleTime: 1000 * 60 * 5,
     });
 

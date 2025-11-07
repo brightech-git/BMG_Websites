@@ -41,7 +41,7 @@ const getFirstImageUrl = (imagePath) => {
 };
 // Mobile Order Card
 const MobileOrderCard = ({ order, onClick }) => {
-  console.log(order,'order first');
+  //console.log(order,'order first');
   const imageUrl = useMemo(() => getFirstImageUrl(order.orderItems?.[0]?.imagePath), [order]);
   return (
     <div
@@ -52,7 +52,7 @@ const MobileOrderCard = ({ order, onClick }) => {
       onKeyDown={(e) => e.key === "Enter" && onClick(order)}
       aria-label={`View order ${order.orderId || order.id}`}
     >
-     
+
       <div className="order-product-info-mobile">
         <div className="order-product-image-mobile">
           <img src={imageUrl} alt={order.orderItems?.[0]?.productName || "Product"} />
@@ -67,7 +67,7 @@ const MobileOrderCard = ({ order, onClick }) => {
           >
             {order.status}
           </span>
-       
+
           <div className="order-total-mobile">
             Total: {formatCurrency(order.totalAmount || order.amount)}
           </div>
@@ -97,7 +97,7 @@ const DesktopOrderCard = ({ order, onClick }) => {
         <div className="order-product-details-desktop">
           <div className="order-product-name-desktop">{order.orderItems?.[0]?.productName}</div>
         </div>
-     
+
         <div className="order-total-desktop">{formatCurrency(order.totalAmount || order.amount)} </div>
 
         <div
@@ -107,7 +107,7 @@ const DesktopOrderCard = ({ order, onClick }) => {
           )}
         >
           {order.status}
-        
+
         </div>
       </div>
     </div>
@@ -175,7 +175,7 @@ const Orders = ({ setActiveComponent, setSelectedOrder }) => {
     return matchesSearch && matchesStatus && matchesTime;
   });
 
- 
+
 
   // Helper function to get time filter label
   const getTimeFilterLabel = (value) => {

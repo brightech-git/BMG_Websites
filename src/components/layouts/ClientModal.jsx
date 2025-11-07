@@ -6,7 +6,7 @@ const ClientModal = ({ logoSrc, onComplete }) => {
 
     useEffect(() => {
         const modalShown = sessionStorage.getItem('clientModalShown');
-        console.log('CHECKING MODAL:', modalShown); // Check this in console
+        //console.log('CHECKING MODAL:', modalShown); // Check this in console
 
         if (!modalShown) {
             setShowModal(true);

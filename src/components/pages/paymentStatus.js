@@ -13,13 +13,13 @@ const PaymentStatus = () => {
     const orderId = searchParams.get("orderId");
     const mode = searchParams.get("mode");
     const paymentMode = mode === "COD" ? "COD" : "ONLINE";
-    console.log("Payment Mode:", paymentMode);
+    //console.log("Payment Mode:", paymentMode);
 
     const [status, setStatus] = useState(null);
     const [isSuccess, setIsSuccess] = useState(null);
     const [showConfetti, setShowConfetti] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    console.log(isSuccess, 'success')
+    //console.log(isSuccess, 'success')
 
     useEffect(() => {
         // Trigger animations for UI elements
@@ -46,7 +46,7 @@ const PaymentStatus = () => {
                     setShowConfetti(true);
                 } else {
                     const res = await getPaymentStatus(orderId);
-                    console.log("Payment API response:", res);
+                    //console.log("Payment API response:", res);
 
                     setStatus(res);
 
@@ -78,7 +78,7 @@ const PaymentStatus = () => {
     }, [orderId, paymentMode, showConfetti]);
 
     const handleDownloadInvoice = () => {
-        console.log("Download invoice for order:", orderId);
+        //console.log("Download invoice for order:", orderId);
     };
 
     // Helper function to get status message
@@ -89,7 +89,7 @@ const PaymentStatus = () => {
 
         if (status) {
             const txnStatus = status?.paymentStatus;
-            console.log(txnStatus)
+            //console.log(txnStatus)
 
             // Return the most descriptive message available
             return txnStatus || "Unknown Status";
@@ -102,8 +102,8 @@ const PaymentStatus = () => {
         return "Processing...";
     };
 
-    console.log(isSuccess, 'success');
-    console.log(isLoading, 'loadingdata');
+    //console.log(isSuccess, 'success');
+    //console.log(isLoading, 'loadingdata');
 
     return (
         <>

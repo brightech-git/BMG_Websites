@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import { Tab, Nav,  } from "react-bootstrap";
+import { Tab, Nav, } from "react-bootstrap";
 import {
   FaHeart,
   FaRegHeart,
@@ -27,6 +27,8 @@ import Shoprelated from '../../layouts/Shoprelated';
 import Breadcrumb from "../../layouts/Breadcrumb";
 import JewelleryBrandAssurance from "../../layouts/JewelleryBrandAssurance";
 import { Gem, ShieldCheck, RefreshCw } from "lucide-react";
+import { useSelector } from "react-redux";
+import UpdateMobileModal from "../../layouts/UpdateMobileModal";
 
 // ProductSkeleton remains unchanged
 const ProductSkeleton = () => (
@@ -67,14 +69,18 @@ const ProductSkeleton = () => (
 );
 
 const Shopinfo = ({ sno, Authenticated }) => {
-  const isAuthenticated = Authenticated;
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated) || Authenticated;
+
+ 
+  const mobileNumber = useSelector((state) => state.user.contactNumber)|| null;
+  console.log(isAuthenticated,mobileNumber, 'isAuthenticaed')
   const history = useHistory();
   const location = useLocation();
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [animateHeart, setAnimateHeart] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const { data: product, isLoading, error } = useSingleProductQuery(sno);
-  console.log("Fetched product data:", product, "for SNO:", sno);
+  //console.log("Fetched product data:", product, "for SNO:", sno);
   const { addItem } = useRecentlyViewed();
   const { cartItems, addToCartHandler, isLoading: isCartLoading } = useCart();
   const { data: favorites, isLoading: isFavoritesLoading } = useFavorites();
@@ -83,6 +89,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
   const shareRef = React.useRef();
 
   const Base_URL = "https://app.bmgjewellers.com";
+  const [modalOpen, setModalOpen] = React.useState(false);
 
   // Function to get encoded image URL
   const getEncodedImageUrl = (rawPath) => {
@@ -105,9 +112,9 @@ const Shopinfo = ({ sno, Authenticated }) => {
       draggable: true,
       theme: "colored",
     });
-    const redirectState = { from: location.pathname + location.search };
-    localStorage.setItem("lastVisited", JSON.stringify(redirectState));
-    history.push("/login", redirectState);
+    // const redirectState = { from: location.pathname + location.search };
+    // localStorage.setItem("lastVisited", JSON.stringify(redirectState));
+    history.push("/login");
   };
 
   // Share icons data
@@ -164,9 +171,12 @@ const Shopinfo = ({ sno, Authenticated }) => {
       return;
     }
     if (!product?.SNO) return;
-
+    if (!mobileNumber) {
+      setModalOpen(true);
+      return;
+    }
     if (isInCart) {
-      toast.info(`${product.ITEMNAME} is already in cart`, {
+      toast.info(`${product.ITEMCTRNAME} is already in cart`, {
         position: "top-right",
         autoClose: 2000,
         theme: "colored",
@@ -177,14 +187,14 @@ const Shopinfo = ({ sno, Authenticated }) => {
     const cartItem = {
       itemSno: product.SNO,
       itemTagSno: product.SNO,
-      itemName: product.ITEMNAME,
+      itemCtrName: product.ITEMCTRNAME,
       price: getPrice(product),
       image: product.ImagePath ? JSON.parse(product.ImagePath)[0] : "",
     };
 
     addToCartHandler(cartItem);
 
-    toast.success(`${product.ITEMNAME} added to cart!`, {
+    toast.success(`${product.ITEMCTRNAME} added to cart!`, {
       position: "top-right",
       autoClose: 2000,
       theme: "colored",
@@ -196,6 +206,10 @@ const Shopinfo = ({ sno, Authenticated }) => {
     e.stopPropagation();
     if (!isAuthenticated) {
       showAuthToast("proceed with purchase");
+      return;
+    }
+    if (!mobileNumber) {
+      setModalOpen(true);
       return;
     }
     if (!product?.SNO) return;
@@ -211,7 +225,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
           sno: product.SNO,
           itemId: product.ITEMID || null,
           tagNo: product.TAGNO || null,
-          productName: product.ITEMNAME || "Unknown Product",
+          productName: product.ITEMCTRNAME || "Unknown Product",
           weight: product.NETWT || 0,
           quantity: 1,
           price: getPrice(product),
@@ -237,7 +251,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
     if (isWishlisted) {
       removeFavorite.mutate(product.SNO, {
         onSuccess: () => {
-          toast.info(`${product.ITEMNAME} removed from wishlist`, {
+          toast.info(`${product.ITEMCTRNAME} removed from wishlist`, {
             position: "top-right",
             autoClose: 2000,
             theme: "colored",
@@ -255,7 +269,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
     } else {
       addFavorite.mutate(product.SNO, {
         onSuccess: () => {
-          toast.success(`${product.ITEMNAME} added to wishlist`, {
+          toast.success(`${product.ITEMCTRNAME} added to wishlist`, {
             position: "top-right",
             autoClose: 2000,
             theme: "colored",
@@ -296,7 +310,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
       : 0;
 
   const currentUrl = window.location.href;
-  const shareText = `Check out this product: ${product.ITEMNAME || "Unknown Product"
+  const shareText = `Check out this product: ${product.ITEMCTRNAME || "Unknown Product"
     }\nPrice: ₹${getPrice(product).toLocaleString("en-IN", {
       minimumFractionDigits: 2,
     })}\nDescription: ${product.Description || "Expertly crafted jewelry."
@@ -344,278 +358,279 @@ const Shopinfo = ({ sno, Authenticated }) => {
 
   return (
     <section>
-    <section className="modern-product-section">
-      <div className="shopdetail-container">
-        <div className="row product-detail-row g-4">
+      <UpdateMobileModal open={modalOpen} onClose={() => setModalOpen(false)} />
+      <section className="modern-product-section">
+        <div className="shopdetail-container">
+          <div className="row product-detail-row g-4">
             <div className="breadcrumb-mobile-wrapper">
               <Breadcrumb />
             </div>
-          <div className="col-lg-6 col-md-12">
-            <div className="product-gallery-container">
-              {(product.NewArrival || product.Top_Trending || discountPercentage > 0) && (
-                <div className="product-badges">
-                  {product.NewArrival && (
-                    <span className="badge new-arrival">New</span>
-                  )}
-                  {product.Top_Trending && (
-                    <span className="badge trending">Trending</span>
-                  )}
-                  {discountPercentage > 0 && (
-                    <span className="badge discount">-{discountPercentage}%</span>
-                  )}
-                </div>
-              )}
-              {smallsliderpost.length > 0 && <ImageGallery images={smallsliderpost} />}
+            <div className="col-lg-6 col-md-12">
+              <div className="product-gallery-container">
+                {(product.NewArrival || product.Top_Trending || discountPercentage > 0) && (
+                  <div className="product-badges">
+                    {product.NewArrival && (
+                      <span className="badge new-arrival">New</span>
+                    )}
+                    {product.Top_Trending && (
+                      <span className="badge trending">Trending</span>
+                    )}
+                    {discountPercentage > 0 && (
+                      <span className="badge discount">-{discountPercentage}%</span>
+                    )}
+                  </div>
+                )}
+                {smallsliderpost.length > 0 && <ImageGallery images={smallsliderpost} />}
+              </div>
             </div>
-          </div>
-          <div className="col-lg-6 col-md-12">
-            <div className="product-info-container">
-              <div className="breadcrumb-wrapper">
+            <div className="col-lg-6 col-md-12">
+              <div className="product-info-container">
+                <div className="breadcrumb-wrapper">
                   <Breadcrumb />
-              </div>
-            
-              <div className="product-header">
+                </div>
 
-                  <div style={{display:'flex' , alignItems:'center' ,gap:'10px'}}>
-                      <h1 className="product-title">{product.ITEMNAME || "Unknown Product"}</h1>
-                      <p className="sub-product-titles">{product.SUBITEMNAME || "Expertly crafted jewelry."}</p>
+                <div className="product-header">
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <h1 className="product-title">{product.ITEMCTRNAME || "Unknown Product"}</h1>
+                    <p className="sub-product-titles">{product.SUBITEMNAME || "Expertly crafted jewelry."}</p>
                   </div>
-         
-                <div className="header-buttons">
-                  <button
-                    className={`wishlist-btn ${isWishlisted ? "wishlisted" : ""} ${animateHeart ? "animate" : ""
-                      }`}
-                    onClick={handleWishlistToggle}
-                    aria-label={
-                      isWishlisted ? "Remove from wishlist" : "Add to wishlist"
-                    }
-                    disabled={isFavoritesLoading}
-                  >
-                    {isWishlisted ? <FaHeart /> : <FaRegHeart />}
-                  </button>
-                  <button
-                    className={`share-btn ${showShare ? "active" : ""}`}
-                    onClick={() => setShowShare(!showShare)}
-                    aria-label="Share product"
-                  >
-                    <FaShareAlt />
-                  </button>
-                </div>
-              </div>
-              {showShare && (
-                <div className="share-options" ref={shareRef}>
-                  <div className="share-icons">
-                    <a
-                      href={whatsappUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="Share on WhatsApp"
+
+                  <div className="header-buttons">
+                    <button
+                      className={`wishlist-btn ${isWishlisted ? "wishlisted" : ""} ${animateHeart ? "animate" : ""
+                        }`}
+                      onClick={handleWishlistToggle}
+                      aria-label={
+                        isWishlisted ? "Remove from wishlist" : "Add to wishlist"
+                      }
+                      disabled={isFavoritesLoading}
                     >
-                      <FaWhatsapp size={24} />
-                    </a>
-                    <a
-                      href={instagramUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="Share on Instagram"
+                      {isWishlisted ? <FaHeart /> : <FaRegHeart />}
+                    </button>
+                    <button
+                      className={`share-btn ${showShare ? "active" : ""}`}
+                      onClick={() => setShowShare(!showShare)}
+                      aria-label="Share product"
                     >
-                      <FaInstagram size={24} />
-                    </a>
-                    <a
-                      href={facebookUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="Share on Facebook"
-                    >
-                      <FaFacebookF size={24} />
-                    </a>
-                    <a
-                      href={twitterUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="Share on Twitter"
-                    >
-                      <FaTwitter size={24} />
-                    </a>
+                      <FaShareAlt />
+                    </button>
                   </div>
                 </div>
-              )}
-              <div className="product-rating">
-                <div className="stars">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <i
-                      key={star}
-                      className={`fas fa-star ${star <= 4 ? "filled" : ""}`}
-                    ></i>
-                  ))}
+                {showShare && (
+                  <div className="share-options" ref={shareRef}>
+                    <div className="share-icons">
+                      <a
+                        href={whatsappUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Share on WhatsApp"
+                      >
+                        <FaWhatsapp size={24} />
+                      </a>
+                      <a
+                        href={instagramUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Share on Instagram"
+                      >
+                        <FaInstagram size={24} />
+                      </a>
+                      <a
+                        href={facebookUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Share on Facebook"
+                      >
+                        <FaFacebookF size={24} />
+                      </a>
+                      <a
+                        href={twitterUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Share on Twitter"
+                      >
+                        <FaTwitter size={24} />
+                      </a>
+                    </div>
+                  </div>
+                )}
+                <div className="product-rating">
+                  <div className="stars">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <i
+                        key={star}
+                        className={`fas fa-star ${star <= 4 ? "filled" : ""}`}
+                      ></i>
+                    ))}
+                  </div>
+                  <span className="rating-text">(4.0) • 50 Reviews</span>
                 </div>
-                <span className="rating-text">(4.0) • 50 Reviews</span>
-              </div>
-              <div className="product-pricing">
-                <div className="price-row">
-                  {getPrice(product) > 0 && (
-                    <span className="current-price">
-                      ₹
-                      {getPrice(product).toLocaleString("en-IN", {
-                        minimumFractionDigits: 2,
-                      })}
-                    </span>
-                  )}
-                  {discountPercentage > 0 && originalPrice > 0 && (
-                    <span className="original-price">
-                      ₹
-                      {originalPrice.toLocaleString("en-IN", {
-                        minimumFractionDigits: 2,
-                      })}
-                    </span>
+                <div className="product-pricing">
+                  <div className="price-row">
+                    {getPrice(product) > 0 && (
+                      <span className="current-price">
+                        ₹
+                        {getPrice(product).toLocaleString("en-IN", {
+                          minimumFractionDigits: 2,
+                        })}
+                      </span>
+                    )}
+                    {discountPercentage > 0 && originalPrice > 0 && (
+                      <span className="original-price">
+                        ₹
+                        {originalPrice.toLocaleString("en-IN", {
+                          minimumFractionDigits: 2,
+                        })}
+                      </span>
+                    )}
+                  </div>
+                  {product.GSTPer && (
+                    <div className="price-details">
+                      <small>Inclusive of all taxes • GST {product.GSTPer}</small>
+                    </div>
                   )}
                 </div>
-                {product.GSTPer && (
-                  <div className="price-details">
-                    <small>Inclusive of all taxes • GST {product.GSTPer}</small>
+                {(product.NETWT || product.PURITY || product.MaterialFinish || product.ITEMID || product.TAGNO) && (
+                  <div className="product-meta-grid">
+                    {product.NETWT && (
+                      <div className="meta-item">
+                        <span className="meta-label">Weight</span>
+                        <span className="meta-value">{product.NETWT.toFixed(3)} grams</span>
+                      </div>
+                    )}
+                    {product.PURITY && (
+                      <div className="meta-item">
+                        <span className="meta-label">Purity</span>
+                        <span className="meta-value">{product.PURITY}%</span>
+                      </div>
+                    )}
+                    {product.MaterialFinish && (
+                      <div className="meta-item">
+                        <span className="meta-label">Material</span>
+                        <span className="meta-value">{product.MaterialFinish}</span>
+                      </div>
+                    )}
+                    {(product.ITEMID || product.TAGNO) && (
+                      <div className="meta-item">
+                        <span className="meta-label">SKU</span>
+                        <span className="meta-value">
+                          {product.ITEMID}-{product.TAGNO}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )}
+                <div className="jewellery-description">
+                  <JewelleryBrandAssurance
+                    bgColor="var(--brand-bg-color)"
+                    textColor="var(--primary-text-color)"
+                    iconColor="var(--green-color)"
+                    backgroundColor="var(--primary-card-color)"
+                    backGroundColor="var(--brand-background-color)"
+                    assurances={[
+                      { icon: <Gem size={22} />, label: "Sterling Silver Jewellery" },
+                      { icon: <ShieldCheck size={22} />, label: "Certified Authentic" },
+                      { icon: <RefreshCw size={22} />, label: "Free & Safe Shipping" },
+                    ]}
+                  />
+                </div>
+
+                {product.Description && (
+                  <div className="product-description">
+                    <p>{product.Description}</p>
+                  </div>
+                )}
+                <div className="product-actions">
+                  <button
+                    className={`action-btn add-to-cart ${isInCart ? "in-cart" : ""}`}
+                    onClick={handleAddToCart}
+                  >
+                    <i className="fas fa-shopping-cart"></i>
+                    {isInCart ? "In Cart" : "Add to Cart"}
+                  </button>
+                  <button
+                    className="action-btn buy-now"
+                    onClick={handleBuyNow}
+                  >
+                    <i className="fas fa-bolt"></i>
+                    Buy Now
+                  </button>
+                </div>
+                {(product.CATNAME || product.SUBITEMNAME || product.CollectionType || product.Occasion) && (
+                  <div className="product-categories">
+                    {(product.CATNAME || product.SUBITEMNAME) && (
+                      <div className="category-item">
+                        <span className="category-label">Category:</span>
+                        {product.CATNAME && (
+                          <h6 to="#" className="category-link">
+                            {product.CATNAME}
+                          </h6>
+                        )}
+                        {product.SUBITEMNAME && (
+                          <h6 to="#" className="category-link">
+                            {product.SUBITEMNAME}
+                          </h6>
+                        )}
+                      </div>
+                    )}
+                    {product.CollectionType && (
+                      <div className="category-item">
+                        <span className="category-label">Collection:</span>
+                        <span className="category-value">
+                          {product.CollectionType}
+                        </span>
+                      </div>
+                    )}
+                    {product.Occasion && (
+                      <div className="category-item">
+                        <span className="category-label">Occasion:</span>
+                        <span className="category-value">
+                          {product.Occasion.replace("_", " ")}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
-              {(product.NETWT || product.PURITY || product.MaterialFinish || product.ITEMID || product.TAGNO) && (
-                <div className="product-meta-grid">
-                  {product.NETWT && (
-                    <div className="meta-item">
-                      <span className="meta-label">Weight</span>
-                      <span className="meta-value">{product.NETWT.toFixed(3)} grams</span>
-                    </div>
-                  )}
-                  {product.PURITY && (
-                    <div className="meta-item">
-                      <span className="meta-label">Purity</span>
-                      <span className="meta-value">{product.PURITY}%</span>
-                    </div>
-                  )}
-                  {product.MaterialFinish && (
-                    <div className="meta-item">
-                      <span className="meta-label">Material</span>
-                      <span className="meta-value">{product.MaterialFinish}</span>
-                    </div>
-                  )}
-                  {(product.ITEMID || product.TAGNO) && (
-                    <div className="meta-item">
-                      <span className="meta-label">SKU</span>
-                      <span className="meta-value">
-                        {product.ITEMID}-{product.TAGNO}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              )}
-                <div className="jewellery-description">
-                 <JewelleryBrandAssurance
-                    bgColor="var(--brand-bg-color)"
-                  textColor="var(--primary-text-color)"
-                    iconColor="var(--green-color)"
-                    backgroundColor="var(--primary-card-color)"
-                  backGroundColor="var(--brand-background-color)"
-                  assurances={[
-                    { icon: <Gem size={22} />, label: "Sterling Silver Jewellery" },
-                    { icon: <ShieldCheck size={22} />, label: "Certified Authentic" },
-                    { icon: <RefreshCw size={22} />, label: "Free & Safe Shipping" },
-                  ]}
-                /> 
-              </div>
-
-              {product.Description && (
-                <div className="product-description">
-                  <p>{product.Description}</p>
-                </div>
-              )}
-              <div className="product-actions">
-                <button
-                  className={`action-btn add-to-cart ${isInCart ? "in-cart" : ""}`}
-                  onClick={handleAddToCart}
-                >
-                  <i className="fas fa-shopping-cart"></i>
-                  {isInCart ? "In Cart" : "Add to Cart"}
-                </button>
-                <button
-                  className="action-btn buy-now"
-                  onClick={handleBuyNow}
-                >
-                  <i className="fas fa-bolt"></i>
-                  Buy Now
-                </button>
-              </div>
-              {(product.CATNAME || product.SUBITEMNAME || product.CollectionType || product.Occasion) && (
-                <div className="product-categories">
-                  {(product.CATNAME || product.SUBITEMNAME) && (
-                    <div className="category-item">
-                      <span className="category-label">Category:</span>
-                      {product.CATNAME && (
-                        <h6 to="#" className="category-link">
-                          {product.CATNAME}
-                        </h6>
-                      )}
-                      {product.SUBITEMNAME && (
-                        <h6 to="#" className="category-link">
-                          {product.SUBITEMNAME}
-                        </h6>
-                      )}
-                    </div>
-                  )}
-                  {product.CollectionType && (
-                    <div className="category-item">
-                      <span className="category-label">Collection:</span>
-                      <span className="category-value">
-                        {product.CollectionType}
-                      </span>
-                    </div>
-                  )}
-                  {product.Occasion && (
-                    <div className="category-item">
-                      <span className="category-label">Occasion:</span>
-                      <span className="category-value">
-                        {product.Occasion.replace("_", " ")}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
-          </div>
-          <div className="col-12">
-            <Tab.Container defaultActiveKey="price-breakup">
-              <Nav variant="tabs" className="custom-tabs">
-                <Nav.Item>
-                  <Nav.Link eventKey="price-breakup">Price Breakup & Care</Nav.Link>
-                </Nav.Item>
-              </Nav>
-              <Tab.Content className="tab-content-container">
-                <Tab.Pane eventKey="price-breakup">
-                  <div className="price-care-container">
-                    <PriceBreakup product={product} />
-                    <div className="care-instructions">
-                      <h3 className="care-title">Jewellery Care Instructions</h3>
-                      <p className="care-description">
-                        Follow these tips to preserve the shine and extend the life of your jewellery's polish:
-                      </p>
-                      <div className="care-tips">
-                        {careInstructions.map((tip, index) => (
-                          <div key={index} className="care-tip-item">
-                            <h4 className="care-tip-title">{tip.title}</h4>
-                            <p className="care-tip-description">{tip.description}</p>
-                          </div>
-                        ))}
+            <div className="col-12">
+              <Tab.Container defaultActiveKey="price-breakup">
+                <Nav variant="tabs" className="custom-tabs">
+                  <Nav.Item>
+                    <Nav.Link eventKey="price-breakup">Price Breakup & Care</Nav.Link>
+                  </Nav.Item>
+                </Nav>
+                <Tab.Content className="tab-content-container">
+                  <Tab.Pane eventKey="price-breakup">
+                    <div className="price-care-container">
+                      <PriceBreakup product={product} />
+                      <div className="care-instructions">
+                        <h3 className="care-title">Jewellery Care Instructions</h3>
+                        <p className="care-description">
+                          Follow these tips to preserve the shine and extend the life of your jewellery's polish:
+                        </p>
+                        <div className="care-tips">
+                          {careInstructions.map((tip, index) => (
+                            <div key={index} className="care-tip-item">
+                              <h4 className="care-tip-title">{tip.title}</h4>
+                              <p className="care-tip-description">{tip.description}</p>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Tab.Pane>
-              </Tab.Content>
-            </Tab.Container>
+                  </Tab.Pane>
+                </Tab.Content>
+              </Tab.Container>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-    <section>
+      </section>
+      <section>
 
-    </section>
-      <Shoprelated itemName={product.ITEMNAME} />
+      </section>
+      <Shoprelated itemCtrName={product.ITEMCTRNAME} />
     </section>
   );
 };

@@ -7,9 +7,9 @@ const CategoryCard = ({ item }) => {
     const history = useHistory();
     const baseUrl = "https://app.bmgjewellers.com";
 
-    const handleShopNow = (itemName, subItemName) => {
+    const handleShopNow = (itemCtrName, subItemName) => {
         const queryParams = new URLSearchParams();
-        if (itemName) queryParams.append('itemName', itemName);
+        if (itemCtrName) queryParams.append('itemCtrName', itemCtrName);
         if (subItemName) queryParams.append('subItemName', subItemName);
         const fixedQuery = queryParams.toString().replace(/\+/g, '%20');
         history.push(`/products-page?${fixedQuery}`);
@@ -33,7 +33,7 @@ const CategoryCard = ({ item }) => {
             : `${baseUrl}${item.image_path.startsWith('/') ? '' : '/'}${item.image_path}`
         : '/fallback-image.jpg';
 
-    console.log(imgSrc, 'images')
+    //console.log(imgSrc, 'images')
 
     return (
         <div className="offer-card" onClick={() => handleShopNow(item.item_name, item.sub_item_name)} >
@@ -68,7 +68,7 @@ const Category1 = () => {
     const { data, isLoading, error } = useOfferBanners();
 
     const banners = data?.data || [];
-    console.log(banners, 'banner');
+    //console.log(banners, 'banner');
 
     if (isLoading) {
         return (

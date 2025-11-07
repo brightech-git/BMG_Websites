@@ -28,7 +28,7 @@ const ItemSearch = () => {
     recognitionRef.current.lang = "en-US";
 
     recognitionRef.current.onstart = () => {
-      console.log("🎤 Listening started...");
+      //console.log("🎤 Listening started...");
       setIsListening(true);
       setQuery(""); // reset field when listening
     };
@@ -57,7 +57,7 @@ const ItemSearch = () => {
     };
 
     recognitionRef.current.onend = () => {
-      console.log("🎤 Listening stopped.");
+      //console.log("🎤 Listening stopped.");
       setIsListening(false);
 
       // When stopped, if we got some words → search them
@@ -83,7 +83,7 @@ const ItemSearch = () => {
   const handleSearch = (searchTerm = query) => {
     if (!searchTerm.trim()) return;
     const params = new URLSearchParams();
-    params.append("itemName", searchTerm.trim());
+    params.append("itemCtrName", searchTerm.trim());
     history.push(`/products-page?${params.toString()}`);
   };
 

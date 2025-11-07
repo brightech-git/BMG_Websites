@@ -11,6 +11,7 @@ import { useNotification } from '../../../context/notification/NotificationConte
 const Banner = () => {
     const { data: bannerResponse = {}, isLoading } = useBanners();
     const banners = bannerResponse?.data ?? [];
+    //console.log('banners', banners);
     const history = useHistory();
     const baseUrl = "https://app.bmgjewellers.com";
     const { askNotification } = useNotification();
@@ -54,9 +55,9 @@ const Banner = () => {
         ],
     };
 
-    const handleExploreNow = (itemName, gender) => {
+    const handleExploreNow = (itemCtrName, gender) => {
         const queryParams = new URLSearchParams();
-        if (itemName) queryParams.append('itemName', itemName);
+        if (itemCtrName) queryParams.append('itemCtrName', itemCtrName);
         if (gender) queryParams.append('gender', gender);
         const fixedQuery = queryParams.toString().replace(/\+/g, '%20');
         history.push(`/products-page?${fixedQuery}`);

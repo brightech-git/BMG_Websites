@@ -9,10 +9,10 @@ const useHeaderNavByShopId = () => {
       {
         label: "Shop by Category",
         items: [
-          { name: "Rings", value: "rings", keyName: "itemName", keyValue: "rings", image: "/images/categories/rings.jpg" },
-          { name: "Necklaces", value: "necklaces", keyName: "itemName", keyValue: "necklaces", image: "/images/categories/necklaces.jpg" },
-          { name: "Bracelets", value: "bracelets", keyName: "itemName", keyValue: "bracelets", image: "/images/categories/bracelets.jpg" },
-          { name: "Earrings", value: "earrings", keyName: "itemName", keyValue: "earrings", image: "/images/categories/earrings.jpg" },
+          { name: "Rings", value: "rings", keyName: "itemCtrName", keyValue: "rings", image: "/images/categories/rings.jpg" },
+          { name: "Necklaces", value: "necklaces", keyName: "itemCtrName", keyValue: "necklaces", image: "/images/categories/necklaces.jpg" },
+          { name: "Bracelets", value: "bracelets", keyName: "itemCtrName", keyValue: "bracelets", image: "/images/categories/bracelets.jpg" },
+          { name: "Earrings", value: "earrings", keyName: "itemCtrName", keyValue: "earrings", image: "/images/categories/earrings.jpg" },
         ],
       },
       {
@@ -44,8 +44,8 @@ const useHeaderNavByShopId = () => {
       {
         label: "Special Editions",
         items: [
-          { name: "Bridal", keyName: "itemName", keyValue: "bridal", image: "/images/special/bridal.jpg" },
-          { name: "Clearance", keyName: "itemName", keyValue: "clearance", image: "/images/special/clearance.jpg" },
+          { name: "Bridal", keyName: "itemCtrName", keyValue: "bridal", image: "/images/special/bridal.jpg" },
+          { name: "Clearance", keyName: "itemCtrName", keyValue: "clearance", image: "/images/special/clearance.jpg" },
         ],
       },
       {

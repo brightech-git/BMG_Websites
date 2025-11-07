@@ -46,7 +46,7 @@ const ProductCard = ({ item, isMain }) => {
 
     const productImages = getProductImages();
     const mainImage = productImages[0];
-    const productName = (item?.SUBITEMNAME || item?.ITEMNAME || 'Jewelry Item').toLowerCase();
+    const productName = (item?.SUBITEMNAME || item?.itemCtrName || 'Jewelry Item').toLowerCase();
     const currentPrice = parseFloat(item?.GrandTotal) > 0
         ? parseFloat(item.GrandTotal)
         : parseFloat(item?.RATE || 0);
@@ -79,7 +79,7 @@ const ProductCard = ({ item, isMain }) => {
         const cartItem = {
             itemSno: item.SNO,
             itemTagSno: item.SNO,
-            itemName: item.ITEMNAME || item.SUBITEMNAME,
+            itemCtrName: item.ITEMCTRNAME || item.SUBITEMNAME,
             price: item.GrandTotal,
             image: productImages[0],
         };
@@ -137,7 +137,7 @@ const ProductCard = ({ item, isMain }) => {
     const refreshProduct = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log('Refresh product:', item?.SNO);
+        //console.log('Refresh product:', item?.SNO);
     };
 
     const clickProduct = (e) => {

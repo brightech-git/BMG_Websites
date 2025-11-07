@@ -5,6 +5,7 @@ import Breadcrumb from '../layouts/Breadcrumbs';
 import Instafeeds from '../layouts/Instafeeds';
 import Footer from '../layouts/Footerthree';
 import Content from '../sections/shopdetail/Content';
+import SmoothScroll from '../layouts/SmoothScroll';
 
 class Shopdetail extends Component {
     render() {
@@ -19,7 +20,9 @@ class Shopdetail extends Component {
                 </MetaTags>
                 <Header />
                 <Breadcrumb pages={"product-detail"} />
+                <SmoothScroll>
                 <Content />
+                </SmoothScroll>
                 <Instafeeds />
                 <Footer />
             </Fragment>

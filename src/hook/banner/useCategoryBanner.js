@@ -2,10 +2,10 @@
 import { useQuery } from "@tanstack/react-query";
 import * as CategoryBannerService from "../../service/CategoryBannerService";
 
-export const useCategoryBanner = ({ itemName, subItemName,pages, occasion, gender }) => {
+export const useCategoryBanner = ({ itemCtrName, subItemName, pages, occasion, gender }) => {
     return useQuery({
-        queryKey: ["categoryBanner", itemName, subItemName],
-        queryFn: () => CategoryBannerService.getCategoryBanner({ itemName, subItemName, pages, occasion, gender }),
+        queryKey: ["categoryBanner", itemCtrName, subItemName],
+        queryFn: () => CategoryBannerService.getCategoryBanner({ itemCtrName, subItemName, pages, occasion, gender }),
         select: (res) => {
             // return null if no images
             if (res) {

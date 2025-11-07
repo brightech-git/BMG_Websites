@@ -19,7 +19,7 @@ class Contacthelper extends Component {
         this.reCaptchaLoaded = this.reCaptchaLoaded.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-    onNameChange(event) { 
+    onNameChange(event) {
         this.setState({ name: event.target.value })
     }
     onPhoneChange(event) {
@@ -36,9 +36,9 @@ class Contacthelper extends Component {
     }
     // REcaptcha
     reCaptchaLoaded(value) {
-        console.log("Captcha Successfully Loaded", value);
+        //console.log("Captcha Successfully Loaded", value);
     }
-    
+
     handleSubmit(e) {
         e.preventDefault();
         fetch('https://metropolitanhost.com/scripts/sendmail.php', {
@@ -55,7 +55,7 @@ class Contacthelper extends Component {
                 document.getElementById("server_response_success").classList.add("d-block");
                 this.resetForm();
                 this.setState({
-                    isVerified:true
+                    isVerified: true
                 })
             } else {
                 document.getElementById("server_response_danger").classList.add("d-block");

@@ -281,7 +281,7 @@
         gap: 1rem;
     }
          .pus-budget-card {
-             height: 400px;
+             height: 350px;
          }
 }
 
@@ -297,7 +297,7 @@
     
 
     .pus-budget-card {
-        height: 350px;
+        height: 300px;
     }
 
     .pus-content-overlay {
@@ -317,7 +317,7 @@
     }
 
     .pus-budget-card {
-        height: 320px;
+        height: 260px;
     }
 
     .pus-section-title {
@@ -352,7 +352,7 @@
     }
 
     .pus-budget-card {
-        height: 300px;
+        height: 220px;
     }
 
     .pus-content-overlay {

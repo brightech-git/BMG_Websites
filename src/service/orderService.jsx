@@ -76,3 +76,13 @@ export const getAllOrders = async () => {
     const response = await publicUrl.get('/order/all-ordersCount');
     return response.data;
 }
+
+
+export const refundOrderApi = async (formData) => {
+    try {
+        const response = await publicUrl.post('/refunds/submit', formData);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || "Failed to refund order");
+    }
+};

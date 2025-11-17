@@ -6,8 +6,7 @@ import 'aos/dist/aos.css';
 import { useBudgetBanners } from '../../../hook/budgetBanner/useBudgetBanners';
 import './PriceUnderSection.css';
 
-const PriceUnderSection = () => {
-  const { data: budgetBanners, isLoading, isError } = useBudgetBanners();
+const PriceUnderSection = ({budgetBanners ,isLoading ,isError}) => {
   const baseURL = "https://app.bmgjewellers.com";
   const history = useHistory();
 

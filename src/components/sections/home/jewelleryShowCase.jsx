@@ -4,16 +4,34 @@ import { useHistory } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import './JewelleryShowCAse.css';
-import img1 from '../../../assets/img/bmg/bmg-22.jpg';
-import img2 from '../../../assets/img/bmg/bmg-17.jpg';
 import { FiArrowRight, FiShield, FiTruck, FiRefreshCw, FiAward } from 'react-icons/fi';
+import { useBestDesignedBanners } from '../../../hook/BestDesignedBanner/useBestDesignedbanner';
+import { getProductImages } from '../../../utils/getProductImages';
 
 const JewelryShowcase = () => {
     const history = useHistory();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const bannerContainerRef = useRef(null);
-    const bannerImages = [img1, img2];
+    const [banners ,setBanners] = useState()
+    const {data , isLoading , isError} = useBestDesignedBanners();
+
+    useEffect(()=>{
+        if(data){
+            setBanners(data)
+        }
+    })
+    console.log(banners ,'bannerssss')
+
+    const bannerImages = banners?.flatMap((b) => getProductImages(b.Image)) || [];
+
+    bannerImages.map((img) => console.log(img, "imagesss"));
+    console.log(bannerImages, "latestbanner");
+
+
+    bannerImages.map((img)=>console.log(img,'imagesss'))
+   
+    console.log(bannerImages ,'latestbanner')
 
     // Handle mouse movement for parallax effect
     const handleMouseMove = (e) => {
@@ -43,10 +61,12 @@ const JewelryShowcase = () => {
         }, 5000);
 
         return () => clearInterval(timer);
-    }, []);
+    }, [bannerImages.length]);
 
     const handleSeeAll = () => history.push('/products-page?best_design=true');
 
+    if(isLoading) return <p>Loading Banner</p>
+    if(isError) return <p>Error to get Banner</p>
     return (
         <section className="jewelry-showcase" data-aos="fade-up">
             <div className="container py-5">

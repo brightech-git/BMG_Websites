@@ -163,14 +163,18 @@ const Orders = ({ setActiveComponent, setSelectedOrder }) => {
       (order.items || []).some(item =>
         (item.name || '').toLowerCase().includes(searchQuery.toLowerCase())
       );
-
+      console.log(order, 'order');
+      console.log(statusFilter, 'orders');
+  console.log(matchesSearch, 'matchesSearch')
 
     // Status filter
     const matchesStatus = statusFilter === '' ||
       order.status.toLowerCase() === statusFilter.toLowerCase();
 
+     
+
     // Time filter
-    const matchesTime = timeFilter === '' || isWithinTimeFrame(order.orderDate, parseInt(timeFilter));
+    const matchesTime = timeFilter === '' || isWithinTimeFrame(order.orderTime, parseInt(timeFilter));
 
     return matchesSearch && matchesStatus && matchesTime;
   });
@@ -233,18 +237,19 @@ const Orders = ({ setActiveComponent, setSelectedOrder }) => {
                 onChange={(e) => setStatusFilter(e.target.value)}
               >
                 <option value="">All Statuses</option>
+                <option value="Pending">Pending</option>
                 <option value="Placed">Placed</option>
                 <option value="in_processing">Processing</option>
                 <option value="packed">Packed</option>
                 <option value="shipped">Shipped</option>
                 <option value="delivered">Delivered</option>
                 <option value="cancelled">Cancelled</option>
-                <option value="returned">Cancelled</option>
+                <option value="refunded">Returned</option>
               </select>
               <FontAwesomeIcon icon={faChevronDown} className="select-arrow" />
             </div>
 
-            {/* Time Filter
+            {/* Time Filter */}
             <div className="filter-group">
               <select
                 className="filter-select"
@@ -259,10 +264,10 @@ const Orders = ({ setActiveComponent, setSelectedOrder }) => {
                 <option value="365">Last Year</option>
               </select>
               <FontAwesomeIcon icon={faChevronDown} className="select-arrow" />
-            </div> */}
+            </div>
 
             {/* Clear Filters Button */}
-            {(statusFilter || timeFilter || searchQuery) && (
+            {/* {(statusFilter || timeFilter || searchQuery) && (
               <button
                 className="clear-filters-btn"
                 onClick={() => {
@@ -273,7 +278,7 @@ const Orders = ({ setActiveComponent, setSelectedOrder }) => {
               >
                 <FontAwesomeIcon icon={faTimes} /> Clear Filters
               </button>
-            )}
+            )} */}
           </div>
         </div>
 

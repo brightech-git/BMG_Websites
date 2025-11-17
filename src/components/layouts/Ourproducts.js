@@ -1,17 +1,30 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FiArrowRight } from 'react-icons/fi';
-import img1 from '../../assets/img/bmg/bmg-4.jpg';
-import img2 from '../../assets/img/bmg/bmg-2.jpg';
 import { useHistory } from 'react-router-dom';
 import './NewArrival.css';
+import { useLatestBanner } from '../../hook/lastestCollectionBanner/useLatestCollectionBanner';
+import { getProductImages } from '../../utils/getProductImages';
+
 
 const NewArrival = () => {
     const bannerContainerRef = useRef(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [mousePosition, setMousePosition] = useState({ x: 0.5, y: 0.5 });
     const [isMobile, setIsMobile] = useState(false);
+    const { data ,isLoading ,isError} = useLatestBanner();
+    const [banners ,setBanners] = useState();
 
-    const bannerImages = [img1, img2];
+    useEffect(() => {
+        if (data) {
+            console.log(data, "latestImage");
+            setBanners(data);
+        }
+    }, [data]); console.log(banners, "bannerdata");
+
+    const bannerImages = banners?.map((item) => getProductImages(item.Image) )|| [];
+
+    console.log(bannerImages, "bannerImages");
+
     const history = useHistory();
 
     useEffect(() => {
@@ -90,7 +103,8 @@ const NewArrival = () => {
     const handleExplore = () => {
         history.push('/products-page?new_arrival=true');
     };
-
+    if (isLoading) return <p>Loading banners...</p>;
+    if (isError) return <p>Failed to load banners</p>;
     return (
         <section className="arrival-section">
             <div className="arrival-container">

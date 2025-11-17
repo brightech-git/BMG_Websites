@@ -1,8 +1,6 @@
 /* Login Section */
-.login-section {
-    margin: 150px 0px 0px;
-    background-color: var(--primary-color);
-    min-height: 100vh;
+.login-auth-section {
+    margin: 160px 0px 0px 0px;
     display: flex;
     align-items: center;
 }
@@ -13,7 +11,7 @@
 }
 
 .login-wrapper {
-    background-color: var(--primary-card-color);
+    background-color: var(--white-color);
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
@@ -22,7 +20,6 @@
 .login-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    min-height: 600px;
 }
 
 /* Visual Section */
@@ -35,7 +32,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 40px;
     position: relative;
 }
 
@@ -102,6 +98,7 @@
     background-color: white;
     transition: all 0.3s ease;
     outline: none;
+    height: 50px;
 }
 
 .form-input:focus {
@@ -176,9 +173,10 @@
 .register-section{
     display: flex;
     text-align: center;
-    margin: 0px auto !important;
+    margin: 5px auto !important;
     border-top: 1px solid #e5e7eb;
     justify-content: center;
+    padding-top: 10px;
     gap: 10px;
    
 }
@@ -217,10 +215,6 @@
 
   
 
-    .login-visual {
-        padding: 30px;
-    }
-
     .visual-title {
         font-size: 2rem;
     }
@@ -246,10 +240,7 @@
        min-height: 200px;
    }
 
-    .login-visual {
-        padding: 40px 20px;
-        min-height: 400px;
-    }
+   
 
     .visual-title {
         font-size: 1.75rem;
@@ -293,10 +284,7 @@
         border-radius: 12px;
     }
 
-    .login-visual {
-        padding: 30px 15px;
-        min-height: 350px;
-    }
+   
 
     .visual-title {
         font-size: 1.5rem;

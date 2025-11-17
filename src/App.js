@@ -153,6 +153,7 @@ function App() {
       const timer = setTimeout(() => {
         setShowModal(false);
         setShowHome(true);
+        
         sessionStorage.setItem('splashShown', 'true');
       }, 3000);
 
@@ -164,13 +165,13 @@ function App() {
 
   const currentOrder = flattenedOrders[currentOrderIndex];
 
-  // const handleAccess = () => {
-  //   setHasAccess(true);
-  // };
+  const handleAccess = () => {
+    setHasAccess(true);
+  };
 
-  // if (!hasAccess) {
-  //   return <MaintenanceLogin onAccess={handleAccess} />;
-  // }
+  if (!hasAccess) {
+    return <MaintenanceLogin onAccess={handleAccess} />;
+  }
 
   return (
     <Router basename="/">

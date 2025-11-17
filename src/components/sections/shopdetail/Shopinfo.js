@@ -72,8 +72,8 @@ const Shopinfo = ({ sno, Authenticated }) => {
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated) || Authenticated;
 
  
-  const mobileNumber = useSelector((state) => state.user.contactNumber)|| null;
-  console.log(isAuthenticated,mobileNumber, 'isAuthenticaed')
+  // const mobileNumber = useSelector((state) => state.user.user.contactNumber) || null;
+  // console.log(isAuthenticated,mobileNumber, 'isAuthenticaed')
   const history = useHistory();
   const location = useLocation();
   const [isWishlisted, setIsWishlisted] = useState(false);
@@ -89,7 +89,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
   const shareRef = React.useRef();
 
   const Base_URL = "https://app.bmgjewellers.com";
-  const [modalOpen, setModalOpen] = React.useState(false);
+  // const [modalOpen, setModalOpen] = React.useState(false);
 
   // Function to get encoded image URL
   const getEncodedImageUrl = (rawPath) => {
@@ -166,15 +166,15 @@ const Shopinfo = ({ sno, Authenticated }) => {
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
+
     if (!isAuthenticated) {
       showAuthToast("add items to cart");
       return;
     }
-    if (!product?.SNO) return;
-    if (!mobileNumber) {
-      setModalOpen(true);
-      return;
-    }
+    // if (!mobileNumber) {
+    //   setModalOpen(true);
+    //   return;
+    // }
     if (isInCart) {
       toast.info(`${product.ITEMCTRNAME} is already in cart`, {
         position: "top-right",
@@ -204,21 +204,22 @@ const Shopinfo = ({ sno, Authenticated }) => {
   const handleBuyNow = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    console.log("triggered")
     if (!isAuthenticated) {
       showAuthToast("proceed with purchase");
       return;
     }
-    if (!mobileNumber) {
-      setModalOpen(true);
-      return;
-    }
-    if (!product?.SNO) return;
+    // if (!mobileNumber) {
+    //   setModalOpen(true);
+    //   return;
+    // }
 
     const firstImagePath = product.ImagePath
       ? JSON.parse(product.ImagePath)[0]
       : "";
     const encodedImageUrl = getEncodedImageUrl(firstImagePath);
 
+    console.log("before checout")
     const checkoutPayload = {
       items: [
         {
@@ -301,7 +302,12 @@ const Shopinfo = ({ sno, Authenticated }) => {
   const images = product.ImagePath
     ? JSON.parse(product.ImagePath).map(getEncodedImageUrl).filter(Boolean)
     : [];
+
+  const videos = product.VideoPath
+    ? JSON.parse(product.VideoPath).map(getEncodedImageUrl).filter(Boolean)
+    : [];
   const smallsliderpost = images.map((img) => ({ img }));
+  const smallslivervideos = videos.map((video) => ({video}));
 
   const originalPrice = product.GrandTotal ? product.GrandTotal * 1.25 : 0;
   const discountPercentage =
@@ -358,7 +364,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
 
   return (
     <section>
-      <UpdateMobileModal open={modalOpen} onClose={() => setModalOpen(false)} />
+      <UpdateMobileModal />
       <section className="modern-product-section">
         <div className="shopdetail-container">
           <div className="row product-detail-row g-4">
@@ -367,20 +373,13 @@ const Shopinfo = ({ sno, Authenticated }) => {
             </div>
             <div className="col-lg-6 col-md-12">
               <div className="product-gallery-container">
-                {(product.NewArrival || product.Top_Trending || discountPercentage > 0) && (
-                  <div className="product-badges">
-                    {product.NewArrival && (
-                      <span className="badge new-arrival">New</span>
-                    )}
-                    {product.Top_Trending && (
-                      <span className="badge trending">Trending</span>
-                    )}
-                    {discountPercentage > 0 && (
-                      <span className="badge discount">-{discountPercentage}%</span>
-                    )}
-                  </div>
-                )}
-                {smallsliderpost.length > 0 && <ImageGallery images={smallsliderpost} />}
+               
+                <ImageGallery images={smallsliderpost} videos={smallslivervideos} badges={{
+                  NewArrival: product.NewArrival,
+                  Top_Trending: product.Top_Trending,
+                  discountPercentage: discountPercentage
+                }} />
+               {/* {smallsliderpost.length > 0 && <ImageGallery images={smallsliderpost} videos={smallslivervideos }/>} */}
               </div>
             </div>
             <div className="col-lg-6 col-md-12">

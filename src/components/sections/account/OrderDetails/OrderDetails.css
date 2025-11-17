@@ -58,12 +58,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--primary-card-color);
   border-radius: var(--radius-lg);
-  padding: 1.25rem 1.5rem;
+  padding: 1rem;
   margin-bottom: 1.5rem;
   border: 1px solid var(--grey-color);
-  box-shadow: var(--shadow-sm);
 }
 
 .status-summary-content {
@@ -223,7 +221,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 200px;
 }
 
 .item-price-compact {

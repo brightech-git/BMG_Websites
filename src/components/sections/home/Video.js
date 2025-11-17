@@ -4,8 +4,8 @@ import './video.css';
 
 const baseUrl = 'https://bmgjewellers.com';
 
-const Video = () => {
-  const { data: videos, isLoading, isError } = useVideos();
+const Video = ({videoList,isLoading ,isError }) => {
+  // const { data: videos, isLoading, isError } = useVideos();
 
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
@@ -15,7 +15,7 @@ const Video = () => {
   const [touchStartX, setTouchStartX] = useState(0);
   const [touchEndX, setTouchEndX] = useState(0);
 
-  const videoList = videos?.data || [];
+  // const videoList = videos?.data || [];
 
   // Handle swipe gestures
   const handleTouchStart = (e) => {

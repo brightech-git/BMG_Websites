@@ -93,7 +93,7 @@ const Content = () => {
     }, [isAuthenticated, history]);
 
     return (
-        <section className="login-section">
+        <section className="login-auth-section">
             <div className="container">
                 <div className="login-wrapper">
                     <div className="login-grid">

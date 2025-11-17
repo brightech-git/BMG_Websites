@@ -1,117 +1,121 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
-import './ShopByRecipient.css';
-import men from './image/Men.png';
-import women from './image/Women.png';
-import kid from './image/kids.png';
-import { useTrackOrder } from '../../../hook/order/useOrderTracking';
+import React from "react";
+import { useHistory } from "react-router-dom";
+import "./ShopByRecipient.css";
+import { useGenderBanner } from "../../../hook/genderBanner/useGender";
 
 const ShopByRecipient = () => {
     const history = useHistory();
+    const { data: genderBannerResponse } = useGenderBanner();
+    const banners = genderBannerResponse ?? [];
 
-    const categories = [
-        { id: 1, label: "For Him", image: men, query: "itemCtrName=Gift Ideas&subItemName=FOR HIM" },
-        { id: 2, label: "For Her", image: women, query: "itemCtrName=Gift Ideas&subItemName=FOR HER" },
-        { id: 3, label: "For Kids", image: kid, query: "subItemName=FOR KIDS&itemCtrName=Gift Ideas" },
-    ];
+    const baseUrl = "https://app.bmgjewellers.com";
 
-    const handleCategoryClick = (query) => {
-        history.push(`/products-page?${query}`);
+    const handleCategoryClick = (itemName, subItemName) => {
+        const queryParams = new URLSearchParams();
+        if (itemName) queryParams.append("itemName", itemName);
+        if (subItemName) queryParams.append("subItemName", subItemName);
+        history.push(`/products-page?${queryParams.toString()}`);
     };
 
-    const { trackOrder } = useTrackOrder('7D116046113');
-    //console.log(trackOrder, 'trackorder');
+    // Filter banners by title
+    const topRowBanners = banners.filter(
+        (b) =>
+            b.title?.toLowerCase().includes("for him") ||
+            b.title?.toLowerCase().includes("for kids")
+    );
+
+    const bottomRowBanners = banners.filter((b) =>
+        b.title?.toLowerCase().includes("for her")
+    );
+
     return (
         <section className="recipient-section">
             <div className="container">
                 <div className="recipient-header">
-                    <h2 className="recipient-title">
-                        Celebrate Every Bond
-                    </h2>
-                    <h6 className='recipient-subtitle'>
+                    <h2 className="recipient-title">Celebrate Every Bond</h2>
+                    <h6 className="recipient-subtitle">
                         Handpicked jewelry gifts crafted to make every moment unforgettable.
                     </h6>
                 </div>
+
+                {/* Desktop: 3-column grid | Mobile: 2 + 1 layout */}
                 <div className="recipient-grid">
+                    {/* Top Row: For Him + For Kids */}
                     <div className="recipient-row-top">
-                        {categories.filter(cat => cat.label !== "For Her").map((category) => (
-                            <div key={category.id} className="recipient-card-wrapper">
-                                <div
-                                    className="recipient-card"
-                                    onClick={() => handleCategoryClick(category.query)}
-                                    role="button"
-                                    tabIndex={0}
-                                    aria-label={`Shop ${category.label} products`}
-                                >
-                                    <div className="recipient-card-frame">
-                                        <div className="recipient-card-inner">
-                                            <div className="recipient-image-container">
-                                                <img
-                                                    src={category.image}
-                                                    alt={category.label}
-                                                    className="recipient-image"
-                                                    loading="lazy"
-                                                />
-                                                <div className="recipient-overlay"></div>
-                                                <h3 className="recipient-label">{category.label}</h3>
-                                                <button
-                                                    className="recipient-button"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleCategoryClick(category.query);
-                                                    }}
-                                                    aria-label={`View ${category.label} collection`}
-                                                >
-                                                    View Collection
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        {topRowBanners.map((banner) => (
+                            <RecipientCard
+                                key={banner.id}
+                                banner={banner}
+                                baseUrl={baseUrl}
+                                onClick={handleCategoryClick}
+                            />
                         ))}
                     </div>
+
+                    {/* Bottom Row: For Her */}
                     <div className="recipient-row-bottom">
-                        {categories.filter(cat => cat.label === "For Her").map((category) => (
-                            <div key={category.id} className="recipient-card-wrapper">
-                                <div
-                                    className="recipient-card"
-                                    onClick={() => handleCategoryClick(category.query)}
-                                    role="button"
-                                    tabIndex={0}
-                                    aria-label={`Shop ${category.label} products`}
-                                >
-                                    <div className="recipient-card-frame">
-                                        <div className="recipient-card-inner">
-                                            <div className="recipient-image-container">
-                                                <img
-                                                    src={category.image}
-                                                    alt={category.label}
-                                                    className="recipient-image"
-                                                    loading="lazy"
-                                                />
-                                                <div className="recipient-overlay"></div>
-                                                <h3 className="recipient-label">{category.label}</h3>
-                                                <button
-                                                    className="recipient-button"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleCategoryClick(category.query);
-                                                    }}
-                                                    aria-label={`View ${category.label} collection`}
-                                                >
-                                                    View Collection
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        {bottomRowBanners.map((banner) => (
+                            <RecipientCard
+                                key={banner.id}
+                                banner={banner}
+                                baseUrl={baseUrl}
+                                onClick={handleCategoryClick}
+                            />
                         ))}
                     </div>
                 </div>
             </div>
         </section>
+    );
+};
+
+// Reusable Card Component
+const RecipientCard = ({ banner, baseUrl, onClick }) => {
+    return (
+        <div className="recipient-card-wrapper">
+            <div
+                className="recipient-card"
+                onClick={() => onClick(banner.itemname, banner.gender)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === "Enter" && onClick(banner.itemname, banner.gender)}
+            >
+                <div className="recipient-card-frame">
+                    <div className="recipient-card-inner">
+                        <div className="recipient-image-container">
+                            <img
+                                src={
+                                    banner?.image_path
+                                        ? `${baseUrl}${banner.image_path}`
+                                        : "/fallback-image.jpg"
+                                }
+                                alt={banner.title}
+                                className="recipient-image"
+                                loading="lazy"
+                                onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = "/fallback-image.jpg";
+                                }}
+                            />
+                            <div className="recipient-overlay"></div>
+                            <h3 className="recipient-label">{banner.title}</h3>
+                            {/* {banner.subtitle && (
+                                <p className="recipient-subtext">{banner.subtitle}</p>
+                            )} */}
+                            <button
+                                className="recipient-button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onClick(banner.itemname, banner.gender);
+                                }}
+                            >
+                                View Collection
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 };
 

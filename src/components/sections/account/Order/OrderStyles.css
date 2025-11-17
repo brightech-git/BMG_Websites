@@ -16,9 +16,7 @@
 }
 
 .order-header-container {
-  margin-bottom: 2.5rem;
-  padding-bottom: 1.25rem;
-  border-bottom: 1px solid var(--secondary-card-color);
+  margin-bottom: 1.25rem;
 }
 
 .order-main-title {
@@ -659,11 +657,7 @@
 
 /* Search and Filter Styles */
 .order-filter-container {
-  margin-bottom: 2rem;
-  background: var(--primary-card-color);
-  border-radius: var(--radius-md);
-  padding: 1.5rem;
-  box-shadow: var(--shadow-sm);
+  margin-bottom: 1rem;
 }
 
 .search-filter-wrapper {

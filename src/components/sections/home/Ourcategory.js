@@ -4,9 +4,7 @@ import { useCategoryImages } from '../../../hook/categorywithImage/useCategoryQu
 import './OurCategory.css';
 import DragScrollComponent from '../../layouts/DragScrollComponent';
 
-const OurCategory = () => {
-    const { data: categories = [], isLoading: isCategoriesLoading } = useCategoryImages();
-    const subcategories = categories.length ? [...categories].reverse() : [];
+const OurCategory = ({subcategories ,isCategoriesLoading}) => {
 
 
 

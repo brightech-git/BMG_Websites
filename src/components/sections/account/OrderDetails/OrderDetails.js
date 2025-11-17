@@ -278,12 +278,12 @@ const OrderDetail = ({ order: initialOrder, setActiveComponent }) => {
     <div className="account-container">
       <div className="order-content">
         {/* Order Header */}
-        <div className="order-header-simplified">
+        {/* <div className="order-header-simplified">
           <h1 className="order-detail-title">Order Details</h1>
           <button onClick={() => setActiveComponent('Orders')} className="back-btn-right">
             <FontAwesomeIcon icon={faAngleLeft} className="meta-icon" /> Back to Orders
           </button>
-        </div>
+        </div> */}
 
         {/* Status Summary */}
         <div className={`status-summary-container ${currentStatus === 'DELIVERED' ? 'delivered' : ''}`}>
@@ -333,7 +333,7 @@ const OrderDetail = ({ order: initialOrder, setActiveComponent }) => {
                     <div className="item-details-compact">
                       <div className='item-info-compact'>
                         <h4 className="item-name-compact">{item.productName}</h4>
-                        {item.weight && <p>Weight: {item.weight}</p>}
+                        {item.weight && <p>Weight: {item.weight} </p> }
                       </div>
                       <p className="item-price-compact">{item.price.toFixed(2)}</p>
                     </div>

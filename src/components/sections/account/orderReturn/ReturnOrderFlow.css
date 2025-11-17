@@ -1410,7 +1410,10 @@
     .return-flow__progress-label {
         font-size: 0.75rem;
     }
-
+.return-flow__action-cards{
+    display: flex;
+    flex-direction: column;
+}
 
 
     .return-flow__product-image {

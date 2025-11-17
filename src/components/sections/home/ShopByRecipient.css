@@ -3,7 +3,7 @@
     padding: 2.5rem 1rem;
     font-family: var(--secondary-font);
     margin: 0 auto;
-    width:100%;
+    width: 100%;
 }
 
 .recipient-header {
@@ -36,35 +36,72 @@
     height: 2px;
     background: var(--primary-hover-color);
 }
-.recipient-subtitle{
+
+.recipient-subtitle {
     margin: 10px auto;
-        color: var(--primary-text-color);
-        font-family: var(--secondary-font);
-        font-size: 16px;
-        font-weight: 500;
-        opacity: 0.7;
-}
-.recipient-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    transition: all 0.3s ease;
+    color: var(--primary-text-color);
+    font-family: var(--secondary-font);
+    font-size: 16px;
+    font-weight: 500;
+    opacity: 0.7;
 }
 
-.recipient-row-top {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.8rem;
+/* ===================================
+   GRID LAYOUT
+=================================== */
+
+/* Desktop: 3 columns in one row */
+@media (min-width: 992px) {
+    .recipient-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+
+    .recipient-row-top,
+    .recipient-row-bottom {
+        display: contents;
+        /* Let children flow into parent grid */
+    }
+
+    .recipient-card-wrapper {
+        height: 450px;
+    }
 }
 
-.recipient-row-bottom {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.8rem;
+/* Mobile: 2 on top, 1 on bottom */
+@media (max-width: 992px) {
+    .recipient-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .recipient-row-top {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.8rem;
+    }
+
+    .recipient-row-bottom {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+        padding: 0rem 8rem;
+    }
+
+    .recipient-card-wrapper {
+        height: 280px;
+    }   
+
+    .recipient-row-bottom .recipient-card-wrapper {
+        height: 350px;
+    }
 }
 
-
-
+/* ===================================
+   CARD STYLES
+=================================== */
 .recipient-card {
     border-radius: 15px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -163,26 +200,38 @@
     font-family: var(--title-font);
 }
 
+.recipient-subtext {
+    position: absolute;
+    bottom: 3rem;
+    left: 1rem;
+    right: 1rem;
+    color: var(--white-color);
+    font-family: var(--secondary-font);
+    font-size: clamp(0.7rem, 1.8vw, 0.9rem);
+    font-weight: 400;
+    opacity: 0.85;
+    z-index: 4;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
 .recipient-button {
     position: absolute;
     bottom: 1rem;
     left: 50%;
     transform: translateX(-50%) scale(1);
-    background: transparent;
-    border: 1px solid var(--white-color);
+    background: var(--gradient-border);
     color: var(--white-color);
     padding: 0.4rem 1rem;
     font-size: clamp(0.65rem, 1.8vw, 0.85rem);
     font-weight: 500;
     border-radius: 20px;
     cursor: pointer;
-    transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+    transition: all 0.3s ease;
     z-index: 4;
-    min-width: 200px !important;
+    min-width: 200px;
     text-align: center;
     font-family: var(--secondary-font);
     opacity: 0;
-    will-change: transform, opacity;
 }
 
 .recipient-card:hover .recipient-button,
@@ -191,88 +240,53 @@
     transform: translateX(-50%) scale(1.05);
 }
 
-.recipient-button:hover,
-.recipient-button:focus {
-    background: var(--white-color);
-    color: var(--primary-text-color);
-    transform: translateX(-50%) scale(1.08);
-}
 
 .recipient-button:focus {
     outline: 2px solid var(--focus-outline);
     outline-offset: 2px;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-@media (min-width: 768px) {
-    .recipient-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.2rem;
-    }
-
-    .recipient-row-top,
-    .recipient-row-bottom {
-        display: contents;
-    }
-
-          .recipient-card-wrapper {
-              height: 450px;
-              /* Increased from 350px to 420px */
-          }
-
-    .recipient-button {
-        bottom: 1.5rem;
-        padding: 0.5rem 1.5rem;
-        font-size: 0.9rem;
-    }
-}
-
+/* ===================================
+   RESPONSIVE TWEAKS
+=================================== */
 @media (max-width: 767px) {
     .recipient-section {
         padding: 1.5rem 0.8rem;
     }
-
-    .recipient-card-wrapper {
-        height: 250px;
-        animation: slideIn 0.3s ease;
-    }
-
-    .recipient-row-bottom .recipient-card-wrapper {
-        height: 350px;
-    }
-
+         .recipient-row-bottom {
+             padding: 0rem 4rem;
+         }
+  .recipient-card-wrapper {
+      height: 300px;
+  }
     .recipient-button {
         padding: 0.35rem 0.9rem;
         font-size: 0.75rem;
         min-width: 130px !important;
         opacity: 1;
     }
+         .recipient-row-bottom .recipient-card-wrapper {
+             height: 340px;
+         }
 
     .recipient-label {
         font-size: 1.2rem;
     }
-         .recipient-subtitle {
-             font-size: 12px;
-         }
+
+    .recipient-subtitle {
+        font-size: 12px;
+    }
 }
 
 @media (max-width: 480px) {
     .recipient-card-wrapper {
-        height: 220px;
+        height: 240px;
     }
-
+    .recipient-row-bottom{
+        padding: 0rem 2rem;
+    }
     .recipient-row-bottom .recipient-card-wrapper {
-        height: 300px;
+        height: 250px;
     }
 
     .recipient-label {
@@ -287,19 +301,31 @@
         font-size: 0.65rem;
         min-width: 110px !important;
     }
-         .recipient-subtitle {
-             font-size: 10px;
-         }
+
+    .recipient-subtitle {
+        font-size: 10px;
+    }
 }
 
-@keyframes slideIn {
+/* ===================================
+   ANIMATIONS
+=================================== */
+@keyframes fadeIn {
     from {
-        transform: translateY(20px);
         opacity: 0;
     }
 
     to {
-        transform: translateY(0);
         opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
     }
 }

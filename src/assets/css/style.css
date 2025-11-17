@@ -55,7 +55,7 @@
     --primary-font: 'Gloock', 'serif';
     --secondary-font: 'Domine', 'Montserrat', 'sans-serif';
     --title-font: 'Dancing Script';
-    --primary-color: #f6f6f6;
+    --primary-color: #ffffff;
     --primary-text-color: #041f60;
     --secondary-text-color: #201f1f;
     --primary-card-color: #eeece8;
@@ -98,9 +98,10 @@
     --red-color: #e74c3c;
     --brand-background-color: linear-gradient(135deg, #e3bdfc 30%, #bce0ee 70%);
     --brand-bg-color: linear-gradient(135deg, #eebcc4 70%, #fcd6bd 30%);
-    --login-button-background: linear-gradient(135deg, #ee4a81, #b681fa);
+    --login-button-background: linear-gradient(90deg, #f02f6f, #f856af);
     --cart-button-background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
     --whistlist-button-background: linear-gradient(135deg, #31063a, #ff2b59);
+    --primary-theme-color:#F39C42;
 }
 
 
@@ -1855,7 +1856,7 @@ header.header-two .header-info .item .title {
 }
 
 header.header-three {
-    background-color: transparent;
+    background-color: #fff;
     position: relative;
 }
 
@@ -1898,7 +1899,6 @@ header.header-three .main-menu-area.sticky-header.sticky-active {
 
 header.header-three .main-menu-area.sticky-header.sticky-active .nav-container {
     -webkit-box-shadow: 0px 5px 5px 0px rgba(238, 238, 238, 0.04);
-    box-shadow: 0px 5px 5px 0px rgba(194, 194, 194, 0.04);
 }
 
 header.header-three .main-menu-area.sticky-header.sticky-active .nav-container .menu-items ul li a {

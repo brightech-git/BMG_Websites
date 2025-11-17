@@ -1,11 +1,10 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import Slider from 'react-slick';
-import { useCategoryBanner } from '../../../hook/banner/useCategoriesBanner';
 import useFilterProducts from '../../../hook/product/useFilterProducts';
 import './handpicked.css';
+import { getProductImages } from '../../../utils/getProductImages';
 
-const BASE_URL = "https://app.bmgjewellers.com";
 
 const NoBlurNavButton = ({ direction, onClick }) => {
     const iconClass = direction === 'next' ? 'fal fa-arrow-right' : 'fal fa-arrow-left';
@@ -81,6 +80,8 @@ const NoBlurProductCard = ({ product }) => {
 const NoBlurHighlightedProducts = ({ itemCtrName, subItemName }) => {
     const { data, loading, error } = useFilterProducts({ itemCtrName, subItemName }, 0, 3);
 
+    console.log(data ,)
+
     //console.log('productsdata', data)
 
     if (loading) return <div className="noblur-text-center">Loading products...</div>;
@@ -95,17 +96,15 @@ const NoBlurHighlightedProducts = ({ itemCtrName, subItemName }) => {
     );
 };
 
-const NoBlurHandpicked = () => {
+const NoBlurHandpicked = ({data , isLoading ,error}) => {
     const history = useHistory();
-    const { data, isLoading, error } = useCategoryBanner();
-    //console.log('datainhandpick')
-    //console.log(data, 'datainhandpick');
 
-    const baseUrl = "https://app.bmgjewellers.com";
+    console.log(data ,'baaner')
 
-    const handleShopNow = (itemCtrName, subItemName) => {
+
+    const handleShopNow = (itemName, subItemName) => {
         const queryParams = new URLSearchParams();
-        if (itemCtrName) queryParams.append('itemCtrName', itemCtrName);
+        if (itemName) queryParams.append('itemCtrName', itemName);
         if (subItemName) queryParams.append('subItemName', subItemName);
         history.push(`/products-page?${queryParams.toString()}`);
     };
@@ -122,6 +121,7 @@ const NoBlurHandpicked = () => {
         speed: 800,
         nextArrow: <NoBlurNavButton direction="next" />,
         prevArrow: <NoBlurNavButton direction="prev" />,
+        
         responsive: [
             {
                 breakpoint: 1400,
@@ -194,17 +194,17 @@ const NoBlurHandpicked = () => {
                                     onClick={() => handleShopNow(banner.itemName, banner.subItemName)}
                                     role="button"
                                     tabIndex={0}
-                                    aria-label={`View ${banner.itemCtrName} collection`}
+                                    aria-label={`View ${banner.itemName} collection`}
                                 >
                                     <img
-                                        src={`${baseUrl}${banner.image_path}`}
+                                        src={getProductImages(banner.image_path)}
                                         alt={banner.title}
                                         loading="lazy"
                                     />
                                 </div>
 
                                 <NoBlurHighlightedProducts
-                                    itemCtrName={banner.itemCtrName}
+                                    itemCtrName={banner.itemName}
                                     subItemName={banner.subItemName}
                                 />
                             </div>

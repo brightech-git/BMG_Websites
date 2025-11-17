@@ -119,26 +119,25 @@ const Content = () => {
     }, [location.pathname, dispatch]);
 
     return (
-        <section className="auth-section">
+        <section className="register-auth">
             <div className="container">
                 <div className="auth-wrapper">
                     <div className="auth-grid">
                         <div className="auth-visual">
-
                         </div>
 
                         <div className="auth-form-container">
-                            <div className="form-header">
-                                <h1 className="form-title">
+                             <div className="form-header-registerUp">
+                                <h1 className="form-title-register">
                                     {showOtpModal ? 'Verify Your Account' : 'Create Your Account'}
                                 </h1>
-                                <p className="form-subtitle">
+                                <p className="form-subtitle-register">
                                     {showOtpModal
                                         ? 'Enter the 6-digit code sent to your mobile'
                                         : 'Fill in your details to get started'
                                     }
                                 </p>
-                            </div>
+                            </div> 
 
                             {error && !showOtpModal && (
                                 <div className="error-message">
@@ -150,7 +149,7 @@ const Content = () => {
                             )}
 
                             {!showOtpModal ? (
-                                <form onSubmit={handleRegister} className="auth-form" autoComplete="off">
+                                <form onSubmit={handleRegister} className="register-auth-form" autoComplete="off">
                                     <div className="form-field">
                                         <label htmlFor="username" className="field-label">
                                             Username

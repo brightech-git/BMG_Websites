@@ -64,12 +64,8 @@ const CategoryCard = ({ item }) => {
     );
 };
 
-const Category1 = () => {
-    const { data, isLoading, error } = useOfferBanners();
-
-    const banners = data?.data || [];
-    //console.log(banners, 'banner');
-
+const Category1 = ({ banners, isLoading, error }) => {
+ 
     if (isLoading) {
         return (
             <div className="offer-container">

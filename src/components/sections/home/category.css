@@ -1,7 +1,6 @@
 .category-container {
     width: 100%;
     padding: 2rem 1rem;
-    background-color: var(--primary-color);
     font-family: var(--secondary-font);
 }
 

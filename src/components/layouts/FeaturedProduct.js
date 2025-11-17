@@ -1,50 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import img1 from './feature.jpg';
 import img2 from './feature2.jpg';
 import img3 from './feature3.jpg';
 import img4 from './feature4.jpg';
 import './FeaturedBanners.css';
+import { getProductImages } from '../../utils/getProductImages';
+import { useFeaturedBanner } from '../../hook/featuredBanner/useFeaturedBanner';
 
 const FeaturedBanners = () => {
   const history = useHistory();
+  const [banner, setBanner] =useState();
+
+
+   const { data ,isLoading ,isError } = useFeaturedBanner();
+
+  useEffect(() => {
+    if (data) {
+      setBanner(data);
+    }
+  }, [data]);
 
   // Banner data with unique images
-  const banners = [
-    {
-      id: 1,
-      image: img1,
-      title: 'Spring Collection',
-      subtitle: 'New Arrivals',
-      link: '/products-page?featured_products=true',
-    },
-    {
-      id: 2,
-      image: img2,
-      title: 'Luxury Edition',
-      subtitle: 'Premium Selection',
-      link: '/products-page?featured_products=true',
-    },
-    {
-      id: 3,
-      image: img3,
-      title: 'Minimalist Style',
-      subtitle: 'Clean & Simple',
-      link: '/products-page?featured_products=true',
-    },
-    {
-      id: 4,
-      image: img4,
-      title: 'Vintage Finds',
-      subtitle: 'Timeless Pieces',
-      link: '/products-page?featured_products=true',
-    },
-  ];
+  const banners =banner ||  [];
+  console.log(banner ,'featured');
+  console.log(banners, 'featured');
 
   const handleBannerClick = (link) => {
     history.push(link);
   };
-
+  if (isLoading) return <p>Loading Banner</p>;
+  if (isError) return <p>Loading Banner Error</p>;
+  if (!banners?.length) return <p>No banners available</p>;
   return (
     <section className='fb-container'>
       <div className="fb-banner-container">
@@ -56,7 +43,7 @@ const FeaturedBanners = () => {
             </div>
             <div className="col-auto">
               <button
-                className="fb-explore-btn btn"
+                className="feature-explore-btn btn"
                 onClick={() => handleBannerClick('/products-page?featured_products=true')}
               >
                 Explore All
@@ -71,23 +58,15 @@ const FeaturedBanners = () => {
             <div className="col-lg-6">
               <div
                 className="fb-banner-item fb-featured-banner"
-                onClick={() => handleBannerClick(banners[0].link)}
+                onClick={() => handleBannerClick('/products-page?featured_products=true')}
               >
                 <div className="position-relative w-100 h-100 overflow-hidden">
                   <img
-                    src={banners[0].image}
-                    alt={banners[0].title}
+                    src={getProductImages(banners[0].Image)}
+                    alt={banners[0].Name}
                     className="fb-banner-image"
                     loading="lazy"
                   />
-                  <div className="fb-overlay"></div>
-                </div>
-                <div className="fb-banner-content">
-                  <h3 className="fb-title">{banners[0].title}</h3>
-                  <button className="fb-cta-btn btn">
-                    View
-                    <span className="fb-btn-arrow ms-1">→</span>
-                  </button>
                 </div>
               </div>
             </div>
@@ -100,51 +79,36 @@ const FeaturedBanners = () => {
                   <div className="col-6" key={banner.id}>
                     <div
                       className="fb-banner-item fb-small-banner"
-                      onClick={() => handleBannerClick(banner.link)}
+                      onClick={() => handleBannerClick('/products-page?featured_products=true')}
                     >
                       <div className="position-relative w-100 h-100 overflow-hidden">
                         <img
-                          src={banner.image}
+                          src={getProductImages(banner.Image)}
                           alt={banner.title}
                           className="fb-banner-image"
                           loading="lazy"
                         />
-                        <div className="fb-overlay"></div>
-                      </div>
-                      <div className="fb-banner-content">
-                        <h3 className="fb-title">{banner.title}</h3>
-                        <button className="fb-cta-btn btn">
-                          View
-                          <span className="fb-btn-arrow ms-1">→</span>
-                        </button>
+                     
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              {/* Bottom Row - One Large Banner */}
               <div className="row">
                 <div className="col-12">
                   <div
                     className="fb-banner-item fb-bottom-banner"
-                    onClick={() => handleBannerClick(banners[3].link)}
+                    onClick={() => handleBannerClick('/products-page?featured_products=true')}
                   >
                     <div className="position-relative w-100 h-100 overflow-hidden">
                       <img
-                        src={banners[3].image}
-                        alt={banners[3].title}
+                        src={getProductImages(banners[3].Image)}
+                        alt={banners[3].Name}
                         className="fb-banner-image"
                         loading="lazy"
                       />
-                      <div className="fb-overlay"></div>
-                    </div>
-                    <div className="fb-banner-content">
-                      <h3 className="fb-title">{banners[3].title}</h3>
-                      <button className="fb-cta-btn btn">
-                        View
-                        <span className="fb-btn-arrow ms-1">→</span>
-                      </button>
+                     
                     </div>
                   </div>
                 </div>

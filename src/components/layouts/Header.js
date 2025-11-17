@@ -300,7 +300,7 @@ const Header = ({ isAuthenticated }) => {
 
 
 
-                {/* Enhanced Precious Metals Ticker */}
+          
                 <div className="precious-metals-ticker-wrapper">
                   <div className="precious-metals-ticker">
                     <div className="ticker-header">
@@ -309,7 +309,6 @@ const Header = ({ isAuthenticated }) => {
                     <div className="ticker-container">
                       {ratesData && !ratesLoading && !ratesError ? (
                         <div className="ticker-content">
-                          {/* Duplicate content for seamless loop */}
                           {[...Array(2)].map((_, duplicateIndex) =>
                             Object.entries(ratesData).map(([key, value], index) => (
                               <div
@@ -320,7 +319,7 @@ const Header = ({ isAuthenticated }) => {
                                   className={`metal-badge ${key.toLowerCase().includes("silver") ? "silver" : "gold"
                                     }`}
                                 >
-                                  {/* {key.toLowerCase().includes("silver") ? "Ag" : "Au"} */}
+                             
                                 </span>
                                 <span className="ticker-name">
                                   {key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
@@ -347,9 +346,7 @@ const Header = ({ isAuthenticated }) => {
                     </div>
                   </div>
                 </div>
-                <div>
-
-                </div>
+               
 
                 <div className="auth-actions">
                   {isAuthenticated ? (
@@ -616,7 +613,7 @@ const Header = ({ isAuthenticated }) => {
         {width < 768 && (
           <div
             style={{
-              background: "#f6f5f0",
+              background: "#fff",
               justifyContent: "center",
               alignItems: "center",
               padding: "5px 25px 5px 10px",

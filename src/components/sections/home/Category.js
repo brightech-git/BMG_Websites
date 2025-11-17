@@ -41,11 +41,12 @@ const CategoryCard = ({ item }) => {
                 src={`${baseUrl}${item.image_path}`}
                 alt={`${item.occasion} category`}
                 className="category-image"
+                onClick={() => handleShopNow(item.occasion, item.gender)}
                 onError={(e) => {
                     e.target.src = '/fallback-image.jpg';
                 }}
             />
-            <div className="bmg-category-content">
+            {/* <div className="bmg-category-content">
                 <span className="category-tag">
                     {capitalizeWords(item.occasion)}
                 </span>
@@ -58,14 +59,12 @@ const CategoryCard = ({ item }) => {
                     <span className="btn-text">{item.action || 'Shop Now'}</span>
                     <span className="btn-arrow">→</span>
                 </button>
-            </div>
+            </div> */}
         </div>
     );
 };
 
-const Category = () => {
-    const { data, isLoading, error } = useOccasionBanners();
-    const banners = data?.data || [];
+const Category = ({ banners, isLoading, error }) => {
 
     if (isLoading) {
         return (

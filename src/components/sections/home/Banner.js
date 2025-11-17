@@ -1,7 +1,6 @@
 import React from 'react';
 import Slider from 'react-slick';
 import { useHistory } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
 import { useBanners } from '../../../hook/banner/useBannerQueries';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -11,36 +10,43 @@ import { useNotification } from '../../../context/notification/NotificationConte
 const Banner = () => {
     const { data: bannerResponse = {}, isLoading } = useBanners();
     const banners = bannerResponse?.data ?? [];
-    //console.log('banners', banners);
     const history = useHistory();
+
+
     const baseUrl = "https://app.bmgjewellers.com";
     const { askNotification } = useNotification();
+    
+    const isMultiBanner = banners.length > 1;
+
     const settings = {
-        dots: true,
-        infinite: true,
-        autoplay: true,
+        dots: false,
+        infinite: isMultiBanner, // ✅ Only loop if multiple banners
+        autoplay: isMultiBanner, // ✅ Only autoplay if multiple
         autoplaySpeed: 3000,
         speed: 1000,
         slidesToShow: 1,
         slidesToScroll: 1,
-        centerMode: true,
-        centerPadding: '15%',
+        centerMode: isMultiBanner, // ✅ Only center when multiple
+        centerPadding: isMultiBanner ? '15%' : '0',
         arrows: false,
-        swipe: true,
-        swipeToSlide: true,
+        swipe: isMultiBanner,
+        swipeToSlide: isMultiBanner,
         touchThreshold: 10,
         adaptiveHeight: false,
+        pauseOnHover: true,
         responsive: [
             {
                 breakpoint: 992,
                 settings: {
-                    centerPadding: '10%',
+                    centerPadding: isMultiBanner ? '10%' : '0',
+                    centerMode: isMultiBanner,
                 },
             },
             {
                 breakpoint: 768,
                 settings: {
-                    centerPadding: '5%',
+                    centerPadding: isMultiBanner ? '5%' : '0',
+                    centerMode: isMultiBanner,
                     arrows: false,
                 },
             },
@@ -55,20 +61,22 @@ const Banner = () => {
         ],
     };
 
-    const handleExploreNow = (itemCtrName, gender) => {
+    const handleBannerClick = (itemCtrName, gender) => {
         const queryParams = new URLSearchParams();
         if (itemCtrName) queryParams.append('itemCtrName', itemCtrName);
         if (gender) queryParams.append('gender', gender);
         const fixedQuery = queryParams.toString().replace(/\+/g, '%20');
-        history.push(`/products-page?${fixedQuery}`);
-
-        // ✅ Only show permission modal if needed
-        askNotification(
-            "To Get Exclusive Offer",
-            "Enable notifications to get real-time updates and offers."
-        );
+        
+        if (fixedQuery) {
+            history.push(`/products-page?${fixedQuery}`);
+            
+            // Show notification modal
+            askNotification(
+                "To Get Exclusive Offer",
+                "Enable notifications to get real-time updates and offers."
+            );
+        }
     };
-
 
     if (isLoading) {
         return (
@@ -83,10 +91,14 @@ const Banner = () => {
             <Slider {...settings}>
                 {banners.map((img, index) => (
                     <div className="hero-slide" key={img.id || index}>
-                        <div className="hero-media">
+                        <div 
+                            className={`hero-media ${(img.itemname || img.gender) ? 'clickable' : ''}`}
+                            onClick={() => (img.itemname || img.gender) && handleBannerClick(img.itemname, img.gender)}
+                            style={{ cursor: (img.itemname || img.gender) ? 'pointer' : 'default' }}
+                        >
                             <img
                                 src={img?.image_path ? `${baseUrl}${img.image_path}` : img?.image || '/fallback-image.jpg'}
-                                alt={`banner-${index}`}
+                                alt={img.title || `banner-${index}`}
                                 className="hero-image"
                                 loading="lazy"
                                 onError={(e) => {
@@ -94,21 +106,6 @@ const Banner = () => {
                                     e.target.src = '/fallback-image.jpg';
                                 }}
                             />
-                        </div>
-                        <div className="hero-content-container">
-                            <div className="hero-content">
-                                <h1 className="banner-hero-title">{img.title || 'Explore Our Collection'}</h1>
-                                <p className="banner-hero-description">{img.subtitle || 'Discover our latest collection.'}</p>
-                                {(img.itemname || img.gender) && (
-                                    <button
-                                        className="banner-hero-buttons"
-                                        onClick={() => handleExploreNow(img.itemname, img.gender)}
-                                        aria-label={`Explore ${img.title || 'collection'}`}
-                                    >
-                                        Explore Now
-                                    </button>
-                                )}
-                            </div>
                         </div>
                     </div>
                 ))}

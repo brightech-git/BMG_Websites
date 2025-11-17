@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import './ReturnOrderFlow.css';
 import Header from '../../../layouts/HeaderWithAuth';
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { useRefundOrder } from '../../../../hook/order/useOrderMutation';
 
 const mockItem = {
     imagePath: 'https://images.pexels.com/photos/6387626/pexels-photo-6387626.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260',
@@ -11,7 +12,7 @@ const mockItem = {
     price: 2499.99,
     size: 'M',
     color: 'Navy Blue',
-    orderId: '#ORD-789456',
+    orderId: 'ORD-A27F7F0A-2',
     orderDate: '2024-01-15'
 };
 
@@ -19,12 +20,20 @@ const user = JSON.parse(localStorage.getItem('user'));
 const customerId = user?.id;
 
 const ReturnOrderFlow = () => {
+
+
+    const { mutateAsync: refundOrder } = useRefundOrder();
+
     const [activeStep, setActiveStep] = useState(1);
+
     const [reason, setReason] = useState('');
     const [comments, setComments] = useState('');
     const [selectedAddressId, setSelectedAddressId] = useState(null);
     const [returnAction, setReturnAction] = useState('');
     const [refundMode, setRefundMode] = useState('');
+
+    const [selectedImageFile, setSelectedImageFile ] =useState()
+
     const [showModal, setShowModal] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [formErrors, setFormErrors] = useState({});
@@ -149,14 +158,71 @@ const ReturnOrderFlow = () => {
 
     const handlePrev = () => activeStep > 1 && setActiveStep(activeStep - 1);
 
-    const handleConfirm = () => {
-        if (validateStep(4)) {
-            toast.success('Return request submitted successfully!');
-            // Here you would typically make an API call to submit the return
-        } else {
-            toast.error('Please complete all required fields');
+    const handleConfirm = async () => {
+        if (!validateStep(4)) {
+            toast.error("Please complete all required fields");
+            return;
+        }
+
+        // 🧱 Step 1: Build refund request JSON
+        const refundRequest = {
+            reason,
+            comments,
+            action: returnAction, // Replace or Return
+            addresses: [
+                {
+                    id: selectedAddressId,
+                    street: "123 Example Street",
+                    city: "Chennai",
+                    pincode: "600001",
+                },
+            ],
+            products: [
+                {
+                    productId: mockItem.id || 1,
+                    quantity: 1,
+                },
+            ],
+            orderId: mockItem.orderId || 0,
+        };
+
+        // 🧩 Step 2: Create FormData
+        const formData = new FormData();
+        formData.append(
+            "refund",
+            new Blob([JSON.stringify(refundRequest)], { type: "application/json" })
+        );
+
+        // 🖼️ Optional: attach image
+        // if (selectedImageFile) {
+        //     formData.append("image", selectedImageFile);
+        // }
+
+        // 🧾 Step 3: Verify in console
+        // ✅ Step 3: Console to verify before sending
+        for (const [key, value] of formData.entries()) {
+            if (value instanceof Blob) {
+                console.log(`${key}: Blob (${value.type}, ${value.size} bytes)`);
+                // If it's a JSON blob, you can read it too:
+                if (value.type === "application/json") {
+                    value.text().then((json) => console.log("→ JSON:", JSON.parse(json)));
+                }
+            } else {
+                console.log(`${key}: ${value}`);
+            }
+        }
+
+        // 🚀 Step 4: Call API
+        try {
+            const response = await refundOrder(formData);
+            console.log("Refund API Response:", response);
+            toast.success("Return request submitted successfully!");
+        } catch (error) {
+            console.error("Refund API Error:", error);
+            toast.error("Failed to submit return request");
         }
     };
+
 
     const getStepSegmentClass = (step) => {
         if (step < activeStep) return 'return-flow__progress-segment--completed';

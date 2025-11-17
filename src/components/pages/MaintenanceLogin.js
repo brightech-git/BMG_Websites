@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "./MaintenanceLogin.css";
-import loginimage from "../../assets/img/bg/login-bg.png";
+import { Cog } from "lucide-react"; // for the gear animation (Lucide icons)
 
 const MaintenanceLogin = ({ onAccess }) => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
     const HARD_CODED_PASSWORD = "bmg@123";
-    const EXPIRY_DURATION = 1000 * 60 * 30; 
+    const EXPIRY_DURATION = 1000 * 60 * 30; // 30 mins
 
     useEffect(() => {
+
         const storedAccess = localStorage.getItem("admin_access");
         const storedTime = localStorage.getItem("admin_access_time");
 
@@ -20,7 +21,7 @@ const MaintenanceLogin = ({ onAccess }) => {
                 localStorage.removeItem("admin_access_time");
                 setError("⏳ Access expired. Please login again.");
             } else {
-                onAccess(); // ✅ still valid
+                onAccess();
             }
         }
     }, [onAccess]);
@@ -37,29 +38,30 @@ const MaintenanceLogin = ({ onAccess }) => {
     };
 
     return (
-        <div className="maintenance-container">
-            <div className="maintenance-content">
-                <div className="image-section">
-                    <img src={loginimage} alt="Showroom Preview" className="showroom-image" />
-                </div>
+        <div className="maintenance-page">
+            <div className="gear-wrapper">
+                <Cog className="gear big" />
+                <Cog className="gear medium" />
+                <Cog className="gear small" />
+            </div>
 
-                <div className="form-section">
-                    <div className="maintenance-card">
-                        <h1>🚧 Under Maintenance</h1>
-                        <p>Our shop is currently undergoing updates. Please check back later.</p>
+            <div className="text-section">
+                <h1>Our Website is Under Maintenance</h1>
+                <p>
+                    We’re currently upgrading our servers. <br />
+                    Please check back soon. Thank you for your patience.
+                </p>
 
-                        <form onSubmit={handleLogin}>
-                            <input
-                                type="password"
-                                placeholder="Enter admin password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                            {error && <p className="maintenance-error">{error}</p>}
-                            <button type="submit">Access Website</button>
-                        </form>
-                    </div>
-                </div>
+                <form onSubmit={handleLogin} className="access-form">
+                    <input
+                        type="password"
+                        placeholder="Enter admin password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    {error && <p className="error-text">{error}</p>}
+                    <button type="submit">Access Website</button>
+                </form>
             </div>
         </div>
     );

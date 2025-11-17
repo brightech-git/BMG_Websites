@@ -12,7 +12,7 @@ export const useCart = () => {
     const queryClient = useQueryClient();
 
     const mobileNumber = useSelector((state) => state.user.user?.contactNumber);
-    console.log("📱 Mobile Number from Redux:", mobileNumber);
+    //console.log("📱 Mobile Number from Redux:", mobileNumber);
 
     // Always get the latest values from localStorage
     const token = localStorage.getItem("user_token");

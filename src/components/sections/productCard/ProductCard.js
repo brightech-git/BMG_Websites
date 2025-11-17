@@ -16,7 +16,7 @@ const ProductCard = ({ item }) => {
     const { cartItems, addToCartHandler } = useCart();
     const isAuthenticated = useSelector((state) => state.user.isAuthenticated)
     
-    const mobileNumber = useSelector((state) => state.user.contactNumber);
+    // const mobileNumber = useSelector((state) => state.user.user.contactNumber) || null;
     const history = useHistory();
     const location = useLocation();
 
@@ -26,7 +26,7 @@ const ProductCard = ({ item }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
     const [loadingState, setLoadingState] = useState(true);
-    const [modalOpen, setModalOpen] = useState(false);
+    // const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(() => setLoadingState(false), 500);
@@ -115,10 +115,10 @@ const ProductCard = ({ item }) => {
             history.push('/login', { from: location.pathname });
             return;
         }
-        if(!mobileNumber){
-            setModalOpen(true);
-            return;
-        }
+        // if(!mobileNumber){
+        //     setModalOpen(true);
+        //     return;
+        // }
 
         if (!item?.SNO) {
             console.warn('Missing item SNO');
@@ -232,7 +232,7 @@ const ProductCard = ({ item }) => {
     return (
         <>
         <div className="card-container">
-                <UpdateMobileModal open={modalOpen} onClose={() => setModalOpen(false)} />
+                <UpdateMobileModal  />
             <div
                 className="product-item"
                 onMouseEnter={handleMouseEnter}
@@ -272,14 +272,14 @@ const ProductCard = ({ item }) => {
                     </div>
 
                     <div className="quick-actions">
-                        <button
+                        {/* <button
                             className={`action-buttons add-cart-btn ${cartAnimation ? 'cart-animation' : ''}`}
                             onClick={addItemToCart}
                             aria-label="Add to Cart"
                             title="Add to Cart"
                         >
                             <span className="add-button-text">{isInCart ? 'In Cart' : 'Add to Cart'}</span>
-                        </button>
+                        </button> */}
 
                         <button
                             className={`action-button wish-btn ${heartAnimation ? 'heart-animation' : ''}`}
@@ -413,11 +413,11 @@ const ProductCard = ({ item }) => {
 
                 .quick-actions {
                     position: absolute;
-                    bottom: 12px;
-                    left: 50%;
+                    top: 6px;
+                    right: -15px;
                     transform: translateX(-50%);
                     display: flex;
-                    gap: 8px;
+                    gap: 0px;
                     opacity: 0;
                     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                     z-index: 10;
@@ -622,10 +622,7 @@ const ProductCard = ({ item }) => {
                         height: 32px;
                         padding: 0 8px;
                     }
-                    .quick-actions {
-                        bottom: 8px;
-                        gap: 6px;
-                    }
+                   
                     .touch-hint {
                         font-size: 0.65rem;
                         padding: 3px 6px;

@@ -95,13 +95,14 @@ const Content = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [location]);
-
-    const products = Array.isArray(data?.data)
-        ? data.data
-        : Array.isArray(data)
-            ? data
+console.log(data ,'dataproducts');
+    const productsData = data?.data;
+    const products = Array.isArray(productsData?.data)
+        ? productsData.data
+        : Array.isArray(productsData)
+            ? productsData
             : [];
-
+    console.log(products, 'dataproducts')
     const handleLoadMore = useCallback(() => {
         if (lastAttemptTriggered) return; // Prevent further triggers after last attempt
         //console.log('handleLoadMore triggered, previous count:', previousProductCount.current);

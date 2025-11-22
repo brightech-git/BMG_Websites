@@ -7,7 +7,7 @@
   "types": "lib/index",
   "dependencies": {
     "@ark-ui/react": "^5.18.0",
-    "@chakra-ui/react": "^3.22.0",
+    "@chakra-ui/react": "^2.10.9",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@fortawesome/fontawesome-svg-core": "^7.0.0",

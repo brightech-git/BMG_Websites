@@ -67,9 +67,10 @@ const ShopRelatedUpdated = ({ itemCtrName }) => {
 
 
     // Map API data to match ProductCard props
-    const relatedProducts = data?.data || [];
+    const relatedProducts = Array.isArray(data?.data) ? data.data : [];
 
-    //console.log('Mapped products:', relatedProducts); // Debug mapped products
+
+    console.log('Mapped products:', relatedProducts); // Debug mapped products
 
     return (
         <section className="products-showcase-section">

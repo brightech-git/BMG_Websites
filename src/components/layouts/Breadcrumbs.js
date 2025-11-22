@@ -5,7 +5,7 @@ import "./BreadStyles.css";
 
 const Breadcrumbs = ({ itemCtrName,  pages, occasion, gender }) => {
     const [isImageLoaded, setIsImageLoaded] = useState(false);
-console.log(itemCtrName ,'itemname for bread')
+// console.log(itemCtrName ,'itemname for bread')
     // Build params based on priority rules
     let params = {
         itemCtrName: "",
@@ -28,14 +28,14 @@ console.log(itemCtrName ,'itemname for bread')
         params = { pages };
     }
 
-    console.log(params, 'params')
+    // console.log(params, 'params')
 
     const { data: bannerData, isLoading, isError } = useCategoryBanner(params);
 
 
     const banners = bannerData?.results || [];
 
-    console.log(banners, 'banners')
+    // console.log(banners, 'banners')
 
 
     // Reset loading state whenever data OR props change

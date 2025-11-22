@@ -409,7 +409,19 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
         };
       }
     }, [isDragging, handleMove, handleEnd]);
+    useEffect(() => {
+      const panels = document.querySelectorAll('.filter-panel-content');
 
+      panels.forEach((el) => {
+        const handler = (e) => {
+          e.stopPropagation(); // prevent parent scroll
+        };
+        el.addEventListener('wheel', handler, { passive: false });
+
+        // Cleanup
+        return () => el.removeEventListener('wheel', handler);
+      });
+    }, []);
     return (
       <div className="price-range-container">
         <div className="price-slider" ref={sliderRef} role="slider" aria-label="Price range slider">
@@ -452,8 +464,8 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
             onClick={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
             aria-label="Toggle filter panel"
           >
-            <Filter size={18} />
-            <span>Filters</span>
+            <Filter size={12} />
+            <span className='filter-name'>Filters</span>
             {activeFiltersCount > 0 && <span className="filter-count">{activeFiltersCount}</span>}
           </button>
           {activeFiltersCount > 0 && (
@@ -499,7 +511,7 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
       {isFilterPanelOpen && <div className="filter-overlay" onClick={() => setIsFilterPanelOpen(false)} />}
 
       {/* Filter Panel */}
-      <div className={`filter-panel ${isFilterPanelOpen ? 'open' : ''}`} role="dialog" aria-label="Filter panel">
+      <div className={`filter-panel ${isFilterPanelOpen ? 'open' : ''}`}  role="dialog" aria-label="Filter panel" >
         <div className="filter-panel-header">
           <h3 style={{ fontFamily: 'var(--title-font)' }}>Filters</h3>
           <button
@@ -511,7 +523,16 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
           </button>
         </div>
 
-        <div className="filter-panel-content">
+        <div className="filter-panel-content" onWheel={(e) => {
+          const el = e.currentTarget;
+          const atTop = el.scrollTop === 0;
+          const atBottom = Math.ceil(el.scrollTop + el.clientHeight) >= el.scrollHeight;
+
+          if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+            // Prevent scrolling parent page
+            e.preventDefault();
+          }
+        }} >
           {Object.entries(FILTER_LABELS).map(([key, label]) => {
             // Hide "sizeName" filter unless itemCtrName is ring/bangle
             const normalizedName = itemCtrName?.toLowerCase().trim();
@@ -522,7 +543,7 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
             }
 
             return (
-              <div key={key} className="filter-section">
+              <div key={key} className="filter-section" >
                 <button
                   className="section-toggle"
                   onClick={() => toggleSection(key)}
@@ -596,7 +617,7 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
       <style>{`
         .filter-container {
           background: var(--primary-color);
-          padding: 1rem 1.5rem;
+          padding: 1rem 0rem;
           border-bottom: 1px solid #e5e7eb;
           position: relative;
           top: 0;
@@ -614,19 +635,20 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
           background: var(--primary-card-color);
           border: 2px solid var(--primary-hover-color);
           color: var(--primary-hover-color);
-          padding: 0.75rem 1.25rem;
-          border-radius: 1.5rem;
+          padding: 0.35rem;
+          border-radius: 2rem;
           font-family: var(--secondary-font);
-          font-size: 0.875rem;
+          font-size: 0.8rem;
           font-weight: 600;
           display: flex;
           align-items: center;
-          gap: 0.5rem;
+          gap: 0.25rem;
           cursor: pointer;
           transition: all 0.3s ease;
           position: relative;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
+
 
         .filter-toggle-btn:hover {
           background: var(--primary-hover-color);
@@ -795,6 +817,7 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
           flex: 1;
           overflow-y: auto;
           padding: 0;
+          min-height:80vh !important;
         }
 
         .filter-section {
@@ -1011,9 +1034,6 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
             width: 320px;
           }
 
-          .filter-container {
-            padding: 0.75rem 1rem;
-          }
 
           .filter-toggle-btn {
             padding: 0.5rem 1rem;
@@ -1065,10 +1085,6 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
         @media (max-width: 480px) {
           .filter-panel {
             width: 280px;
-          }
-
-          .filter-container {
-            padding: 0.5rem 0.75rem;
           }
 
           .filter-toggle-btn {

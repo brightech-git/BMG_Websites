@@ -71,13 +71,14 @@ const PriceUnderSection = ({budgetBanners ,isLoading ,isError}) => {
   return (
     <section className="pus-budget-section">
       <div className="pus-container">
-        <h2 className="pus-section-title">
+        <div className="pus-section">
           <span className="title-part-1">Explore by Budget</span>
-        </h2>
-
-        <p className="pus-section-subtitle">
-          Discover curated collections tailored to your budget for every style and occasion
-        </p>
+          <p className="pus-section-subtitle">
+            Discover curated collections tailored to your budget for every style and occasion
+          </p>
+        </div>
+        
+      
 
         <div className="pus-card-container">
           <div className="pus-budget-cards-grid">
@@ -119,15 +120,15 @@ const PriceUnderSection = ({budgetBanners ,isLoading ,isError}) => {
                     />
 
                     {/* Content Overlay */}
-                    <div className="pus-content-overlay">
+                    {/* <div className="pus-content-overlay">
                       <div className="pus-overlay-content">
-                        <h3 className="pus-card-title">{category.title}</h3>
+                        <h3 className="pus-card-title">{category.title}</h3> */}
                         {/* {category.min_price && category.max_price && (
                           <div className="pus-card-price-range">
                             {formatPrice(category.min_price)} - {formatPrice(category.max_price)}
                           </div>
                         )} */}
-                        <button
+                        {/* <button
                           className="pus-category-btn"
                           aria-label={`Explore ${category.title} collection`}
                           onClick={(e) => {
@@ -139,10 +140,10 @@ const PriceUnderSection = ({budgetBanners ,isLoading ,isError}) => {
                           <span className="pus-btn-arrow">→</span>
                         </button>
                       </div>
-                    </div>
+                    </div> */}
 
                     {/* Gradient Overlay */}
-                    <div className="pus-gradient-overlay"></div>
+                    {/* <div className="pus-gradient-overlay"></div> */}
                   </div>
                 </div>
               </div>

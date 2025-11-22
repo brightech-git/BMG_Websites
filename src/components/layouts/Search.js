@@ -83,7 +83,7 @@ const ItemSearch = () => {
   const handleSearch = (searchTerm = query) => {
     if (!searchTerm.trim()) return;
     const params = new URLSearchParams();
-    params.append("itemCtrName", searchTerm.trim());
+    params.append("search", searchTerm.trim());
     history.push(`/products-page?${params.toString()}`);
   };
 

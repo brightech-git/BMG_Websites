@@ -9,8 +9,7 @@ import { toast } from 'react-toastify';
 import './Checkout.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrash, faPhone } from '@fortawesome/free-solid-svg-icons';
-
-
+import GeoLocationPicker from '../../address/GeoLocationPicker';
 
 // Enhanced Progress Stepper with Icon-Centered Dividers
 const ProgressStepper = ({ currentStep }) => {
@@ -65,11 +64,15 @@ const ProgressStepper = ({ currentStep }) => {
   );
 };
 // Address Modal
-const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddress, onSaveAddress, onDeleteAddress, customerProfile }) => {
+const AddressModal = ({ show, onHide,  addresses, selectedAddress, onSelectAddress, onSaveAddress, onDeleteAddress, customerProfile }) => {
 
-  //console.log(customerProfile,'cust')
+
+  //console.log(customerProfile,'cust');
+ const [ clear ,setClear] = useState(false);
+  const [ showLocations ,setShowLocations] = useState (false);
   const [mode, setMode] = useState('list');
   const [currentAddress, setCurrentAddress] = useState(null);
+
   const [formData, setFormData] = useState({
     name: customerProfile?.username || customerProfile?.name || '',
     phone: customerProfile?.contactNumber || '',
@@ -93,6 +96,7 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
 
   const handleAddNew = () => {
     setCurrentAddress(null);
+    setShowLocations(true);
     setFormData({
       name: customerProfile?.name || customerProfile?.username || '',
       phone: customerProfile?.contactNumber || '',
@@ -110,9 +114,48 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
     });
     setMode('add');
   };
+  const handleClear = () => {
+    setFormData({
+      name: '',
+      phone: '',
+      addressLine: '',
+      city: '',
+      state: '',
+      pincode: '',
+      country: 'India',
+      locality: '',
+      landmark: '',
+      gstNumber: '',
+      companyName: '',
+      alternatePhone: '',
+      isDefault: false,
+    });
+
+    setClear(true); // stop the location from auto-filling
+  };
+
+  const handleGeoFill = (geoRes) => {
+
+    console.log(geoRes ,'geoRes')
+    setFormData(prev => ({
+      ...prev, // keep previous values
+      addressLine: geoRes.addressLine || prev.addressLine,
+      city: geoRes.city || prev.city,
+      state: geoRes.state || prev.state,
+      pincode: geoRes.pincode || prev.pincode,
+      locality: geoRes.locality || prev.locality,
+      landmark: geoRes.landmark || prev.landmark,
+
+      // If you want to store these too:
+      latitude: geoRes.latitude,
+      longitude: geoRes.longitude
+    }));
+    setClear(true);
+  };
 
   const handleEdit = (address) => {
     setCurrentAddress(address);
+    setShowLocations(true);
     setFormData({
       name: address.name,
       phone: address.phone,
@@ -147,21 +190,26 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
       return;
     }
     onSaveAddress(currentAddress?.id ? { id: currentAddress.id, ...formData } : formData);
+    
+    setClear(true);
     setMode('list');
   };
-
+ 
   const handleDelete = (addressId) => {
     if (window.confirm('Are you sure you want to delete this address?')) {
       onDeleteAddress(addressId);
     }
   };
 
+console.log(showLocations ,'showlocation')
   return (
     <Modal show={show} onHide={onHide} centered className="address-modal">
       <Modal.Header closeButton className="modal-header-styled">
         <Modal.Title className="modal-title-styled">
           {mode === 'list' ? 'Select Address' : mode === 'add' ? 'Add Address' : 'Edit Address'}
+  
         </Modal.Title>
+        {mode !== 'list' && <GeoLocationPicker onAddressSelected={handleGeoFill}  clear={clear} />} 
       </Modal.Header>
       <Modal.Body className="modal-body-styled">
         {mode === 'list' ? (
@@ -300,6 +348,7 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
               />
             </Form.Group>
             <div className="form-actions">
+              <Button variant="outline-secondary" onClick={handleClear}  className="cancel-button">Clear</Button>
               <Button variant="outline-secondary" onClick={() => setMode('list')} className="cancel-button">Cancel</Button>
               <Button variant="primary" type="submit" className="save-button">{currentAddress ? 'Update' : 'Save'}</Button>
             </div>
@@ -363,12 +412,14 @@ const EnhancedCheckout = ({ location, history }) => {
 
 
   const { data: addresses, isLoading: addressesLoading, refetch: refetchAddresses } = useAddressesByCustomer(profile?.id);
+  
 
   console.log('Profile:', profile);
   //console.log('Addresses:', addresses);
   //console.log('Selected Address:', selectedAddress);
   const { mutate: createOrder } = useCreateOrder();
   const { mutate: createAddress } = useCreateAddress();
+
   const { mutate: updateAddress } = useUpdateAddress();
   const { mutate: deleteAddress } = useDeleteAddress();
 
@@ -378,12 +429,14 @@ const EnhancedCheckout = ({ location, history }) => {
       try {
         const parsedCart = JSON.parse(storedCart);
         setCartItems(parsedCart.items || []);
-        setTotalAmount(parsedCart.totalAmount || 0);
+        setTotalAmount(parsedCart.totalAmount.toFixed(2) || 0);
       } catch (error) {
         console.error('Failed to parse cart from localStorage:', error);
       }
     }
   }, []);
+
+  
 
   useEffect(() => {
     localStorage.setItem('cartitems', JSON.stringify({ items: cartItems, totalAmount }));
@@ -483,14 +536,14 @@ const EnhancedCheckout = ({ location, history }) => {
       })),
     };
 
-    //console.log('Order Payload:', orderPayload);
+    console.log('Order Payload:', orderPayload);
 
     // ✅ Store in localStorage (with JSON.stringify)
     localStorage.setItem('order', JSON.stringify(orderPayload));
 
     createOrder(orderPayload, {
       onSuccess: (data) => {
-        //console.log("Order created successfully:", data, "Payload:", orderPayload);
+        console.log("Order created successfully:", data,);
 
         if (data.orderId) {
           if (paymentMode === "ONLINE") {
@@ -658,6 +711,7 @@ const EnhancedCheckout = ({ location, history }) => {
         onSaveAddress={handleSaveAddress}
         onDeleteAddress={handleDeleteAddress}
         customerProfile={profile}
+
       />
     </div>
   );

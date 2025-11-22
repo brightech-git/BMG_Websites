@@ -14,8 +14,8 @@ import SmoothScroll from '../layouts/SmoothScroll';
 class Shopleft extends Component {
     render() {
         const { location } = this.props;
-        const { itemCtrName, subItemName } = queryString.parse(location.search); // ⬅️ parse query params
-        //console.log(itemCtrName, subItemName, 'datas')
+        const { itemCtrName } = queryString.parse(location.search); // ⬅️ parse query params
+        console.log(itemCtrName,  'datas for breadcrumb')
 
         return (
             <Fragment>
@@ -26,7 +26,7 @@ class Shopleft extends Component {
                 <Header />
 
                 {/* Pass query params to Breadcrumb */}
-                <Breadcrumb itemCtrName={itemCtrName} subItemName={subItemName} pages={"products-page"} />
+                <Breadcrumb itemCtrName={itemCtrName} pages="products-page" />
                 <SmoothScroll>
                     <Content />
                 </SmoothScroll>

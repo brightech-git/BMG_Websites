@@ -174,14 +174,14 @@ const Content = () => {
     if (isLoading && products.length === 0) {
         return (
             <section className="shop-container">
-                <ProductFilterBar />
+                {/* <ProductFilterBar isLoading={isLoading}/> */}
                 <div className="product-area">
                     <div className="product-header">
                         <div className="placeholder-glow">
                             <div className="placeholder bg-secondary" style={{ height: '20px', width: '200px' }}></div>
                         </div>
                     </div>
-                    <LoadingGrid count={8} />
+                    <LoadingGrid count={10} />
                 </div>
             </section>
         );

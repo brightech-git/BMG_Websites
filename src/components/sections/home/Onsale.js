@@ -22,10 +22,7 @@ const Onsale = () => {
         return (
             <section className="collections-showcase">
                 <div className="container">
-                    <div className="section-header">
-                        <h2 className="section-title">Featured Collections</h2>
-                        <div className="title-decoration"></div>
-                    </div>
+                   
                     <div className="collections-grid">
                         <div className="main-collection shimmer">
                             <div className="collection-image"></div>
@@ -78,7 +75,7 @@ const Onsale = () => {
         <section className="collections-showcase">
             <div className="container">
                 <div className="section-header">
-                    <h2 className="section-title">Featured Collections</h2>
+                    <h2 className="section-title">Festival Collections</h2>
                 </div>
 
                 <div className="collections-grid">
@@ -99,8 +96,8 @@ const Onsale = () => {
                                         }}
                                     />
                                 </div>
-                                <div className="collection-overlay always-visible-mobile">
-                                    <div className="collection-badge">Featured</div>
+                                {/* <div className="collection-overlay always-visible-mobile">
+                            
                                     <div className="collection-content">
                                         <h3 className="collection-name">{mainBanner.title}</h3>
                                         <p className="collection-description">{mainBanner.subtitle}</p>
@@ -111,7 +108,7 @@ const Onsale = () => {
                                             </svg>
                                         </button>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     )}
@@ -136,7 +133,7 @@ const Onsale = () => {
                                                 }}
                                             />
                                         </div>
-                                        <div className="collection-overlay always-visible-mobile">
+                                        {/* <div className="collection-overlay always-visible-mobile">
                                             <div className="collection-content">
                                                 <h4 className="collection-name">{banner.title}</h4>
                                                 <button className="explore-button">
@@ -145,7 +142,7 @@ const Onsale = () => {
                                                     </svg>
                                                 </button>
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                             )

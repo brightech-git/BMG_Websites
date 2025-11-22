@@ -7,8 +7,8 @@ export const useInitiatePayment = (options = {}) => {
     return useMutation({
         mutationFn: initiatePayment,
         onSuccess: (data) => {
-            
             if (options.onSuccess) options.onSuccess(data);
+            
         },
         onError: (error) => {
             const errMsg = typeof error === 'string'

@@ -21,6 +21,7 @@
 /* Section Header */
 .section-header {
     align-items: center;
+    margin-bottom: 1rem;
 }
 
 .section-title {
@@ -58,7 +59,7 @@
 }
 
 .collection-card {
-    height: 700px;
+    height: 600px;
     position: relative;
     border-radius: 15px;
     overflow: hidden;
@@ -79,7 +80,7 @@
 }
 
 .secondary-collection .collection-card {
-    height: 330px;
+    height: 250px;
 }
 
 .secondary-collection .collection-card:hover {
@@ -386,11 +387,11 @@
     }
 
     .collection-card {
-        height: 650px;
+        height: 620px;
     }
 
     .secondary-collection .collection-card {
-        height: 360px;
+        height: 300px;
     }
 }
 
@@ -407,6 +408,13 @@
     .secondary-collection .collection-name {
         font-size: 18px;
     }
+        .collection-card {
+            height: 560px;
+        }
+    
+        .secondary-collection .collection-card {
+            height: 260px;
+        }
 }
 
 /* Tablet screens (768px to 991px) */
@@ -424,12 +432,12 @@
     }
 
     .collections-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
         gap: 25px;
     }
 
     .collection-card {
-        height: 400px;
+        height: 420px;
     }
 
     .secondary-collections {
@@ -438,7 +446,7 @@
     }
 
     .secondary-collection .collection-card {
-        height: 180px;
+        height: 200px;
     }
 
     /* Ensure content is always visible on tablets */
@@ -477,10 +485,10 @@
     .collection-card {
         height: 350px;
     }
-
+ 
     .secondary-collections {
         grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 15px;
+        gap: 10px;
     }
 
     .main-collection .collection-content {
@@ -551,14 +559,17 @@
     .collections-grid {
         gap: 20px;
     }
-
+ .collections-grid {
+     grid-template-columns: 1fr;
+     gap: 10px;
+ }
     .secondary-collections {
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         gap: 15px;
     }
 
     .collection-card {
-        height: 300px;
+        height: 250px;
     }
 
     .main-collection .collection-content {

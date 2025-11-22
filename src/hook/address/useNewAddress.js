@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
     createAddress,
     getAddressesByCustomer,
+    getAddressByLocation,
     getAddressById,
     updateAddress,
     deleteAddress,
@@ -14,6 +15,16 @@ export const useAddressesByCustomer = (customerId) => {
         queryKey: ["addresses", customerId],
         queryFn: () => getAddressesByCustomer(customerId),
         enabled: !!customerId, // only fetch if we have customerId
+    });
+};
+
+
+export const useAddressByLocation = (coords, options = {}) => {
+    return useQuery({
+        queryKey: ["address", coords],
+        queryFn: () => getAddressByLocation(coords), // <-- function
+        enabled: false, // don't fetch automatically
+        ...options,
     });
 };
 

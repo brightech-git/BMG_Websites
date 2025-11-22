@@ -15,7 +15,7 @@ const ProductCard = ({ item }) => {
     const removeFavorite = useRemoveFavorite();
     const { cartItems, addToCartHandler } = useCart();
     const isAuthenticated = useSelector((state) => state.user.isAuthenticated)
-    
+
     // const mobileNumber = useSelector((state) => state.user.user.contactNumber) || null;
     const history = useHistory();
     const location = useLocation();
@@ -231,32 +231,33 @@ const ProductCard = ({ item }) => {
 
     return (
         <>
-        <div className="card-container">
-                <UpdateMobileModal  />
-            <div
-                className="product-item"
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
+            <div className="card-container">
+                <UpdateMobileModal />
+                <div
+                    className="product-item"
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
 
-            >
-                <div className="image-wrapper" >
-                    <div
-                        className="image-container"
-                        onClick={clickProduct}
-                    >
-                        {/* Main Image with smooth transition */}
-                        <img
-                            src={productImages[currentImageIndex]}
-                            alt={productName}
-                            className="product-image"
-                            onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = fallbackImage;
-                            }}
-                        />
-
-                        {/* Image Indicator for multiple images */}
-                        {/* {hasMultipleImages && (
+                >
+                    <div className="image-wrapper" >
+                        <div
+                            className="image-container"
+                            onClick={clickProduct}
+                        >
+                            {/* Main Image with smooth transition */}
+                            <img
+                                src={productImages[currentImageIndex]}
+                                alt={productName}
+                                className="product-image"
+                                onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = fallbackImage;
+                                }}
+                            />
+                            {/* Previous image for hover-out effect */}
+                          
+                            {/* Image Indicator for multiple images */}
+                            {/* {hasMultipleImages && (
                             <div className="image-indicator">
                                 {productImages.map((_, index) => (
                                     <div
@@ -269,10 +270,10 @@ const ProductCard = ({ item }) => {
 
 
 
-                    </div>
+                        </div>
 
-                    <div className="quick-actions">
-                        {/* <button
+                        <div className="quick-actions">
+                            {/* <button
                             className={`action-buttons add-cart-btn ${cartAnimation ? 'cart-animation' : ''}`}
                             onClick={addItemToCart}
                             aria-label="Add to Cart"
@@ -281,38 +282,41 @@ const ProductCard = ({ item }) => {
                             <span className="add-button-text">{isInCart ? 'In Cart' : 'Add to Cart'}</span>
                         </button> */}
 
-                        <button
-                            className={`action-button wish-btn ${heartAnimation ? 'heart-animation' : ''}`}
-                            onClick={toggleWishlist}
-                            aria-label={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
-                            title={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
-                        >
-                            <Heart
-                                size={14}
-                                fill={isWishlisted ? '#dc3545' : 'none'}
-                                color={isWishlisted ? '#dc3545' : 'currentColor'}
-                            />
-                        </button>
+                            <button
+                                className={`action-button wish-btn ${heartAnimation ? 'heart-animation' : ''}`}
+                                onClick={toggleWishlist}
+                                aria-label={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
+                                title={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
+                            >
+                                <Heart
+                                    size={14}
+                                    fill={isWishlisted ? '#dc3545' : 'none'}
+                                    color={isWishlisted ? '#dc3545' : 'currentColor'}
+                                />
+                            </button>
+                        </div>
                     </div>
+
+                    <div className="item-info">
+                        <h3 className="item-name">{productName}</h3>
+                        <div className="price-section">
+                            <span className="new-price">
+                                ₹{currentPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                            </span>
+                        </div>
+                    </div>
+
+                    <button className='product-addToCart' onClick={addItemToCart}>   {isInCart ? "In Cart" : "Add to Cart"} </button>
+
                 </div>
 
-                <div className="item-info">
-                    <h3 className="item-name">{productName}</h3>
-                    <div className="price-section">
-                        <span className="new-price">
-                            ₹{currentPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <style>{`
+                <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&display=swap');
                 @import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
                 
                 .card-container {
                     width: 100%;
-                    max-width: 320px;
+                    max-width:400px;
                     margin: 0 auto;
                 }
 
@@ -323,7 +327,7 @@ const ProductCard = ({ item }) => {
                     overflow: hidden;
                     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                     cursor: pointer;
-                    border: 1px solid #ebebebff;
+                    border:none ;
                 }
 
                 .product-item:hover {
@@ -553,6 +557,30 @@ const ProductCard = ({ item }) => {
                     font-weight: 400;
                     color: #041f60;
                 }
+                     .product-addToCart {
+  position: relative;
+  width:100%;
+  bottom:0px;
+  left:50%;
+  transform: translateX(-50%);
+  padding: 5px 10px;
+  font-size: 12px;
+  background: var(--addtocart-product-color);
+  color: var(--green-color);
+  border: none;
+  font-weight:bold;
+  border-radius: 4px;
+
+  opacity: 0;         /* hidden */
+  pointer-events: none; /* not clickable when hidden */
+  transition: opacity 0.3s ease;
+}
+
+/* Show on hover */
+.product-item:hover .product-addToCart {
+  opacity: 1;
+  pointer-events: auto; /* enable interaction */
+}
 
                 /* Touch Device Optimizations */
                 @media (hover: none) and (pointer: coarse) {
@@ -591,14 +619,12 @@ const ProductCard = ({ item }) => {
                 /* Mobile Optimizations */
                 @media (max-width: 768px) {
                     .card-container {
-                        max-width: 260px;
+                        max-width: 300px;
                     }
                     .add-button-text {
                         font-size: 12px !important;
                     }
-                    .product-item {
-                        border-radius: 10px;
-                    }
+                   
                     .item-info {
                         padding: 12px 8px;
                     }
@@ -627,6 +653,9 @@ const ProductCard = ({ item }) => {
                         font-size: 0.65rem;
                         padding: 3px 6px;
                     }
+                        .product-addToCart{
+                      opacity: 1; 
+                        }
                 }
 
                 @media (max-width: 480px) {
@@ -686,9 +715,12 @@ const ProductCard = ({ item }) => {
                         min-width: 24px;
                         height: 24px;
                     }
+                       
+
+
                 }
             `}</style>
-        </div>
+            </div>
         </>
     );
 };

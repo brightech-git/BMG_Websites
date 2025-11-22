@@ -98,6 +98,7 @@
     --red-color: #e74c3c;
     --brand-background-color: linear-gradient(135deg, #e3bdfc 30%, #bce0ee 70%);
     --brand-bg-color: linear-gradient(135deg, #eebcc4 70%, #fcd6bd 30%);
+    --addtocart-product-color: linear-gradient(135deg, #fbbfac 70%, #fcd6bd 30%);
     --login-button-background: linear-gradient(90deg, #f02f6f, #f856af);
     --cart-button-background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
     --whistlist-button-background: linear-gradient(135deg, #31063a, #ff2b59);

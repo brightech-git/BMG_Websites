@@ -1133,10 +1133,10 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     font-family: var(--secondary-font);
 }
 
-.enhanced-card {
+.header-enhanced-card {
     padding: 12px;
     border-radius: 10px;
-    background-color: var(--primary-color);
+    background-color: transparent !important;
     text-align: center;
     transition: box-shadow 0.2s ease;
     display: inline-flex !important;
@@ -1150,7 +1150,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     margin: 0 auto;
     /* center inside grid cell */
 }
-.enhanced-card:hover {
+.header-enhanced-card:hover {
     box-shadow: 0 4px 10px 0 var(--shadow-color);
     border: 1px solid var(--grey-color);
     cursor: pointer;

@@ -433,7 +433,7 @@ const Header = ({ isAuthenticated }) => {
                                                   key={idx}
                                                 >
                                                   <div
-                                                    className="enhanced-card"
+                                                    className="header-enhanced-card"
                                                     onClick={() =>
                                                       handleClick(item.keyName, item.keyValue)
                                                     }

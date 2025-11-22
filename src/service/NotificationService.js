@@ -7,6 +7,7 @@ export const postNotification = async ({ userId, deviceId, deviceType, fcmToken 
     deviceType,
     fcmToken,
   };
+  console.log({...payload}, 'payload')
 
   const res = await PublicUrl.post("/device/register", payload);
   return res.data;

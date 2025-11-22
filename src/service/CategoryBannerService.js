@@ -7,6 +7,6 @@ import PublicUrl from "../api/publicUrl";
  */
 export const getCategoryBanner = ({ itemCtrName, subItemName, pages, occasion, gender }) => {
     return PublicUrl.get("/category_image/get", {
-        params: { itemCtrName: itemCtrName, subItemName: subItemName, pages: pages, occasion: occasion, gender: gender }
+        params: { itemName: itemCtrName, pages: pages, occasion: occasion, gender: gender }
     });
 };

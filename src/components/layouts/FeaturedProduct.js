@@ -14,9 +14,11 @@ const FeaturedBanners = () => {
 
 
    const { data ,isLoading ,isError } = useFeaturedBanner();
-
+  console.log(data ,'featured')
   useEffect(() => {
-    if (data) {
+    if(!data)
+      return;
+    else {
       setBanner(data);
     }
   }, [data]);
@@ -61,12 +63,15 @@ const FeaturedBanners = () => {
                 onClick={() => handleBannerClick('/products-page?featured_products=true')}
               >
                 <div className="position-relative w-100 h-100 overflow-hidden">
-                  <img
-                    src={getProductImages(banners[0].Image)}
-                    alt={banners[0].Name}
-                    className="fb-banner-image"
-                    loading="lazy"
-                  />
+                  {banners[0] && (
+                    <img
+                      src={getProductImages(banners[0]?.Image)}
+                      alt={banners[0]?.Name}
+                      className="fb-banner-image"
+                      loading="lazy"
+                    />
+                  )}
+
                 </div>
               </div>
             </div>
@@ -83,8 +88,8 @@ const FeaturedBanners = () => {
                     >
                       <div className="position-relative w-100 h-100 overflow-hidden">
                         <img
-                          src={getProductImages(banner.Image)}
-                          alt={banner.title}
+                          src={getProductImages(banner?.Image)}
+                          alt={banner?.title}
                           className="fb-banner-image"
                           loading="lazy"
                         />
@@ -102,13 +107,15 @@ const FeaturedBanners = () => {
                     onClick={() => handleBannerClick('/products-page?featured_products=true')}
                   >
                     <div className="position-relative w-100 h-100 overflow-hidden">
-                      <img
-                        src={getProductImages(banners[3].Image)}
-                        alt={banners[3].Name}
-                        className="fb-banner-image"
-                        loading="lazy"
-                      />
-                     
+                      {banners[3] && (
+                        <img
+                          src={getProductImages(banners[3]?.Image)}
+                          alt={banners[3]?.Name}
+                          className="fb-banner-image"
+                          loading="lazy"
+                        />
+                      )}
+
                     </div>
                   </div>
                 </div>

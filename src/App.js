@@ -203,7 +203,7 @@ function App() {
       )}
 
       {showHome && (
-        <PageTransition animation="fade">
+        // <PageTransition animation="fade">
           <Switch>
             {/* Your existing routes */}
             <Route exact path="/" component={Home} />
@@ -250,7 +250,7 @@ function App() {
             <Route component={Error} />
             <RouteTracker />
           </Switch>
-        </PageTransition>
+        // </PageTransition>
       )}
     </Router>
   );

@@ -29,23 +29,30 @@ export const filterProducts = async (filters) => {
         const cleanedFilters = {};
         Object.entries(filters).forEach(([key, value]) => {
             if (value !== '' && value !== null && value !== undefined) {
-                cleanedFilters[key] = typeof value === 'string' ? value.replace(/^"|"$/g, '').trim() : value;
+                cleanedFilters[key] =
+                    typeof value === "string" ? value.replace(/^"|"$/g, "").trim() : value;
             }
         });
 
         const queryString = new URLSearchParams(cleanedFilters).toString();
-        //console.log('API query string:', queryString); // Debug
 
-        // Option 1: Keep POST request (as in your original code)
         const response = await PublicUrl.get(`/product/items/filter?${queryString}`);
-        return response.data;
 
-        // Option 2: Use GET request (uncomment if backend supports it)
-        // const response = await PublicUrl.get(`/product/items/filter?${queryString}`);
-        // return response.data;
+        return {
+            success: true,
+            data: response.data,
+            error: null,
+        };
+
     } catch (error) {
-        console.error('filterProducts error:', error.response?.data || error.message);
-        throw error;
+        console.error("filterProducts error:", error.response?.data || error.message);
+
+        // ⛔ DO NOT CRASH — return safe fallback
+        return {
+            success: false,
+            data: [],
+            error: error.response?.data || error.message,
+        };
     }
 };
 

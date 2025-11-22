@@ -1,3 +1,4 @@
+import { param } from "jquery";
 import PublicUrl from "../api/publicUrl";
 
 // Create Address
@@ -6,6 +7,15 @@ export const createAddress = async (addressData) => {
     return data;
 };
 
+export const getAddressByLocation = async (coords) => {
+    const response = await PublicUrl.get("/addresses/geocode", {
+        params: {
+            latitude: coords?.latitude,
+            longitude: coords?.longitude,
+        },
+    });
+    return response.data;
+};
 // Get addresses by customerId
 export const getAddressesByCustomer = async (customerId) => {
     const { data } = await PublicUrl.get(`/addresses/customer/${customerId}`);

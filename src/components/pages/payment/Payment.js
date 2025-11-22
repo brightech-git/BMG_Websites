@@ -1,94 +1,94 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useHistory, useLocation } from 'react-router-dom';
-import { useInitiatePayment } from '../../../hook/payment/useInitiatePayment';
-import './PaymentPage.css';
-import { getPaymentRedirectUrl } from '../../../service/paymentServiceicici';
-import { toast } from 'react-toastify';
-
+import React, { useEffect } from "react";
+import { useParams, useHistory } from "react-router-dom";
+import { useInitiatePayment } from "../../../hook/payment/useInitiatePayment";
+import { getPaymentRedirectUrl } from "../../../service/paymentServiceicici";
+import { toast } from "react-toastify";
+import { useLocation } from "react-router-dom/cjs/react-router-dom";
+import './PaymentPage.css'
 const PaymentPage = () => {
     const { orderId } = useParams();
     const history = useHistory();
-    const location = useLocation();
     const { mutate: initiatePayment } = useInitiatePayment();
+    const location = useLocation();
+    const orderPayload = location.state?.orderPayload;
 
-    const [retryCount, setRetryCount] = useState(0);
-    const maxRetries = 3;
-
-    // ✅ Get order payload from router state or fallback to localStorage
-    let orderPayload = location.state?.orderPayload;
-    if (!orderPayload) {
-        orderPayload = JSON.parse(localStorage.getItem("order"));
-    }
-
-    //console.log("Order Payload:", orderPayload);
-
-    const onSuccess = async (response) => {
-        //console.log("Payment initiated successfully:", response);
-
-        const { redirectURI, tranCtx } = response || {};
-
-        if (redirectURI && tranCtx) {
-            try {
-                toast.success('Payment initiated successfully!');
-                const redirectUrl = await getPaymentRedirectUrl(redirectURI, tranCtx);
-                window.location.href = redirectUrl;
-            } catch (err) {
-                console.error(err);
-                toast.error("Something went wrong while redirecting to payment page.");
-                history.push("/account", { activeComponent: "Orders" });
-            }
-        } else {
-            history.push("/account", { activeComponent: "Orders" });
-            toast.warning("Order redirect details are missing.");
-        }
-    };
-
-    const onError = (error) => {
-        console.error('Payment initiation failed:', error);
-        toast.error('Payment failed. Please try again.');
-        history.push("/account", { activeComponent: "Orders" });
-    };
-
+    const totalAmount = orderPayload?.totalAmount.toFixed(2) ?? "N/A";
+    const customerName = orderPayload?.customerName ?? "Customer";
     useEffect(() => {
-        if (!orderId) return;
-        if (!localStorage.getItem("user_token")) {
-            toast.error("Please login");
-            history.push("/login");
+        if (!orderId) {
+            console.warn("No orderId provided");
             return;
         }
 
-        if (!orderPayload) {
-            toast.error("Order details not found");
-            history.push("/account", { activeComponent: "Orders" });
-            return;
-        }
+        let cancelled = false;
 
-        // ✅ Trigger payment directly from passed payload
-        initiatePayment({
-            merchantTxnNo: orderId,
-            amount: orderPayload.totalAmount,
-            currencyCode: 356,
-            payType: 0,
-            transactionType: "SALE",
-            addlParam1: '',
-            addlParam2: '',
-            returnURL: "https://bmgjewellers.com",
-            customerEmailID: orderPayload.email,
-            customerMobileNo: orderPayload.contact
-        }, { onSuccess, onError });
+        const merchantTxnNo = orderId; // Use orderId directly for now
 
-    }, [orderId, orderPayload, history, initiatePayment]);
+        console.log("Initiating payment with merchantTxnNo:", merchantTxnNo);
+
+        initiatePayment(
+            {
+                merchantTxnNo,
+                amount: totalAmount, 
+                currencyCode: 356,
+                payType: 0,
+                transactionType: "SALE",
+                addlParam1: "",
+                addlParam2: "",
+                returnURL: "https://bmgjewellers.com",
+            },
+            {
+                onSuccess: async (response) => {
+                    if (cancelled) return;
+                    console.log("Payment initiated successfully:", response);
+
+                    const { redirectURI, tranCtx } = response;
+
+                    if (redirectURI && tranCtx) {
+                        try {
+                            const finalUrl = await getPaymentRedirectUrl(
+                                redirectURI,
+                                tranCtx
+                            );
+                            console.log("Redirecting to:", finalUrl);
+                            window.location.href = finalUrl;
+                        } catch (err) {
+                            console.error("Failed to get final redirect URL:", err);
+                            toast.error("Failed to redirect");
+                            history.push("/account");
+                        }
+                    } else {
+                        console.warn("Missing redirect info in response:", response);
+                        toast.error("Missing redirect info");
+                        history.push("/account");
+                    }
+                },
+                onError: (error) => {
+                    if (cancelled) return;
+                    console.error("Payment initiation failed:", error);
+                    toast.error("Payment failed");
+                    history.push("/account");
+                },
+            }
+        );
+
+        return () => {
+            cancelled = true;
+        };
+    }, [orderId, initiatePayment, history]);
 
     return (
-        <div className="payment-loading-page">
-            <div className="payment-loading-spinner"></div>
-            <h2>Generating Payment Link...</h2>
-            <p>Please wait while we redirect you to the secure payment gateway.</p>
-            {retryCount > 0 && (
-                <p className="retry-message">
-                    Retrying... ({retryCount}/{maxRetries})
+        <div className="payment-page-container">
+            <div className="payment-box">
+                <div className="spinner"></div>
+                <h2>Redirecting to Payment...</h2>
+                <p>
+                    Please wait while we securely redirect you to the payment gateway.
                 </p>
-            )}
+                <p className="tip">
+                    ⚡ Tip: Do not refresh or close this page.
+                </p>
+            </div>
         </div>
     );
 };

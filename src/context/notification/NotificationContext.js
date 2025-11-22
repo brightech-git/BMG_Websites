@@ -35,7 +35,7 @@ export const NotificationProvider = ({ children }) => {
                 fcmToken,
             });
         }
-
+console.log(fcmToken ,'fcmToken')
         setShowPermissionModal(false);
     };
 

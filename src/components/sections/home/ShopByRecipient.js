@@ -97,12 +97,12 @@ const RecipientCard = ({ banner, baseUrl, onClick }) => {
                                     e.target.src = "/fallback-image.jpg";
                                 }}
                             />
-                            <div className="recipient-overlay"></div>
-                            <h3 className="recipient-label">{banner.title}</h3>
+                            {/* <div className="recipient-overlay"></div>
+                            <h3 className="recipient-label">{banner.title}</h3> */}
                             {/* {banner.subtitle && (
                                 <p className="recipient-subtext">{banner.subtitle}</p>
                             )} */}
-                            <button
+                            {/* <button
                                 className="recipient-button"
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -110,7 +110,7 @@ const RecipientCard = ({ banner, baseUrl, onClick }) => {
                                 }}
                             >
                                 View Collection
-                            </button>
+                            </button> */}
                         </div>
                     </div>
                 </div>

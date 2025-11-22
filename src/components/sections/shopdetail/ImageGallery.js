@@ -10,7 +10,7 @@ const ImageGallery = ({ images, videos = [], badges = {} }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
     const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
-    const [autoScroll, setAutoScroll] = useState(true);
+    const [autoScroll, setAutoScroll] = useState(false);
 
     const mainImageRef = useRef(null);
     const zoomTimeoutRef = useRef(null);

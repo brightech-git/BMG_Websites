@@ -3,23 +3,23 @@ import { useCategoryBanner } from "../../hook/banner/useCategoryBanner";
 import fallbackImage from "../../assets/img/banner/footer.webp";
 import "./BreadStyles.css";
 
-const Breadcrumbs = ({ itemName, subItemName, pages, occasion, gender }) => {
+const Breadcrumbs = ({ itemCtrName,  pages, occasion, gender }) => {
     const [isImageLoaded, setIsImageLoaded] = useState(false);
-
+console.log(itemCtrName ,'itemname for bread')
     // Build params based on priority rules
     let params = {
-        itemName: "",
-        subItemName: "",
+        itemCtrName: "",
+      
         pages: "",
         occasion: "",
         gender: "",
     };
 
 
-    if (itemName && subItemName) {
-        params = { itemName, subItemName, pages: "", occasion: "", gender: "" };
-    } else if (itemName) {
-        params = { itemName, subItemName: "", pages: "", occasion: "", gender: "" };
+    if (itemCtrName ) {
+        params = { itemCtrName,pages: "", occasion: "", gender: "" };
+    } else if (itemCtrName) {
+        params = { itemCtrName, pages: "", occasion: "", gender: "" };
     } else if (gender) {
         params = { gender };
     } else if (occasion) {
@@ -28,20 +28,20 @@ const Breadcrumbs = ({ itemName, subItemName, pages, occasion, gender }) => {
         params = { pages };
     }
 
-    //console.log(params, 'params')
+    console.log(params, 'params')
 
     const { data: bannerData, isLoading, isError } = useCategoryBanner(params);
 
 
     const banners = bannerData?.results || [];
 
-    //console.log(banners, 'banners')
+    console.log(banners, 'banners')
 
 
     // Reset loading state whenever data OR props change
     useEffect(() => {
         setIsImageLoaded(false);
-    }, [bannerData, itemName, subItemName, pages, occasion, gender]);
+    }, [bannerData, itemCtrName, pages, occasion, gender]);
 
     const handleImageError = (e) => {
         console.error("Failed to load banner image:", e.target.src);
@@ -58,9 +58,9 @@ const Breadcrumbs = ({ itemName, subItemName, pages, occasion, gender }) => {
                 loading="lazy"
             />
             <div className="banner-content-overlay">
-                <h1 className="banner-title">{pages || itemName || "Category"}</h1>
+                <h1 className="banner-title">{pages || itemCtrName || "Category"}</h1>
                 <p className="banner-description">
-                    {subItemName || "Explore our collection"}
+                    {"Explore our collection"}
                 </p>
             </div>
         </div>
@@ -88,18 +88,18 @@ const Breadcrumbs = ({ itemName, subItemName, pages, occasion, gender }) => {
                                     onError={handleImageError}
                                     loading="lazy"
                                 />
-                                <div className="banner-content-overlay">
+                                {/* <div className="banner-content-overlay">
                                     <h1 className="banner-title">
                                         {isLoading
                                             ? "Loading..."
-                                            : item?.title || itemName || item.pages || "Category"}
+                                            : item?.title || itemCtrName || item.pages || "Category"}
                                     </h1>
                                     <p className="banner-description">
                                         {item?.subtitle ||
-                                            subItemName ||
+                                            
                                             "Explore our collection"}
                                     </p>
-                                </div>
+                                </div> */}
                             </div>
                         );
                     })

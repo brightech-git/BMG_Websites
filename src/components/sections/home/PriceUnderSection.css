@@ -8,12 +8,10 @@
    
 }
 .pus-container{
-    max-width:1500px;
-    margin:0 auto;
     background: linear-gradient(135deg, var(--primary-card-color) 0%, #f8f9fa 100%);
     border-radius: 24px;
-        position: relative;
-        overflow: hidden;
+    position: relative;
+    overflow: hidden;
 }
 
 .pus-container:before {
@@ -42,49 +40,33 @@
 }
 
 .pus-card-container {
-    margin: 1rem auto !important;
-    padding: 1rem;
+    padding: 0.5rem;
     position: relative;
     z-index: 2;
 }
 
-.pus-section-title {
-    font-family: var(--title-font);
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 900;
-    text-align: center;
-    margin-bottom: 1.5rem;
-    letter-spacing: -0.5px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.8rem;
-    flex-wrap: wrap;
+.pus-section {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   margin: 0 auto;
 }
 
-.pus-section-title .title-part-1 {
+.pus-section .title-part-1 {
+    margin:0.5rem 0rem;
     background: var(--gradient-text);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     position: relative;
-}
-
-.pus-section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 120px;
-    height: 4px;
-    background: var(--primary-hover-color);
-    border-radius: 2px;
+    font-family: var(--title-font);
+        font-size: clamp(2rem, 4vw, 2rem);
+        font-weight: bold;
+  
 }
 
 .pus-section-subtitle {
-    font-size: clamp(1rem, 2vw, 1rem);
+    font-size: clamp(0.7rem, 1vw, 0.9rem);
     color: var(--grey-color);
     text-align: center;
     margin-bottom: 2rem;
@@ -291,7 +273,6 @@
             gap: 0.5rem;
         }
     .pus-card-container {
-        margin: 0.5rem auto !important;
         padding: 0.5rem;
     }
     
@@ -320,15 +301,7 @@
         height: 260px;
     }
 
-    .pus-section-title {
-        font-size: clamp(1.8rem, 6vw, 2.5rem);
-        margin-bottom: 1rem;
-    }
 
-    .pus-section-subtitle {
-        font-size: 1rem;
-        margin-bottom: 3rem;
-    }
 
     .pus-content-overlay {
         padding: 1.2rem;
@@ -364,10 +337,7 @@
         font-size: clamp(0.6rem, 1vw, 0.7rem);
     }
 
-    .pus-section-title {
-        flex-direction: column;
-        gap: 0.3rem;
-    }
+   
 }
 
 /* Animation for card entrance */

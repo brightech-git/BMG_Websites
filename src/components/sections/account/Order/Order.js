@@ -165,7 +165,7 @@ const Orders = ({ setActiveComponent, setSelectedOrder }) => {
       );
       console.log(order, 'order');
       console.log(statusFilter, 'orders');
-  console.log(matchesSearch, 'matchesSearch')
+
 
     // Status filter
     const matchesStatus = statusFilter === '' ||

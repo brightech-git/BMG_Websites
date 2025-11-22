@@ -2,7 +2,9 @@ import PublicUrl from "../api/publicUrl";
 
 export const initiatePayment = async (paymentData) => {
     try {
+        console.log(paymentData ,'paymentData')
         const { data } = await PublicUrl.post('/payment/initiate-sale', paymentData);
+        console.log("payment" ,data)
         return data;
     } catch (error) {
         console.error('Payment initiation failed:', error);

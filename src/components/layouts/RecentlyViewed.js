@@ -8,10 +8,10 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useFavorites, useAddFavorite, useRemoveFavorite } from '../../hook/favorites/useFavoritesQuery';
 import { useCart } from '../../hook/cart/useCartQuery';
 import { toast } from 'react-toastify';
-// Import your external CSS file
 import './recently-viewed.css';
+import ProductCard from '../sections/productCard/ProductCard';
 
-const ProductCard = ({ item, isMain }) => {
+const RVProductCard = ({ item, isMain, isMobile = false }) => {
     const { data: favorites, isLoading: isFavoritesLoading } = useFavorites();
     const addFavorite = useAddFavorite();
     const removeFavorite = useRemoveFavorite();
@@ -150,7 +150,7 @@ const ProductCard = ({ item, isMain }) => {
 
     if (loadingState || !item) {
         return (
-            <div className="product-card">
+            <div className={`product-card ${isMobile ? 'product-card--mobile' : ''}`}>
                 <div className="product-card__inner product-card--loading">
                     <div className="product-card__image-container">
                         <div className="jewel-carousel__skeleton"></div>
@@ -165,7 +165,7 @@ const ProductCard = ({ item, isMain }) => {
     }
 
     return (
-        <div className={`product-card ${isMain ? 'main-product' : ''}`}>
+        <div className={`product-card ${isMain && !isMobile ? 'main-product' : ''} ${isMobile ? 'product-card--mobile' : ''}`}>
             <div className="product-card__inner" onClick={clickProduct}>
                 <div className="product-card__image-container">
                     <img
@@ -183,14 +183,14 @@ const ProductCard = ({ item, isMain }) => {
                         </span>
                     )}
                     <div className="product-card__actions">
-                        <button
+                        {/* <button
                             className="product-card__action product-card__action--refresh"
                             onClick={refreshProduct}
                             aria-label="Refresh Product"
                             title="Refresh"
                         >
                             <RefreshCw size={16} />
-                        </button>
+                        </button> */}
                         <button
                             className={`product-card__action product-card__action--cart ${cartAnimation ? 'cart-animate' : ''}`}
                             onClick={addItemToCart}
@@ -198,7 +198,11 @@ const ProductCard = ({ item, isMain }) => {
                             title="Add to Cart"
                         >
                             <ShoppingCart size={16} />
-                            <span className="product-card__action-text">{isInCart ? 'In Cart' : 'Add'}</span>
+                            {!isMobile && (
+                                <span className="product-card__action-text">
+                                    {isInCart ? 'In Cart' : 'Add'}
+                                </span>
+                            )}
                         </button>
                         <button
                             className={`product-card__action product-card__action--wishlist ${heartAnimation ? 'heart-animate' : ''}`}
@@ -220,7 +224,6 @@ const ProductCard = ({ item, isMain }) => {
                         <span className="product-card__current-price">
                             ₹{currentPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                         </span>
-
                     </div>
                 </div>
             </div>
@@ -231,6 +234,7 @@ const ProductCard = ({ item, isMain }) => {
 const ProductCarousel = () => {
     const [currentIndex, setCurrentIndex] = useState(1);
     const [isAnimating, setIsAnimating] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
     const animationRef = useRef(null);
     const navigate = useHistory();
     const { data: recentlyViewedData, isLoading: isSnoLoading, isError: isSnoError, error: snoError } = useRecentlyViewed();
@@ -249,6 +253,20 @@ const ProductCarousel = () => {
         .filter((q) => q.isSuccess && q.data)
         .map((q) => q.data);
 
+    // Check for mobile screen size
+    useEffect(() => {
+        const checkScreenSize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        checkScreenSize();
+        window.addEventListener('resize', checkScreenSize);
+
+        return () => {
+            window.removeEventListener('resize', checkScreenSize);
+        };
+    }, []);
+
     const getLoopedProducts = () => {
         if (products.length === 0) return [];
         if (products.length === 1) return [products[0], products[0], products[0]];
@@ -259,7 +277,7 @@ const ProductCarousel = () => {
     const loopedProducts = getLoopedProducts();
 
     const handlePrevious = () => {
-        if (isAnimating || products.length === 0) return;
+        if (isAnimating || products.length === 0 || isMobile) return;
         setIsAnimating(true);
         if (animationRef.current) clearTimeout(animationRef.current);
         const newIndex = currentIndex === 0 ? loopedProducts.length - 1 : currentIndex - 1;
@@ -275,7 +293,7 @@ const ProductCarousel = () => {
     };
 
     const handleNext = () => {
-        if (isAnimating || products.length === 0) return;
+        if (isAnimating || products.length === 0 || isMobile) return;
         setIsAnimating(true);
         if (animationRef.current) clearTimeout(animationRef.current);
         const newIndex = currentIndex === loopedProducts.length - 1 ? 0 : currentIndex + 1;
@@ -337,18 +355,28 @@ const ProductCarousel = () => {
                         <h2 className="jewel-carousel__title">Viewed Products</h2>
                     </div>
                     <div className="jewel-carousel__content">
-                        <div className="jewel-carousel__grid-wrapper">
-                            <div className="jewel-carousel__grid">
-                                {Array.from({ length: 3 }).map((_, i) => (
-                                    <div
-                                        key={`skeleton-${i}`}
-                                        className={`jewel-carousel__item ${i === 1 ? 'main-product' : ''}`}
-                                    >
-                                        <ProductCard item={null} isMain={i === 1} />
+                        {isMobile ? (
+                            <div className="jewel-carousel__mobile-grid">
+                                {Array.from({ length: 2 }).map((_, i) => (
+                                    <div key={`skeleton-mobile-${i}`} className="jewel-carousel__mobile-item">
+                                        <RVProductCard item={null} isMobile={true} />
                                     </div>
                                 ))}
                             </div>
-                        </div>
+                        ) : (
+                            <div className="jewel-carousel__grid-wrapper">
+                                <div className="jewel-carousel__grid">
+                                    {Array.from({ length: 3 }).map((_, i) => (
+                                        <div
+                                            key={`skeleton-${i}`}
+                                            className={`jewel-carousel__item ${i === 1 ? 'main-product' : ''}`}
+                                        >
+                                            <RVProductCard item={null} isMain={i === 1} />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </section>
@@ -364,17 +392,15 @@ const ProductCarousel = () => {
                         <h2 className="jewel-carousel__title">Viewed Products</h2>
                     </div>
                     <div className="jewel-carousel__content">
-                        <div className="jewel-carousel__grid-wrapper">
-                            <div className="jewel-carousel__empty">
-                                <p>No recently viewed products.</p>
-                                <button
-                                    className="jewel-carousel__cta"
-                                    onClick={() => navigate.push('/products-page')}
-                                    aria-label="Browse Products"
-                                >
-                                    Browse Products
-                                </button>
-                            </div>
+                        <div className="jewel-carousel__empty">
+                            <p>No recently viewed products.</p>
+                            <button
+                                className="jewel-carousel__cta"
+                                onClick={() => navigate.push('/products-page')}
+                                aria-label="Browse Products"
+                            >
+                                Browse Products
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -390,41 +416,57 @@ const ProductCarousel = () => {
                     <h2 className="jewel-carousel__title">Viewed Products</h2>
                 </div>
                 <div className="jewel-carousel__content">
-                    <button
-                        className="jewel-carousel__nav jewel-carousel__nav--prev"
-                        onClick={handlePrevious}
-                        disabled={isAnimating}
-                        aria-label="Previous products"
-                    >
-                        <div className="jewel-carousel__nav-content">
-                            <ChevronLeft size={24} />
-                            <div className="jewel-carousel__nav-glow"></div>
-                        </div>
-                    </button>
-                    <div className="jewel-carousel__grid-wrapper">
-                        <div className="jewel-carousel__grid">
-                            {getVisibleProducts().map((product, index) => (
-                                <div
-                                    key={`${product.SNO}-${product.displayIndex}-${index}`}
-                                    data-position={product.position}
-                                    className={`jewel-carousel__item ${product.position === 0 ? 'main-product' : 'side-product'} ${isAnimating ? 'is-animating' : ''}`}
-                                >
-                                    <ProductCard item={product} isMain={product.position === 0} />
+                    {!isMobile && (
+                        <button
+                            className="jewel-carousel__nav jewel-carousel__nav--prev"
+                            onClick={handlePrevious}
+                            disabled={isAnimating}
+                            aria-label="Previous products"
+                        >
+                            <div className="jewel-carousel__nav-content">
+                                <ChevronLeft size={24} />
+                                <div className="jewel-carousel__nav-glow"></div>
+                            </div>
+                        </button>
+                    )}
+
+                    {isMobile ? (
+                        <div className="jewel-carousel__mobile-grid">
+                            {products.map((product, index) => (
+                                <div key={`mobile-${product.SNO}-${index}`} className="jewel-carousel__mobile-item">
+                                    <ProductCard item={product} isMobile={true} />
                                 </div>
                             ))}
                         </div>
-                    </div>
-                    <button
-                        className="jewel-carousel__nav jewel-carousel__nav--next"
-                        onClick={handleNext}
-                        disabled={isAnimating}
-                        aria-label="Next products"
-                    >
-                        <div className="jewel-carousel__nav-content">
-                            <ChevronRight size={24} />
-                            <div className="jewel-carousel__nav-glow"></div>
+                    ) : (
+                        <div className="jewel-carousel__grid-wrapper">
+                            <div className="jewel-carousel__grid">
+                                {getVisibleProducts().map((product, index) => (
+                                    <div
+                                        key={`${product.SNO}-${product.displayIndex}-${index}`}
+                                        data-position={product.position}
+                                        className={`jewel-carousel__item ${product.position === 0 ? 'main-product' : 'side-product'} ${isAnimating ? 'is-animating' : ''}`}
+                                    >
+                                        <RVProductCard item={product} isMain={product.position === 0} />
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    </button>
+                    )}
+
+                    {!isMobile && (
+                        <button
+                            className="jewel-carousel__nav jewel-carousel__nav--next"
+                            onClick={handleNext}
+                            disabled={isAnimating}
+                            aria-label="Next products"
+                        >
+                            <div className="jewel-carousel__nav-content">
+                                <ChevronRight size={24} />
+                                <div className="jewel-carousel__nav-glow"></div>
+                            </div>
+                        </button>
+                    )}
                 </div>
             </div>
         </section>

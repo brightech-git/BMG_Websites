@@ -8,21 +8,22 @@ import { FiArrowRight, FiShield, FiTruck, FiRefreshCw, FiAward } from 'react-ico
 import { useBestDesignedBanners } from '../../../hook/BestDesignedBanner/useBestDesignedbanner';
 import { getProductImages } from '../../../utils/getProductImages';
 
-const JewelryShowcase = () => {
+const JewelryShowcase = ({banners , isLoading ,isError}) => {
+
     const history = useHistory();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const bannerContainerRef = useRef(null);
-    const [banners ,setBanners] = useState()
-    const {data , isLoading , isError} = useBestDesignedBanners();
 
-    useEffect(()=>{
-        if(data){
-            setBanners(data)
-        }
-    })
-    console.log(banners ,'bannerssss')
+    // const [banners ,setBanners] = useState()
+    // const {data , isLoading , isError} = useBestDesignedBanners();
 
+    // useEffect(()=>{
+    //     if(data){
+    //         setBanners(data)
+    //     }
+    // },[])
+    console.log(banners ,'banner for data ')
     const bannerImages = banners?.flatMap((b) => getProductImages(b.Image)) || [];
 
     bannerImages.map((img) => console.log(img, "imagesss"));

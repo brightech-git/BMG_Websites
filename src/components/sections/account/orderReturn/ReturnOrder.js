@@ -12,7 +12,7 @@ const mockItem = {
     price: 2499.99,
     size: 'M',
     color: 'Navy Blue',
-    orderId: 'ORD-A27F7F0A-2',
+    orderId: 'ORD-4BEE564F',
     orderDate: '2024-01-15'
 };
 
@@ -164,64 +164,31 @@ const ReturnOrderFlow = () => {
             return;
         }
 
-        // 🧱 Step 1: Build refund request JSON
         const refundRequest = {
             reason,
             comments,
-            action: returnAction, // Replace or Return
+            action: returnAction,
             addresses: [
-                {
-                    id: selectedAddressId,
-                    street: "123 Example Street",
-                    city: "Chennai",
-                    pincode: "600001",
-                },
+                { id: selectedAddressId, street: "123 Example Street", city: "Chennai", pincode: "600001" }
             ],
-            products: [
-                {
-                    productId: mockItem.id || 1,
-                    quantity: 1,
-                },
-            ],
-            orderId: mockItem.orderId || 0,
+            products: [{ productId: mockItem.id || 1, quantity: 1 }],
+            orderId: mockItem.orderId || null, // make sure it's valid
         };
 
-        // 🧩 Step 2: Create FormData
         const formData = new FormData();
-        formData.append(
-            "refund",
-            new Blob([JSON.stringify(refundRequest)], { type: "application/json" })
-        );
+        formData.append("refund", new Blob([JSON.stringify(refundRequest)], { type: "application/json" }));
+        if (selectedImageFile) formData.append("image", selectedImageFile);
 
-        // 🖼️ Optional: attach image
-        // if (selectedImageFile) {
-        //     formData.append("image", selectedImageFile);
-        // }
-
-        // 🧾 Step 3: Verify in console
-        // ✅ Step 3: Console to verify before sending
-        for (const [key, value] of formData.entries()) {
-            if (value instanceof Blob) {
-                console.log(`${key}: Blob (${value.type}, ${value.size} bytes)`);
-                // If it's a JSON blob, you can read it too:
-                if (value.type === "application/json") {
-                    value.text().then((json) => console.log("→ JSON:", JSON.parse(json)));
-                }
-            } else {
-                console.log(`${key}: ${value}`);
-            }
-        }
-
-        // 🚀 Step 4: Call API
         try {
             const response = await refundOrder(formData);
             console.log("Refund API Response:", response);
             toast.success("Return request submitted successfully!");
         } catch (error) {
-            console.error("Refund API Error:", error);
+            console.error("Refund submission failed:", error);
             toast.error("Failed to submit return request");
         }
     };
+
 
 
     const getStepSegmentClass = (step) => {

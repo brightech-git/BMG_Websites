@@ -3,11 +3,9 @@ import { Link, useHistory } from 'react-router-dom';
 import { useFestivalBanner } from '../../../hook/banner/useFestivalBanner';
 import './OnSale.css';
 
-const Onsale = () => {
-    const { data: festivalBannerResponse, isLoading, isError } = useFestivalBanner();
-    const baseUrl = "https://bmgjewellers.com";
+const Onsale = ({festivalBanners ,isLoading ,isError}) => {
 
-    const festivalBanners = festivalBannerResponse?.data || [];
+    const baseUrl = 'https://app.bmgjewellers.com'
     const mainBanner = festivalBanners[0] || null;
     const secondaryBanners = festivalBanners.slice(1);
 

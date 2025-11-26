@@ -20,19 +20,64 @@ firebase.initializeApp({
 
 // Retrieve an instance of Firebase Messaging so that it can handle background
 // messages.
+// const messaging = firebase.messaging();
+
+// messaging.onBackgroundMessage((payload) => {
+//     console.log(
+//         '[firebase-messaging-sw.js] Received background message ',
+//         payload
+//     );
+//     // Customize notification here
+//     const notificationTitle = payload.notification.title;
+//     const notificationOptions = {
+//         body: payload.notification.body,
+//         icon: payload.notification.image
+//     };
+
+//     self.registration.showNotification(notificationTitle, notificationOptions);
+// });
+
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-    console.log(
-        '[firebase-messaging-sw.js] Received background message ',
-        payload
-    );
-    // Customize notification here
-    const notificationTitle = payload.notification.title;
+    console.log("[SW] Background message received:", payload);
+
+    const data = payload.data || {};
+    const notificationTitle = data.title || "New Notification";
     const notificationOptions = {
-        body: payload.notification.body,
-        icon: payload.notification.image
+        body: data.body || data.message || "",
+        icon: data.imageUrl || "/default-icon.png",
+        image: data.imageUrl,
+        data: {
+            url: data.url || "https://app.bmgjewellers.com"
+        }
     };
 
     self.registration.showNotification(notificationTitle, notificationOptions);
 });
+
+
+self.addEventListener("notificationclick", function (event) {
+    event.notification.close();
+
+    // Log the data to check what is received
+    console.log("[SW] Notification clicked, data:", event.notification.data);
+
+    const targetUrl = event.notification.data?.url || "/";
+    console.log("[SW] Target URL:", targetUrl);
+
+    event.waitUntil(
+        clients.matchAll({ type: "window", includeUncontrolled: true })
+            .then(windowClients => {
+                for (let client of windowClients) {
+                    if (client.url === targetUrl && "focus" in client) {
+                        return client.focus();
+                    }
+                }
+                if (clients.openWindow) {
+                    return clients.openWindow(targetUrl);
+                }
+            })
+    );
+});
+

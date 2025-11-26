@@ -2440,20 +2440,6 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     display: none;
 }
 
-.sigma-header .sigma-main-menu .menu-item-has-children>.sub-menu {
-    position: absolute;
-    top: 120%;
-    left: 0;
-    right: 0;
-    background: #f6f5f0;
-    visibility: hidden;
-    opacity: 0;
-    transition: all 0.3s ease-out 0s;
-    width: 250px;
-    z-index: 10;
-    box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.1);
-
-}
 
 .sigma-header .sigma-main-menu .menu-item-has-children:hover>.sub-menu {
     opacity: 1;

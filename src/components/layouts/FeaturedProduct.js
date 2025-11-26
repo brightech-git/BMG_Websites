@@ -6,27 +6,13 @@ import img3 from './feature3.jpg';
 import img4 from './feature4.jpg';
 import './FeaturedBanners.css';
 import { getProductImages } from '../../utils/getProductImages';
-import { useFeaturedBanner } from '../../hook/featuredBanner/useFeaturedBanner';
 
-const FeaturedBanners = () => {
+
+const FeaturedBanners = ({banners ,isLoading ,isError}) => {
   const history = useHistory();
-  const [banner, setBanner] =useState();
+ 
 
-
-   const { data ,isLoading ,isError } = useFeaturedBanner();
-  console.log(data ,'featured')
-  useEffect(() => {
-    if(!data)
-      return;
-    else {
-      setBanner(data);
-    }
-  }, [data]);
-
-  // Banner data with unique images
-  const banners =banner ||  [];
-  console.log(banner ,'featured');
-  console.log(banners, 'featured');
+  
 
   const handleBannerClick = (link) => {
     history.push(link);

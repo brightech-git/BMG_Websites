@@ -1,19 +1,17 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import "./ShopByRecipient.css";
-import { useGenderBanner } from "../../../hook/genderBanner/useGender";
 
-const ShopByRecipient = () => {
+const ShopByRecipient = ({banners}) => {
     const history = useHistory();
-    const { data: genderBannerResponse } = useGenderBanner();
-    const banners = genderBannerResponse ?? [];
+   
 
     const baseUrl = "https://app.bmgjewellers.com";
 
-    const handleCategoryClick = (itemName, subItemName) => {
+    const handleCategoryClick = (itemName) => {
         const queryParams = new URLSearchParams();
         if (itemName) queryParams.append("itemName", itemName);
-        if (subItemName) queryParams.append("subItemName", subItemName);
+       
         history.push(`/products-page?${queryParams.toString()}`);
     };
 

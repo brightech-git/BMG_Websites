@@ -1,6 +1,5 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { useOfferBanners } from '../../../hook/banner/useOfferBanner';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Category1.css';
 const CategoryCard = ({ item }) => {

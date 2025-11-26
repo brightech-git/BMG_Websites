@@ -297,10 +297,6 @@ const Header = ({ isAuthenticated }) => {
                   </span>
 
                 </div>
-
-
-
-          
                 <div className="precious-metals-ticker-wrapper">
                   <div className="precious-metals-ticker">
                     <div className="ticker-header">
@@ -377,6 +373,19 @@ const Header = ({ isAuthenticated }) => {
                 <div className="nav-menu d-lg-flex align-items-center justify-content-between">
                   <div className="navbar-close">
 
+                  </div>
+                  <div className="site-logo site-logo-text">
+                    <Link to="/">
+                      <img
+                        src={Logo}
+                        alt="Diamond Icon"
+                        style={{
+                          width: "100px",
+                          height: "auto",
+                          marginRight: "10px",
+                        }}
+                      />
+                    </Link>
                   </div>
                   <div className="sigma-header-nav">
                     <div className="container">
@@ -480,20 +489,8 @@ const Header = ({ isAuthenticated }) => {
                       </div>
                     </div>
                   </div>
-                  <div className="site-logo site-logo-text">
-                    <Link to="/">
-                      <img
-                        src={Logo}
-                        alt="Diamond Icon"
-                        style={{
-                          width: "100px",
-                          height: "auto",
-                          marginRight: "10px",
-                        }}
-                      />
-                    </Link>
-                  </div>
-                  <div style={{ marginLeft: "20px" }} className="headersearch">
+                 
+                  <div  className="headersearch">
                     <ItemSearch />
                   </div>
                 </div>

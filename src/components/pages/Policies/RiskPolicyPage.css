@@ -1,0 +1,92 @@
+.policy-wrapper {
+    margin: 150px auto;
+    padding: 20px;
+    background-color: var(--white-color);
+}
+
+.riskPolicy-title {
+    font-family: var(--title-font);
+    font-size: 2rem;
+    color: var(--primary-text-color) ;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.risk-policy-intro {
+    font-family: var(--secondary-font);
+    color: var(--secondary-text-color);
+    line-height: 1.6;
+    margin-bottom: 30px;
+    text-align: justify;
+}
+
+/* Accordion container */
+.risk-custom-accordion .risk-accordion-item {
+    margin-bottom: 12px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    border: 1px solid var(--grey-color);
+}
+
+/* Header */
+.accordion-header {
+    width: 100%;
+    border: none;
+    text-align: left;
+    padding: 10px;
+font-size: clamp(0.75rem, 1.2vw, 0.9rem);
+    font-family: var(--secondary-font);
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--black-color);
+    transition: var(--transition);
+}
+
+
+/* Active state */
+.accordion-header.active {
+    background: var(--primary-hover-color);
+    color: var(--white-color);
+}
+
+/* Arrow */
+.arrow {
+    transition: transform 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.arrow.open {
+    transform: rotate(180deg);
+}
+
+/* Panel content */
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    background: var(--white-color);
+    padding: 0 20px;
+    transition: max-height 0.35s ease, padding 0.3s ease;
+}
+
+.accordion-content.show {
+    padding: 10px;
+    max-height: 500px;
+    /* enough for long content */
+    backdrop-filter: var(--overlay-blur);
+}
+
+/* List items */
+.accordion-content ul {
+    padding-left: 20px;
+}
+
+.accordion-content li {
+    margin-bottom: 10px;
+    font-family: var(--secondary-font);
+    color: var(--secondary-text-color);
+    line-height: 1.5;
+}

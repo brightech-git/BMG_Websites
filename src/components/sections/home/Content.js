@@ -1,8 +1,8 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect ,useState } from "react";
 import Banner from "./Banner";
 import Category from "./Category";
 import Category1 from "./Category1";
-import Condos from "./Condos";
+import Condos from "./ShopByPrice";
 import Ourcategory from "./Ourcategory";
 import Handpicked from "../homethree/Handpicked";
 import ShopByRecipient from "./ShopByRecipient";
@@ -26,6 +26,11 @@ import { useCategoryImages } from "../../../hook/categorywithImage/useCategoryQu
 import { useOfferBanners } from "../../../hook/banner/useOfferBanner";
 import { useBudgetBanners } from "../../../hook/budgetBanner/useBudgetBanners";
 import { useCategoryBanner } from "../../../hook/banner/useCategoriesBanner";
+import { useGenderBanner } from "../../../hook/genderBanner/useGender";
+import { useLatestBanner } from "../../../hook/lastestCollectionBanner/useLatestCollectionBanner";
+import { useBestDesignedBanners } from '../../../hook/BestDesignedBanner/useBestDesignedbanner';
+import { useFeaturedBanner } from "../../../hook/featuredBanner/useFeaturedBanner";
+import { useFestivalBanner } from "../../../hook/banner/useFestivalBanner";
 
 const Content = () => {
 
@@ -58,10 +63,8 @@ const Content = () => {
 
     const { data: budgetBanner, isLoading:budgerLoading, isError:budgetError } = useBudgetBanners();
    
-console.log(budgetBanner ,'budget')
     // Ensure it's an array and take only first 4 items
     const budgetBanners = Array.isArray(budgetBanner?.categories) ? budgetBanner?.categories.reverse().slice(0, 4) : [];
-    console.log(budgetBanners, 'budget')
 
 
     // ------------------------------CategoryImages--------------------------------//
@@ -69,10 +72,50 @@ console.log(budgetBanner ,'budget')
      const { data:CategoryData , isLoading : categoriesLoading, error:CategoryError } = useCategoryBanner();
 
     
-    // ------------------------------Video--------------------------------//
-    // ------------------------------Video--------------------------------//
-    // ------------------------------Video--------------------------------//
-    // ------------------------------Video--------------------------------//
+    // ------------------------------Shop for receipient--------------------------------//
+     const { data: genderBannerResponse } = useGenderBanner();
+        const recipientBanners = genderBannerResponse ?? [];
+
+    // ------------------------------Latest Banner Images --------------------------------//
+    const { data:LastestData, LatestisLoading, LatestisError } = useLatestBanner();
+
+    const [latestBanners, setLatestBanners] = useState();
+
+    useEffect(() => {
+        if (LastestData) {
+            setLatestBanners(LastestData)
+        }
+
+    }, [LastestData]);
+
+    // ------------------------------Best Designed Products--------------------------------//
+    const { data:bestData , bestIsLoading , bestIsError} = useBestDesignedBanners();
+
+    const [bestBanners , setBestBanners] =useState();
+
+     useEffect(()=>{
+         if (bestData){
+            setBestBanners(bestData)
+        }
+        
+     }, [bestData]);
+
+    // ------------------------------Featured Banners--------------------------------//
+    const { data:FeaturedBanner, featureIsLoading, FeatureIsError } = useFeaturedBanner();
+   const [featureBanner, setFeatureBanner] =useState();
+
+  useEffect(() => {
+      if (!FeaturedBanner)
+      return;
+    else {
+          setFeatureBanner(FeaturedBanner);
+    }
+  }, [FeaturedBanner]);  
+
+  //------------------------------Festival Banners--------------------//
+    const { data: festivalBannerResponse, festivalIsLoading, FestivalIsError } = useFestivalBanner();
+
+    const festivalBanners = festivalBannerResponse?.data || [];
 
 
     // ------------------------------Video--------------------------------//
@@ -110,28 +153,31 @@ console.log(budgetBanner ,'budget')
                 </RevealSection>
 
                 <RevealSection intensity={0.4}>
-                    <ShopByRecipient />
+                    <ShopByRecipient  banners={recipientBanners}  />
                 </RevealSection>
 
                 <RevealSection intensity={0.3}>
-                    <Ourproducts />
+                    <Ourproducts banners={latestBanners} isLoading={LatestisLoading} isError={LatestisError} />
                 </RevealSection>
 
-                <RevealSection intensity={0.3}>
+                {/* <RevealSection intensity={0.3}>
                     <TrendingProducts />
+                </RevealSection> */}
+
+               
+
+                <RevealSection intensity={0.3}>
+                    <FeaturedBanners banners={featureBanner} isLoading={featureIsLoading} isError={FeatureIsError}/>
                 </RevealSection>
 
                 <RevealSection intensity={0.3}>
-                    <JewelryShowcase />
+                    <Onsale festivalBanners={festivalBanners} isLoading={festivalIsLoading} isError={FestivalIsError}/>
                 </RevealSection>
 
                 <RevealSection intensity={0.3}>
-                    <FeaturedBanners />
+                    <JewelryShowcase banners={bestBanners} isLoading={bestIsLoading} isError={bestIsError}/>
                 </RevealSection>
 
-                <RevealSection intensity={0.3}>
-                    <Onsale />
-                </RevealSection>
                 {isVideo && <RevealSection intensity={0.3}>
                     <Video videoList={videoList} isLoading={videoLoading} isError={videoError} />
                 </RevealSection>}

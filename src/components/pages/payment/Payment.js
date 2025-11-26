@@ -4,32 +4,47 @@ import { useInitiatePayment } from "../../../hook/payment/useInitiatePayment";
 import { getPaymentRedirectUrl } from "../../../service/paymentServiceicici";
 import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom/cjs/react-router-dom";
-import './PaymentPage.css'
+import './PaymentPage.css';
+import { useOrderHistory } from "../../../hook/order/useOrderHistoryQuery";
 const PaymentPage = () => {
     const { orderId } = useParams();
     const history = useHistory();
+    const {data:orders } =useOrderHistory();
+    const existingOrders = orders?.orders;
+
+    console.log(existingOrders ,'orderexisted')
     const { mutate: initiatePayment } = useInitiatePayment();
     const location = useLocation();
     const orderPayload = location.state?.orderPayload;
 
     const totalAmount = orderPayload?.totalAmount.toFixed(2) ?? "N/A";
     const customerName = orderPayload?.customerName ?? "Customer";
+
     useEffect(() => {
         if (!orderId) {
             console.warn("No orderId provided");
             return;
         }
 
+        // 🔥 STEP 1: Do not allow multiple payment attempts for same order
+        const isOrderAlreadyProcessed = existingOrders?.some(
+            (order) => order.orderId === orderId
+        );
+
+        if (isOrderAlreadyProcessed) {
+            toast.warn("This order payment already attempted. Redirecting...");
+            history.replace("/account"); // or /orders page
+            return; // ❌ Stop here so API never calls again
+        }
+
+        // --- Your existing code below ---
         let cancelled = false;
-
-        const merchantTxnNo = orderId; // Use orderId directly for now
-
-        console.log("Initiating payment with merchantTxnNo:", merchantTxnNo);
+        const merchantTxnNo = orderId;
 
         initiatePayment(
             {
                 merchantTxnNo,
-                amount: totalAmount, 
+                amount: totalAmount,
                 currencyCode: 356,
                 payType: 0,
                 transactionType: "SALE",
@@ -40,7 +55,6 @@ const PaymentPage = () => {
             {
                 onSuccess: async (response) => {
                     if (cancelled) return;
-                    console.log("Payment initiated successfully:", response);
 
                     const { redirectURI, tranCtx } = response;
 
@@ -50,22 +64,18 @@ const PaymentPage = () => {
                                 redirectURI,
                                 tranCtx
                             );
-                            console.log("Redirecting to:", finalUrl);
                             window.location.href = finalUrl;
                         } catch (err) {
-                            console.error("Failed to get final redirect URL:", err);
                             toast.error("Failed to redirect");
                             history.push("/account");
                         }
                     } else {
-                        console.warn("Missing redirect info in response:", response);
                         toast.error("Missing redirect info");
                         history.push("/account");
                     }
                 },
-                onError: (error) => {
+                onError: () => {
                     if (cancelled) return;
-                    console.error("Payment initiation failed:", error);
                     toast.error("Payment failed");
                     history.push("/account");
                 },
@@ -75,7 +85,8 @@ const PaymentPage = () => {
         return () => {
             cancelled = true;
         };
-    }, [orderId, initiatePayment, history]);
+    }, [orderId, initiatePayment]);
+
 
     return (
         <div className="payment-page-container">

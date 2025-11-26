@@ -13,7 +13,7 @@ export const useNotification = () => useContext(NotificationContext);
 
 export const NotificationProvider = ({ children }) => {
     const [showPermissionModal, setShowPermissionModal] = useState(false);
-    const user = useSelector((state) => state.user.user) || {};
+    const user = useSelector((state) => state.user.user) || {}; 
     const [notifData, setNotifData] = useState({ title: "", message: "", image: "" });
     const { mutate: registerDevice } = useRegisterNotification();
 
@@ -43,8 +43,8 @@ console.log(fcmToken ,'fcmToken')
     useEffect(() => {
         const unsubscribe = onMessageListener()
             .then((payload) => {
-                //console.log("FCM foreground payload: ", payload);
-                const { title, body, image } = payload.notification;
+                console.log("FCM foreground payload: ", payload);
+                const { title, body, image ,url} = payload.data;
 
                 toast.info(
                     <div style={{ display: "flex", alignItems: "center" }}>
@@ -64,6 +64,7 @@ console.log(fcmToken ,'fcmToken')
                         <div>
                             <strong>{title}</strong>
                             <div>{body}</div>
+                            <div>{url}</div>
                         </div>
                     </div>,
                     {

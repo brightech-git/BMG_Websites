@@ -76,7 +76,7 @@ function App() {
   const [notifData, setNotifData] = useState({ title: "", message: "" });
   const [showHome, setShowHome] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [hasAccess, setHasAccess] = useState(false); // track maintenance login access
+  // const [hasAccess, setHasAccess] = useState(false); // track maintenance login access
   // Order notification states
   const [currentOrderIndex, setCurrentOrderIndex] = useState(0);
   const [showOrderNotification, setShowOrderNotification] = useState(false);
@@ -165,13 +165,13 @@ function App() {
 
   const currentOrder = flattenedOrders[currentOrderIndex];
 
-  const handleAccess = () => {
-    setHasAccess(true);
-  };
+  // const handleAccess = () => {
+  //   setHasAccess(true);
+  // };
 
-  if (!hasAccess) {
-    return <MaintenanceLogin onAccess={handleAccess} />;
-  }
+  // if (!hasAccess) {
+  //   return <MaintenanceLogin onAccess={handleAccess} />;
+  // }
 
   return (
     <Router basename="/">
@@ -210,31 +210,38 @@ function App() {
             <Route exact path="/home" component={Home} />
             <Route exact path="/about" component={About} />
             <PrivateRoute exact path="/account" component={Account} />
-            <Route exact path="/blog-detail" component={Blogdetail} />
+
+
+            {/* <Route exact path="/blog-detail" component={Blogdetail} />
             <Route exact path="/blog-grid" component={Bloggrid} />
             <Route exact path="/blog-grid-sidebar" component={Bloggridsidebar} />
-            <Route exact path="/blog-list" component={Bloglist} />
-            <PrivateRoute exact path="/cart" component={Cart} />
-            <PrivateRoute exact path="/checkout" component={Checkout} />
-            <Route exact path="/classification" component={Classification} />
-            <Route exact path="/coming-soon" component={Comingsoon} />
-            <Route exact path="/contact" component={Contact} />
-            <Route exact path="/gallery" component={Gallery} />
-            <Route exact path="/gallery-two" component={Gallerytwo} />
-            <Route exact path="/legal" component={Legal} />
+            <Route exact path="/blog-list" component={Bloglist} /> */}
+
+
+         
+
+            {/* <Route exact path="/classification" component={Classification} /> */}
+            {/* <Route exact path="/gallery" component={Gallery} />
+            <Route exact path="/gallery-two" component={Gallerytwo} /> */}
+            {/* <Route exact path="/legal" component={Legal} /> */}
+          {/* <Route exact path="/team" component={Team} /> */}
+          {/* <Route exact path="/typography" component={Typography} /> */}
+
+          <PrivateRoute exact path="/cart" component={Cart} />
+          <PrivateRoute exact path="/checkout" component={Checkout} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/forgot-password" component={ForgotPassword} />
             <Route exact path="/product-detail/:sno" component={Shopdetail} />
             <Route exact path="/products-page" component={Shopleft} />
-            <Route exact path="/team" component={Team} />
-            <Route exact path="/typography" component={Typography} />
+         
+
             <PrivateRoute exact path="/wishlist" component={Wishlist} />
             <PrivateRoute exact path="/payment/:orderId" component={PaymentPage} />
             <Route path="/account" component={AccountPage} />
             <Route path="/return" component={ReturnOrderFlow} />
             <Route exact path="/privacypolicy" component={PrivacyPolicy} />
-            <Route exact path="/risk-compliance policy" component={PolicyPage} />
+            <Route exact path="/risk-compliance-policy" component={PolicyPage} />
             <Route exact path="/cancellation-return-policy" component={CancellationReturnPolicy} />
             <Route exact path="/delivery&shipping" component={DeliveryShippingPolicy} />
             <Route exact path="/refund-policy" component={RefundPolicy} />
@@ -245,9 +252,12 @@ function App() {
             <Route exact path="/payment-success" component={PaymentStatus} />
             <Route exact path="/payment-failure" component={PaymentFailure} />
             <Route exact path="/appointment" component={Appointment} />
+            
             <Route exact path="/hero" component={EnchantedHero} />
             <Route exact path="/heros" component={UpdateMobileModal} />
             <Route component={Error} />
+          <Route exact path="/coming-soon" component={Comingsoon} />
+          <Route exact path="/contact" component={Contact} />
             <RouteTracker />
           </Switch>
         // </PageTransition>

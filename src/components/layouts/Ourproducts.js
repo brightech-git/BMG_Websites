@@ -2,24 +2,25 @@ import React, { useEffect, useRef, useState } from 'react';
 import { FiArrowRight } from 'react-icons/fi';
 import { useHistory } from 'react-router-dom';
 import './NewArrival.css';
-import { useLatestBanner } from '../../hook/lastestCollectionBanner/useLatestCollectionBanner';
 import { getProductImages } from '../../utils/getProductImages';
 
 
-const NewArrival = () => {
+const NewArrival = ({banners ,isLoading ,isError}) => {
+
     const bannerContainerRef = useRef(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [mousePosition, setMousePosition] = useState({ x: 0.5, y: 0.5 });
     const [isMobile, setIsMobile] = useState(false);
-    const { data ,isLoading ,isError} = useLatestBanner();
-    const [banners ,setBanners] = useState();
+  
+    // const [banners ,setBanners] = useState();
 
-    useEffect(() => {
-        if (data) {
-            console.log(data, "latestImage");
-            setBanners(data);
-        }
-    }, [data]); console.log(banners, "bannerdata");
+    // useEffect(() => {
+    //     if (data) {
+    //         setBanners(data);
+    //     }
+    // }, [data]); 
+    
+    console.log(banners, "bannerdata");
 
     const bannerImages = banners?.map((item) => getProductImages(item.Image) )|| [];
 

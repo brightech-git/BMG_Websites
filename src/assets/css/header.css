@@ -793,13 +793,12 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     top: 120%;
     left: 0;
     right: 0;
-    background: var(--primary-color);
+    background: var(--white-color);
     visibility: hidden;
     opacity: 0;
     transition: all 0.3s ease-out 0s;
     width: 50px;
     z-index: 10;
-    box-shadow: 0 0 50px var(--shadow-color);
 }
 
 .sigma-header .sigma-main-menu .menu-item-has-children:hover>.sub-menu {
@@ -820,7 +819,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     color: var(--primary-text-color);
     line-height: 30px;
     font-family: var(--secondary-font);
-    background-color: var(--primary-color);
+    background-color: var(--white-color);
 }
 
 .sigma-header .sigma-main-menu .menu-item-has-children>.sub-menu>li.menu-item:last-child>a {
@@ -891,9 +890,10 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     padding: 0 !important;
 }
 
+/*Lable */
 .sigma-header .sigma-main-menu .menu-item-has-children.menu-item-has-megamenu>.sub-menu .sigm-megamenu-nav>.nav-item>.nav-link {
     border: none !important;
-    background: var(--primary-color);
+    background: var(--white-color);
     color: var(--primary-text-color) ;
     font-weight: 500;
     padding: 0px !important;

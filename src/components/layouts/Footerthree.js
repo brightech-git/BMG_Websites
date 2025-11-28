@@ -140,9 +140,9 @@ const Footertwo = () => {
                     <li className="footer-link-item">
                       <Link to="/refund-policy" className="footer-link">Shipping & Returns</Link>
                     </li>
-                    {/* <li className="footer-link-item">
-                      <Link to="/size-guide" className="footer-link">Size Guide</Link>
-                    </li> */}
+                    <li className="footer-link-item">
+                      <Link to="/faq" className="footer-link">FAQ</Link>
+                    </li>
                   </ul>
                 </div>
               </div>

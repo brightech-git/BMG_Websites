@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { ArrowUp } from 'lucide-react';
 import './Backtotop.css';
 
 class Backtotop extends Component {
@@ -43,15 +44,16 @@ class Backtotop extends Component {
     return (
       <Link
         to="#"
-        className={`back-to-top-btn ${isTop ? 'back-to-top-visible' : ''}`}
+        className={`back-to-top-btn ${isTop ? 'back-to-top-visible animate-fade-in-up' : ''} hover-lift`}
         id="backToTop"
         onClick={(e) => {
           e.preventDefault(); // Prevent jumping
           this.scrollToTop();
         }}
-        aria-label="Scroll to top"
+        aria-label="Back to top"
       >
-        <i className="fas fa-angle-double-up back-to-top-icon" />
+        <ArrowUp className="back-to-top-icon" size={18} />
+        <span className="back-to-top-text text-xs">Back to Top</span>
       </Link>
     );
   }

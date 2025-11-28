@@ -21,6 +21,7 @@ import './assets/css/flaticon.css';
 import './assets/fonts/flaticon/flaticon-2.css';
 import './assets/css/default.css';
 import './assets/css/style.css';
+import './assets/css/animations.css';
 
 import 'swiper/css';
 import 'swiper/css/autoplay';
@@ -42,18 +43,18 @@ root.render(
       <QueryClientProvider client={queryClient}>
         <NotificationProvider>
           <CompanyDetailsProvider>
-          <BrowserRouter>
-            <App />
-            <ToastContainer
-              position="top-right"
-              autoClose={2000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              pauseOnHover
-              draggable
-            />
-          </BrowserRouter>
+            <BrowserRouter>
+              <App />
+              <ToastContainer
+                position="top-right"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                pauseOnHover
+                draggable
+              />
+            </BrowserRouter>
           </CompanyDetailsProvider>
         </NotificationProvider>
       </QueryClientProvider>

@@ -1,70 +1,128 @@
-/* Container */
+/* ===================================================================
+   FAQ COMPONENT STYLES
+   Professional, Responsive Design using Root CSS Variables
+   =================================================================== */
+
+/* Wrapper */
+.faq-wrapper {
+    min-height: 100vh;
+    background-color: var(--primary-color);
+}
+
+/* Main Container */
 .faq-container {
     font-family: var(--secondary-font);
     color: var(--primary-text-color);
-    background-color: var(--primary-card-color);
-    padding: 1rem;
-    margin-top: 150px;
+    background-color: var(--white-color);
+    padding: 2rem;
+    margin: 150px auto 3rem;
+    max-width: 900px;
+    width: 100%;
+    box-shadow: var(--shadow-md);
+    border-radius: var(--radius-lg);
 }
 
-/* Header section: Title left, dropdown right */
+/* Header Section */
 .faq-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
 }
 
-.faq-header h1 {
+.faq-title-header {
     font-family: var(--title-font);
-    font-size: 2rem;
-    font-weight: bold;
+    font-size: 2.5rem;
+    font-weight: 700;
     color: var(--primary-text-color);
     margin: 0;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
 }
-.faq-title-header{
 
-}
 .faq-header-select {
-    padding: 0.25rem;
-    font-size: 0.9rem;
+    padding: 0.25rem ;
+    font-size: 0.95rem;
+    font-family: var(--secondary-font);
     border-radius: var(--radius-md);
-    border: 1px solid var(--grey-color);
     background-color: var(--white-color);
     color: var(--primary-text-color);
+    cursor: pointer;
+    transition: var(--transition);
+    min-width: 80px;
+    outline: none;
+    height: 40px;
+    border: 1px solid var(--grey-color);
 }
 
-/* Accordion section */
+.faq-header-select:hover {
+    border-color: var(--primary-hover-color);
+    box-shadow: var(--shadow-sm);
+}
+
+
+
+/* FAQ Section Container */
 .faq-section {
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.faq-section-group {
+    margin-bottom: 1.5rem;
+}
+
+.faq-section-group:last-child {
+    margin-bottom: 0;
 }
 
 .faq-section h2 {
-    font-size: 1.25rem;
+    font-family: var(--secondary-font);
+    font-size: 1.1rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    color: var(--primary-text-color);
+    margin-bottom: 1.25rem;
+    margin-top: 2rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--primary-card-color);
 }
 
-/* Accordion items */
+.faq-section-group:first-child h2 {
+    margin-top: 0;
+}
+
+/* FAQ Accordion Items */
 .faq-item {
-    border: 1px solid var(--grey-color);
+    border: 1px solid var(--primary-card-color);
     border-radius: var(--radius-md);
     overflow: hidden;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    background-color: var(--white-color);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.faq-item:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-hover-color);
 }
 
 .faq-item button {
     width: 100%;
     text-align: left;
-    padding: 0.5rem 0.75rem;
+    padding: 1.25rem 1.5rem;
     background-color: var(--secondary-card-color);
     border: none;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.95rem;
+    font-size: 1rem;
+    font-family: var(--secondary-font);
+    font-weight: 500;
+    color: var(--primary-text-color);
     transition: var(--transition);
+    gap: 1rem;
 }
 
 .faq-item button:hover {
@@ -72,23 +130,246 @@
     color: var(--white-color);
 }
 
+.faq-item button:focus {
+    outline: none;
+    box-shadow: inset 0 0 0 2px var(--white-color);
+}
+
+.faq-item button span:first-child {
+    flex: 1;
+    line-height: 1.5;
+}
+
+.faq-item button span:last-child {
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1;
+    min-width: 24px;
+    text-align: center;
+    transition: var(--transition);
+    color: var(--primary-hover-color);
+}
+
+.faq-item button:hover span:last-child {
+    color: var(--white-color);
+    transform: rotate(90deg);
+}
+
+/* Answer Content */
 .faq-item .answer {
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem;
     background-color: var(--white-color);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    line-height: 1.8;
+    color: var(--secondary-text-color);
+    overflow: hidden;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        max-height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    to {
+        opacity: 1;
+        max-height: 1000px;
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+}
+
+.faq-item .answer p {
+    margin: 0;
+    color: var(--secondary-text-color);
 }
 
 .faq-item .answer ul {
     list-style-type: disc;
-    margin-left: 1rem;
+    margin-bottom: 0;
+    padding-left: 0.5rem;
 }
 
 .faq-item .answer li {
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.55rem;
+    color: var(--secondary-text-color);
+    line-height: 1.7;
 }
 
-/* Reduce unnecessary spacing and oversized buttons */
-.faq-item button span:last-child {
-    font-weight: bold;
-    font-size: 1.1rem;
+.faq-item .answer li:last-child {
+    margin-bottom: 0;
+}
+
+/* ===================================================================
+   RESPONSIVE DESIGN
+   =================================================================== */
+
+/* Tablet Devices (max-width: 992px) */
+@media (max-width: 992px) {
+    .faq-container {
+        padding: 1.75rem;
+        margin: 120px auto 2rem;
+        max-width: 95%;
+    }
+
+    .faq-title-header {
+        font-size: 2.25rem;
+    }
+
+    .faq-section h2 {
+        font-size: 1rem;
+    }
+
+    .faq-item button {
+        padding: 1.1rem 1.25rem;
+        font-size: 0.95rem;
+    }
+}
+
+/* Mobile Devices (max-width: 768px) */
+@media (max-width: 768px) {
+    .faq-container {
+        padding: 1.5rem;
+        margin: 100px auto 2rem;
+        border-radius: var(--radius-md);
+    }
+
+    
+
+    .faq-title-header {
+        font-size: 2rem;
+        width: 100%;
+    }
+
+    .faq-header-select {
+        width: 100%;
+    }
+
+    .faq-section h2 {
+        font-size: 0.8rem;
+    }
+
+    .faq-item {
+        margin-bottom: 0.875rem;
+    }
+
+    .faq-item button {
+        padding: 1rem 1.15rem;
+        font-size: 0.9rem;
+        flex-wrap: wrap;
+    }
+
+    .faq-item button span:first-child {
+        width: calc(100% - 30px);
+    }
+
+    .faq-item button span:last-child {
+        font-size: 1.35rem;
+    }
+
+    .faq-item .answer {
+        font-size: 0.75rem;
+    }
+
+    .faq-item .answer ul {
+        margin-left: 0.25rem;
+    }
+}
+
+/* Small Mobile Devices (max-width: 480px) */
+@media (max-width: 480px) {
+    .faq-container {
+        padding: 0.75rem;
+        margin: 150px auto 1.5rem;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .faq-title-header {
+        font-size: 1.75rem;
+    }
+
+    .faq-header-select {
+        font-size: 0.75rem;
+    }
+
+    .faq-section h2 {
+        font-size: 0.75rem;
+    }
+
+    .faq-item button {
+        padding: 0.875rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    .faq-item button span:last-child {
+        font-size: 1.25rem;
+        min-width: 20px;
+    }
+
+    .faq-item .answer {
+        font-size: 0.725rem;
+        line-height: 1.7;
+    }
+
+    .faq-item .answer ul {
+        margin-left: 0.5rem;
+    }
+
+    .faq-item .answer li {
+        margin-bottom: 0.25rem;
+    }
+}
+
+/* Extra Small Devices (max-width: 360px) */
+@media (max-width: 360px) {
+    .faq-container {
+        padding: 1rem;
+    }
+
+    .faq-title-header {
+        font-size: 1.5rem;
+    }
+
+    .faq-item button {
+        padding: 0.75rem 0.875rem;
+    }
+
+    .faq-item .answer {
+        padding: 0.275rem;
+    }
+}
+
+/* ===================================================================
+   ACCESSIBILITY & FOCUS STATES
+   =================================================================== */
+
+.faq-item button:focus-visible {
+    outline: 2px solid var(--primary-hover-color);
+    outline-offset: 2px;
+}
+
+.faq-header-select:focus-visible {
+    outline: 2px solid var(--primary-hover-color);
+    outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+    .faq-container {
+        box-shadow: none;
+        border: 1px solid var(--grey-color);
+    }
+
+    .faq-item {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .faq-item button {
+        background-color: var(--white-color) !important;
+        color: var(--primary-text-color) !important;
+    }
 }

@@ -3,8 +3,7 @@
 .testimonials-section {
   max-width: 100%;
   margin: 0 auto;
-  padding: 4rem 0;
-  background: var(--primary-color);
+  padding: 2rem 0;
   font-family: var(--secondary-font);
   overflow: hidden;
 }

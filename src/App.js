@@ -2,29 +2,30 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import Preloader from './components/layouts/Preloader';
+// import Preloader from './components/layouts/Preloader';
 import Home from './components/pages/Home';
 import About from './components/pages/About';
 import Account from './components/pages/Account';
-import Blogdetail from './components/pages/Blogdetail';
-import Bloggrid from './components/pages/Bloggrid';
-import Bloggridsidebar from './components/pages/Bloggridsidebar';
-import Bloglist from './components/pages/Bloglist';
+import FAQ from './components/layouts/faq';
+import { faqContent, languages } from './components/layouts/faqContent';
+// import Bloggrid from './components/pages/Bloggrid';
+// import Bloggridsidebar from './components/pages/Bloggridsidebar';
+// import Bloglist from './components/pages/Bloglist';
 import Cart from './components/pages/Cart';
 import Checkout from './components/pages/Checkout';
-import Classification from './components/pages/Classification';
+// import Classification from './components/pages/Classification';
 import Comingsoon from './components/pages/Comingsoon';
 import Contact from './components/pages/Contact';
 import Error from './components/pages/Error';
-import Gallery from './components/pages/Gallery';
-import Gallerytwo from './components/pages/Gallerytwo';
-import Legal from './components/pages/Legal';
+// import Gallery from './components/pages/Gallery';
+// import Gallerytwo from './components/pages/Gallerytwo';
+// import Legal from './components/pages/Legal';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import Shopdetail from './components/pages/Shopdetail';
 import Shopleft from './components/pages/Shopleft';
-import Team from './components/pages/Team';
-import Typography from './components/pages/Typography';
+// import Team from './components/pages/Team';
+// import Typography from './components/pages/Typography';
 import Wishlist from './components/pages/Wishlist';
 import PrivacyPolicy from './components/pages/Policies/Privacy';
 import PaymentPage from './components/pages/payment/Payment';
@@ -34,7 +35,7 @@ import TermsConditions from './components/pages/Policies/TermsConditions';
 import PrivateRoute from './route/UserPrivateRoute';
 import DeliveryShippingPolicy from './components/pages/Policies/DeliveryAndShipping';
 import ForgotPassword from './components/pages/ForgotPassword';
-import PaymentSuccess from './components/pages/PaymentSuccess';
+// import PaymentSuccess from './components/pages/PaymentSuccess';
 import WhyChooseUs from "./components/pages/Policies/WhyChooseUs";
 import Appointment from './components/pages/virtualShop/Appointment';
 import BangleSizeGuide from './components/pages/SizeGuide/BangleSize';
@@ -50,8 +51,8 @@ import PaymentFailure from './components/pages/PaymentFailure';
 import PaymentStatus from './components/pages/paymentStatus';
 import Logo from "./assets/img/logo1.jpg";
 import './App.css';
-import PageTransition from './components/layouts/PageTransition';
-import ProductOrdersModal from './components/layouts/ProductOrdersModal';
+// import PageTransition from './components/layouts/PageTransition';
+// import ProductOrdersModal from './components/layouts/ProductOrdersModal';
 import { useAllOrders } from './hook/order/useOrderHistoryQuery';
 import { OrderNotification } from './components/layouts/ProductOrdersModal';
 import EnchantedHero from './assets/videos/EnchantedHero';
@@ -255,6 +256,14 @@ function App() {
             
             <Route exact path="/hero" component={EnchantedHero} />
             <Route exact path="/heros" component={UpdateMobileModal} />
+
+          <Route
+            exact
+            path='/faq'
+            render={() => <FAQ languages={languages} content={faqContent} />}
+          />
+
+
             <Route component={Error} />
           <Route exact path="/coming-soon" component={Comingsoon} />
           <Route exact path="/contact" component={Contact} />

@@ -1,5 +1,5 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
+import React ,{useMemo} from 'react';
+import { useHistory  } from 'react-router-dom';
 import Slider from 'react-slick';
 import useFilterProducts from '../../../hook/product/useFilterProducts';
 import './handpicked.css';
@@ -29,6 +29,8 @@ const NoBlurNavButton = ({ direction, onClick }) => {
 // PRODUCT CARD
 // ------------------------------
 const NoBlurProductCard = ({ product }) => {
+
+    console.log(product ,'productsfordata')
     const baseUrl = "https://app.bmgjewellers.com";
 
     const handleProductClick = (e, sno) => {
@@ -86,28 +88,30 @@ const NoBlurProductCard = ({ product }) => {
 // ------------------------------
 // HIGHLIGHTED PRODUCTS
 // ------------------------------
-const NoBlurHighlightedProducts = ({ itemCtrName, subItemName }) => {
+const NoBlurHighlightedProducts = React.memo(({ itemCtrName }) => {
     const { data, loading, error } = useFilterProducts(
-        { itemCtrName, subItemName },
+        { itemCtrName },
         0,
         3
     );
 
+    const highlightProducts = useMemo(
+        () => (data && Array.isArray(data?.data?.data) ? data?.data?.data : []),
+        [data]
+    );
+    console.log("dataforproducts", highlightProducts)
     if (loading) return <div className="noblur-text-center">Loading products...</div>;
     if (error) return <div className="noblur-text-center noblur-text-danger">Error loading products</div>;
-
-    if (!Array.isArray(data?.data) || data.data.length === 0) {
-        return <div className="noblur-text-center">No highlighted products</div>;
-    }
+    if (highlightProducts.length === 0) return <div className="noblur-text-center">No highlighted products</div>;
 
     return (
         <div className="noblur-products-grid">
-            {data.data.map((product, index) => (
-                <NoBlurProductCard key={`product-${index}`} product={product} />
+            {highlightProducts.map((product) => (
+                <NoBlurProductCard key={product?.SNO} product={product} />
             ))}
         </div>
     );
-};
+});
 
 
 // ------------------------------
@@ -177,7 +181,7 @@ const NoBlurHandpicked = ({ data, isLoading, error }) => {
                                 {/* MAIN BANNER IMAGE */}
                                 <div
                                     className="noblur-main-img"
-                                    onClick={() => handleShopNow(banner?.itemName, banner?.subItemName)}
+                                    onClick={() => handleShopNow(banner?.itemName)}
                                     role="button"
                                     tabIndex={0}
                                     aria-label={`View ${banner?.itemName || ""} collection`}
@@ -192,7 +196,6 @@ const NoBlurHandpicked = ({ data, isLoading, error }) => {
                                 {/* SUB PRODUCTS */}
                                 <NoBlurHighlightedProducts
                                     itemCtrName={banner?.itemName}
-                                    subItemName={banner?.subItemName}
                                 />
 
                             </div>

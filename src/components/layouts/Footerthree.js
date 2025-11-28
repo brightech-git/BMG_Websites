@@ -1,667 +1,255 @@
-import React, { Component, Fragment } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import Backtotop from "./Backtotop";
 import logo from "./logo.png";
 import "./Footer.css";
-import btsLogo from './btsLogo.jpg'
+import btsLogo from './btsLogo.jpg';
+import { useFooterContent } from "../../hook/footer/useFooterContent";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useCompanyDetails } from "../../context/clientDetails/clientDetialContext";
 
-class Footertwo extends Component {
-  render() {
-    return (
-      <Fragment>
-        <Backtotop />
-        <footer className="footer-two">
-          {/* Main Footer Content */}
-          <div className="footer-widget-area pt-100 pb-50">
-            <div className="container">
-              <div className="row">
-                {/* Site Info */}
-                <div className="col-lg-3 col-sm-6 order-1">
-                  <div className="widget site-info-widget mb-50">
-                    <div className="footer-logo mb-50">
-                      <img src={logo} alt="Logo" />
-                    </div>
-                    {/* <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua.
-                    </p> */}
-                    <div className="social-links mt-40">
-                      <a
-                        href="https://www.facebook.com/bmgjewellersmadurai?mibextid=ZbWKwL"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <i className="fab fa-facebook-f" />
-                      </a>
-                      <a
-                        href="https://x.com/BMGjewellers24?t=bMxPT0NbhA5RzvLl5pCdLA&s=09"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <i className="fab fa-twitter" />
-                      </a>
-                      <a
-                        href="https://www.instagram.com/bmgjewellers_madurai?igsh=MWxyZGIxbnl5aDc5Nw=="
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <i className="fab fa-instagram" />
-                      </a>
-                      {/* <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
-                        <i className="fab fa-linkedin" />
-                      </a> */}
-                      <a
-                        href="https://youtube.com/@bmgjewellersmadurai?si=FvRFbXc7tEAkzSUu"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <i className="fab fa-youtube" />
-                      </a>
-                    </div>
+const Footertwo = () => {
 
-                    {/* Download App Section */}
-                    <div className="download-app-section mt-30">
-                      <h6 className="mb-3">
-                        Download Our App
-                      </h6>
-                      <div className="app-download-links">
-                        <a
-                          href="https://play.google.com/store/apps/details?id=com.jk_08.newapp&pcampaignid=web_share"
-                          className="app-download-link"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{
-                            display: "inline-block",
-                            marginRight: "10px",
-                            marginBottom: "10px",
-                          }}
-                        >
-                          <img
-                            src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg"
-                            alt="Download on App Store"
-                            style={{ height: "40px" }}
-                          />
-                        </a>
-                        <a
-                          href="https://play.google.com/store/apps/details?id=com.jk_08.newapp&pcampaignid=web_share"
-                          className="app-download-link"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{
-                            display: "inline-block",
-                            marginBottom: "10px",
-                          }}
-                        >
-                          <img
-                            src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
-                            alt="Get it on Google Play"
-                            style={{ height: "40px" }}
-                          />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
+  const history =useHistory();
+  const { data: footerContent } = useFooterContent();
+  const {details} = useCompanyDetails();
+
+
+
+  const footerCategory = footerContent?.entries|| [];
+
+  const itemNames = footerCategory.map((item)=>{
+    console.log(item.title ,'itemnames');
+  })
+  console.log(itemNames,'itemNames');
+  return (
+    <>
+      <Backtotop />
+      <footer className="footer-two">
+        {/* Main Footer Content */}
+        <div className="footer-widget-area">
+          <div className="footer-container">
+            <div className="footer-grid">
+              {/* Brand Section */}
+              <div className="footer-brand-section">
+                <div className="footer-logo">
+                  <img src={logo} alt="BMG Jewellers" className="footer-logo-img" />
+                </div>
+                <p className="footer-brand-description">
+                  Your trusted partner in exquisite jewelry since inception.
+                  Crafting timeless pieces with unparalleled craftsmanship.
+                </p>
+                <div className="footer-social-links">
+                  <a
+                    href="https://www.facebook.com/bmgjewellersmadurai?mibextid=ZbWKwL"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="social-link"
+                    aria-label="Facebook"
+                  >
+                    <i className="fab fa-facebook-f" />
+                  </a>
+                  <a
+                    href="https://x.com/BMGjewellers24?t=bMxPT0NbhA5RzvLl5pCdLA&s=09"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="social-link"
+                    aria-label="Twitter"
+                  >
+                    <i className="fab fa-twitter" />
+                  </a>
+                  <a
+                    href="https://www.instagram.com/bmgjewellers_madurai?igsh=MWxyZGIxbnl5aDc5Nw=="
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="social-link"
+                    aria-label="Instagram"
+                  >
+                    <i className="fab fa-instagram" />
+                  </a>
+                  <a
+                    href="https://youtube.com/@bmgjewellersmadurai?si=FvRFbXc7tEAkzSUu"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="social-link"
+                    aria-label="YouTube"
+                  >
+                    <i className="fab fa-youtube" />
+                  </a>
                 </div>
 
-                {/* Useful Links */}
-                <div className="col-lg-6 order-3 order-lg-2">
-                  <div className="widget nav-widget mb-50">
-                    <h4 className="widget-title">Useful Links</h4>
-                    <ul className="useful-links">
-                      <li>
-                        <Link to="/about">About Us</Link>
-                      </li>
-                      <li>
-                        <Link to="/privacypolicy">Privacy Policy</Link>
-                      </li>
-                      <li>
-                        <Link to="/terms-conditions">Terms & Conditions</Link>
-                      </li>
-                      <li>
-                        <Link to="/risk-compliance-policy">Mitigation & Compliance Policy</Link>
-                      </li>
-                      <li>
-                        <Link to="/cancellation-return-policy">
-                          Cancellation & Return Policy
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="/refund-policy">Shipping and Returns</Link>
-                      </li>
-                      <li>
-                        <Link to="/why-choose-us">why choose us</Link>
-                      </li>
-                      <li>
-                        <Link to="/bangle-size-guide">Bangle Size Guide</Link>
-                      </li>
-                      <li>
-                        <Link to="/ring-size-guide">Ring Size Guide</Link>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-
-                {/* Contact Info */}
-                <div className="col-lg-3 col-sm-6 order-2 order-lg-3">
-                  <div className="widget contact-widget mb-50">
-                    <h4 className="widget-title">Contact Us.</h4>
-                    <div className="contact-lists">
-                      <div className="contact-box">
-                        <div className="icon">
-                          <i className="flaticon-phone" />
-                        </div>
-                        <div className="desc">
-                          <h6 className="title">Phone Number</h6>
-                          <span> +91-95143 33601,</span>
-                          <span> +91-95143 33609</span>
-                        </div>
-                      </div>
-                      <div className="contact-box">
-                        <div className="icon">
-                          <i className="flaticon-message" />
-                        </div>
-                        <div className="desc">
-                          <h6 className="title">Email Address</h6>
-                          <Link to="#">Contact@bmgjewellers.in</Link>
-                        </div>
-                      </div>
-                      <div className="contact-box">
-                        <div className="icon">
-                          <i className="flaticon-location-pin" />
-                        </div>
-                        <div className="desc">
-                          <h6 className="title">Office Address</h6>
-                          <span>M/s. BMG Jewellers Pvt Ltd, 160, Melamasi St,
-                            Madurai-625001
-                          </span>
-                        </div>
-                      </div>
-                    </div>
+                {/* Download App Section */}
+                <div className="footer-app-section">
+                  <h6 className="app-section-title">Download Our App</h6>
+                  <div className="app-download-buttons">
+                    <a
+                      href="https://play.google.com/store/apps/details?id=com.jk_08.newapp&pcampaignid=web_share"
+                      className="app-download-btn"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg"
+                        alt="Download on App Store"
+                        className="app-store-img"
+                      />
+                    </a>
+                    <a
+                      href="https://play.google.com/store/apps/details?id=com.jk_08.newapp&pcampaignid=web_share"
+                      className="app-download-btn"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                        alt="Get it on Google Play"
+                        className="play-store-img"
+                      />
+                    </a>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* Popular Searches Section */}
-          <div
-            className="popular-searches py-5"
-            style={{ backgroundColor: "#f5f6f0" }}
-          >
-            <div className="container">
-              <h5
-                className="mb-4 text-uppercase"
-                style={{ fontWeight: 600 }}
-              >
-                Popular Searches
-              </h5>
-
-              <div className="row">
-                {/* Column 1 */}
-                <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="font-weight-bold">Rings</h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="/products-page?itemCtrName=RINGS&subItemName=DAILY WEAR">
-                        Daily Wear
+              {/* Quick Links */}
+              <div className="footer-links-section">
+                <h4 className="footer-section-title">Quick Links</h4>
+                <div className="footer-links-grid">
+                  <ul className="footer-links-list">
+                    <li className="footer-link-item">
+                      <Link to="/about" className="footer-link">About Us</Link>
+                    </li>
+                    <li className="footer-link-item">
+                      <Link to="/why-choose-us" className="footer-link">Why Choose Us</Link>
+                    </li>
+                    <li className="footer-link-item">
+                      <Link to="/privacypolicy" className="footer-link">Privacy Policy</Link>
+                    </li>
+                    <li className="footer-link-item">
+                      <Link to="/terms-conditions" className="footer-link">Terms & Conditions</Link>
+                    </li>
+                
+             
+                    <li className="footer-link-item">
+                      <Link to="/risk-compliance-policy" className="footer-link">Compliance Policy</Link>
+                    </li>
+                    <li className="footer-link-item">
+                      <Link to="/cancellation-return-policy" className="footer-link">
+                        Return Policy
                       </Link>
                     </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=RINGS&subItemName=STATEMENT RINGS">
-                        Statement Rings
-                      </Link>
+                    <li className="footer-link-item">
+                      <Link to="/refund-policy" className="footer-link">Shipping & Returns</Link>
                     </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=RINGS&subItemName=COUPLE RINGS">
-                        Couple Rings
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=RINGS&subItemName=ENGAGEMENT RINGS">
-                        Engagement Rings
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=RINGS&subItemName=WEDDING RINGS">
-                        Wedding Rings
-                      </Link>
-                    </li>
-                  </ul>
-
-                  <h6 className="font-weight-bold mt-3">Earrings</h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="/products-page?itemCtrName=EARRINGS&subItemName=JHUMAKAS">
-                        Jhumkas
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=EARRINGS&subItemName=STUDS">
-                        Studs
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=EARRINGS&subItemName=CHANDBALIS">
-                        Chandbalis
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=EARRINGS&subItemName=DANGLERS">
-                        Danglers
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-
-                {/* Column 2 */}
-                <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="font-weight-bold">
-                    Necklaces & Sets
-                  </h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="/products-page?itemCtrName=NECKLACES&subItemName=CHOCKER SETS">
-                        Chocker sets
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=NECKLACES&subItemName=LONG HARAM">
-                        Long Haram
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=NECKLACES&subItemName=SHORT CHAINS">
-                        Short Chains
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=NECKLACES&subItemName=TEMPLE SETS">
-                        Temple sets
-                      </Link>
-                    </li>
-                  </ul>
-
-                  <h6 className="font-weight-bold mt-3">
-                    Bangles & Bracelets
-                  </h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="/products-page?itemCtrName=BANGLES&subItemName=KADAS">
-                        Kadas
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=BANGLES&subItemName=CLOSED BANGLES">
-                        Closed Bangles
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=BANGLES&subItemName=OPENABLE BANGLES">
-                        Openable Bangles
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=BANGLES&subItemName=ADJUSTABLE BRACELETS">
-                        Adjustable Bracelets
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-
-                {/* Column 3 */}
-                <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="font-weight-bold">
-                    Ankles & Toe Rings
-                  </h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="/products-page?itemCtrName=ANKLES&subItemName=TRADITIONAL ANKLETS">
-                        Traditional Anklets
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=ANKLES&subItemName=FANCY ANKLETS">
-                        Fancy Anklets
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=ANKLES&subItemName=TOE RINGS">
-                        Toe Rings
-                      </Link>
-                    </li>
-                  </ul>
-
-                  <h6 className="font-weight-bold mt-3">
-                    Pendants & Chains
-                  </h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="/products-page?itemCtrName=PENDANTS&subItemName=NAME PENDANTS">
-                        Name Pendants
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=PENDANTS&subItemName=STONE PENDANTS">
-                        Stone Pendants
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=PENDANTS&subItemName=PLAIN CHAINS">
-                        Plain Chains
-                      </Link>
-                    </li>
-                  </ul>
-
-                  <h6 className="font-weight-bold mt-3">
-                    Maang Tikka & Hair
-                  </h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="/products-page?itemCtrName=MAANG TIKKA&subItemName=BRIDAL">
-                        Bridal
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=MAANG TIKKA&subItemName=FESTIVE LOOK">
-                        Festive Look
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-
-                {/* Column 4 */}
-                <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="font-weight-bold">
-                    Bridal Collection
-                  </h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="/products-page?itemCtrName=BRIDAL&subItemName=FULL SETS">
-                        Full Sets
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=BRIDAL&subItemName=BRIDAL EARRINGS">
-                        Bridal Earrings
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=BRIDAL&subItemName=BRIDAL BANGLES">
-                        Bridal Bangles
-                      </Link>
-                    </li>
-                  </ul>
-
-                  <h6 className="font-weight-bold mt-3">
-                    Temple Jewellery
-                  </h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="/products-page?itemCtrName=TEMPLE&subItemName=TRADITIONAL KEMP">
-                        Traditional Kemp
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=TEMPLE&subItemName=MATTE GOLD FINISH">
-                        Matte Gold Finish
-                      </Link>
-                    </li>
-                  </ul>
-
-                  <h6 className="font-weight-bold mt-3">
-                    Men's Jewellery
-                  </h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="/products-page?itemCtrName=MEN&subItemName=CHAINS">
-                        Chains
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=MEN&subItemName=KADA">
-                        Kada
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=MEN&subItemName=RINGS">
-                        Rings
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              {/* Second Row */}
-              <div className="row mt-3">
-                {/* Column 1 */}
-                <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="font-weight-bold">Kids Jewellery</h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="/products-page?itemCtrName=KIDS&subItemName=CUTE NECKPIECES">
-                        Cute Neckpieces
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=KIDS&subItemName=MINI BANGLES">
-                        Mini Bangles
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=KIDS&subItemName=STUDS">
-                        Studs
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-
-                {/* Column 2 */}
-                <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="font-weight-bold">
-                    Oxidised Jewellery
-                  </h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="/products-page?itemCtrName=OXIDISED&subItemName=GERMAN SILVER">
-                        German Silver
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=OXIDISED&subItemName=ANTIQUE LOOK SETS">
-                        Antique Look Sets
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-
-                {/* Column 3 */}
-                <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="font-weight-bold">
-                    Customised Jewellery
-                  </h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="/products-page?itemCtrName=CUSTOMISED&subItemName=NAME JEWELLERY">
-                        Name Jewellery
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=CUSTOMISED&subItemName=ALPHABET PENDANTS">
-                        Alphabet Pendants
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=CUSTOMISED&subItemName=BIRTHSTONE RINGS">
-                        BirthStone Rings
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-
-                {/* Column 4 */}
-                <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="font-weight-bold">Gift Ideas</h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="/products-page?maxGrandTotal=999">
-                        Under Rs.999
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?maxGrandTotal=1999">
-                        Under Rs.1999
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?maxGrandTotal=2999">
-                        Under Rs.2999
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?minGrandTotal=3000">
-                        Above Rs.3000
-                      </Link>
-                    </li>
-                    {/* <li>
-                      <Link to="/products-page?itemCtrName=GIFTS&subItemName=FOR HIM">
-                        For Him
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=GIFTS&subItemName=FOR HER">
-                        For Her
-                      </Link>
+                    {/* <li className="footer-link-item">
+                      <Link to="/size-guide" className="footer-link">Size Guide</Link>
                     </li> */}
                   </ul>
                 </div>
               </div>
 
-              {/* Third Row */}
-              <div className="row mt-3">
-                <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="font-weight-bold">
-                    Festival Specials
-                  </h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="/products-page?itemCtrName=FESTIVAL&subItemName=NAVARATRI">
-                        Navaratri
+              {/* Contact Information */}
+              <div className="footer-contact-section">
+                <h4 className="footer-section-title">Get In Touch</h4>
+                <div className="contact-info-list">
+                  <div className="contact-info-item">
+                    <div className="contact-icon">
+                      <i className="flaticon-phone" />
+                    </div>
+                    <div className="footer-contact-details">
+                      <h6 className="footer-contact-label">Phone Number</h6>
+                      <div className="contact-numbers">
+                        <span>{details?.phone || ""}</span>
+                        {/* <span>+91-95143 33609</span> */}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="contact-info-item">
+                    <div className="contact-icon">
+                      <i className="flaticon-message" />
+                    </div>
+                    <div className="footer-contact-details">
+                      <h6 className="footer-contact-label">Email Address</h6>
+                      <Link to="mailto:Contact@bmgjewellers.in" className="contact-email">
+                        {details?.email || ""}
                       </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=FESTIVAL&subItemName=DIWALI">
-                        Diwali
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=FESTIVAL&subItemName=WEDDING SEASON">
-                        Wedding Season Picks
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="font-weight-bold">Clearance Sale</h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="/products-page?itemCtrName=CLEARANCE&subItemName=HEAVY DISCOUNT">
-                        Heavy Discount
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=CLEARANCE&subItemName=LAST STOCK">
-                        Last Stock Items
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="font-weight-bold">Offers</h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="/products-page?itemCtrName=OFFER&subItemName=BUY 2 GET 1">
-                        Buy 2 Get 1
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=OFFER&subItemName=50 OFF">
-                        50% Off
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="col-lg-3 col-sm-6 mb-3">
-                  <h6 className="font-weight-bold">New Arrivals</h6>
-                  <ul className="footer-links">
-                    <li>
-                      <Link to="/products-page?itemCtrName=NEW&subItemName=TRENDING">
-                        Trending Now
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/products-page?itemCtrName=NEW&subItemName=JUST IN">
-                        Just In
-                      </Link>
-                    </li>
-                  </ul>
+                    </div>
+                  </div>
+                  <div className="contact-info-item">
+                    <div className="contact-icon">
+                      <i className="flaticon-location-pin" />
+                    </div>
+                    <div className="footer-contact-details">
+                      <h6 className="footer-contact-label">Store Location</h6>
+                      <address className="contact-address">
+                        {details?.address1 || ""}<br />
+                        {details?.address2 || ""}<br />
+                        {details?.areaCode || ""}
+                      </address>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+        <div className=" bg-white p-2 border-b">
+          <h5 className="text-md ">Quick Search</h5>
+        <div className="flex items-center p-1" >
 
-          {/* Copyright Section */}
-          <div className="copyright-area pt-30 pb-30">
-            <div className="container">
-              <div className="d-flex justify-content-between align-items-center flex-wrap copy-right">
+          <h6 className="text-sm items-center mr-5" > Categories</h6>
+          {footerCategory.map((item, idx) => (
+            <React.Fragment key={idx}>
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  if (item.link) {
+                    history.push(item.link)
+                  }
+                }}
+                className="flex row-reverse text-xs"
+              >
+                {item.title}
+              </span>
 
-                {/* Left Side */}
-                <p className="copyright-text copyright-two mb-0">
-                  © 2025, <Link to="#" className="bmg">BMG Jewellers Pvt Ltd</Link>
+              {/* Add separator "|" ONLY between items, not after last one */}
+              {idx !== footerCategory.length - 1 && <span> | </span>}
+            </React.Fragment>
+          ))}
+        </div>
+        </div>
+
+        {/* Copyright Section */}
+        <div className="footer-copyright">
+          <div className="footer-container">
+            <div className="copyright-content">
+              <div className="copyright-text">
+                <p>
+                  © 2025 <Link to="/" className="company-name">BMG Jewellers Pvt Ltd</Link>.
+                  All rights reserved.
                 </p>
-
-                {/* Right Side */}
-                <div className="footer-menu d-flex align-items-center">
-                  <span
-                    style={{
-                      color: "var(--primary-hover-color)",
-                      fontSize: "14px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Crafted By
-                  </span>
-                  <img
-                    src={btsLogo}
-                    alt="Brightech Logo"
-                    style={{ width: "25px", height: "25px", margin: "0 5px" }}
-                  />
-                  <a
-                    href="https://www.brightechsoftware.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      color: "var(--primary-text-color)",
-                      fontSize: "14px",
-                      textDecoration: "none",
-                      fontWeight: "800",
-                      marginLeft: "4px",
-                    }}
-                  >
-                    BrightechSoftware Solutions
-                  </a>
-                </div>
+              </div>
+              <div className="developer-credit">
+                <span className="crafted-by">Crafted By</span>
+                <img
+                  src={btsLogo}
+                  alt="Brightech Software Solutions"
+                  className="developer-logo"
+                />
+                <a
+                  href="https://www.brightechsoftware.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="developer-link"
+                >
+                  Brightech Software Solutions
+                </a>
               </div>
             </div>
           </div>
-
-        </footer>
-      </Fragment>
-    );
-  }
-}
+        </div>
+      </footer>
+    </>
+  );
+};
 
 export default Footertwo;

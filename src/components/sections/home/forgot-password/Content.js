@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import { forgotPassword, resetPassword, clearError } from '../../../../redux/slices/userSlice';
-import loginbg from '../../../../assets/img/bg/sign.webp';
 import './ForgotPassword.css';
 
 const ForgotPassword = () => {
@@ -124,7 +123,7 @@ const ForgotPassword = () => {
                                                     }
                                                 }}
                                                 maxLength={10}
-                                                className={errors.contactNumber ? 'is-invalid' : ''}
+                                                className={errors.contactNumber?'is-invalid':'mobile-input'}
                                                 required
                                             />
                                             {errors.contactNumber && (
@@ -132,19 +131,21 @@ const ForgotPassword = () => {
                                             )}
                                         </div>
 
-                                        <div className="auth-link-container">
-                                            <Link to="/login" className="auth-link">
-                                                Remember your password? <span className="auth-link-login">Login</span>
-                                            </Link>
-                                        </div>
-
+                                       
+                                        <div className='button-section'>
                                         <button
                                             type="submit"
-                                            className="primary-btn"
+                                            className="btn-main main-filled"
                                             disabled={loading}
                                         >
                                             {loading ? 'Sending OTP...' : 'Send OTP'}
                                         </button>
+                                        </div>
+                                        <div className="auth-link-container">
+                                            <Link to="/login" className="auth-link">
+                                                Are you Remembered your password? <span className="auth-link-login">Login</span>
+                                            </Link>
+                                        </div>
                                     </form>
                                 ) : (
                                     <form onSubmit={handleResetPassword}>
@@ -161,7 +162,7 @@ const ForgotPassword = () => {
                                                     }
                                                 }}
                                                 maxLength={6}
-                                                className={errors.otp ? 'is-invalid' : ''}
+                                                className={errors.otp ? 'is-invalid' : 'mobile-input'}
                                                 required
                                             />
                                             {errors.otp && <div className="error-feedback">{errors.otp}</div>}
@@ -178,7 +179,7 @@ const ForgotPassword = () => {
                                                         setErrors({ ...errors, newPassword: '' });
                                                     }
                                                 }}
-                                                className={errors.newPassword ? 'is-invalid' : ''}
+                                                className={errors.newPassword ? 'is-invalid' : 'mobile-input'}
                                                 required
                                             />
                                             {errors.newPassword && (
@@ -197,22 +198,22 @@ const ForgotPassword = () => {
                                                         setErrors({ ...errors, confirmPassword: '' });
                                                     }
                                                 }}
-                                                className={errors.confirmPassword ? 'is-invalid' : ''}
+                                                className={errors.confirmPassword ? 'is-invalid' : 'mobile-input'}
                                                 required
                                             />
                                             {errors.confirmPassword && (
                                                 <div className="error-feedback">{errors.confirmPassword}</div>
                                             )}
                                         </div>
-
+                                            <div className='button-section'>
                                         <button
                                             type="submit"
-                                            className="primary-btn"
+                                            className="btn-main main-filled"
                                             disabled={loading}
                                         >
                                             {loading ? 'Resetting...' : 'Reset Password'}
                                         </button>
-
+                                            </div>
                                         <p className="resend-prompt">
                                             Didn't receive OTP?{' '}
                                             <button
@@ -223,6 +224,7 @@ const ForgotPassword = () => {
                                                 Resend OTP
                                             </button>
                                         </p>
+                                   
                                     </form>
                                 )}
                             </div>

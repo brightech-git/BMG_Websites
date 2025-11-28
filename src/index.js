@@ -30,7 +30,7 @@ import 'swiper/css/navigation';
 import { Provider } from 'react-redux';
 import { store } from './store/index'; // adjust path
 import { NotificationProvider } from './context/notification/NotificationContext';
-
+import { CompanyDetailsProvider } from './context/clientDetails/clientDetialContext';
 const queryClient = new QueryClient();
 
 // ✅ Use createRoot instead of ReactDOM.render
@@ -41,6 +41,7 @@ root.render(
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <NotificationProvider>
+          <CompanyDetailsProvider>
           <BrowserRouter>
             <App />
             <ToastContainer
@@ -53,6 +54,7 @@ root.render(
               draggable
             />
           </BrowserRouter>
+          </CompanyDetailsProvider>
         </NotificationProvider>
       </QueryClientProvider>
     </Provider>

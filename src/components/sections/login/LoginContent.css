@@ -5,7 +5,7 @@
     align-items: center;
 }
 
-.login-section .container {
+.login-auth-section .container {
     max-width: 1200px;
     padding: 0 20px;
 }
@@ -25,7 +25,7 @@
 /* Visual Section */
 .login-visual {
     background: linear-gradient(135deg, var(--primary-hover-color) 0%, var(--gold-color) 100%);
-    background-image: url('../../../assets/img/bg/sign.webp');
+    background-image: url('../../../assets/img/bg/11.jpg');
     background-size: cover;
     background-position: center;
     background-blend-mode: overlay;

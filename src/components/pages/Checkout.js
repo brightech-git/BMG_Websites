@@ -3,7 +3,6 @@ import { useLocation, useHistory } from 'react-router-dom';
 import MetaTags from 'react-meta-tags';
 import Header from '../layouts/HeaderWithAuth';
 import Breadcrumb from '../layouts/Breadcrumbs';
-import Instafeeds from '../layouts/Instafeeds';
 import Footer from '../layouts/Footerthree';
 import Content from '../sections/checkout/Content';
 
@@ -33,7 +32,7 @@ const Checkout = () => {
             <Header />
             {/* <Breadcrumb pages={"Checkout"} /> */}
             <Content />
-            {/* <Instafeeds /> */}
+
             <Footer />
         </Fragment>
     );

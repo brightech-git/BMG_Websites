@@ -6,7 +6,6 @@
 
 .jewel-carousel {
     padding: 2rem 0;
-    background-color: var(--primary-color);
     font-family: var(--secondary-font);
     position: relative;
     overflow: hidden;

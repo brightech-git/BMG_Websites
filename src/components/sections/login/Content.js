@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import loginbg from '../../../assets/img/bg/sign.webp';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, clearError } from '../../../redux/slices/userSlice';
 import './LoginContent.css';
 import GoogleLoginButton from '../register/GoogleLoginButton';
+import { usePostNotification } from '../../../hook/notification/useNotificationQuery';
 
 const Content = () => {
     const [contactOrEmailOrUsername, setContactOrEmailOrUsername] = useState('');
@@ -14,6 +14,8 @@ const Content = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const location = useLocation();
+
+    const { mutate } = usePostNotification(); 
 
     const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
     const error = useSelector((state) => state.user.error);
@@ -33,14 +35,17 @@ const Content = () => {
                     password: password,
                 })
             ).unwrap();
-
+            console.log(resultAction ,'resultActions')
             if (resultAction?.token) {
                 setContactOrEmailOrUsername('');
                 setPassword('');
                 setLocalError(null);
 
+                
+
                 const lastVisited = localStorage.getItem("lastVisited");
-                console.log("Last visited:", lastVisited);
+                
+                
                 let parsedLastVisited = null;
 
                 try {

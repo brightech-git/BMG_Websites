@@ -1,171 +1,118 @@
-/* Terms & Conditions Styles */
+/* Terms Wrapper */
 .terms-wrapper {
     background-color: var(--primary-color);
-    padding: 3rem 1rem;
+    padding: 2rem 1rem;
     font-family: var(--secondary-font);
     color: var(--primary-text-color);
-    min-height: 100vh;
-    margin-top: 90px;
+    margin-top: 150px;
 }
 
+/* Container */
 .terms-container {
     max-width: 960px;
     margin: 0 auto;
 }
 
+/* Page Heading */
 .terms-heading {
-    font-family: var(--primary-font);
-    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-size: 16px;
+    font-weight: 600;
     text-align: center;
-    margin-bottom: 2rem;
-    color: var(--black-color);
-    font-weight: 500;
-}
-
-.terms-card {
-    background: var(--primary-color);
-    border-radius: 12px;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 8px var(--shadow-color);
-}
-
-.terms-card-body {
-    padding: 1.5rem;
-}
-
-.terms-card-content {
-    display: flex;
-    gap: 1.5rem;
-}
-
-.terms-icon {
-    color: var(--primary-hover-color);
-    font-size: 1.5rem;
-    min-width: 40px;
-    padding-top: 0.3rem;
-}
-
-.terms-section-heading {
-    font-family: var(--primary-font);
-    font-size: clamp(1.2rem, 1.8vw, 1.5rem);
-    margin-bottom: 1rem;
-    color: var(--primary-text-color);
-}
-
-.terms-list {
-    padding-left: 1.5rem;
-    margin: 1rem 0;
-}
-
-.terms-list li {
-    font-size: clamp(0.9rem, 1.1vw, 1rem);
-    line-height: 1.8;
-    margin-bottom: 0.5rem;
+    margin-bottom: 20px;
     color: var(--black-color);
 }
 
-.terms-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    margin: 1rem 0;
-}
-
-@media (min-width: 768px) {
-    .terms-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-.terms-box {
+/* Accordion Card */
+.terms-accordion {
     background: var(--primary-card-color);
-    border-radius: 8px;
-    padding: 1.2rem;
-    border: 1px solid var(--grey-color);
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px var(--shadow-color);
+    padding: 10px 14px;
 }
 
-.terms-box h5 {
-    font-size: clamp(1rem, 1.2vw, 1.2rem);
-    margin-bottom: 0.5rem;
-    color: var(--primary-text-color);
+/* Accordion Header */
+.terms-accordion summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--black-color);
+    list-style: none;
 }
 
-.terms-box ul {
-    padding-left: 1.2rem;
-    margin: 0.5rem 0 0;
+.terms-accordion summary::-webkit-details-marker {
+    display: none;
 }
 
-.terms-box ul li {
-    font-size: clamp(0.85rem, 1vw, 0.95rem);
+/* Icon */
+.terms-icon {
+    font-size: 16px;
+    color: var(--primary-hover-color);
+}
+
+/* Arrow Icon */
+.term-arrow-icon {
+    margin-left: auto;
+    transition: transform 0.3s ease;
+    font-size: 10px;
+}
+
+/* Rotate arrow when open */
+details[open] .term-arrow-icon {
+    transform: rotate(180deg);
+}
+
+/* Accordion Content */
+.terms-content {
+    padding-left: 18px;
+    margin-top: 10px;
+    font-size: 12px;
     line-height: 1.6;
-    margin-bottom: 0.3rem;
+    color: var(--black-color);
 }
 
-.payment-online {
-    background-color: rgba(2, 73, 8, 0.1);
+.terms-content li {
+    font-size: 12px;
+        list-style-type: disc;
+        /* 🔹 Dot bullet */
+        margin-left: 16px;
+        line-height: 1.5;
+        color: var(--black-color);
+        margin-bottom: 6px;
 }
 
-.payment-cod {
-    background-color: rgba(207, 220, 221, 0.3);
-}
-
+/* Notes */
 .terms-note {
-    padding: 0.8rem 1rem;
-    border-radius: 6px;
-    margin-top: 1rem;
-    font-size: clamp(0.85rem, 1vw, 0.95rem);
+    background: var(--secondary-card-color);
+    padding: 10px;
+    margin-top: 10px;
+    border-left: 3px solid var(--primary-hover-color);
+    font-size: 12px;
+    border-radius: 4px;
 }
 
-.terms-note.info {
-    background-color: var(--secondary-card-color);
-    border-left: 4px solid var(--primary-hover-color);
-}
-
-.terms-note.warning {
-    background-color: rgba(205, 134, 92, 0.1);
-    border-left: 4px solid var(--primary-hover-color);
-}
-
-.terms-note.secondary {
-    background-color: rgba(169, 169, 169, 0.1);
-    border-left: 4px solid var(--grey-color);
-}
-
+/* Last Updated */
 .terms-update {
     text-align: center;
-    margin-top: 2rem;
-    padding: 0.8rem;
-    background-color: var(--primary-card-color);
+    font-size: 12px;
+    margin-top: 20px;
+    background: var(--primary-card-color);
+    padding: 10px;
     border-radius: 6px;
-    font-size: clamp(0.85rem, 1vw, 0.95rem);
 }
 
+/* Mobile Responsive */
 @media (max-width: 768px) {
     .terms-wrapper {
         margin-top: 110px;
         padding-top: 1.5rem;
     }
 
-    .terms-card-content {
+    .terms-accordion summary {
         flex-direction: column;
-        gap: 1rem;
-    }
-
-    .terms-icon {
-        align-self: flex-start;
-    }
-}
-
-@media (max-width: 576px) {
-    .terms-card-body {
-        padding: 1rem;
-    }
-
-    .terms-list {
-        padding-left: 1rem;
-    }
-
-    .terms-box {
-        padding: 1rem;
+        align-items: flex-start;
     }
 }

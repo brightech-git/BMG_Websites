@@ -96,12 +96,12 @@ const JewelryShowcase = ({banners , isLoading ,isError}) => {
                                     />
                                 ))}
                             </div>
-                            <div className="carousel-overlay-best" onClick={handleSeeAll}>
+                            {/* <div className="carousel-overlay-best" onClick={handleSeeAll}>
                                 <div className="view-collection-best">
                                     <span>View Collection</span>
                                     <FiArrowRight className="arrow-icon" />
                                 </div>
-                            </div>
+                            </div> */}
 
 
                         </div>
@@ -135,7 +135,7 @@ const JewelryShowcase = ({banners , isLoading ,isError}) => {
                             </div>
 
                             <button
-                                className="premium-shop-btn"
+                                className="btn-main main-filled"
                                 onClick={handleSeeAll}
                                 aria-label="Shop Now for best designed jewels"
                             >

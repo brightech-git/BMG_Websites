@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import MetaTags from "react-meta-tags";
 import Header from '../layouts/HeaderWithAuth';
 import Breadcrumb from '../layouts/Breadcrumbs';
-import Instafeeds from '../layouts/Instafeeds';
+
 import Footer from '../layouts/Footerthree';
 import Content from '../sections/blogdetail/Content';
 
@@ -20,7 +20,7 @@ class Blogdetail extends Component {
                 <Header/>
                 <Breadcrumb breadcrumb={{pagename:'Blog Detail'}}/>
                 <Content/>
-                <Instafeeds/>
+              
                 <Footer/>
             </Fragment>
         );

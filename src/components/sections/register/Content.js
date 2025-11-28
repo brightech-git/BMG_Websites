@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signup, verifyOtp, clearError } from '../../../redux/slices/userSlice';
-import loginbg from '../../../assets/img/bg/sign.webp';
 import GoogleLoginButton from './GoogleLoginButton';
 import './Register.css';
 

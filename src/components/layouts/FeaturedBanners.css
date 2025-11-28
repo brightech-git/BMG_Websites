@@ -78,7 +78,6 @@ margin: 0 auto;
 }
 
 .fb-banner-item:hover {
-    transform: translateY(-5px);
     box-shadow: 0 4px 15px var(--shadow-color);
 }
 
@@ -89,9 +88,7 @@ margin: 0 auto;
     transition: transform 0.5s ease;
 }
 
-.fb-banner-item:hover .fb-banner-image {
-    transform: scale(1.05);
-}
+
 
 .fb-overlay {
     position: absolute;
@@ -143,19 +140,12 @@ margin: 0 auto;
     backdrop-filter: var(--overlay-blur);
 }
 
-.fb-cta-btn:hover {
-    background-color: rgba(255, 255, 255, 0.9);
-    border-color: rgba(255, 255, 255, 0.9);
-}
+
 
 .fb-btn-arrow {
     transition: transform 0.3s ease;
 }
 
-.fb-cta-btn:hover .fb-btn-arrow,
-.fb-explore-btn:hover .fb-btn-arrow {
-    transform: translateX(5px);
-}
 
 .fb-featured-banner {
     height: 500px;

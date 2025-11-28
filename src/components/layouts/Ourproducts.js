@@ -134,13 +134,14 @@ const NewArrival = ({banners ,isLoading ,isError}) => {
                             onMouseMove={handleMouseMove}
                             onMouseLeave={handleMouseLeave}
                         >
-                            <div className="arrival-shimmer-overlay"></div>
+                   
                             <div className="arrival-banner-wrapper">
                                 {bannerImages.map((img, index) => (
                                     <img
                                         key={index}
                                         src={img}
                                         alt={`New Arrival Banner ${index + 1}`}
+                                        onClick={handleExplore}
                                         className={`arrival-banner-img ${index === currentImageIndex ? 'arrival-active' : ''}`}
                                         loading="lazy"
                                         style={{
@@ -151,12 +152,12 @@ const NewArrival = ({banners ,isLoading ,isError}) => {
                                     />
                                 ))}
                             </div>
-                            <div className="arrival-carousel-overlay">
+                            {/* <div className="arrival-carousel-overlay">
                                 <div className="arrival-view-collection" onClick={handleExplore}>
                                     <span>Explore New Arrivals</span>
                                     <FiArrowRight className="arrival-arrow-icon" />
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>

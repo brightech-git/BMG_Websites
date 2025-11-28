@@ -1,0 +1,94 @@
+/* Container */
+.faq-container {
+    font-family: var(--secondary-font);
+    color: var(--primary-text-color);
+    background-color: var(--primary-card-color);
+    padding: 1rem;
+    margin-top: 150px;
+}
+
+/* Header section: Title left, dropdown right */
+.faq-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.faq-header h1 {
+    font-family: var(--title-font);
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-text-color);
+    margin: 0;
+}
+.faq-title-header{
+
+}
+.faq-header-select {
+    padding: 0.25rem;
+    font-size: 0.9rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--grey-color);
+    background-color: var(--white-color);
+    color: var(--primary-text-color);
+}
+
+/* Accordion section */
+.faq-section {
+    margin-bottom: 1rem;
+}
+
+.faq-section h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+/* Accordion items */
+.faq-item {
+    border: 1px solid var(--grey-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.faq-item button {
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    background-color: var(--secondary-card-color);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+.faq-item button:hover {
+    background-color: var(--primary-hover-color);
+    color: var(--white-color);
+}
+
+.faq-item .answer {
+    padding: 0.5rem 0.75rem;
+    background-color: var(--white-color);
+    font-size: 0.9rem;
+}
+
+.faq-item .answer ul {
+    list-style-type: disc;
+    margin-left: 1rem;
+}
+
+.faq-item .answer li {
+    margin-bottom: 0.25rem;
+}
+
+/* Reduce unnecessary spacing and oversized buttons */
+.faq-item button span:last-child {
+    font-weight: bold;
+    font-size: 1.1rem;
+}

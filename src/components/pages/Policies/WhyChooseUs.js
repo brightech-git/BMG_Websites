@@ -15,8 +15,8 @@ const BMGJewellers = () => {
       {/* Header Section */}
       <header className="header">
         <div className="header-content">
-          <h1 >BMG Jewellers Pvt Ltd</h1>
-          <p>Where tradition meets elegance, and every piece tells a story. Discover the finest jewelry crafted with passion and precision.</p>
+        
+         
         </div>
       </header>
       
@@ -115,9 +115,11 @@ const BMGJewellers = () => {
 const BenefitCard = ({ title, icon, content }) => {
   return (
     <div className="benefit-card">
-      <div className="card-header">{title}</div>
-      <div className="card-body">
-        <div className="icon">{icon}</div>
+      <div className='card-header-container'>
+      <span className="card-icon">{icon}</span> <span className="card-header-title">{title}</span>
+      </div>
+      <div className="card-body-container">
+        
         {content.map((paragraph, index) => (
           <p key={index}>{paragraph}</p>
         ))}

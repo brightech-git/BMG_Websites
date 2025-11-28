@@ -49,8 +49,8 @@ const OurCategory = ({subcategories ,isCategoriesLoading}) => {
     }
 
     return (
-        <section className="elegant-category-section">
-            <div className="elegant-container">
+        <section className="elegant-category-sections">
+            <div className="elegant-containers">
                 <div className="elegant-header">
                     <h2 className="content-title">BMG WORLD</h2>
                 </div>
@@ -60,22 +60,22 @@ const OurCategory = ({subcategories ,isCategoriesLoading}) => {
                     {subcategories.map((category) => (
                         <div
                             key={category.id}
-                            className="elegant-card"
+                            className="elegant-cards"
                             onClick={() => handleItemClick(category.item_name)}
                         >
-                            <div className="elegant-image-container">
+                            <div className="elegant-image-containers">
                                 <img
                                     src={`${baseUrl}${category.image_path}`}
                                     alt={formatItemName(category.item_name)}
-                                    className="elegant-image"
+                                    className="elegant-images"
                                     loading="lazy"
                                 />
                             </div>
-                            <div className="elegant-details">
+                            {/* <div className="elegant-details">
                                 <h3 className="elegant-title">
                                     {formatItemName(category.item_name)}
                                 </h3>
-                            </div>
+                            </div> */}
                         </div>
                     ))}
 

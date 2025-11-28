@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import MetaTags from "react-meta-tags";
 import Header from '../layouts/HeaderWithAuth';
 import Breadcrumb from '../layouts/Breadcrumbs';
-import Instafeeds from '../layouts/Instafeeds';
 import Footer from '../layouts/Footerthree';
 import Content from '../sections/cart/Content';
 
@@ -20,7 +19,7 @@ class Cart extends Component {
                 <Header/>
                 <Breadcrumb pages={"Cart"} />
                 <Content/>
-                <Instafeeds/>
+      
                 <Footer/>
             </Fragment>
         );

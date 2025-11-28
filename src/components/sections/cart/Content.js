@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { useCart } from '../../../hook/cart/useCartQuery';
 import { useSingleProductQuery } from '../../../hook/product/useSingleProductQuery';
-import fallbackImage from '../../../assets/img/shop/image-4 (2).jpg';
+import fallbackImage from '../../../assets/img/bg/78.jpg';
 import "./Cart.css";
 
 // CartItem component with enhanced pricing and skeleton loading

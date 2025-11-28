@@ -53,7 +53,7 @@
 .hero-media {
     position: relative;
     width: 100%;
-    padding-top: 45%;
+    padding-top: 50%;
     height: 0;
     border-radius: 15px;
     overflow: hidden;
@@ -221,7 +221,7 @@
         margin-top: 70px ;
     }
     .hero-media {
-        padding-top: 55%;
+        padding-top: 50%;
     }
 
     .banner-hero-title {
@@ -243,7 +243,7 @@
             margin-top: 140px;
         }
     .hero-media {
-        padding-top: 65%;
+        padding-top: 50%;
     }
 
     .hero-content {
@@ -279,7 +279,7 @@
 
 @media (max-width: 576px) {
     .hero-media {
-        padding-top: 55%;
+        padding-top: 50%;
     }
 
     .hero-content {
@@ -309,7 +309,7 @@
 
 @media (max-width: 400px) {
     .hero-media {
-        padding-top: 55%;
+        padding-top: 48%;
     }
 
     .hero-content {

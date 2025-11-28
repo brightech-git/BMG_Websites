@@ -175,7 +175,7 @@ export const changePassword = createAsyncThunk(
  //googleLogin
 export const googleLogin = createAsyncThunk(
     "user/googleLogin",
-    async (idToken, thunkAPI) => {
+    async ({ idToken, onSuccess }, thunkAPI) => {
         try {
             const response = await googleLoginService(idToken);
             console.log('Google Login Response:', response);
@@ -188,10 +188,13 @@ export const googleLogin = createAsyncThunk(
             }
             toast.success("✅ Google login successful!", {
                 position: "top-right",
-                autoClose: 2000,
+                autoClose: 3000,
             });
+            if (onSuccess) onSuccess(response);
 
             return response;
+
+          
         } catch (error) {
             toast.error(error.message || "Google login failed", {
                 position: "top-right",

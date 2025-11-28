@@ -98,10 +98,10 @@
     border: none;
 }
 
-.pus-budget-card:hover {
+/* .pus-budget-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-}
+} */
 
 .pus-image-container {
     position: relative;
@@ -118,10 +118,10 @@
     transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.pus-budget-card:hover .pus-card-image {
+/* .pus-budget-card:hover .pus-card-image {
     transform: scale(1.08);
     filter: brightness(1.05);
-}
+} */
 
 /* Gradient Overlay */
 .pus-gradient-overlay {
@@ -138,10 +138,10 @@
     opacity: 0.8;
     transition: opacity 0.3s ease;
 }
-
+/* 
 .pus-budget-card:hover .pus-gradient-overlay {
     opacity: 0.9;
-}
+} */
 
 /* Content Overlay */
 .pus-content-overlay {

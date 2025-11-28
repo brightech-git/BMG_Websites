@@ -64,7 +64,7 @@ console.log(fcmToken ,'fcmToken')
                         <div>
                             <strong>{title}</strong>
                             <div>{body}</div>
-                            <div>{url}</div>
+                         
                         </div>
                     </div>,
                     {

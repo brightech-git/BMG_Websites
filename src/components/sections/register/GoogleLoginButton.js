@@ -2,16 +2,36 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { googleLogin } from "../../../redux/slices/userSlice";
 
-
+import { usePostNotification } from "../../../hook/notification/useNotificationQuery";
 const GoogleLoginButton = () => {
 
     const dispatch = useDispatch();
+    const{mutate} =usePostNotification();
+
     const handleCredentialResponse = (response) => {
         const idToken = response.credential;
         console.log("Encoded JWT ID token:", idToken);
 
         // Dispatch to Redux (calls backend + saves user)
-        dispatch(googleLogin(idToken));
+        dispatch(
+            googleLogin({
+                idToken,
+                onSuccess: (loginResponse) => {
+                    const userId = loginResponse.id; // or wherever userId is returned
+                    const tempId = 4; // replace with your actual template ID for "Login Successful"
+
+                    mutate({ tempId, userId }, {
+                        onSuccess: () => {
+                            console.log("Login notification sent successfully!");
+                        },
+                        onError: (err) => {
+                            console.error("Failed to send login notification:", err);
+                        }
+                    });
+                }
+            })
+        );
+
     };
 
     useEffect(() => {

@@ -7,7 +7,7 @@
     margin: 160px 0px 0px 0px;
 }
 
-.auth-section .container {
+.register-auth .container {
     max-width: 1200px;
     padding: 0 20px;
 }
@@ -27,7 +27,7 @@
 /* Visual Section */
 .auth-visual {
     background: linear-gradient(135deg, rgba(205, 134, 92, 0.9), rgba(212, 163, 115, 0.8));
-    background-image: url('../../../assets/img/bg/sign.webp');
+    background-image: url('../../../assets/img/bg/11.jpg');
     background-size: cover;
     background-position: center;
     background-blend-mode: overlay;

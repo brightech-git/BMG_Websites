@@ -2,7 +2,6 @@
 
 .collections-showcase {
     padding: 80px 0;
-    background: var(--primary-color);
     position: relative;
     overflow: hidden;
     width: 100%;
@@ -68,9 +67,7 @@
     background: var(--white-color, #fff);
 }
 
-.collection-card:hover {
-    transform: translateY(-8px);
-}
+
 
 /* Secondary Collections */
 .secondary-collections {
@@ -83,9 +80,7 @@
     height: 250px;
 }
 
-.secondary-collection .collection-card:hover {
-    transform: translateY(-5px);
-}
+
 
 /* Collection Image */
 .collection-image {
@@ -105,9 +100,7 @@
     transition: transform 0.4s ease;
 }
 
-.collection-card:hover .collection-image img {
-    transform: scale(1.05);
-}
+
 
 .collection-overlay {
     position: absolute;
@@ -219,7 +212,7 @@
 
 .collection-card:hover .explore-button {
     opacity: 1;
-    transform: translateX(0);
+
 }
 
 .arrow-icon {
@@ -681,13 +674,9 @@
     }
 
     /* Only apply hover transformations on non-touch devices */
-    .collection-card:hover {
-        transform: translateY(-8px);
-    }
+   
 
-    .secondary-collection .collection-card:hover {
-        transform: translateY(-5px);
-    }
+   
 
     .collection-card:hover .collection-image img {
         transform: scale(1.05);

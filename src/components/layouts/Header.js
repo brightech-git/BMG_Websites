@@ -18,7 +18,7 @@ import { useRatesQuery } from "../../hook/rate/useRatesQuery"; // Add this impor
 import './Header.css';
 import { useHeaderData } from "../../hook/header/useNavData";
 import { motion, AnimatePresence } from "framer-motion";
-
+import { useCompanyDetails } from "../../context/clientDetails/clientDetialContext";
 
 const Header = ({ isAuthenticated }) => {
   const width = useScreenWidth();
@@ -31,6 +31,13 @@ const Header = ({ isAuthenticated }) => {
   const [showRates, setShowRates] = useState(false); // State to toggle rates display
   const dispatch = useDispatch();
   const { data } = useHeaderData();
+
+  const { details } = useCompanyDetails();
+
+ 
+
+  const companyData = details ||{};
+  console.log(companyData, 'detailsAboutcompany');
   const NavData = data
   //console.log('NacData', NavData)
 
@@ -461,9 +468,9 @@ const Header = ({ isAuthenticated }) => {
 
                                                       </div>
                                                     )}
-                                                    <span className="menu-card-label">
+                                                    {/* <span className="menu-card-label">
                                                       {item.name || item.label}
-                                                    </span>
+                                                    </span> */}
                                                   </div>
                                                 </div>
                                               ))}

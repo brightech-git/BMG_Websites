@@ -1,5 +1,4 @@
 .recipient-section {
-    background-color: var(--primary-color);
     padding: 2.5rem 1rem;
     font-family: var(--secondary-font);
     margin: 0 auto;
@@ -158,10 +157,10 @@
     animation: fadeIn 0.5s ease forwards;
 }
 
-.recipient-card:hover .recipient-image,
+/* .recipient-card:hover .recipient-image,
 .recipient-card:focus .recipient-image {
     transform: scale(1.04);
-}
+} */
 
 .recipient-overlay {
     position: absolute;
@@ -175,10 +174,10 @@
     z-index: 3;
 }
 
-.recipient-card:hover .recipient-overlay,
+/* .recipient-card:hover .recipient-overlay,
 .recipient-card:focus .recipient-overlay {
     opacity: 0.5;
-}
+} */
 
 .recipient-label {
     position: absolute;
@@ -230,11 +229,11 @@
     opacity: 0;
 }
 
-.recipient-card:hover .recipient-button,
+/* .recipient-card:hover .recipient-button,
 .recipient-card:focus .recipient-button {
     opacity: 1;
     transform: translateX(-50%) scale(1.05);
-}
+} */
 
 
 .recipient-button:focus {

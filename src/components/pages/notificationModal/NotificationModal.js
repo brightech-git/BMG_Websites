@@ -30,7 +30,7 @@ const NotificationModal = ({ show, onClose, onAllow, title, message, image, type
                         </button>
                     </div>
                 )}
-                {/* If type === "message", no buttons */}
+               
             </div>
         </div>
     );

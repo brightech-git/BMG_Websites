@@ -19,12 +19,6 @@
 
 
 
-.header-content {
-  background: rgba(0, 0, 0, 0.3);
-  padding: 2rem;
-  border-radius: 10px;
-  margin-top: 190px;
-}
 
 .header-content h1 {
   font-family: var(--title-font);
@@ -83,15 +77,21 @@
   transform: translateY(-10px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
-
-.card-header {
-  font-family: var(--primary-font);
-  font-size: 1.5rem;
-  color: var(--green-color);
-  margin-bottom: 1rem;
+.card-header-container{
+  display: flex;
+  align-items: center;
   text-align: center;
+  gap:5px;
 }
 
+.card-header-title {
+  font-size: clamp(1rem , 2vh , 1.5rem);
+  font-weight: bold;
+  font-family: var(--secondary-font);
+}
+.card-icon{
+  font-size: 1rem;
+}
 .card-body {
   text-align: center;
 }

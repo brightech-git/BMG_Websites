@@ -6,9 +6,10 @@
 
 .riskPolicy-title {
     font-family: var(--title-font);
-    font-size: 2rem;
+    font-size: 1.5rem;
+    font-weight: bolder;
     color: var(--primary-text-color) ;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     text-align: center;
 }
 
@@ -16,8 +17,9 @@
     font-family: var(--secondary-font);
     color: var(--secondary-text-color);
     line-height: 1.6;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     text-align: justify;
+    font-size: 12px;
 }
 
 /* Accordion container */
@@ -89,4 +91,9 @@ font-size: clamp(0.75rem, 1.2vw, 0.9rem);
     font-family: var(--secondary-font);
     color: var(--secondary-text-color);
     line-height: 1.5;
+    font-size: 12px;
+    list-style-type: disc;
+    margin-left: 16px;
+
+
 }

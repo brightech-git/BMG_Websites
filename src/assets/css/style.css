@@ -101,6 +101,7 @@
     --addtocart-product-color: linear-gradient(135deg, #fbbfac 70%, #fcd6bd 30%);
     --login-button-background: linear-gradient(90deg, #f02f6f, #f856af);
     --cart-button-background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+    --main-btn-background:linear-gradient(135deg, #fc5454, #d84141);
     --whistlist-button-background: linear-gradient(135deg, #31063a, #ff2b59);
     --primary-theme-color:#F39C42;
 }
@@ -136,7 +137,7 @@ body {
     overflow: hidden;
     font-size: 14px;
     line-height: 1.6;
-    background-color: #f6f6f6 !important;
+    background-color: #fff !important;
 }
 
 * {
@@ -546,14 +547,14 @@ select {
 
 .btn-main.main-filled {
     position: relative;
-    background-color: var(--blue-color);
+    background: var(--cart-button-background);
     color: var(--white-color);
     transform-origin: center;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s;
 }
 
 .btn-main.main-filled:hover {
-    background-color: var(--primary-hover-color) !important;
+    background: var(--main-btn-background) !important;
     color: var(--white-color) !important;
     box-shadow: none;
     border: var(--primary-hover-color) !important;
@@ -569,7 +570,7 @@ select {
     transform: translateX(-50%);
     width: 0%;
     height: 2px;
-    background-color: var(--white-color);
+    background: var(--white-color);
     /* Or any line color you prefer */
     transition: width 0.3s ease-in-out;
 }
@@ -3908,7 +3909,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     top: 0;
     width: 100%;
     height: 100%;
-    background-image: url(../img/icon/pattern-04.png);
+    /* background-image: url(../img/icon/pattern-04.png); */
     content: "";
     background-size: cover;
     background-position: center;
@@ -7969,7 +7970,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 }
 
 .post-box.quote-post::after {
-    background-image: url(../img/icon/pattern-05.png);
+    /* background-image: url(../img/icon/pattern-05.png); */
     z-index: -1;
     opacity: 0.6;
 }
@@ -8012,7 +8013,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     position: absolute;
     left: 0;
     top: 5px;
-    background-image: url(../img/icon/quote.png);
+    /* background-image: url(../img/icon/quote.png); */
     width: 75px;
     height: 90px;
     background-size: contain;
@@ -8267,7 +8268,6 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     top: 40px;
     bottom: 40px;
     content: '';
-    background-image: url(../img/blog-details/quote-icon.png);
     z-index: -1;
     background-size: contain;
     background-position: right center;
@@ -11257,8 +11257,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 }
 
 .product-description .tabs .tab-content {
-    padding: 20px;
-    margin-top: 30px;
+    padding: 10px;
 }
 
 .input-group.input-group-two input,
@@ -12006,7 +12005,7 @@ footer .footer-widget-area::after,
     top: 0;
     width: 100%;
     height: 100%;
-    background-image: url(../img/banner/footer.webp);
+    /* background-image: url(../img/banner/footer.webp); */
     content: '';
     background-size: cover;
     background-repeat: repeat;
@@ -12198,9 +12197,7 @@ footer .footer-widget-area .widget.contact-widget .contact-lists .contact-box .i
     color: #fcd462;
 }
 
-footer .footer-widget-area.light-theme {
-    background-image: url(../img/icon/pattern-02.png);
-}
+
 
 footer .footer-widget-area.light-theme::after {
     display: none;
@@ -12418,28 +12415,32 @@ footer .copyright-area.light-theme .footer-menu ul li::before {
     flex-direction: column;
 }
 
-.widget.nav-widget .useful-links {
+.footer-useful-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 0 40px;
+    gap: 0 5px;
     margin-bottom: 1px;
     padding: 0;
     list-style: none;
+    width:100%
 }
 
-.widget.nav-widget .useful-links li {
-    width: 45%;
-    /* Two columns */
-    margin-bottom: 20px !important;
+.footer-useful-links li{
+    font-size: 12px;
+    margin-bottom: 0px;
+    color: var(--primary-text-color) !important;
 }
 
+.footer-useful-links li:hover{
+    color: var(--primary-hover-color) !important;
+}
 /* Responsive behavior */
 @media (max-width: 768px) {
     .payment-icons {
         justify-content: center;
     }
 
-    .widget.nav-widget .useful-links li {
+    .widget.nav-widget .footer-useful-links li {
         width: 100%;
         /* Stack links on small screens */
     }

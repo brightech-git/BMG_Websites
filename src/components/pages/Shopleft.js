@@ -6,7 +6,6 @@ import queryString from 'query-string';
 
 import Header from '../layouts/HeaderWithAuth';
 import Breadcrumb from '../layouts/Breadcrumbs';
-import Instafeeds from '../layouts/Instafeeds';
 import Footer from '../layouts/Footerthree';
 import Content from '../sections/shopleft/Content';
 import SmoothScroll from '../layouts/SmoothScroll';
@@ -31,7 +30,7 @@ class Shopleft extends Component {
                     <Content />
                 </SmoothScroll>
 
-                {/* <Instafeeds /> */}
+              
                 <Footer />
             </Fragment>
         );

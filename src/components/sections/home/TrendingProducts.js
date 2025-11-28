@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import './TrendingProducts.css';
 import img1 from './image/WeddingRing.jpg';
-import coupleImg from '../../../assets/img/room-suite/pngegg (2).png';
+import coupleImg from '../../../assets/img/author-small.png';
 import img2 from './image/counpleRing.jpg';
 import img3 from './image/engageRing.jpg'
 

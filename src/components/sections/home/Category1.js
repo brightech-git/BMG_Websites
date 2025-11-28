@@ -2,6 +2,8 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Category1.css';
+
+
 const CategoryCard = ({ item }) => {
     const history = useHistory();
     const baseUrl = "https://app.bmgjewellers.com";
@@ -44,21 +46,7 @@ const CategoryCard = ({ item }) => {
                     e.target.src = '/fallback-image.jpg';
                 }}
             />
-            {/* <div className="offer-content">
-                <h2 className="offer-title text-truncate" title={item.item_name}>
-                    {item.item_name}
-                </h2>
-                <p className="offer-subtitle text-truncate" title={item.sub_item_name}>
-                    {item.sub_item_name}
-                </p>
-                <button
-                    className="offer-shop-btn offer-shop-filled mt-2"
-                    onClick={() => handleShopNow(item.item_name, item.sub_item_name)}
-                    aria-label={`Shop ${item.item_name} collection`}
-                >
-                    Shop Now
-                </button>
-            </div> */}
+           
         </div>
     );
 };

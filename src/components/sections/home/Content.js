@@ -136,11 +136,11 @@ const Content = () => {
                     <Category banners={occasionbanners} isLoading={occasionLoading} error={occasionbannersError} />
                 </RevealSection>
 
-                <RevealSection intensity={0.25}>
+                {/* <RevealSection intensity={0}> */}
                     <Ourcategory subcategories={subcategories} isCategoriesLoading={isCategoriesLoading}/>
-                </RevealSection>
+                {/* </RevealSection> */}
 
-                <RevealSection intensity={0.3}>
+                <RevealSection intensity={0}>
                     <Category1 banners={offerBanners} isLoading={offerLoading} error={offerError} />
                 </RevealSection>
 

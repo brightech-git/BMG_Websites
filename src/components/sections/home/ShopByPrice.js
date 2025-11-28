@@ -119,31 +119,6 @@ const PriceUnderSection = ({budgetBanners ,isLoading ,isError}) => {
                       }}
                     />
 
-                    {/* Content Overlay */}
-                    {/* <div className="pus-content-overlay">
-                      <div className="pus-overlay-content">
-                        <h3 className="pus-card-title">{category.title}</h3> */}
-                        {/* {category.min_price && category.max_price && (
-                          <div className="pus-card-price-range">
-                            {formatPrice(category.min_price)} - {formatPrice(category.max_price)}
-                          </div>
-                        )} */}
-                        {/* <button
-                          className="pus-category-btn"
-                          aria-label={`Explore ${category.title} collection`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleCategoryNavigation(category.min_price, category.max_price);
-                          }}
-                        >
-                          Shop Now
-                          <span className="pus-btn-arrow">→</span>
-                        </button>
-                      </div>
-                    </div> */}
-
-                    {/* Gradient Overlay */}
-                    {/* <div className="pus-gradient-overlay"></div> */}
                   </div>
                 </div>
               </div>

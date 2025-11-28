@@ -17,7 +17,7 @@ class Contact extends Component {
                     />
                 </MetaTags>
                 <Header/>
-                <Breadcrumb pages={"ContactUs"}/>
+                {/* <Breadcrumb pages={"ContactUs"}/> */}
                 <Content/>
          
                 <Footer/>

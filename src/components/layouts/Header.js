@@ -489,7 +489,7 @@ const Header = ({ isAuthenticated }) => {
                               <Link to="/products-page">Shop</Link>
                             </li>
                             <li className="menu-item">
-                              <Link to="/contact">Contact</Link>
+                              <Link to="/contactstore">Contact</Link>
                             </li>
                           </ul>
                         </nav>

@@ -16,6 +16,7 @@ import Checkout from './components/pages/Checkout';
 // import Classification from './components/pages/Classification';
 import Comingsoon from './components/pages/Comingsoon';
 import Contact from './components/pages/Contact';
+import ContactStore from './components/pages/ContactStore';
 import Error from './components/pages/Error';
 // import Gallery from './components/pages/Gallery';
 // import Gallerytwo from './components/pages/Gallerytwo';
@@ -57,6 +58,7 @@ import { useAllOrders } from './hook/order/useOrderHistoryQuery';
 import { OrderNotification } from './components/layouts/ProductOrdersModal';
 import EnchantedHero from './assets/videos/EnchantedHero';
 import UpdateMobileModal from './components/layouts/UpdateMobileModal';
+import Success from './components/pages/Success';
 
 function ScrollWatcher() {
   const location = useLocation();
@@ -206,12 +208,13 @@ function App() {
       {showHome && (
         // <PageTransition animation="fade">
           <Switch>
+
             {/* Your existing routes */}
             <Route exact path="/" component={Home} />
             <Route exact path="/home" component={Home} />
             <Route exact path="/about" component={About} />
             <PrivateRoute exact path="/account" component={Account} />
-
+          <Route path="/ContactUs" component={Contact} />
 
             {/* <Route exact path="/blog-detail" component={Blogdetail} />
             <Route exact path="/blog-grid" component={Bloggrid} />
@@ -262,11 +265,12 @@ function App() {
             path='/faq'
             render={() => <FAQ languages={languages} content={faqContent} />}
           />
-
-
+          
+          <Route exact path="/contactstore" component={ContactStore} />
+          <Route exact path="/success" component={Success} />
             <Route component={Error} />
-          <Route exact path="/coming-soon" component={Comingsoon} />
-          <Route exact path="/contact" component={Contact} />
+            <Route exact path="/coming-soon" component={Comingsoon} />
+           
             <RouteTracker />
           </Switch>
         // </PageTransition>

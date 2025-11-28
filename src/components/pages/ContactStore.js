@@ -1,21 +1,47 @@
 import React, { useState, useEffect } from "react";
 import { Alert } from "react-bootstrap";
 import { toast } from 'react-toastify';
-import { useContactFormQuery } from "../../../hook/contactForm/useContactFormQuery";
-import { useCompanyDetails } from "../../../context/clientDetails/clientDetialContext";
-import './Contact.css';
-import img1 from '../../../assets/img/bg/56.jpg';
-
-const Contact = () => {
+import { useContactFormQuery } from "../../hook/contactForm/useContactFormQuery";
+import { useCompanyDetails } from "../../context/clientDetails/clientDetialContext";
+import './ContactStore.css';
+import largerImg from '../../assets/img/bg/store/1.jpg';
+import mobileImg from '../../assets/img/bg/store/2.jpg';
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import Headers from "../layouts/HeaderWithAuth";
+import Footertwo from "../layouts/Footerthree";
+const ContactStore = () => {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         mobileNumber: "",
         comment: "",
     });
-
+const history =useHistory()
     const { details: companyDetails } = useCompanyDetails();
     const mutation = useContactFormQuery();
+
+    const [banner, setBanner] = useState(largerImg);
+    const [isMobile, setIsMobile] = useState(false);
+    useEffect(() => {
+        const handleResize = () => {
+            // If width is less than 768px, use portrait, else landscape
+            if (window.innerWidth < 768) {
+                setBanner(largerImg);
+            } else {
+                setBanner(largerImg);
+            }
+            const checkWidth = () => setIsMobile(window.innerWidth <= 767);
+            checkWidth(); // initial check
+            window.addEventListener("resize", checkWidth);
+            return () => window.removeEventListener("resize", checkWidth);
+        };
+
+        handleResize(); // Set initial image
+        window.addEventListener('resize', handleResize); // Update on resize
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -45,6 +71,7 @@ const Contact = () => {
                     comment: "",
                     mobileNumber: ""
                 });
+                history.push('/success');
             },
             onError: () => {
                 toast.error("Something went wrong. Please try again later.");
@@ -62,6 +89,10 @@ const Contact = () => {
     }, [mutation.isSuccess, mutation.isError]);
 
     // Contact information items
+    const logo = `https://app.bmgjewellers.com${companyDetails?.logo?.trim()}`;
+
+
+
     // Build full address
     const fullAddress = `${companyDetails?.address1 || ""}, ${companyDetails?.address2 || ""} - ${companyDetails?.areaCode || ""}`;
 
@@ -103,50 +134,41 @@ const Contact = () => {
 
 
     return (
-        <section className="contact-main-section animate-fade-in">
+        <>
+      
+       
+                    <Headers />
+   
+   
+        <section className="contact-main-section animate-fade-in m-2 ">
             {/* Header Section */}
-            <div className="contact-header-section">
-                <div className="container">
+            <div className="contacts-header-section">
+        
                     <div className="header-title-sections row align-items-center">
-                        <div className="col-lg-6">
+                
                             <div className="contact-header-content">
                                 <h1 className="contact-main-title">
-                                    Get In Touch
+                                    உங்களுக்காக புதிய தங்கம் ஜொலிக்கும் வெள்ளி நகைகள் உலகம்
                                 </h1>
-                                <p className="contact-subtitle">
-                                    We'd love to hear from you. Let us know how we can help you
-                                    with your jewelry needs.
-                                </p>
+                               
+                               
                             </div>
-                        </div>
-                        <div className="col-lg-6">
-                            <div className="contact-header-stats">
-                                <div className="stat-item">
-                                    <span className="stat-number">24/7</span>
-                                    <span className="stat-label">Customer Support</span>
-                                </div>
-                                <div className="stat-item">
-                                    <span className="stat-number">1hr</span>
-                                    <span className="stat-label">Response Time</span>
-                                </div>
-                                <div className="stat-item">
-                                    <span className="stat-number">100%</span>
-                                    <span className="stat-label">Satisfaction</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
             {/* Banner Image */}
-            <div className="container">
-            <div className="banner-container">
-                <img src={img1} alt="Contact Banner" className="contact-banner" />
-            </div>
+            <div className="banner-containers">
+                    <div
+                        className="contact-banner-container animate-slide-in-left"
+                     
+                    >
+                        <picture>
+                            <img src={banner} alt="Contact Banner" className="contact-banner-img" />
+                        </picture>
+                    </div>
             </div>
 
             {/* Main Contact Section */}
-            <div className="container">
+  
                 <div className="row">
                     {/* Left Info Column */}
                     <div className="col-lg-5">
@@ -155,20 +177,26 @@ const Contact = () => {
                                 <h3>Contact Information</h3>
                                 <p>Say something to start a live chat!</p>
                             </div>
+                                <div className="contact-info-list">
+                                    {contactInfo.map((item, index) => (
+                                        <a
+                                            key={index}
+                                            href={item.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="contact-info-item animate-slide-in-left contact-info-clickable"
+                                        >
+                                            <div className="info-icon">
+                                                <i className={item.icon} />
+                                            </div>
+                                            <div className="info-content">
+                                                <h4>{item.title}</h4>
+                                                <p>{item.content}</p>
+                                            </div>
+                                        </a>
+                                    ))}
+                                </div>
 
-                            <div className="contact-info-list">
-                                {contactInfo.map((item, index) => (
-                                    <div key={index} className="contact-info-item animate-slide-in-left">
-                                        <div className="info-icon">
-                                            <i className={item.icon} />
-                                        </div>
-                                        <div className="info-content">
-                                            <h4>{item.title}</h4>
-                                            <p>{item.content}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
 
                             {/* Social Connect */}
                             <div className="social-connect">
@@ -195,8 +223,8 @@ const Contact = () => {
                     <div className="col-lg-7">
                         <div className="contact-form-wrapper animate-slide-in-right">
                             <div className="form-header">
-                                <h2>Send Us a Message</h2>
-                                <p>Fill out the form below and we'll get back to you shortly.</p>
+                                <h2>உங்கள் தகவலை பகிருங்கள்</h2>
+                                <p>புதிய கலெக்ஷன் preview-களும், லாஞ்ச் நாள் சிறப்பு ஆஃபர்களும் நேரடியாக உங்களைச் சேரும்.</p>
                             </div>
 
                             <form onSubmit={handleSubmit} className="contact-form">
@@ -295,18 +323,18 @@ const Contact = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+  
 
             {/* Store Location Section */}
             <div className="store-location-section">
-                <div className="container">
+
                     <div className="section-header text-center">
                         <h2>Visit Our Store</h2>
                         <p>Come experience the brilliance of BMG Jewellers in person</p>
                     </div>
 
                     <div className="row align-items-center">
-                        <div className="col-lg-4">
+                        {/* <div className="col-lg-4">
                             <div className="location-content">
                                 <div className="location-card">
                                     <div className="location-header">
@@ -342,7 +370,7 @@ const Contact = () => {
                                             <i className="fas fa-wheelchair" />
                                             <span>Wheelchair Accessible</span>
                                         </div> */}
-                                        <div className="feature-item">
+                                        {/* <div className="feature-item">
                                             <i className="fas fa-credit-card" />
                                             <span>All Cards Accepted</span>
                                         </div>
@@ -368,13 +396,13 @@ const Contact = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */} 
 
-                        <div className="col-lg-8">
+                        <div className="">
                             <div className="map-container">
                                 <iframe
                                     title="BMG Jewellers Location"
-                                    src={companyDetails?.mapEmbed || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3807.395115164899!2d78.1157195!3d9.9161012!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00c52cde0dc627%3A0x8f265e55e17fdc92!2sBMG%20Jewellers!5e1!3m2!1sen!2sin!4v1764321951738!5m2!1sen!2sin"}
+                                        src={companyDetails?.mapEmbed || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3807.394863191887!2d78.11334837488296!3d9.916122890185033!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00c52cde0dc627%3A0x8f265e55e17fdc92!2sBMG%20Jewellers!5e1!3m2!1sen!2sin!4v1764324069943!5m2!1sen!2sin"}
                                     className="google-map"
                                     allowFullScreen
                                     loading="lazy"
@@ -383,16 +411,12 @@ const Contact = () => {
                             </div>
                         </div>
                     </div>
-                </div>
+    
             </div>
         </section>
-        // <section style={{display:'flex',marginTop:'150px'}}>
-        //     <div style={{ display: 'flex' , width:'100%' ,height:'500px'}}>
-        //         <img src={img1} style={{width:'100%' ,height:'100%' ,objectFit:'cover' ,objectPosition:'center center'}}></img>
-        //          <img src={img1} style={{width:'100%' ,height:'100%' ,objectFit:'cover' ,objectPosition:'center center'}}></img>
-        //     </div>
-        // </section>
+         <Footertwo />
+        </>
     );
 };
 
-export default Contact;
+export default ContactStore;

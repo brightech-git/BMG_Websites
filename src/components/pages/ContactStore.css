@@ -1,26 +1,72 @@
+.contact-header-container{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    background: var(--white-color);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.company-section {
+    display: flex;
+    align-items: center;
+    gap:clamp(10px, 1vw, 20px);
+
+}
+.image-container {
+    width: clamp(50px, 10vw, 100px);
+}
+.contact-header-logo{
+    width: 100%;
+    height:auto;
+}
+.contact-header-title {
+    background: var(--gradient-text);
+    color: transparent;
+    -webkit-background-clip: text;
+    font-size: clamp(0.654rem, 2vw, 1.2rem);
+}
+
+
+
+
+
+
 /* ---------------------------------------------
    MAIN WRAPPER
 ---------------------------------------------- */
 .contact-main-section {
-    margin-top: 120px;
+    max-width: 1400px;
+    margin: 150px auto 0px auto!important;
     font-family: var(--secondary-font);
     color: var(--primary-text-color);
 }
-
+.header-title-sections{
+    margin-bottom: 0.5rem;
+}
+.contact-header-content{
+    text-align: center;
+    justify-content: center;
+    color: var(--primary-text-color);
+}
 
 /* ---------------------------------------------
    HEADER SECTION
 ---------------------------------------------- */
-.contact-header-section {
-    padding: 40px 0;
-}
+
 
 .contact-main-title {
     font-family: var(--primary-font);
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: var(--primary-hover-color);
+    font-weight: bolder;
 }
-
+@media (max-width: 768px) {
+    .contact-main-title {
+        font-size: 0.8rem;
+    }
+}
 .contact-subtitle {
     font-size: 0.8rem;
     opacity: 0.9;
@@ -45,52 +91,9 @@
 .stat-label {
     font-size: 0.8rem;
 }
-/* Banner Wrapper */
-.banner-container {
-    width: 100%;
-    height: 450px;
-    overflow: hidden;
-    /* Prevent image overflow */
-    border-radius: 10px;
-    margin-bottom: 1rem;
-}
 
-/* Banner Image */
-.contact-banner {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* Makes image fill area nicely */
-    object-position: center;
-    display: block;
-    /* Removes unwanted gaps */
-    border-radius: 10px;
-}
 
-/* -------------------------------
-   Responsive Breakpoints
--------------------------------- */
 
-/* Tablets */
-@media (max-width: 992px) {
-    .banner-container {
-        height: 350px;
-    }
-}
-
-/* Large Mobile */
-@media (max-width: 768px) {
-    .banner-container {
-        height: 300px;
-    }
-}
-
-/* Small Mobile */
-@media (max-width: 576px) {
-    .banner-container {
-        height: 220px;
-    }
-}
 /* ---------------------------------------------
    LEFT CONTACT INFO
 ---------------------------------------------- */
@@ -99,13 +102,13 @@
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-   
+
 }
 
 .contact-info-header h3 {
     margin-bottom: 10px;
     position: relative;
-    color :var(--primary-text-color);
+    color: var(--primary-text-color);
     font-size: 1.2rem;
 }
 
@@ -191,16 +194,18 @@
     border-radius: 10px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
 }
-.form-header{
+
+.form-header {
     display: flex;
     flex-direction: column;
 }
+
 .form-header h2 {
     font-family: var(--secondary-font);
     margin-bottom: 10px;
     position: relative;
     font-family: 1.2rem;
-    
+
 }
 
 .form-header h2::after {
@@ -212,7 +217,8 @@
     left: 0;
     bottom: -8px;
 }
-.form-header p{
+
+.form-header p {
     font-size: 0.8rem;
     color: var(--primary-text-color);
 
@@ -269,21 +275,23 @@
     color: #cd5c5c;
 }
 
-.section-header{
+.section-header {
     margin-bottom: 10px;
     display: flex;
     flex-direction: column;
 }
 
-.section-header h2{
+.section-header h2 {
     font-size: 1.2rem;
     color: var(--primary-text-color);
 
 }
-.section-header p{
+
+.section-header p {
     font-size: 0.8rem;
     color: var(--primary-text-color);
 }
+
 /* -----------------------
 ----------------------
    STORE LOCATION SECTION
@@ -371,11 +379,6 @@
 /* ---------------------------------------------
    RESPONSIVE
 ---------------------------------------------- */
-@media (max-width: 991px) {
-    .contact-header-section {
-        padding: 60px 0;
-    }
-}
 
 @media (max-width: 767px) {
 
@@ -386,5 +389,37 @@
 
     .google-map {
         height: 350px;
+    }
+}
+
+.banner-container{
+    margin: 0 auto !important;
+}
+/* Desktop container — landscape banner */
+.contact-banner-container {
+    width: 100%;
+    max-width: 70%;
+    /* instead of fixed 700px */
+    margin: 0 auto;
+    border-radius: 10px;
+    overflow: hidden;
+  
+    /* keeps landscape shape */
+}
+
+/* Both landscape & portrait images fit perfectly */
+.contact-banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Mobile container — portrait banner */
+@media (max-width: 767px) {
+    .contact-banner-container {
+        max-width: 100%;
+ 
+        /* portrait shape */
     }
 }

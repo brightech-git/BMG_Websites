@@ -88,18 +88,7 @@ const Breadcrumbs = ({ itemCtrName,  pages, occasion, gender }) => {
                                     onError={handleImageError}
                                     loading="lazy"
                                 />
-                                {/* <div className="banner-content-overlay">
-                                    <h1 className="banner-title">
-                                        {isLoading
-                                            ? "Loading..."
-                                            : item?.title || itemCtrName || item.pages || "Category"}
-                                    </h1>
-                                    <p className="banner-description">
-                                        {item?.subtitle ||
-                                            
-                                            "Explore our collection"}
-                                    </p>
-                                </div> */}
+                              
                             </div>
                         );
                     })

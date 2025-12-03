@@ -69,12 +69,12 @@ const NoBlurProductCard = ({ product }) => {
 
     return (
         <div className="noblur-product-card">
-            <div className="noblur-product-img-container">
+            <div className="noblur-product-img-container"  onClick={(e) => handleProductClick(e, product?.SNO)} >
                 {firstImage ? (
                     <img
                         src={firstImage}
                         alt={product?.itemCtrName || "Product"}
-                        onClick={(e) => handleProductClick(e, product?.SNO)}
+                       
                     />
                 ) : (
                     <div className="noblur-no-image">No Image</div>
@@ -164,12 +164,10 @@ const NoBlurHandpicked = ({ data, isLoading, error }) => {
                 {/* HEADER */}
                 <div className="noblur-header">
                     <h2 className="noblur-title">
-                        <span className="noblur-gradient-text">Exclusive</span>
-                        <span className="noblur-subtitle"> Collection</span>
+                        <span className="noblur-gradient-text">Exclusive Collection</span>
+                
                     </h2>
-                    <p className="noblur-description">
-                        Hand-selected premium pieces for the discerning collector
-                    </p>
+                   
                 </div>
 
                 {/* SLIDER */}

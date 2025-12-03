@@ -42,7 +42,7 @@
     margin: 0;
     padding: 0;
 }
-.product-grid>* {
+.product-grid >* {
     border: 1px solid #ddd;
     padding: 10px;
     /* optional, for spacing */

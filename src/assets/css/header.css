@@ -61,6 +61,12 @@ h6 {
     font-weight: 600;
 }
 
+.menu-item-active{
+    color: var(--primary-hover-color) ;
+    font-family: var(--secondary-font);
+    font-weight: 700;
+}
+
 @media (max-width: 576px) {
     .sigma-header .lr-topbar-controls.style-2>li {
         margin-left: 10px;
@@ -102,9 +108,10 @@ header.sticky-header.sticky-active .lr-topbar {
 
 header .nav-container {
     position: relative;
-    background-color: var(--primary-color) !important;
-    line-height: 70px !important;
-    margin-top: 30px !important;
+    background-color:var(--white-color) ;
+    line-height: 60px ;
+    
+
 }
 
 header .nav-container .toggle {
@@ -490,6 +497,7 @@ header.sticky-header.sticky-active.header-two .nav-container .navbar-toggler spa
 header.header-three {
     background-color: transparent;
     position: relative;
+  
 }
 
 header.header-three.header-absolute {

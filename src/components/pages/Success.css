@@ -29,7 +29,16 @@
     color: #2ecc71;
     margin-bottom: 20px;
 }
+.gtm-click{
+    cursor: pointer;
+    background: var(--primary-hover-color);
+    color: var(--white-color);
+    padding: 5px;
 
+}
+.gtm-click:hover {
+    color: var(--white-color);
+}
 .home-btn {
     display: inline-block;
     margin-top: 20px;

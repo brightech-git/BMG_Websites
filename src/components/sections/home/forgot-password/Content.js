@@ -88,147 +88,132 @@ const ForgotPassword = () => {
     return (
         <section className="auth-section">
             <div className="container">
-                <div className="auth-container">
-                    <div className="row no-gutters">
-                        <div className="col-lg-6">
-                            <div className="auth-background">
-                                <div className="description text-center"></div>
+                <div className="auth-container animate-fade-in-up">
+                    <div className="auth-form animate-fade-in-down">
+                        <h2>{step === 1 ? 'Forgot Password' : 'Reset Password'}</h2>
+
+                        {(error || errors.general) && (
+                            <div className="alert alert-danger animate-shake">
+                                {error || errors.general}
                             </div>
-                        </div>
+                        )}
 
-                        <div className="col-lg-6">
-                            <div className="auth-form">
-                                <h2>{step === 1 ? 'Forgot Password' : 'Reset Password'}</h2>
+                        {step === 1 ? (
+                            <form onSubmit={handleSendOtp} className="animate-bounce-in">
+                                <div className="input-field input-field-styled mb-20">
+                                    <label htmlFor="contactNumber">Mobile Number</label>
+                                    <input
+                                        id="contactNumber"
+                                        type="tel"
+                                        placeholder="Enter your mobile number"
+                                        value={contactNumber}
+                                        onChange={(e) => {
+                                            const value = e.target.value.replace(/\D/g, "");
+                                            if (value.length <= 10) setContactNumber(value);
+                                            if (errors.contactNumber) setErrors({ ...errors, contactNumber: '' });
+                                        }}
+                                        maxLength={10}
+                                        className={errors.contactNumber ? 'is-invalid mobile-input' : 'mobile-input'}
+                                        required
+                                    />
+                                    {errors.contactNumber && (
+                                        <div className="error-feedback">{errors.contactNumber}</div>
+                                    )}
+                                </div>
 
-                                {(error || errors.general) && (
-                                    <div className="alert alert-danger">
-                                        {error || errors.general}
-                                    </div>
-                                )}
+                                <div className='button-section'>
+                                    <button
+                                        type="submit"
+                                        className="btn-main main-filled"
+                                        disabled={loading}
+                                    >
+                                        {loading ? 'Sending OTP...' : 'Send OTP'}
+                                    </button>
+                                </div>
 
-                                {step === 1 ? (
-                                    <form onSubmit={handleSendOtp}>
-                                        <div className="input-field input-field-styled mb-20">
-                                            <input
-                                                type="tel"
-                                                placeholder="Mobile Number"
-                                                value={contactNumber}
-                                                onChange={(e) => {
-                                                    const value = e.target.value.replace(/\D/g, "");
-                                                    if (value.length <= 10) {
-                                                        setContactNumber(value);
-                                                        if (errors.contactNumber) {
-                                                            setErrors({ ...errors, contactNumber: '' });
-                                                        }
-                                                    }
-                                                }}
-                                                maxLength={10}
-                                                className={errors.contactNumber?'is-invalid':'mobile-input'}
-                                                required
-                                            />
-                                            {errors.contactNumber && (
-                                                <div className="error-feedback">{errors.contactNumber}</div>
-                                            )}
-                                        </div>
+                                <div className="auth-link-container">
+                                    <Link to="/login" className="auth-link">
+                                        Remember your password? <span className="auth-link-login">Login</span>
+                                    </Link>
+                                </div>
+                            </form>
+                        ) : (
+                            <form onSubmit={handleResetPassword} className="animate-bounce-in">
+                                <div className="input-field input-field-styled mb-20">
+                                    <label htmlFor="otp">OTP</label>
+                                    <input
+                                        id="otp"
+                                        type="text"
+                                        placeholder="Enter OTP"
+                                        value={otp}
+                                        onChange={(e) => {
+                                            const value = e.target.value.replace(/\D/g, "");
+                                            if (value.length <= 6) setOtp(value);
+                                            if (errors.otp) setErrors({ ...errors, otp: '' });
+                                        }}
+                                        maxLength={6}
+                                        className={errors.otp ? 'is-invalid mobile-input' : 'mobile-input'}
+                                        required
+                                    />
+                                    {errors.otp && <div className="error-feedback">{errors.otp}</div>}
+                                </div>
 
-                                       
-                                        <div className='button-section'>
-                                        <button
-                                            type="submit"
-                                            className="btn-main main-filled"
-                                            disabled={loading}
-                                        >
-                                            {loading ? 'Sending OTP...' : 'Send OTP'}
-                                        </button>
-                                        </div>
-                                        <div className="auth-link-container">
-                                            <Link to="/login" className="auth-link">
-                                                Are you Remembered your password? <span className="auth-link-login">Login</span>
-                                            </Link>
-                                        </div>
-                                    </form>
-                                ) : (
-                                    <form onSubmit={handleResetPassword}>
-                                        <div className="input-field input-field-styled mb-20">
-                                            <input
-                                                type="text"
-                                                placeholder="OTP"
-                                                value={otp}
-                                                onChange={(e) => {
-                                                    const value = e.target.value.replace(/\D/g, "");
-                                                    setOtp(value);
-                                                    if (errors.otp) {
-                                                        setErrors({ ...errors, otp: '' });
-                                                    }
-                                                }}
-                                                maxLength={6}
-                                                className={errors.otp ? 'is-invalid' : 'mobile-input'}
-                                                required
-                                            />
-                                            {errors.otp && <div className="error-feedback">{errors.otp}</div>}
-                                        </div>
+                                <div className="input-field input-field-styled mb-20">
+                                    <label htmlFor="newPassword">New Password</label>
+                                    <input
+                                        id="newPassword"
+                                        type="password"
+                                        placeholder="Enter new password"
+                                        value={newPassword}
+                                        onChange={(e) => {
+                                            setNewPassword(e.target.value);
+                                            if (errors.newPassword) setErrors({ ...errors, newPassword: '' });
+                                        }}
+                                        className={errors.newPassword ? 'is-invalid mobile-input' : 'mobile-input'}
+                                        required
+                                    />
+                                    {errors.newPassword && <div className="error-feedback">{errors.newPassword}</div>}
+                                </div>
 
-                                        <div className="input-field input-field-styled mb-20">
-                                            <input
-                                                type="password"
-                                                placeholder="New Password"
-                                                value={newPassword}
-                                                onChange={(e) => {
-                                                    setNewPassword(e.target.value);
-                                                    if (errors.newPassword) {
-                                                        setErrors({ ...errors, newPassword: '' });
-                                                    }
-                                                }}
-                                                className={errors.newPassword ? 'is-invalid' : 'mobile-input'}
-                                                required
-                                            />
-                                            {errors.newPassword && (
-                                                <div className="error-feedback">{errors.newPassword}</div>
-                                            )}
-                                        </div>
+                                <div className="input-field input-field-styled mb-30">
+                                    <label htmlFor="confirmPassword">Confirm Password</label>
+                                    <input
+                                        id="confirmPassword"
+                                        type="password"
+                                        placeholder="Confirm new password"
+                                        value={confirmPassword}
+                                        onChange={(e) => {
+                                            setConfirmPassword(e.target.value);
+                                            if (errors.confirmPassword) setErrors({ ...errors, confirmPassword: '' });
+                                        }}
+                                        className={errors.confirmPassword ? 'is-invalid mobile-input' : 'mobile-input'}
+                                        required
+                                    />
+                                    {errors.confirmPassword && <div className="error-feedback">{errors.confirmPassword}</div>}
+                                </div>
 
-                                        <div className="input-field input-field-styled mb-30">
-                                            <input
-                                                type="password"
-                                                placeholder="Confirm Password"
-                                                value={confirmPassword}
-                                                onChange={(e) => {
-                                                    setConfirmPassword(e.target.value);
-                                                    if (errors.confirmPassword) {
-                                                        setErrors({ ...errors, confirmPassword: '' });
-                                                    }
-                                                }}
-                                                className={errors.confirmPassword ? 'is-invalid' : 'mobile-input'}
-                                                required
-                                            />
-                                            {errors.confirmPassword && (
-                                                <div className="error-feedback">{errors.confirmPassword}</div>
-                                            )}
-                                        </div>
-                                            <div className='button-section'>
-                                        <button
-                                            type="submit"
-                                            className="btn-main main-filled"
-                                            disabled={loading}
-                                        >
-                                            {loading ? 'Resetting...' : 'Reset Password'}
-                                        </button>
-                                            </div>
-                                        <p className="resend-prompt">
-                                            Didn't receive OTP?{' '}
-                                            <button
-                                                type="button"
-                                                className="resend-otp"
-                                                onClick={handleSendOtp}
-                                            >
-                                                Resend OTP
-                                            </button>
-                                        </p>
-                                   
-                                    </form>
-                                )}
-                            </div>
-                        </div>
+                                <div className='button-section'>
+                                    <button
+                                        type="submit"
+                                        className="btn-main main-filled"
+                                        disabled={loading}
+                                    >
+                                        {loading ? 'Resetting...' : 'Reset Password'}
+                                    </button>
+                                </div>
+
+                                <p className="resend-prompt">
+                                    Didn't receive OTP?{' '}
+                                    <button
+                                        type="button"
+                                        className="resend-otp"
+                                        onClick={handleSendOtp}
+                                    >
+                                        Resend OTP
+                                    </button>
+                                </p>
+                            </form>
+                        )}
                     </div>
                 </div>
             </div>

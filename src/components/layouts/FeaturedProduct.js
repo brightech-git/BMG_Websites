@@ -14,8 +14,12 @@ const FeaturedBanners = ({banners ,isLoading ,isError}) => {
 
   
 
-  const handleBannerClick = (link) => {
-    history.push(link);
+  const handleBannerClick = () => {
+
+    const queryParams = new URLSearchParams();
+    const itemCtrName = "FEATURED";
+    queryParams.append("itemCtrName", itemCtrName);
+    history.push(`products-page?${queryParams.toString()}`);
   };
   if (isLoading) return <p>Loading Banner</p>;
   if (isError) return <p>Loading Banner Error</p>;
@@ -29,24 +33,16 @@ const FeaturedBanners = ({banners ,isLoading ,isError}) => {
             <div className="col-auto">
               <h2 className="fb-main-title">Curated Just for You</h2>
             </div>
-            <div className="col-auto">
-              <button
-                className="feature-explore-btn btn"
-                onClick={() => handleBannerClick('/products-page?featured_products=true')}
-              >
-                Explore All
-                <span className="fb-btn-arrow ms-1">→</span>
-              </button>
-            </div>
+        
           </div>
 
           {/* Banner Grid */}
           <div className="row g-4">
             {/* Left Column - Large Featured Banner */}
-            <div className="col-lg-6">
+            <div className="main-banner col-lg-6">
               <div
                 className="fb-banner-item fb-featured-banner"
-                onClick={() => handleBannerClick('/products-page?featured_products=true')}
+                onClick={() => handleBannerClick()}
               >
                 <div className="position-relative w-100 h-100 overflow-hidden">
                   {banners[0] && (
@@ -70,7 +66,7 @@ const FeaturedBanners = ({banners ,isLoading ,isError}) => {
                   <div className="col-6" key={banner.id}>
                     <div
                       className="fb-banner-item fb-small-banner"
-                      onClick={() => handleBannerClick('/products-page?featured_products=true')}
+                      onClick={() => handleBannerClick()}
                     >
                       <div className="position-relative w-100 h-100 overflow-hidden">
                         <img
@@ -90,7 +86,7 @@ const FeaturedBanners = ({banners ,isLoading ,isError}) => {
                 <div className="col-12">
                   <div
                     className="fb-banner-item fb-bottom-banner"
-                    onClick={() => handleBannerClick('/products-page?featured_products=true')}
+                    onClick={() => handleBannerClick()}
                   >
                     <div className="position-relative w-100 h-100 overflow-hidden">
                       {banners[3] && (

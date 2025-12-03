@@ -1,37 +1,26 @@
-.fb-container{
-background-color: var(--feature-bg-color);
+.fb-container {
+    background-color: var(--feature-bg-color);
 }
+
 .fb-banner-container {
-margin: 0 auto;
+    margin: 0 auto;
     padding: 2rem 1rem;
     font-family: var(--secondary-font);
-    
     max-width: 1400px;
-   
+
 }
 
 .fb-main-title {
-    font-family: var(--title-font);
-    font-size: clamp(2.5rem, 4vw, 3rem);
-    font-weight: 700;
-    position: relative;
-    padding-bottom: 0.5rem;
-    background: linear-gradient(to right, var(--primary-hover-color), #a05ccdff);
+background: var(--gradient-border);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    text-shadow: var(--text-shadow);
+    font-family: var(--title-font);
+    font-weight: bolder;
+    font-size: 40px;
 }
 
-.fb-main-title::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 2px;
-    background: linear-gradient(to right, #ff6a00, #ee0979);
-}
 
 .fb-explore-btn {
     padding: 10px 20px;
@@ -58,7 +47,7 @@ margin: 0 auto;
     height: 100%;
     background-color: var(--white-color);
     transition: width 0.3s ease;
-    z-index: -1;
+   z-index : -1;
 }
 
 .fb-explore-btn:hover::before {
@@ -96,7 +85,7 @@ margin: 0 auto;
     left: 0;
     width: 100%;
     height: 100%;
-   
+
 }
 
 .fb-banner-content {
@@ -148,18 +137,55 @@ margin: 0 auto;
 
 
 .fb-featured-banner {
-    height: 500px;
+    height: 440px;
 }
 
 .fb-small-banner {
-    height: 220px;
+    height: 180px;
 }
 
 .fb-bottom-banner {
-    height: 260px;
+    height: 240px;
+}
+@media (max-width: 992px) {
+    .fb-banner-content {
+        bottom: 0.5rem;
+        left: 0.5rem;
+    }
+
+    .fb-subtitle {
+        font-size: 0.75rem;
+    }
+
+    .fb-title {
+        font-size: 0.8rem;
+    }
+
+    .fb-cta-btn {
+        padding: 6px 12px;
+        font-size: 12px !important;
+    }
+
+    .fb-small-banner {
+        height: 160px;
+    }
+
+    .fb-featured-banner {
+        height: 400px;
+    }
+
+    .fb-bottom-banner {
+        height: 200px;
+    }
+          .fb-main-title {
+              font-size: 28px;
+          }
 }
 
 @media (max-width: 768px) {
+    .fb-main-title {
+            font-size: 26px;
+        }
     .fb-banner-content {
         bottom: 0.5rem;
         left: 0.5rem;
@@ -193,27 +219,79 @@ margin: 0 auto;
 
 @media (max-width: 576px) {
     .fb-banner-container {
-        padding: 1rem 0;
+        padding: 0rem 2rem;
+    }
+    .main-banner{
+       padding: 0rem 1rem;
+    }
+        .fb-featured-banner{
+            height: 280px;
+        }
+        .fb-featured-banner img{
+            object-position: center bottom;
+        }
+    .fb-small-banner{
+            height: 120px;
     }
 
-    .fb-small-banner,
-    .fb-featured-banner,
     .fb-bottom-banner {
         height: 150px;
         margin-bottom: 0.5rem;
     }
 
     .fb-main-title {
-        font-size: 1.2rem;
+        font-size: 20px;
     }
 
     .fb-explore-btn {
         font-size: 10px !important;
         padding: 8px 16px;
-        color: var(--white-color) ;
+        color: var(--white-color);
     }
-         .fb-cta-btn {
-             padding: 5px 10px !important; 
-             font-size: 9px !important;
-         }
+
+    .fb-cta-btn {
+        padding: 5px 10px !important;
+        font-size: 9px !important;
+    }
+}
+@media (max-width: 480px) {
+    .fb-banner-container {
+        padding: 0rem;
+    }
+
+    .main-banner {
+        padding: 0rem 1rem;
+    }
+
+    .fb-featured-banner {
+        height: 250px;
+    }
+
+    .fb-featured-banner img {
+        object-position: center bottom;
+    }
+
+    .fb-small-banner{
+        height: 100px ;
+    }
+
+    .fb-bottom-banner {
+        height: 150px;
+        margin-bottom: 0.5rem;
+    }
+
+    .fb-main-title {
+        font-size: 18px;
+    }
+
+    .fb-explore-btn {
+        font-size: 10px !important;
+        padding: 8px 16px;
+        color: var(--white-color);
+    }
+
+    .fb-cta-btn {
+        padding: 5px 10px !important;
+        font-size: 9px !important;
+    }
 }

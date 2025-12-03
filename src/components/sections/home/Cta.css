@@ -8,7 +8,7 @@
 .cta-background {
   background-size: cover;
   background-position: center;
-  z-index: 1;
+  : 1;
   position: absolute;
   top: 0;
   left: 0;
@@ -17,7 +17,7 @@
 }
 
 .cta-overlay {
-  z-index: 2;
+  : 2;
   position: absolute;
   top: 0;
   left: 0;
@@ -27,7 +27,7 @@
 
 .cta-content {
   position: relative;
-  z-index: 3;
+  : 3;
   display: flex;
   flex-direction: column;
   justify-content: center;

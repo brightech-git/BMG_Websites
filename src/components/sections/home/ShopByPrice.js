@@ -73,9 +73,9 @@ const PriceUnderSection = ({budgetBanners ,isLoading ,isError}) => {
       <div className="pus-container">
         <div className="pus-section">
           <span className="title-part-1">Explore by Budget</span>
-          <p className="pus-section-subtitle">
+          {/* <p className="pus-section-subtitle">
             Discover curated collections tailored to your budget for every style and occasion
-          </p>
+          </p> */}
         </div>
         
       

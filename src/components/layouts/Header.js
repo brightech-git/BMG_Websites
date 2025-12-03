@@ -1,6 +1,6 @@
 // src/components/layouts/Header.js
 import React, { useState, useEffect, Fragment } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory ,useLocation} from "react-router-dom";
 import classNames from "classnames";
 import { ChevronDown, ShoppingCart, Menu, User, Heart, Video } from "lucide-react";
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
@@ -19,6 +19,9 @@ import './Header.css';
 import { useHeaderData } from "../../hook/header/useNavData";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCompanyDetails } from "../../context/clientDetails/clientDetialContext";
+import silvericon from '../../assets/img/890.png';
+import goldicon from '../../assets/img/891.png';
+
 
 const Header = ({ isAuthenticated }) => {
   const width = useScreenWidth();
@@ -31,10 +34,29 @@ const Header = ({ isAuthenticated }) => {
   const [showRates, setShowRates] = useState(false); // State to toggle rates display
   const dispatch = useDispatch();
   const { data } = useHeaderData();
-
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [open ,setOpen] =useState(false);
   const { details } = useCompanyDetails();
+const location =useLocation();
+  const getMetalIcon = (key) => {
+    const k = key.toLowerCase();
+    console.log(k,'rates')
+    if (k.includes("silver")) return silvericon ;
+    if (k.includes("gold")) return goldicon ;
+    return "/icons/gold.png"; // deault gold
+  };
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
 
- 
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const companyData = details ||{};
   console.log(companyData, 'detailsAboutcompany');
@@ -287,9 +309,9 @@ const Header = ({ isAuthenticated }) => {
           }`}
         id="header"
       >
-        {width >= 992 && (
-          <div className="header-top">
-            <div className="container-fluid container-custom-three">
+        {width > 991 && (
+          <div className={isScrolled ? "header-top-hide":"header-top"}>
+        
               <div className="header-top-content">
 
                 <div
@@ -304,53 +326,23 @@ const Header = ({ isAuthenticated }) => {
                   </span>
 
                 </div>
-                <div className="precious-metals-ticker-wrapper">
-                  <div className="precious-metals-ticker">
-                    <div className="ticker-header">
-                      <span className="ticker-title">Live Rates</span>
-                    </div>
-                    <div className="ticker-container">
-                      {ratesData && !ratesLoading && !ratesError ? (
-                        <div className="ticker-content">
-                          {[...Array(2)].map((_, duplicateIndex) =>
-                            Object.entries(ratesData).map(([key, value], index) => (
-                              <div
-                                key={`${duplicateIndex}-${key}-${index}`}
-                                className="ticker-item"
-                              >
-                                <span
-                                  className={`metal-badge ${key.toLowerCase().includes("silver") ? "silver" : "gold"
-                                    }`}
-                                >
-                             
-                                </span>
-                                <span className="ticker-name">
-                                  {key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                                </span>
-                                <span className="ticker-value">₹{value}</span>
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      ) : ratesLoading ? (
-                        <div className="ticker-loading">
-                          <div className="loading-dots">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                          </div>
-                          <span>Loading rates...</span>
-                        </div>
-                      ) : (
-                        <div className="ticker-error">
-                          <span>⚠️ Unable to load rates</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
+              
+
+
                
 
+                <div className="header-top-right-container">
+                <div className="rates-horizontal-container">
+                  {ratesData && Object.entries(ratesData).map(([key, value], index) => (
+                    <div key={index} className="rate-item-horizontal">
+                      <img src={getMetalIcon(key)} className="rate-icon" alt="" />
+                      <span className="rate-text primary-text">
+                        {key.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
+                        &nbsp;- ₹ {value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
                 <div className="auth-actions">
                   {isAuthenticated ? (
                     <div className="authLogin-button logout-trigger" onClick={handleLogout}>
@@ -368,15 +360,15 @@ const Header = ({ isAuthenticated }) => {
 
                   )}
                 </div>
-
               </div>
-            </div>
+              </div>
+         
           </div>
         )}
-        <div className="header-main">
-          <div className="main-menu-area sticky-header">
-            <div className="container-fluid p-0">
-              <div className="nav-container d-flex align-items-center justify-content-between">
+        <div className={`${isScrolled ? "main-header" : ""}`}>
+          <div className="main-menu-area">
+          
+              <div className="nav-container d-flex align-items-center  justify-content-between">
                 <div className="nav-menu d-lg-flex align-items-center justify-content-between">
                   <div className="navbar-close">
 
@@ -399,12 +391,12 @@ const Header = ({ isAuthenticated }) => {
                       <div className="sigma-header-nav-inner">
                         <nav>
                           <ul className="sigma-main-menu">
-                            <li className="menu-item">
-                              <Link to="/home">Home</Link>
+                            <li className={location.pathname ==="/" ? "menu-item-active":"menu-item"}>
+                              <Link to="/">Home</Link>
                             </li>
 
 
-                            <li className="menu-item menu-item-has-children menu-item-has-megamenu">
+                          <li className={location.pathname === "/#" ? "menu-item-active":"menu-item  menu-item-has-children menu-item-has-megamenu"}>
                               <Link to="#">
                                 Categories{" "}
                                 <ChevronDown size={16} className="dropdown-icon" />
@@ -485,10 +477,10 @@ const Header = ({ isAuthenticated }) => {
                             </li>
 
 
-                            <li className="menu-item menu-item-has-children">
+                          <li className={location.pathname === "/products-page" ? "menu-item-active":"menu-item"}>
                               <Link to="/products-page">Shop</Link>
                             </li>
-                            <li className="menu-item">
+                          <li className={location.pathname === "/contactstore" ? "menu-item-active" : "menu-item"}>
                               <Link to="/contactstore">Contact</Link>
                             </li>
                           </ul>
@@ -542,7 +534,7 @@ const Header = ({ isAuthenticated }) => {
                   </div>
                 </div>
               </div>
-            </div>
+           
           </div>
         </div>
         <div className="sigma-mobile-header">
@@ -663,133 +655,8 @@ const Header = ({ isAuthenticated }) => {
           )}
         </AnimatePresence>
       </header>
-      <div
-        className={classNames("offcanvas-wrapper", {
-          "show-offcanvas": classmethod,
-        })}
-      >
-        <div
-          className={classNames("offcanvas-overly", {
-            "show-overly": classmethod,
-          })}
-          onClick={removeClass}
-        />
-        <div className="offcanvas-widget">
-          <Link to="#" className="offcanvas-close" onClick={removeClass}>
-            <i className="fal fa-times" />
-          </Link>
-          <Canvas />
-        </div>
-      </div>
-      <style jsx>{`
-        :root {
-          --primary-hover-color: #cd865c;
-          --primary-text-color: #041f60;
-        }
-        
-        .welcome-section {
-          flex: 0 0 auto;
-          background-color: var(--primary-hover-color);
-          padding: 0.2rem 1rem;
-          border-radius: 30px;
-          display: flex;
-          align-items: center;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-
-        .welcome-text {
-          color: var(--primary-text-color);
-          font-size: 12px;
-          font-weight: 600;
-          opacity: 0.9;
-          margin-left: 5px;
-        }
-
-        /* Pulse Animation */
-        .welcome-pulse {
-          animation: welcomePulse 2s infinite;
-        }
-
-        @keyframes welcomePulse {
-          0% {
-            box-shadow: 0 0 0 0 rgba(205, 134, 92, 0.4);
-          }
-          70% {
-            box-shadow: 0 0 0 10px rgba(205, 134, 92, 0);
-          }
-          100% {
-            box-shadow: 0 0 0 0 rgba(205, 134, 92, 0);
-          }
-        }
-
-        /* Glow Animation */
-        .welcome-glow {
-          animation: welcomeGlow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes welcomeGlow {
-          from {
-            box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px var(--primary-hover-color), 0 0 20px var(--primary-hover-color);
-          }
-          to {
-            box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px var(--primary-hover-color), 0 0 40px var(--primary-hover-color);
-          }
-        }
-
-        /* Bounce Animation */
-        .welcome-bounce {
-          animation: welcomeBounce 2s infinite;
-        }
-
-        @keyframes welcomeBounce {
-          0%, 20%, 50%, 80%, 100% {
-            transform: translateY(0);
-          }
-          40% {
-            transform: translateY(-5px);
-          }
-          60% {
-            transform: translateY(-3px);
-          }
-        }
-
-        /* Shake Animation */
-        .welcome-shake {
-          animation: welcomeShake 2s infinite;
-        }
-
-        @keyframes welcomeShake {
-          0% { transform: translateX(0); }
-          25% { transform: translateX(-2px); }
-          50% { transform: translateX(2px); }
-          75% { transform: translateX(-2px); }
-          100% { transform: translateX(0); }
-        }
-
-        /* Color Change Animation */
-        .welcome-color-change {
-          animation: welcomeColorChange 4s infinite alternate;
-        }
-
-        @keyframes welcomeColorChange {
-          0% {
-            background-color: var(--primary-hover-color);
-          }
-          100% {
-            background-color: #e39f7b;
-          }
-        }
-
-        /* Hover Effects */
-        .welcome-section:hover {
-          transform: scale(1.05);
-        }
-
-        .welcome-hover {
-          animation: none !important; /* Stop animation on hover */
-        }
-      `}</style>
+    
+   
     </Fragment>
   );
 };

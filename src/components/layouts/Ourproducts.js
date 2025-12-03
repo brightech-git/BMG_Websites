@@ -11,14 +11,7 @@ const NewArrival = ({banners ,isLoading ,isError}) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [mousePosition, setMousePosition] = useState({ x: 0.5, y: 0.5 });
     const [isMobile, setIsMobile] = useState(false);
-  
-    // const [banners ,setBanners] = useState();
-
-    // useEffect(() => {
-    //     if (data) {
-    //         setBanners(data);
-    //     }
-    // }, [data]); 
+ 
     
     console.log(banners, "bannerdata");
 
@@ -102,7 +95,11 @@ const NewArrival = ({banners ,isLoading ,isError}) => {
     }, [bannerImages.length]);
 
     const handleExplore = () => {
-        history.push('/products-page?new_arrival=true');
+        const itemCtrName = "NEW_ARRIVALS";
+        const queryParams = new URLSearchParams();
+        queryParams.append("itemCtrName", itemCtrName);
+
+        history.push(`/products-page?${queryParams.toString()}`);
     };
     if (isLoading) return <p>Loading banners...</p>;
     if (isError) return <p>Failed to load banners</p>;
@@ -113,7 +110,7 @@ const NewArrival = ({banners ,isLoading ,isError}) => {
                     <div className="arrival-content-col">
                         <div className="arrival-content">
                             <h3 className="arrival-subtitle">
-                                <span className="arrival-gradient-text">Discover</span> Our Latest Collection
+                                <span className="arrival-gradient-text">Discover Our Latest Collection </span>
                             </h3>
                             <p className="arrival-desc">
                                 Unveil the elegance of our newest arrivals, crafted with precision and inspired by timeless beauty. Each piece is designed to elevate your style.

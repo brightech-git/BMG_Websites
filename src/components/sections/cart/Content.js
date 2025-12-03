@@ -87,7 +87,7 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
 
 
     return (
-        <div className="cart-item">
+        <div className={`cart-item ${isSelected ? "selected" : ""}`}>
             <input
                 type="checkbox"
                 checked={isSelected}

@@ -16,7 +16,7 @@ const ProductCard = ({ item }) => {
     const { cartItems, addToCartHandler } = useCart();
     const isAuthenticated = useSelector((state) => state.user.isAuthenticated)
 
-    // const mobileNumber = useSelector((state) => state.user.user.contactNumber) || null;
+    const mobileNumber = useSelector((state) => state.user.user?.contactNumber) || null;
     const history = useHistory();
     const location = useLocation();
 
@@ -26,7 +26,7 @@ const ProductCard = ({ item }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
     const [loadingState, setLoadingState] = useState(true);
-    // const [modalOpen, setModalOpen] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(() => setLoadingState(false), 500);
@@ -115,10 +115,10 @@ const ProductCard = ({ item }) => {
             history.push('/login', { from: location.pathname });
             return;
         }
-        // if(!mobileNumber){
-        //     setModalOpen(true);
-        //     return;
-        // }
+        if (!mobileNumber) {
+            setModalOpen(true);
+            return;
+        }
 
         if (!item?.SNO) {
             console.warn('Missing item SNO');
@@ -232,7 +232,7 @@ const ProductCard = ({ item }) => {
     return (
         <>
             <div className="card-container">
-                <UpdateMobileModal />
+                <UpdateMobileModal open={modalOpen} onClose={() => setModalOpen(false)} />
                 <div
                     className="product-item"
                     onMouseEnter={handleMouseEnter}
@@ -255,7 +255,7 @@ const ProductCard = ({ item }) => {
                                 }}
                             />
                             {/* Previous image for hover-out effect */}
-                          
+
                             {/* Image Indicator for multiple images */}
                             {/* {hasMultipleImages && (
                             <div className="image-indicator">
@@ -374,7 +374,7 @@ const ProductCard = ({ item }) => {
                     transform: translateX(-50%);
                     display: flex;
                     gap: 6px;
-                    z-index: 10;
+                    : 10;
                     background: rgba(0, 0, 0, 0.5);
                     padding: 4px 8px;
                     border-radius: 12px;
@@ -405,7 +405,7 @@ const ProductCard = ({ item }) => {
                     border-radius: 12px;
                     font-size: 0.7rem;
                     font-family: 'Montserrat', sans-serif;
-                    z-index: 10;
+                    : 10;
                     backdrop-filter: blur(4px);
                     animation: fadeInOut 3s ease-in-out infinite;
                 }
@@ -424,7 +424,7 @@ const ProductCard = ({ item }) => {
                     gap: 0px;
                     opacity: 0;
                     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                    z-index: 10;
+                    : 10;
                 }
 
                 .product-item:hover .quick-actions {
@@ -465,7 +465,7 @@ const ProductCard = ({ item }) => {
                     color: #041f60;
                     border-radius: 18px;
                     padding: 0 10px;
-                    background: #f6f5f0;
+                    background: #fff;
                     cursor: pointer;
                     font-size: clamp(0.4rem, 1vw, 0.2rem) !important;
                     touch-action: manipulation;
@@ -490,7 +490,7 @@ const ProductCard = ({ item }) => {
 
                 .add-cart-btn:hover {
                     color: #cd865c;
-                    background: #f6f5f0;
+                    background: #fff;
                 }
 
                 .action-button:active {

@@ -89,7 +89,7 @@
     top: 50%;
     transform: translateY(-50%);
     color: var(--primary-hover-color);
-    z-index: 5;
+    : 5;
 }
 
 .with-icon {

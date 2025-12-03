@@ -102,6 +102,7 @@
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    order: 1;
 
 }
 
@@ -193,6 +194,7 @@
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+    order:2
 }
 
 .form-header {
@@ -382,9 +384,12 @@
 
 @media (max-width: 767px) {
 
-    .contact-info-wrapper,
-    .contact-form-wrapper {
+    .contact-info-wrapper{
         padding: 25px;
+        order: 2;
+    }
+    .contact-form-wrapper{
+        order:1
     }
 
     .google-map {
@@ -421,5 +426,11 @@
         max-width: 100%;
  
         /* portrait shape */
+    }
+    .form-header h2{
+        font-size: 0.9rem;
+    }
+    .form-header p{
+        font-size: 0.6rem;
     }
 }

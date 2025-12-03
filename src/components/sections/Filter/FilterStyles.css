@@ -3,7 +3,7 @@
   position: fixed;
   top: 100px;
   right: 20px;
-  z-index: 1000;
+  : 1000;
   background: #cd865c;
   color: white;
   border: none;
@@ -29,7 +29,7 @@
   width: 350px;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  : 999;
   transition: right 0.3s ease;
 }
 
@@ -144,7 +144,7 @@
   .filter-modal {
     width: 100%;
   }
-  
+
   .filter-modal-content {
     padding: 15px;
   }

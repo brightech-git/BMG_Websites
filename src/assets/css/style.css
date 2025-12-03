@@ -1,51 +1,3 @@
-/*-----------------------------------------------------------------------------------
-    CSS INDEX
-    ===================
-    Common
-    Header
-    -- Off canvas menu
-    -- Breadcrumb CSS
-    Banner
-    About
-    Jewelries Tab
-    Call TO Action
-    Text Block
-    Testimonial
-    Latest Post
-    Core Feature
-    -- Dark Style
-    Jewelries
-    -- Jewelries Gird
-    -- Jewelries List
-    -- Jewelries Slider
-      -- Jewelries Slider One
-      -- Jewelries Slider Two
-    -- Jewelries Details
-    Counter
-    Our Menu
-    Contact
-    -- Contact info box
-    Offers
-    Gallery
-    News
-    -- News Details
-    -- Paginations
-    -- Sidebars
-    Booking Form
-    Places
-    -- Places Details
-    Gold Earring
-    Footer
-    -- Subscibe
-    -- Widgets
-    -- Copy Right
-    -- Back to top
-
------------------------------------------------------------------------------------*/
-
-
-/*=======  COMMON CSS  =======*/
-
 
 @import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap');
@@ -57,10 +9,10 @@
     --title-font: 'Dancing Script';
     --primary-color: #ffffff;
     --primary-text-color: #041f60;
-    --secondary-text-color: #201f1f;
+    --secondary-text-color: #0843ce;
     --primary-card-color: #eeece8;
-    --primary-hover-color: #cd865c;
-    --secondary-card-color: rgb(238, 246, 247);
+    --primary-hover-color: #f16137;
+    --secondary-card-color: #f7f7f7;
     --feature-bg-color: #ece6d3;
     --cat-bg-color: #f2e7e9;
     --main-cat-bg-color: #eef7ee;
@@ -103,7 +55,7 @@
     --cart-button-background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
     --main-btn-background:linear-gradient(135deg, #fc5454, #d84141);
     --whistlist-button-background: linear-gradient(135deg, #31063a, #ff2b59);
-    --primary-theme-color:#F39C42;
+    --primary-theme-color:#f16137;
 }
 
 
@@ -791,7 +743,7 @@ select {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 9999;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1304,9 +1256,7 @@ header.header-absolute {
     position: absolute;
     left: 0;
     width: 100%;
-    z-index: 99;
-    background-color: #f6f5f0;
-    padding: 10px !important;
+    padding: 10px;
     top: 0px;
 }
 
@@ -1324,7 +1274,6 @@ header.header-absolute {
 
 header .nav-container {
     position: relative;
-    background-color: #f6f5f0;
 }
 
 header .nav-container .toggle {
@@ -1599,12 +1548,11 @@ header .nav-container .menu-items ul li .submenu {
     left: 0;
     top: 110%;
     width: 200px;
-    background-color: #f6f5f0;
     opacity: 0;
     visibility: hidden;
     -webkit-transition: all 0.3s ease-out 0s;
     transition: all 0.3s ease-out 0s;
-    z-index: 99;
+   
     height: auto;
 }
 
@@ -1673,7 +1621,6 @@ header .nav-container .navbar-toggler {
 
 header .nav-container .navbar-toggler span {
     position: relative;
-    background-color: #f6f5f0;
     border-radius: 3px;
     display: block;
     height: 3px;
@@ -1706,7 +1653,7 @@ header .nav-container .navbar-close {
     position: absolute;
     top: 20px;
     right: 20px;
-    z-index: 12;
+
     display: none;
 }
 
@@ -1741,11 +1688,10 @@ header .nav-container .navbar-close .cross-wrap span.bottom {
 }
 
 header .nav-container.breakpoint-on .nav-menu {
-    background-color: #f6f5f0;
     position: fixed;
     top: 0;
     left: -300px;
-    z-index: 9999;
+
     width: 300px;
     height: 100%;
     -webkit-transition-duration: 500ms;
@@ -1803,7 +1749,7 @@ header .nav-container.breakpoint-on .nav-menu .menu-items ul li .dd-trigger {
     width: 45px;
     top: 0;
     border-left: 1px solid rgba(255, 255, 255, 0.5);
-    z-index: 2;
+
     background: transparent;
     text-align: center;
     line-height: 45px;
@@ -1871,11 +1817,10 @@ header.header-three .main-menu-area {
     position: absolute;
     left: 0;
     width: 100%;
-    z-index: 99;
+    
     height: auto;
-    bottom: -45px;
-    margin-top: -20px !important;
-
+    background-color: var(--white-color) ;
+    border-bottom: 1px solid #eee !important;
 }
 
 @media (max-width: 399px) {
@@ -1892,7 +1837,7 @@ header.header-three .main-menu-area.sticky-header.sticky-active {
     left: 0;
     right: 0;
     bottom: auto;
-    z-index: 999;
+
     -webkit-animation: sticky 1.2s;
     animation: sticky 1.2s;
     background-color: var(--primary-color);
@@ -1915,7 +1860,6 @@ header.header-three .main-menu-area.sticky-header.sticky-active .nav-container .
 
 
 header.header-three .nav-container {
-    background-color: #f6f5f0;
     padding: 0 20px;
 }
 
@@ -2048,7 +1992,7 @@ header.header-three .search .search-icon .open-icon {
     position: absolute;
     left: 50%;
     top: 50%;
-    z-index: 2;
+
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
@@ -2130,7 +2074,7 @@ header.header-three .search .search-form form button {
     top: 0;
     width: 60px;
     height: 100%;
-    z-index: 1;
+
     background-color: #fcd462;
     font-size: 14px;
     color: #fff;
@@ -2139,7 +2083,7 @@ header.header-three .search .search-form form button {
 }
 
 header.header-three .search .search-form form button:hover {
-    background-color: #f6f5f0;
+
     color: #1c1b19;
 }
 
@@ -2171,8 +2115,7 @@ header.sticky-header.sticky-active {
     top: 0;
     left: 0;
     right: 0;
-    background-color: #f6f5f0 !important;
-    z-index: 999;
+  
     -webkit-animation: sticky 1.2s;
     animation: sticky 1.2s;
     box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.04);
@@ -2224,9 +2167,7 @@ header.sticky-header.sticky-active.header-two .nav-container .menu-items ul li a
     color: #fff;
 }
 
-header.sticky-header.sticky-active.header-two .nav-container .navbar-toggler span {
-    background-color: #f6f5f0;
-}
+
 
 header.sticky-header.sticky-active.header-two .header-info .item a,
 header.sticky-header.sticky-active.header-two .header-info .item,
@@ -2290,7 +2231,6 @@ header.sticky-header.sticky-active.header-two .header-info .item .title {
     box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.1);
     right: 0;
     left: auto;
-    background-color: #f6f5f0;
 }
 
 .sigma-header .cart-dropdown-menu .cart-items-box {
@@ -2461,7 +2401,6 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     color: #404040;
     line-height: 30px;
     font-family: 'Montserrat';
-    background-color: #f6f5f0;
 }
 
 .sigma-header .sigma-main-menu .menu-item-has-children>.sub-menu>li.menu-item:last-child>a {
@@ -2781,7 +2720,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     left: 0;
     background-color: var(--primary-color);
     height: 100vh;
-    z-index: 10;
+
     transition: 0.3s all;
     display: none;
     overflow-y: auto;
@@ -2903,7 +2842,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     left: 0;
     -webkit-transition: all 0.4s;
     transition: all 0.4s;
-    z-index: 999;
+  
     opacity: 0;
     visibility: hidden;
     margin-left: -450px;
@@ -2919,7 +2858,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     position: fixed;
     height: 100vh;
     width: 100%;
-    z-index: 98;
+
     background-color: #1e1e1e;
     left: 0;
     top: 0;
@@ -2941,8 +2880,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     height: 100vh;
     overflow-y: auto;
     padding: 70px 40px;
-    position: relative;
-    z-index: 99;
+
 }
 
 .offcanvas-wrapper .offcanvas-widget a.offcanvas-close {
@@ -3001,7 +2939,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     top: 0;
     width: 60px;
     height: 100%;
-    z-index: 1;
+ 
     background-color: #0a0a0a;
     font-size: 14px;
     color: #fff;
@@ -3010,7 +2948,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 }
 
 .offcanvas-wrapper .offcanvas-widget .widget.search-widget form button:hover {
-    background-color: #f6f5f0;
+ 
     color: #1c1b19;
 }
 
@@ -3047,7 +2985,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 }
 
 .offcanvas-wrapper .offcanvas-widget .widget.social-link ul li a:hover {
-    background-color: #f6f5f0;
+ 
     color: #1c1b19;
 }
 
@@ -3058,7 +2996,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     background-size: cover;
     background-position: center;
     position: relative;
-    z-index: 1;
+
     margin-top: 130px;
     padding: 50px;
 
@@ -3088,7 +3026,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     top: 0;
     height: 100%;
     width: 100%;
-    z-index: -1;
+ 
     background-color: #353530;
     content: '';
     opacity: 0;
@@ -3149,7 +3087,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     bottom: -32px;
     background-color: #353530;
     padding: 20px 40px;
-    z-index: 2;
+  
     transform: translateX(-50%);
 }
 
@@ -3968,7 +3906,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 
 .shop-btn {
     padding: 12px 26px;
-    background-color: #f6f5f0;
+
     color: #000;
     font-weight: 500;
     border: none;
@@ -4322,7 +4260,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     font-size: 24px;
     color: var(--primary-hover-color);
     cursor: pointer;
-    z-index: 10;
+
     transition: all 0.3s ease;
 }
 
@@ -4424,7 +4362,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 
 .room-type-section {
     position: relative;
-    z-index: 1;
+
     background-size: 100% 100%;
     background-position: center;
 }
@@ -4438,7 +4376,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     content: '';
     background-color: var(--primary-color);
     opacity: 0.6;
-    z-index: -1;
+  
     background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
@@ -4492,7 +4430,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     width: 100%;
     height: 280px;
     position: relative;
-    z-index: 1;
+
     overflow: hidden;
     margin-top: 15px;
 }
@@ -4536,7 +4474,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     position: absolute;
     left: 30px;
     bottom: 30px;
-    z-index: 2;
+
     right: 30px;
 }
 
@@ -4600,7 +4538,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     right: 15px;
     bottom: 0;
     border-radius: 50%;
-    z-index: 3;
+
     color: var(--primary-color);
     font-size: 18px;
     line-height: 60px;
@@ -4646,7 +4584,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     padding: 70px 0px;
     background-color: var(--primary-color) !important;
     position: relative;
-    z-index: 1;
+
     overflow: hidden;
     margin-bottom: 30px !important;
 }
@@ -4723,7 +4661,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     -webkit-transition: all 0.3s ease-out 0s;
     transition: all 0.3s ease-out 0s;
     position: relative;
-    z-index: 2;
+ 
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
@@ -4753,7 +4691,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 .cta-section .cta-inner .cta-features .single-feature .cta-desc {
     position: relative;
     padding-left: 40px;
-    z-index: 1;
+  
     font-size: 14px;
 }
 
@@ -4785,7 +4723,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     line-height: 1;
     -webkit-text-fill-color: transparent;
     -webkit-text-stroke: 1px #fff;
-    z-index: -1;
+
     color: transparent;
     opacity: 0.1;
 }
@@ -4837,7 +4775,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 
 .room-gallery-cta {
     position: relative;
-    z-index: 1;
+
     background-size: cover;
     background-position: center;
     padding: 120px 0;
@@ -4850,8 +4788,6 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     top: 0;
     width: 100%;
     height: 100%;
-    z-index: -1;
-    background-color: #f6f5f0;
     opacity: 0.7;
     content: '';
 }
@@ -4948,12 +4884,12 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 
 .room-gallery-cta .rotate-images img {
     position: absolute;
-    z-index: 1;
+
     bottom: 0;
     -webkit-transform: rotate(-37deg);
     transform: rotate(-37deg);
     left: 3%;
-    z-index: -1;
+ 
 }
 
 @media (max-width: 767px) {
@@ -5058,7 +4994,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 /* Text Block Base Styles */
 .text-block {
     position: relative;
-    z-index: 1;
+
 }
 
 /* Background Variant */
@@ -5075,7 +5011,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     width: 100%;
     height: 100%;
     background-color: #353530;
-    z-index: -1;
+
     opacity: 0.94;
 }
 
@@ -5106,7 +5042,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     top: 0;
     height: 100%;
     width: 30%;
-    z-index: -1;
+
 }
 
 .text-block.with-pattern .pattern-wrap .pattern {
@@ -5122,7 +5058,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     top: 0;
     width: 100%;
     height: 100%;
-    z-index: 1;
+ 
     background-size: cover;
     background-position: right;
 }
@@ -5277,7 +5213,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 .intro-video.overlapped .video-wrap.video-wrap-two {
     position: relative;
     margin-top: -70px;
-    z-index: 2;
+
     height: 500px;
 }
 
@@ -5652,7 +5588,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
-    z-index: 1;
+
     display: flex;
     align-items: flex-end;
     padding: 35px 40px;
@@ -5665,7 +5601,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1;
+ 
 }
 
 .blog-style-2 .blog-post:after {
@@ -5679,7 +5615,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     top: 0;
     pointer-events: none;
     width: 100%;
-    z-index: -1;
+  
     max-width: none;
     height: 100%;
 }
@@ -5748,7 +5684,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     background-size: cover;
     background-position: center center;
     position: relative;
-    z-index: 1;
+   
     overflow: hidden;
 }
 
@@ -5759,8 +5695,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     top: 0;
     width: 100%;
     height: 100%;
-    z-index: -1;
-    z-index: -1;
+ 
     opacity: 0.6;
 }
 
@@ -5770,7 +5705,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     background-color: #000;
     position: absolute;
     top: 0;
-    z-index: -1;
+   
 }
 
 .spacer.spacer-lg {
@@ -6196,7 +6131,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 
 .room-slider {
     position: relative;
-    z-index: 1;
+
     background-color: var(--primary-color) !important;
     /*=======  Jewelries Slider One  =======*/
     /*=======  Jewelries Slider Two  =======*/
@@ -6253,7 +6188,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     font-size: 14px;
     padding: 60px 50px;
     position: relative;
-    z-index: 2;
+ 
     margin-top: -495px;
 }
 
@@ -6284,7 +6219,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     font-weight: 700;
     top: 90px;
     color: #4c4c4c;
-    z-index: 3;
+
     letter-spacing: 2px;
 }
 
@@ -6298,7 +6233,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     right: 0;
     line-height: 1;
     font-size: 200px;
-    z-index: -1;
+
     -webkit-text-fill-color: transparent;
     -webkit-text-stroke: 1px rgba(255, 255, 255, 0.6);
     opacity: 0.1;
@@ -6601,7 +6536,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     transition: all 0.3s ease-out 0s;
     position: absolute;
     top: 40%;
-    z-index: 2;
+ 
     left: 22%;
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
@@ -6772,7 +6707,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 .room-details .deatils-box .thumb {
     margin-top: -90px;
     position: relative;
-    z-index: -1;
+
     margin-bottom: 60px;
 }
 
@@ -7127,7 +7062,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 
 .menu-area {
     position: relative;
-    z-index: 1;
+
 }
 
 .menu-area.menu-nagative-gallery {
@@ -7230,7 +7165,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     left: 2%;
     top: -70px;
     max-width: 250px;
-    z-index: 2;
+
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
@@ -7255,7 +7190,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     position: absolute;
     right: 3%;
     bottom: 160px;
-    z-index: -1;
+
     max-width: 250px;
 }
 
@@ -7316,7 +7251,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     transform: translateY(-50%);
     font-size: 24px;
     color: #fcd462;
-    z-index: 2;
+
     -webkit-transition: all 0.3s ease-out 0s;
     transition: all 0.3s ease-out 0s;
     visibility: hidden;
@@ -7362,9 +7297,6 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     }
 }
 
-.menu-area .menu-loop .single-menu-box.hover-drak:hover .menu-desc {
-    background-color: #f6f5f0;
-}
 
 .menu-area .menu-loop .single-menu-box.hover-drak:hover .menu-desc,
 .menu-area .menu-loop .single-menu-box.hover-drak:hover .menu-desc h4 a {
@@ -7473,7 +7405,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     margin-right: 60px;
     border-top: 6px solid #fcd462;
     margin-top: -75px;
-    z-index: 2;
+
     position: relative;
 }
 
@@ -7745,10 +7677,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     background-color: #fcd462;
 }
 
-.post-box .post-desc .cat:hover {
-    background-color: #f6f5f0;
-    color: #1c1b19;
-}
+
 
 .post-box .post-desc h2 {
     font-size: 42px;
@@ -7902,7 +7831,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 
 .post-box.title-with-thumb {
     position: relative;
-    z-index: 1;
+ 
 }
 
 .post-box.title-with-thumb::after {
@@ -7915,7 +7844,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     background-image: url(../img/texture-1.5da6b882.png);
     background-size: cover;
     background-position: center;
-    z-index: -1;
+
     opacity: 0.1;
 }
 
@@ -7930,7 +7859,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 .post-box.quote-post {
     padding: 50px;
     position: relative;
-    z-index: 1;
+
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
@@ -7965,20 +7894,20 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     width: 100%;
     height: 100%;
     background-color: #fcd462;
-    z-index: -1;
+    
     content: '';
 }
 
 .post-box.quote-post::after {
     /* background-image: url(../img/icon/pattern-05.png); */
-    z-index: -1;
+ 
     opacity: 0.6;
 }
 
 .post-box.quote-post .post-desc {
     border: none;
     position: relative;
-    z-index: 1;
+ 
     padding: 0;
     padding-left: 115px;
     background-color: transparent;
@@ -8250,7 +8179,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     padding: 45px 55px;
     background-color: var(--primary-card-color);
     border-radius: 0;
-    z-index: 1;
+
     font-size: 28px;
     font-family: "Prata", serif;
     font-weight: 400;
@@ -8268,7 +8197,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     top: 40px;
     bottom: 40px;
     content: '';
-    z-index: -1;
+ 
     background-size: contain;
     background-position: right center;
     background-repeat: no-repeat;
@@ -8655,7 +8584,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     display: inline-block;
     font-size: 14px;
     font-weight: 700;
-    z-index: 2;
+
     color: #a3a3a3;
 }
 
@@ -9114,7 +9043,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 .booking-form {
     position: relative;
     margin-top: -70px;
-    z-index: 2;
+  
 }
 
 .booking-form.overlapped {
@@ -9241,7 +9170,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 
 .categories-box-layout {
     margin-top: 80px;
-    z-index: 2;
+ 
     width: 100%;
     padding: 10px 40px;
 }
@@ -9265,7 +9194,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     padding: 0;
     display: flex;
     position: relative;
-    z-index: 1;
+
     overflow: hidden;
     height: 100%;
     transition: all 0.3s ease;
@@ -9280,7 +9209,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 
 .category-content {
     position: relative;
-    z-index: 2;
+
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -9459,7 +9388,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 .book-room-style2 {
     position: relative;
     background-color: #353530;
-    z-index: 1;
+
 }
 
 .book-room-style2:before {
@@ -9482,7 +9411,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     width: 50%;
     height: 100%;
     background-color: #fcd462;
-    z-index: -1;
+
 }
 
 .book-room-style2 .book-room-content,
@@ -9595,7 +9524,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     position: absolute;
     bottom: 50%;
     transform: translateY(50%);
-    z-index: 5;
+
     right: 10px;
     display: flex;
     flex-direction: column;
@@ -10406,7 +10335,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     position: absolute;
     bottom: 40px;
     left: 40px;
-    z-index: 2;
+
 }
 
 @media (max-width: 767px) {
@@ -10773,7 +10702,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
 
 .food-box.shop-box.shop-box-2 {
     position: relative;
-    z-index: 1;
+
 }
 
 .food-box.shop-box.shop-box-2:before {
@@ -10785,7 +10714,7 @@ header.header-three.sigma-header .nav-container .menu-right-buttons .cart-dropdo
     height: 100%;
     background-color: transparent;
     transition: all 0.3s ease-out 0s;
-    z-index: -1;
+ 
 }
 
 .food-box.shop-box.shop-box-2:hover:before {
@@ -11568,14 +11497,14 @@ td.has-title {
 
 .login-content {
     position: relative;
-    z-index: 1;
+
     display: flex;
     align-items: center;
     justify-content: center;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    z-index: 1;
+
     height: 100%;
     padding: 20px;
 }
@@ -11587,7 +11516,7 @@ td.has-title {
     top: 0;
     width: 100%;
     height: 100%;
-    z-index: -1
+
 }
 
 .login-content .description {
@@ -11835,7 +11764,7 @@ td.has-title {
     height: 100%;
     background: linear-gradient(180deg, transparent 0, transparent 30%, #000);
     opacity: 0.8;
-    z-index: 1;
+   
     transition: all 0.3s ease-out 0s;
 }
 
@@ -11862,7 +11791,7 @@ td.has-title {
     height: auto;
     background-color: transparent;
     padding: 20px;
-    z-index: 2;
+   
 }
 
 .location-thumb .location-content .icon {
@@ -11995,7 +11924,7 @@ footer .footer-subscibe-area .subscribe-text .subscribe-form button:hover {
 
 footer .footer-widget-area {
     position: relative;
-    z-index: 1;
+    
 }
 
 footer .footer-widget-area::after,
@@ -12010,7 +11939,7 @@ footer .footer-widget-area::after,
     background-size: cover;
     background-repeat: repeat;
     background-position: center;
-    z-index: -1;
+ 
 }
 
 @media(min-width: 1600px) {

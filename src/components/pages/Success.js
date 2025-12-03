@@ -16,9 +16,14 @@ const Success = () => {
                 <h2>Form Submitted Successfully!</h2>
                 <p>Thank you for reaching out. We will get back to you shortly.</p>
 
-                {/* <a href="/" className="home-btn">
-                    Go Back to Home
-                </a> */}
+                    <a
+                        href="/"
+                        className="gtm-click animate-fade-out"
+                        onClick={() => window.dataLayer.push({ event: "formSubmissionSuccess",formName: "Contact Form" })}
+                    >
+                        Go Back Home
+                    </a>
+
             </div>
         </div>
         <section>

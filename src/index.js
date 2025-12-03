@@ -22,7 +22,7 @@ import './assets/fonts/flaticon/flaticon-2.css';
 import './assets/css/default.css';
 import './assets/css/style.css';
 import './assets/css/animations.css';
-
+import './assets/css/utils.css';
 import 'swiper/css';
 import 'swiper/css/autoplay';
 import 'swiper/css/pagination';

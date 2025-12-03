@@ -1,5 +1,3 @@
-
-
 /* Mobile Menu Overlay */
 .mobile-menu-overlay {
     position: fixed;
@@ -8,7 +6,7 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
+    : 9999;
     display: flex;
     justify-content: flex-start;
     align-items: stretch;
@@ -135,17 +133,17 @@
 
 /* Section Title Wrapper */
 .jewelry-mobile-nav .section-title-wrapper {
-    
+
     display: flex;
-    align-items: flex-start ;
-    align-self: flex-start ;
-    align-content: flex-start ;
-    text-align: start ;
-    padding: 10px 14px ;
+    align-items: flex-start;
+    align-self: flex-start;
+    align-content: flex-start;
+    text-align: start;
+    padding: 10px 14px;
     cursor: pointer;
     transition: all 0.3s ease;
     border-radius: 4px;
-    width: '100%';  
+    width: '100%';
 }
 
 .jewelry-mobile-nav .section-title-wrapper:hover {
@@ -160,10 +158,10 @@
     letter-spacing: 0.4px;
     font-family: var(--secondary-font);
     align-items: flex-start !important;
-        align-self: flex-start !important;
-        align-content: flex-start !important;
-        text-align: start !important;
-        background-color: aqua;
+    align-self: flex-start !important;
+    align-content: flex-start !important;
+    text-align: start !important;
+    background-color: aqua;
 }
 
 .jewelry-mobile-nav .section-dropdown-icon {
@@ -189,13 +187,13 @@
 .jewelry-mobile-nav .nav-item.active .submenu {
     display: block;
     animation: slideDown 0.3s ease;
-  
+
 }
 
 .jewelry-mobile-nav .submenu .nav-item {
     margin-bottom: 6px;
     list-style: none;
-    
+
 }
 
 .jewelry-mobile-nav .submenu a {
@@ -257,11 +255,11 @@
     font-size: 13px;
     font-weight: 500;
     color: var(--primary-text-color);
-    padding: 10px ;
+    padding: 10px;
     display: flex;
     align-items: center;
     font-family: var(--secondary-font);
-        
+
 }
 
 .jewelry-mobile-nav .mega-menu .nav-item p:hover {
@@ -293,7 +291,7 @@
 /* Responsive Styles */
 @media (max-width: 480px) {
     .mobile-menu-container {
-        width:330px;
+        width: 330px;
     }
 
     .mobile-menu-header {

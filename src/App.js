@@ -57,21 +57,27 @@ import './App.css';
 import { useAllOrders } from './hook/order/useOrderHistoryQuery';
 import { OrderNotification } from './components/layouts/ProductOrdersModal';
 import EnchantedHero from './assets/videos/EnchantedHero';
-import UpdateMobileModal from './components/layouts/UpdateMobileModal';
+// import UpdateMobileModal from './components/layouts/UpdateMobileModal';
 import Success from './components/pages/Success';
+import SchemePrivacyPolicy from './components/pages/SchemePrivacyPolicy';
+import SupportPage from './components/pages/SchemeSupport';
+import Dashboard from './components/pages/AccountDemo/Dashboard';
+import OrderDetails from './components/pages/AccountDemo/OrderDetails';
+import ChangePassword from './components/pages/AccountDemo/ChangePassword';
+import Orders from './components/pages/AccountDemo/Orders';
 
-function ScrollWatcher() {
-  const location = useLocation();
-  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+// function ScrollWatcher() {
+//   const location = useLocation();
+//   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      sessionStorage.setItem('lastVisited', location.pathname);
-    }
-  }, [location, isAuthenticated]);
+//   useEffect(() => {
+//     if (!isAuthenticated) {
+//       sessionStorage.setItem('lastVisited', location.pathname);
+//     }
+//   }, [location, isAuthenticated]);
 
-  return null;
-}
+//   return null;
+// }
 
 
 function App() {
@@ -178,8 +184,8 @@ function App() {
 
   return (
     <Router basename="/">
-      <UpdateMobileModal />
-      <ScrollWatcher />
+      {/* <UpdateMobileModal /> */}
+      {/* <ScrollWatcher /> */}
       <ScrollToTop />
       <NotificationModal
         show={showNotifModal}
@@ -238,7 +244,11 @@ function App() {
             <Route exact path="/forgot-password" component={ForgotPassword} />
             <Route exact path="/product-detail/:sno" component={Shopdetail} />
             <Route exact path="/products-page" component={Shopleft} />
-         
+
+          <Route exact path="/dummy-account" component={Dashboard} />
+          <Route exact path="/dummy-orders" component={Orders } />
+          <Route exact path="/dummy-order-details/:orderId" component={OrderDetails} />
+          <Route exact path="/dummy-change-password" component={ChangePassword} />
 
             <PrivateRoute exact path="/wishlist" component={Wishlist} />
             <PrivateRoute exact path="/payment/:orderId" component={PaymentPage} />
@@ -258,19 +268,21 @@ function App() {
             <Route exact path="/appointment" component={Appointment} />
             
             <Route exact path="/hero" component={EnchantedHero} />
-            <Route exact path="/heros" component={UpdateMobileModal} />
+            <Route exact path="/scheme-privacy" component={SchemePrivacyPolicy} />
+            <Route exact path="/scheme-support" component={SupportPage} />
 
           <Route
             exact
             path='/faq'
             render={() => <FAQ languages={languages} content={faqContent} />}
           />
-          
+          <Route exact path="/contact" component={Contact} />
           <Route exact path="/contactstore" component={ContactStore} />
-          <Route exact path="/success" component={Success} />
+          <Route exact path="/contactstore/success" component={Success} />
             <Route component={Error} />
             <Route exact path="/coming-soon" component={Comingsoon} />
-           
+
+          
             <RouteTracker />
           </Switch>
         // </PageTransition>

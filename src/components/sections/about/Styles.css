@@ -4,6 +4,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -14,6 +15,7 @@
   0% {
     background-position: -1000px 0;
   }
+
   100% {
     background-position: 1000px 0;
   }
@@ -24,10 +26,12 @@
     transform: scale(1);
     opacity: 1;
   }
+
   50% {
     transform: scale(1.05);
     opacity: 0.8;
   }
+
   100% {
     transform: scale(1);
     opacity: 1;
@@ -38,9 +42,11 @@
   0% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-10px);
   }
+
   100% {
     transform: translateY(0px);
   }
@@ -61,9 +67,9 @@
   overflow-x: hidden;
 }
 
-.bmg-global h1, 
-.bmg-global h2, 
-.bmg-global h3, 
+.bmg-global h1,
+.bmg-global h2,
+.bmg-global h3,
 .bmg-global h4 {
   font-family: var(--title-font);
   font-weight: 700;
@@ -139,7 +145,7 @@
   font-size: 3rem;
   margin-bottom: 15px;
   color: #b8860b;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
   display: inline-block;
 }
@@ -166,7 +172,7 @@
   position: relative;
 }
 
-.bmg-tagline::before, 
+.bmg-tagline::before,
 .bmg-tagline::after {
   content: '"';
   font-size: 2rem;
@@ -261,7 +267,7 @@
   height: 350px;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
   position: relative;
   transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
@@ -276,12 +282,12 @@
   border: 1px solid rgba(184, 134, 11, 0.3);
   border-radius: 12px;
   pointer-events: none;
-  z-index: 2;
+  : 2;
 }
 
 .bmg-image-container:hover {
   transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
 .bmg-image-container img {
@@ -301,7 +307,7 @@
   height: 350px;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
   position: relative;
 }
 
@@ -315,7 +321,7 @@
   border: 1px solid rgba(184, 134, 11, 0.3);
   border-radius: 12px;
   pointer-events: none;
-  z-index: 2;
+  : 2;
 }
 
 .bmg-video-container video {
@@ -348,7 +354,7 @@
   background: rgba(0, 0, 0, 0.4);
   transition: all 0.4s ease;
   cursor: pointer;
-  z-index: 10;
+  : 10;
 }
 
 .bmg-play-button-overlay-playing {
@@ -381,7 +387,7 @@
   padding: 30px 25px;
   border-radius: 12px;
   text-align: center;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
   transition: all 0.4s ease;
   position: relative;
   overflow: hidden;
@@ -399,7 +405,7 @@
 
 .bmg-value-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
 .bmg-value-card h3 {
@@ -430,7 +436,7 @@
   margin-top: 40px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
 }
 
 .bmg-promise-container::before {
@@ -461,7 +467,7 @@
   margin: 0 auto 20px;
   line-height: 1.7;
   position: relative;
-  z-index: 1;
+  : 1;
 }
 
 /* Mission Section Styles */
@@ -531,7 +537,7 @@
   justify-content: center;
   align-items: center;
   background: rgba(255, 255, 255, 0.9);
-  z-index: 5;
+  : 5;
 }
 
 .bmg-video-spinner {
@@ -545,8 +551,13 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Tablet Styles */
@@ -554,57 +565,57 @@
   .bmg-header {
     padding: 100px 20px 80px;
   }
-  
+
   .bmg-logo {
     font-size: 3.5rem;
     margin-bottom: 20px;
   }
-  
+
   .bmg-tagline {
     font-size: 1.5rem;
   }
-  
+
   .bmg-section {
     padding: 80px 0;
   }
-  
+
   .bmg-section-title {
     font-size: 2.5rem;
     margin-bottom: 3rem;
   }
-  
+
   .bmg-content-wrapper {
     flex-direction: row;
     gap: 50px;
   }
-  
+
   .bmg-content-wrapper-reverse {
     flex-direction: row-reverse;
   }
-  
+
   .bmg-text-content {
     flex: 1;
   }
-  
+
   .bmg-image-container,
   .bmg-video-container {
     flex: 1;
     height: 400px;
   }
-  
+
   .bmg-values-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 40px;
   }
-  
+
   .bmg-value-card {
     padding: 40px 30px;
   }
-  
+
   .bmg-promise-container {
     padding: 60px 50px;
   }
-  
+
   .bmg-mission-icon,
   .bmg-vision-icon {
     font-size: 4rem;
@@ -616,70 +627,70 @@
   .bmg-logo {
     font-size: 4rem;
   }
-  
+
   .bmg-tagline {
     font-size: 1.6rem;
   }
-  
+
   .bmg-section-title {
     font-size: 3rem;
     margin-bottom: 4rem;
   }
-  
+
   .bmg-content-wrapper {
     gap: 80px;
   }
-  
+
   .bmg-text-content p {
     font-size: 1.2rem;
   }
-  
+
   .bmg-image-container,
   .bmg-video-container {
     height: 500px;
   }
-  
+
   .bmg-values-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 50px;
   }
-  
+
   .bmg-value-card {
     padding: 50px 40px;
   }
-  
+
   .bmg-value-card h3 {
     font-size: 1.8rem;
   }
-  
+
   .bmg-value-card p {
     font-size: 1.15rem;
   }
-  
+
   .bmg-icon {
     font-size: 3.5rem;
   }
-  
+
   .bmg-promise-container {
     padding: 80px 70px;
   }
-  
+
   .bmg-promise-container p {
     font-size: 1.25rem;
   }
-  
+
   .bmg-play-button-overlay::after {
     font-size: 5rem;
   }
-  
+
   .bmg-mission-statement {
     padding-right: 20px;
   }
-  
+
   .bmg-vision-statement {
     padding-left: 20px;
   }
-  
+
   .bmg-mission-icon,
   .bmg-vision-icon {
     font-size: 5rem;
@@ -694,7 +705,8 @@
 }
 
 /* High-resolution displays */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
   .bmg-logo {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -709,19 +721,19 @@
     font-size: 12pt;
     line-height: 1.5;
   }
-  
+
   .bmg-header,
   .bmg-section {
     page-break-inside: avoid;
     break-inside: avoid;
   }
-  
+
   .bmg-image-container,
   .bmg-video-container,
   .bmg-play-button-overlay {
     display: none;
   }
-  
+
   .bmg-value-card {
     box-shadow: none;
     border: 1px solid #ddd;

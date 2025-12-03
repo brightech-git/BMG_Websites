@@ -33,11 +33,14 @@
 }
 
 .noblur-gradient-text {
-    background: var(--gradient-text);
+background: var(--gradient-border);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
     color: transparent;
+    text-shadow: var(--text-shadow);
+    font-family: var(--title-font);
+    font-weight: bolder;
+    font-size: 40px;
 }
 
 .noblur-subtitle {
@@ -120,7 +123,7 @@
     transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
-    background: var(--white-color) ;
+    background: var(--white-color);
     cursor: pointer;
     margin: 0 auto;
 }
@@ -159,7 +162,7 @@
     background-color: rgba(255, 255, 255, 0.95);
     color: var(--primary-text-color);
     cursor: pointer;
-    z-index: 10;
+   z-index : 10;
     transition: all 0.3s ease;
     font-size: 1.125rem;
     border: none;
@@ -261,6 +264,9 @@
         line-height: 3rem;
         font-size: 1rem;
     }
+    .noblur-gradient-text{
+        font-size: 32px;
+    }
 }
 
 @media (max-width: 68em) {
@@ -268,6 +274,9 @@
         width: 17rem;
         height: 18rem;
     }
+           .noblur-gradient-text {
+               font-size: 32px;
+           }
 }
 
 @media (max-width: 62em) {
@@ -326,6 +335,9 @@
     .noblur-description {
         font-size: 0.85rem;
     }
+           .noblur-gradient-text {
+               font-size: 26px;
+           }
 }
 
 @media (max-width: 48em) {
@@ -361,6 +373,9 @@
     .noblur-description {
         font-size: 0.8rem;
     }
+           .noblur-gradient-text {
+               font-size: 24px;
+           }
 }
 
 @media (max-width: 36em) {
@@ -387,6 +402,9 @@
     .noblur-main-product {
         margin-bottom: 2rem;
     }
+           .noblur-gradient-text {
+               font-size: 20px;
+           }
 }
 
 @media (max-width: 30em) {

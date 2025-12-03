@@ -72,7 +72,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated) || Authenticated;
 
  
-  // const mobileNumber = useSelector((state) => state.user.user.contactNumber) || null;
+  const mobileNumber = useSelector((state) => state.user.user?.contactNumber) || null;
   // console.log(isAuthenticated,mobileNumber, 'isAuthenticaed')
   const history = useHistory();
   const location = useLocation();
@@ -89,7 +89,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
   const shareRef = React.useRef();
 
   const Base_URL = "https://app.bmgjewellers.com";
-  // const [modalOpen, setModalOpen] = React.useState(false);
+  const [modalOpen, setModalOpen] = React.useState(false);
 
   // Function to get encoded image URL
   const getEncodedImageUrl = (rawPath) => {
@@ -112,8 +112,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
       draggable: true,
       theme: "colored",
     });
-    // const redirectState = { from: location.pathname + location.search };
-    // localStorage.setItem("lastVisited", JSON.stringify(redirectState));
+    
     history.push("/login");
   };
 
@@ -171,10 +170,10 @@ const Shopinfo = ({ sno, Authenticated }) => {
       showAuthToast("add items to cart");
       return;
     }
-    // if (!mobileNumber) {
-    //   setModalOpen(true);
-    //   return;
-    // }
+    if (!mobileNumber) {
+      setModalOpen(true);
+      return;
+    }
     if (isInCart) {
       toast.info(`${product.ITEMCTRNAME} is already in cart`, {
         position: "top-right",
@@ -209,10 +208,10 @@ const Shopinfo = ({ sno, Authenticated }) => {
       showAuthToast("proceed with purchase");
       return;
     }
-    // if (!mobileNumber) {
-    //   setModalOpen(true);
-    //   return;
-    // }
+    if (!mobileNumber) {
+      setModalOpen(true);
+      return;
+    }
 
     const firstImagePath = product.ImagePath
       ? JSON.parse(product.ImagePath)[0]
@@ -364,7 +363,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
 
   return (
     <section>
-      <UpdateMobileModal />
+      <UpdateMobileModal open={modalOpen} onClose={() => setModalOpen(false) }/>
       <section className="modern-product-section">
         <div className="shopdetail-container">
           <div className="row product-detail-row g-4">

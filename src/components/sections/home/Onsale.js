@@ -9,10 +9,10 @@ const Onsale = ({festivalBanners ,isLoading ,isError}) => {
     const mainBanner = festivalBanners[0] || null;
     const secondaryBanners = festivalBanners.slice(1);
 
-    const handleProductClick = (itemCtrName, subItemName) => {
+    const handleProductClick = (itemCtrName) => {
         const queryParams = new URLSearchParams();
         if (itemCtrName) queryParams.append('itemCtrName', itemCtrName);
-        if (subItemName) queryParams.append('subItemName', subItemName);
+        // if (subItemName) queryParams.append('subItemName', subItemName);
         window.location.href = `/products-page?${queryParams.toString()}`;
     };
 
@@ -72,8 +72,8 @@ const Onsale = ({festivalBanners ,isLoading ,isError}) => {
     return (
         <section className="collections-showcase">
             <div className="container">
-                <div className="section-header">
-                    <h2 className="section-title">Festival Collections</h2>
+                <div className="festival-section-header">
+                    <h2 className="onsale-title-text">Festival Collections</h2>
                 </div>
 
                 <div className="collections-grid">

@@ -1,5 +1,3 @@
-
-
 /* Base Styles */
 .address-page-layout {
   background-color: var(--primary-color);
@@ -276,7 +274,7 @@
 }
 
 .btn-edit:hover {
-  background-color:var(--primary-hover-color);
+  background-color: var(--primary-hover-color);
 }
 
 .btn-set-default {
@@ -285,7 +283,7 @@
 }
 
 .btn-set-default:hover {
-  background-color:var(--btn-color);
+  background-color: var(--btn-color);
 }
 
 .btn-delete {
@@ -294,7 +292,7 @@
 }
 
 .btn-delete:hover {
-  background-color:var(--primary-hover-color);
+  background-color: var(--primary-hover-color);
 }
 
 /* No Addresses State */
@@ -357,7 +355,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  : 1000;
   padding: 1rem;
 }
 
@@ -377,6 +375,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -535,11 +534,11 @@ form {
   transition: all 0.2s ease;
 }
 
-.custom-checkbox:hover input ~ .checkmark {
+.custom-checkbox:hover input~.checkmark {
   background-color: var(--primary-card-color);
 }
 
-.custom-checkbox input:checked ~ .checkmark {
+.custom-checkbox input:checked~.checkmark {
   background-color: var(--primary-hover-color);
   border-color: var(--primary-hover-color);
 }
@@ -550,7 +549,7 @@ form {
   display: none;
 }
 
-.custom-checkbox input:checked ~ .checkmark:after {
+.custom-checkbox input:checked~.checkmark:after {
   display: block;
 }
 
@@ -635,28 +634,28 @@ form {
   .address-page-layout {
     flex-direction: column;
   }
-  
+
   .address-manager-container {
     padding: 1rem;
   }
-  
+
   .form-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .form-group.full-width {
     grid-column: span 1;
   }
-  
+
   .address-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .address-header {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .address-tabs {
     flex-direction: column;
   }

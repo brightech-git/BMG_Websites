@@ -1,6 +1,5 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { useOccasionBanners } from '../../../hook/banner/useOccasionBanners';
 import './category.css';
 
 const CategoryCard = ({ item }) => {
@@ -9,8 +8,8 @@ const CategoryCard = ({ item }) => {
 
     const handleShopNow = (occasion, gender) => {
         const queryParams = new URLSearchParams();
-        if (occasion) queryParams.append('occasion', occasion);
-        if (gender) queryParams.append('gender', gender);
+        if (occasion) queryParams.append('itemCtrName', occasion);
+        // if (gender) queryParams.append('gender', gender);
         history.push(`/products-page?${queryParams.toString()}`);
     };
 
@@ -90,8 +89,7 @@ const Category = ({ banners, isLoading, error }) => {
         <div className="category-container">
             <div className='title-container'>
                 <h4 className='occ-title'> Shop By Occasion</h4>
-                <span className='occ-sub-title'>Find the perfect piece for weddings, parties, or everyday style.
-                    Jewelry that makes every occasion shine. </span>
+              
             </div>
 
 

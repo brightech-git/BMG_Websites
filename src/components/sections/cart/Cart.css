@@ -91,7 +91,10 @@
     border-radius: 20px;
     white-space: nowrap;
 }
-
+.cart-item.selected {
+    background-color: var(--primary-card-color);
+    /* light blue or whatever you want */
+}
 /* Compact Cart Content Layout */
 .cart-content {
     display: grid;
@@ -118,7 +121,7 @@
     grid-template-columns: auto 120px 1fr auto;
     gap: 1rem;
     padding: 1rem;
-    background: var(--primary-color);
+    background: var(--secondary-card-color);
     border: 1px solid var(--border-color);
     border-radius: 20px 20px 0px 0px;
     transition: var(--transition);

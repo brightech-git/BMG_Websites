@@ -10,20 +10,19 @@
 
 .testimonials-header {
   text-align: center;
-  margin-bottom: 3rem;
-  padding: 0 2rem;
+  margin-bottom: 1rem;
 }
 
 .testimonials-header h2 {
-  font-family: var(--title-font);
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 900;
-  background: var(--gradient-text);
-  color:transparent;
-  background-clip: text;
+
+background: var(--gradient-border);
   -webkit-background-clip: text;
-  margin-bottom: 1rem;
-  line-height: 1.2;
+  background-clip: text;
+  color: transparent;
+  text-shadow: var(--text-shadow);
+  font-family: var(--title-font);
+  font-weight: bolder;
+  font-size: 40px;
 
 }
 
@@ -244,8 +243,9 @@
     margin-bottom: 2rem;
     padding: 0 1rem;
   }
+  
 .testimonials-header h2{
-  font-size: 2rem;
+  font-size: 26px;
 }
 .testimonials-header p{
   font-size: 0.8rem;

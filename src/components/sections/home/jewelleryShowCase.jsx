@@ -64,17 +64,21 @@ const JewelryShowcase = ({banners , isLoading ,isError}) => {
         return () => clearInterval(timer);
     }, [bannerImages.length]);
 
-    const handleSeeAll = () => history.push('/products-page?best_design=true');
+    const handleSeeAll = () => {
+        const queryParams =new URLSearchParams();
+        queryParams.append('itemCtrName', 'BEST_DESIGNED');
+        history.push(`/products-page?${queryParams.toString()}`);
+    }
 
     if(isLoading) return <p>Loading Banner</p>
     if(isError) return <p>Error to get Banner</p>
     return (
         <section className="jewelry-showcase" data-aos="fade-up">
-            <div className="container py-5">
-                <div className="row align-items-center">
-                    <div className="col-lg-6 mb-4 mb-lg-0">
+            <div className="bestdesign-container py-2">
+                <div className="bs-row  ">
+                    <div className="col-lg-6 mb-1 mb-lg-0 ">
                         <div
-                            className="jewelry-banner-container position-relative h-100"
+                            className="jewelry-banner-container position-relative"
                             ref={bannerContainerRef}
                             onMouseMove={handleMouseMove}
                             onMouseLeave={handleMouseLeave}
@@ -108,8 +112,8 @@ const JewelryShowcase = ({banners , isLoading ,isError}) => {
                     </div>
                     <div className="col-lg-6 ps-lg-5">
                         <div className="jewelry-content">
-                            <h2 className="jewelry-title mb-4">
-                                <span className="gradient-text">Our Best Designed</span> Jewels
+                            <h2 className="jewelry-title mb-2">
+                                <span className="gradient-text">Our Best Designed Jewels</span> 
                             </h2>
                             <p className="jewelry-desc mb-4">
                                 Discover exquisite craftsmanship with our handcrafted jewelry, blending tradition and modernity. Each piece is meticulously designed to reflect elegance and timeless beauty.

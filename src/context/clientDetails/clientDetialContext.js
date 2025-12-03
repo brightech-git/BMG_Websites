@@ -10,7 +10,7 @@ export const CompanyDetailsProvider = ({ children }) => {
         const fetchDetails = async () => {
             try {
                 const data = await getCompanyDetails();
-                setDetails(data?.message?.[0]);
+                setDetails(data?.[0]);
             } catch (err) {
                 console.error("Failed to fetch company details", err);
             }

@@ -1,0 +1,80 @@
+.support-container {
+    width: 100%;
+    height: 100%;
+}
+
+.support-bg {
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+}
+
+.support-content {
+    padding: 20px;
+}
+
+/* QUICK ACTION GRID */
+.quick-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 18px;
+    margin-top: 20px;
+}
+
+.quick-box {
+    background: #ffb600;
+    padding: 18px;
+    border-radius: 12px;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s ease;
+    min-height: 95px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.quick-box:hover {
+    background: #e59f00;
+    transform: scale(0.97);
+}
+
+.quick-box i {
+    font-size: 26px;
+    margin-bottom: 6px;
+}
+
+.quick-box p {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* SUPPORT HOURS */
+.hours-card {
+    margin-top: 35px;
+    padding: 20px;
+    background: white;
+    border-radius: 15px;
+    border: 1px solid #eee;
+}
+
+.hours-card h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.hours-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 15px;
+    color: #444;
+    border-bottom: 1px solid #eee;
+}
+
+.hours-row:last-child {
+    border-bottom: none;
+}

@@ -18,7 +18,6 @@ import Header from "../../layouts/HeaderWithAuth";
 import Footer from "../../layouts/Footerthree";
 import SmoothScroll from "../../layouts/SmoothScroll";
 import RevealSection from "../../animations/RevealSection";
-import "./HomeContent.css";
 import { useBanners } from "../../../hook/banner/useBannerQueries";
 import { useVideos } from "../../../hook/video/useVideoQuery";
 import { useOccasionBanners } from "../../../hook/banner/useOccasionBanners";
@@ -131,34 +130,32 @@ const Content = () => {
                 {/* 🌟 Hero Section (no animation wrapper — stays full width) */}
                 <Banner banners={banners} isLoading={mainBannerLoading} />
 
-                {/* ✨ Animated Sections */}
-                <RevealSection intensity={0.3}>
+         
                     <Category banners={occasionbanners} isLoading={occasionLoading} error={occasionbannersError} />
-                </RevealSection>
+             
 
-                {/* <RevealSection intensity={0}> */}
+          
                     <Ourcategory subcategories={subcategories} isCategoriesLoading={isCategoriesLoading}/>
-                {/* </RevealSection> */}
+           
 
-                <RevealSection intensity={0}>
+            
                     <Category1 banners={offerBanners} isLoading={offerLoading} error={offerError} />
-                </RevealSection>
+   
 
-                <RevealSection intensity={0.25}>
                     <Condos budgetBanners={budgetBanners} isLoading={budgerLoading} isError={budgetError} />
-                </RevealSection>
+           
 
-                <RevealSection intensity={0.35}>
+             
                     <Handpicked data={CategoryData} isLoading ={categoriesLoading} error = {CategoryError} />
-                </RevealSection>
+          
 
-                <RevealSection intensity={0.4}>
+ 
                     <ShopByRecipient  banners={recipientBanners}  />
-                </RevealSection>
 
-                <RevealSection intensity={0.3}>
+
+    
                     <Ourproducts banners={latestBanners} isLoading={LatestisLoading} isError={LatestisError} />
-                </RevealSection>
+  
 
                 {/* <RevealSection intensity={0.3}>
                     <TrendingProducts />
@@ -166,30 +163,30 @@ const Content = () => {
 
                
 
-                <RevealSection intensity={0.3}>
+
                     <FeaturedBanners banners={featureBanner} isLoading={featureIsLoading} isError={FeatureIsError}/>
-                </RevealSection>
+    
 
-                <RevealSection intensity={0.3}>
+   
                     <Onsale festivalBanners={festivalBanners} isLoading={festivalIsLoading} isError={FestivalIsError}/>
-                </RevealSection>
+    
 
-                <RevealSection intensity={0.3}>
+
                     <JewelryShowcase banners={bestBanners} isLoading={bestIsLoading} isError={bestIsError}/>
-                </RevealSection>
+
 
                 {isVideo && <RevealSection intensity={0.3}>
                     <Video videoList={videoList} isLoading={videoLoading} isError={videoError} />
                 </RevealSection>}
             
 
-                <RevealSection intensity={0.3}>
-                    <RecentlyViewedWrapper />
-                </RevealSection>
 
-                <RevealSection intensity={0.25}>
+                    <RecentlyViewedWrapper />
+       
+
+       
                     <Testimonials />
-                </RevealSection>
+          
 
                 <Footer />
             </Fragment>

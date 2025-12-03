@@ -52,7 +52,7 @@ const history =useHistory()
         e.preventDefault();
 
         // Basic validation
-        if (!formData.name.trim() || !formData.comment.trim()) {
+        if (!formData.name.trim()) {
             toast.error("Please fill in all required fields.");
             return;
         }
@@ -64,20 +64,30 @@ const history =useHistory()
 
         mutation.mutate(formData, {
             onSuccess: () => {
+                // Push event to GTM
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    event: "formSubmissionSuccess",
+                    formName: "Contact Form",
+                });
+
+                console.log("GTM Event Pushed:", window.dataLayer);
                 toast.success("Message submitted successfully!");
                 setFormData({
                     name: "",
                     email: "",
                     comment: "",
-                    mobileNumber: ""
+                    mobileNumber: "",
                 });
-                history.push('/success');
+
+                history.push("/contactstore/success");
             },
             onError: () => {
                 toast.error("Something went wrong. Please try again later.");
             },
         });
     };
+
 
     useEffect(() => {
         if (mutation.isSuccess || mutation.isError) {
@@ -94,7 +104,7 @@ const history =useHistory()
 
 
     // Build full address
-    const fullAddress = `${companyDetails?.address1 || ""}, ${companyDetails?.address2 || ""} - ${companyDetails?.areaCode || ""}`;
+    const fullAddress = `${companyDetails?.ADDRESS1 || ""}, ${companyDetails?.ADDRESS2 || ""} - ${companyDetails?.AREACODE || ""}`;
 
     // Contact info for left column
     const contactInfo = [
@@ -102,34 +112,35 @@ const history =useHistory()
             icon: "fas fa-map-marker-alt",
             title: "Address",
             content: fullAddress,
-            link: "#"
+            link: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(fullAddress)
         },
+
         {
             icon: "fas fa-phone",
             title: "Phone",
-            content: companyDetails?.phone ? `Mobile: ${companyDetails.phone}` : "Not Available",
-            link: `tel:${companyDetails?.phone || ""}`
+            content: companyDetails?.PHONE ? `Mobile: ${companyDetails.PHONE}` : "Not Available",
+            link: `tel:${companyDetails?.PHONE || ""}`
         },
         {
             icon: "fas fa-envelope",
             title: "Email",
-            content: companyDetails?.email || "Not Available",
-            link: `mailto:${companyDetails?.email || ""}`
+            content: companyDetails?.EMAIL || "Not Available",
+            link: `mailto:${companyDetails?.EMAIL || ""}`
         },
         {
             icon: "fas fa-file-invoice",
             title: "GST Number",
-            content: companyDetails?.gstNo || "Not Available",
+            content: companyDetails?.GSTNO || "Not Available",
             link: "#"
         }
     ];
 
     // Social links (kept blank if API has none)
     const socialLinks = [
-        { icon: "fab fa-facebook-f", url: companyDetails?.socialMedia?.facebook || "#" },
-        { icon: "fab fa-twitter", url: companyDetails?.socialMedia?.twitter || "#" },
-        { icon: "fab fa-instagram", url: companyDetails?.socialMedia?.instagram || "#" },
-        { icon: "fab fa-linkedin-in", url: companyDetails?.socialMedia?.linkedin || "#" }
+        { icon: "fab fa-facebook-f", url: companyDetails?.FACEBOOKLINK || "#" },
+        { icon: "fab fa-twitter", url: companyDetails?.TWITTERLINK || "#" },
+        { icon: "fab fa-instagram", url: companyDetails?.INSTALINK || "#" },
+        { icon: "fab fa-youtube", url: companyDetails?.YOUTUBELINK || "#" }
     ];
 
 
@@ -170,6 +181,111 @@ const history =useHistory()
             {/* Main Contact Section */}
   
                 <div className="row">
+                    <div className="col-lg-7">
+                        <div className="contact-form-wrapper animate-slide-in-right">
+                            <div className="form-header">
+                                <h2>உங்கள் தகவலை பகிருங்கள்</h2>
+                                <p>புதிய கலெக்ஷன் preview-களும், லாஞ்ச் நாள் சிறப்பு ஆஃபர்களும் நேரடியாக உங்களைச் சேரும்.</p>
+                            </div>
+
+                            <form id="contactForm" onSubmit={handleSubmit} className="contact-form">
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <div className="form-group">
+                                            <label htmlFor="name">Full Name *</label>
+                                            <input
+                                                type="text"
+                                                id="name"
+                                                name="name"
+                                                placeholder="Enter your full name"
+                                                value={formData.name}
+                                                onChange={handleChange}
+                                                required
+                                                className="form-control-input"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="form-group">
+                                            <label htmlFor="email">Email Address</label>
+                                            <input
+                                                type="email"
+                                                id="email"
+                                                name="email"
+                                                placeholder="Enter your email"
+                                                value={formData.email}
+                                                onChange={handleChange}
+                                                className="form-control-input"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="mobileNumber">Mobile Number</label>
+                                    <input
+                                        type="tel"
+                                        id="mobileNumber"
+                                        name="mobileNumber"
+                                        placeholder="Enter your mobile number"
+                                        value={formData.mobileNumber}
+                                        onChange={handleChange}
+                                        className="form-control-input"
+                                    />
+                                </div>
+
+                                {/* <div className="form-group">
+                                    <label htmlFor="comment">Your Message *</label>
+                                    <textarea
+                                        id="comment"
+                                        name="comment"
+                                        placeholder="Tell us about your requirements..."
+                                        value={formData.comment}
+                                        onChange={handleChange}
+                                        required
+                                        rows="5"
+                                        className="form-control-input"
+                                    />
+                                </div> */}
+                                <div className="form-actions">
+                                    <a
+                                        href="#"
+                                        className="btn-submit"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            document.getElementById("contactForm").requestSubmit();
+                                        }}
+                                    >
+                                        {mutation.isLoading ? (
+                                            <>
+                                                <i className="fas fa-spinner fa-spin" />
+                                                Sending Message...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <i className="fas fa-paper-plane" />
+                                                Send Message
+                                            </>
+                                        )}
+                                    </a>
+
+                                </div>
+
+                                {mutation.isSuccess && (
+                                    <Alert variant="success" className="mt-4">
+                                        <i className="fas fa-check-circle" />
+                                        <strong>Success!</strong> Your message has been sent successfully. We'll get back to you soon.
+                                    </Alert>
+                                )}
+                                {mutation.isError && (
+                                    <Alert variant="danger" className="mt-4">
+                                        <i className="fas fa-exclamation-triangle" />
+                                        <strong>Error!</strong> Failed to send message. Please try again later.
+                                    </Alert>
+                                )}
+                            </form>
+                        </div>  
+                    </div>
                     {/* Left Info Column */}
                     <div className="col-lg-5">
                         <div className="contact-info-wrapper">
@@ -220,108 +336,7 @@ const history =useHistory()
                     </div>
 
                     {/* Right Form Column */}
-                    <div className="col-lg-7">
-                        <div className="contact-form-wrapper animate-slide-in-right">
-                            <div className="form-header">
-                                <h2>உங்கள் தகவலை பகிருங்கள்</h2>
-                                <p>புதிய கலெக்ஷன் preview-களும், லாஞ்ச் நாள் சிறப்பு ஆஃபர்களும் நேரடியாக உங்களைச் சேரும்.</p>
-                            </div>
-
-                            <form onSubmit={handleSubmit} className="contact-form">
-                                <div className="row">
-                                    <div className="col-md-6">
-                                        <div className="form-group">
-                                            <label htmlFor="name">Full Name *</label>
-                                            <input
-                                                type="text"
-                                                id="name"
-                                                name="name"
-                                                placeholder="Enter your full name"
-                                                value={formData.name}
-                                                onChange={handleChange}
-                                                required
-                                                className="form-control-input"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="col-md-6">
-                                        <div className="form-group">
-                                            <label htmlFor="email">Email Address</label>
-                                            <input
-                                                type="email"
-                                                id="email"
-                                                name="email"
-                                                placeholder="Enter your email"
-                                                value={formData.email}
-                                                onChange={handleChange}
-                                                className="form-control-input"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="mobileNumber">Mobile Number</label>
-                                    <input
-                                        type="tel"
-                                        id="mobileNumber"
-                                        name="mobileNumber"
-                                        placeholder="Enter your mobile number"
-                                        value={formData.mobileNumber}
-                                        onChange={handleChange}
-                                        className="form-control-input"
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="comment">Your Message *</label>
-                                    <textarea
-                                        id="comment"
-                                        name="comment"
-                                        placeholder="Tell us about your requirements..."
-                                        value={formData.comment}
-                                        onChange={handleChange}
-                                        required
-                                        rows="5"
-                                        className="form-control-input"
-                                    />
-                                </div>
-
-                                <div className="form-actions">
-                                    <button
-                                        type="submit"
-                                        className="btn-submit"
-                                        disabled={mutation.isLoading}
-                                    >
-                                        {mutation.isLoading ? (
-                                            <>
-                                                <i className="fas fa-spinner fa-spin" />
-                                                Sending Message...
-                                            </>
-                                        ) : (
-                                            <>
-                                                <i className="fas fa-paper-plane" />
-                                                Send Message
-                                            </>
-                                        )}
-                                    </button>
-                                </div>
-
-                                {mutation.isSuccess && (
-                                    <Alert variant="success" className="mt-4">
-                                        <i className="fas fa-check-circle" />
-                                        <strong>Success!</strong> Your message has been sent successfully. We'll get back to you soon.
-                                    </Alert>
-                                )}
-                                {mutation.isError && (
-                                    <Alert variant="danger" className="mt-4">
-                                        <i className="fas fa-exclamation-triangle" />
-                                        <strong>Error!</strong> Failed to send message. Please try again later.
-                                    </Alert>
-                                )}
-                            </form>
-                        </div>
-                    </div>
+                  
                 </div>
   
 
@@ -402,7 +417,7 @@ const history =useHistory()
                             <div className="map-container">
                                 <iframe
                                     title="BMG Jewellers Location"
-                                        src={companyDetails?.mapEmbed || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3807.394863191887!2d78.11334837488296!3d9.916122890185033!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00c52cde0dc627%3A0x8f265e55e17fdc92!2sBMG%20Jewellers!5e1!3m2!1sen!2sin!4v1764324069943!5m2!1sen!2sin"}
+                                        src={companyDetails?.MAPEMBED || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3807.394863191887!2d78.11334837488296!3d9.916122890185033!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00c52cde0dc627%3A0x8f265e55e17fdc92!2sBMG%20Jewellers!5e1!3m2!1sen!2sin!4v1764324069943!5m2!1sen!2sin"}
                                     className="google-map"
                                     allowFullScreen
                                     loading="lazy"

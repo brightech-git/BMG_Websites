@@ -1,5 +1,3 @@
-
-
 /* Enhanced Bangle Size Guide Styles */
 
 .bangle-container {
@@ -640,7 +638,8 @@
   font-weight: 600;
 }
 
-.hand-size-xs, .hand-size-s {
+.hand-size-xs,
+.hand-size-s {
   background: var(--cat-bg-color);
   color: var(--primary-hover-color);
 }
@@ -650,7 +649,8 @@
   color: var(--primary-text-color);
 }
 
-.hand-size-l, .hand-size-xl {
+.hand-size-l,
+.hand-size-xl {
   background: var(--main-cat-bg-color);
   color: var(--green-color);
 }
@@ -822,7 +822,7 @@
   width: 100px;
   height: 100px;
   color: var(--primary-hover-color);
-  z-index: 2;
+  : 2;
 }
 
 .bangle-overlays {
@@ -1190,6 +1190,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1202,20 +1203,20 @@
     padding: 0;
     background: var(--white-color);
   }
-  
+
   .header-actions,
   .calculator-section,
   .navigation-container,
   .download-section {
     display: none;
   }
-  
+
   .bangle-header {
     background: var(--gradient-bg-color) !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
-  
+
   .guide-card,
   .chart-card,
   .tips-container {
@@ -1228,38 +1229,38 @@
   .bangle-container {
     padding: 1rem;
   }
-  
+
   .main-title {
     font-size: 2rem;
   }
-  
+
   .nav-tabs {
     flex-direction: column;
   }
-  
+
   .size-chart-container {
     grid-template-columns: 1fr;
   }
-  
+
   .size-recommendation {
     flex-direction: column;
     text-align: center;
   }
-  
+
   .comparison-labels {
     flex-direction: column;
     gap: 0.5rem;
     align-items: center;
   }
-  
+
   .download-card {
     padding: 1.5rem;
   }
-  
+
   .download-features {
     margin-top: 1rem;
   }
-  
+
   .guidance-content {
     flex-direction: column;
   }

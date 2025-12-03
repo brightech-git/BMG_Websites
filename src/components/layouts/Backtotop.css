@@ -70,6 +70,7 @@
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -93,7 +94,7 @@
 }
 
 @media (max-width: 480px) {
-    
+
 
     .back-to-top-icon {
         width: 14px;
@@ -106,7 +107,7 @@
 }
 
 @media (max-width: 360px) {
-   
+
     .back-to-top-icon {
         width: 12px;
         height: 12px;

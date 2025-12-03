@@ -11,7 +11,7 @@ const CategoryCard = ({ item }) => {
     const handleShopNow = (itemCtrName, subItemName) => {
         const queryParams = new URLSearchParams();
         if (itemCtrName) queryParams.append('itemCtrName', itemCtrName);
-        if (subItemName) queryParams.append('subItemName', subItemName);
+        // if (subItemName) queryParams.append('subItemName', subItemName);
         const fixedQuery = queryParams.toString().replace(/\+/g, '%20');
         history.push(`/products-page?${fixedQuery}`);
     };
@@ -77,7 +77,7 @@ const Category1 = ({ banners, isLoading, error }) => {
         <div className="offer-container">
             <div className='offer-title-container'>
                 <h4 className='cat-offer-title'> Exclusive Offers </h4>
-                <span className='offer-sub-title'>Unwrap timeless elegance with special savings on our finest collections. </span>
+                {/* <span className='offer-sub-title'>Unwrap timeless elegance with special savings on our finest collections. </span> */}
             </div>
             <div className="offer-grid" >
                 {banners.map((item, i) => (

@@ -1,0 +1,140 @@
+.privacy-container {
+    width: 100%;
+    min-height: 100vh;
+}
+
+.privacy-bg {
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+}
+
+.content-wrapper {
+    padding: 20px;
+}
+
+/* POLICY CARD */
+.policy-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.policy-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.icon-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #ffb600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    margin-right: 12px;
+}
+
+.policy-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.policy-content {
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+
+.sub-section {
+    margin-top: 15px;
+}
+
+.sub-title {
+    font-size: 15px;
+    font-weight: bold;
+    color: #d69300;
+    margin-bottom: 4px;
+}
+
+.sub-content {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
+}
+
+/* CONTACT CARD */
+.contact-card {
+    background: #fff;
+    padding: 22px;
+    border-radius: 16px;
+    border: 1px solid #eee;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+}
+
+.contact-title {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.contact-item {
+    margin-bottom: 15px;
+}
+
+.contact-row {
+    display: flex;
+    align-items: center;
+}
+
+.contact-icon {
+    font-size: 20px;
+    color: #ffb600;
+}
+
+.contact-label {
+    margin-left: 8px;
+    font-weight: 600;
+}
+
+.contact-value {
+    margin-left: 28px;
+    font-size: 14px;
+    color: #333;
+}
+
+.link {
+    color: #ff9800;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* FOOTER */
+.legal-footer {
+    background: #ffb600;
+    padding: 15px;
+    border-radius: 14px;
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.legal-footer .material-icons {
+    margin-right: 6px;
+}
+
+copyright {
+    text-align: center;
+    font-size: 13px;
+    padding-bottom: 20px;
+}

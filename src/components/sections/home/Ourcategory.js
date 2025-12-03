@@ -27,7 +27,7 @@ const OurCategory = ({subcategories ,isCategoriesLoading}) => {
             <section className="elegant-category-section">
                 <div className="elegant-container">
                     <div className="elegant-header">
-                        <h2 className="content-title">BMG WORLD</h2>
+                        <h2 className="cat-content-title">Bmg World</h2>
                     </div>
                     <div className="elegant-scroll-container">
                         {[...Array(5)].map((_, index) => (
@@ -52,7 +52,7 @@ const OurCategory = ({subcategories ,isCategoriesLoading}) => {
         <section className="elegant-category-sections">
             <div className="elegant-containers">
                 <div className="elegant-header">
-                    <h2 className="content-title">BMG WORLD</h2>
+                    <h2 className="cat-content-title">Bmg World</h2>
                 </div>
 
                 <DragScrollComponent>

@@ -2,7 +2,7 @@ import PublicUrl from "../api/publicUrl";
 
 export const getCompanyDetails = async () => {
     try {
-        const response = await PublicUrl.get('/company');
+        const response = await PublicUrl.get('/company/all');
         if (response.data) {
             return response.data;
         }

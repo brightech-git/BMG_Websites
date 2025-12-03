@@ -9,73 +9,113 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useCompanyDetails } from "../../context/clientDetails/clientDetialContext";
 
 const Footertwo = () => {
-
-  const history =useHistory();
+  const history = useHistory();
   const { data: footerContent } = useFooterContent();
-  const {details} = useCompanyDetails();
+  const { details } = useCompanyDetails();
 
+  // Centralized footer data
+  const footerData = {
+    company: {
+      name: "BMG Jewellers Pvt Ltd",
+      logo: `${details?.LOGO ? "https://app.bmgjewellers.com" + details.LOGO : logo}`,
+      year: 2025,
+      website: "/"
+    },
 
+    socialMedia: [
+      {
+        name: "facebook",
+        icon: "fab fa-facebook-f",
+        url: details?.FACEBOOKLINK || "https://www.facebook.com/bmgjewellersmadurai"
+      },
+      {
+        name: "instagram",
+        icon: "fab fa-instagram",
+        url: details?.INSTALINK || "https://www.instagram.com/bmgjewellers_madurai"
+      },
+      {
+        name: "twitter",
+        icon: "fab fa-twitter",
+        url: details?.TWITTERLINK || "https://x.com/BMGjewellers24"
+      },
+      {
+        name: "youtube",
+        icon: "fab fa-youtube",
+        url: details?.YOUTUBELINK || "https://youtube.com/@bmgjewellersmadurai"
+      }
+    ],
 
-  const footerCategory = footerContent?.entries|| [];
+    appLinks: {
+      appStore: "https://play.google.com/store/apps/details?id=com.jk_08.newapp&pcampaignid=web_share",
+      playStore: "https://play.google.com/store/apps/details?id=com.jk_08.newapp&pcampaignid=web_share",
+      appStoreImg: "https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg",
+      playStoreImg: "https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+    },
 
-  const itemNames = footerCategory.map((item)=>{
-    console.log(item.title ,'itemnames');
-  })
-  console.log(itemNames,'itemNames');
+    quickLinks: [
+      { name: "About Us", href: "/about" },
+      { name: "Why Choose Us", href: "/why-choose-us" },
+      { name: "FAQ", href: "/faq" }
+    ],
+
+    policyLinks: [
+      { name: "Privacy Policy", href: "/privacypolicy" },
+      { name: "Terms & Conditions", href: "/terms-conditions" },
+      { name: "Compliance Policy", href: "/risk-compliance-policy" },
+      { name: "Return Policy", href: "/cancellation-return-policy" },
+      { name: "Shipping & Returns", href: "/refund-policy" }
+    ],
+
+    contactInfo: {
+      phone: details?.PHONE || details?.phone || "",
+      email: details?.EMAIL || details?.email || "",
+      address: {
+        line1: details?.ADDRESS1 || "",
+        line2: details?.ADDRESS2 || "",
+        areaCode: details?.AREACODE || ""
+      }
+    },
+
+    developer: {
+      name: "Brightech Software Solutions",
+      website: "https://www.brightechsoftware.com/",
+      logo: btsLogo
+    }
+  };
+
+  const footerCategory = footerContent?.entries || [];
+
   return (
     <>
       <Backtotop />
-      <footer className="footer-two">
+      <footer className="footer-two ">
         {/* Main Footer Content */}
-        <div className="footer-widget-area">
+        <div className="footer-two-widget-area">
           <div className="footer-container">
             <div className="footer-grid">
               {/* Brand Section */}
               <div className="footer-brand-section">
                 <div className="footer-logo">
-                  <img src={logo} alt="BMG Jewellers" className="footer-logo-img" />
+                  <img
+                    src={footerData.company.logo}
+                    alt={footerData.company.name}
+                    className="footer-logo-img"
+                  />
                 </div>
-                <p className="footer-brand-description">
-                  Your trusted partner in exquisite jewelry since inception.
-                  Crafting timeless pieces with unparalleled craftsmanship.
-                </p>
+
                 <div className="footer-social-links">
-                  <a
-                    href="https://www.facebook.com/bmgjewellersmadurai?mibextid=ZbWKwL"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="social-link"
-                    aria-label="Facebook"
-                  >
-                    <i className="fab fa-facebook-f" />
-                  </a>
-                  <a
-                    href="https://x.com/BMGjewellers24?t=bMxPT0NbhA5RzvLl5pCdLA&s=09"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="social-link"
-                    aria-label="Twitter"
-                  >
-                    <i className="fab fa-twitter" />
-                  </a>
-                  <a
-                    href="https://www.instagram.com/bmgjewellers_madurai?igsh=MWxyZGIxbnl5aDc5Nw=="
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="social-link"
-                    aria-label="Instagram"
-                  >
-                    <i className="fab fa-instagram" />
-                  </a>
-                  <a
-                    href="https://youtube.com/@bmgjewellersmadurai?si=FvRFbXc7tEAkzSUu"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="social-link"
-                    aria-label="YouTube"
-                  >
-                    <i className="fab fa-youtube" />
-                  </a>
+                  {footerData.socialMedia.map((item) => (
+                    <a
+                      key={item.name}
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="social-link"
+                      aria-label={item.name}
+                    >
+                      <i className={item.icon}></i>
+                    </a>
+                  ))}
                 </div>
 
                 {/* Download App Section */}
@@ -83,25 +123,25 @@ const Footertwo = () => {
                   <h6 className="app-section-title">Download Our App</h6>
                   <div className="app-download-buttons">
                     <a
-                      href="https://play.google.com/store/apps/details?id=com.jk_08.newapp&pcampaignid=web_share"
+                      href={footerData.appLinks.appStore}
                       className="app-download-btn"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       <img
-                        src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg"
+                        src={footerData.appLinks.appStoreImg}
                         alt="Download on App Store"
                         className="app-store-img"
                       />
                     </a>
                     <a
-                      href="https://play.google.com/store/apps/details?id=com.jk_08.newapp&pcampaignid=web_share"
+                      href={footerData.appLinks.playStore}
                       className="app-download-btn"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       <img
-                        src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                        src={footerData.appLinks.playStoreImg}
                         alt="Get it on Google Play"
                         className="play-store-img"
                       />
@@ -113,110 +153,130 @@ const Footertwo = () => {
               {/* Quick Links */}
               <div className="footer-links-section">
                 <h4 className="footer-section-title">Quick Links</h4>
-                <div className="footer-links-grid">
-                  <ul className="footer-links-list">
-                    <li className="footer-link-item">
-                      <Link to="/about" className="footer-link">About Us</Link>
-                    </li>
-                    <li className="footer-link-item">
-                      <Link to="/why-choose-us" className="footer-link">Why Choose Us</Link>
-                    </li>
-                    <li className="footer-link-item">
-                      <Link to="/privacypolicy" className="footer-link">Privacy Policy</Link>
-                    </li>
-                    <li className="footer-link-item">
-                      <Link to="/terms-conditions" className="footer-link">Terms & Conditions</Link>
-                    </li>
-                
-             
-                    <li className="footer-link-item">
-                      <Link to="/risk-compliance-policy" className="footer-link">Compliance Policy</Link>
-                    </li>
-                    <li className="footer-link-item">
-                      <Link to="/cancellation-return-policy" className="footer-link">
-                        Return Policy
+                <ul className="footer-links-list">
+                  {footerData.quickLinks.map((link, index) => (
+                    <li key={index} className="footer-link-item">
+                      <Link to={link.href} className="footer-link">
+                        {link.name}
                       </Link>
                     </li>
-                    <li className="footer-link-item">
-                      <Link to="/refund-policy" className="footer-link">Shipping & Returns</Link>
+                  ))}
+                </ul>
+               
+              </div>
+
+              {/* Policy Links */}
+              <div className="footer-links-section">
+                <h4 className="footer-section-title">Policy Links</h4>
+                <ul className="footer-links-list">
+                  {footerData.policyLinks.map((link, index) => (
+                    <li key={index} className="footer-link-item">
+                      <Link to={link.href} className="footer-link">
+                        {link.name}
+                      </Link>
                     </li>
-                    <li className="footer-link-item">
-                      <Link to="/faq" className="footer-link">FAQ</Link>
-                    </li>
-                  </ul>
-                </div>
+                  ))}
+                </ul>
               </div>
 
               {/* Contact Information */}
               <div className="footer-contact-section">
                 <h4 className="footer-section-title">Get In Touch</h4>
                 <div className="contact-info-list">
-                  <div className="contact-info-item">
-                    <div className="contact-icon">
-                      <i className="flaticon-phone" />
-                    </div>
-                    <div className="footer-contact-details">
-                      <h6 className="footer-contact-label">Phone Number</h6>
-                      <div className="contact-numbers">
-                        <span>{details?.phone || ""}</span>
-                        {/* <span>+91-95143 33609</span> */}
+                  {/* Phone */}
+                  {footerData.contactInfo.phone && (
+                    <div className="contact-info-item">
+                      <div className="contact-icon">
+                        <i className="flaticon-phone" />
+                      </div>
+                      <div className="footer-contact-details">
+                        <h6 className="footer-contact-label">Phone Number</h6>
+                        <div className="contact-numbers">
+                          <a
+                            href={`tel:${footerData.contactInfo.phone.replace(/\D/g, '')}`}
+                            className="contact-link"
+                          >
+                            {footerData.contactInfo.phone}
+                          </a>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="contact-info-item">
-                    <div className="contact-icon">
-                      <i className="flaticon-message" />
+                  )}
+
+                  {/* Email */}
+                  {footerData.contactInfo.email && (
+                    <div className="contact-info-item">
+                      <div className="contact-icon">
+                        <i className="flaticon-message" />
+                      </div>
+                      <div className="footer-contact-details">
+                        <h6 className="footer-contact-label">Email Address</h6>
+                        <a
+                          href={`mailto:${footerData.contactInfo.email}`}
+                          className="contact-email"
+                        >
+                          {footerData.contactInfo.email}
+                        </a>
+                      </div>
                     </div>
-                    <div className="footer-contact-details">
-                      <h6 className="footer-contact-label">Email Address</h6>
-                      <Link to="mailto:Contact@bmgjewellers.in" className="contact-email">
-                        {details?.email || ""}
-                      </Link>
+                  )}
+
+                  {/* Address */}
+                  {(footerData.contactInfo.address.line1 || footerData.contactInfo.address.line2) && (
+                    <div className="contact-info-item">
+                      <div className="contact-icon">
+                        <i className="flaticon-location-pin" />
+                      </div>
+                      <div className="footer-contact-details">
+                        <h6 className="footer-contact-label">Store Location</h6>
+                        <address className="contact-address">
+                          {footerData.contactInfo.address.line1 && (
+                            <>
+                              {footerData.contactInfo.address.line1}
+                              <br />
+                            </>
+                          )}
+                          {footerData.contactInfo.address.line2 && (
+                            <>
+                              {footerData.contactInfo.address.line2}
+                              <br />
+                            </>
+                          )}
+                          {footerData.contactInfo.address.areaCode && (
+                            <>{footerData.contactInfo.address.areaCode}.</>
+                          )}
+                        </address>
+                      </div>
                     </div>
-                  </div>
-                  <div className="contact-info-item">
-                    <div className="contact-icon">
-                      <i className="flaticon-location-pin" />
-                    </div>
-                    <div className="footer-contact-details">
-                      <h6 className="footer-contact-label">Store Location</h6>
-                      <address className="contact-address">
-                        {details?.address1 || ""}<br />
-                        {details?.address2 || ""}<br />
-                        {details?.areaCode || ""}
-                      </address>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div className=" bg-white p-2 border-b">
-          <h5 className="text-md ">Quick Search</h5>
-        <div className="flex items-center p-1" >
 
-          <h6 className="text-sm items-center mr-5" > Categories</h6>
-          {footerCategory.map((item, idx) => (
-            <React.Fragment key={idx}>
-              <span
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  if (item.link) {
-                    history.push(item.link)
-                  }
-                }}
-                className="flex row-reverse text-xs"
-              >
-                {item.title}
-              </span>
-
-              {/* Add separator "|" ONLY between items, not after last one */}
-              {idx !== footerCategory.length - 1 && <span> | </span>}
-            </React.Fragment>
-          ))}
-        </div>
-        </div>
+        {/* Quick Search Section */}
+        {/* <div className="footer-quick-search">
+          <div className="footer-container">
+            <h5 className="quick-search-title">Quick Search</h5>
+            <div className="quick-search-content">
+              <span className="search-label">Categories</span>
+              <div className="search-categories">
+                {footerCategory.map((item, idx) => (
+                  <React.Fragment key={idx}>
+                    <span
+                      className="category-link"
+                      onClick={() => item.link && history.push(item.link)}
+                    >
+                      {item.title}
+                    </span>
+                    {idx !== footerCategory.length - 1 && <span className="separator">|</span>}
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div> */}
 
         {/* Copyright Section */}
         <div className="footer-copyright">
@@ -224,24 +284,27 @@ const Footertwo = () => {
             <div className="copyright-content">
               <div className="copyright-text">
                 <p>
-                  © 2025 <Link to="/" className="company-name">BMG Jewellers Pvt Ltd</Link>.
-                  All rights reserved.
+                  © {footerData.company.year}{" "}
+                  <Link to={footerData.company.website} className="company-name">
+                    {footerData.company.name}
+                  </Link>
+                  . All rights reserved.
                 </p>
               </div>
               <div className="developer-credit">
                 <span className="crafted-by">Crafted By</span>
                 <img
-                  src={btsLogo}
-                  alt="Brightech Software Solutions"
+                  src={footerData.developer.logo}
+                  alt={footerData.developer.name}
                   className="developer-logo"
                 />
                 <a
-                  href="https://www.brightechsoftware.com/"
+                  href={footerData.developer.website}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="developer-link"
                 >
-                  Brightech Software Solutions
+                  {footerData.developer.name}
                 </a>
               </div>
             </div>

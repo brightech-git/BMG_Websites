@@ -5,6 +5,7 @@
 			overflow: hidden;
 			width: 100%;
 			height: 240px;
+
 			.room-img {
 				height: 100%;
 				width: 100%;
@@ -13,23 +14,28 @@
 				background-position: center;
 			}
 		}
+
 		&:hover {
 			.room-img {
 				transform: scale(1.1);
 			}
 		}
+
 		.room-desc {
 			background-color: $white;
 			font-size: 14px;
 			text-align: center;
 			padding: 50px 35px 30px;
 			position: relative;
+
 			@media #{$lg} {
 				padding: 50px 25px 30px;
 			}
+
 			@media #{$lsm} {
 				padding: 50px 20px 30px;
 			}
+
 			.icons {
 				background-color: $white;
 				padding: 15px;
@@ -50,44 +56,55 @@
 					display: inline-block;
 					margin: 0px 10px;
 					color: $heading-color;
+
 					@media #{$lg} {
 						margin: 0 5px;
 					}
+
 					@media #{$md} {
 						margin: 0 8px;
 					}
+
 					@media #{$lsm} {
 						margin: 0 5px;
 					}
+
 					@media #{$tiny} {
 						margin: 0 5px;
 					}
 				}
 			}
+
 			h4 {
 				font-size: 24px;
 				letter-spacing: -1px;
 				margin-bottom: 15px;
+
 				@media #{$lsm} {
 					font-size: 20px;
 				}
 			}
+
 			span.price,
 			a.book-btn {
 				font-size: 16px;
 				font-weight: 700;
 				color: $primary-color;
 				margin-top: 25px;
+
 				@media #{$lsm} {
 					font-size: 14px;
 				}
 			}
+
 			a.book-btn {
 				color: #bdbdbd;
 				margin-left: 20px;
+
 				@media #{$lsm} {
 					margin-left: 10px;
 				}
+
 				&:hover {
 					color: $primary-color;
 				}
@@ -167,6 +184,7 @@
 					}
 				}
 			}
+
 			h4 {
 				font-size: 24px;
 				letter-spacing: -1px;
@@ -203,9 +221,11 @@
 				color: $primary-color;
 				line-height: 1;
 				display: block;
+
 				@media #{$xsm} {
 					margin-top: 30px;
 				}
+
 				span {
 					font-size: 16px;
 				}
@@ -217,28 +237,34 @@
 /*=======  Jewelry Slider  =======*/
 .room-slider {
 	position: relative;
-	z-index: 1;
+	: 1;
+
 	/*=======  Jewelry Slider One  =======*/
 	.rooms-slider-one {
 		&.row {
 			margin-left: -20px;
 			margin-right: -20px;
-			& > .col {
+
+			&>.col {
 				padding-left: 20px;
 				padding-right: 20px;
 			}
 		}
+
 		.slider-img {
 			width: 100%;
 			height: 580px;
 			background-size: cover;
 			background-position: center;
+
 			@media #{$lg} {
 				height: 500px;
 			}
+
 			@media #{$sm} {
 				height: 450px;
 			}
+
 			@media #{$xsm} {
 				height: 400px;
 			}
@@ -249,25 +275,30 @@
 		@media #{$sm} {
 			margin-bottom: 100px;
 		}
+
 		.room-content-box {
 			background-color: $heading-color;
 			color: #d4d4d4;
 			font-size: 14px;
 			padding: 60px 50px;
 			position: relative;
-			z-index: 2;
+			: 2;
 			margin-top: -495px;
+
 			@media #{$lg} {
 				margin-top: -445px;
 			}
+
 			@media #{$sm} {
 				margin-top: -100px;
 				padding: 50px 30px;
 			}
+
 			@media #{$xsm} {
 				margin-top: -50px;
 				padding: 50px 30px;
 			}
+
 			.slider-count {
 				position: absolute;
 				right: 50px;
@@ -275,8 +306,9 @@
 				font-weight: 700;
 				top: 90px;
 				color: #4c4c4c;
-				z-index: 3;
+				: 3;
 				letter-spacing: 2px;
+
 				.current {
 					color: $primary-color;
 				}
@@ -288,10 +320,11 @@
 				right: 0;
 				line-height: 1;
 				font-size: 200px;
-				z-index: -1;
+				: -1;
 				-webkit-text-fill-color: transparent;
 				-webkit-text-stroke: 1px rgba($color: $white, $alpha: 0.6);
 				opacity: 0.1;
+
 				@media #{$sm} {
 					font-size: 150px;
 				}
@@ -301,29 +334,36 @@
 				font-size: 36px;
 				color: $white;
 				margin-bottom: 20px;
+
 				&,
 				a {
 					color: $white;
 				}
 			}
+
 			.icon {
 				line-height: 1;
 				color: $primary-color;
 				margin-bottom: 40px;
 				font-size: 70px;
 			}
+
 			.room-content-slider {
 				padding-bottom: 45px;
+
 				.single-content {
 					overflow: hidden;
 				}
+
 				ul.slick-dots {
 					position: absolute;
 					left: 0;
 					bottom: 0;
+
 					li {
 						display: inline-block;
 						cursor: pointer;
+
 						button {
 							font-size: 0;
 							border: 0;
@@ -333,6 +373,7 @@
 							margin: 0 5px;
 							@include transition(0.3s);
 						}
+
 						&.slick-active {
 							button {
 								width: 26px;
@@ -356,12 +397,15 @@
 				overflow: hidden;
 				width: 100%;
 				height: 500px;
+
 				@media #{$md} {
 					height: 420px;
 				}
+
 				@media #{$sm} {
 					height: 350px;
 				}
+
 				.img {
 					height: 100%;
 					width: 100%;
@@ -370,11 +414,13 @@
 					@include transition(0.3s);
 				}
 			}
+
 			&:hover {
 				.img {
 					transform: scale(1.1);
 				}
 			}
+
 			.icons {
 				background-color: $white;
 				padding: 15px;
@@ -387,15 +433,18 @@
 				opacity: 0;
 				@include transition(0.3s);
 				width: max-content;
+
 				li {
 					display: inline-block;
 					margin: 0px 10px;
 					color: $heading-color;
+
 					@media #{$xsm} {
 						margin: 0px 5px;
 					}
 				}
 			}
+
 			.room-desc {
 				position: absolute;
 				left: 40px;
@@ -431,38 +480,48 @@
 					font-size: 36px;
 					margin-bottom: 10px;
 					letter-spacing: -1px;
+
 					@media #{$lg} {
 						font-size: 32px;
 					}
+
 					@media #{$md} {
 						font-size: 28px;
 					}
+
 					@media #{$sm} {
 						font-size: 26px;
 					}
 				}
+
 				.price {
 					text-align: right;
 					font-size: 40px;
 					color: $primary-color;
+
 					@media #{$md} {
 						font-size: 32px;
 					}
+
 					@media #{$sm} {
 						font-size: 28px;
 					}
+
 					@media #{$xsm} {
 						text-align: left;
 						margin-top: 10px;
 					}
+
 					span {
 						font-size: 16px;
 					}
 				}
 			}
 		}
+
 		.slick-current {
 			.single-rooms-box {
+
 				.room-desc,
 				.icons {
 					visibility: visible;
@@ -470,6 +529,7 @@
 				}
 			}
 		}
+
 		.slick-arrow {
 			height: 80px;
 			width: 80px;
@@ -482,7 +542,7 @@
 			@include transition(0.3s);
 			position: absolute;
 			top: 40%;
-			z-index: 2;
+			: 2;
 			left: 22%;
 			transform: translateY(-50%);
 
@@ -506,19 +566,23 @@
 				margin-left: 20px;
 				left: auto;
 				right: 22%;
+
 				@media #{$lg} {
 					left: auto;
 					right: 10%;
 				}
+
 				@media #{$md} {
 					left: auto;
 					right: 5%;
 				}
+
 				@media #{$sm} {
 					left: auto;
 					right: 2%;
 				}
 			}
+
 			&:hover,
 			&.next-arrow {
 				background-color: $primary-color;
@@ -533,6 +597,7 @@
 .room-details {
 	.deatils-box {
 		font-family: $roboto;
+
 		.title-wrap {
 			display: flex;
 			justify-content: space-between;
@@ -565,15 +630,19 @@
 					font-weight: 700;
 					letter-spacing: 3px;
 				}
+
 				h2 {
 					font-size: 48px;
 					letter-spacing: -1px;
+
 					@media #{$lg} {
 						font-size: 42px;
 					}
+
 					@media #{$lsm} {
 						font-size: 32px;
 					}
+
 					@media #{$xsm} {
 						font-size: 28px;
 					}
@@ -585,16 +654,20 @@
 				color: $primary-color;
 				font-weight: 700;
 				font-family: $archivo;
+
 				@media #{$lg} {
 					font-size: 35px;
 				}
+
 				@media #{$lsm} {
 					font-size: 30px;
 				}
+
 				@media #{$xsm} {
 					font-size: 24px;
 					margin-top: 15px;
 				}
+
 				span {
 					font-size: 16px;
 				}
@@ -604,8 +677,9 @@
 		.thumb {
 			margin-top: -90px;
 			position: relative;
-			z-index: -1;
+			: -1;
 			margin-bottom: 60px;
+
 			@media #{$lsm} {
 				margin-top: -65px;
 			}
@@ -637,12 +711,15 @@
 					margin-bottom: 20px;
 					padding-left: 40px;
 					position: relative;
+
 					@media #{$lsm} {
 						width: 50%;
 					}
+
 					@media #{$xsm} {
 						width: 100%;
 					}
+
 					i {
 						color: $primary-color;
 						position: absolute;
@@ -671,6 +748,7 @@
 					margin-bottom: 20px;
 					position: relative;
 					padding-left: 40px;
+
 					&::before {
 						position: absolute;
 						left: 0;
@@ -706,9 +784,11 @@
 			width: 100%;
 			height: 390px;
 			background-color: $white;
+
 			@media #{$xsm} {
 				height: 320px;
 			}
+
 			iframe {
 				width: 100%;
 				height: 100%;
@@ -721,20 +801,25 @@
 			}
 		}
 	}
+
 	.room-booking-form {
 		background-color: $white;
 		padding: 40px;
+
 		@media #{$md} {
 			margin-top: 30px;
 		}
+
 		@media #{$sm} {
 			margin-top: 30px;
 		}
+
 		input,
 		.nice-select,
 		select {
 			background-color: $main-bg;
 		}
+
 		.main-btn {
 			height: 60px;
 			line-height: 60px;
@@ -742,18 +827,22 @@
 			width: 100%;
 			padding: 0;
 		}
+
 		.title {
 			font-weight: 700;
 			font-family: $archivo;
 			margin-bottom: 30px;
 			padding-left: 60px;
 			position: relative;
+
 			@media #{$lg} {
 				padding-left: 50px;
 			}
+
 			@media #{$tiny} {
 				padding-left: 50px;
 			}
+
 			&::before {
 				position: absolute;
 				left: 0;
@@ -763,9 +852,11 @@
 				height: 2px;
 				background-color: $primary-color;
 				content: '';
+
 				@media #{$lg} {
 					width: 30px;
 				}
+
 				@media #{$tiny} {
 					width: 30px;
 				}

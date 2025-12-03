@@ -5,12 +5,12 @@ import "./ShopByRecipient.css";
 const ShopByRecipient = ({banners}) => {
     const history = useHistory();
    
-
+console.log(banners ,'genderbanner')
     const baseUrl = "https://app.bmgjewellers.com";
 
     const handleCategoryClick = (itemName) => {
         const queryParams = new URLSearchParams();
-        if (itemName) queryParams.append("itemName", itemName);
+        if (itemName) queryParams.append("itemCtrName", itemName);
        
         history.push(`/products-page?${queryParams.toString()}`);
     };
@@ -28,12 +28,12 @@ const ShopByRecipient = ({banners}) => {
 
     return (
         <section className="recipient-section">
-            <div className="container">
+            <div className="shopby-container">
                 <div className="recipient-header">
                     <h2 className="recipient-title">Celebrate Every Bond</h2>
-                    <h6 className="recipient-subtitle">
+                    {/* <h6 className="recipient-subtitle">
                         Handpicked jewelry gifts crafted to make every moment unforgettable.
-                    </h6>
+                    </h6> */}
                 </div>
 
                 {/* Desktop: 3-column grid | Mobile: 2 + 1 layout */}
@@ -73,10 +73,10 @@ const RecipientCard = ({ banner, baseUrl, onClick }) => {
         <div className="recipient-card-wrapper">
             <div
                 className="recipient-card"
-                onClick={() => onClick(banner.itemname, banner.gender)}
+                onClick={() => onClick(banner.itemName)}
                 role="button"
                 tabIndex={0}
-                onKeyDown={(e) => e.key === "Enter" && onClick(banner.itemname, banner.gender)}
+                onKeyDown={(e) => e.key === "Enter" && onClick(banner.itemName)}
             >
                 <div className="recipient-card-frame">
                     <div className="recipient-card-inner">

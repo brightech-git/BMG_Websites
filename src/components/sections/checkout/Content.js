@@ -361,8 +361,9 @@ console.log(showLocations ,'showlocation')
 
 // Order Summary Panel
 const OrderSummaryPanel = ({ items, subtotal, total, isCompact = false }) => {
+  
 
-  //console.log(items , 'ordersummary');
+  console.log(items , 'ordersummary');
   return (
     <div className={`order-panel ${isCompact ? 'compact' : ''}`}>
       <div className="order-header">
@@ -377,7 +378,7 @@ const OrderSummaryPanel = ({ items, subtotal, total, isCompact = false }) => {
             </div>
             <div className="item-details">
               <h6 className="order-item-name">{item.productName || item.name}</h6>
-              <p className="item-variant">SKU: {item.sno || item.tagNo}</p>
+              <p className="item-variant">SKU: {item.itemId}-{item.tagNo}</p>
               <p className="item-variant">Weight: {item?.weight.toFixed(3) || item?.tagNo}</p>
             </div>
             <div className="item-price">₹{(item?.price).toFixed(2)}</div>
@@ -597,7 +598,7 @@ const EnhancedCheckout = ({ location, history }) => {
             {currentStep === 1 && (
               <div className="step-section">
                 <div className="section-heading">
-                  <h3 className="section-title"><MapPin size={14} className="section-icon" /> Delivery Address</h3>
+                  <h3 className="checkout-section-title"><MapPin size={14} className="section-icon" /> Delivery Address</h3>
                 </div>
                 <div className="contact-details">
                   <div className="contact-row">
@@ -648,7 +649,7 @@ const EnhancedCheckout = ({ location, history }) => {
             {currentStep === 2 && (
               <div className="step-section">
                 <div className="section-heading">
-                  <h3 className="section-title"><ShoppingBag size={14} className="order-icon" /> Order Summary</h3>
+                  <h3 className="checkout-section-title"><ShoppingBag size={14} className="order-icon" /> Order Summary</h3>
                 </div>
                 <OrderSummaryPanel items={cartItems} subtotal={subtotal} total={totalAmount} />
               </div>
@@ -656,7 +657,7 @@ const EnhancedCheckout = ({ location, history }) => {
             {currentStep === 3 && (
               <div className="step-section">
                 <div className="section-heading">
-                  <h3 className="section-title"><CreditCard size={14} className="section-icon" /> Payment Method</h3>
+                  <h3 className="checkout-section-title"><CreditCard size={14} className="section-icon" /> Payment Method</h3>
                 </div>
                 <div className="payment-area">
                   <p className="payment-hint">All transactions are secure and encrypted.</p>

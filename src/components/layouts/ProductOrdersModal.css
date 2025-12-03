@@ -3,7 +3,7 @@
     position: fixed;
     bottom: 20px;
     left: 20px;
-    background: var(--primary-card-color);
+    background: var(--white-color);
     box-shadow: var(--shadow-sm);
     border-radius: 12px;
     padding: 10px;
@@ -34,18 +34,21 @@
     height: 100%;
     object-fit: cover;
 }
+
 .orderNotification-details {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
+
 .product-purchased-by {
     font-size: 11px;
     font-weight: 900;
     color: var(--secondary-text-color);
     margin-bottom: 4px;
 }
+
 .order-notification-item .customer-name {
     font-weight: 600;
     font-size: 12px;
@@ -71,7 +74,7 @@
     top: -8px;
     right: -8px;
     background: var(--red-color);
-    color:var(--white-color);
+    color: var(--white-color);
     border: none;
     border-radius: 50%;
     width: 20px;
@@ -98,31 +101,33 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-   
-        .order-notification-item .product-image {
-            width: 40px;
-            height: 40px;
-            border-radius: 6px;
-        }
-                .order-notification-item .customer-name {
-                 
-                    font-size: 10px;
-                    
-                }
-        
-                .order-notification-item .product-name {
-                    font-size: 10px;
-                   
-                   
-                }
-        
-                .order-notification-item .order-time {
-                    font-size: 8px;
-                   
-                }
-.order-notification-modal {
-    position: fixed;
-    bottom: 10px;
-    left: 10px;
-}
+
+    .order-notification-item .product-image {
+        width: 40px;
+        height: 40px;
+        border-radius: 6px;
+    }
+
+    .order-notification-item .customer-name {
+
+        font-size: 10px;
+
+    }
+
+    .order-notification-item .product-name {
+        font-size: 10px;
+
+
+    }
+
+    .order-notification-item .order-time {
+        font-size: 8px;
+
+    }
+
+    .order-notification-modal {
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+    }
 }

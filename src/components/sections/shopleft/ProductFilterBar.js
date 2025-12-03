@@ -7,29 +7,33 @@ import debounce from 'lodash/debounce';
 
 // Filter options and validation
 const FILTER_OPTIONS = {
-  gender: ['Men', 'Women', 'Kids'],
-  occasion: ['DAILY_WEAR', 'WEDDING', 'TRADITIONAL'],
+  // gender: ['Men', 'Women', 'Kids'],
+  // occasion: ['DAILY_WEAR', 'WEDDING', 'TRADITIONAL'],
+
+  // colorAccent: ['Silver', 'Gold'],
+  // materialFinish: ['GOLDCOATED', 'SILVERCOATED'],
+  // stoneUnit: ['Carat', 'Gram', 'Piece'],
+  //sortDirection: ['ASC', 'DESC'],
   size: ['2', '2.2', '2.4', '2.6', '2.8', '2.10'],
-  colorAccent: ['Silver', 'Gold'],
-  materialFinish: ['GOLDCOATED', 'SILVERCOATED'],
-  stoneUnit: ['Carat', 'Gram', 'Piece'],
   sortBy: [
     // { label: 'Most Relevant', value: 'relevance_DESC' },
-    { label: 'Price – Low to High', value: 'priceLowToHigh_ASC' },
-    { label: 'Price – High to Low', value: 'priceHighToLow_DESC' },
+    { label: 'Price – Low to High', value: 'priceLowToHigh' },
+    { label: 'Price – High to Low', value: 'priceHighToLow' },
   ],
-  sortDirection: ['ASC', 'DESC'],
+ 
 };
 
 const FILTER_VALIDATION = {
-  gender: ['Men', 'Women', 'Kids'],
-  occasion: ['DAILY_WEAR', 'WEDDING', 'TRADITIONAL'],
+  // gender: ['Men', 'Women', 'Kids'],
+  // occasion: ['DAILY_WEAR', 'WEDDING', 'TRADITIONAL'],
+  // colorAccent: ['Silver', 'Gold'],
+  // materialFinish: ['GOLDCOATED', 'SILVERCOATED'],
+  // stoneUnit: ['Carat', 'Gram', 'Piece'],
+  //sortDirection: ['ASC', 'DESC'],
+  
   sizeName: ['2', '2.2', '2.4', '2.6', '2.8', '2.10'],
-  colorAccent: ['Silver', 'Gold'],
-  materialFinish: ['GOLDCOATED', 'SILVERCOATED'],
-  stoneUnit: ['Carat', 'Gram', 'Piece'],
   sortBy: ['priceLowToHigh', 'priceHighToLow'],
-  sortDirection: ['ASC', 'DESC'],
+
 };
 
 const PRICE_RANGE = {
@@ -39,12 +43,13 @@ const PRICE_RANGE = {
 };
 
 const FILTER_LABELS = {
-  gender: 'Gender',
-  occasion: 'Occasion',
+  // gender: 'Gender',
+  // occasion: 'Occasion', 
+  // colorAccent: 'Color',
+  // materialFinish: 'Finish',
+  // stoneUnit: 'Stone Unit',
+
   sizeName: 'Size',
-  colorAccent: 'Color',
-  materialFinish: 'Finish',
-  stoneUnit: 'Stone Unit',
   priceRange: 'Price',
   sortBy: 'Sort',
 };
@@ -94,16 +99,20 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
 
     const extractedFilters = {
 
-      gender: searchParams.get('gender') || '',
-      occasion: searchParams.get('occasion') || '',
+      // gender: searchParams.get('gender') || '',
+      // occasion: searchParams.get('occasion') || '',
+     
+      // colorAccent: searchParams.get('colorAccent') || '',
+      // materialFinish: searchParams.get('materialFinish') || '',
+      // stoneUnit: searchParams.get('stoneUnit') || '',
+   
+     
+      // sortDirection: searchParams.get('sortDirection') || '',
+
       sizeName: searchParams.get('sizeName') || '',
-      colorAccent: searchParams.get('colorAccent') || '',
-      materialFinish: searchParams.get('materialFinish') || '',
-      stoneUnit: searchParams.get('stoneUnit') || '',
+      sortBy: searchParams.get('sortBy') || '',
       minGrandTotal: searchParams.get('minGrandTotal') || '',
       maxGrandTotal: searchParams.get('maxGrandTotal') || '',
-      sortBy: searchParams.get('sortBy') || '',
-      sortDirection: searchParams.get('sortDirection') || '',
     };
 
     const validatedFilters = {};
@@ -170,16 +179,16 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
       if (!value) {
         const params = new URLSearchParams(location.search);
         params.delete('sortBy');
-        params.delete('sortDirection');
+        // params.delete('sortDirection');
         params.delete('page');
         history.push({ search: params.toString() });
         return;
       }
-      const [sortBy, sortDirection] = value.split('_');
-      if (FILTER_VALIDATION.sortBy.includes(sortBy) && FILTER_VALIDATION.sortDirection.includes(sortDirection)) {
+      const [sortBy] = value.split('_');
+      if (FILTER_VALIDATION.sortBy.includes(sortBy)) {
         const params = new URLSearchParams(location.search);
         params.set('sortBy', sortBy);
-        params.set('sortDirection', sortDirection);
+        // params.set('sortDirection', sortDirection);
         params.delete('page');
         history.push({ search: params.toString() });
         if (onFiltersChange) {
@@ -250,7 +259,7 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
         params.delete(key);
       }
       if (key === 'sortBy') {
-        params.delete('sortDirection');
+        params.delete('sortBy');
       }
       params.delete('page');
       history.push({ search: params.toString() });
@@ -286,7 +295,7 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
   const activeFiltersCount = useMemo(() => {
     return Object.entries(filters).reduce(
       (count, [key, value]) =>
-        value && value !== '' && key !== 'sortDirection' && key !== 'maxGrandTotal' ? count + 1 : count,
+        value && value !== ''  && key !== 'maxGrandTotal' ? count + 1 : count,
       0
     );
   }, [filters]);
@@ -306,7 +315,7 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
       const maxVal = filters.maxGrandTotal ? Number(filters.maxGrandTotal) : PRICE_RANGE.max;
       return `${formatCurrency(minVal)} - ${formatCurrency(maxVal)}`;
     }
-    if (key === 'sortBy' || key === 'sortDirection' || key === 'maxGrandTotal') return null;
+    if (key === 'sortBy'  || key === 'maxGrandTotal') return null;
     return value;
   };
 
@@ -569,7 +578,7 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
                           const optionLabel = typeof option === 'object' ? option.label : option;
                           const isChecked =
                             filters[key] === value ||
-                            (key === 'sortBy' && `${filters[key]}_${filters.sortDirection}` === value);
+                            (key === 'sortBy' && `${filters[key]}` === value);
 
                           return (
                             <label key={value} className="filter-option">

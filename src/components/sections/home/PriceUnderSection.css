@@ -4,11 +4,15 @@
     font-family: var(--secondary-font);
     padding: 1rem 0rem;
     margin: 0 auto;
-    
-   
-}
-.pus-container{
     background: linear-gradient(135deg, var(--primary-card-color) 0%, #f8f9fa 100%);
+
+
+}
+
+.pus-container {
+    
+    max-width:1400px;
+    margin: 0 auto;
     border-radius: 24px;
     position: relative;
     overflow: hidden;
@@ -46,23 +50,22 @@
 }
 
 .pus-section {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
 }
 
 .pus-section .title-part-1 {
-    margin:0.5rem 0rem;
-    background: var(--gradient-text);
+    background: var(--gradient-border);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    position: relative;
+    text-shadow: var(--text-shadow);
     font-family: var(--title-font);
-        font-size: clamp(2rem, 4vw, 2rem);
-        font-weight: bold;
-  
+    font-weight: bolder;
+    font-size: 40px;
+
 }
 
 .pus-section-subtitle {
@@ -138,6 +141,7 @@
     opacity: 0.8;
     transition: opacity 0.3s ease;
 }
+
 /* 
 .pus-budget-card:hover .pus-gradient-overlay {
     opacity: 0.9;
@@ -178,7 +182,7 @@
     font-size: clamp(1rem, 1.5vw, 1.2rem);
     background: var(--gradient-text);
     background-clip: text;
-    color:transparent;
+    color: transparent;
     -webkit-background-clip: text;
     font-weight: 600;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
@@ -262,20 +266,22 @@
         grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
         gap: 1rem;
     }
-         .pus-budget-card {
-             height: 320px;
-         }
+
+    .pus-budget-card {
+        height: 320px;
+    }
 }
 
 @media (max-width: 992px) {
     .pus-budget-cards-grid {
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 0.5rem;
-        }
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 0.5rem;
+    }
+
     .pus-card-container {
         padding: 0.5rem;
     }
-    
+
 
     .pus-budget-card {
         height: 300px;
@@ -284,6 +290,9 @@
     .pus-content-overlay {
         padding: 1.5rem;
     }
+           .pus-section  .title-part-1 {
+             font-size: 30px;
+         }
 }
 
 @media (max-width: 768px) {
@@ -309,8 +318,12 @@
 
     .pus-category-btn {
         padding: 0.5rem 1rem;
-        font-size: clamp(0.9rem, 1vw, 1rem); ;
+        font-size: clamp(0.9rem, 1vw, 1rem);
+        ;
     }
+                 .pus-section .title-part-1 {
+             font-size: 26px;
+         }
 }
 
 @media (max-width: 576px) {
@@ -336,8 +349,11 @@
         padding: 0.4rem 0.8rem;
         font-size: clamp(0.6rem, 1vw, 0.7rem);
     }
+        .pus-section.title-part-1{
+        font-size: 20px;
+    }
 
-   
+
 }
 
 /* Animation for card entrance */
@@ -367,18 +383,19 @@
     outline: 2px solid white;
     outline-offset: 2px;
 }
-@media (max-width: 450px){
+
+@media (max-width: 450px) {
     .pus-budget-section {
-            padding: 1.5rem 0.25rem;
-        }
-    
-        .pus-budget-cards-grid {
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            margin: 0 auto;
-            gap: 0.5rem;
-        }
-    
-        .pus-budget-card {
-            height: 250px;
-        }
+        padding: 1.5rem 0.25rem;
+    }
+
+    .pus-budget-cards-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        margin: 0 auto;
+        gap: 0.5rem;
+    }
+
+    .pus-budget-card {
+        height: 250px;
+    }
 }

@@ -139,7 +139,7 @@
     position: absolute;
     top: 12px;
     right: 12px;
-    z-index: 2;
+    : 2;
 }
 
 .badge-dot {
@@ -183,9 +183,11 @@
     .minimal-offer-container {
         margin-bottom: 1.25rem;
     }
-        .minimal-offer-card{
-            padding: 0.5rem;
-        }
+
+    .minimal-offer-card {
+        padding: 0.5rem;
+    }
+
     .minimal-offer-card.with-hover:hover {
         transform: none;
     }

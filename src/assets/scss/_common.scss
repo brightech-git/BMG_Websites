@@ -10,6 +10,7 @@ body {
 	font-size: 16px;
 	line-height: 1.6;
 	background-color: $main-bg;
+
 	@media #{$tiny} {
 		font-size: 14px;
 	}
@@ -57,6 +58,7 @@ h6 {
 	font-family: $oldstan;
 	font-weight: 400;
 	margin: 0px;
+
 	&,
 	a {
 		color: $heading-color;
@@ -66,21 +68,27 @@ h6 {
 h1 {
 	font-size: 48px;
 }
+
 h2 {
 	font-size: 36px;
 }
+
 h3 {
 	font-size: 28px;
 }
+
 h4 {
 	font-size: 22px;
 }
+
 h5 {
 	font-size: 18px;
 }
+
 h6 {
 	font-size: 16px;
 }
+
 ul,
 ol {
 	margin: 0px;
@@ -94,6 +102,7 @@ p {
 
 a {
 	@include transition(0.3s);
+
 	&,
 	&:hover {
 		color: $primary-color;
@@ -133,12 +142,15 @@ select {
 	height: 70px;
 	padding-left: 50px;
 	line-height: 70px;
+
 	.list {
 		width: 100%;
 		border-radius: 0;
+
 		li {
 			line-height: 35px;
 			color: $text-color;
+
 			&:hover,
 			&.option:hover {
 				background-color: $primary-color;
@@ -146,9 +158,11 @@ select {
 			}
 		}
 	}
+
 	&::after {
 		display: none;
 	}
+
 	&::before {
 		content: '\f063';
 		font-family: 'Font Awesome 5 Pro';
@@ -162,12 +176,14 @@ select {
 }
 
 .input-group {
+
 	input,
 	select,
 	textarea,
 	select {
 		padding-left: 80px;
 	}
+
 	label {
 		font-size: 14px;
 		font-weight: 700;
@@ -175,6 +191,7 @@ select {
 		color: $heading-color;
 		display: block;
 	}
+
 	.icon {
 		position: absolute;
 		left: 40px;
@@ -182,6 +199,7 @@ select {
 		color: $primary-color;
 		transform: translateY(50%);
 	}
+
 	&.textarea {
 		.icon {
 			top: 25px;
@@ -189,14 +207,17 @@ select {
 			transform: translateY(0);
 		}
 	}
+
 	.nice-select {
 		padding-left: 80px;
+
 		&::before {
 			left: 40px;
 		}
 	}
 
 	&.input-group-two {
+
 		input,
 		select,
 		textarea,
@@ -206,20 +227,24 @@ select {
 			background-color: $white;
 			color: $text-color;
 		}
+
 		::placeholder {
 			opacity: 1;
 			color: $text-color;
 		}
+
 		.icon {
 			left: auto;
 			bottom: 30px;
 			right: 30px;
 		}
+
 		.nice-select {
 			background-color: $white;
 			padding: 0 50px 0 30px;
 			height: 60px;
 			line-height: 60px;
+
 			&::before {
 				left: auto;
 				right: 30px;
@@ -272,18 +297,22 @@ select {
 	letter-spacing: 2px;
 	color: $text-color;
 	border: 2px solid $primary-color;
+
 	&.btn-filled {
 		background-color: $primary-color;
 		color: $white;
 		box-shadow: 0px 14px 24px 0px rgba(190, 173, 142, 0.4);
+
 		&:hover {
 			background-color: transparent;
 			color: $text-color;
 			box-shadow: none;
 		}
 	}
+
 	&.btn-border {
 		border-color: $primary-color;
+
 		&:hover {
 			background-color: $primary-color;
 			color: $white;
@@ -299,13 +328,16 @@ select {
 		text-transform: uppercase;
 		letter-spacing: 3px;
 		padding-bottom: 20px;
+
 		@media #{$sm} {
 			letter-spacing: 2px;
 		}
+
 		@media #{$tiny} {
 			font-size: 12px;
 		}
 	}
+
 	h2 {
 		font-size: 80px;
 		line-height: 1.125;
@@ -314,20 +346,25 @@ select {
 		@media #{$lg} {
 			font-size: 62px;
 		}
+
 		@media #{$md} {
 			font-size: 52px;
 		}
+
 		@media #{$sm} {
 			font-size: 42px;
 		}
+
 		@media #{$tiny} {
 			font-size: 32px;
 		}
 	}
+
 	&.white-color {
 		span.title-tag {
 			color: $primary-color;
 		}
+
 		h2 {
 			color: $white;
 		}
@@ -337,6 +374,7 @@ select {
 .arrow-style {
 	display: flex;
 	justify-content: flex-end;
+
 	.slick-arrow {
 		height: 70px;
 		width: 70px;
@@ -347,9 +385,11 @@ select {
 		background: $white;
 		cursor: pointer;
 		@include transition(0.3s);
+
 		&.next-arrow {
 			margin-left: 20px;
 		}
+
 		&:hover,
 		&.next-arrow {
 			background-color: $primary-color;
@@ -369,11 +409,13 @@ select {
 	top: 0;
 	left: 0;
 	right: 0;
-	z-index: 9999;
+	: 9999;
+
 	.cssload-container {
 		display: block;
 		width: 97px;
 	}
+
 	.cssload-loading i {
 		width: 19px;
 		height: 19px;
@@ -381,15 +423,18 @@ select {
 		border-radius: 50%;
 		background: $white;
 	}
+
 	.cssload-loading i:first-child {
 		opacity: 0;
 		animation: cssload-loading-ani2 0.58s linear infinite;
 		transform: translate(-19px);
 	}
+
 	.cssload-loading i:nth-child(2),
 	.cssload-loading i:nth-child(3) {
 		animation: cssload-loading-ani3 0.58s linear infinite;
 	}
+
 	.cssload-loading i:last-child {
 		animation: cssload-loading-ani1 0.58s linear infinite;
 	}
@@ -400,6 +445,7 @@ select {
 	0% {
 		top: -200px;
 	}
+
 	100% {
 		top: 0;
 	}
@@ -414,6 +460,7 @@ select {
 		transform: scale(1);
 		opacity: 1;
 	}
+
 	100% {
 		-webkit-transform: scale(1.3);
 		-moz-transform: scale(1.3);
@@ -423,6 +470,7 @@ select {
 		opacity: 0;
 	}
 }
+
 @keyframes pulse-border-2 {
 	0% {
 		-webkit-transform: scale(1);
@@ -432,6 +480,7 @@ select {
 		transform: scale(1);
 		opacity: 1;
 	}
+
 	100% {
 		-webkit-transform: scale(1.5);
 		-moz-transform: scale(1.5);
@@ -448,12 +497,14 @@ select {
 		opacity: 0;
 	}
 }
+
 @keyframes cssload-loading-ani2 {
 	100% {
 		transform: translate(19px);
 		opacity: 1;
 	}
 }
+
 @keyframes cssload-loading-ani3 {
 	100% {
 		transform: translate(19px);
@@ -464,9 +515,11 @@ select {
 	0% {
 		@include transform(scale(1));
 	}
+
 	50% {
 		@include transform(scale(1.2));
 	}
+
 	100% {
 		@include transform(scale(1));
 	}
@@ -477,38 +530,47 @@ select {
 		-webkit-transform: translateX(3px) rotate(2deg);
 		transform: translateX(3px) rotate(2deg);
 	}
+
 	20% {
 		-webkit-transform: translateX(-3px) rotate(-2deg);
 		transform: translateX(-3px) rotate(-2deg);
 	}
+
 	30% {
 		-webkit-transform: translateX(3px) rotate(2deg);
 		transform: translateX(3px) rotate(2deg);
 	}
+
 	40% {
 		-webkit-transform: translateX(-3px) rotate(-2deg);
 		transform: translateX(-3px) rotate(-2deg);
 	}
+
 	50% {
 		-webkit-transform: translateX(2px) rotate(1deg);
 		transform: translateX(2px) rotate(1deg);
 	}
+
 	60% {
 		-webkit-transform: translateX(-2px) rotate(-1deg);
 		transform: translateX(-2px) rotate(-1deg);
 	}
+
 	70% {
 		-webkit-transform: translateX(2px) rotate(1deg);
 		transform: translateX(2px) rotate(1deg);
 	}
+
 	80% {
 		-webkit-transform: translateX(-2px) rotate(-1deg);
 		transform: translateX(-2px) rotate(-1deg);
 	}
+
 	90% {
 		-webkit-transform: translateX(1px) rotate(0);
 		transform: translateX(1px) rotate(0);
 	}
+
 	100% {
 		-webkit-transform: translateX(-1px) rotate(0);
 		transform: translateX(-1px) rotate(0);

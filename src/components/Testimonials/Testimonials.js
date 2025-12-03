@@ -101,7 +101,7 @@ const Testimonials = () => {
     <section className="testimonials-section" aria-label="Customer testimonials">
       <div className="testimonials-header">
         <h2>What Our Customers Say</h2>
-        <p>Discover why thousands trust us with their most precious moments</p>
+        {/* <p>Discover why thousands trust us with their most precious moments</p> */}
       </div>
 
       <div

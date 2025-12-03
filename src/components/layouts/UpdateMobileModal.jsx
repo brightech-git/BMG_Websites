@@ -13,7 +13,7 @@ const UpdateMobileModal = ({ open: propOpen, onClose: propOnClose }) => {
 
     const [contactNumber, setContactNumber] = useState("");
     const [otp, setOtp] = useState("");
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [showOtpSection, setShowOtpSection] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
@@ -21,12 +21,26 @@ const UpdateMobileModal = ({ open: propOpen, onClose: propOnClose }) => {
     const [errors, setErrors] = useState({});
     const modalRef = useRef(null);
 
-    // Always show modal for design
-    useEffect(() => {
-        setOpen(true);
-    }, []);
+    // // Always show modal for design
+    // useEffect(() => {
+    //     const alreadyShown = localStorage.getItem("mobile_modal_shown");
+
+    //     // If modal was shown before, do not open
+    //     if (alreadyShown) {
+    //         setOpen(false);
+    //         return;
+    //     }
+
+    //     // If user is logged in and has NO mobile number → open
+    //     if (isAuthenticated && !user?.contactNumber) {
+    //         setOpen(true);
+    //         localStorage.setItem("mobile_modal_shown", "yes"); // Mark as shown
+    //     }
+    // }, [isAuthenticated, user]);
+
 
     // Allow parent to control modal
+    
     useEffect(() => {
         if (propOpen !== undefined) setOpen(propOpen);
     }, [propOpen]);

@@ -94,10 +94,11 @@ const Category = ({ banners, isLoading, error }) => {
 
 
             <div className="category-grid">
-                {banners.map((item, i) => (
+                {[...banners].map((item, i) => (
                     <CategoryCard key={i} item={item} />
                 ))}
             </div>
+
         </div>
     );
 };

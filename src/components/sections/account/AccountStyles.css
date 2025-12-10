@@ -1,6 +1,7 @@
 /* Layout */
 .account-container {
   display: flex;
+  margin-top: 150px;
 }
 
 .account-layout {
@@ -13,6 +14,7 @@
 /* Fixed Sidebar */
 .account-sidebar {
   position: sticky;
+  background-color: var(--primary-color);
   top: 10%;
   left: 0;
 
@@ -180,9 +182,18 @@
   background: #ccc;
   cursor: not-allowed;
 }
+@media (max-width: 975px){
+  .account-container {
+      margin-top: 80px;
+    }
+}
 
 /* Responsive */
 @media (max-width: 768px) {
+
+  .account-container {
+    margin-top:50px;
+  }
   .account-layout {
     flex-direction: column;
     /* Stack sidebar and content vertically */
@@ -190,16 +201,13 @@
 
   .account-sidebar {
     position: relative;
-    /* Remove fixed positioning on mobile */
     width: 100%;
-    /* Full width */
     height: auto;
-    /* Adjust height */
+    margin-top: -50px !important;
   }
 
   .account-content {
     margin-left: 0;
-    /* Remove offset */
     padding: 1rem;
   }
 

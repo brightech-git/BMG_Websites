@@ -69,7 +69,7 @@ class Shopsidebar extends Component {
                                     <img src={item.img} alt={item.title} />
                                 </div>
                                 <div className="feed-desc desc">
-                                    <h6><Link to="/product-detail">{item.title}</Link></h6>
+                                    <h6><Link to="/product-page">{item.title}</Link></h6>
                                     <span className="price">₹{item.price} <span>₹{item.discountprice}</span></span>
                                 </div>
                             </div>

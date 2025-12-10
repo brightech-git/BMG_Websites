@@ -54,18 +54,20 @@ import Logo from "./assets/img/logo1.jpg";
 import './App.css';
 // import PageTransition from './components/layouts/PageTransition';
 // import ProductOrdersModal from './components/layouts/ProductOrdersModal';
-import { useAllOrders } from './hook/order/useOrderHistoryQuery';
+import { useAllOrders } from './hook/order/useAllOrdersQuery';
 import { OrderNotification } from './components/layouts/ProductOrdersModal';
 import EnchantedHero from './assets/videos/EnchantedHero';
 // import UpdateMobileModal from './components/layouts/UpdateMobileModal';
 import Success from './components/pages/Success';
 import SchemePrivacyPolicy from './components/pages/SchemePrivacyPolicy';
 import SupportPage from './components/pages/SchemeSupport';
-import Dashboard from './components/pages/AccountDemo/Dashboard';
-import OrderDetails from './components/pages/AccountDemo/OrderDetails';
-import ChangePassword from './components/pages/AccountDemo/ChangePassword';
-import Orders from './components/pages/AccountDemo/Orders';
 
+
+import ChangePassword from './components/sections/account/ChangePassword/ChangePassword';
+import AddressManager from './components/sections/account/Address/AddressManager';
+import OrderDetail from './components/sections/account/OrderDetails/OrderDetails';
+import Orders from './components/sections/account/Order/Order';
+import Dashboard from './components/sections/account/Dashboard/Dashboard';
 // function ScrollWatcher() {
 //   const location = useLocation();
 //   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
@@ -242,13 +244,9 @@ function App() {
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/forgot-password" component={ForgotPassword} />
-            <Route exact path="/product-detail/:sno" component={Shopdetail} />
+            <Route exact path="/products-page/:sno" component={Shopdetail} />
             <Route exact path="/products-page" component={Shopleft} />
 
-          <Route exact path="/dummy-account" component={Dashboard} />
-          <Route exact path="/dummy-orders" component={Orders } />
-          <Route exact path="/dummy-order-details/:orderId" component={OrderDetails} />
-          <Route exact path="/dummy-change-password" component={ChangePassword} />
 
             <PrivateRoute exact path="/wishlist" component={Wishlist} />
             <PrivateRoute exact path="/payment/:orderId" component={PaymentPage} />
@@ -282,7 +280,13 @@ function App() {
             <Route component={Error} />
             <Route exact path="/coming-soon" component={Comingsoon} />
 
-          
+          <Route index element={<Dashboard />} /> {/* Default page */}
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route exact path="/account/change-password" component={ChangePassword} />
+          <Route exact path="/account/orders" component={Orders} />
+          <Route path="/account/orderdetails" component={OrderDetail} />
+            <Route exact path="/account/address" component={AddressManager} />
+            
             <RouteTracker />
           </Switch>
         // </PageTransition>

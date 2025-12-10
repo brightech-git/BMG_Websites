@@ -1,71 +1,25 @@
-import React, { useState,useEffect } from "react";
-import { useDispatch,  } from "react-redux";
-import { logout } from '../../../redux/slices/userSlice'
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { logout } from '../../../redux/slices/userSlice';
 import AccountSidebar from "./AccountSidebar/AccountSideBar";
+import "./AccountStyles.css";
+import { useHistory, Route, Switch } from "react-router-dom";
 import Dashboard from "./Dashboard/Dashboard";
 import Orders from "./Order/Order";
+import OrderDetail from "./OrderDetails/OrderDetails";
 import AddressManager from "./Address/AddressManager";
 import ChangePassword from "./ChangePassword/ChangePassword";
-import OrderDetail from "./OrderDetails/OrderDetails";
-import "./AccountStyles.css";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { useLocation } from "react-router-dom";
 import './logout.css';
-
+import Header from "../../layouts/HeaderWithAuth";
+import Footertwo from "../../layouts/Footerthree";
 
 const AccountPage = () => {
-  const location = useLocation();
-  const [activeComponent, setActiveComponent] = useState("Dashboard");
-  const [selectedOrder, setSelectedOrder] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
-  useEffect(() => {
-    if (location.state?.activeComponent) {
-      setActiveComponent(location.state.activeComponent);
-    }
-   
-  }, [location.state]);
 
-  const renderActiveComponent = () => {
-    switch (activeComponent) {
-      case "Dashboard":
-        return (
-          <Dashboard
-            setActiveComponent={setActiveComponent}
-            setSelectedOrder={setSelectedOrder}
-          />
-        );
-      case "Orders":
-        return (
-          <Orders
-            setActiveComponent={setActiveComponent}
-            setSelectedOrder={setSelectedOrder}
-          />
-        );
-      case "Addresses":
-        return <AddressManager />;
-      case "Change Password":
-        return <ChangePassword />;
-      case "OrderDetail":
-        return (
-          <OrderDetail
-            order={selectedOrder}
-            setActiveComponent={setActiveComponent}
-          />
-        );
-      default:
-        return <Dashboard />;
-    }
-  };
-
-  const openLogoutModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeLogoutModal = () => {
-    setIsModalOpen(false);
-  };
+  const openLogoutModal = () => setIsModalOpen(true);
+  const closeLogoutModal = () => setIsModalOpen(false);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -75,17 +29,25 @@ const AccountPage = () => {
   };
 
   return (
+    <>
+    <Header />
     <section className="account-with-header">
       <div className="account-container">
         <div className="account-layout">
           <div className="account-sidebar">
-            <AccountSidebar
-              activeComponent={activeComponent}
-              setActiveComponent={setActiveComponent}
-              openLogoutModal={openLogoutModal}
-            />
+            <AccountSidebar openLogoutModal={openLogoutModal} />
           </div>
-          <main className="account-content">{renderActiveComponent()}</main>
+          <main className="account-content">
+
+            <Switch>
+              <Route exact path="/account/dashboard" component={Dashboard} />
+              <Route exact path="/account/orders" component={Orders} />
+                <Route path="/account/orderdetails" component={OrderDetail} />
+              <Route exact path="/account/address" component={AddressManager} />
+              <Route exact path="/account/change-password" component={ChangePassword} />
+              <Route path="/account" component={Dashboard} /> {/* default */}
+            </Switch>
+          </main>
         </div>
       </div>
 
@@ -99,17 +61,15 @@ const AccountPage = () => {
               <p>Are you sure you want to log out of your account?</p>
             </div>
             <div className="logout-modal-footer">
-              <button className="cancel-btn" onClick={closeLogoutModal}>
-                Cancel
-              </button>
-              <button className="logout-btn" onClick={handleLogout}>
-                Log Out
-              </button>
+              <button className="cancel-btn" onClick={closeLogoutModal}>Cancel</button>
+              <button className="logout-btn" onClick={handleLogout}>Log Out</button>
             </div>
           </div>
         </div>
       )}
     </section>
+    <Footertwo/>
+    </>
   );
 };
 

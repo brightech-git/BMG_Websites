@@ -1,427 +1,195 @@
 import React, { useState, useEffect } from "react";
 import {
   FiShoppingBag,
-  FiClock,
-  FiTruck,
-  FiCheckCircle,
   FiHeart,
   FiShoppingCart,
   FiChevronRight,
   FiLoader,
-  FiAlertCircle,
   FiPackage,
-  FiCalendar,
-  FiUser,
+  FiTruck,
+  FiCheckCircle,
+  FiClock,
+  FiXCircle,
 } from "react-icons/fi";
-import "./Dashboard.css";
-import { useOrderHistory } from "../../../../hook/order/useOrderHistoryQuery";
+import { Link, useHistory } from "react-router-dom";
+import { getOrderHistory } from "../../../../service/orderService";
 import { useCart } from "../../../../hook/cart/useCartQuery";
 import { useFavorites } from "../../../../hook/favorites/useFavoritesQuery";
-import { Link } from "react-router-dom/cjs/react-router-dom";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { getOrderHistory } from "../../../../service/orderService";
 
-const Dashboard = ({ setActiveComponent, setSelectedOrder }) => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+const Dashboard = () => {
   const history = useHistory();
-  const {
-    data: ordersData,
-    isLoading: ordersLoading,
-    error: ordersError,
-  } = useOrderHistory();
 
-  const [orderDetails, setOrderDetails] = useState([]);
-  const [loading, setLoading] = useState(false);
-  //console.log(orderDetails, 'orderDetails')
+  const [orders, setOrders] = useState([]);
+  const [loadingOrders, setLoadingOrders] = useState(true);
 
+  const { cartItems = { data: [] }, isLoading: cartLoading } = useCart();
+  const { data: wishlistResponse = { data: [] }, isLoading: wishlistLoading } = useFavorites();
+
+  // Fetch orders using the service directly (just like your original code)
   useEffect(() => {
     const fetchOrders = async () => {
-      setLoading(true); // start loading
+      setLoadingOrders(true);
       try {
-        const orders = await getOrderHistory();
-        //console.log(orders, 'orders');
-        setOrderDetails(orders);
-      } catch (error) {
-        console.error('Failed to load orders:', error);
+        const response = await getOrderHistory(); // Your service
+        const orderList = Array.isArray(response.content)
+          ? response.content
+          : Array.isArray(response)
+            ? response
+            : [];
+        setOrders(orderList);
+      } catch (err) {
+        console.error("Failed to load orders:", err);
+        setOrders([]);
       } finally {
-        setLoading(false); // stop loading
+        setLoadingOrders(false);
       }
     };
-
     fetchOrders();
   }, []);
 
-
-
-  const {
-    cartItems: cartData = { data: [] },
-    isLoading: cartLoading,
-    error: cartError,
-  } = useCart();
-
-  const {
-    data: wishlistResponse = { data: [] },
-    isLoading: wishlistLoading,
-    error: wishlistError,
-  } = useFavorites();
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-      if (window.innerWidth > 768) {
-        setIsMobileMenuOpen(false);
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const getFirstImage = (imagePath) => {
-    if (!imagePath) return null;
-    return imagePath.trim();
-  };
-
-  const getResolvedImageUrl = (url) => {
-    if (!url) return null;
-    if (url.startsWith("http")) return url;
-    if (url.startsWith("/")) return `https://app.bmgjewellers.com${url}`;
-    return null;
-  };
-
-  const calculateMetrics = () => {
-    const orders = ordersData || [];
-    //console.log("Orders:", orders);
-    const totalOrders = orderDetails.length;
-    const wishlistItems = wishlistResponse?.data?.length || 0;
-    const cartItems = Array.isArray(cartData?.data) ? cartData.data.length : 0;
-    //console.log("Cart Items:", cartData?.data);
-
-    return [
-      {
-        icon: <FiShoppingBag size={24} />,
-        value: totalOrders,
-        label: "Total Orders",
-        key: "Orders",
-        color: "blue",
-        description: "All your orders",
-      },
-      {
-        icon: <FiHeart size={24} />,
-        value: wishlistItems,
-        label: "Wishlist",
-        key: "Wishlist",
-        color: "rose",
-        description: "Your saved items",
-      },
-      {
-        icon: <FiShoppingCart size={24} />,
-        value: cartItems,
-        label: "Cart Items",
-        key: "Cart",
-        color: "purple",
-        description: "Items ready to checkout",
-      },
-    ];
-  };
-
-  const metrics = calculateMetrics();
+  const metrics = [
+    { icon: <FiShoppingBag />, value: orders.length, label: "Orders", to: "/account/orders" },
+    { icon: <FiHeart />, value: wishlistResponse.data?.length || 0, label: "Wishlist", to: "/wishlist" },
+    { icon: <FiShoppingCart />, value: cartItems.data?.length || 0, label: "Cart", to: "/cart" },
+  ];
 
   const getStatusBadge = (status) => {
-    switch (status?.toUpperCase()) {
-      case "PLACED":
-        return "yellow";
-      case "DELIVERED":
-        return "green";
-      case "SHIPPED":
-        return "blue";
-      case "PROCESSING":
-        return "amber";
-      case "CANCELLED":
-        return "red";
-      case "REFUNDED":
-        return "red";
-
-      default:
-        return "gray";
-    }
-  };
-
-  const getStatusIcon = (status) => {
-    switch (status?.toUpperCase()) {
-      case "DELIVERED":
-        return <FiCheckCircle size={14} />;
-      case "SHIPPED":
-        return <FiTruck size={14} />;
-      case "PLACED":
-        return <FiPackage size={14} />;
-      case "PROCESSING":
-        return <FiClock size={14} />;
-      default:
-        return <FiPackage size={14} />;
-    }
-  };
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const formatDate = (dateString) => {
-    if (!dateString) return "N/A";
-    try {
-      return new Date(dateString).toLocaleDateString("en-US", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-    } catch (error) {
-      return "Invalid Date";
-    }
-  };
-
-  const getTotalItems = (orderItems) => {
-    if (!Array.isArray(orderItems)) return 0;
-    return orderItems.reduce((total, item) => total + (item.quantity || 1), 0);
-  };
-
-  const getOrderItemsSummary = (orderItems) => {
-    if (!Array.isArray(orderItems) || orderItems.length === 0) {
-      return { text: "No items", count: "0 items" };
-    }
-
-    const itemNames = orderItems
-      .slice(0, 2)
-      .map((item) => item.productName || "Unknown Item");
-    const totalQuantity = getTotalItems(orderItems);
-
-    let text = itemNames.join(", ");
-    if (orderItems.length > 2) {
-      text += `, +${orderItems.length - 2} more`;
-    }
-
-    return {
-      text,
-      count: `${totalQuantity} item${totalQuantity !== 1 ? "s" : ""}`,
+    const s = (status || "").toUpperCase();
+    const map = {
+      DELIVERED: { color: "text-green-700 border-green-700 bg-green-50", icon: <FiCheckCircle /> },
+      SHIPPED: { color: "text-blue-700 border-blue-700 bg-blue-50", icon: <FiTruck /> },
+      PROCESSING: { color: "text-orange-700 border-orange-700 bg-orange-50", icon: <FiClock /> },
+      PENDING: { color: "text-orange-700 border-orange-700 bg-orange-50", icon: <FiClock /> },
+      CANCELLED: { color: "text-red-700 border-red-700 bg-red-50", icon: <FiXCircle /> },
     };
+    return map[s] || { color: "text-gray-600 border-gray-400 bg-gray-50", icon: <FiPackage /> };
   };
 
-  const handleOrderRowClick = (order) => {
-    setSelectedOrder(order);
-    setActiveComponent("OrderDetail");
+  const formatDate = (d) => {
+    if (!d) return "-";
+    return new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
   };
 
-  const isLoading = ordersLoading || cartLoading || wishlistLoading || loading;
-  const hasError = ordersError || cartError || wishlistError;
-  const orders = Array.isArray(orderDetails) ? orderDetails : [];
+  const isLoading = loadingOrders || cartLoading || wishlistLoading;
 
   if (isLoading) {
     return (
-      <div className="dashboard">
-        <main className={`dashboard__content ${isMobileMenuOpen ? "menu-open" : ""}`}>
-          <div className="loading">
-            <FiLoader className="loading__spinner" size={24} />
-            <p className="loading__text">Loading your dashboard...</p>
-          </div>
-        </main>
-      </div>
-    );
-  }
-
-  if (hasError) {
-    return (
-      <div className="dashboard">
-        <main className={`dashboard__content ${isMobileMenuOpen ? "menu-open" : ""}`}>
-          <div className="error">
-            <FiAlertCircle size={24} className="error__icon" />
-            <h3 className="error__title">Error Loading Dashboard</h3>
-            <p className="error__message">
-              We couldn't load your dashboard data. Please try again later.
-            </p>
-            {ordersError && (
-              <p className="error__detail">Orders: {ordersError.message}</p>
-            )}
-            {cartError && (
-              <p className="error__detail">Cart: {cartError.message}</p>
-            )}
-            {wishlistError && (
-              <p className="error__detail">Wishlist: {wishlistError.message}</p>
-            )}
-            <button onClick={() => window.location.reload()} className="error__retry">
-              Retry
-            </button>
-          </div>
-        </main>
+      <div className="min-h-screen bg-[#eeece8] p-4">
+        <div className="bg-white rounded-sm border border-gray-300 p-16 text-center">
+          <FiLoader className="mx-auto text-4xl text-[#f16137] animate-spin" />
+          <p className="mt-4 text-sm text-gray-600">Loading your dashboard...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="dashboard">
-      {windowWidth <= 768 && (
-        <header className="dashboard__mobile-header">
-          <h1 className="dashboard__mobile-title">Dashboard</h1>
-        </header>
-      )}
-      <main className={`dashboard__content ${isMobileMenuOpen ? "menu-open" : ""}`}>
-        <div className="dashboard__container">
-          <header className="dashboard__header">
-            <h1 className="dashboard__title">Dashboard</h1>
-            <p className="dashboard__subtitle">
-              Welcome back! Here's an overview of your account activity.
-            </p>
-          </header>
-          <section className="metrics">
-            {metrics.map((metric, index) => (
+    <>
+      <style jsx>{`
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeInUp { animation: fadeInUp 0.4s ease-out forwards; }
+      `}</style>
+
+      <div className="min-h-screen bg-[#eeece8] px-3 py-3 mt-[100px] md:mt-0 font-secondary text-[#041f60] text-base leading-tight">
+
+        {/* Header + Metrics */}
+        <div className="bg-white border border-gray-300 rounded-sm p-2 mb-2  rounded-xl flex flex-row md:flex-row md:items-center md:justify-between gap-2">
+          <div>
+            <h2 className="text-sm md:text-lg font-bold text-[#f16137]">
+              My Account
+            </h2>
+            <p className="text-sm text-gray-600 mt-1">Welcome back</p>
+          </div>
+
+          <div className="flex gap-2">
+            {metrics.map((m, i) => (
               <button
-                key={index}
-                className={`metric-card metric-card--${metric.color}`}
-                onClick={() => {
-                  if (metric.key === "Orders") {
-                    setActiveComponent("Orders"); // switch inside dashboard
-                  } else if (metric.key === "Cart") {
-                    history.push("/cart"); // go to cart page
-                  } else if (metric.key === "Wishlist") {
-                    history.push("/wishlist"); // go to wishlist page
-                  }
-                }}
-                aria-label={`View ${metric.label}`}
+                key={i}
+                onClick={() => history.push(m.to)}
+                className="flex items-center gap-2 px-2 py-1.5  border border-gray-300 rounded-full bg-[var(--primary-hover-color)] transition-all cursor-pointer"
               >
-                <div className="metric-card__icon">{metric.icon}</div>
-                <div className="metric-card__content">
-                  <h3 className="metric-card__value">{metric.value}</h3>
-                  <p className="metric-card__label">{metric.label}</p>
-                  <p className="metric-card__description">{metric.description}</p>
-                </div>
-                <div className="metric-card__arrow">
-                  <FiChevronRight size={16} />
+                <span className="text-[#fff] text-sm">{m.icon}</span>
+                <div className="text-left">
+                  <div className="text-[#fff] font-bold text-base">{m.value}</div>
                 </div>
               </button>
             ))}
-          </section>
-
-
-          <section className="order-history">
-            <div className="order-history__header">
-              <div className="order-history__title-group">
-                <h2 className="order-history__title">Recent Orders</h2>
-                <p className="order-history__subtitle">Your latest order activity</p>
-              </div>
-              <button
-                className="order-history__view-all"
-                onClick={() => setActiveComponent("Orders")}
-                aria-label="View all orders"
-              >
-                View All Orders <FiChevronRight size={14} />
-              </button>
-            </div>
-
-            {orders.length > 0 ? (
-              <div className="order-history__cards">
-                {orders.map((order, index) => {
-                  const firstItem = order.orderItems?.[0];
-                  //console.log("First Item:", firstItem);
-                  const firstImage = firstItem ? getFirstImage(firstItem.imagePath) : null;
-                  const itemsSummary = getOrderItemsSummary(order.orderItems);
-
-                  return (
-                    <div
-                      className="order-history__card"
-                      key={index}
-                      onClick={() => handleOrderRowClick(order)}
-                      role="button"
-                      tabIndex={0}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          handleOrderRowClick(order);
-                        }
-                      }}
-                      aria-label={`View details for order ${order.orderId}`}
-                    >
-                      <div className="order-history__card-content">
-                        <div className="order-history__items-info">
-                          {firstImage ? (
-                            <div className="order-history__item-image-container">
-                              <div className="order-history__item-image">
-                                <img
-                                  src={getResolvedImageUrl(firstImage)}
-                                  alt={firstItem?.productName || "Product"}
-                                  onError={(e) => {
-                                    e.target.style.display = "none";
-                                    const placeholder = e.target.parentNode.querySelector(
-                                      ".order-history__item-image-placeholder"
-                                    );
-                                    if (placeholder) placeholder.style.display = "flex";
-                                  }}
-                                />
-                                <div
-                                  className="order-history__item-image-placeholder"
-                                  style={{ display: "none" }}
-                                >
-                                  <FiPackage size={16} />
-                                </div>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="order-history__item-image-container">
-                              <div className="order-history__item-image-placeholder">
-                                <FiPackage size={16} />
-                              </div>
-                            </div>
-                          )}
-                          <div className="order-history__items-details">
-                            <span className="order-history__items-text">{itemsSummary.text}</span>
-                            <span className="order-history__items-count">{itemsSummary.count}</span>
-                          </div>
-                        </div>
-                        <div className="order-history__status">
-                          <span
-                            className={`order-history__status-badge order-history__status-badge--${getStatusBadge(
-                              order.status
-                            )}`}
-                          >
-                            {getStatusIcon(order.status)}
-                            <span>{order.status}</span>
-                          </span>
-                          {order.courierTrackingId && (
-                            <span className="order-history__tracking-id">
-                              Track: {order.courierTrackingId}
-                            </span>
-                          )}
-                        </div>
-                        <div className="order-history__total">
-                          <span className="order-history__total-amount">
-                            ₹{order.totalAmount?.toFixed(2) || "0.00"}
-                          </span>
-                          {order.paymentMode && (
-                            <span className="order-history__payment-mode">via {order.paymentMode}</span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="order-history__empty">
-                <div className="order-history__empty-icon">
-                  <FiShoppingBag size={40} />
-                </div>
-                <h3 className="order-history__empty-title">No Orders Yet</h3>
-                <p className="order-history__empty-message">
-                  You haven't placed any orders yet. Start shopping to see your orders here!
-                </p>
-                <Link to="/products-page" className="order-history__shop-now">
-                  <FiShoppingCart size={14} /> Start Shopping
-                </Link>
-              </div>
-            )}
-          </section>
+          </div>
         </div>
-      </main>
-    </div>
+
+        {/* Recent Orders */}
+        <div className="bg-white border border-gray-300 rounded-sm overflow-hidden">
+          <div className="p-2 border-b border-gray-300 flex justify-between items-center">
+            <h3 className="font-bold text-[var(--primary-text-color)] text-lg">Recent Orders</h3>
+            <button
+              onClick={() => history.push("/account/orders")}
+              className="text-sm font-semibold text-[#041f60] hover:text-[#f16137] flex items-center gap-1"
+            >
+              View All <FiChevronRight />
+            </button>
+          </div>
+
+          {orders.length === 0 ? (
+            <div className="p-12 text-center">
+              <FiPackage className="mx-auto text-6xl text-gray-300 mb-4" />
+              <p className="text-gray-600 mb-3">No orders yet</p>
+              <Link
+                to="/products-page"
+                className="inline-block px-6 py-2.5 bg-[#041f60] text-white text-sm rounded hover:bg-[#f16137] transition"
+              >
+                Shop Now
+              </Link>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50 border-b border-gray-300">
+                  <tr>
+                    <th className="text-left px-2 py-2 text-xs font-bold uppercase tracking-wider">Order ID</th>
+                    <th className="text-left px-2 py-2 text-xs font-bold uppercase tracking-wider hidden sm:table-cell">Date</th>
+                    <th className="text-left px-2 py-2 text-xs font-bold uppercase tracking-wider">Status</th>
+                    <th className="text-left px-2 py-2 text-xs font-bold uppercase tracking-wider">Total</th>
+                      <th className="text-left px-2 py-2 text-xs font-bold uppercase tracking-wider">Know More</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {orders.slice(0, 5).map((order, i) => {
+                    const badge = getStatusBadge(order.status);
+                    return (
+                      <tr
+                        key={order.orderId}
+                        onClick={() => history.push("/account/orderdetails", { order })}
+                        className="hover:bg-orange-50 cursor-pointer animate-fadeInUp"
+                        style={{ animationDelay: `${i * 80}ms` }}
+                      >
+                        <td className="px-2 py-2 font-semibold text-[#f16137]">#{order.orderId}</td>
+                        <td className="px-2 py-2 text-gray-600 hidden sm:table-cell">
+                          {formatDate(order.orderTime || order.createdAt)}
+                        </td>
+                        <td className="px-2 py-2">
+                          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border ${badge.color}`}>
+                            {badge.icon} {order.status || "Unknown"}
+                          </span>
+                        </td>
+                        <td className="px-2 py-2 font-semibold">
+                          ₹{(order.totalAmount || 0).toFixed(2)}
+                        </td>
+                        <td className="px-2 py-2 text-right">
+                          <FiChevronRight className="text-gray-400 hover:text-[#f16137]" />
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+    </>
   );
 };
 

@@ -23,6 +23,17 @@ export const getProductBySno = async (sno) => {
 
     throw new Error(`No product found for SNO: ${sno}`);
 };
+export const getWhatsappLink = async (sno) => {
+   if(sno)
+   {
+       const response = await PublicUrl.get('/product/whatsapp-link', {
+           params: { sno: sno }
+       });
+       return response.data;
+   }
+    
+    throw new Error(`No product found for SNO: ${sno}`);
+};
 
 export const filterProducts = async (filters) => {
     try {

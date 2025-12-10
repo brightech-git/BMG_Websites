@@ -1,55 +1,73 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import "./Breadcrumb.css";
+import { ChevronRight, Home } from "lucide-react";
 
 const Breadcrumb = () => {
     const location = useLocation();
-    const { pathname } = location;
+    const pathParts = location.pathname.split("/").filter(Boolean);
 
-    // Split the path into parts (remove empty values)
-    const pathParts = pathname.split("/").filter((part) => part);
-
-    // Create breadcrumb items
-    const crumbs = pathParts.map((part, index) => {
-        const routeTo = "/" + pathParts.slice(0, index + 1).join("/");
+    const crumbs = pathParts.map((part, i) => {
+        const routeTo = "/" + pathParts.slice(0, i + 1).join("/");
         const name = decodeURIComponent(part)
             .replace(/-/g, " ")
-            .replace(/\b\w/g, (c) => c.toUpperCase());
+            .replace(/\b\w/g, c => c.toUpperCase());
         return { name, routeTo };
     });
 
     return (
         <AnimatePresence mode="wait">
             <motion.nav
-                key={pathname}
-                className="breadcrumb-container"
-                aria-label="breadcrumb"
-                initial={{ opacity: 0, y: -8 }}
+                key={location.pathname}
+                className="flex items-center gap-1 text-xs md:text-sm py-3 px-2 bg-white/80 rounded-xl backdrop-blur-sm border-b border-gray-200 sticky top-0 z-0"
+                initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 8 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                aria-label="Breadcrumb"
             >
-                <ul className="breadcrumb-list">
-                    <li>
-                        <Link to="/" className="breadcrumb-link">
-                            Home
-                        </Link>
-                    </li>
-                    {crumbs.map((crumb, index) => (
-                        <motion.li
-                            key={crumb.routeTo}
-                            className="breadcrumb-item"
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.25, delay: index * 0.05 }}
-                        >
-                            
-                                <span className="breadcrumb-active">{crumb.name}</span>
-                            
-                        </motion.li>
-                    ))}
-                </ul>
+                {/* Home */}
+                <Link
+                    to="/"
+                    className="flex items-center gap-2 text-[#041f60] hover:text-[#f16137] transition-colors font-medium"
+                >
+                    <Home className="w-4 h-4" />
+                    <span className="hidden sm:inline">Home</span>
+                </Link>
+
+                {/* Separator */}
+                {crumbs.length > 0 && (
+                    <ChevronRight className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                )}
+
+                {/* Dynamic Crumbs */}
+                {crumbs.map((crumb, i) => (
+                    <motion.div
+                        key={crumb.routeTo}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3, delay: i * 0.08 }}
+                        className="flex items-center gap-2"
+                    >
+                        {i < crumbs.length - 1 ? (
+                            <Link
+                                to={crumb.routeTo}
+                                className="text-gray-600 hover:text-[#f16137] transition-colors font-medium capitalize"
+                            >
+                                {crumb.name}
+                            </Link>
+                        ) : (
+                            <span className="text-[#f16137] font-semibold capitalize">
+                                {crumb.name}
+                            </span>
+                        )}
+
+                        {/* Separator except last */}
+                        {i < crumbs.length - 1 && (
+                            <ChevronRight className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                        )}
+                    </motion.div>
+                ))}
             </motion.nav>
         </AnimatePresence>
     );

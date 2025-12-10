@@ -1,18 +1,20 @@
 
 
 .account-navigation-panel {
-  background-color: var(--primary-color);
   padding: 1rem;
   position: sticky;
 }
-
+.sidebar-content{
+background-color: var(--primary-card-color);
+box-shadow: var(--shadow-sm);
+border-radius: var(--radius-lg);
+padding: 1rem;
+}
 .user-profile-card {
   display: flex;
   flex-direction: column;
+   
   align-items: center;
-  padding-bottom: 1.5rem;
-  margin-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border-color);
 }
 
 .profile-image-container {
@@ -63,7 +65,7 @@
 .navigation-link {
   display: flex;
   align-items: center;
-  padding: 0.75rem 1rem;
+  padding: 0.25rem 0.65rem;
   color: var(--text-light);
   text-decoration: none;
   border-radius: var(--radius-sm);
@@ -82,8 +84,8 @@
 }
 
 .navigation-link.current-route {
-  background-color: rgba(79, 70, 229, 0.1);
-  color: var(--primary-hover-color);
+  background-color: var(--primary-hover-color) ;
+  color: var(--white-color) ;
   font-weight: 500;
 }
 
@@ -91,12 +93,19 @@
   margin-right: 0.75rem;
   display: flex;
   align-items: center;
+  color: var(--primary-text-color);
 }
 
 .link-text {
   flex: 1;
+  color: var(--primary-text-color);
 }
-
+.navigation-link.current-route  .link-text{
+  color: var(--white-color) ;
+}
+.navigation-link.current-route .link-icon{
+  color: var(--white-color) ;
+}
 .sign-out-btn {
   color: var(--danger-color);
 }
@@ -130,15 +139,13 @@
 }
 
 @media(max-width:1200px){
-  .account-navigation-panel{
-    margin-top: 80px
-  }
+
 }
 /* Responsive styles */
 @media (max-width: 992px) {
   .account-navigation-panel {
     width: 240px;
-    margin-top: 0px;
+    margin-top: 10px;
     top:0rem;
   }
 }
@@ -146,12 +153,9 @@
 @media (max-width: 768px) {
   .account-navigation-panel {
     width: 100%;
-    background-color: var(--white-color);
     position: static;
-    margin-bottom: 1.5rem;
-    padding: 0;
+    padding: 10px;
     box-shadow: none;
-      margin-top:10px;
   }
 
   .mobile-menu-header {
@@ -170,8 +174,8 @@
   .user-profile-card {
     align-items: center;
     text-align: left;
-    padding: 1rem 0;
-    margin-bottom: 1rem;
+    padding:0;
+    margin-bottom: 0rem;
     border-bottom: 1px solid var(--border-color);
   }
 
@@ -182,8 +186,8 @@
     height: 40px;
   }
 .profile-avatar-container{
-  width:40px !important; 
-  height: 40px !important;
+  width:40px ; 
+  height: 40px ;
 }
   .profile-info {
     text-align: left;

@@ -21,8 +21,8 @@ const PriceUnderSection = ({budgetBanners ,isLoading ,isError}) => {
 
   const handleCategoryNavigation = (minPrice, maxPrice) => {
     const searchParams = new URLSearchParams();
-    if (minPrice) searchParams.append('minGrandTotal', minPrice);
-    if (maxPrice) searchParams.append('maxGrandTotal', maxPrice);
+    if (minPrice,maxPrice) searchParams.append('priceRange',minPrice + '-' + maxPrice)
+    // if (maxPrice) searchParams.append('maxGrandTotal', maxPrice);
     const formattedQuery = searchParams.toString().replace(/\+/g, '%20');
     history.push(`/products-page?${formattedQuery}`);
   };

@@ -1,258 +1,148 @@
-import React, { useState, useCallback, useMemo } from "react";
-import classNames from "classnames";
-import { useOrderHistory } from "../../../../hook/order/useOrderHistoryQuery";
-import { formatCurrency } from "../../../../assets/utills/formatters";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faBox,
-  faBoxOpen,
-  faExclamationCircle,
-  faSpinner,
-  faAngleLeft,
-  faAngleRight,
-  faShoppingBag,
-  faUndo,
-  faSearch,
-  faTimes,
-  faChevronDown,
+  faBox, faBoxOpen, faExclamationCircle, faSpinner,
+  faSearch, faTimes, faChevronDown, faCheckCircle,
+  faTruck, faClock, faAngleLeft, faAngleRight
 } from "@fortawesome/free-solid-svg-icons";
-import "./OrderStyles.css";
+import { getOrderHistory } from "../../../../service/orderService";
+import { formatCurrency } from "../../../../assets/utills/formatters";
+import { useHistory } from "react-router-dom";
 
-
-// Util to get the image URL from different formats
-const getFirstImageUrl = (imagePath) => {
-  if (!imagePath) return "https://via.placeholder.com/150";
-  if (imagePath.startsWith("http")) return imagePath;
-
-  try {
-    const parsed = JSON.parse(imagePath);
-    if (Array.isArray(parsed) && parsed.length > 0) {
-      return `https://app.bmgjewellers.com${parsed[0]}`;
-    }
-  } catch (e) {
-    const cleaned = imagePath.replace(/\[|\]/g, "");
-    const parts = cleaned.split(/["',\s]+/).filter((p) => p.startsWith("/uploads"));
-    if (parts.length > 0) {
-      return `https://app.bmgjewellers.com${parts[0]}`;
-    }
-  }
-
-  return "https://via.placeholder.com/150";
-};
-// Mobile Order Card
-const MobileOrderCard = ({ order, onClick }) => {
-  //console.log(order,'order first');
-  const imageUrl = useMemo(() => getFirstImageUrl(order.orderItems?.[0]?.imagePath), [order]);
-  return (
-    <div
-      className="order-card-mobile"
-      onClick={() => onClick(order)}
-      tabIndex={0}
-      role="button"
-      onKeyDown={(e) => e.key === "Enter" && onClick(order)}
-      aria-label={`View order ${order.orderId || order.id}`}
-    >
-
-      <div className="order-product-info-mobile">
-        <div className="order-product-image-mobile">
-          <img src={imageUrl} alt={order.orderItems?.[0]?.productName || "Product"} />
-        </div>
-        <div className="order-product-details-mobile">
-          <div className="order-product-name-mobile">{order.orderItems?.[0]?.productName}</div>
-          <span
-            className={classNames(
-              "order-status-mobile",
-              order.status?.toLowerCase().replace(/\s/g, "-")
-            )}
-          >
-            {order.status}
-          </span>
-
-          <div className="order-total-mobile">
-            Total: {formatCurrency(order.totalAmount || order.amount)}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Desktop Order Card
-const DesktopOrderCard = ({ order, onClick }) => {
-  const imageUrl = useMemo(() => getFirstImageUrl(order.orderItems?.[0]?.imagePath), [order]);
-  return (
-    <div
-      className="order-card-desktop"
-      onClick={() => onClick(order)}
-      tabIndex={0}
-      role="button"
-      onKeyDown={(e) => e.key === "Enter" && onClick(order)}
-      aria-label={`View order ${order.orderId || order.id}`}
-    >
-      <div className="order-card-content-desktop">
-        <div className="order-product-image-desktop">
-          <img src={imageUrl} alt={order.orderItems?.[0]?.productName || "Product"} />
-        </div>
-
-        <div className="order-product-details-desktop">
-          <div className="order-product-name-desktop">{order.orderItems?.[0]?.productName}</div>
-        </div>
-
-        <div className="order-total-desktop">{formatCurrency(order.totalAmount || order.amount)} </div>
-
-        <div
-          className={classNames(
-            "order-status-desktop",
-            order.status?.toLowerCase().replace(/\s/g, "-")
-          )}
-        >
-          {order.status}
-
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const Orders = ({ setActiveComponent, setSelectedOrder }) => {
+const Orders = () => {
+  const [ordersData, setOrdersData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
-  const { data, isLoading, error } = useOrderHistory();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
-  const [timeFilter, setTimeFilter] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [timeFilter, setTimeFilter] = useState("");
+  const history = useHistory();
+  const pageSize = 10;
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await getOrderHistory(currentPage, pageSize);
+        setOrdersData(data);
+      } catch (err) {
+        setError(err.response?.data?.message || err.message || "Failed to load orders");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchOrders();
+  }, [currentPage]);
 
   const orders = useMemo(() => {
-    if (Array.isArray(data?.content)) return data.content;
-    if (Array.isArray(data)) return data;
-    return [];
-  }, [data]);
+    if (!ordersData) return [];
+    return Array.isArray(ordersData) ? ordersData : [];
+  }, [ordersData]);
 
-  const handlePageChange = useCallback(
-    (page) => {
-      if (page >= 0 && page < (data?.totalPages || 1)) {
-        setCurrentPage(page);
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-    },
-    [data?.totalPages]
-  );
+  const filteredOrders = useMemo(() => {
+    return orders.filter((order) => {
+      const q = searchQuery.toLowerCase();
+      const matchesSearch = !q ||
+        String(order.orderId || "").toLowerCase().includes(q) ||
+        (order.items || []).some(item => String(item.name || "").toLowerCase().includes(q));
 
-  const handleOrderClick = useCallback(
-    (order) => {
-      setSelectedOrder(order);
-      setActiveComponent("OrderDetail");
-    },
-    [setSelectedOrder, setActiveComponent]
-  );
-  const isWithinTimeFrame = (orderDate, days) => {
-    if (!days) return true;
+      const matchesStatus = !statusFilter || (order.status || "").toLowerCase() === statusFilter.toLowerCase();
 
-    const orderDateTime = new Date(orderDate).getTime();
-    const currentTime = new Date().getTime();
-    const timeDiff = currentTime - orderDateTime;
-    const daysDiff = timeDiff / (1000 * 3600 * 24);
-
-    return daysDiff <= days;
-  };
-
-  const filteredOrders = orders.filter(order => {
-    // Search filter
-    const matchesSearch =
-      searchQuery === '' ||
-      (order.orderId || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (order.items || []).some(item =>
-        (item.name || '').toLowerCase().includes(searchQuery.toLowerCase())
+      const matchesTime = !timeFilter || (
+        Date.now() - new Date(order.orderTime || order.createdAt).getTime() <= parseInt(timeFilter) * 86400000
       );
-      console.log(order, 'order');
-      console.log(statusFilter, 'orders');
 
+      return matchesSearch && matchesStatus && matchesTime;
+    });
+  }, [orders, searchQuery, statusFilter, timeFilter]);
 
-    // Status filter
-    const matchesStatus = statusFilter === '' ||
-      order.status.toLowerCase() === statusFilter.toLowerCase();
+  const handlePageChange = useCallback((page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
-     
-
-    // Time filter
-    const matchesTime = timeFilter === '' || isWithinTimeFrame(order.orderTime, parseInt(timeFilter));
-
-    return matchesSearch && matchesStatus && matchesTime;
-  });
-
-
-
-  // Helper function to get time filter label
   const getTimeFilterLabel = (value) => {
-    switch (value) {
-      case '7': return 'Last 7 Days';
-      case '30': return 'Last 30 Days';
-      case '90': return 'Last 3 Months';
-      case '180': return 'Last 6 Months';
-      case '365': return 'Last Year';
-      default: return '';
-    }
+    const labels = { "7": "Last 7 Days", "30": "Last 30 Days", "90": "Last 3 Months", "180": "Last 6 Months", "365": "Last Year" };
+    return labels[value] || "";
   };
-  // Helper function to check if order is within time frame
+
+  const getStatusBadge = (status) => {
+    const s = (status || "").toUpperCase();
+    const map = {
+      DELIVERED: { type: "success", icon: faCheckCircle },
+      SHIPPED: { type: "info", icon: faTruck },
+      PROCESSING: { type: "warning", icon: faClock },
+      PENDING: { type: "warning", icon: faClock },
+      CANCELLED: { type: "danger", icon: faTimes },
+    };
+    return map[s] || { type: "default", icon: faBox };
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "-";
+    return new Date(dateString).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+  };
 
   return (
-    <div className="order-content">
-      <div className="order-header-container">
-        <h1 className="order-main-title">
-          <FontAwesomeIcon icon={faBox} /> Order History
-        </h1>
-        <p className="order-subtitle">View and manage your past orders</p>
-      </div>
+    <>
+      {/* Subtle Animations */}
+      <style jsx>{`
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeInUp { animation: fadeInUp 0.4s ease-out forwards; }
+      `}</style>
 
-      {/* Search and Filter Section */}
-      <div className="order-filter-container">
-        <div className="search-filter-wrapper">
-          {/* Search Input */}
-          <div className="search-container">
-            <FontAwesomeIcon icon={faSearch} className="search-icon" />
+      <div className="font-secondary mt-[100px] md:mt-0 text-[var(--primary-text-color)] px-2 py-3 text-sm leading-tight bg-[#eeece8] min-h-screen">
+
+        {/* Header */}
+        <div className="bg-white border border-gray-300 rounded-lg p-2 mb-2 flex justify-between items-center">
+          <h1 className="text-base font-bold text-[var(--primary-hover-color)] flex items-center gap-1.5 font-primary">
+            <FontAwesomeIcon icon={faBox} /> Order History
+          </h1>
+          <p className="text-xs opacity-80 text-[var(--primary-text-color)]">Manage your past orders</p>
+        </div>
+
+        {/* Filters */}
+        <div className="bg-white border border-gray-300 rounded-lg p-2 mb-2 flex flex-wrap gap-1.5 items-center justify-between">
+          <div className="relative flex-1 max-w-xs">
+            <FontAwesomeIcon icon={faSearch} className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 text-xs" />
             <input
               type="text"
-              placeholder="Search by order ID..."
-              className="search-input"
+              placeholder="Search orders..."
+              className="w-full pl-7 pr-3 py-1.5 h-[45px] sm:h-12 bg-white text-sm border border-gray-300 rounded-sm focus:outline-none text-[var(--primary-text-color)]"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             {searchQuery && (
-              <button
-                className="clear-search-btn"
-                onClick={() => setSearchQuery('')}
-                aria-label="Clear search"
-              >
-                <FontAwesomeIcon icon={faTimes} />
+              <button onClick={() => setSearchQuery("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-red-600">
+                <FontAwesomeIcon icon={faTimes} className="text-xs" />
               </button>
             )}
           </div>
 
-          {/* Filter Dropdowns */}
-          <div className="filter-dropdowns">
-            {/* Status Filter */}
-            <div className="filter-group">
+          <div className="flex gap-1">
+            <div className="relative">
               <select
-                className="filter-select"
+                className="appearance-none text-[var(--primary-text-color)] bg-white h-[40px] sm:h-8  border border-gray-300 rounded-sm px-4 py-1.5 pr-6 text-xs cursor-pointer"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
               >
                 <option value="">All Statuses</option>
-                <option value="Pending">Pending</option>
-                <option value="Placed">Placed</option>
+                <option value="pending">Pending</option>
+                <option value="placed">Placed</option>
                 <option value="in_processing">Processing</option>
                 <option value="packed">Packed</option>
                 <option value="shipped">Shipped</option>
                 <option value="delivered">Delivered</option>
                 <option value="cancelled">Cancelled</option>
-                <option value="refunded">Returned</option>
               </select>
-              <FontAwesomeIcon icon={faChevronDown} className="select-arrow" />
+              <FontAwesomeIcon icon={faChevronDown} className="absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none text-xs text-gray-500" />
             </div>
 
-            {/* Time Filter */}
-            <div className="filter-group">
+            <div className="relative">
               <select
-                className="filter-select"
+                className="appearance-none bg-white text-[var(--primary-text-color)] h-[40px] sm:h-8  border border-gray-300 rounded-sm px-4 py-1.5 pr-6 text-xs cursor-pointer"
                 value={timeFilter}
                 onChange={(e) => setTimeFilter(e.target.value)}
               >
@@ -263,165 +153,132 @@ const Orders = ({ setActiveComponent, setSelectedOrder }) => {
                 <option value="180">Last 6 Months</option>
                 <option value="365">Last Year</option>
               </select>
-              <FontAwesomeIcon icon={faChevronDown} className="select-arrow" />
+              <FontAwesomeIcon icon={faChevronDown} className="absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none text-xs text-gray-500" />
             </div>
-
-            {/* Clear Filters Button */}
-            {/* {(statusFilter || timeFilter || searchQuery) && (
-              <button
-                className="clear-filters-btn"
-                onClick={() => {
-                  setStatusFilter('');
-                  setTimeFilter('');
-                  setSearchQuery('');
-                }}
-              >
-                <FontAwesomeIcon icon={faTimes} /> Clear Filters
-              </button>
-            )} */}
           </div>
         </div>
 
-        {/* Active Filters Display */}
+        {/* Active Filters */}
         {(statusFilter || timeFilter || searchQuery) && (
-          <div className="active-filters">
-            <span className="active-filters-label">Active filters:</span>
+          <div className="flex flex-wrap gap-1 mb-2">
             {statusFilter && (
-              <span className="filter-tag">
-                Status: {statusFilter}
-                <button onClick={() => setStatusFilter('')}>
-                  <FontAwesomeIcon icon={faTimes} />
+              <span className="inline-flex items-center gap-1 bg-gray-100 text-xs px-2 py-0.5 rounded border">
+                {statusFilter}
+                <button onClick={() => setStatusFilter("")} className="ml-1 hover:text-red-600">
+                  <FontAwesomeIcon icon={faTimes} className="text-xs" />
                 </button>
               </span>
             )}
             {timeFilter && (
-              <span className="filter-tag">
-                Time: {getTimeFilterLabel(timeFilter)}
-                <button onClick={() => setTimeFilter('')}>
-                  <FontAwesomeIcon icon={faTimes} />
-                </button>
-              </span>
-            )}
-            {searchQuery && (
-              <span className="filter-tag">
-                Search: "{searchQuery}"
-                <button onClick={() => setSearchQuery('')}>
-                  <FontAwesomeIcon icon={faTimes} />
+              <span className="inline-flex items-center gap-1 bg-gray-100 text-xs px-2 py-0.5 rounded border">
+                {getTimeFilterLabel(timeFilter)}
+                <button onClick={() => setTimeFilter("")} className="ml-1 hover:text-red-600">
+                  <FontAwesomeIcon icon={faTimes} className="text-xs" />
                 </button>
               </span>
             )}
           </div>
         )}
-      </div>
 
-      {/* Conditional Rendering */}
-      {isLoading ? (
-        <div className="order-loading-screen">
-          <FontAwesomeIcon icon={faSpinner} className="order-loading-spinner" size="3x" />
-          <p className="loading-text">Loading your orders...</p>
-        </div>
-      ) : error ? (
-        <div className="order-error-container">
-          <div className="order-error-card">
-            <FontAwesomeIcon icon={faExclamationCircle} className="order-error-icon" size="3x" />
-            <h3 className="error-title">Something went wrong</h3>
-            <p className="error-message">{error.message || "Please try refreshing the page."}</p>
-            <button className="order-retry-button" onClick={() => window.location.reload()}>
-              <FontAwesomeIcon icon={faUndo} /> Retry
+        {/* Content */}
+        {loading ? (
+          <div className="bg-white border border-gray-300 rounded-sm p-5 text-center">
+            <FontAwesomeIcon icon={faSpinner} spin className="text-lg text-[var(--primary-hover-color)]" /> Loading your orders...
+          </div>
+        ) : error ? (
+          <div className="bg-red-50 border border-red-200 rounded-sm p-5 text-center">
+            <FontAwesomeIcon icon={faExclamationCircle} className="text-2xl text-red-600 mb-2" />
+            <p className="text-sm">{error}</p>
+            <button onClick={() => window.location.reload()} className="mt-2 px-3 py-1.5 bg-[#041f60] text-white text-xs rounded hover:bg-[#f16137]">
+              Retry
             </button>
           </div>
-        </div>
-      ) : !filteredOrders.length ? (
-        <div className="order-empty-state">
-          <FontAwesomeIcon icon={faBoxOpen} className="order-empty-illustration" size="5x" />
-          <h3 className="empty-title">
-            {searchQuery || statusFilter || timeFilter ? "No matching orders" : "No orders yet"}
-          </h3>
-          <p className="empty-message">
-            {searchQuery || statusFilter || timeFilter
-              ? "Try adjusting your search or filters to find what you're looking for."
-              : "Your order history will appear here once you make a purchase."}
-          </p>
-          {(searchQuery || statusFilter || timeFilter) ? (
-            <button
-              className="order-shop-button"
-              onClick={() => {
-                setStatusFilter('');
-                setTimeFilter('');
-                setSearchQuery('');
-              }}
-            >
-              <FontAwesomeIcon icon={faUndo} /> Clear Filters
-            </button>
-          ) : (
-            <button
-              className="order-shop-button"
-              onClick={() => setActiveComponent("Shop")}
-            >
-              <FontAwesomeIcon icon={faShoppingBag} /> Start Shopping
-            </button>
-          )}
-        </div>
-      ) : (
-        <>
-          {/* Results Count */}
-          <div className="results-count">
-            Showing {filteredOrders.length} of {orders.length} orders
+        ) : filteredOrders.length === 0 ? (
+          <div className="bg-white border border-gray-300 rounded-sm p-8 text-center">
+            <FontAwesomeIcon icon={faBoxOpen} className="text-5xl text-gray-300 mb-3" />
+            <p className="text-sm">
+              {orders.length === 0 ? "You haven't placed any orders yet" : "No orders match your filters"}
+            </p>
+            {(statusFilter || timeFilter || searchQuery) && (
+              <button
+                onClick={() => { setSearchQuery(""); setStatusFilter(""); setTimeFilter(""); }}
+                className="mt-3 px-4 py-1.5 bg-[#f16137] text-white text-xs rounded"
+              >
+                Clear Filters
+              </button>
+            )}
           </div>
-
-          {/* Desktop View */}
-          <div className="desktop-view">
-            {filteredOrders.map((order) => (
-              <DesktopOrderCard
-                key={order.orderId || order.id}
-                order={order}
-                onClick={handleOrderClick}
-              />
-            ))}
-          </div>
-
-          {/* Mobile View */}
-          <div className="mobile-view">
-            {filteredOrders.map((order) => (
-              <MobileOrderCard
-                key={order.orderId || order.id}
-                order={order}
-                onClick={handleOrderClick}
-              />
-            ))}
-          </div>
-
-          {/* Pagination */}
-          {data?.totalPages > 1 && (
-            <div className="order-pagination">
-              <div className="pagination-controls">
-                <button
-                  className={classNames("pagination-btn", { disabled: currentPage === 0 })}
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 0}
-                  aria-label="Previous Page"
-                >
-                  <FontAwesomeIcon icon={faAngleLeft} /> Prev
-                </button>
-                <span className="page-info" aria-live="polite">
-                  Page {currentPage + 1} of {data.totalPages}
-                </span>
-                <button
-                  className={classNames("pagination-btn", {
-                    disabled: currentPage >= data.totalPages - 1,
-                  })}
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage >= data.totalPages - 1}
-                  aria-label="Next Page"
-                >
-                  Next <FontAwesomeIcon icon={faAngleRight} />
-                </button>
+        ) : (
+          <>
+            <div className="bg-white border border-gray-300 rounded-sm overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm ">
+                  <thead className="bg-gray-50 border-b border-gray-300">
+                    <tr>
+                      <th className="text-left px-3 py-2 text-xs font-bold uppercase text-[var(--primary-text-color)]">Order ID</th>
+                      <th className="text-left px-3 py-2 text-xs font-bold uppercase text-[var(--primary-text-color)] hidden sm:table-cell">Date</th>
+                      <th className="text-left px-3 py-2 text-xs font-bold uppercase text-[var(--primary-text-color)]">Status</th>
+                      <th className="text-left px-3 py-2 text-xs font-bold uppercase text-[var(--primary-text-color)] ">Total</th>
+                      <th className="text-center px-3 py-2">Know More</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredOrders.map((order, i) => {
+                      const badge = getStatusBadge(order.status);
+                      return (
+                        <tr
+                          key={order.orderId || order.id}
+                          className="border-b border-gray-200 hover:bg-gray-50 cursor-pointer animate-fadeInUp"
+                          style={{ animationDelay: `${i * 50}ms` }}
+                          onClick={() => history.push('/account/orderdetails', { order })}
+                        >
+                          <td className="px-2 py-2 font-semibold text-[var(--primary-hover-color)]">#{order.orderId || order.id}</td>
+                          <td className="px-2 py-2 text-gray-600 hidden sm:table-cell">{formatDate(order.orderTime || order.createdAt)}</td>
+                          <td className="px-2 py-2">
+                            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold border
+                              ${badge.type === "success" || badge.type === "info" || badge.type === "warning" ? "text-[var(--primary-text-color)] border-[#041f60]" : ""}
+                              ${badge.type === "danger" ? "text-[var(--primary-hover-color)] border-[#f16137]" : ""}
+                              ${badge.type === "default" ? "text-gray-600 border-gray-400" : ""}
+                            `}>
+                              <FontAwesomeIcon icon={badge.icon} className="text-xs" /> {badge.text}
+                            </span>
+                          </td>
+                          <td className="px-2 py-2 font-semibold text-[var(--primary-hover-color)] items-end">{formatCurrency(order.totalAmount || order.amount)}</td>
+                          <td className="px-2 py-2 text-center">
+                            <FontAwesomeIcon icon={faAngleRight} className="text-gray-400 hover:text-[var(--primary-hover-color)]" />
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             </div>
-          )}
-        </>
-      )}
-    </div>
+
+            {/* Pagination */}
+            {ordersData?.totalPages > 1 && (
+              <div className="flex justify-end items-center gap-2 mt-2 text-xs">
+                <button
+                  disabled={currentPage === 0}
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  className="p-1.5 border border-gray-300 rounded disabled:opacity-50 hover:bg-gray-100"
+                >
+                  <FontAwesomeIcon icon={faAngleLeft} />
+                </button>
+                <span>Page {currentPage + 1} of {ordersData.totalPages}</span>
+                <button
+                  disabled={currentPage >= ordersData.totalPages - 1}
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  className="p-1.5 border border-gray-300 rounded disabled:opacity-50 hover:bg-gray-100"
+                >
+                  <FontAwesomeIcon icon={faAngleRight} />
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </>
   );
 };
 

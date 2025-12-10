@@ -1,42 +1,25 @@
-import React ,{useMemo} from 'react';
-import { useHistory  } from 'react-router-dom';
-import Slider from 'react-slick';
+import React, { useMemo } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Navigation, EffectCoverflow } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/effect-coverflow';
 import useFilterProducts from '../../../hook/product/useFilterProducts';
 import './handpicked.css';
 import { getProductImages } from '../../../utils/getProductImages';
 
 
 // ------------------------------
-// NAV BUTTONS
-// ------------------------------
-const NoBlurNavButton = ({ direction, onClick }) => {
-    const iconClass = direction === 'next' ? 'fal fa-arrow-right' : 'fal fa-arrow-left';
-    const ariaLabel = direction === 'next' ? 'Next slide' : 'Previous slide';
-
-    return (
-        <button
-            className={`noblur-nav-btn ${direction}-btn`}
-            onClick={onClick}
-            aria-label={ariaLabel}
-        >
-            <i className={iconClass} />
-        </button>
-    );
-};
-
-
-// ------------------------------
 // PRODUCT CARD
 // ------------------------------
 const NoBlurProductCard = ({ product }) => {
-
-    console.log(product ,'productsfordata')
     const baseUrl = "https://app.bmgjewellers.com";
 
     const handleProductClick = (e, sno) => {
         e.preventDefault();
         e.stopPropagation();
-        if (sno) window.location.href = `/product-detail/${sno}`;
+        if (sno) window.location.href = `/products-page/${sno}`;
     };
 
     const getFirstImage = () => {
@@ -69,12 +52,11 @@ const NoBlurProductCard = ({ product }) => {
 
     return (
         <div className="noblur-product-card">
-            <div className="noblur-product-img-container"  onClick={(e) => handleProductClick(e, product?.SNO)} >
+            <div className="noblur-product-img-container" onClick={(e) => handleProductClick(e, product?.SNO)}>
                 {firstImage ? (
                     <img
                         src={firstImage}
                         alt={product?.itemCtrName || "Product"}
-                       
                     />
                 ) : (
                     <div className="noblur-no-image">No Image</div>
@@ -99,7 +81,7 @@ const NoBlurHighlightedProducts = React.memo(({ itemCtrName }) => {
         () => (data && Array.isArray(data?.data?.data) ? data?.data?.data : []),
         [data]
     );
-    console.log("dataforproducts", highlightProducts)
+
     if (loading) return <div className="noblur-text-center">Loading products...</div>;
     if (error) return <div className="noblur-text-center noblur-text-danger">Error loading products</div>;
     if (highlightProducts.length === 0) return <div className="noblur-text-center">No highlighted products</div>;
@@ -127,27 +109,6 @@ const NoBlurHandpicked = ({ data, isLoading, error }) => {
         history.push(`/products-page?${q.toString()}`);
     };
 
-    const sliderSettingss = {
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        infinite: true,
-        arrows: true,
-        fade: false,
-        centerMode: false,
-        autoplay: true,
-        autoplaySpeed: 4000,
-        speed: 800,
-        nextArrow: <NoBlurNavButton direction="next" />,
-        prevArrow: <NoBlurNavButton direction="prev" />,
-        responsive: [
-            { breakpoint: 1400, settings: { slidesToShow: 3 } },
-            { breakpoint: 992, settings: { slidesToShow: 2 } },
-            { breakpoint: 768, settings: { slidesToShow: 2, arrows: false } },
-            { breakpoint: 576, settings: { slidesToShow: 2, arrows: false } },
-            { breakpoint: 420, settings: { slidesToShow: 1, arrows: false } },
-        ],
-    };
-
     if (isLoading) return <div className="noblur-loading">Loading banners...</div>;
     if (error) return <div className="noblur-error">Error loading banners</div>;
 
@@ -165,41 +126,102 @@ const NoBlurHandpicked = ({ data, isLoading, error }) => {
                 <div className="noblur-header">
                     <h2 className="noblur-title">
                         <span className="noblur-gradient-text">Exclusive Collection</span>
-                
                     </h2>
-                   
                 </div>
 
-                {/* SLIDER */}
-                <Slider className="noblur-slider-container" {...sliderSettingss}>
-                    {banners.map((banner, index) => (
-                        <div key={`banner-${index}`} className="noblur-slide">
-                            <div className="noblur-main-product">
+                {/* SWIPER SLIDER */}
+                <div className="noblur-swiper-wrapper">
+                    <Swiper
+                        modules={[Autoplay, Navigation, EffectCoverflow]}
+                        effect="coverflow"
+                        coverflowEffect={{
+                            rotate: 0,
+                            stretch: 0,
+                            depth: 100,
+                            modifier: 1,
+                            slideShadows: false,
+                        }}
+                        centeredSlides={true}
+                        slidesPerView="auto"
+                        spaceBetween={30}
+                        loop={true}
+                        speed={800}
+                        autoplay={{
+                            delay: 4000,
+                            disableOnInteraction: false,
+                            pauseOnMouseEnter: true
+                        }}
+                        navigation={{
+                            nextEl: '.noblur-swiper-next',
+                            prevEl: '.noblur-swiper-prev',
+                        }}
+                        grabCursor={true}
+                        className="noblur-swiper"
+                        watchSlidesProgress={true}
+                        slideToClickedSlide={true}
+                        breakpoints={{
+                            320: {
+                                slidesPerView: 'auto',
+                                spaceBetween: 20,
+                            },
+                            576: {
+                                slidesPerView: 'auto',
+                                spaceBetween: 20,
+                            },
+                            768: {
+                                slidesPerView: 'auto',
+                                spaceBetween: 25,
+                            },
+                            992: {
+                                slidesPerView: 'auto',
+                                spaceBetween: 30,
+                            },
+                        }}
+                        onInit={(swiper) => {
+                            setTimeout(() => {
+                                swiper.update();
+                            }, 100);
+                        }}
+                    >
+                        {banners.map((banner, index) => (
+                            <SwiperSlide key={`banner-${index}`} className="noblur-swiper-slide">
+                                <div className="noblur-slide">
+                                    <div className="noblur-main-product">
 
-                                {/* MAIN BANNER IMAGE */}
-                                <div
-                                    className="noblur-main-img"
-                                    onClick={() => handleShopNow(banner?.itemName)}
-                                    role="button"
-                                    tabIndex={0}
-                                    aria-label={`View ${banner?.itemName || ""} collection`}
-                                >
-                                    <img
-                                        src={getProductImages(banner?.image_path)}
-                                        alt={banner?.title || "Image"}
-                                        loading="lazy"
-                                    />
+                                        {/* MAIN BANNER IMAGE */}
+                                        <div
+                                            className="noblur-main-img"
+                                            onClick={() => handleShopNow(banner?.itemName)}
+                                            role="button"
+                                            tabIndex={0}
+                                            aria-label={`View ${banner?.itemName || ""} collection`}
+                                        >
+                                            <img
+                                                src={getProductImages(banner?.image_path)}
+                                                alt={banner?.title || "Image"}
+                                                loading="lazy"
+                                            />
+                                        </div>
+
+                                        {/* SUB PRODUCTS */}
+                                        <NoBlurHighlightedProducts
+                                            itemCtrName={banner?.itemName}
+                                        />
+
+                                    </div>
                                 </div>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
 
-                                {/* SUB PRODUCTS */}
-                                <NoBlurHighlightedProducts
-                                    itemCtrName={banner?.itemName}
-                                />
-
-                            </div>
-                        </div>
-                    ))}
-                </Slider>
+                    {/* CUSTOM NAVIGATION BUTTONS */}
+                    <button className="noblur-swiper-prev noblur-nav-btn prev-btn" aria-label="Previous slide">
+                        <i className="fal fa-arrow-left" />
+                    </button>
+                    <button className="noblur-swiper-next noblur-nav-btn next-btn" aria-label="Next slide">
+                        <i className="fal fa-arrow-right" />
+                    </button>
+                </div>
 
             </div>
         </section>

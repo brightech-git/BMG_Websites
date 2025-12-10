@@ -10,12 +10,11 @@ export const createOrder = async (orderData) => {
 export const getOrderHistory = async () => {
     const payload = {
         page: '0',
-        size: '2000',
+        size: '10',
     };
     const response = await publicUrl.get('/order/history', {
         params: payload
     });
-    // //console.log(response.data, 'history');
     return response.data;
 };
 // Cancel an order

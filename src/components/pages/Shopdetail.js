@@ -18,7 +18,7 @@ class Shopdetail extends Component {
                     />
                 </MetaTags>
                 <Header />
-                <Breadcrumb pages={"product-detail"} />
+                <Breadcrumb pages={"products-page"} />
                 <SmoothScroll>
                 <Content />
                 </SmoothScroll>

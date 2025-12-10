@@ -1,481 +1,330 @@
+'use client';
+
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { Trash2, ShoppingBag } from 'lucide-react';
 import { useCart } from '../../../hook/cart/useCartQuery';
 import { useSingleProductQuery } from '../../../hook/product/useSingleProductQuery';
 import fallbackImage from '../../../assets/img/bg/78.jpg';
-import "./Cart.css";
+import SmartButton from '../../ui/SmartButton';
 
-// CartItem component with enhanced pricing and skeleton loading
 const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
     const [imageError, setImageError] = useState(false);
-    const { data: product, isLoading: productLoading, error: productError } = useSingleProductQuery(item.itemTagSno);
+    const { data: product, isLoading: loading, error: productError } = useSingleProductQuery(item.itemTagSno || item.sno);
 
-    //console.log("CartItem rendering for item:", item, "Product data:", product, "Error:", productError);
-
-    // Calculate pricing with discount (15% markup for strikethrough effect)
-    const calculatePricing = useCallback((currentPrice) => {
-        const price = Number(currentPrice) || 0;
-        const originalPrice = price * 1.15; // Add 15% for original price
-        const discount = Math.round(((originalPrice - price) / originalPrice) * 100);
-
-        return {
-            current: price,
-            original: originalPrice,
-            discount: discount
-        };
-    }, []);
-
-    useEffect(() => {
-        if (productError) {
-            console.error(`Failed to load product for ${item.itemTagSno}:`, productError);
-            const pricing = calculatePricing(item.amount || 0);
-            onProductData(item.sno, {
-                itemId: item.itemId || null,
-                tagNo: item.tagNo || null,
-                productName: item.ITEMCTRNAME || item.SUBITEMNAME || item.itemTagSno || 'Unknown Product',
-                price: pricing.current,
-                originalPrice: pricing.original,
-                discount: pricing.discount,
-                imagePath: fallbackImage,
-                weight: item.netWt || null,
-                purity: item.purity || null,
-            });
-        } else if (product) {
-            let imageUrls = [];
-            try {
-                imageUrls = JSON.parse(product.ImagePath || "[]");
-            } catch (err) {
-                console.error("Error parsing ImagePath for item", item.itemTagSno, err);
-            }
-            const getPrice = (data) => {
-                return Number(data?.GrandTotal) > 0
-                    ? Number(data.GrandTotal)
-                    : Number(data?.RATE || data?.amount || 0);
-            };
-            const pricing = calculatePricing(getPrice(product));
-
-            onProductData(item.sno, {
-                itemId: product.ITEMID || item.itemId || null,
-                tagNo: product.TAGNO || item.tagNo || null,
-                productName: [product.ITEMCTRNAME, product.SUBITEMNAME].filter(Boolean).join(' - ') || item.itemTagSno || 'Unknown Product',
-                price: pricing.current,
-                originalPrice: pricing.original,
-                discount: pricing.discount,
-                imagePath: imageUrls.length > 0 ? `https://app.bmgjewellers.com${imageUrls[0]}` : fallbackImage,
-                weight: product.NETWT || item.netWt || null,
-                purity: product.PURITY || item.purity || null,
-            });
-        }
-    }, [product, productError, item, onProductData, calculatePricing]);
-
-    let imageUrls = [];
-    try {
-        imageUrls = JSON.parse(product?.ImagePath || "[]");
-    } catch (err) {
-        console.error("Error parsing ImagePath for item", item.itemTagSno, err);
-    }
     const baseUrl = "https://app.bmgjewellers.com";
-    const firstImage = imageUrls.length > 0 ? baseUrl + imageUrls[0] : fallbackImage;
 
+    // Always send data back — even if product fails
+    useEffect(() => {
+        const imagePath = product?.ImagePath
+            ? `${baseUrl}${JSON.parse(product.ImagePath)[0] || ''}`
+            : fallbackImage;
 
-    const getPrice = (data) => {
-        return Number(data?.GrandTotal) > 0
-            ? Number(data.GrandTotal)
-            : Number(data?.RATE || data?.amount || 0);
-    };
+        const price = Number(product?.GrandTotal || product?.RATE || item.amount || 0);
 
+        onProductData(item.sno, {
+            productName: product?.ITEMCTRNAME || item.ITEMCTRNAME || item.itemTagSno || "Unknown Product",
+            imagePath: imageError ? fallbackImage : imagePath,
+            price,
+            weight: product?.NETWT || item.netWt || null,
+            purity: product?.PURITY || item.purity || null,
+            itemId: product?.ITEMID || item.itemId || null,
+            tagNo: product?.TAGNO || item.tagNo || null,
+        });
+    }, [product, productError, item, onProductData, imageError]);
 
+    const displayImage = imageError ? fallbackImage :
+        product?.ImagePath ? `${baseUrl}${JSON.parse(product.ImagePath)[0] || ''}` : fallbackImage;
+
+    const displayPrice = Number(product?.GrandTotal || product?.RATE || item.amount || 0);
 
     return (
-        <div className={`cart-item ${isSelected ? "selected" : ""}`}>
+        <div className={`flex items-center gap-1.5 sm:gap-3 p-2 sm:p-3  mb-3 border ${isSelected ? "border-[#f16137]" : "border-gray-200"}  ${isSelected ? "bg-[var(--primary-card-color)]" : "white"} rounded-t-2xl hover:shadow-lg transition-all duration-300`}>
             <input
                 type="checkbox"
                 checked={isSelected}
                 onChange={() => onSelect(item.sno)}
-                className="cart-item-checkbox"
-                aria-label={`Select ${product?.ITEMCTRNAME || item.itemTagSno}`}
+                className="w-3 h-3 sm:w-4 sm:h-4 text-[#f16137] "
             />
-            <div className="cart-item-image-container">
-                {productLoading ? (
-                    <div className="cart-item-image-loading skeleton"></div>
+
+            <div className="w-14 h-14 sm:w-20 sm:h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                {loading ? (
+                    <div className="w-full h-full bg-gray-200 animate-pulse" />
                 ) : (
                     <img
-                        src={imageError ? fallbackImage : firstImage}
-                        alt={product?.ITEMCTRNAME || item.itemTagSno}
-                        className="cart-item-image"
+                        src={displayImage}
+                        alt={product?.ITEMCTRNAME || "Product"}
                         onError={() => setImageError(true)}
-                        loading="lazy"
+                        className="w-full h-full object-cover"
                     />
                 )}
             </div>
-            <div className="cart-item-details">
-                {productLoading ? (
-                    <>
-                        <div className="cart-item-title-loading skeleton"></div>
-                        <div className="cart-item-sku-loading skeleton"></div>
-                    </>
-                ) : (
-                    <>
-                        <h3 className="cart-item-title">
-                            <Link to={`/product/${item.itemTagSno}`}>
-                                {product?.ITEMCTRNAME || item.itemTagSno}
-                            </Link>
-                        </h3>
-                        <div className="cart-item-sku">
-                            SKU: <span>{product?.ITEMID || item.itemId || 'N/A'}-{product?.TAGNO || item.tagNo || 'N/A'}</span>
-                        </div>
-                    </>
-                )}
 
-                <div className="cart-item-price">
-                    {!productLoading && (
-                        <>
-
-                            <div className="price-current">
-                                <span className="price-label">Price</span> : ₹
-                                {getPrice(product).toFixed(2)}
-                            </div>
-
-                        </>
-                    )}
+            <div className="flex-1">
+                <h3 className="text-xs sm:text-sm font-semibold text-[#041f60]">
+                    <Link to={`/products-page/${item.itemTagSno || item.sno}`} className="hover:text-[#f16137] transition">
+                        {product?.ITEMCTRNAME || item.ITEMCTRNAME || item.itemTagSno || "Loading..."}
+                    </Link>
+                </h3>
+                <p className="text-xs text-gray-600 mt-1">
+                    SKU: {(product?.ITEMID || item.itemId || 'N/A')} - {(product?.TAGNO || item.tagNo || 'N/A')}
+                </p>
+                <div className="flex gap-2 sm:gap-4 text-xs text-gray-600 mt-2">
+                    {(product?.NETWT || item.netWt) && <span>Weight: {(product?.NETWT || item.netWt).toFixed(3)}g</span>}
+                    {(product?.PURITY || item.purity) && <span>Purity: {product?.PURITY || item.purity}%</span>}
                 </div>
-
-                {!productLoading && (
-                    <div className="cart-item-specs">
-                        {(product?.NETWT || item.netWt) && (
-                            <div className="cart-item-spec">
-                                <span className="spec-label">Weight:</span>
-                                <span className="spec-value">{product?.NETWT.toFixed(3) || item.netWt}g</span>
-                            </div>
-                        )}
-                        {(product?.PURITY || item.purity) && (
-                            <div className="cart-item-spec">
-                                <span className="spec-label">Purity:</span>
-                                <span className="spec-value">{product?.PURITY || item.purity}</span>
-                            </div>
-                        )}
-                    </div>
-                )}
             </div>
+
+            <div className="text-right">
+                <p className="text-base font-semibold text-[#f16137]">
+                    ₹{displayPrice.toLocaleString('en-IN')}
+                </p>
+            </div>
+
             <button
-                className="cart-item-remove"
-                title="Remove item"
                 onClick={() => onRemove(item.sno)}
-                aria-label="Remove item"
-                disabled={productLoading}
+                className="ml-2 p-2 text-red-600 hover:bg-red-50 rounded-xl transition"
+                disabled={loading}
             >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
             </button>
         </div>
     );
 };
 
-// Enhanced Cart component
-const Cart = ({ history }) => {
-    const { cartItems, isLoading, error, deleteCart } = useCart();
+const SkeletonCartLoading = () =>{
+    return (
+        <div className="bg-[#eeece8] py-6 px-2">
+            <div className="max-w-7xl mx-auto">
+
+                {/* Header skeleton */}
+                <div className='flex items-center justify-between mb-2 px-3 py-2 bg-[#fff] rounded-lg animate-pulse'>
+                    <div className="h-4 w-32 bg-gray-300 rounded"></div>
+                    <div className="h-3 w-20 bg-gray-300 rounded"></div>
+                </div>
+
+                <div className="grid lg:grid-cols-3 gap-10">
+
+                    {/* Items skeleton */}
+                    <div className="lg:col-span-2 space-y-2">
+                        {[1, 2, 3, 4].map(i => (
+                            <div key={i} className="flex items-center gap-3 p-3 bg-white rounded-2xl border border-gray-200 animate-pulse">
+
+                                <div className="w-4 h-4 bg-gray-300 rounded"></div>
+
+                                {/* Image */}
+                                <div className="w-20 h-20 bg-gray-300 rounded-lg"></div>
+
+                                {/* Info */}
+                                <div className="flex-1 space-y-2">
+                                    <div className="h-4 w-36 bg-gray-300 rounded"></div>
+                                    <div className="h-3 w-20 bg-gray-300 rounded"></div>
+                                    <div className="h-3 w-28 bg-gray-300 rounded"></div>
+                                </div>
+
+                                {/* Price */}
+                                <div className="h-5 w-12 bg-gray-300 rounded"></div>
+
+                                <div className="h-6 w-6 bg-gray-300 rounded"></div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Summary skeleton */}
+                    <div className="lg:col-span-1">
+                        <div className="bg-white rounded-xl border border-gray-200 p-3 animate-pulse">
+                            <div className="h-5 w-32 bg-gray-300 rounded mb-4"></div>
+
+                            {[1, 2, 3].map(i => (
+                                <div key={i} className="h-4 w-full bg-gray-300 rounded mb-3"></div>
+                            ))}
+
+                            <div className="h-10 w-full bg-gray-300 rounded mt-3"></div>
+
+                            <div className="h-3 w-24 bg-gray-300 rounded mt-4"></div>
+                            <div className="h-3 w-20 bg-gray-300 rounded mt-2"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        )
+}
+const Cart = () => {
+    const history = useHistory();
+    const { cartItems, isLoading, deleteCart, clearCart } = useCart();
     const [selectedItems, setSelectedItems] = useState([]);
     const [productDataMap, setProductDataMap] = useState({});
-    const [isRemoving, setIsRemoving] = useState(null);
 
+    const items = useMemo(() => {
+        if (!cartItems?.data) return [];
+        const data = cartItems.data;
+        if (data?.message?.toLowerCase().includes("empty")) return [];
+        return Array.isArray(data) ? data : Object.values(data);
+    }, [cartItems]);
+
+    // Auto-select all on load
     useEffect(() => {
-        if (cartItems?.data && selectedItems.length === 0) {
-            const initialItems = (Array.isArray(cartItems.data) ? cartItems.data : Object.values(cartItems.data))
-                .map((item) => item.sno)
-                .filter((sno) => !selectedItems.includes(sno));
-            setSelectedItems((prev) => Array.from(new Set([...prev, ...initialItems])));
-
+        if (items.length > 0 && selectedItems.length === 0) {
+            setSelectedItems(items.map(i => i.sno));
         }
-    }, [cartItems, selectedItems.length]);
+    }, [items]);
 
-    const handleSelectItem = useCallback((sno) => {
-        setSelectedItems((prev) =>
-            prev.includes(sno)
-                ? prev.filter((id) => id !== sno)
-                : [...prev, sno]
-        );
-    }, []);
+    // Listen for payment success → clear cart
+    useEffect(() => {
+        const handlePayment = () => clearCart();
+        window.addEventListener("payment-success", handlePayment);
+        return () => window.removeEventListener("payment-success", handlePayment);
+    }, [clearCart]);
 
-    const handleProductData = useCallback((sno, productData) => {
-        setProductDataMap((prev) => {
-            if (prev[sno]?.price === productData.price && prev[sno]?.itemId === productData.itemId) return prev;
-            return { ...prev, [sno]: productData };
-        });
-    }, []);
-
-    const handleRemoveItem = useCallback(async (itemId) => {
-        if (window.confirm('Are you sure you want to remove this item from your cart?')) {
-            setIsRemoving(itemId);
-            try {
-                await deleteCart(itemId);
-                setSelectedItems((prev) => prev.filter((id) => id !== itemId));
-                setProductDataMap((prev) => {
-                    const newMap = { ...prev };
-                    delete newMap[itemId];
-                    return newMap;
-                });
-            } catch (err) {
-                console.error('Failed to remove item:', err);
-                alert('Failed to remove item. Please try again.');
-            } finally {
-                setIsRemoving(null);
-            }
-        }
-    }, [deleteCart]);
-    //console.log(selectedItems, 'selecterd items')
- const items = useMemo(() => {
-    console.log(cartItems, "cartItems");
-
-    // if cartItems is the full Axios response
-    const data = cartItems?.data;
-
-    if (!data) return [];
-
-    // If backend says cart is empty
-    if (typeof data.message === "string" && data.message.toLowerCase().includes("cart is empty")) {
-        return [];
-    }
-
-    // If data is an array
-    if (Array.isArray(data)) {
-        return data;
-    }
-
-    // If data is an object with nested list
-    if (data && typeof data === "object") {
-        return Object.values(data);
-    }
-
-    // Default fallback
-    return [];
-}, [cartItems]);
-
-
-    const { subtotal, originalSubtotal, totalSavings, shipping, total, isDataComplete } = useMemo(() => {
-        const defaultTotals = {
-            subtotal: 0,
-            originalSubtotal: 0,
-            totalSavings: 0,
-            shipping: 0,
-            total: 0,
-            isDataComplete: false
-        };
-        if (items.length === 0) return defaultTotals;
-
-        const selectedItemsData = items.filter((item) => selectedItems.includes(item.sno));
-
-        const subtotal = selectedItemsData.reduce((sum, item) => {
-            const product = productDataMap[item.sno];
-            const price = product?.price || item.amount || 0;
+    const totals = useMemo(() => {
+        const selected = items.filter(i => selectedItems.includes(i.sno));
+        const subtotal = selected.reduce((sum, item) => {
+            const price = productDataMap[item.sno]?.price || item.amount || 0;
             return sum + Number(price);
         }, 0);
 
-        const originalSubtotal = selectedItemsData.reduce((sum, item) => {
-            const product = productDataMap[item.sno];
-            const originalPrice = product?.originalPrice || (product?.price || item.amount || 0) * 1.15;
-            return sum + Number(originalPrice);
-        }, 0);
-
-        const totalSavings = originalSubtotal - subtotal;
-        const isDataComplete = selectedItems.every((sno) => !!productDataMap[sno]);
-
         return {
             subtotal,
-            originalSubtotal,
-            totalSavings,
-            shipping: 0,
             total: subtotal,
-            isDataComplete
+            count: selected.length,
+            ready: selected.length > 0 && selected.every(i => productDataMap[i.sno])
         };
     }, [items, selectedItems, productDataMap]);
 
+    const handleCheckout = () => {
+        if (!totals.ready) return alert("Please wait for product details to load");
+        if (selectedItems.length === 0) return alert("Please select items");
 
-
-    const handleOnCheckout = useCallback(() => {
-        if (selectedItems.length === 0) {
-            alert('Please select at least one item to proceed to checkout.');
-            return;
-        }
-        if (!isDataComplete) {
-            alert('Please wait until all product data is loaded before proceeding to checkout.');
-            return;
-        }
-
-        const selectedCartItems = items
-            .filter((item) => selectedItems.includes(item.sno))
-            .map((item) => ({
-                sno: item.sno,
-                itemId: productDataMap[item.sno]?.itemId || item.itemId || null,
-                tagNo: productDataMap[item.sno]?.tagNo || item.tagNo || null,
-                productName: productDataMap[item.sno]?.productName || item.itemTagSno || 'Unknown Product',
-                quantity: item.quantity,
-                price: productDataMap[item.sno]?.price || item.amount || 0,
-                originalPrice: productDataMap[item.sno]?.originalPrice || 0,
-                imagePath: productDataMap[item.sno]?.imagePath || fallbackImage,
-                weight: productDataMap[item.sno]?.weight || null,
-                purity: productDataMap[item.sno]?.purity || null,
-            }));
-
-        const checkoutPayload = {
-            items: selectedCartItems,
-            totalAmount: total,
-            originalAmount: originalSubtotal,
-            totalSavings: totalSavings,
+        const payload = {
+            items: items
+                .filter(i => selectedItems.includes(i.sno))
+                .map(item => ({
+                    sno: item.sno,
+                    itemId: productDataMap[item.sno]?.itemId || item.itemId || null,
+                    tagNo: productDataMap[item.sno]?.tagNo || item.tagNo || null,
+                    productName: productDataMap[item.sno]?.productName || "Product",
+                    price: productDataMap[item.sno]?.price || 0,
+                    imagePath: productDataMap[item.sno]?.imagePath || fallbackImage,
+                    weight: productDataMap[item.sno]?.weight || null,
+                    purity: productDataMap[item.sno]?.purity || null,
+                })),
+            totalAmount: totals.total,
         };
 
-        //console.log('Navigating with payload:', checkoutPayload);
-        history.push('/checkout', checkoutPayload);
-    }, [selectedItems, isDataComplete, items, productDataMap, total, originalSubtotal, totalSavings, history]);
+        history.push("/checkout", payload);
+    };
 
-    if (isLoading && !cartItems) {
+    if (isLoading) {
         return (
-            <div className="container-fluid">
-                <div className="row justify-content-center">
-                    <div className="col-12">
-                        <div className="cart-loading">
-                            <div className="loading-spinner"></div>
-                            <p>Loading your cart...</p>
-                        </div>
+            <SkeletonCartLoading />
+        );
+    }
+
+
+    if (!isLoading && items.length === 0) {
+        return (
+            <div className="bg-[#fff] flex items-center justify-center p-2 ">
+                <div className="  text-center max-w-lg p-3 ">
+                    <ShoppingBag className="w-10 h-10 sm:w-20 sm:h-20 text-gray-300 mx-auto mb-2 animate-slide-in-right" />
+                    <div className='mb-3'>
+                        <h2 className="text-sm sm:text-xl font-bold text-[#041f60] mb-1 animate-slide-in-down ">Your Cart is Empty</h2>
+                    <p className="text-gray-600 text-xs sm:text-sm ">Explore our stunning jewelry collection</p>
                     </div>
+                
+                    <SmartButton variant='primary' className='w-full animate-wobble' onClick={()=>history.push('/products-page')}>Continue Shopping </SmartButton>
+
                 </div>
             </div>
         );
     }
 
-    if (error) {
-        return (
-            <div className="container-fluid">
-                <div className="row justify-content-center">
-                    <div className="col-12 col-md-8 col-lg-6">
-                        <div className="cart-error">
-                            <div className="error-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <h3>Failed to load cart</h3>
-                            <p>Please try again later</p>
-                            <Link to="/home" className="btn-primary">
-                                Return Home
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
+
+    const handleDeleteCartItem = (sno) =>{
+        if(window.confirm("Are you sure you want to remove this item from your cart?")){
+            deleteCart(sno);
+            return;
+        }
+    
     }
 
     return (
-        <div className="container-fluid">
-            <main className="cart-container">
-                <div className="cart-header">
-                    <h1>Your Shopping Cart</h1>
-                    <div className="cart-item-count">
-                        {items.length} {items.length === 1 ? 'Item' : 'Items'}
-                    </div>
+        <div className="bg-[#eeece8] py-6 px-2">
+            <div className="max-w-7xl mx-auto">
+                <div className='flex items-center justify-between mb-2 px-3 py-2 bg-[#fff] rounded-lg'>
+                    <h1 className="text-sm sm:text-lg font-semibold text-center text-[#041f60] ">Your Shopping Cart</h1>
+                    <p className='text-xs'> Showing {items.length} items in your cart </p>
                 </div>
-
-                {items.length === 0 ? (
-                    <div className="row justify-content-center">
-                        <div className="col-12 col-md-8 col-lg-6">
-                            <div className="empty-cart">
-                                <div className="empty-cart-icon">
-                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                    </svg>
-                                </div>
-                                <h2>Your cart is empty</h2>
-                                <p>Discover our amazing jewelry collection</p>
-                                <Link to="/products-page" className="btn-primary">
-                                    Continue Shopping
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="cart-content">
-                        <div className="cart-items-section">
-                            {/* Select All Controls */}
-                            <div className="d-flex align-items-center justify-center ">
-
-                                <span className="text-muted" style={{ fontSize: '0.75rem' }}>
-                                    {selectedItems.length} out of {items.length} selected
-                                </span>
-                            </div>
-
-                            {/* Cart Items */}
-                            {items.map((item) => (
+               
+                <div className="grid lg:grid-cols-3 gap-10">
+                    {/* Items */}
+                    <div className="lg:col-span-2 space-y-2">
+                        <div className="bg-white/90 backdrop-blur-sm rounded-3xl border border-gray-200 p-3">
+                            <p className="text-sm text-gray-600 mb-2">
+                                {selectedItems.length} of {items.length} items selected
+                            </p>
+           
+                            {items.map(item => (
+                           
                                 <CartItem
                                     key={item.sno}
                                     item={item}
-                                    onRemove={handleRemoveItem}
-                                    onSelect={handleSelectItem}
+                                    onRemove={handleDeleteCartItem}
+                                    onSelect={sno => setSelectedItems(prev =>
+                                        prev.includes(sno) ? prev.filter(x => x !== sno) : [...prev, sno]
+                                    )}
                                     isSelected={selectedItems.includes(item.sno)}
-                                    onProductData={handleProductData}
+                                    onProductData={(sno, data) => setProductDataMap(prev => ({ ...prev, [sno]: data }))}
                                 />
+                
                             ))}
                         </div>
+                    </div>
 
-                        <div className="cart-summary-section">
-                            <div className="summary-card">
-                                <h3 className="summary-title">Order Summary</h3>
-                                {isDataComplete ? (
-                                    <>
-                                        <div className="summary-row">
-                                            <span>Items ({selectedItems.length})</span>
+                    {/* Summary */}
+                    <div className="lg:col-span-1">
+                        <div className="bg-white rounded-xl shadow-md sm:shadow-lg border border-gray-200 p-3 sticky top-20">
+                            <h3 className="text-sm sm:text-lg font-bold text-[#041f60] mb-2">Order Summary</h3>
 
-                                        </div>
-
-                                        <div className="summary-row">
-                                            <span>Subtotal</span>
-                                            <span>₹{subtotal.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</span>
-                                        </div>
-                                        <div className="summary-row">
-                                            <span>Shipping</span>
-                                            <span className="free-shipping">Free</span>
-                                        </div>
-                                        <div className="summary-divider"></div>
-                                        <div className="summary-row total-row">
-                                            <span>Total</span>
-                                            <span className="total-amount">
-                                                ₹{total.toLocaleString('en-IN', { maximumFractionDigits: 2 })}
-                                            </span>
-                                        </div>
-
-                                    </>
-                                ) : (
-                                    <div className="summary-loading">
-                                        <div className="skeleton" style={{ height: '20px', marginBottom: '10px' }}></div>
-                                        <div className="skeleton" style={{ height: '20px', marginBottom: '10px' }}></div>
-                                        <div className="skeleton" style={{ height: '20px', marginBottom: '10px' }}></div>
-                                        <p>Loading order summary...</p>
-                                    </div>
-                                )}
-
-                                <button
-                                    className="main-button button-filled w-100 mt-3"
-                                    onClick={handleOnCheckout}
-                                    disabled={!isDataComplete || isRemoving || selectedItems.length === 0}
-                                >
-                                    {isRemoving ? 'Removing...' :
-                                        selectedItems.length === 0 ? 'Select Items to Checkout' :
-                                            'Proceed to Checkout'}
-                                </button>
-
-                                <div className="payment-methods">
-                                    <p>Secure Payment Options:</p>
-                                    <div className="payment-icons">
-                                        <small className="text-muted">💳 Credit Card | 💰 UPI | 🏦 Net Banking</small>
+                            <div className="space-y-2 text-xs sm:text-sm">
+                                <div className="flex justify-between">
+                                    <span>Items ({totals.count})</span>
+                                    <span className="font-semibold">₹{totals.subtotal.toLocaleString('en-IN')}</span>
+                                </div>
+                                <div className="flex justify-between text-xs sm:text-sm text-green-600 font-bold">
+                                    <span>Shipping</span>
+                                    <span>Free</span>
+                                </div>
+                                <div className="border-t-2 border-dashed border-gray-300 pt-3 text-xs sm:text-sm ">
+                                    <div className="flex justify-between text-sm font-bold text-[#f16137]">
+                                        <span>Total</span>
+                                        <span>₹{totals.total.toLocaleString('en-IN')}</span>
                                     </div>
                                 </div>
                             </div>
+                            <div className='flex min-w-full mt-2'>
+                            <SmartButton
+                                onClick={handleCheckout}
+                                disabled={!totals.ready || selectedItems.length === 0}
+                                isLoading={!totals.ready}
+                                variant='primary'
+                                className='w-full'
+                               
+                            >
+                                {selectedItems.length === 0 ? "Select Items" : totals.ready ? "Checkout" : "Loading..."}
+                            </SmartButton>
+                            </div>
+                            <div className="mt-2 text-center text-xs text-gray-600">
+                                <p className="font-small text-xs">100% Secure Payment</p>
+                                <p className="mt-2 text-xs">Credit Card • UPI • Net Banking</p>
+                            </div>
                         </div>
                     </div>
-                )}
-            </main>
+                </div>
+            </div>
         </div>
     );
 };
 
-export default withRouter(Cart);
+export default Cart;

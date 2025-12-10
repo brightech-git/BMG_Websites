@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Lock, Eye, EyeOff, CheckCircle, AlertCircle } from "lucide-react";
+import { Lock, Eye, EyeOff, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { changePassword } from "../../../../redux/slices/userSlice";
 
@@ -13,42 +13,43 @@ export default function ChangePassword() {
     confirmPassword: "",
   });
 
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [show, setShow] = useState({
+    current: false,
+    new: false,
+    confirm: false,
+  });
+
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
 
+  const toggleShow = (field) => {
+    setShow((prev) => ({ ...prev, [field]: !prev[field] }));
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-
-    if (errors[name]) {
-      setErrors({ ...errors, [name]: "" });
-    }
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const validate = () => {
     const newErrors = {};
 
-    if (!formData.currentPassword)
-      newErrors.currentPassword = "Current password is required";
+    if (!formData.currentPassword) newErrors.currentPassword = "Current password is required";
 
     if (!formData.newPassword) {
       newErrors.newPassword = "New password is required";
     } else if (formData.newPassword.length < 8) {
       newErrors.newPassword = "Password must be at least 8 characters";
     } else if (!/[A-Z]/.test(formData.newPassword)) {
-      newErrors.newPassword = "Must contain at least one uppercase letter";
+      newErrors.newPassword = "Must contain one uppercase letter";
     } else if (!/[0-9]/.test(formData.newPassword)) {
-      newErrors.newPassword = "Must contain at least one number";
+      newErrors.newPassword = "Must contain one number";
     } else if (!/[^A-Za-z0-9]/.test(formData.newPassword)) {
-      newErrors.newPassword = "Must contain at least one special character";
+      newErrors.newPassword = "Must contain one special character";
     }
 
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = "Please confirm your password";
-    } else if (formData.newPassword !== formData.confirmPassword) {
+    if (formData.confirmPassword !== formData.newPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }
 
@@ -58,7 +59,6 @@ export default function ChangePassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validate()) return;
 
     try {
@@ -70,224 +70,194 @@ export default function ChangePassword() {
       ).unwrap();
 
       setSuccess(true);
-      setFormData({
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      });
-
+      setFormData({ currentPassword: "", newPassword: "", confirmPassword: "" });
       setTimeout(() => setSuccess(false), 5000);
-    } catch (error) {
-      setErrors({ submit: error?.message || "Failed to update password" });
+    } catch (err) {
+      setErrors({ submit: err?.message || "Failed to change password" });
     }
   };
 
-  const passwordStrength = {
-    hasMinLength: formData.newPassword.length >= 8,
-    hasUppercase: /[A-Z]/.test(formData.newPassword),
-    hasNumber: /[0-9]/.test(formData.newPassword),
-    hasSpecialChar: /[^A-Za-z0-9]/.test(formData.newPassword),
+  const strength = {
+    length: formData.newPassword.length >= 8,
+    upper: /[A-Z]/.test(formData.newPassword),
+    number: /[0-9]/.test(formData.newPassword),
+    special: /[^A-Za-z0-9]/.test(formData.newPassword),
   };
 
-  const strengthScore = Object.values(passwordStrength).filter(Boolean).length;
+  const score = Object.values(strength).filter(Boolean).length;
+  const strengthText = ["", "Weak", "Fair", "Good", "Strong"][score] || "Very Strong";
+  const strengthColor = score <= 1 ? "bg-red-500" : score <= 2 ? "bg-orange-500" : score <= 3 ? "bg-yellow-500" : "bg-green-500";
 
   return (
+    <div className=" mt-[100px] md:mt-0  bg-[#eeece8] px-2 py-4 flex items-center justify-center">
+      <div className="w-full max-w-md">
 
-      <div className="max-w-md mx-auto py-2">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-2">
+        {/* Card */}
+        <div className="bg-white border border-gray-300 rounded-xl shadow-sm p-6">
 
           {/* Header */}
-          <div className="text-center mb-1">
-            <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full mb-2">
-              <Lock size={32} className="text-blue-600" />
+          <div className="text-center mb-3">
+            <div className="w-14 h-14 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-1">
+              <Lock className="w-8 h-8 text-[#f16137]" />
             </div>
-            <h1 className="text-xl font-bold text-gray-900 mb-2">Change Password</h1>
-            <p className="text-gray-600">Secure your account with a new password</p>
+            <h1 className="text-2xl font-bold text-[#041f60]">Change Password</h1>
+            <p className="text-sm text-gray-600 mt-1">Keep your account secure</p>
           </div>
 
-          {/* Success */}
+          {/* Success Message */}
           {success && (
-            <div className="mb-2 flex items-center gap-3 bg-green-50 p-2 rounded-lg border border-green-200">
-              <CheckCircle size={20} className="text-green-600" />
+            <div className="mb-3 p-3 bg-green-50 border border-green-200 rounded-sm flex items-start gap-3 animate-fade">
+              <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="font-semibold text-green-900">Success!</p>
-                <p className="text-sm text-green-800">
-                  Your password has been updated successfully.
-                </p>
+                <p className="font-semibold text-green-900">Password Updated!</p>
+                <p className="text-sm text-green-700">Your password has been changed successfully.</p>
               </div>
             </div>
           )}
 
-          {/* Error */}
+          {/* Server Error */}
           {errors.submit && (
-            <div className="mb-2 flex items-center gap-3 bg-red-50 p-4 rounded-lg border border-red-200">
-              <AlertCircle size={20} className="text-red-600" />
+            <div className="mb-2 p-2 bg-red-50 border border-red-200 rounded-sm flex items-start gap-3">
+              <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold text-red-900">Error</p>
-                <p className="text-sm text-red-800">{errors.submit}</p>
+                <p className="text-sm text-red-700">{errors.submit}</p>
               </div>
             </div>
           )}
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-3">
+          <form onSubmit={handleSubmit} className="space-y-5">
 
             {/* Current Password */}
-            <InputField
-              label="Current Password"
-              type={showCurrentPassword ? "text" : "password"}
-              name="currentPassword"
-              value={formData.currentPassword}
-              onChange={handleChange}
-              error={errors.currentPassword}
-              icon={<Lock size={18} />}
-              onToggle={() => setShowCurrentPassword(!showCurrentPassword)}
-              showToggle={true}
-              showPassword={showCurrentPassword}
-            />
+            <div>
+              <label className="text-sm font-medium text-[#041f60] flex items-center gap-2 mb-1">
+    
+                Current Password
+              </label>
+              <div className="relative">
+                <input
+                  type={show.current ? "text" : "password"}
+                  name="currentPassword"
+                  value={formData.currentPassword}
+                  onChange={handleChange}
+                  className={`w-full px-5 py-3 bg-white text-[var(--primary-text-color)] pl-10 h-12 border ${errors.currentPassword ? "border-red-500" : "border-gray-300"} rounded-sm focus:border-[#f16137] focus:ring-2 focus:ring-orange-100 outline-none transition`}
+                  placeholder="Enter current password"
+                />
+                <Lock className="w-5 h-5 text-black-600  absolute left-3 top-1/2 -translate-y-1/2" />
+                <button
+                  type="button"
+                  onClick={() => toggleShow("current")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {show.current ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+              {errors.currentPassword && <p className="text-red-600 text-sm mt-1">{errors.currentPassword}</p>}
+            </div>
 
             {/* New Password */}
-            <InputField
-              label="New Password"
-              type={showNewPassword ? "text" : "password"}
-              name="newPassword"
-              value={formData.newPassword}
-              onChange={handleChange}
-              error={errors.newPassword}
-              icon={<Lock size={18} />}
-              onToggle={() => setShowNewPassword(!showNewPassword)}
-              showToggle={true}
-              showPassword={showNewPassword}
-            />
+            <div>
+              <label className="text-sm font-medium text-[#041f60] flex items-center gap-2 mb-1.5">
+   
+                New Password
+              </label>
+              <div className="relative">
+                <input
+                  type={show.new ? "text" : "password"}
+                  name="newPassword"
+                  value={formData.newPassword}
+                  onChange={handleChange}
+                  className={`w-full px-5 py-3 pl-11 h-12 bg-white border ${errors.newPassword ? "border-red-500" : "border-gray-300"} rounded-sm focus:border-[#f16137] focus:ring-2 focus:ring-orange-100 outline-none transition`}
+                  placeholder="Create new password"
+                />
+                <Lock className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <button
+                  type="button"
+                  onClick={() => toggleShow("new")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {show.new ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+              {errors.newPassword && <p className="text-red-600 text-sm mt-1">{errors.newPassword}</p>}
+            </div>
 
-            {/* Strength Bar */}
+            {/* Password Strength */}
             {formData.newPassword && (
-              <StrengthIndicator
-                passwordStrength={passwordStrength}
-                strengthScore={strengthScore}
-              />
+              <div className="space-y-3 p-4 bg-gray-50 rounded-sm border border-gray-200">
+                <div className="flex gap-2">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div
+                      key={i}
+                      className={`h-2 flex-1 rounded-full transition-all ${i <= score ? strengthColor : "bg-gray-300"}`}
+                    />
+                  ))}
+                </div>
+                <p className="text-sm font-medium text-gray-700">Strength: <span className={score >= 4 ? "text-green-600" : score >= 3 ? "text-yellow-600" : "text-red-600"}>{strengthText}</span></p>
+
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className={`${strength.length ? "text-green-600" : "text-gray-500"} flex items-center gap-1.5`}>
+                    {strength.length ? "Check" : "Cross"} 8+ characters
+                  </div>
+                  <div className={`${strength.upper ? "text-green-600" : "text-gray-500"} flex items-center gap-1.5`}>
+                    {strength.upper ? "Check" : "Cross"} One uppercase
+                  </div>
+                  <div className={`${strength.number ? "text-green-600" : "text-gray-500"} flex items-center gap-1.5`}>
+                    {strength.number ? "Check" : "Cross"} One number
+                  </div>
+                  <div className={`${strength.special ? "text-green-600" : "text-gray-500"} flex items-center gap-1.5`}>
+                    {strength.special ? "Check" : "Cross"} One special char
+                  </div>
+                </div>
+              </div>
             )}
 
             {/* Confirm Password */}
-            <InputField
-              label="Confirm New Password"
-              type={showConfirmPassword ? "text" : "password"}
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              error={errors.confirmPassword}
-              icon={<Lock size={18} />}
-              onToggle={() => setShowConfirmPassword(!showConfirmPassword)}
-              showToggle={true}
-              showPassword={showConfirmPassword}
-            />
+            <div>
+              <label className="text-sm font-medium text-[#041f60] flex items-center gap-2 mb-1.5">
+     
+                Confirm New Password
+              </label>
+              <div className="relative">
+                <input
+                  type={show.confirm ? "text" : "password"}
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className={`w-full px-5 py-3 pl-11 h-12 bg-white border ${errors.confirmPassword ? "border-red-500" : "border-gray-300"} rounded-sm focus:border-[#f16137] focus:ring-2 focus:ring-orange-100 outline-none transition`}
+                  placeholder="Re-enter new password"
+                />
+                <Lock className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <button
+                  type="button"
+                  onClick={() => toggleShow("confirm")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {show.confirm ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+              {errors.confirmPassword && <p className="text-red-600 text-sm mt-1">{errors.confirmPassword}</p>}
+            </div>
 
-            {/* Submit */}
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+              className="w-full bg-[#f16137] hover:bg-[#f16157] text-white rounded-xl font-semibold py-3.5 rounded-sm transition flex items-center justify-center gap-2 disabled:opacity-70"
             >
-              {loading ? "Updating..." : "Update Password"}
+              {loading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Updating...
+                </>
+              ) : (
+                "Update Password"
+              )}
             </button>
 
           </form>
         </div>
-      </div>
- 
-  );
-}
-
-/* ------ Reusable Input Component ------ */
-function InputField({
-  label,
-  type,
-  name,
-  value,
-  onChange,
-  error,
-  icon,
-  showToggle,
-  onToggle,
-  showPassword,
-}) {
-  const ToggleIcon = showPassword ? <EyeOff size={18} /> : <Eye size={18} />;
-
-  return (
-    <div>
-      <label className="block text-sm font-semibold text-gray-900 mb-2">
-        {label}
-      </label>
-      <div className="relative">
-        <input
-          type={type}
-          name={name}
-          value={value}
-          onChange={onChange}
-          placeholder={label}
-          className={`w-full px-4 py-2 pl-10 border bg-white h-10 ${error ? "border-red-500" : "border-gray-300"
-            }`}
-        />
-        <span className="absolute left-1 top-1/2 -translate-y-1/2 text-gray-400">
-          {icon}
-        </span>
-
-        {showToggle && (
-          <button
-            type="button"
-            onClick={onToggle}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-          >
-            {ToggleIcon}
-          </button>
-        )}
-      </div>
-      {error && <p className="text-red-600 text-sm mt-1">{error}</p>}
-    </div>
-  );
-}
-
-/* ------ Strength Indicator Component ------ */
-function StrengthIndicator({ passwordStrength, strengthScore }) {
-  return (
-    <div className="mt-2 space-y-2">
-      <div className="flex gap-1">
-        {[0, 1, 2, 3].map((i) => (
-          <div
-            key={i}
-            className={`h-1 flex-1 rounded-full ${i < strengthScore ? "bg-blue-600" : "bg-gray-200"
-              }`}
-          />
-        ))}
-      </div>
-
-      <p className="text-xs text-gray-600">
-        Strength:{" "}
-        <span className="font-semibold">
-          {["Weak", "Fair", "Good", "Strong", "Very Strong"][strengthScore]}
-        </span>
-      </p>
-
-      {/* Requirements */}
-      <div className="space-y-1 text-xs">
-        {[
-          ["Minimum 8 characters", passwordStrength.hasMinLength],
-          ["Uppercase letter", passwordStrength.hasUppercase],
-          ["Number", passwordStrength.hasNumber],
-          ["Special character", passwordStrength.hasSpecialChar],
-        ].map(([label, valid]) => (
-          <div
-            key={label}
-            className={`flex items-center gap-2 ${valid ? "text-green-600" : "text-gray-600"
-              }`}
-          >
-            <div
-              className={`w-2 h-2 rounded-full border ${valid ? "bg-green-600 border-green-600" : "border-gray-300"
-                }`}
-            />
-            {label}
-          </div>
-        ))}
       </div>
     </div>
   );

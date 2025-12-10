@@ -281,7 +281,7 @@ const location =useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsTop(window.scrollY > 110);
+      setIsTop(window.scrollY > 60);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);

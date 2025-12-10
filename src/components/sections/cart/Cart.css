@@ -173,7 +173,7 @@
     font-size: 1rem;
     font-weight: 600;
     margin: 0 0 0.25rem 0;
-    color: var(--black-color);
+    color: var(--primary-text-color);
     line-height: 1.3;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -269,7 +269,7 @@
     justify-content: center;
     border: none;
     border-radius: 50%;
-    color: var(--grey-color);
+    color:red;
     background: var(--light-bg-color);
     cursor: pointer;
     transition: var(--transition);
@@ -279,7 +279,7 @@
 }
 
 .cart-item-remove:hover:not(:disabled) {
-    background: var(--error-color);
+    background: red;
     color: var(--white-color);
     transform: scale(1.1);
 }

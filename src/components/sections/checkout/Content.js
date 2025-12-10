@@ -379,7 +379,7 @@ const OrderSummaryPanel = ({ items, subtotal, total, isCompact = false }) => {
             <div className="item-details">
               <h6 className="order-item-name">{item.productName || item.name}</h6>
               <p className="item-variant">SKU: {item.itemId}-{item.tagNo}</p>
-              <p className="item-variant">Weight: {item?.weight.toFixed(3) || item?.tagNo}</p>
+             {item?.weight && <p className="item-variant">Weight: {item?.weight.toFixed(3) || item?.tagNo}</p>} 
             </div>
             <div className="item-price">₹{(item?.price).toFixed(2)}</div>
 
@@ -399,6 +399,9 @@ const OrderSummaryPanel = ({ items, subtotal, total, isCompact = false }) => {
 const EnhancedCheckout = ({ location, history }) => {
   const { state: checkoutPayload = {} } = location || {};
   const { items: initialCartItems = [], totalAmount: initialTotalAmount = 0 } = checkoutPayload;
+
+
+  console.log(checkoutPayload , 'payloadcheckout')
   
   const [cartItems, setCartItems] = useState(initialCartItems);
   const [totalAmount, setTotalAmount] = useState(initialTotalAmount);
@@ -587,7 +590,7 @@ const EnhancedCheckout = ({ location, history }) => {
         </button>
         {summaryOpen && (
           <div className="mobile-order-panel">
-            <OrderSummaryPanel items={cartItems} subtotal={subtotal} total={totalAmount} isCompact />
+            <OrderSummaryPanel items={cartItems} subtotal={totalAmount} total={totalAmount} isCompact />
           </div>
         )}
       </div>
@@ -700,7 +703,7 @@ const EnhancedCheckout = ({ location, history }) => {
           </div>
         </div>
         <div className="checkout-aside">
-          <OrderSummaryPanel items={cartItems} subtotal={subtotal} total={totalAmount} />
+          <OrderSummaryPanel items={cartItems} subtotal={totalAmount} total={totalAmount} />
         </div>
       </div>
       <AddressModal

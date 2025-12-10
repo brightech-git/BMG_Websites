@@ -82,6 +82,7 @@
     border: 2px solid #ddd;
     border-radius: var(--radius-md);
     font-family: var(--secondary-font);
+    color: var(--primary-text-color);
     font-size: 1rem;
     background: #fff;
     transition: var(--transition);
@@ -141,7 +142,7 @@
 .auth-login-btn-icon {
     width: 18px;
     height: 18px;
-    color: var(--white-color);
+    color: var(--white-color) !important;
 }
 
 /* ================================

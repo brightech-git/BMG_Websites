@@ -1,63 +1,67 @@
-/* Hero Banner Component Styles */
+/* Banner.css - FIXED: All slides at same vertical level */
 .hero-banner {
     position: relative;
     width: 100%;
-    margin: 0 auto;
-    padding: 1.5rem;
+    padding: 1.5rem 1.5rem 2.5rem;
     overflow: hidden;
     margin-top: 130px;
 }
 
-/* Skeleton Loading */
-.hero-skeleton-container {
+.bmj-banner-swiper {
+    overflow: visible !important;
     width: 100%;
-    position: relative;
-    overflow: hidden;
-    background-color: var(--primary-color);
 }
 
-.hero-skeleton-placeholder {
-    width: 100%;
-    padding-top: 45%;
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-}
-
-@keyframes shimmer {
-    0% {
-        background-position: 200% 0;
-    }
-
-    100% {
-        background-position: -200% 0;
-    }
-}
-
-/* Slide Container */
-.hero-slide {
-    position: relative;
-    width: 100%;
-    outline: none;
-    transition: transform 0.3s ease;
-}
-
-/* Make adjacent slides smaller and slightly transparent */
-.slick-slide:not(.slick-center) {
-    transform: scale(0.92);
+/* CRITICAL: Set fixed height for all slides */
+.bmj-slide {
+    width: 70% !important;
+    height: auto !important;
     opacity: 0.7;
-    transition: all 0.3s ease;
+    display: flex !important;
+    align-items: center !important;
 }
 
-/* Media Container */
+/* Wrapper must not have any vertical offset */
+.bmj-banner-swiper .swiper-wrapper {
+    align-items: center !important;
+}
+
+/* Banner image container - THIS defines the actual height */
 .hero-media {
     position: relative;
     width: 100%;
-    padding-top: 50%;
     height: 0;
-    border-radius: 15px;
+    padding-top: 55%;
+    border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
+    cursor: pointer;
+    transition: all 0.9s cubic-bezier(0.25, 0.5, 0.25, 0.5);
+    transform: scale(0.85);
+    transform-origin: center center;
+}
+
+/* Active center slide */
+.bmj-banner-swiper .swiper-slide-active {
+    opacity: 1 !important;
+    z-index: 20;
+}
+
+.bmj-banner-swiper .swiper-slide-active .hero-media {
+    transform: scale(1) !important;
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+}
+
+/* Side preview slides */
+.bmj-banner-swiper .swiper-slide-prev,
+.bmj-banner-swiper .swiper-slide-next {
+    opacity: 0.7 !important;
+    z-index: 10;
+}
+
+.bmj-banner-swiper .swiper-slide-prev .hero-media,
+.bmj-banner-swiper .swiper-slide-next .hero-media {
+    transform: scale(0.85) !important;
 }
 
 .hero-image {
@@ -67,351 +71,116 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
-    transition: transform 0.4s ease;
+    transition: transform 0.6s ease;
 }
 
-.hero-slide.slick-active .hero-image {
-    transform: scale(1.02);
+.hero-media:hover .hero-image {
+    transform: scale(1.06);
 }
 
-/* Diamond Dots Styles */
+/* Diamond Dots */
 .diamond-dots {
-    position: absolute;
-    bottom: -25px;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    text-align: center;
-    z-index: 3;
+    position: absolute !important;
+    bottom: -25px !important;
+    left: 96% !important;
+    transform: translateX(-50%) ;
+    display: flex;
+    gap: 10px;
+    z-index: 9999;
 }
 
-.diamond-dot {
-    display: inline-block;
-    margin: 0 8px;
-    padding: 0;
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+.diamond-bullet {
+    width: 18px ;
+    height: 18px ;
+    display: flex ;
+    align-items: center ;
+    justify-content: center ; 
+    cursor: pointer ;
 }
 
 .diamond-shape {
-    width: 8px;
-    height: 8px;
-    background: var(--primary-text-color);
-    transform: rotate(45deg);
-    transition: all 0.3s ease;
-    border: 1px solid rgba(34, 33, 33, 0.8);
+    width: 10px;
+    height: 10px;
+    background:var(--primary-text-color) !important;
+    transform: rotate(45deg) !important;
+    transition: all 0.4s ease !important;
 }
 
-/* Active diamond dot */
-.slick-active .diamond-shape {
-    background: var(--primary-hover-color, #fa6b18);
-    border-color: var(--primary-hover-color, #ec6e24);
-    box-shadow: 0 0 8px rgba(247, 94, 5, 0.6);
-    transform: rotate(45deg) scale(1.2);
-    animation: diamond-pulse 1.5s infinite;
+.swiper-pagination-bullet-active .diamond-shape {
+    background: #fa6b18 !important;
+    border-color: #fa6b18 !important;
+    transform: rotate(45deg) scale(1.6) !important;
+    box-shadow: 0 0 20px rgba(250, 107, 24, 0.9) !important;
 }
 
-/* Hover effects */
-.diamond-dot:hover .diamond-shape {
-    background: var(--primary-hover-color);
-    transform: rotate(45deg) scale(1.1);
-}
-
-.slick-active .diamond-dot:hover .diamond-shape {
-    background: var(--primary-hover-color, #cd865c);
-    transform: rotate(45deg) scale(1.3);
-}
-
-/* Diamond pulse animation */
-@keyframes diamond-pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(205, 134, 92, 0.4);
-    }
-
-    70% {
-        box-shadow: 0 0 0 6px rgba(205, 134, 92, 0);
-    }
-
-    100% {
-        box-shadow: 0 0 0 0 rgba(205, 134, 92, 0);
-    }
-}
-
-/* Content Container */
-.hero-content-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    z-index: 2;
-}
-
-/* Content */
-.hero-content {
-    max-width: 600px;
-    padding: 2rem 4rem;
-    color: var(--white-color, #fff);
-    text-align: left;
-}
-
-
-/* Button */
-.banner-hero-buttons {
-    font-family: var(--secondary-font);
-    font-size: clamp(0.9rem, 2vw, 0.9rem);
-    font-weight: 400;
-    letter-spacing: 1px;
-    padding: 0.65rem 1rem;
-    border: none;
-    border-radius: 10px;
-    color: var(--primary-text-color, #fff);
-    position: relative;
-    overflow: hidden;
-    transition: all 0.4s ease;
-    z-index: 1;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-.banner-hero-buttons::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 0;
-    height: 100%;
-    background-color: #cd865c !important;
-    transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-    z-index: -1;
-}
-
-.banner-hero-buttons:hover {
-    border-color: var(--primary-hover-color, #cd865c);
-    color: var(--white-color, #fff);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.banner-hero-buttons:hover::before {
-    width: 100%;
-    right: auto;
-    left: 0;
-}
-
-/* Slick Slider Arrows */
-.slick-prev,
-.slick-next {
-    width: 40px;
-    height: 40px;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 50%;
-    z-index: 2;
-    transition: all 0.3s ease;
-}
-
-.slick-prev:hover,
-.slick-next:hover {
-    background: var(--primary-hover-color, #cd865c);
-    transform: scale(1.1);
-}
-
-.slick-prev:before,
-.slick-next:before {
-    font-size: 20px;
-    color: var(--white-color, #fff);
-}
-
-.slick-prev {
-    left: 10px;
-}
-
-.slick-next {
-    right: 10px;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 1300px) {
-    .hero-media {
-        padding-top: 50%;
-    }
-
-    .hero-content {
-        padding: 2rem;
-    }
-}
-
+/* RESPONSIVE */
 @media (max-width: 992px) {
-    .hero-banner {
-        margin-top: 70px;
+    .bmj-slide {
+        width: 60% !important;
     }
 
-    .hero-media {
-        padding-top: 50%;
-    }
-
-    .banner-hero-title {
-        font-size: clamp(1.8rem, 4vw, 2.8rem);
-    }
-
-    .hero-content {
-        padding: 1.5rem;
-    }
-
-    .slick-slide:not(.slick-center) {
-        transform: scale(0.95);
-        opacity: 0.8;
-    }
-
-    /* Adjust diamond dots for tablet */
-    .diamond-dot {
-        margin: 0 6px;
-        width: 14px;
-        height: 14px;
-    }
-
-    .diamond-shape {
-        width: 6px;
-        height: 6px;
+    .bmj-banner-swiper .swiper-slide-prev,
+    .bmj-banner-swiper .swiper-slide-next {
+        opacity: 0.6 !important;
     }
 }
 
 @media (max-width: 768px) {
-    .hero-banner {
-        margin-top: 120px;
+    .bmj-slide {
+        width: 85% !important;
     }
 
-    .hero-media {
-        padding-top: 50%;
+    .bmj-banner-swiper .swiper-slide-prev,
+    .bmj-banner-swiper .swiper-slide-next {
+        opacity: 0.4 !important;
     }
 
-    .hero-content {
-        padding: 1rem;
-        max-width: 70%;
-    }
-
-    .banner-hero-title {
-        font-size: clamp(1.5rem, 3.5vw, 2.2rem);
-    }
-
- 
-
-    .banner-hero-button {
-        padding: 0.6rem 1.3rem !important;
-        font-size: clamp(0.7rem, 1vw, 0.7rem) !important;
-    }
-
-    .slick-prev,
-    .slick-next {
-        width: 35px;
-        height: 35px;
-    }
-
-    .slick-prev:before,
-    .slick-next:before {
-        font-size: 18px;
-    }
-
-    /* Adjust diamond dots for mobile */
     .diamond-dots {
-        bottom: -20px;
+        gap: 10px;
+        bottom: -15px !important;
     }
 
-    .diamond-dot {
-        margin: 0 4px;
-        width: 12px;
-        height: 12px;
+    .diamond-bullet {
+        width: 15px;
+        height: 15px;
     }
 
-  
+    .diamond-shape {
+        width: 8px;
+        height: 8px;
+    }
 }
 
 @media (max-width: 576px) {
+    .hero-banner {
+        padding: 1rem 1rem 1.5rem;
+        margin-top: 120px;
+    }
+
+    .bmj-slide {
+        width: 90% !important;
+    }
+
+    .bmj-banner-swiper .swiper-slide:not(.swiper-slide-active) {
+        opacity: 0.3 !important;
+    }
+
     .hero-media {
-        padding-top: 50%;
+        border-radius: 14px;
     }
 
-    .hero-content {
-        padding: 0.75rem;
-        max-width: 60%;
+    .diamond-dots {
+        bottom: -15px !important;
+        gap: 8px;
     }
 
-    .banner-hero-title {
-        font-size: clamp(1.2rem, 2vw, 1.8rem);
+    .diamond-bullet {
+        width: 13px;
+        height: 13px;
     }
 
-
-    .banner-hero-button {
-        padding: 0.5rem 1rem !important;
-        font-size: 10px !important;
-    }
-
-    .slick-slide:not(.slick-center) {
-        transform: scale(1);
-        opacity: 1;
-    }
-
-    /* Smaller diamond dots for small mobile */
-    .diamond-dot {
-        margin: 0 3px;
-        width: 10px;
-        height: 10px;
-    }
-
-   
-}
-
-@media (max-width: 400px) {
-    .hero-media {
-        padding-top: 48%;
-    }
-
-    .hero-content {
-        padding: 0.5rem;
-    }
-
-    .banner-hero-buttons {
-        padding: 0.4rem 1rem;
-        font-size: 10px;
-    }
-}
-
-/* Accessibility */
-.hero-button:focus-visible,
-.slick-prev:focus-visible,
-.slick-next:focus-visible {
-    outline: 2px solid var(--primary-hover-color, #cd865c);
-    outline-offset: 2px;
-}
-
-/* Focus for diamond dots */
-.diamond-dot:focus-visible .diamond-shape {
-    outline: 2px solid var(--primary-hover-color, #cd865c);
-    outline-offset: 2px;
-}
-
-/* Reduced Motion */
-@media (prefers-reduced-motion: reduce) {
-
-    .hero-image,
-    .hero-buttons,
-    .hero-buttons::before,
-    .slick-slide,
     .diamond-shape {
-        transition: none !important;
-    }
-
-    .hero-skeleton-placeholder {
-        animation: none;
-    }
-
-    .slick-active .diamond-shape {
-        animation: none;
+        width: 7px;
+        height: 7px;
     }
 }

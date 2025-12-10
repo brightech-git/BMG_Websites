@@ -531,8 +531,6 @@
   border-radius: 8px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   width: 280px;
-  z-index: 2147483647 !important;
-  /* Maximum z-index */
   max-height: 80vh;
   overflow-y: auto;
 }

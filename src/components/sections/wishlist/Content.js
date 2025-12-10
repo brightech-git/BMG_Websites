@@ -1,185 +1,239 @@
+'use client';
+
 import React from "react";
-import { Link, useLocation, useHistory } from "react-router-dom";
-import { Heart, Trash2, Loader2, ShoppingCart, Star } from "lucide-react";
+import { Link, useHistory } from "react-router-dom";
+import { Heart, Trash2, ShoppingCart, Star } from "lucide-react";
 import { useFavorites, useRemoveFavorite } from "../../../hook/favorites/useFavoritesQuery";
 import { useSingleProductQuery } from "../../../hook/product/useSingleProductQuery";
 import { useCart } from "../../../hook/cart/useCartQuery";
 import { toast } from "react-toastify";
-import "./Wishlist.css";
 import { useSelector } from "react-redux";
-
-const Wishlist = () => {
-  const { data: favorites, isLoading, isError } = useFavorites();
-  const { cartItems, addToCartHandler } = useCart();
-  const removeFavorite = useRemoveFavorite();
-
-  const favoriteSnoList = favorites?.data || [];
-
-  const handleRemove = (sno) => {
-    if (window.confirm("Are you sure you want to remove this item from your wishlist?")) {
-      removeFavorite.mutate(sno);
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="wl-loading">
-        <Loader2 className="wl-spinner" size={40} strokeWidth={2} />
-        <p>Loading your wishlist...</p>
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div className="wl-error">
-        <div className="wl-error-icon">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-        <h3>Unable to load wishlist</h3>
-        <p>Please refresh the page or try again later</p>
-        <button className="wl-retry-btn" onClick={() => window.location.reload()}>
-          Retry
-        </button>
-      </div>
-    );
-  }
-
-  return (
-    <div className="wl-container">
-      <div className="wl-header">
-        <h1>My Wishlist</h1>
-        {favoriteSnoList.length > 0 && (
-          <div className="wl-count">{favoriteSnoList.length} Items</div>
-        )}
-      </div>
-
-      {favoriteSnoList.length === 0 ? (
-        <div className="wl-empty">
-          <Heart className="wl-empty-icon" size={64} strokeWidth={1.5} />
-          <h2>Your wishlist is empty</h2>
-          <p>Discover and save your favorite items</p>
-          <Link to="/products-page" className="wl-explore-btn">
-            Explore Collection
-          </Link>
-        </div>
-      ) : (
-        <div className="wl-grid">
-          {favoriteSnoList.map((sno) => (
-            <WishlistItem
-              key={sno}
-              sno={sno}
-              cartItems={cartItems}
-              addToCartHandler={addToCartHandler}
-              onRemove={handleRemove}
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
+import SmartButton from "../../ui/SmartButton";
 
 const WishlistItem = ({ sno, onRemove, cartItems, addToCartHandler }) => {
   const { data: item, isLoading } = useSingleProductQuery(sno);
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
-  const location = useLocation();
   const history = useHistory();
+  console.log(cartItems?.data,'cartItems');
+  console.log(item,'cartItems');
 
-  const isInCart = Array.isArray(cartItems?.data) &&
-    cartItems.data.some(cartItem => cartItem.itemTagSno === item?.SNO);
-
-  let imageUrls = [];
-  try {
-    imageUrls = JSON.parse(item?.ImagePath || "[]");
-  } catch (err) {
-    console.error("Error parsing ImagePath", err);
-  }
+  const isInCart = Array.isArray(cartItems?.data) && cartItems?.data?.some(i => i.itemTagSno === item?.SNO);
 
   const baseUrl = "https://app.bmgjewellers.com";
-  const productImages = imageUrls.map((path) => baseUrl + path);
-  const firstImage = productImages.length > 0 ? productImages[0] : "/images/placeholder.png";
+  const imagePath = item?.ImagePath ? JSON.parse(item.ImagePath)[0] : null;
+  const imageUrl = imagePath ? `${baseUrl}${imagePath}` : "/images/placeholder.png";
 
-  const addItemToCart = (e) => {
+  const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
     if (!isAuthenticated) {
-      toast.info('🔐 Please log in to add items to your cart.');
-      history.push('/login', { from: location.pathname });
-      return;
-    }
-
-    if (!item?.SNO) {
-      console.warn('Missing item SNO');
+      toast.info("Please log in to add to cart");
+      history.push("/login");
       return;
     }
 
     if (isInCart) {
-      toast.warning('Item already in cart');
+      toast.info("Already in cart");
       return;
     }
-
+    console.log(item, 'productitem');
     const cartItem = {
       itemSno: item.SNO,
       itemTagSno: item.SNO,
+      itemId: item.ITEMID,
+      tagNo: item.TAGNO,
+      grsWt: item.GRSWT,
+      netWt: item.NETWT,
+      stnWt: item?.STNWT || 0,
+      amount: item.GrandTotal || item.RATE,
+      stnAmount: item?.STNAMT || 0,
       itemCtrName: item.ITEMCTRNAME || item.SUBITEMNAME,
       price: item.GrandTotal,
-      image: productImages[0],
+      image: item.ImagePath? item.imagePath[0] : "",
     };
-
     addToCartHandler(cartItem);
-    toast.success('🛒 Item added to cart!');
+    toast.success("Added to cart!");
   };
 
   if (isLoading) {
     return (
-      <div className="wl-item wl-item-loading">
-        <div className="wl-spinner">
-          <Loader2 size={20} strokeWidth={2} />
-        </div>
+      <div className="bg-gray-100 rounded-2xl p-6 animate-pulse">
+        <div className="bg-gray-300 rounded-xl w-full h-64 mb-4" />
+        <div className="h-5 bg-gray-300 rounded w-3/4 mb-2" />
+        <div className="h-6 bg-gray-300 rounded w-1/2" />
       </div>
     );
   }
 
   if (!item) return null;
 
-
-
   return (
-    <div className="wl-item">
-      <div className="wl-item-img-container">
-        <Link to={`/product-detail/${sno}`}>
+    <div className="group relative bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-md hover:shadow-lg  transition-all duration-300">
+      {/* Image */}
+      <Link to={`/products-page/${sno}`} className="block">
+        <div className="aspect-square overflow-hidden bg-gray-50">
           <img
-            src={firstImage}
+            src={imageUrl}
             alt={item.SUBITEMNAME}
-            className="wl-item-img"
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
             loading="lazy"
           />
-        </Link>
-        <button
-          className="wl-remove-btn"
-          onClick={() => onRemove(sno)}
-          aria-label="Remove from wishlist"
-        >
-          <Trash2 size={16} />
-        </button>
-      </div>
-
-      <div className="wl-item-details">
-        <div className="wl-items-wrap">
-          <h3 className="wl-item-title">
-            <Link to={`/product-detail/${sno}`}>{item.SUBITEMNAME}</Link>
-          </h3>
-
-          <h4 className="wl-item-price">₹{item.GrandTotal.toLocaleString()}</h4>
         </div>
-        <button className="wl-move-to-cart-btn" onClick={addItemToCart}>
-          <ShoppingCart size={14} className="wl-cart-icon" />
-          {isInCart ? 'In Cart' : 'Add to Cart'}
-        </button>
+      </Link>
+
+      {/* Remove Button */}
+      <button
+        onClick={() => onRemove(sno)}
+        className="absolute top-3 right-3 p-2.5 bg-white/90  text-red-400 backdrop-blur-sm rounded-full shadow-lg  transition-all hover:bg-red-50 hover:text-red-600"
+      >
+        <Trash2 className="w-5 h-5 " />
+      </button>
+
+      {/* Content */}
+      <div className="p-2 sm:p-3">
+        <div className="flex justify-between items-center text-center">
+        <h3 className="text-xs sm:text-sm font-medium text-[#041f60] line-clamp-2 mb-2">
+          <Link to={`/products-page/${sno}`} className="hover:text-[#f16137] transition text-xs">
+            {item.SUBITEMNAME || item.ITEMCTRNAME}
+          </Link>
+          
+        </h3>
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-xs sm:text-sm font-bold text-[#f16137]">
+            ₹{Number(item.GrandTotal || item.RATE || 0).toLocaleString('en-IN')}
+          </p>
+        </div>
+
+        </div> 
+
+        {/* Add to Cart */}
+        <div className="flex justify-center">
+        <SmartButton
+          onClick={handleAddToCart}
+          variant="primary"
+          isDisabled={isInCart}
+          className="flex gap-1 items-center justify-center"
+        >
+          {isInCart ? "Already In Cart" : "Add to Cart"}
+        </SmartButton>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Wishlist = () => {
+  const { data: favorites, isLoading, isError } = useFavorites();
+  const { cartItems, addToCartHandler } = useCart();
+  const removeFavorite = useRemoveFavorite();
+
+  const history = useHistory();
+  const items = favorites?.data || [];
+
+  const handleRemove = (sno) => {
+    if (window.confirm("Remove from wishlist?")) {
+      removeFavorite.mutate(sno);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="bg-[#eeece8] py-4 px-4 sm:px-4 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+
+          {/* Header Skeleton */}
+          <div className="bg-white rounded-xl px-4 py-2 mb-3 flex justify-between items-center">
+            <div className="h-5 w-32 bg-gray-300 animate-pulse rounded-lg"></div>
+            <div className="h-4 w-20 bg-gray-200 animate-pulse rounded-lg"></div>
+          </div>
+
+          {/* Grid Skeleton */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 lg:gap-4">
+            {Array.from({ length: 10 }).map((_, idx) => (
+              <div
+                key={idx}
+                className="group relative bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-md"
+              >
+                {/* Image Skeleton */}
+                <div className="aspect-square bg-gray-200 animate-pulse"></div>
+
+                {/* Remove Btn */}
+                <div className="absolute top-3 right-3 w-9 h-9 bg-white/70 backdrop-blur-sm rounded-full animate-pulse"></div>
+
+                {/* Content */}
+                <div className="p-3">
+                  <div className="h-4 w-24 bg-gray-200 animate-pulse rounded-md mb-3"></div>
+                  <div className="h-4 w-16 bg-gray-200 animate-pulse rounded-md mb-3"></div>
+
+                  {/* Button Skeleton */}
+                  <div className="flex justify-center">
+                    <div className="h-9 w-28 bg-gray-300 animate-pulse rounded-lg"></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </div>
+    );
+  }
+
+
+  if (isError || items.length === 0) {
+    return (
+      <div className="bg-[#fff] flex items-center justify-center p-4">
+        <div className="text-center max-w-md">
+          <div className="animate-heartbeat ">
+            <Heart className="w-14 h-14 text-[#F7374F] mx-auto mb-2 " />
+          </div>
+          <h2 className="text-sm sm:text-base font-bold text-[#041f60] mb-2">
+            Your Wishlist is Empty
+          </h2>
+          <p className="text-gray-600 text-xs sm:text-sm mb-2">
+            Save your favorite jewelry for later
+          </p>
+
+          <div className="flex justify-center animate-shake-infinite">
+          <SmartButton
+            onClick={()=>history.push('products-page')}
+            variant="primary"
+          >
+            Explore Collection
+          </SmartButton>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-[#eeece8] py-4 px-4 sm:px-4 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+
+        {/* Header */}
+        <div className=" bg-[#fff] flex justify-between items-center text-center rounded-xl px-4 py-2 mb-3">
+          <h1 className="text-sm sm:text-lg font-bold text-[#041f60]">
+            My Wishlist
+          </h1>
+          <p className="text-xs sm:text-sm text-gray-600">
+            {items.length} {items.length === 1 ? "Item" : "Items"} Saved
+          </p>
+        </div>
+
+        {/* Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 lg:gap-4">
+          {items.map((sno) => (
+            <WishlistItem
+              key={sno}
+              sno={sno}
+              onRemove={handleRemove}
+              cartItems={cartItems}
+              addToCartHandler={addToCartHandler}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

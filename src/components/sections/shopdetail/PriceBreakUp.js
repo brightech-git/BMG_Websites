@@ -1,103 +1,117 @@
 import React, { useState } from 'react';
 import { FaInfoCircle, FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import './PriceBreakup.css';
 
 const PriceBreakup = ({ product }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     if (!product) return null;
 
-    // Calculate values based on product data
     const grandTotal = parseFloat(product.GrandTotal) || 0;
     const rate = parseFloat(product.RATE) || 0;
     const grossAmount = parseFloat(product.GrossAmount) || 0;
     const gstAmount = parseFloat(product.GSTAmount) || 0;
     const gstPercentage = product.GSTPer ? parseInt(product.GSTPer) : 0;
 
-    // Determine what to display based on available data
     const hasDetailedPricing = grandTotal > 0 && grossAmount > 0;
     const displayPrice = hasDetailedPricing ? grandTotal : rate;
+    const discount = 0; 
 
-    // Calculate discount if any (this would need to be provided or calculated based on your business logic)
-    const discount = 0; // Default to 0 discount
-
-    // Format discount display - show dash if zero
-    const formatDiscount = (value) => {
-        return value === 0 ? '-' : `₹${value.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
-    };
+    const formatPrice = (value) =>
+        value === 0 ? '-' : `₹${value.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
 
     return (
-        <div className="price-breakup-container">
-            <div className="price-breakup-summary" onClick={() => setIsExpanded(!isExpanded)}>
-                <div className="final-price">
-                    <span className="label">Total Amount:</span>
-                    <span className="value">₹{displayPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
-                </div>
-                <button
-                    className="toggle-breakup"
-                  
-                >
-                    <FaInfoCircle />
-                    {isExpanded ? 'Hide' : 'View'} Price Breakdown
-                    {isExpanded ? <FaChevronUp /> : <FaChevronDown />}
-                </button>
-            </div>
+        <div className="bg-white border border-gray-300 rounded-lg mt-2 overflow-hidden shadow-sm">
 
+            {/* Summary Header */}
+            <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="w-full px-4 py-2 flex items-center justify-between hover:bg-gray-50 transition"
+            >
+                <div className="flex items-center gap-3">
+                    <FaInfoCircle className="w-5 h-5 text-[#f16137]" />
+                    <div className="text-left">
+                        <p className="text-sm text-gray-600">Total Amount</p>
+                        <p className="text-sm font-bold text-[#041f60]">
+                            ₹{displayPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                        </p>
+                    </div>
+                </div>
+                <div className="flex items-center gap-2 text-sm font-medium text-[#041f60]">
+                    {isExpanded ? "Hide" : "View"} Breakdown
+                    {isExpanded ? <FaChevronUp className="w-4 h-4" /> : <FaChevronDown className="w-4 h-4" />}
+                </div>
+            </button>
+
+            {/* Expanded Details */}
             {isExpanded && (
-                <div className="price-breakup-details">
-                    <table className="price-table">
+                <div className="border-t border-gray-200 px-5 py-3 bg-gray-50">
+                    <table className="w-full text-sm">
                         <thead>
-                            <tr>
-                                <th>Component</th>
-                                <th>Value</th>
-                                <th>Discount</th>
-                                <th>Final Value</th>
+                            <tr className="border-b border-gray-300 text-sm text-left text-gray-700 font-semibold">
+                                <th className="pb-2">Component</th>
+                                <th className="pb-2 text-right">Value</th>
+                                <th className="pb-2 text-right">Discount</th>
+                                <th className="pb-2 text-right">Final</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="text-gray-800">
                             {hasDetailedPricing ? (
                                 <>
-                                  
-
-                                    {/* Base price row */}
-                                    <tr>
-                                        <td>{product.MaterialFinish || 'Material'}</td>
-                                        <td>₹{grossAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                                        <td>{formatDiscount(discount)}</td>
-                                        <td>₹{(grossAmount - discount).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                                    {/* Material / Base Price */}
+                                    <tr className="border-b text-xs border-gray-200">
+                                        <td className="py-2 font-medium">{product.MaterialFinish || 'Material Cost'}</td>
+                                        <td className="py-2 text-right">₹{grossAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                                        <td className="py-2 text-right">{formatPrice(discount)}</td>
+                                        <td className="py-2 text-right font-semibold">
+                                            ₹{(grossAmount - discount).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                        </td>
                                     </tr>
 
-                                    {/* Total before tax */}
-                                    <tr className="subtotal">
-                                        <td>Total</td>
-                                        <td>₹{grossAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                                        <td>{formatDiscount(discount)}</td>
-                                        <td>₹{(grossAmount - discount).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                                    {/* Subtotal */}
+                                    <tr className="border-b border-gray-200 text-xs font-medium">
+                                        <td className="py-2">Subtotal</td>
+                                        <td className="py-2 text-right">₹{grossAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                                        <td className="py-2 text-right">{formatPrice(discount)}</td>
+                                        <td className="py-2 text-right">
+                                            ₹{(grossAmount - discount).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                        </td>
                                     </tr>
 
-                                    {/* GST row */}
-                                    <tr>
-                                        <td>GST ({gstPercentage}%)</td>
-                                        <td>₹{gstAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                                        <td>-</td>
-                                        <td>₹{gstAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                                    {/* GST */}
+                                    <tr className="border-b text-xs border-gray-200">
+                                        <td className="py-2">GST ({gstPercentage}%)</td>
+                                        <td className="py-2 text-right">₹{gstAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                                        <td className="py-2 text-right">-</td>
+                                        <td className="py-2 text-right font-semibold text-[#f16137]">
+                                            +₹{gstAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                        </td>
                                     </tr>
 
-                                    {/* Grand Total row */}
-                                    <tr className="grand-total">
-                                        <td colSpan="3">Grand Total</td>
-                                        <td>₹{grandTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                                    {/* Grand Total */}
+                                    <tr className="text-sm font-bold bg-orange-50">
+                                        <td colSpan="3" className="py-2 text-[#041f60]">Grand Total</td>
+                                        <td className="py-2 text-right text-[#f16137]">
+                                            ₹{grandTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                        </td>
                                     </tr>
                                 </>
                             ) : (
-                                // Simplified view when only rate is available
-                                <tr className="grand-total">
-                                    <td colSpan="3">Price</td>
-                                    <td>₹{rate.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                                <tr className="bg-orange-50">
+                                    <td colSpan="3" className="py-2 text-left font-bold text-[#041f60]">Price</td>
+                                    <td className="py-4 text-right text-[#f16137] text-lg font-bold">
+                                        ₹{rate.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                    </td>
                                 </tr>
                             )}
                         </tbody>
                     </table>
+
+                    {/* Inclusive Note */}
+                    {gstPercentage > 0 && (
+                        <p className="text-xs text-gray-600 text-center mt-2 italic">
+                            All prices are inclusive of GST ({gstPercentage}%)
+                        </p>
+                    )}
                 </div>
             )}
         </div>

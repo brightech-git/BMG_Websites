@@ -12914,3 +12914,22 @@ footer .copyright-area.light-theme .footer-menu ul li::before {
         max-width: 1400px;
     }
 }
+/* tailwind.config.js or globals.css */
+@layer components {
+    .zoom-slider::-webkit-slider-thumb {
+        @apply appearance-none w-5 h-5 bg-orange-500 rounded-full border-4 border-white shadow-xl cursor-grab;
+    }
+
+    .zoom-slider::-moz-range-thumb {
+        @apply w-5 h-5 bg-orange-500 rounded-full border-4 border-white shadow-xl cursor-grab;
+    }
+
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+}

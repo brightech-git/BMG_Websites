@@ -111,6 +111,7 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
 
       sizeName: searchParams.get('sizeName') || '',
       sortBy: searchParams.get('sortBy') || '',
+      priceRange : searchParams.get('priceRange') || '',
       minGrandTotal: searchParams.get('minGrandTotal') || '',
       maxGrandTotal: searchParams.get('maxGrandTotal') || '',
     };
@@ -198,32 +199,59 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
     },
     [location.search, history, onFiltersChange]
   );
+  // Initial load: sync slider with URL params
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+
+    let initialMin = PRICE_RANGE.min;
+    let initialMax = PRICE_RANGE.max;
+
+    if (params.get("priceRange")) {
+      const [pmin, pmax] = params.get("priceRange").split("-").map(Number);
+      if (!isNaN(pmin) && !isNaN(pmax)) {
+        initialMin = pmin;
+        initialMax = pmax;
+      }
+    }
+
+    setPriceRange([initialMin, initialMax]);  // <-- updates your slider
+  }, [location.search]);
 
   const debouncedPriceChange = useCallback(
     debounce((min, max) => {
       const params = new URLSearchParams(location.search);
-      if (min > PRICE_RANGE.min) {
-        params.set('minGrandTotal', min.toString());
+
+      // Build price range string
+      const rangeString = `${min}-${max}`;
+
+      // If full range selected → remove the param
+      const isDefaultRange =
+        min === PRICE_RANGE.min && max === PRICE_RANGE.max;
+
+      if (isDefaultRange) {
+        params.delete('priceRange');   // remove custom range
       } else {
-        params.delete('minGrandTotal');
+        params.set('priceRange', rangeString);  // set 1-199 etc
       }
-      if (max < PRICE_RANGE.max) {
-        params.set('maxGrandTotal', max.toString());
-      } else {
-        params.delete('maxGrandTotal');
-      }
-      if (min === PRICE_RANGE.min && max === PRICE_RANGE.max) {
-        params.delete('minGrandTotal');
-        params.delete('maxGrandTotal');
-      }
+
+      // Remove old keys
+      params.delete('minGrandTotal');
+      params.delete('maxGrandTotal');
+
+      // Reset pagination
       params.delete('page');
+
+      // Update URL
       history.push({ search: params.toString() });
+
+      // Trigger callback
       if (onFiltersChange) {
         onFiltersChange(Object.fromEntries(params));
       }
     }, 300),
     [location.search, history, onFiltersChange]
   );
+
 
   const handlePriceChange = useCallback(
     (min, max) => {
@@ -250,9 +278,8 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
   const handleRemoveFilter = useCallback(
     (key) => {
       const params = new URLSearchParams(location.search);
-      if (key === 'priceRange' || key === 'minGrandTotal') {
-        params.delete('minGrandTotal');
-        params.delete('maxGrandTotal');
+      if (key === 'priceRange') {
+        params.delete('priceRange');
         setPriceRange([PRICE_RANGE.min, PRICE_RANGE.max]);
         setInputValues({ min: '', max: '' });
       } else {
@@ -265,9 +292,8 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
       history.push({ search: params.toString() });
       setLocalFilters((prev) => {
         const newFilters = { ...prev };
-        if (key === 'priceRange' || key === 'minGrandTotal') {
-          delete newFilters.minGrandTotal;
-          delete newFilters.maxGrandTotal;
+        if (key === 'priceRange') {
+          delete newFilters.priceRange;
         } else {
           delete newFilters[key];
         }
@@ -295,7 +321,7 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
   const activeFiltersCount = useMemo(() => {
     return Object.entries(filters).reduce(
       (count, [key, value]) =>
-        value && value !== ''  && key !== 'maxGrandTotal' ? count + 1 : count,
+        value && value !== ''  ? count + 1 : count,
       0
     );
   }, [filters]);
@@ -310,12 +336,13 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
   };
 
   const formatFilterLabel = (key, value) => {
-    if (key === 'priceRange' || (key === 'minGrandTotal' && (filters.minGrandTotal || filters.maxGrandTotal))) {
+    console.log(key ,value ,'priceRange')
+    if (key === 'priceRange' ) {
       const minVal = filters.minGrandTotal ? Number(filters.minGrandTotal) : PRICE_RANGE.min;
       const maxVal = filters.maxGrandTotal ? Number(filters.maxGrandTotal) : PRICE_RANGE.max;
       return `${formatCurrency(minVal)} - ${formatCurrency(maxVal)}`;
     }
-    if (key === 'sortBy'  || key === 'maxGrandTotal') return null;
+    // if (key === 'sortBy'  || key === 'priceRange') return null;
     return value;
   };
 
@@ -488,32 +515,52 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
         {activeFiltersCount > 0 && (
           <div className="active-filters-row">
             <div className="active-filters">
-              {Object.entries(filters).map(([key, value]) => {
-                if (!value || value === '' || key === 'sortDirection' || key === 'maxGrandTotal') return null;
-                let displayValue;
-                if (key === 'minGrandTotal' && (filters.minGrandTotal || filters.maxGrandTotal)) {
-                  displayValue = formatFilterLabel('priceRange');
-                  if (filters.maxGrandTotal) return null;
-                } else {
-                  displayValue = formatFilterLabel(key, value);
-                }
-                if (!displayValue) return null;
-                return (
-                  <div key={key} className="filter-tag">
-                    <span>{displayValue}</span>
-                    <button
-                      onClick={() => handleRemoveFilter(key === 'minGrandTotal' ? 'priceRange' : key)}
-                      className="remove-tag"
-                      aria-label={`Remove ${displayValue} filter`}
-                    >
-                      <X size={12} />
-                    </button>
-                  </div>
-                );
-              })}
+              {Object.entries(filters)
+                // filter out empty values
+                .filter(([k, v]) => v !== undefined && v !== null && v !== "")
+                // we will render priceRange only (skip min/max when priceRange exists)
+               
+                .map(([key, value]) => {
+                  // build display value
+                  let displayValue = null;
+
+                  if (key === "priceRange") {
+                    // value expected like "1-199" or "1-199.00"
+                    const [min, max] = String(value).split("-").map(v => v.trim());
+                    if (min && max) {
+                      displayValue = `Price: ₹${Number(min).toLocaleString()} - ₹${Number(max).toLocaleString()}`;
+                    } else {
+                      displayValue = `Price: ${value}`;
+                    }
+                  } else {
+                    // fallback to your existing formatter if available
+                    displayValue = typeof formatFilterLabel === "function"
+                      ? formatFilterLabel(key, value)
+                      : `${key}: ${value}`;
+                  }
+
+                  if (!displayValue) return null;
+
+                  // which key to pass to remover — priceRange should remove itself
+                  const removerKey = key === "priceRange" ? "priceRange" : key;
+
+                  return (
+                    <div key={key} className="filter-tag">
+                      <span>{displayValue}</span>
+                      <button
+                        onClick={() => handleRemoveFilter(removerKey)}
+                        className="remove-tag"
+                        aria-label={`Remove ${displayValue} filter`}
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  );
+                })}
             </div>
           </div>
         )}
+
       </div>
 
       {/* Overlay */}

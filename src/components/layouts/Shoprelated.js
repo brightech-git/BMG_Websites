@@ -1,125 +1,202 @@
 import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
-import Slider from 'react-slick';
 import ProductCard from '../sections/productCard/ProductCard';
 import useFilterProducts from '../../hook/product/useFilterProducts';
-import './ShopRelated.css';
+import { ChevronLeft, ChevronRight, AlertCircle, Loader2 } from 'lucide-react';
 
 const ShopRelatedUpdated = ({ itemCtrName }) => {
-    //console.log('Received itemCtrName:', itemCtrName);
-    const sliderRef = useRef(null);
+    const scrollRef = useRef(null);
 
-    // Fetch related products using useFilterProducts hook
     const { data, loading, error } = useFilterProducts(
-        { itemCtrName }, // No specific filters for related products
-        1,  // Page 1
-        10  // Fetch up to 10 products
+        { itemCtrName },
+        0,
+        10
     );
-    //console.log('API data:', data); // Debug API response
 
-    const next = () => {
-        sliderRef.current.slickNext();
+    const relatedProducts = Array.isArray(data?.data?.data)
+        ? data.data.data
+        : [];
+
+    const scroll = (direction) => {
+        if (!scrollRef.current) return;
+        const scrollAmount = 300; // Slightly increased for better experience
+        scrollRef.current.scrollBy({
+            left: direction === 'left' ? -scrollAmount : scrollAmount,
+            behavior: 'smooth',
+        });
     };
-
-    const previous = () => {
-        sliderRef.current.slickPrev();
-    };
-
-    const sliderSettings = {
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        fade: false,
-        infinite: true,
-        autoplay: true,
-        autoplaySpeed: 4000,
-        arrows: false,
-        dots: false,
-        swipeToSlide: true,
-        touchThreshold: 10, // makes taps more responsive
-        pauseOnHover: true,
-        accessibility: true,
-        swipeToSlide: true,
-        touchThreshold: 10,
-        focusOnSelect: true,
-        pauseOnHover: true,
-        focusOnSelect: true, // ✅ allow tapping slides to trigger link clicks
-        responsive: [
-            {
-                breakpoint: 992,
-                settings: {
-                    slidesToShow: 4,
-                },
-            },
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 3,
-                },
-            },
-            {
-                breakpoint: 576,
-                settings: {
-                    slidesToShow: 2,
-                },
-            },
-        ],
-    };
-
-
-    // Map API data to match ProductCard props
-    const relatedProducts = Array.isArray(data?.data) ? data.data : [];
-
-
-    console.log('Mapped products:', relatedProducts); // Debug mapped products
 
     return (
-        <section className="products-showcase-section">
-            <div className="products-showcase-container">
-                <div className="products-showcase-header">
-                    <div className="products-showcase-title">
-                        <h2 className="showcase-title">Related Products</h2>
+        <section className="py-2 bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-base">
+            <div className="container mx-auto px-2 max-w-7xl">
+                {/* Header with navigation */}
+                <div className="flex items-center justify-between mb-2">
+                    <div>
+                        <h2 className="text-sm md:text-lg font-bold text-gray-900 dark:text-white">
+                            Related Products
+                        </h2>
+                        <p className="text-gray-600 text-xs  dark:text-gray-400 mt-1">
+                            Discover products similar to what you're viewing
+                        </p>
                     </div>
-                    <div className="products-showcase-nav">
-                        <button
-                            className="products-showcase-nav-arrow"
-                            onClick={previous}
-                            aria-label="Previous products"
-                        >
-                            <i className="fal fa-arrow-left" />
-                        </button>
-                        <button
-                            className="products-showcase-nav-arrow"
-                            onClick={next}
-                            aria-label="Next products"
-                        >
-                            <i className="fal fa-arrow-right" />
-                        </button>
-                    </div>
+
+                    {/* Navigation buttons - Only show if there are products */}
+                    {relatedProducts.length > 0 && (
+                        <div className="flex items-center space-x-3">
+                            <button
+                                onClick={() => scroll('left')}
+                                className="p-2 rounded-full bg-white dark:bg-gray-800 shadow-md hover:shadow-lg 
+                                         border border-gray-200 dark:border-gray-700 
+                                         hover:bg-gray-50 dark:hover:bg-gray-700 
+                                         transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2
+                                         disabled:opacity-50 disabled:cursor-not-allowed"
+                                aria-label="Scroll left"
+                                disabled={loading}
+                            >
+                                <ChevronLeft className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                            </button>
+                            <button
+                                onClick={() => scroll('right')}
+                                className="p-2 rounded-full bg-white dark:bg-gray-800 shadow-md hover:shadow-lg 
+                                         border border-gray-200 dark:border-gray-700 
+                                         hover:bg-gray-50 dark:hover:bg-gray-700 
+                                         transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2
+                                         disabled:opacity-50 disabled:cursor-not-allowed"
+                                aria-label="Scroll right"
+                                disabled={loading}
+                            >
+                                <ChevronRight className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                            </button>
+                        </div>
+                    )}
                 </div>
 
-                {loading && <div>Loading products...</div>}
-                {error && (
-                    <div className="alert alert-danger" style={{ fontSize: '14px' }}>
-                        Failed to load products: {error}
+                {/* Loading State */}
+                {loading && (
+                    <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory">
+                        {[...Array(4)].map((_, i) => (
+                            <div
+                                key={i}
+                                className="flex-shrink-0 w-64 md:w-72 lg:w-80 snap-start"
+                            >
+                                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md 
+                                border border-gray-200 dark:border-gray-700 
+                                overflow-hidden h-full animate-pulse">
+
+                                    {/* Image Skeleton */}
+                                    <div className="w-full h-40 md:h-48 lg:h-52 bg-gray-300 dark:bg-gray-700"></div>
+
+                                    {/* Text Skeleton */}
+                                    <div className="p-4 space-y-3">
+                                        <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>
+                                        <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/2"></div>
+                                        <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-2/3"></div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 )}
-                {!loading && !error && relatedProducts.length === 0 && (
-                    <div>No related products found.</div>
-                )}
 
-                <Slider
-                    className="products-showcase-slider"
-                    ref={sliderRef}
-                    {...sliderSettings}
-                >
-                    {relatedProducts.map((item, i) => (
-                        <div key={i}>
+
+                {/* Error State */}
+                {error && (
+                    <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 
+                                   rounded-xl p-2 mb-2">
+                        <div className="flex items-center gap-3">
+                            <AlertCircle className="w-6 h-6 text-red-600 dark:text-red-400 flex-shrink-0" />
                             <div>
-                                <ProductCard item={item} />
+                                <h3 className="font-semibold text-red-800 dark:text-red-200">
+                                    Failed to load products
+                                </h3>
+                                <p className="text-red-700 dark:text-red-300 mt-1">
+                                    {typeof error === 'string' ? error : 'Please try again later'}
+                                </p>
                             </div>
                         </div>
-                    ))}
-                </Slider>
+                    </div>
+                )}
+
+                {/* Empty State */}
+                {!loading && !error && relatedProducts.length === 0 && (
+                    <div className="bg-gray-100 dark:bg-gray-800/50 rounded-xl p-12 text-center">
+                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-200 dark:bg-gray-700 
+                                      flex items-center justify-center">
+                            <AlertCircle className="w-8 h-8 text-gray-500 dark:text-gray-400" />
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                            No related products found
+                        </h3>
+                        <p className="text-gray-600 dark:text-gray-400">
+                            We couldn't find any products related to this item
+                        </p>
+                    </div>
+                )}
+
+                {/* Products Grid - Horizontal Scroll */}
+                {!loading && !error && relatedProducts.length > 0 && (
+                    <div className="relative">
+                        {/* Gradient overlays for better UX */}
+                        <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-gray-50 dark:from-gray-900 to-transparent z-10 pointer-events-none" />
+                        <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-gray-50 dark:from-gray-900 to-transparent z-10 pointer-events-none" />
+
+                        {/* Scrollable container */}
+                        <div
+                            ref={scrollRef}
+                            className="flex gap-2  overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory"
+                            style={{
+                                scrollbarWidth: 'none', // Firefox
+                                msOverflowStyle: 'none', // IE/Edge
+                            }}
+                        >
+                            {/* Hide scrollbar for Chrome/Safari */}
+                            <style jsx>{`
+                                .scrollbar-hide::-webkit-scrollbar {
+                                    display: none;
+                                }
+                            `}</style>
+
+                            {relatedProducts.map((item, index) => (
+                                <div
+                                    key={`${item.id || item._id || index}-${item.name}`}
+                                    className="flex-shrink-0 w-45 md:w-55 lg:w-60 snap-start "
+                                >
+                                  
+                                        <ProductCard item={item} />
+                                  
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Scroll indicators - Only show if scrollable */}
+                        {/* {relatedProducts.length > 3 && (
+                            <div className="flex justify-center mt-6 space-x-2">
+                                {[...Array(Math.min(5, Math.ceil(relatedProducts.length / 2)))].map((_, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => {
+                                            if (scrollRef.current) {
+                                                const scrollWidth = scrollRef.current.scrollWidth;
+                                                const itemWidth = 288; // Approximate width of each card
+                                                const visibleItems = Math.floor(scrollRef.current.clientWidth / itemWidth);
+                                                const targetScroll = i * visibleItems * itemWidth;
+                                                scrollRef.current.scrollTo({
+                                                    left: targetScroll,
+                                                    behavior: 'smooth'
+                                                });
+                                            }
+                                        }}
+                                        className="w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-700 hover:bg-primary transition-colors duration-200"
+                                        aria-label={`Go to page ${i + 1}`}
+                                    />
+                                ))}
+                            </div>
+                        )} */}
+                    </div>
+                )}
+
+       
+              
             </div>
         </section>
     );

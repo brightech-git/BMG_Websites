@@ -1,758 +1,434 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import React, { useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import {
-  FiPlus,
-  FiEdit2,
-  FiCheckCircle,
-  FiTrash2,
-  FiMapPin,
-  FiX,
-  FiSave,
-  FiHome,
-  FiBriefcase,
-  FiPhone,
-  FiNavigation,
-} from "react-icons/fi";
+  Plus, Edit2, CheckCircle, Trash2, MapPin, X, Save,
+  Home, Briefcase, Phone, Navigation, User, Building,
+  Tag, Star, Globe, AlertCircle, Loader2 ,Map
+} from "lucide-react";
 import {
   useAddressesByCustomer,
   useCreateAddress,
   useUpdateAddress,
   useDeleteAddress,
 } from "../../../../hook/address/useAddress";
-import "./AddressStyles.css";
 
 const AddressManager = () => {
   const user = useSelector((state) => state.user.user);
   const customerId = user?.id;
-  const queryClient = useQueryClient();
 
-  // State management
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState(null);
-  const [showBusinessFields, setShowBusinessFields] = useState(false);
-  const [activeTab, setActiveTab] = useState("all");
 
   const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    pincode: "",
-    locality: "",
-    addressLine: "",
-    city: "",
-    state: "",
-    landmark: "",
-    alternatePhone: "",
-    gstNumber: "",
-    companyName: "",
-    isDefault: false,
-    addressType: "home",
+    name: "", phone: "", pincode: "", locality: "", addressLine: "",
+    city: "", state: "", landmark: "", alternatePhone: "",
+    companyName: "", gstNumber: "", isDefault: false, addressType: "home"
   });
 
-  // Query hooks
-  const {
-    data: addresses = [],
-    isLoading,
-    isError,
-    error: queryError,
-    refetch: refetchAddresses,
-  } = useAddressesByCustomer(customerId);
-
+  // Hooks
+  const { data: addresses = [], isLoading, isError, refetch } = useAddressesByCustomer(customerId);
   const createMutation = useCreateAddress();
   const updateMutation = useUpdateAddress();
   const deleteMutation = useDeleteAddress();
 
-  // Filter addresses based on active tab
-  const filteredAddresses = addresses.filter((address) => {
-    if (activeTab === "all") return true;
-    if (activeTab === "default") return address.isDefault;
-    if (activeTab === "home") return !address.companyName;
-    if (activeTab === "work") return address.companyName;
-    return true;
-  });
-
-  // Handle input changes
-  const handleInputChange = useCallback((e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  }, []);
-
-  // Reset form to default values
-  const resetForm = useCallback(() => {
+  const resetForm = () => {
     setFormData({
-      name: "",
-      phone: "",
-      pincode: "",
-      locality: "",
-      addressLine: "",
-      city: "",
-      state: "",
-      landmark: "",
-      alternatePhone: "",
-      gstNumber: "",
-      companyName: "",
-      isDefault: false,
-      addressType: "home",
+      name: "", phone: "", pincode: "", locality: "", addressLine: "",
+      city: "", state: "", landmark: "", alternatePhone: "",
+      companyName: "", gstNumber: "", isDefault: false, addressType: "home"
     });
-    setShowBusinessFields(false);
-    setError(null);
-  }, []);
-
-  // Open form to add new address
-  const handleAddAddress = useCallback(() => {
-    setIsFormOpen(true);
     setEditingId(null);
-    resetForm();
-  }, [resetForm]);
+    setError(null);
+  };
 
-  // Open form to edit existing address
-  const handleEditAddress = useCallback((address) => {
-    setIsFormOpen(true);
-    setEditingId(address.id);
-    setFormData({
-      ...address,
-      gstNumber: address.gstNumber || "",
-      companyName: address.companyName || "",
-      addressType: address.companyName ? "work" : "home",
-    });
-    setShowBusinessFields(!!address.gstNumber || !!address.companyName);
-  }, []);
-
-  // Handle form submission
-  const handleSubmit = useCallback(async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
 
-    const addressData = {
+    const payload = {
       ...formData,
       customerId,
-      addressType: undefined,
+      companyName: formData.addressType === "work" ? formData.companyName : null,
+      gstNumber: formData.addressType === "work" ? formData.gstNumber : null,
     };
 
     try {
       if (editingId) {
-        await updateMutation.mutateAsync({
-          id: editingId,
-          address: addressData,
-        });
+        await updateMutation.mutateAsync({ id: editingId, address: payload });
       } else {
-        await createMutation.mutateAsync(addressData);
+        await createMutation.mutateAsync(payload);
       }
-
-      await refetchAddresses();
+      await refetch();
       setIsFormOpen(false);
+      resetForm();
     } catch (err) {
-      setError(err.message || "Failed to save address. Please try again.");
+      setError(err.message || "Failed to save address");
     }
-  }, [formData, editingId, customerId, updateMutation, createMutation, refetchAddresses]);
+  };
 
-  // Set address as default
-  const handleSetDefault = useCallback(async (id) => {
+  const handleSetDefault = async (id) => {
     try {
-      // Reset all addresses to non-default first
+      // Reset all others
       await Promise.all(
-        addresses.map((addr) => {
-          if (addr.id !== id && addr.isDefault) {
-            return updateMutation.mutateAsync({
-              id: addr.id,
-              address: { ...addr, isDefault: false },
-            });
-          }
-          return Promise.resolve();
-        })
+        addresses
+          .filter(a => a.id !== id && a.isDefault)
+          .map(a => updateMutation.mutateAsync({ id: a.id, address: { ...a, isDefault: false } }))
       );
-
-      // Set the selected address as default
-      const addressToUpdate = addresses.find((addr) => addr.id === id);
-      if (!addressToUpdate.isDefault) {
-        await updateMutation.mutateAsync({
-          id,
-          address: { ...addressToUpdate, isDefault: true },
-        });
+      // Set this one
+      const addr = addresses.find(a => a.id === id);
+      if (!addr?.isDefault) {
+        await updateMutation.mutateAsync({ id, address: { ...addr, isDefault: true } });
       }
-
-      await refetchAddresses();
+      refetch();
     } catch (err) {
-      setError(
-        err.message || "Failed to set default address. Please try again."
-      );
+      setError("Failed to set default address");
     }
-  }, [addresses, updateMutation, refetchAddresses]);
+  };
 
-  // Delete address by ID
-  const handleDeleteAddress = useCallback(async (id) => {
+  const handleDelete = async (id) => {
     if (addresses.length <= 1) {
-      setError("You must have at least one address.");
+      setError("You must have at least one address");
       return;
     }
-
-    if (!window.confirm("Are you sure you want to delete this address?")) {
-      return;
-    }
+    if (!window.confirm("Delete this address?")) return;
 
     try {
       await deleteMutation.mutateAsync(id);
-      await refetchAddresses();
+      refetch();
     } catch (err) {
-      setError(err.message || "Failed to delete address. Please try again.");
+      setError("Failed to delete address");
     }
-  }, [addresses.length, deleteMutation, refetchAddresses]);
+  };
 
-  // Handle address type toggle in form
-  const handleAddressTypeToggle = useCallback((type) => {
-    setFormData((prev) => ({
-      ...prev,
-      addressType: type,
-    }));
-    setShowBusinessFields(type === "work");
-  }, []);
-
-  // Handle tab change
-  const handleTabChange = useCallback((tab) => {
-    setActiveTab(tab);
-  }, []);
-
-  // Early return if no customerId
   if (!customerId) {
     return (
-      <div className="address-page-layout">
-        <main className="address-manager-container">
-          <div className="error-container">
-            <div className="error-icon">⚠️</div>
-            <h3>User not authenticated</h3>
-            <p>Please log in to manage your addresses</p>
-          </div>
-        </main>
+      <div className="min-h-screen bg-[#eeece8] flex items-center justify-center p-4">
+        <div className="bg-white border border-gray-300 rounded-sm p-10 text-center">
+          <AlertCircle className="w-14 h-14 text-red-500 mx-auto mb-4" />
+          <p className="text-lg font-medium">Please log in to manage addresses</p>
+        </div>
       </div>
     );
   }
 
-  // Loading state
   if (isLoading) {
     return (
-      <div className="address-page-layout">
-        <main className="address-manager-container">
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
-            <p>Loading your addresses...</p>
-          </div>
-        </main>
-      </div>
-    );
-  }
-
-  // Error state
-  if (isError) {
-    return (
-      <div className="address-page-layout">
-        <main className="address-manager-container">
-          <div className="error-container">
-            <div className="error-icon">⚠️</div>
-            <h3>Failed to load addresses</h3>
-            <p>{queryError?.message || "Please try again later"}</p>
-            <button className="retry-button" onClick={() => refetchAddresses()}>
-              Retry
-            </button>
-          </div>
-        </main>
+      <div className="min-h-screen bg-[#eeece8] flex items-center justify-center p-4">
+        <div className="bg-white border border-gray-300 rounded-sm p-16 text-center">
+          <Loader2 className="w-12 h-12 text-[#f16137] animate-spin mx-auto" />
+          <p className="mt-4 text-gray-600">Loading addresses...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="account-address-page-layout">
-  
+    <>
+      <style jsx>{`
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { transform: translateX(-20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .animate-fade { animation: fadeInUp 0.4s ease-out forwards; }
+        .animate-slide { animation: slideIn 0.4s ease-out forwards; }
+      `}</style>
 
-      <main className="account-address-manager-container">
-        <div className="address-manager">
-          
+      <div className="min-h-screen mt-[100px] md:mt-0 bg-[#eeece8] px-3 py-3 font-secondary text-[#041f60]">
 
-          {error && (
-            <div className="error-message">
+        {/* Header */}
+        <div className="bg-white border border-gray-300 rounded-xl p-2 mb-2 flex justify-between items-center">
+          <div>
+            <h2 className="text-lg font-bold text-[var(--primary-hover-color)]">Manage Addresses</h2>
+            <p className="text-sm text-[var(--primary-text-color)]">Add or edit delivery addresses</p>
+          </div>
+          <button
+            onClick={() => { setIsFormOpen(true); resetForm(); }}
+            className="flex items-center gap-2 px-2 py-2 bg-[#041f60] text-white rounded hover:bg-[#f16137] text-xs font-medium transition"
+          >
+            <Plus className="w-5 h-5" /> Add New Address
+          </button>
+        </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-sm p-3 mb-4 flex justify-between items-center">
+            <div className="flex items-center gap-2 text-sm">
+              <AlertCircle className="w-5 h-5 text-red-600" />
               <span>{error}</span>
-              <button
-                className="error-close-btn"
-                onClick={() => setError(null)}
-              >
-                <FiX />
-              </button>
             </div>
-          )}
+            <button onClick={() => setError(null)}><X className="w-5 h-5 text-red-600" /></button>
+          </div>
+        )}
 
-          {/* Address Tabs */}
-          <div className="address-tabs">
+        {/* Address Cards */}
+        {addresses.length === 0 ? (
+          <div className="bg-white border border-gray-300 rounded-sm p-16 text-center">
+            <MapPin className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <p className="text-lg font-medium mb-2">No addresses yet</p>
             <button
-              className={`tab-btn ${activeTab === "all" ? "active" : ""}`}
-              onClick={() => handleTabChange("all")}
+              onClick={() => { setIsFormOpen(true); resetForm(); }}
+              className="mt-4 px-6 py-2.5 bg-[#f16137] text-white rounded text-sm font-medium hover:bg-[#d84141]"
             >
-              All Addresses ({addresses.length})
-            </button>
-            <button
-              className={`tab-btn ${activeTab === "default" ? "active" : ""}`}
-              onClick={() => handleTabChange("default")}
-            >
-              Default ({addresses.filter((a) => a.isDefault).length})
-            </button>
-            <button
-              className={`tab-btn ${activeTab === "home" ? "active" : ""}`}
-              onClick={() => handleTabChange("home")}
-            >
-              <FiHome className="tab-icon" /> Home
-            </button>
-            <button
-              className={`tab-btn ${activeTab === "work" ? "active" : ""}`}
-              onClick={() => handleTabChange("work")}
-            >
-              <FiBriefcase className="tab-icon" /> Work
-            </button>
-            <button
-              className="add-address-btn"
-              onClick={handleAddAddress}
-              disabled={createMutation.isPending}
-            >
-              <FiPlus className="btn-icon" /> Add New Address
+              Add First Address
             </button>
           </div>
-
-          {filteredAddresses.length === 0 ? (
-            <div className="no-addresses">
-              <FiMapPin className="empty-icon" />
-              <h3>No addresses found</h3>
-              <p>Add an address to get started</p>
-              <button
-                className="add-first-address-btn"
-                onClick={handleAddAddress}
-                disabled={createMutation.isPending}
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {addresses.map((addr, i) => (
+              <div
+                key={addr.id}
+                className={`bg-white border ${addr.isDefault ? "border-[#f16137]" : "border-gray-300"} rounded-xl p-3 relative hover:shadow-md transition animate-slide`}
+                style={{ animationDelay: `${i * 80}ms` }}
               >
-                <FiPlus className="btn-icon" /> Add Your First Address
-              </button>
-            </div>
-          ) : (
-            <div className="address-grid">
-              {filteredAddresses.map((address, index) => (
-                <div
-                  key={`address-${address.id}-${index}`}
-                  className={`address-card ${
-                    address.isDefault ? "default" : ""
-                  } ${address.companyName ? "work" : "home"}`}
-                >
-                  <div className="card-header">
-                    <div className="address-type">
-                      {address.companyName ? (
-                        <FiBriefcase className="address-icon work" />
-                      ) : (
-                        <FiHome className="address-icon home" />
-                      )}
-                      <div className="address-summary">
-                        <span className="name">{address.name}</span>
-                        {/* {address.isDefault && (
-                          <span className="default-badge">
-                            <FiCheckCircle /> Default
-                          </span>
-                        )} */}
-                      </div>
-                    </div>
+                {addr.isDefault && (
+                  <div className="absolute top-3 right-3 bg-[#f16137] text-white text-xs px-2.5 py-1 rounded flex items-center gap-1">
+                    <Star className="w-3.5 h-3.5" /> Default
                   </div>
+                )}
 
-                  <div className="card-details">
-                    <div className="address-details">
-                      <div className="detail-row">
-                        <FiNavigation className="detail-icon" />
-                        <div>
-                          <p className="detail-label">Address</p>
-                          <p className="detail-value">
-                            {address.addressLine}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="detail-row">
-                        <FiMapPin className="detail-icon" />
-                        <div>
-                          <p className="detail-label">Locality/City</p>
-                          <p className="detail-value">
-                            {address.locality}, {address.city}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="detail-row">
-                        <FiMapPin className="detail-icon" />
-                        <div>
-                          <p className="detail-label">State/Pincode</p>
-                          <p className="detail-value">
-                            {address.state} - {address.pincode}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="detail-row">
-                        <FiPhone className="detail-icon" />
-                        <div>
-                          <p className="detail-label">Phone</p>
-                          <p className="detail-value">{address.phone}</p>
-                        </div>
-                      </div>
-                      {address.alternatePhone && (
-                        <div className="detail-row">
-                          <FiPhone className="detail-icon" />
-                          <div>
-                            <p className="detail-label">Alternate Phone</p>
-                            <p className="detail-value">
-                              {address.alternatePhone}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                      {address.landmark && (
-                        <div className="detail-row">
-                          <FiMapPin className="detail-icon" />
-                          <div>
-                            <p className="detail-label">Landmark</p>
-                            <p className="detail-value">{address.landmark}</p>
-                          </div>
-                        </div>
-                      )}
-                      {address.companyName && (
-                        <div className="detail-row">
-                          <FiBriefcase className="detail-icon" />
-                          <div>
-                            <p className="detail-label">Company</p>
-                            <p className="detail-value">
-                              {address.companyName}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                      {address.gstNumber && (
-                        <div className="detail-row">
-                          <FiBriefcase className="detail-icon" />
-                          <div>
-                            <p className="detail-label">GST Number</p>
-                            <p className="detail-value">
-                              {address.gstNumber}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="card-actions">
-                      <button
-                        className="btn-edit"
-                        onClick={() => handleEditAddress(address)}
-                        disabled={updateMutation.isPending}
-                      >
-                        <FiEdit2 className="btn-icon" /> Edit
-                      </button>
-                      {!address.isDefault && (
-                        <button
-                          className="btn-set-default"
-                          onClick={() => handleSetDefault(address.id)}
-                          disabled={updateMutation.isPending}
-                        >
-                          <FiCheckCircle className="btn-icon" /> Set Default
-                        </button>
-                      )}
-                      {addresses.length > 1 && (
-                        <button
-                          className="btn-delete"
-                          onClick={() => handleDeleteAddress(address.id)}
-                          disabled={deleteMutation.isPending}
-                        >
-                          <FiTrash2 className="btn-icon" /> Delete
-                        </button>
-                      )}
-                    </div>
+                <div className="flex items-start gap-3 mb-3">
+                  {addr.companyName ? <Briefcase className="w-6 h-6 text-gray-600 mt-1" /> : <Home className="w-6 h-6 text-gray-600 mt-1" />}
+                  <div>
+                    <p className="font-bold text-base">{addr.name}</p>
+                    <p className="text-sm text-gray-600">{addr.phone}</p>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
 
-          {/* Address Form Modal */}
-          {isFormOpen && (
-            <div className="address-form-overlay">
-              <div className="address-form-container">
-                <div className="form-header">
-                  <h2>{editingId ? "Edit Address" : "Add New Address"}</h2>
+                <div className="text-sm space-y-1 text-gray-700">
+                  <p>{addr.addressLine}</p>
+                  <p>{addr.locality}, {addr.city}, {addr.state} - {addr.pincode}</p>
+                  {addr.landmark && <p className="text-gray-500">Near {addr.landmark}</p>}
+                  {addr.companyName && <p className="font-medium">{addr.companyName}</p>}
+                  {addr.gstNumber && <p className="text-xs">GST: {addr.gstNumber}</p>}
+                </div>
+
+                <div className="flex gap-2 mt-5">
                   <button
-                    className="close-btn"
-                    onClick={() => setIsFormOpen(false)}
-                    disabled={
-                      createMutation.isPending || updateMutation.isPending
-                    }
+                    onClick={() => {
+                      setFormData({ ...addr, addressType: addr.companyName ? "work" : "home" });
+                      setEditingId(addr.id);
+                      setIsFormOpen(true);
+                    }}
+                    className="flex-1 py-2.5 border border-gray-300 rounded text-sm hover:bg-gray-50 flex items-center justify-center gap-1.5"
                   >
-                    <FiX />
+                    <Edit2 className="w-4 h-4" /> Edit
+                  </button>
+                  {!addr.isDefault && (
+                    <button
+                      onClick={() => handleSetDefault(addr.id)}
+                      className="flex-1 py-2.5 border border-[#f16137] text-[#f16137] rounded text-sm hover:bg-orange-50"
+                    >
+                      Set Default
+                    </button>
+                  )}
+                  {addresses.length > 1 && (
+                    <button
+                      onClick={() => handleDelete(addr.id)}
+                      className="px-3 py-2.5 border border-red-300 text-red-600 rounded hover:bg-red-50"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Form Modal */}
+        {isFormOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-[9999] flex items-center justify-center p-1 ">
+            <div className="bg-white rounded-sm max-w-2xl w-full max-h-[100%] overflow-y-auto border border-gray-300">
+              <div className="p-2 border-b border-gray-300 flex justify-between items-center">
+                <h3 className="text-lg font-bold text-[var(--primary-hover-color)]">{editingId ? "Edit" : "Add New"} Address</h3>
+                <button onClick={() => { setIsFormOpen(false); resetForm(); }}>
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <form onSubmit={handleSubmit} className="p-3 space-y-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+
+                  {/* Full Name */}
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-medium text-[#041f60] flex items-center gap-2">
+                      <User className="w-4 h-4 text-gray-500" />
+                      Full Name <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      required
+                      value={formData.name}
+                      onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
+                      placeholder="Enter full name"
+                      className="w-full text-[#041f60] bg-white px-2 py-1 h-10 border border-gray-300 rounded-sm focus:border-[#f16137] focus:ring-2 focus:ring-orange-100 outline-none transition"
+                    />
+                  </div>
+
+                  {/* Mobile Number */}
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-medium text-[#041f60] flex items-center gap-2">
+                      <Phone className="w-4 h-4 text-gray-500" />
+                      Mobile Number <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      required
+                      value={formData.phone}
+                      onChange={e => setFormData(p => ({ ...p, phone: e.target.value.replace(/\D/g, "").slice(0, 10) }))}
+                      placeholder="10-digit mobile number"
+                      maxLength="10"
+                      className="w-full bg-white text-[#041f60] px-2 py-1 h-10 border border-gray-300 rounded-sm focus:border-[#f16137] focus:ring-2 focus:ring-orange-100 outline-none transition"
+                    />
+                  </div>
+
+                  {/* Pincode */}
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-medium text-[#041f60] flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-gray-500" />
+                      Pincode <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      required
+                      value={formData.pincode}
+                      onChange={e => setFormData(p => ({ ...p, pincode: e.target.value.replace(/\D/g, "").slice(0, 6) }))}
+                      placeholder="6-digit pincode"
+                      maxLength="6"
+                      className="w-full px-2 py-1  text-[#041f60] h-10 bg-white  border border-gray-300 rounded-sm focus:border-[#f16137] focus:ring-2 focus:ring-orange-100 outline-none transition"
+                    />
+                  </div>
+
+                  {/* Locality */}
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-medium text-[#041f60] flex items-center gap-2">
+                      <Map className="w-4 h-4 text-gray-500" />
+                      Locality / Area <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      required
+                      value={formData.locality}
+                      onChange={e => setFormData(p => ({ ...p, locality: e.target.value }))}
+                      placeholder="e.g. Sector 18, Gandhi Nagar"
+                      className="w-full px-2 py-1 h-10 bg-white text-[#041f60]  border border-gray-300 rounded-sm focus:border-[#f16137] focus:ring-2 focus:ring-orange-100 outline-none transition"
+                    />
+                  </div>
+
+                  {/* Full Address */}
+                  <div className="md:col-span-2 space-y-1.5">
+                    <label className="text-sm font-medium text-[#041f60] flex items-center gap-2">
+                      <Navigation className="w-4 h-4 text-gray-500" />
+                      Flat, House no., Building, Street <span className="text-red-600">*</span>
+                    </label>
+                    <textarea
+                      required
+                      value={formData.addressLine}
+                      onChange={e => setFormData(p => ({ ...p, addressLine: e.target.value }))}
+                      placeholder="House no., apartment, building name, street"
+                      rows="3"
+                      className="w-full px-2 py-1 h-20 bg-white text-[#041f60] border border-gray-300 rounded-sm focus:border-[#f16137] focus:ring-2 focus:ring-orange-100 outline-none transition resize-none"
+                    />
+                  </div>
+
+                  {/* City */}
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-medium text-[#041f60] flex items-center gap-2">
+                      <Building className="w-4 h-4 text-gray-500" />
+                      City / District <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      required
+                      value={formData.city}
+                      onChange={e => setFormData(p => ({ ...p, city: e.target.value }))}
+                      placeholder="e.g. Mumbai"
+                      className="w-full px-2 py-1 h-10 bg-white border text-[#041f60] border-gray-300 rounded-sm focus:border-[#f16137] focus:ring-2 focus:ring-orange-100 outline-none transition"
+                    />
+                  </div>
+
+                  {/* State */}
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-medium text-[#041f60] flex items-center gap-2">
+                      <Globe className="w-4 h-4 text-gray-500" />
+                      State <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      required
+                      value={formData.state}
+                      onChange={e => setFormData(p => ({ ...p, state: e.target.value }))}
+                      placeholder="e.g. Maharashtra"
+                      className="w-full px-2 py-1 h-10 border  bg-white text-[#041f60] border-gray-300 rounded-sm focus:border-[#f16137] focus:ring-2 focus:ring-orange-100 outline-none transition"
+                    />
+                  </div>
+
+                  {/* Landmark (Optional) */}
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-medium text-[#041f60] flex items-center gap-2">
+                      <Tag className="w-4 h-4 text-gray-500" />
+                      Landmark <span className="text-gray-500">(Optional)</span>
+                    </label>
+                    <input
+                      value={formData.landmark}
+                      onChange={e => setFormData(p => ({ ...p, landmark: e.target.value }))}
+                      placeholder="e.g. Near Apollo Hospital"
+                      className="w-full px-2 py-1 h-10 border  bg-white text-[#041f60] border-gray-300 rounded-sm focus:border-[#f16137] focus:ring-2 focus:ring-orange-100 outline-none transition"
+                    />
+                  </div>
+
+                  {/* Alternate Phone (Optional) */}
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-medium text-[#041f60] flex items-center gap-2">
+                      <Phone className="w-4 h-4 text-gray-500" />
+                      Alternate Phone <span className="text-gray-500">(Optional)</span>
+                    </label>
+                    <input
+                      value={formData.alternatePhone}
+                      onChange={e => setFormData(p => ({ ...p, alternatePhone: e.target.value.replace(/\D/g, "").slice(0, 10) }))}
+                      placeholder="Another 10-digit number"
+                      maxLength="10"
+                      className="w-full px-2 py-1 h-10 border  bg-white text-[#041f60] border-gray-300 rounded-sm focus:border-[#f16137] focus:ring-2 focus:ring-orange-100 outline-none transition"
+                    />
+                  </div>
+
+                  {/* Default Address Checkbox */}
+                  <div className="md:col-span-2">
+                    <label className="flex items-center gap-3 cursor-pointer text-sm font-medium">
+                      <input
+                        type="checkbox"
+                        checked={formData.isDefault}
+                        onChange={e => setFormData(p => ({ ...p, isDefault: e.target.checked }))}
+                        className="w-4 h-4 text-[#f16137] rounded focus:ring-[#f16137]"
+                      />
+                      <span className="flex items-center gap-2">
+                        <Star className="w-3 h-3 text-yellow-500" />
+                        Set as default address
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex justify-end gap-2 pt-2 border-t border-gray-200">
+                  <button
+                    type="button"
+                    onClick={() => { setIsFormOpen(false); resetForm(); }}
+                    className="px-6 py-2.5 border border-gray-300 rounded text-xs font-medium hover:bg-gray-50 transition"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={createMutation.isPending || updateMutation.isPending}
+                    className="px-6 py-2.5 bg-[#f16137] text-white rounded text-xs font-medium hover:bg-[#d84141] disabled:opacity-70 flex items-center gap-2 transition"
+                  >
+                    {(createMutation.isPending || updateMutation.isPending) ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Save className="w-4 h-4" />
+                    )}
+                    {editingId ? "Update" : "Save"} Address
                   </button>
                 </div>
-
-                <form onSubmit={handleSubmit}>
-                  <div className="form-grid">
-                    {/* Address Type Toggle */}
-                    <div className="form-group full-width address-type-toggle">
-                      <button
-                        type="button"
-                        className={`type-btn ${
-                          formData.addressType === "home" ? "active" : ""
-                        }`}
-                        onClick={() => handleAddressTypeToggle("home")}
-                      >
-                        <FiHome className="btn-icon" /> Home
-                      </button>
-                      <button
-                        type="button"
-                        className={`type-btn ${
-                          formData.addressType === "work" ? "active" : ""
-                        }`}
-                        onClick={() => handleAddressTypeToggle("work")}
-                      >
-                        <FiBriefcase className="btn-icon" /> Work
-                      </button>
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="name">Full Name*</label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Enter your full name"
-                        disabled={
-                          createMutation.isPending || updateMutation.isPending
-                        }
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="phone">Mobile Number*</label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="10-digit mobile number"
-                        pattern="[0-9]{10}"
-                        maxLength="10"
-                        disabled={
-                          createMutation.isPending || updateMutation.isPending
-                        }
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="pincode">Pincode*</label>
-                      <input
-                        type="text"
-                        id="pincode"
-                        name="pincode"
-                        value={formData.pincode}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="6-digit pincode"
-                        pattern="[0-9]{6}"
-                        maxLength="6"
-                        disabled={
-                          createMutation.isPending || updateMutation.isPending
-                        }
-                      />
-                    </div>
-
-                    <div className="form-group full-width">
-                      <label htmlFor="addressLine">Complete Address*</label>
-                      <textarea
-                        id="addressLine"
-                        name="addressLine"
-                        value={formData.addressLine}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="House no, building, street, area"
-                        rows="2"
-                        disabled={
-                          createMutation.isPending || updateMutation.isPending
-                        }
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="locality">Locality*</label>
-                      <input
-                        type="text"
-                        id="locality"
-                        name="locality"
-                        value={formData.locality}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Area/Locality"
-                        disabled={
-                          createMutation.isPending || updateMutation.isPending
-                        }
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="city">City*</label>
-                      <input
-                        type="text"
-                        id="city"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="City"
-                        disabled={
-                          createMutation.isPending || updateMutation.isPending
-                        }
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="state">State*</label>
-                      <input
-                        type="text"
-                        id="state"
-                        name="state"
-                        value={formData.state}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="State"
-                        disabled={
-                          createMutation.isPending || updateMutation.isPending
-                        }
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="landmark">Landmark (Optional)</label>
-                      <input
-                        type="text"
-                        id="landmark"
-                        name="landmark"
-                        value={formData.landmark}
-                        onChange={handleInputChange}
-                        placeholder="Nearby landmark"
-                        disabled={
-                          createMutation.isPending || updateMutation.isPending
-                        }
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="alternatePhone">
-                        Alternate Phone (Optional)
-                      </label>
-                      <input
-                        type="tel"
-                        id="alternatePhone"
-                        name="alternatePhone"
-                        value={formData.alternatePhone}
-                        onChange={handleInputChange}
-                        placeholder="Alternate phone number"
-                        pattern="[0-9]{10}"
-                        maxLength="10"
-                        disabled={
-                          createMutation.isPending || updateMutation.isPending
-                        }
-                      />
-                    </div>
-
-                    <div className="form-group full-width checkbox-group">
-                      <label className="custom-checkbox">
-                        <input
-                          type="checkbox"
-                          name="isDefault"
-                          checked={formData.isDefault}
-                          onChange={handleInputChange}
-                          disabled={
-                            createMutation.isPending || updateMutation.isPending
-                          }
-                        />
-                        <span className="checkmark"></span>
-                        Set as default address
-                      </label>
-                    </div>
-
-                    {/* Business Fields (shown when work address is selected) */}
-                    {showBusinessFields && (
-                      <>
-                        <div className="form-group">
-                          <label htmlFor="companyName">Company Name</label>
-                          <input
-                            type="text"
-                            id="companyName"
-                            name="companyName"
-                            value={formData.companyName}
-                            onChange={handleInputChange}
-                            placeholder="Your company name"
-                            disabled={
-                              createMutation.isPending ||
-                              updateMutation.isPending
-                            }
-                          />
-                        </div>
-
-                        <div className="form-group">
-                          <label htmlFor="gstNumber">GST Number</label>
-                          <input
-                            type="text"
-                            id="gstNumber"
-                            name="gstNumber"
-                            value={formData.gstNumber}
-                            onChange={handleInputChange}
-                            placeholder="Enter GST Number"
-                            pattern="^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$"
-                            title="Enter valid GST number (e.g., 22AAAAA0000A1Z5)"
-                            disabled={
-                              createMutation.isPending ||
-                              updateMutation.isPending
-                            }
-                          />
-                        </div>
-                      </>
-                    )}
-                  </div>
-
-                  <div className="form-actions">
-                    <button
-                      type="button"
-                      className="btn-cancel"
-                      onClick={() => setIsFormOpen(false)}
-                      disabled={
-                        createMutation.isPending || updateMutation.isPending
-                      }
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      className="btn-save"
-                      disabled={
-                        createMutation.isPending || updateMutation.isPending
-                      }
-                    >
-                      {createMutation.isPending || updateMutation.isPending ? (
-                        <span className="spinner"></span>
-                      ) : (
-                        <>
-                          <FiSave className="btn-icon" />{" "}
-                          {editingId ? "Update" : "Save"}
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </form>
-              </div>
+              </form>
             </div>
-          )}
-        </div>
-      </main>
-    </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

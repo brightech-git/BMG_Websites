@@ -70,7 +70,7 @@ class Content extends Component {
                                                     </div>
                                                     <div className="desc text-center">
                                                         <h4>
-                                                            <Link to="/product-detail">{item.title} </Link>
+                                                            <Link to="/products-page">{item.title} </Link>
                                                         </h4>
                                                         <span className="price">${item.price}
                                                             {item.discount > 0 || item.discount !== '' ? <span> ${Math.ceil(item.price * (item.discount / 100))} </span> : ''}</span>

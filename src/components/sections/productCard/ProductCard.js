@@ -207,7 +207,7 @@ const ProductCard = ({ item }) => {
         //console.log('productcard triggered', ` ${item?.SNO}`)
         e.preventDefault();
         e.stopPropagation();
-        window.location.href = `/product-detail/${item?.SNO}`;
+        window.location.href = `/products-page/${item?.SNO}`;
     };
 
     const isInCart = Array.isArray(cartItems?.data) &&

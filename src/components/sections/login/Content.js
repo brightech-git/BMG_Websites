@@ -140,9 +140,9 @@ const LoginContent = () => {
 
                     <button type="submit" className="auth-login-btn animate-bounce-in">
                         <span>Sign In</span>
-                        <svg className="auth-login-btn-icon" viewBox="0 0 24 24">
+                        {/* <svg className="auth-login-btn-icon" viewBox="0 0 24 24">
                             <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
-                        </svg>
+                        </svg> */}
                     </button>
 
                     <div className="auth-google-wrapper animate-fade-in-up">

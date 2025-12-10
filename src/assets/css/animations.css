@@ -773,13 +773,17 @@
 .animate-pulse {
     animation: pulse 2s var(--animation-timing-ease) infinite;
 }
-
-.animate-shake {
+.animate-shake{
     animation: shake 0.5s var(--animation-timing-ease);
 }
-
-.animate-wobble {
+.animate-shake-infinite {
+    animation: shake 2s var(--animation-timing-ease) infinite;
+}
+.animate-wobble-noinfinite{
     animation: wobble 1s var(--animation-timing-ease);
+}
+.animate-wobble {
+    animation: wobble 1s var(--animation-timing-ease) infinite;
 }
 
 .animate-heartbeat {

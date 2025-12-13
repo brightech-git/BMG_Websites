@@ -39,11 +39,11 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
     const displayPrice = Number(product?.GrandTotal || product?.RATE || item.amount || 0);
 
     return (
-        <div className={`flex items-center gap-1.5 sm:gap-3 p-2 sm:p-3  mb-3 border ${isSelected ? "border-[#f16137]" : "border-gray-200"}  ${isSelected ? "bg-[var(--primary-card-color)]" : "white"} rounded-t-2xl hover:shadow-lg transition-all duration-300`}>
+        <div onClick={() => onSelect(item.sno)} className={`flex items-center gap-1.5 sm:gap-3 p-2 sm:p-3  mb-3 border ${isSelected ? "border-[#f16137]" : "border-gray-200"}  ${isSelected ? "bg-[var(--primary-card-color)]" : "white"} rounded-t-2xl hover:shadow-lg transition-all duration-300`}>
             <input
                 type="checkbox"
                 checked={isSelected}
-                onChange={() => onSelect(item.sno)}
+           
                 className="w-3 h-3 sm:w-4 sm:h-4 text-[#f16137] "
             />
 

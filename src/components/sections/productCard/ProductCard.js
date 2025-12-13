@@ -15,7 +15,7 @@ const ProductCard = ({ item }) => {
     const removeFavorite = useRemoveFavorite();
     const { cartItems, addToCartHandler } = useCart();
     const isAuthenticated = useSelector((state) => state.user.isAuthenticated)
-
+    const [isAnimating, setIsAnimating] = useState(false);
     const mobileNumber = useSelector((state) => state.user.user?.contactNumber) || null;
     const history = useHistory();
     const location = useLocation();
@@ -96,13 +96,21 @@ const ProductCard = ({ item }) => {
     // Mouse hover for desktop
     const handleMouseEnter = () => {
         if (!isTouchDevice && hasMultipleImages) {
-            setCurrentImageIndex(1);
+            setIsAnimating(true);
+            setTimeout(() => {
+                setCurrentImageIndex(1);
+                setIsAnimating(false);
+            }, 250);
         }
     };
 
     const handleMouseLeave = () => {
         if (!isTouchDevice && hasMultipleImages) {
-            setCurrentImageIndex(0);
+            setIsAnimating(true);
+            setTimeout(() => {
+                setCurrentImageIndex(0);
+                setIsAnimating(false);
+            }, 250);
         }
     };
 
@@ -248,12 +256,11 @@ const ProductCard = ({ item }) => {
                             <img
                                 src={productImages[currentImageIndex]}
                                 alt={productName}
-                                className="product-image"
-                                onError={(e) => {
-                                    e.target.onerror = null;
-                                    e.target.src = fallbackImage;
-                                }}
+                                className={`absolute inset-0 w-full h-full object-cover transition-all duration-500
+        ${isAnimating ? "translate-x-4 opacity-0" : "translate-x-0 opacity-100"}
+    `}
                             />
+
                             {/* Previous image for hover-out effect */}
 
                             {/* Image Indicator for multiple images */}
@@ -332,6 +339,7 @@ const ProductCard = ({ item }) => {
 
                 .product-item:hover {
                     transform: translateY(-4px);
+
                     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
                 }
 
@@ -365,6 +373,7 @@ const ProductCard = ({ item }) => {
                     transition: opacity 0.5s ease-in-out;
                     filter: brightness(1.02);
                 }
+
 
                 /* Image Indicator */
                 .image-indicator {
@@ -528,7 +537,7 @@ const ProductCard = ({ item }) => {
                 .item-info {
                     padding: 10px 8px;
                     text-align: center;
-                    background: var(--primary-card-color);
+                    background: transparent;
                 }
 
                 .item-name {

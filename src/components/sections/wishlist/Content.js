@@ -50,7 +50,7 @@ const WishlistItem = ({ sno, onRemove, cartItems, addToCartHandler }) => {
       stnAmount: item?.STNAMT || 0,
       itemCtrName: item.ITEMCTRNAME || item.SUBITEMNAME,
       price: item.GrandTotal,
-      image: item.ImagePath? item.imagePath[0] : "",
+      image: item.ImagePath ? item.ImagePath[0] : "",
     };
     addToCartHandler(cartItem);
     toast.success("Added to cart!");
@@ -85,9 +85,9 @@ const WishlistItem = ({ sno, onRemove, cartItems, addToCartHandler }) => {
       {/* Remove Button */}
       <button
         onClick={() => onRemove(sno)}
-        className="absolute top-3 right-3 p-2.5 bg-white/90  text-red-400 backdrop-blur-sm rounded-full shadow-lg  transition-all hover:bg-red-50 hover:text-red-600"
+        className="absolute top-1 right-1 p-2 bg-white/90  text-red-400 backdrop-blur-sm rounded-full shadow-lg  transition-all hover:bg-red-50 hover:text-red-600"
       >
-        <Trash2 className="w-5 h-5 " />
+        <Trash2 className="w-3 h-3 " />
       </button>
 
       {/* Content */}

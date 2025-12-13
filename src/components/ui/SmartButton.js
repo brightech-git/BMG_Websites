@@ -47,7 +47,12 @@ const SmartButton = ({
             success: "bg-green-600",
             error: "bg-red-600",
             disabled: "bg-gray-400 text-gray-200 cursor-not-allowed",
-        }
+        },
+         success: {
+            base: "bg-[#1E5128] border-1 border-[#1E5128] text-[#FFF] ",
+            loading: "border-gray-400 text-gray-400",
+            disabled: "border-gray-300 text-gray-400 cursor-not-allowed",
+        },
     };
 
     const sizes = {

@@ -335,7 +335,8 @@ const location =useLocation();
                 <div className="rates-horizontal-container">
                   {ratesData && Object.entries(ratesData).map(([key, value], index) => (
                     <div key={index} className="rate-item-horizontal">
-                      <img src={getMetalIcon(key)} className="rate-icon" alt="" />
+                      <img  src={getMetalIcon(key)} className="rate-icon coin " alt="" />
+                      
                       <span className="rate-text primary-text">
                         {key.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
                         &nbsp;- ₹ {value}

@@ -185,7 +185,7 @@ const Content = () => {
        
 
        
-                    <Testimonials />
+                    {/* <Testimonials /> */}
           
 
                 <Footer />

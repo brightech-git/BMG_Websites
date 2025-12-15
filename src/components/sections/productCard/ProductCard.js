@@ -20,13 +20,17 @@ const ProductCard = ({ item }) => {
     const history = useHistory();
     const location = useLocation();
 
+    const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
+  
     const [isWishlisted, setIsWishlisted] = useState(false);
     const [heartAnimation, setHeartAnimation] = useState(false);
     const [cartAnimation, setCartAnimation] = useState(false);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+   
+
     const [isTouchDevice, setIsTouchDevice] = useState(false);
     const [loadingState, setLoadingState] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
+    const [hover, setHover] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(() => setLoadingState(false), 500);
@@ -42,7 +46,6 @@ const ProductCard = ({ item }) => {
         window.addEventListener('resize', checkTouchDevice);
         return () => window.removeEventListener('resize', checkTouchDevice);
     }, []);
-
     const getProductImages = () => {
         try {
             const imageData = item?.ImagePath;
@@ -68,9 +71,28 @@ const ProductCard = ({ item }) => {
             return [fallbackImage];
         }
     };
-
     const productImages = getProductImages();
     const hasMultipleImages = productImages.length > 1;
+    const defaultIndex = isMobile && hasMultipleImages ? 1 : 0;
+    const [currentImageIndex, setCurrentImageIndex] = useState(defaultIndex);
+    
+
+ 
+    useEffect(() => {
+        if (!productImages?.length) return;
+
+        productImages.slice(0, 2).forEach((src) => {
+            const img = new Image();
+            img.src = src;
+        });
+    }, [productImages]);
+
+    useEffect(() => {
+        if (isMobile && hasMultipleImages) {
+            setCurrentImageIndex(1);
+        }
+    }, [isMobile, hasMultipleImages]);
+
     const productName = (item?.SUBITEMNAME || item?.ITEMCTRNAME || 'Jewelry Item').toLowerCase();
     const currentPrice = parseFloat(item?.GrandTotal) > 0
         ? parseFloat(item.GrandTotal)
@@ -150,7 +172,7 @@ const ProductCard = ({ item }) => {
             stnAmount: item?.STNAMT || 0,
             itemCtrName: item.ITEMCTRNAME || item.SUBITEMNAME,
             price: item.GrandTotal,
-            image: productImages[0],
+            image: productImages[1],
         };
 
         addToCartHandler(cartItem);
@@ -253,13 +275,48 @@ const ProductCard = ({ item }) => {
                             onClick={clickProduct}
                         >
                             {/* Main Image with smooth transition */}
-                            <img
-                                src={productImages[currentImageIndex]}
-                                alt={productName}
-                                className={`absolute inset-0 w-full h-full object-cover transition-all duration-500
-        ${isAnimating ? "translate-x-4 opacity-0" : "translate-x-0 opacity-100"}
+                            <div
+                                className="relative w-full h-full overflow-hidden"
+                                onMouseEnter={() => !isTouchDevice && setHover(true)}
+                                onMouseLeave={() => !isTouchDevice && setHover(false)}
+                            >
+                                {/* Image 1 */}
+                                <img
+                                    src={productImages[0]}
+                                    alt={productName}
+                                    className={`  absolute inset-0 w-full h-full object-cover transition-all duration-300 ease-out
+       ${
+                                        isMobile
+                                            ? "opacity-0 scale-100"           // 👈 hide on mobile
+                                            : hover
+                                                ? "opacity-0 scale-105"
+                                                : "opacity-100 scale-100"
+      }
     `}
-                            />
+                                    loading="eager"
+                                    decoding="async"
+                                />
+
+                                {/* Image 2 */}
+                                {hasMultipleImages  && (
+                                    <img
+                                        src={productImages[1]}
+                                        alt={productName}
+                                        className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 ease-out
+      ${
+                                            isMobile
+                                                ? "opacity-100 scale-100"       // 👈 show by default on mobile
+                                                : hover
+                                                    ? "opacity-100 scale-100"
+                                                    : "opacity-0 scale-95"
+        }
+      `}
+                                        loading="eager"
+                                        decoding="async"
+                                    />
+                                )}
+                            </div>
+
 
                             {/* Previous image for hover-out effect */}
 
@@ -357,6 +414,7 @@ const ProductCard = ({ item }) => {
                     width: 100%;
                     aspect-ratio: 1;
                     overflow: hidden;
+                    border-radius: 18px;
                 }
 
                 .image-container {
@@ -364,10 +422,12 @@ const ProductCard = ({ item }) => {
                     width: 100%;
                     height: 100%;
                     cursor: pointer;
+                    
                 }
 
                 .product-image {
                     width: 100%;
+        
                     height: 100%;
                     object-fit: cover;
                     transition: opacity 0.5s ease-in-out;
@@ -527,6 +587,23 @@ const ProductCard = ({ item }) => {
                     0%, 100% { transform: translateY(0); }
                     50% { transform: translateY(-4px); }
                 }
+                    .flip {
+  transform-style: preserve-3d;
+}
+
+.front {
+  backface-visibility: hidden;
+}
+
+.back {
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+}
+
+.flip-hover {
+  transform: rotateY(180deg);
+}
+
 
                 .add-button-text {
                     font-size: 14px !important;
@@ -665,6 +742,9 @@ const ProductCard = ({ item }) => {
                         .product-addToCart{
                       opacity: 1; 
                         }
+                        img {
+    transition-duration: 200ms;
+  }
                 }
 
                 @media (max-width: 480px) {

@@ -7,10 +7,13 @@ import { useCart } from '../../../hook/cart/useCartQuery';
 import { useSingleProductQuery } from '../../../hook/product/useSingleProductQuery';
 import fallbackImage from '../../../assets/img/bg/78.jpg';
 import SmartButton from '../../ui/SmartButton';
+ import UpdateMobileModal from '../../layouts/UpdateMobileModal';
+import { useSelector } from 'react-redux';
 
 const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
     const [imageError, setImageError] = useState(false);
     const { data: product, isLoading: loading, error: productError } = useSingleProductQuery(item.itemTagSno || item.sno);
+  
 
     const baseUrl = "https://app.bmgjewellers.com";
 
@@ -157,6 +160,11 @@ const Cart = () => {
     const [selectedItems, setSelectedItems] = useState([]);
     const [productDataMap, setProductDataMap] = useState({});
 
+    const [modalOpen, setModalOpen] = useState(false);
+    const [mobileCheckDone, setMobileCheckDone] = useState(false);
+    const mobileNumber = useSelector(state => state.user.user?.contactNumber);
+    console.log(mobileNumber, 'ContactNumber');
+
     const items = useMemo(() => {
         if (!cartItems?.data) return [];
         const data = cartItems.data;
@@ -171,12 +179,24 @@ const Cart = () => {
         }
     }, [items]);
 
+
+    useEffect(() => {
+        if (!mobileNumber && !mobileCheckDone) {
+            setModalOpen(true);
+            setMobileCheckDone(true);
+        }
+    }, [mobileNumber, mobileCheckDone]);
+    
     // Listen for payment success → clear cart
     useEffect(() => {
         const handlePayment = () => clearCart();
         window.addEventListener("payment-success", handlePayment);
         return () => window.removeEventListener("payment-success", handlePayment);
     }, [clearCart]);
+
+
+    const isMobileMissing = !mobileNumber;
+
 
     const totals = useMemo(() => {
         const selected = items.filter(i => selectedItems.includes(i.sno));
@@ -216,12 +236,22 @@ const Cart = () => {
         history.push("/checkout", payload);
     };
 
-    if (isLoading) {
+    if (!modalOpen && isLoading) {
         return (
             <SkeletonCartLoading />
         );
     }
-
+    if (isMobileMissing) {
+        return (
+            <UpdateMobileModal
+                open={true}
+                onClose={() => {
+                    setModalOpen(false);
+                    history.replace('/');
+                }}
+            />
+        );
+    }
 
     if (!isLoading && items.length === 0) {
         return (
@@ -304,16 +334,17 @@ const Cart = () => {
                                 </div>
                             </div>
                             <div className='flex min-w-full mt-2'>
-                            <SmartButton
-                                onClick={handleCheckout}
-                                disabled={!totals.ready || selectedItems.length === 0}
-                                isLoading={!totals.ready}
-                                variant='primary'
-                                className='w-full'
-                               
-                            >
-                                {selectedItems.length === 0 ? "Select Items" : totals.ready ? "Checkout" : "Loading..."}
-                            </SmartButton>
+                                <SmartButton
+                                    onClick={handleCheckout}
+                                    disabled={!totals.ready || selectedItems.length === 0 || !mobileNumber}
+                                >
+                                    {!mobileNumber
+                                        ? "Add Mobile Number"
+                                        : totals.ready
+                                            ? "Checkout"
+                                            : "Loading..."}
+                                </SmartButton>
+
                             </div>
                             <div className="mt-2 text-center text-xs text-gray-600">
                                 <p className="font-small text-xs">100% Secure Payment</p>

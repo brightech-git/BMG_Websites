@@ -44,7 +44,7 @@ class Backtotop extends Component {
     return (
       <Link
         to="#"
-        className={`back-to-top-btn ${isTop ? 'back-to-top-visible animate-fade-in-up' : ''} hover-lift`}
+        className={`back-to-top-btn ${isTop ? 'back-to-top-visible ' : ''}`}
         id="backToTop"
         onClick={(e) => {
           e.preventDefault(); // Prevent jumping

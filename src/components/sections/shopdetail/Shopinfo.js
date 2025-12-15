@@ -110,18 +110,36 @@ const Shopinfo = ({ sno, Authenticated }) => {
     cartItems.data.some((item) => item.itemTagSno === product?.SNO);
 
   const handleAddToCart = (e) => {
-    e.preventDefault(); e.stopPropagation();
+    e.preventDefault();
+    e.stopPropagation();
 
+    // ❌ NOT logged in
+    if (!isAuthenticated) {
+      toast.error("Please login to add to cart");
+      history.push("/login");
+      return;
+    }
+
+    // ❌ Logged in but no mobile (Google login case)
+    if (!mobileNumber) {
+      setModalOpen(true);
+      return;
+    }
+
+    // ❌ Already in cart
+    if (isInCart) {
+      toast.info("Already in cart");
+      return;
+    }
+
+    // ✅ NOW start loading
     setCartLoading(true);
     setCartSuccess(false);
-    if (!isAuthenticated) return toast.error("Please login to add to cart") && history.push("/login");
-    if (!mobileNumber) return setModalOpen(true);
 
-    if (isInCart) return toast.info("Already in cart");
-    console.log(product, 'products');
-    const image = product.ImagePath ? JSON.parse(product.ImagePath)[0] : "";
-    
-   
+    const image = product.ImagePath
+      ? JSON.parse(product.ImagePath)[0]
+      : "";
+
     addToCartHandler({
       itemSno: product.SNO,
       itemTagSno: product.SNO,
@@ -129,9 +147,11 @@ const Shopinfo = ({ sno, Authenticated }) => {
       price: getPrice(),
       image: getEncodedImageUrl(image),
     });
+
     toast.success("Added to cart!");
     setCartLoading(false);
     setCartSuccess(true);
+
     setTimeout(() => {
       setCartSuccess(false);
     }, 2000);

@@ -1,6 +1,6 @@
 'use client';
 
-import React from "react";
+import React,{useState} from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Heart, Trash2, ShoppingCart, Star } from "lucide-react";
 import { useFavorites, useRemoveFavorite } from "../../../hook/favorites/useFavoritesQuery";
@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import SmartButton from "../../ui/SmartButton";
 
-const WishlistItem = ({ sno, onRemove, cartItems, addToCartHandler }) => {
+const WishlistItem = ({ sno, onRemove, cartItems, addToCartHandler, mobileNumber ,setModalOpen}) => {
   const { data: item, isLoading } = useSingleProductQuery(sno);
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
   const history = useHistory();
@@ -27,17 +27,25 @@ const WishlistItem = ({ sno, onRemove, cartItems, addToCartHandler }) => {
     e.preventDefault();
     e.stopPropagation();
 
+    // ❌ NOT logged in
     if (!isAuthenticated) {
-      toast.info("Please log in to add to cart");
+      toast.error("Please login to add to cart");
       history.push("/login");
       return;
     }
 
+    // ❌ Logged in but no mobile (Google login case)
+    if (!mobileNumber) {
+      setModalOpen(true);
+      return;
+    }
+
+    // ❌ Already in cart
     if (isInCart) {
       toast.info("Already in cart");
       return;
     }
-    console.log(item, 'productitem');
+
     const cartItem = {
       itemSno: item.SNO,
       itemTagSno: item.SNO,
@@ -53,8 +61,11 @@ const WishlistItem = ({ sno, onRemove, cartItems, addToCartHandler }) => {
       image: item.ImagePath ? item.ImagePath[0] : "",
     };
     addToCartHandler(cartItem);
+
     toast.success("Added to cart!");
+
   };
+
 
   if (isLoading) {
     return (
@@ -127,6 +138,12 @@ const Wishlist = () => {
   const { data: favorites, isLoading, isError } = useFavorites();
   const { cartItems, addToCartHandler } = useCart();
   const removeFavorite = useRemoveFavorite();
+
+
+    const [modalOpen, setModalOpen] = useState(false);
+    const [mobileCheckDone, setMobileCheckDone] = useState(false);
+    const mobileNumber = useSelector(state => state.user.user?.contactNumber);
+    console.log(mobileNumber, 'ContactNumber');
 
   const history = useHistory();
   const items = favorites?.data || [];
@@ -231,6 +248,9 @@ const Wishlist = () => {
               onRemove={handleRemove}
               cartItems={cartItems}
               addToCartHandler={addToCartHandler}
+              mobileNumber={mobileNumber}
+              setModalOpen={setModalOpen}
+              modalOpen={modalOpen}
             />
           ))}
         </div>

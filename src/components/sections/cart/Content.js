@@ -165,6 +165,8 @@ const Cart = () => {
     const mobileNumber = useSelector(state => state.user.user?.contactNumber);
     console.log(mobileNumber, 'ContactNumber');
 
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleteSno, setDeleteSno] = useState(null);
     const items = useMemo(() => {
         if (!cartItems?.data) return [];
         const data = cartItems.data;
@@ -271,13 +273,22 @@ const Cart = () => {
     }
 
 
-    const handleDeleteCartItem = (sno) =>{
-        if(window.confirm("Are you sure you want to remove this item from your cart?")){
-            deleteCart(sno);
-            return;
-        }
-    
-    }
+const handleDeleteCartItem = (sno) => {
+    setDeleteSno(sno);
+    setShowDeleteModal(true);
+};
+
+const confirmDelete = () => {
+    deleteCart(deleteSno);
+    setShowDeleteModal(false);
+    setDeleteSno(null);
+};
+
+const cancelDelete = () => {
+    setShowDeleteModal(false);
+    setDeleteSno(null);
+};
+
 
     return (
         <div className="bg-[#eeece8] py-6 px-2">
@@ -351,7 +362,38 @@ const Cart = () => {
                                 <p className="mt-2 text-xs">Credit Card • UPI • Net Banking</p>
                             </div>
                         </div>
-                    </div>
+                   {showDeleteModal && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[9999]">
+    <div className="bg-white rounded-2xl p-4 w-[90%] max-w-sm shadow-xl animate-scale-in">
+
+      <h3 className="text-sm font-semibold text-[#041f60] mb-2">
+        Remove Item
+      </h3>
+
+      <p className="text-xs text-gray-600 mb-4">
+        Are you sure you want to remove this item from your cart?
+      </p>
+
+      <div className="flex justify-end gap-2">
+        <button
+          onClick={cancelDelete}
+          className="px-4 py-1.5 text-xs rounded-lg bg-gray-200 hover:bg-gray-300 transition"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={confirmDelete}
+          className="px-4 py-1.5 text-xs rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
+        >
+          Delete
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+ </div>
                 </div>
             </div>
         </div>

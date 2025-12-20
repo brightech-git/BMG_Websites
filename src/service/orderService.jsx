@@ -10,7 +10,7 @@ export const createOrder = async (orderData) => {
 export const getOrderHistory = async () => {
     const payload = {
         page: '0',
-        size: '10',
+        size: '5',
     };
     const response = await publicUrl.get('/order/history', {
         params: payload

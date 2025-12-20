@@ -6,6 +6,8 @@ import Breadcrumb from '../layouts/Breadcrumbs';
 import Footer from '../layouts/Footerthree';
 import Content from '../sections/checkout/Content';
 
+
+
 const Checkout = () => {
     const location = useLocation();
     const navigate = useHistory();

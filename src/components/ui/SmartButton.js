@@ -49,7 +49,7 @@ const SmartButton = ({
             disabled: "bg-gray-400 text-gray-200 cursor-not-allowed",
         },
          success: {
-            base: "bg-[#1E5128] border-1 border-[#1E5128] text-[#FFF] ",
+            base: "bg-[#1E5128] border-1 border-[#1E5128] hover:bg-[var(--green-color)] text-[#FFF] ",
             loading: "border-gray-400 text-gray-400",
             disabled: "border-gray-300 text-gray-400 cursor-not-allowed",
         },
@@ -57,7 +57,7 @@ const SmartButton = ({
 
     const sizes = {
         sm: "px-2 py-1.8 text-xs",
-        md: "px-2.5 py-2.5 text-sm",
+        md: "px-3 py-2 text-xs",
         lg: "px-4 py-2.5 text-sm",
     };
 

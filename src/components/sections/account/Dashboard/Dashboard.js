@@ -161,7 +161,7 @@ const Dashboard = () => {
                     return (
                       <tr
                         key={order.orderId}
-                        onClick={() => history.push("/account/orderdetails", { order })}
+                        onClick={() => history.push(`/account/orderdetails/${order.orderId}`, { order })}
                         className="hover:bg-orange-50 cursor-pointer animate-fadeInUp"
                         style={{ animationDelay: `${i * 80}ms` }}
                       >

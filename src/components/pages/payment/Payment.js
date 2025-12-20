@@ -1,50 +1,63 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
+import { useLocation } from "react-router-dom/cjs/react-router-dom";
+import { toast } from "react-toastify";
+
 import { useInitiatePayment } from "../../../hook/payment/useInitiatePayment";
 import { getPaymentRedirectUrl } from "../../../service/paymentServiceicici";
-import { toast } from "react-toastify";
-import { useLocation } from "react-router-dom/cjs/react-router-dom";
-import './PaymentPage.css';
 import { useOrderHistory } from "../../../hook/order/useOrderHistoryQuery";
+
+import "./PaymentPage.css";
+
 const PaymentPage = () => {
+
     const { orderId } = useParams();
     const history = useHistory();
-    const {data:orders } =useOrderHistory();
-    const existingOrders = orders?.orders;
-
-    console.log(existingOrders ,'orderexisted')
-    const { mutate: initiatePayment } = useInitiatePayment();
     const location = useLocation();
-    const orderPayload = location.state?.orderPayload;
 
-    const totalAmount = orderPayload?.totalAmount.toFixed(2) ?? "N/A";
+    const [totalAmount, setTotalAmount] = useState(null);
+
+    const { data: orders } = useOrderHistory();
+    const existingOrders = orders?.orders ?? [];
+
+    const { mutate: initiatePayment } = useInitiatePayment();
+
+    const orderPayload = location.state?.orderPayload;
     const customerName = orderPayload?.customerName ?? "Customer";
 
+    /* -------------------------------------------------------
+       Extract total amount once order history is loaded
+    -------------------------------------------------------- */
     useEffect(() => {
-        if (!orderId) {
-            console.warn("No orderId provided");
-            return;
-        }
+        if (!orderId || existingOrders.length === 0) return;
 
-        // 🔥 STEP 1: Do not allow multiple payment attempts for same order
-        const isOrderAlreadyProcessed = existingOrders?.some(
+        const orderDetails = existingOrders.find(
             (order) => order.orderId === orderId
         );
 
-        if (isOrderAlreadyProcessed) {
-            toast.warn("This order payment already attempted. Redirecting...");
-            history.replace("/account"); // or /orders page
-            return; // ❌ Stop here so API never calls again
+        if (!orderDetails?.totalAmount) {
+            console.warn("Total amount not found for order:", orderId);
+            toast.error("Unable to fetch order amount");
+            // history.push("/account");
+            return;
         }
 
-        // --- Your existing code below ---
+        setTotalAmount(Number(orderDetails.totalAmount));
+    }, [orderId, existingOrders, history]);
+
+    /* -------------------------------------------------------
+       Initiate payment only after totalAmount is ready
+    -------------------------------------------------------- */
+    useEffect(() => {
+        if (!orderId || totalAmount === null) return;
+
         let cancelled = false;
         const merchantTxnNo = orderId;
 
         initiatePayment(
             {
                 merchantTxnNo,
-                amount: totalAmount,
+                amount: totalAmount.toFixed(2), // ✅ Payment gateway safe
                 currencyCode: 356,
                 payType: 0,
                 transactionType: "SALE",
@@ -58,25 +71,26 @@ const PaymentPage = () => {
 
                     const { redirectURI, tranCtx } = response;
 
-                    if (redirectURI && tranCtx) {
-                        try {
-                            const finalUrl = await getPaymentRedirectUrl(
-                                redirectURI,
-                                tranCtx
-                            );
-                            window.location.href = finalUrl;
-                        } catch (err) {
-                            toast.error("Failed to redirect");
-                            history.push("/account");
-                        }
-                    } else {
-                        toast.error("Missing redirect info");
+                    if (!redirectURI || !tranCtx) {
+                        toast.error("Invalid payment response");
+                        history.push("/account");
+                        return;
+                    }
+
+                    try {
+                        const finalUrl = await getPaymentRedirectUrl(
+                            redirectURI,
+                            tranCtx
+                        );
+                        window.location.href = finalUrl;
+                    } catch (error) {
+                        toast.error("Failed to redirect to payment gateway");
                         history.push("/account");
                     }
                 },
                 onError: () => {
                     if (cancelled) return;
-                    toast.error("Payment failed");
+                    toast.error("Payment initiation failed");
                     history.push("/account");
                 },
             }
@@ -85,16 +99,19 @@ const PaymentPage = () => {
         return () => {
             cancelled = true;
         };
-    }, [orderId, initiatePayment]);
+    }, [orderId, totalAmount, initiatePayment, history]);
 
-
+    /* -------------------------------------------------------
+       UI
+    -------------------------------------------------------- */
     return (
         <div className="payment-page-container">
             <div className="payment-box">
-                <div className="spinner"></div>
+                <div className="spinner" />
                 <h2>Redirecting to Payment...</h2>
                 <p>
-                    Please wait while we securely redirect you to the payment gateway.
+                    Please wait while we securely redirect you to the payment
+                    gateway.
                 </p>
                 <p className="tip">
                     ⚡ Tip: Do not refresh or close this page.

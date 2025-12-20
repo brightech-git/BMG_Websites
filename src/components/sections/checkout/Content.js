@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { Modal, Button, Badge, Form } from 'react-bootstrap';
+import { Modal, Button, Badge, Form ,InputGroup} from 'react-bootstrap';
 import { Check, Plus, Edit, Trash2, Phone, Home, ShoppingBag, MapPin, User, CreditCard } from 'lucide-react';
 import { useCreateOrder } from '../../../hook/order/useOrderMutation';
 import { useCurrentProfile } from '../../../hook/userProfile/useUserProfileQuery';
@@ -10,6 +10,11 @@ import './Checkout.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrash, faPhone } from '@fortawesome/free-solid-svg-icons';
 import GeoLocationPicker from '../../address/GeoLocationPicker';
+import SmartButton from '../../ui/SmartButton';
+import { useAddressesByPincode } from '../../../hook/address/useGetAddressByPincode';
+
+
+
 
 // Enhanced Progress Stepper with Icon-Centered Dividers
 const ProgressStepper = ({ currentStep }) => {
@@ -64,16 +69,23 @@ const ProgressStepper = ({ currentStep }) => {
   );
 };
 // Address Modal
-const AddressModal = ({ show, onHide,  addresses, selectedAddress, onSelectAddress, onSaveAddress, onDeleteAddress, customerProfile }) => {
+const AddressModal = ({ show, onHide,  addresses, selectedAddress, onSelectAddress, onSaveAddress, onDeleteAddress, customerProfile ,onPincodeChange , pincodeAddress }) => {
 
+  console.log(pincodeAddress, 'pincodeAddress');
+
+  
 
   //console.log(customerProfile,'cust');
  const [ clear ,setClear] = useState(false);
   const [ showLocations ,setShowLocations] = useState (false);
   const [mode, setMode] = useState('list');
   const [currentAddress, setCurrentAddress] = useState(null);
+  const [showPostOfficeList, setShowPostOfficeList] = useState(false);
+
+  const [pincodeVerified, setPincodeVerified] = useState(false);
 
   const [formData, setFormData] = useState({
+
     name: customerProfile?.username || customerProfile?.name || '',
     phone: customerProfile?.contactNumber || '',
     addressLine: '',
@@ -87,12 +99,35 @@ const AddressModal = ({ show, onHide,  addresses, selectedAddress, onSelectAddre
     companyName: '',
     alternatePhone: '',
     isDefault: false
-  });
 
+  });
+  const postOffices = pincodeAddress?.[0]?.PostOffice || [];
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
+
+  useEffect(() => {
+    if (postOffices.length > 0) {
+      setPincodeVerified(false);
+      setShowPostOfficeList(false);
+    }
+  }, [postOffices]);
+
+
+  useEffect(() => {
+    // 👇 When pincode is cleared or invalid
+    if (!/^\d{6}$/.test(formData.pincode)) {
+      setShowPostOfficeList(false);
+      setPincodeVerified(false);
+      onPincodeChange(null); // 👈 THIS IS THE MISSING LINE
+      return;
+    }
+
+    // 👇 Only when valid
+    onPincodeChange(formData.pincode);
+
+  }, [formData.pincode]);
 
   const handleAddNew = () => {
     setCurrentAddress(null);
@@ -134,6 +169,20 @@ const AddressModal = ({ show, onHide,  addresses, selectedAddress, onSelectAddre
     setClear(true); // stop the location from auto-filling
   };
 
+  const handlePostOfficeSelect = (po) => {
+    setFormData(prev => ({
+      ...prev,
+      city: po.District || '',
+      state: po.State || '',
+      country: po.Country || 'India',
+      locality: po.Name || '',
+      pincode: po.Pincode || prev.pincode,
+    }));
+
+    setShowPostOfficeList(false); // close list after selection
+  };
+
+
   const handleGeoFill = (geoRes) => {
 
     console.log(geoRes ,'geoRes')
@@ -156,6 +205,8 @@ const AddressModal = ({ show, onHide,  addresses, selectedAddress, onSelectAddre
   const handleEdit = (address) => {
     setCurrentAddress(address);
     setShowLocations(true);
+    setShowPostOfficeList(false); // 👈 DO NOT open dropdown
+    setPincodeVerified(true);     // 👈 already verified
     setFormData({
       name: address.name,
       phone: address.phone,
@@ -282,43 +333,83 @@ console.log(showLocations ,'showlocation')
             </div>
             <Form.Group className="mb-2">
               <Form.Label className="form-label">Address Line*</Form.Label>
-              <Form.Control as="textarea" name="addressLine" value={formData.addressLine} onChange={handleChange} className="form-control" rows={3} required />
+              <Form.Control as="textarea"  name="addressLine" value={formData.addressLine} onChange={handleChange} className="form-control-text-area" rows={3} required />
             </Form.Group>
             <div className="row mb-2">
+                <div className="col-12 col-md-6 mb-2 pincode-wrapper">
+                  <Form.Group>
+                    <Form.Label className="form-label">Pincode*</Form.Label>
+
+                    <InputGroup>
+                      <Form.Control
+                        type="text"
+                        name="pincode"
+                        value={formData.pincode}
+                        onChange={handleChange}
+                        pattern="[0-9]{6}"
+                        maxLength={6}
+                        required
+                      />
+
+                      {postOffices.length > 0 && (
+                        <InputGroup.Text
+                          role="button"
+                          className="bg-white border-start-0"
+                          onClick={() => {
+                            setShowPostOfficeList(prev => !prev);
+                            setPincodeVerified(true);
+                          }}
+                        >
+                          <Check className="text-success" />
+                        </InputGroup.Text>
+                      )}
+                    </InputGroup>
+                  </Form.Group>
+
+                  {/^\d{6}$/.test(formData.pincode) && showPostOfficeList && postOffices.length > 0 && (
+                    <div className="postoffice-dropdown">
+                      {postOffices.map((po, index) => (
+                        <div
+                          key={index}
+                          className="postoffice-item"
+                          onClick={() => {
+                            handlePostOfficeSelect(po);
+                            setShowPostOfficeList(false);
+                          }}
+                        >
+                          <strong>{po.Name}</strong>
+                          <div className="small text-muted">
+                            {po.Block}, {po.District}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                </div>
               <div className="col-12 col-md-6 mb-2 mb-md-0">
                 <Form.Group>
                   <Form.Label className="form-label">Locality*</Form.Label>
                   <Form.Control type="text" name="locality" value={formData.locality} onChange={handleChange} className="form-control" required />
                 </Form.Group>
               </div>
-              <div className="col-12 col-md-6">
-                <Form.Group>
-                  <Form.Label className="form-label">Landmark</Form.Label>
-                  <Form.Control type="text" name="landmark" value={formData.landmark} onChange={handleChange} className="form-control" />
-                </Form.Group>
-              </div>
+              
             </div>
             <div className="row mb-2">
-              <div className="col-12 col-md-4 mb-2 mb-md-0">
+              <div className="col-12 col-md-6 mb-2 ">
                 <Form.Group>
-                  <Form.Label className="form-label">City*</Form.Label>
+                  <Form.Label className="form-label">District*</Form.Label>
                   <Form.Control type="text" name="city" value={formData.city} onChange={handleChange} className="form-control" required />
                 </Form.Group>
               </div>
-              <div className="col-12 col-md-4 mb-2 mb-md-0">
+              <div className="col-12 col-md-6 mb-2 ">
                 <Form.Group>
                   <Form.Label className="form-label">State*</Form.Label>
                   <Form.Control type="text" name="state" value={formData.state} onChange={handleChange} className="form-control" required />
                 </Form.Group>
               </div>
-              <div className="col-12 col-md-4">
-                <Form.Group>
-                  <Form.Label className="form-label">Pincode*</Form.Label>
-                  <Form.Control type="text" name="pincode" value={formData.pincode} onChange={handleChange} className="form-control" pattern="[0-9]{6}" required />
-                </Form.Group>
-              </div>
-
-              <div className="col-12 col-md-4">
+           
+              {/* <div className="col-12 col-md-4">
                 <Form.Group>
                   <Form.Label className="form-label">GstNumber</Form.Label>
                   <Form.Control type="text" name="gstNumber" value={formData.gstNumber} onChange={handleChange} className="form-control" />
@@ -329,13 +420,22 @@ console.log(showLocations ,'showlocation')
                   <Form.Label className="form-label">CompanyName</Form.Label>
                   <Form.Control type="text" name="companyName" value={formData.companyName} onChange={handleChange} className="form-control" />
                 </Form.Group>
-              </div>
-              <div className="col-12 col-md-4">
+              </div> */}
+             
+                <div className="col-12 col-md-6">
+                  <Form.Group>
+                    <Form.Label className="form-label">Landmark</Form.Label>
+                    <Form.Control type="text" name="landmark" value={formData.landmark} onChange={handleChange} className="form-control" />
+                  </Form.Group>
+                </div>
+
+                  <div className='col-12 col-md-6 '>
                 <Form.Group>
                   <Form.Label className="form-label">Mobile 2</Form.Label>
                   <Form.Control type="text" name="alternatePhone" value={formData.alternatePhone} onChange={handleChange} className="form-control" pattern="[0-9]{10}" />
                 </Form.Group>
-              </div>
+                </div>
+              
             </div>
             <Form.Group className="mb-2">
               <Form.Check
@@ -401,7 +501,8 @@ const EnhancedCheckout = ({ location, history }) => {
   const { items: initialCartItems = [], totalAmount: initialTotalAmount = 0 } = checkoutPayload;
 
 
-  console.log(checkoutPayload , 'payloadcheckout')
+  // console.log(checkoutPayload , 'payloadcheckout');
+
   
   const [cartItems, setCartItems] = useState(initialCartItems);
   const [totalAmount, setTotalAmount] = useState(initialTotalAmount);
@@ -411,9 +512,11 @@ const EnhancedCheckout = ({ location, history }) => {
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [summaryOpen, setSummaryOpen] = useState(false);
 
+  const [pincode ,setPincode] =useState(null);
+
   const { data: profile, isLoading: profileLoading } = useCurrentProfile();
 
-
+  const { data: addressByPincode  } = useAddressesByPincode(pincode);
 
   const { data: addresses, isLoading: addressesLoading, refetch: refetchAddresses } = useAddressesByCustomer(profile?.id);
   
@@ -574,7 +677,9 @@ const EnhancedCheckout = ({ location, history }) => {
   }, [cartItems, totalAmount, selectedAddress, profile?.email, paymentMode, history, createOrder]);
 
 
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const subtotal = cartItems.reduce((sum, item) => sum + item.price , 0);
+
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [currentStep]);
@@ -692,13 +797,14 @@ const EnhancedCheckout = ({ location, history }) => {
             )}
           </div>
           <div className="step-controls">
-            {currentStep > 1 && <button className="nav-button secondary" onClick={handlePrevStep}>Back</button>}
+
+            {currentStep > 1 && <SmartButton variant='outline' size='md' onClick={handlePrevStep}>Back</SmartButton>}
             {currentStep < 3 ? (
-              <button className="nav-button primary" onClick={handleNextStep} disabled={currentStep === 1 && !selectedAddress}>Continue</button>
+              <SmartButton onClick={handleNextStep} size='lg'  isDisabled={currentStep === 1 && !selectedAddress}>Continue</SmartButton>
             ) : (
-              <button className="nav-button primary place-order" onClick={submitOrder} disabled={!selectedAddress}>
+              <SmartButton size='md' variant='success' onClick={submitOrder} isDisabled={!selectedAddress}>
                 Place Order - ₹{totalAmount.toFixed(2)}
-              </button>
+              </SmartButton>
             )}
           </div>
         </div>
@@ -715,6 +821,8 @@ const EnhancedCheckout = ({ location, history }) => {
         onSaveAddress={handleSaveAddress}
         onDeleteAddress={handleDeleteAddress}
         customerProfile={profile}
+        onPincodeChange={setPincode}           // 👈 CALLBACK
+        pincodeAddress={addressByPincode}      // 👈 API RESULT
 
       />
     </div>

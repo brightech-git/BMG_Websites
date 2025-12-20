@@ -284,7 +284,7 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route exact path="/account/change-password" component={ChangePassword} />
           <Route exact path="/account/orders" component={Orders} />
-          <Route path="/account/orderdetails" component={OrderDetail} />
+          <Route path="/account/orderdetails/:orderId" component={OrderDetail} />
             <Route exact path="/account/address" component={AddressManager} />
             
             <RouteTracker />

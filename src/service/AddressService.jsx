@@ -1,3 +1,4 @@
+import axios from "axios";
 import PublicUrl from "../api/publicUrl";
 
 
@@ -25,6 +26,18 @@ const deleteAddress = async (id) => {
     const response = await PublicUrl.delete(`/addresses/delete/${id}`);
     return response.data;
 };
+
+export const getAddressesByPincode = async(pincode)=>{
+    try{
+        const response = await axios.get(`https://api.postalpincode.in/pincode/${pincode}`);
+        console.log(response.data);
+        return response.data
+    }
+    catch(err){
+        console.error('Error fetching addresses by pincode:', err);
+        throw new Error('Failed to fetch addresses by pincode');
+    }
+}
 
 export const addressService = {
     createAddress,

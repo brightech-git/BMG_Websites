@@ -247,23 +247,23 @@ Step Content */
 
 /* Completed State */
 .stepper-step.completed .step-icon-container {
-  border-color: #10b981;
-  background: #10b981;
+  border-color: #116e05;
+  background: #116e05;
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
 .stepper-step.completed .step-number {
-  color: #10b981;
+  color: #116e05;
   font-weight: 600;
 }
 
 .stepper-step.completed .step-label {
-  color: #10b981;
+  color: #116e05;
   font-weight: 600;
 }
 
 .connector-line.completed {
-  background: #10b981;
+  background: #116e05;
 }
 .step-completed-icon{
   color:var(--white-color)
@@ -627,6 +627,7 @@ Step Content */
   height: 16px;
   margin: 0.5rem 0.75rem 0 0;
   cursor: pointer;
+  background:var(--primary-hover-color)
 }
 
 .payment-option label {
@@ -641,7 +642,7 @@ Step Content */
   font-size: clamp(11px, 2.5vw, 12px);
 }
 
-.payment-option input[type="radio"]:checked+label {
+.payment-option input[type="radio"]:checked+label  {
   border-color: var(--primary-hover-color);
   background:var(--primary-hover-color);
   color: var(--white-color);
@@ -654,7 +655,7 @@ Step Content */
 .payment-icon {
   color: var(--black-color);  
 }
-.payment-option input[type="radio"]:checked  {
+.payment-option input[type="radio"]:checked+label .payment-icon {
   color: var(--white-color);
 }
 .payment-desc {
@@ -751,6 +752,11 @@ Step Content */
 }
 
 /* Address Modal */
+.address-modal{
+  --bs-modal-width: 60%;
+  --bs-modal-max-width: 400px;
+}
+
 .address-modal .modal-content {
   border-radius: 8px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
@@ -854,6 +860,10 @@ Step Content */
   height: 40px;
   font-size: clamp(12px, 2vw, 14px);
 
+}
+.address-form-container .form-control-text-area{
+  min-height: 80px;
+  padding-top: 0.5rem;
 }
 
 .address-form-container .form-control:focus {
@@ -1093,4 +1103,32 @@ Step Content */
     box-shadow: none;
     border: none;
   }
+}
+
+/*Address Selection */
+.pincode-wrapper {
+  position: relative;
+}
+
+.postoffice-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1050;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.postoffice-item {
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.postoffice-item:hover {
+  background-color: #f8f9fa;
 }

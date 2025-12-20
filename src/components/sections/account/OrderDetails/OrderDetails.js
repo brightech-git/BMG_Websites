@@ -14,25 +14,37 @@ import { useTrackOrderById } from '../../../../hook/order/useOrderTracking';
 import { toast } from 'react-toastify';
 import { useAdminAddress } from '../../../../hook/address/useAdminAddress';
 import SmartButton from '../../../ui/SmartButton';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { getOrderHistory } from "../../../../service/orderService";
+import { getPaymentStatus } from '../../../../service/paymentServiceicici';
 
 
 const OrderDetail = () => {
   const location = useLocation();
+
+  const { id } = useParams();
+
   const passedOrder = location.state?.order || null;
 
-  const passedOrderId = location.state.orderId|| null;
+
+  const passedOrderId = location?.state?.orderId || id ;
+
+  // console.log(passedOrderId ,'passed')
   const [loading, setLoading] = useState(true);
-const[ordersData , setOrdersData] =useState(null);
+  const[ordersData , setOrdersData] =useState(null);
   const [order, setOrder] = useState(passedOrder);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const history = useHistory();
-    const [error, setError] = useState(null);
-    const [currentPage, setCurrentPage] = useState(0);
+
+  const canReorder = ["pending"]
+
+  const [error, setError] = useState(null);
+
+  const [currentPage, setCurrentPage] = useState(0);
+
   const pageSize = 10;
 
-  const orderId = order?.orderId;
+  const orderId= order?.orderId;
   const { mutate: cancelOrder, isLoading: isCancelling } = useCancelOrder();
   const { data: trackData, refetch: fetchTrackData, isLoading: isTracking } = useTrackOrderById(order?.orderId || orderId);
   const { data: adminAddress, isLoading: addrLoading, isError: addrError } = useAdminAddress();
@@ -124,6 +136,40 @@ const[ordersData , setOrdersData] =useState(null);
       }
     );
   };
+
+  const handleReorder = async (order) => {
+    console.log(order,'single order')
+    try {
+      // 🚫 If order status is not allowed, redirect to products
+      if (!canReorder.includes(order.status.toLowerCase())) {
+        history.push("/products-page");
+        return;
+      }
+
+      // ✅ Confirm action
+      const isConfirmed = window.confirm(
+        "Do you want to proceed to payment for this order again?"
+      );
+
+      if (!isConfirmed) return;
+
+      // 🔄 Check payment / create new order
+      const paymentResult = await getPaymentStatus(order.orderId);
+
+      const newOrderId = paymentResult?.newOrderId;
+
+      if (!newOrderId) {
+        console.error("New order ID not returned");
+        return;
+      }
+
+      // 🚀 Redirect to payment
+      history.push(`/payment/${newOrderId}`);
+    } catch (error) {
+      console.error("Reorder failed:", error);
+    }
+  };
+
 
   const OrderDetailsSkeleton = () => {
     return (
@@ -368,7 +414,7 @@ const[ordersData , setOrdersData] =useState(null);
           </div>
 
           <div className="text-center">
-            <SmartButton onClick={() => history.push('/products-page' )} className="bg-[#f16137] text-white px-3 py-2 rounded-lg font-medium hover:bg-[#d84141] transition flex items-center text-sm gap-1 mx-auto">
+            <SmartButton onClick={() => handleReorder(order)} className="bg-[#f16137] text-white px-3 py-2 rounded-lg font-medium hover:bg-[#d84141] transition flex items-center text-sm gap-1 mx-auto">
               <FontAwesomeIcon icon={faShoppingBag} /> Continue Shopping
             </SmartButton>
           </div>
@@ -425,7 +471,7 @@ const[ordersData , setOrdersData] =useState(null);
                 </div>
 
                 {canCancel && (
-                  <div className="mt-8 pt-6 border-t flex items-center justify-center text-center">
+                  <div className="mt-1 pt-2 border-t flex items-center justify-center text-center">
                     <SmartButton onClick={handleCancel} disabled={isCancelling} >
                       {isCancelling ? <><FontAwesomeIcon icon={faSpinner} spin /> Cancelling...</> : 'Cancel Order'}
                     </SmartButton>

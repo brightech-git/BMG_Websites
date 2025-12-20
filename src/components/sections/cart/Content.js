@@ -274,7 +274,7 @@ const Cart = () => {
 
 
 const handleDeleteCartItem = (sno) => {
-    setDeleteSno(sno);
+    setDeleteSno(sno); 
     setShowDeleteModal(true);
 };
 
@@ -344,10 +344,11 @@ const cancelDelete = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className='flex min-w-full mt-2'>
+                            <div className='flex w-full justify-center mt-2'>
                                 <SmartButton
                                     onClick={handleCheckout}
                                     disabled={!totals.ready || selectedItems.length === 0 || !mobileNumber}
+                                    className='w-full'
                                 >
                                     {!mobileNumber
                                         ? "Add Mobile Number"

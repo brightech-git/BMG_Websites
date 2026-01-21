@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom/cjs/react-router-dom";
 import { toast } from "react-toastify";
@@ -10,15 +10,18 @@ import { useOrderHistory } from "../../../hook/order/useOrderHistoryQuery";
 import "./PaymentPage.css";
 
 const PaymentPage = () => {
-
     const { orderId } = useParams();
     const history = useHistory();
     const location = useLocation();
 
-    const [totalAmount, setTotalAmount] = useState(null);
+    const [totalAmount, setTotalAmount] = useState (null);
+    const [readyToValidate, setReadyToValidate] = useState(false);
 
-    const { data: orders } = useOrderHistory();
-    const existingOrders = orders?.orders ?? [];
+    const paymentStartedRef = useRef(false);
+    const errorShownRef = useRef(false);
+
+    const { data: orders, isLoading, isFetching } = useOrderHistory();
+    const existingOrders = orders?.orders;
 
     const { mutate: initiatePayment } = useInitiatePayment();
 
@@ -26,30 +29,45 @@ const PaymentPage = () => {
     const customerName = orderPayload?.customerName ?? "Customer";
 
     /* -------------------------------------------------------
-       Extract total amount once order history is loaded
+       Mark ready only when loading + fetching are done
     -------------------------------------------------------- */
     useEffect(() => {
-        if (!orderId || existingOrders.length === 0) return;
+        if (!isLoading && !isFetching && existingOrders !== undefined) {
+            setReadyToValidate(true);
+        }
+    }, [isLoading, isFetching, existingOrders]);
 
-        const orderDetails = existingOrders.find(
+    /* -------------------------------------------------------
+       Extract total amount safely
+    -------------------------------------------------------- */
+    useEffect(() => {
+        if (!orderId || !readyToValidate) return;
+
+        const orderDetails = existingOrders?.find(
             (order) => order.orderId === orderId
         );
 
-        if (!orderDetails?.totalAmount) {
-            console.warn("Total amount not found for order:", orderId);
-            toast.error("Unable to fetch order amount");
-            // history.push("/account");
+        console.log("Order Details:", orderDetails);
+
+        if (!orderDetails || orderDetails.totalAmount == null) {
+            if (!errorShownRef.current) {
+                toast.error("Unable to fetch order amount");
+                errorShownRef.current = true;
+            }
             return;
         }
 
         setTotalAmount(Number(orderDetails.totalAmount));
-    }, [orderId, existingOrders, history]);
+    }, [orderId, readyToValidate, existingOrders]);
 
     /* -------------------------------------------------------
-       Initiate payment only after totalAmount is ready
+       Initiate payment (once)
     -------------------------------------------------------- */
     useEffect(() => {
         if (!orderId || totalAmount === null) return;
+        if (paymentStartedRef.current) return;
+
+        paymentStartedRef.current = true;
 
         let cancelled = false;
         const merchantTxnNo = orderId;
@@ -57,7 +75,7 @@ const PaymentPage = () => {
         initiatePayment(
             {
                 merchantTxnNo,
-                amount: totalAmount.toFixed(2), // ✅ Payment gateway safe
+                amount: totalAmount.toFixed(2),
                 currencyCode: 356,
                 payType: 0,
                 transactionType: "SALE",
@@ -113,9 +131,7 @@ const PaymentPage = () => {
                     Please wait while we securely redirect you to the payment
                     gateway.
                 </p>
-                <p className="tip">
-                    ⚡ Tip: Do not refresh or close this page.
-                </p>
+                <p className="tip">⚡ Tip: Do not refresh or close this page.</p>
             </div>
         </div>
     );

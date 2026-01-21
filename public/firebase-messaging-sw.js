@@ -48,6 +48,8 @@ messaging.onBackgroundMessage((payload) => {
         body: data.body || data.message || "",
         icon: data.imageUrl || "/default-icon.png",
         image: data.imageUrl,
+        tag: data.notificationId || Date.now().toString(),
+        renotify: true,
         data: {
             url: data.url || "https://app.bmgjewellers.com"
         }

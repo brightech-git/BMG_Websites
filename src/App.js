@@ -68,6 +68,7 @@ import AddressManager from './components/sections/account/Address/AddressManager
 import OrderDetail from './components/sections/account/OrderDetails/OrderDetails';
 import Orders from './components/sections/account/Order/Order';
 import Dashboard from './components/sections/account/Dashboard/Dashboard';
+import SchemePage from './pages/scheme/Scheme';
 // function ScrollWatcher() {
 //   const location = useLocation();
 //   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
@@ -219,6 +220,7 @@ function App() {
 
             {/* Your existing routes */}
             <Route exact path="/" component={Home} />
+            <Route exact path="/scheme" component={SchemePage} />
             <Route exact path="/home" component={Home} />
             <Route exact path="/about" component={About} />
             <PrivateRoute exact path="/account" component={Account} />
@@ -228,9 +230,6 @@ function App() {
             <Route exact path="/blog-grid" component={Bloggrid} />
             <Route exact path="/blog-grid-sidebar" component={Bloggridsidebar} />
             <Route exact path="/blog-list" component={Bloglist} /> */}
-
-
-         
 
             {/* <Route exact path="/classification" component={Classification} /> */}
             {/* <Route exact path="/gallery" component={Gallery} />

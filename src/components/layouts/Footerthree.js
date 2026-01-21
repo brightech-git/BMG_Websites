@@ -55,7 +55,8 @@ const Footertwo = () => {
     quickLinks: [
       { name: "About Us", href: "/about" },
       { name: "Why Choose Us", href: "/why-choose-us" },
-      { name: "FAQ", href: "/faq" }
+      { name: "FAQ", href: "/faq" },
+      { name: "Scheme", href: "/scheme" }
     ],
 
     policyLinks: [

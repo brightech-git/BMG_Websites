@@ -4,11 +4,11 @@ import { toast } from 'react-toastify';
 import { useContactFormQuery } from "../../hook/contactForm/useContactFormQuery";
 import { useCompanyDetails } from "../../context/clientDetails/clientDetialContext";
 import './ContactStore.css';
-import largerImg from '../../assets/img/bg/store/1.jpg';
-import mobileImg from '../../assets/img/bg/store/2.jpg';
+import largerImg from '../../assets/videos/silverIcon.png';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import Headers from "../layouts/HeaderWithAuth";
 import Footertwo from "../layouts/Footerthree";
+
 const ContactStore = () => {
     const [formData, setFormData] = useState({
         name: "",

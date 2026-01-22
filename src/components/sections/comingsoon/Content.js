@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Countdown from "react-countdown";
 
-import comingsoonbg from '../../../assets/img/404.png';
+import comingsoonbg from '../../../assets/videos/silverIcon.png';
 
 // Random component
 const Completionist = () => <span>You are good to go!</span>;

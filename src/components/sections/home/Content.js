@@ -7,7 +7,7 @@ import Ourcategory from "./Ourcategory";
 import Handpicked from "../homethree/Handpicked";
 import ShopByRecipient from "./ShopByRecipient";
 import Ourproducts from "../../layouts/Ourproducts";
-import TrendingProducts from "./TrendingProducts";
+// import TrendingProducts from "./TrendingProducts";
 import JewelryShowcase from "./jewelleryShowCase";
 import FeaturedBanners from "../../layouts/FeaturedProduct";
 import Onsale from "./Onsale";

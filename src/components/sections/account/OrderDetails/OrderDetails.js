@@ -7,7 +7,7 @@ import {
   faAngleLeft, faReceipt, faCheckCircle, faTimesCircle, faTruck,
   faShoppingBag, faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
-import { formatCurrency } from '../../../../assets/utills/formatters';
+import { formatCurrency } from '../../../../utils/formatters';
 import { Link, useLocation } from 'react-router-dom';
 import { useCancelOrder } from '../../../../hook/order/useOrderMutation';
 import { useTrackOrderById } from '../../../../hook/order/useOrderTracking';

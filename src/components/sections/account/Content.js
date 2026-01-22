@@ -42,7 +42,7 @@ const AccountPage = () => {
             <Switch>
               <Route exact path="/account/dashboard" component={Dashboard} />
               <Route exact path="/account/orders" component={Orders} />
-                <Route path="/account/orderdetails/:id" component={OrderDetail} />
+              <Route path="/account/orderdetails/:id" component={OrderDetail} />
               <Route exact path="/account/address" component={AddressManager} />
               <Route exact path="/account/change-password" component={ChangePassword} />
               <Route path="/account" component={Dashboard} /> {/* default */}

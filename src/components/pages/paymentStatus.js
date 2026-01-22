@@ -18,18 +18,21 @@ import Footertwo from "../layouts/Footerthree";
 import { getPaymentStatus } from "../../service/paymentServiceicici";
 import SmartButton from "../../components/ui/SmartButton";
 
+
+
 const PaymentStatus = () => {
     const location = useLocation();
     const history = useHistory();
     const searchParams = new URLSearchParams(location.search);
     const orderId = searchParams.get("orderId");
     const mode = searchParams.get("mode");
-    const paymentMode = mode === "COD" ? "COD" : "ONLINE";
+    const paymentMode = mode?.toLowerCase() === "cod" ? "COD" : "ONLINE";
 
     const [status, setStatus] = useState(null);
     const [isSuccess, setIsSuccess] = useState(null); // true, false, null (loading)
     const [isLoading, setIsLoading] = useState(true);
 
+    const [retrying, setRetrying] = useState(false);
     useEffect(() => {
         if (!orderId) {
             setIsSuccess(false);
@@ -76,6 +79,36 @@ const PaymentStatus = () => {
         if (isLoading) return "from-blue-50 to-indigo-50";
         if (isSuccess) return "from-emerald-50 via-green-50 to-teal-50";
         return "from-red-50 to-rose-50";
+    };
+    console.log(status, 'status');
+
+
+    const handleReorder = async () => {
+        if (retrying) return;
+
+        setRetrying(true);
+        try {
+            const isConfirmed = window.confirm(
+                "Do you want to proceed to payment for this order again?"
+            );
+
+            if (!isConfirmed) return;
+
+            const res = await getPaymentStatus(orderId);
+            const newOrderId = res?.newOrderId;
+
+            if (!newOrderId) {
+                alert("Unable to retry payment.");
+                return;
+            }
+
+            history.push(`/payment/${newOrderId}`);
+        } catch (e) {
+            console.error(e);
+            alert("Retry failed.");
+        } finally {
+            setRetrying(false);
+        }
     };
 
     return (
@@ -260,14 +293,14 @@ const PaymentStatus = () => {
                             {/* Action Buttons */}
                             <div className="mt-3 grid sm:grid-cols-3 px-4 sm:px-6 items-center sm:justify-center gap-2 animate-fade-up animation-delay-600">
                                 {isSuccess ? (
-                                    <>  
+                                    <>
 
                                         <SmartButton
-                                            onClick={() => history.push("/account/orderdetails", {  orderId: orderId  })}
-                                            variant="secondary" 
-                                                icon={ShoppingBag}
+                                            onClick={() => history.push("/account/orderdetails", { orderId: orderId })}
+                                            variant="secondary"
+                                            icon={ShoppingBag}
                                         >
-                                     
+
                                             View Orders
                                         </SmartButton>
                                         <SmartButton
@@ -279,48 +312,48 @@ const PaymentStatus = () => {
 
                                             Continue Shopping
                                         </SmartButton>
-                                   
-                                            <SmartButton variant="outline" className="flex items-center" icon={Download}>
-                                            
-                                                Download Invoice
-                                            </SmartButton>
-                                
-                                       
+
+                                        <SmartButton variant="outline" className="flex items-center" icon={Download}>
+
+                                            Download Invoice
+                                        </SmartButton>
+
+
                                     </>
                                 ) : (
                                     <>
-                                       
-                                       
-                                        
-                                            <SmartButton
+
+
+
+                                        <SmartButton
                                             onClick={() => history.push("/products-page")}
-                                            
+
                                         >
                                             Back to Shop
                                         </SmartButton>
-                                            
-                                    
-                                        <SmartButton
-                                            onClick={() => history.push(`/checkout?retryOrder=${orderId}`)}
-                                            icon={RotateCcw}
-                                        >
-                          
-                                            Retry Payment
-                                        </SmartButton>
-                                         
-                                
+
+
+                                            <SmartButton
+                                                onClick={handleReorder}
+                                                disabled={retrying}
+                                                icon={RotateCcw}
+                                            >
+                                                {retrying ? "Retrying..." : "Retry Payment"}
+                                            </SmartButton>
+
+
                                     </>
                                 )}
                             </div>
 
                             {/* Support Card */}
                             <div className="flex mt-3 bg-gray-100 rounded-xl p-2 items-center gap-2 justify-between animate-fade-up animation-delay-700">
-                            <div>
-                                <h4 className="text-sm font-bold text-left text-gray-800 mb-2">Need Help?</h4>
-                                <p className="text-gray-600 text-xs">
-                                    Our support team is available 24/7 to assist you
-                                </p>
-                            </div>
+                                <div>
+                                    <h4 className="text-sm font-bold text-left text-gray-800 mb-2">Need Help?</h4>
+                                    <p className="text-gray-600 text-xs">
+                                        Our support team is available 24/7 to assist you
+                                    </p>
+                                </div>
                                 <div className="flex flex-wrap gap-1">
                                     <a
                                         href="/contact"

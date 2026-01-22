@@ -19,8 +19,8 @@ import './Header.css';
 import { useHeaderData } from "../../hook/header/useNavData";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCompanyDetails } from "../../context/clientDetails/clientDetialContext";
-import silvericon from '../../assets/img/890.png';
-import goldicon from '../../assets/img/891.png';
+import silvericon from '../../assets/videos/silverIcon.png';
+import goldicon from '../../assets/videos/silverIcon.png';
 
 
 const Header = ({ isAuthenticated }) => {

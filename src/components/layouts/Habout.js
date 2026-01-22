@@ -4,9 +4,9 @@ import Masonry from 'react-masonry-component';
 import ReactWOW from 'react-wow';
 
 // About img
-import aboutimg2 from '../../assets/img/room-slider/slide.avif';
-import aboutimg1 from '../../assets/img/room-slider/image1.avif';
-import aboutbottomimg from '../../assets/img/feature/03.d2494625.jpg';
+import aboutimg2 from '../../assets/videos/silverIcon.png';
+import aboutimg1 from '../../assets/videos/silverIcon.png';
+import aboutbottomimg from '../../assets/videos/silverIcon.png';
 
 class Habout extends Component {
     render() {

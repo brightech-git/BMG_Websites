@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import errorimg from '../../../assets/img/404.png';
+import errorimg from '../../../assets/videos/silverIcon.png';
 
 class Content extends Component {
     render() {

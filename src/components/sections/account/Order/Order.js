@@ -6,7 +6,7 @@ import {
   faTruck, faClock, faAngleLeft, faAngleRight
 } from "@fortawesome/free-solid-svg-icons";
 import { getOrderHistory } from "../../../../service/orderService";
-import { formatCurrency } from "../../../../assets/utills/formatters";
+import { formatCurrency } from "../../../../utils/formatters";
 import { useHistory } from "react-router-dom";
 
 const Orders = () => {

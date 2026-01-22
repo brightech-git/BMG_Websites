@@ -50,7 +50,7 @@ import NotificationModal from './components/pages/notificationModal/Notification
 import MaintenanceLogin from './components/pages/MaintenanceLogin';
 import PaymentFailure from './components/pages/PaymentFailure';
 import PaymentStatus from './components/pages/paymentStatus';
-import Logo from "./assets/img/logo1.jpg";
+// import Logo from "./assets/img/logo1.jpg";
 import './App.css';
 // import PageTransition from './components/layouts/PageTransition';
 // import ProductOrdersModal from './components/layouts/ProductOrdersModal';
@@ -205,14 +205,14 @@ function App() {
       />
 
       {/* Splash screen only once */}
-      {showModal && (
+      {/* {showModal && (
         <div className="splash-modal">
           <div className="splash-content">
             <img src={Logo} alt="Logo" className="splash-logo" />
             <div className="splash-loader"></div>
           </div>
         </div>
-      )}
+      )} */}
 
       {showHome && (
         // <PageTransition animation="fade">
@@ -261,7 +261,7 @@ function App() {
             <Route exact path="/bangle-size-guide" component={BangleSizeGuide} />
             <Route exact path="/ring-size-guide" component={RingSizeGuide} />
             <Route exact path="/payment-success" component={PaymentStatus} />
-            <Route exact path="/payment-failure" component={PaymentFailure} />
+            {/* <Route exact path="/payment-failure" component={PaymentFailure} /> */}
             <Route exact path="/appointment" component={Appointment} />
             
             <Route exact path="/hero" component={EnchantedHero} />

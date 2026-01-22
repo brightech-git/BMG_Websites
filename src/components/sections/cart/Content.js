@@ -5,7 +5,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { Trash2, ShoppingBag } from 'lucide-react';
 import { useCart } from '../../../hook/cart/useCartQuery';
 import { useSingleProductQuery } from '../../../hook/product/useSingleProductQuery';
-import fallbackImage from '../../../assets/img/bg/78.jpg';
+import fallbackImage from '../../../assets/videos/silverIcon.png';
 import SmartButton from '../../ui/SmartButton';
  import UpdateMobileModal from '../../layouts/UpdateMobileModal';
 import { useSelector } from 'react-redux';

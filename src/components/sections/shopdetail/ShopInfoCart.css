@@ -1,8 +1,8 @@
 /* src/components/ShopInfoCart.css */
-@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gloock&family=Lato:wght@100;300;400;600;700&display=swap');
 
 :root {
-    
+
     --border-radius: 12px;
     --border-radius-sm: 8px;
     --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -21,7 +21,8 @@
     margin: 0px auto !important;
     justify-content: center;
 }
-.shopdetail-container{
+
+.shopdetail-container {
     max-width: 1400px;
 }
 
@@ -34,7 +35,7 @@
 /* Product Gallery Container */
 .product-gallery-container {
     position: relative;
-    height: 90% ;
+    height: 90%;
 }
 
 
@@ -47,6 +48,7 @@
     letter-spacing: 0.5px;
     font-family: var(--secondary-font);
 }
+
 /* Product Badges */
 .product-badges {
     position: absolute;
@@ -115,6 +117,7 @@
     align-items: center;
     gap: 10px;
 }
+
 /* Product Info Container */
 .product-info-container {
     padding: 1rem 0;
@@ -132,18 +135,20 @@
     gap: 0.5rem;
 }
 
-.header-section{
+.header-section {
     display: flex;
     align-items: center;
-    gap:10px
+    gap: 10px
 }
+
 .product-title {
     font-size: 1.2rem;
     font-weight: 600;
     color: var(--primary-text-color);
     font-family: var(--primary-font);
-    
+
 }
+
 .sub-product-titles {
     font-size: 1rem;
     font-weight: 400;
@@ -166,11 +171,13 @@
     transition: var(--transition);
     cursor: pointer;
 }
+
 @media (max-width: 992px) {
-   .breadcrumb-wrapper {
-    display: none;
-   }
+    .breadcrumb-wrapper {
+        display: none;
+    }
 }
+
 @media (min-width: 992px) {
     .breadcrumb-mobile-wrapper {
         display: none;
@@ -554,21 +561,22 @@
 }
 
 .share-btn.active {
-    color: #d4af37; /* Gold color to match jewelry theme */
+    color: #d4af37;
+    /* Gold color to match jewelry theme */
 }
 
 .share-options {
-  position: absolute;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  padding: 12px;
-  z-index: 100;
-  animation: fadeIn 0.3s ease;
-  margin-top: 45px;
-  right: 0;
-  width: max-content;
-  margin-right: 40px;
+    position: absolute;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    padding: 12px;
+    z-index: 100;
+    animation: fadeIn 0.3s ease;
+    margin-top: 45px;
+    right: 0;
+    width: max-content;
+    margin-right: 40px;
 }
 
 
@@ -594,19 +602,23 @@
     transform: scale(1.1);
 }
 
-.share-icons a:nth-child(1) { /* WhatsApp */
+.share-icons a:nth-child(1) {
+    /* WhatsApp */
     background-color: #25D366;
 }
 
-.share-icons a:nth-child(2) { /* Instagram */
+.share-icons a:nth-child(2) {
+    /* Instagram */
     background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
 }
 
-.share-icons a:nth-child(3) { /* Facebook */
+.share-icons a:nth-child(3) {
+    /* Facebook */
     background-color: #3b5998;
 }
 
-.share-icons a:nth-child(4) { /* Twitter */
+.share-icons a:nth-child(4) {
+    /* Twitter */
     background-color: #1DA1F2;
 }
 
@@ -616,6 +628,7 @@
         opacity: 0;
         transform: translateY(-10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -624,10 +637,10 @@
 
 /* For mobile */
 @media (max-width: 768px) {
-  .share-options {
-    right: auto;
-    left: 0;
-  }
+    .share-options {
+        right: auto;
+        left: 0;
+    }
 }
 
 /* Mobile responsiveness */
@@ -636,11 +649,11 @@
         right: auto;
         left: 0;
     }
-    
+
     .share-icons {
         gap: 10px;
     }
-    
+
     .share-icons a {
         width: 35px;
         height: 35px;
@@ -688,8 +701,8 @@
     .skeleton-main-image {
         height: 300px;
     }
-  
-    .badge{
+
+    .badge {
         font-size: 12px;
         padding: 0.25rem 0.75rem;
     }
@@ -740,11 +753,11 @@
         width: 60px;
         height: 60px;
     }
-       
-                 .badge {
-                     font-size: 11px;
-                     padding: 0.23rem 0.65rem;
-                 }
+
+    .badge {
+        font-size: 11px;
+        padding: 0.23rem 0.65rem;
+    }
 }
 
 @media (max-width: 768px) {
@@ -753,8 +766,9 @@
         align-items: flex-start;
         gap: 0.25rem;
     }
-    .header-section{
-        gap:3px;
+
+    .header-section {
+        gap: 3px;
     }
 
     .wishlist-btn {
@@ -772,7 +786,7 @@
         font-size: 1.1rem;
     }
 
-    
+
 
     .original-price {
         font-size: 0.95rem;
@@ -830,11 +844,11 @@
         width: 50px;
         height: 50px;
     }
-        
-                  .badge {
-                      font-size: 10px;
-                      padding: 0.22rem 0.63rem;
-                  }
+
+    .badge {
+        font-size: 10px;
+        padding: 0.22rem 0.63rem;
+    }
 }
 
 @media (max-width: 576px) {
@@ -857,7 +871,7 @@
         font-size: 0.9rem;
     }
 
-    
+
 
     .product-meta-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -890,7 +904,7 @@
         padding: 0.75rem;
     }
 
-  
+
 
     .skeleton-main-image {
         height: 150px;
@@ -909,18 +923,21 @@
         height: 1.5rem;
         width: 150px;
     }
-        .badge {
-            font-size: 8px;
-            padding: 0.2rem 0.6rem;
-        }
-}
-@media (max-width: 436px){
 
-         .badge {
-             font-size: 8px;
-             padding: 0.1rem 0.5rem;
-         }
+    .badge {
+        font-size: 8px;
+        padding: 0.2rem 0.6rem;
+    }
 }
+
+@media (max-width: 436px) {
+
+    .badge {
+        font-size: 8px;
+        padding: 0.1rem 0.5rem;
+    }
+}
+
 /* Print Styles */
 @media print {
     .modern-product-section {
@@ -1140,6 +1157,7 @@
         font-size: 0.75rem;
     }
 }
+
 /* Add these styles to the existing ShopInfoCart.css */
 
 /* Tabbed Navigation */
@@ -1185,9 +1203,10 @@
 /* Care Instructions */
 .care-instructions {
     padding: 1rem;
-  
+
 }
-.jewellery-description{
+
+.jewellery-description {
     margin: 0px auto !important;
 }
 
@@ -1229,7 +1248,8 @@
     .care-tips {
         grid-template-columns: 1fr;
     }
-    .jewellery-description{
+
+    .jewellery-description {
         max-width: 750px;
         margin: 0px auto !important;
     }
@@ -1259,10 +1279,11 @@
     .care-tip-description {
         font-size: 0.8rem;
     }
-         .jewellery-description {
-             max-width: 570px;
-            margin: 0px auto !important;
-         }
+
+    .jewellery-description {
+        max-width: 570px;
+        margin: 0px auto !important;
+    }
 }
 
 @media (max-width: 576px) {
@@ -1294,8 +1315,9 @@
     .care-tip-description {
         font-size: 0.75rem;
     }
-        .jewellery-description {
-            max-width: 370px;
-            margin: 0px auto !important;
-        }
+
+    .jewellery-description {
+        max-width: 370px;
+        margin: 0px auto !important;
+    }
 }

@@ -8,81 +8,40 @@ import {
   faShoppingBag, faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
 import { formatCurrency } from '../../../../utils/formatters';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useCancelOrder } from '../../../../hook/order/useOrderMutation';
 import { useTrackOrderById } from '../../../../hook/order/useOrderTracking';
 import { toast } from 'react-toastify';
 import { useAdminAddress } from '../../../../hook/address/useAdminAddress';
 import SmartButton from '../../../ui/SmartButton';
 import { useHistory, useParams } from 'react-router-dom';
-import { getOrderHistory } from "../../../../service/orderService";
-import { getPaymentStatus } from '../../../../service/paymentServiceicici';
-
+import { useCreateReOrder } from '../../../../hook/order/useReorder';
+import { useGetOrderById} from '../../../../hook/order/useAllOrdersQuery';
+import { Truck } from 'lucide-react';
 
 const OrderDetail = () => {
-  const location = useLocation();
 
   const { id } = useParams();
 
-  const passedOrder = location.state?.order || null;
 
 
-  const passedOrderId = location?.state?.orderId || id ;
+  const {data:order, isLoading : loading , isError:error} = useGetOrderById(id);
 
-  // console.log(passedOrderId ,'passed')
-  const [loading, setLoading] = useState(true);
-  const[ordersData , setOrdersData] =useState(null);
-  const [order, setOrder] = useState(passedOrder);
+
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const history = useHistory();
 
-  const canReorder = ["pending"]
-
-  const [error, setError] = useState(null);
-
-  const [currentPage, setCurrentPage] = useState(0);
-
-  const pageSize = 10;
+  const canReorder = ["pending"];
 
   const orderId= order?.orderId;
   const { mutate: cancelOrder, isLoading: isCancelling } = useCancelOrder();
+  const { mutateAsync: createReOrder, isLoading: isReordering } = useCreateReOrder();
   const { data: trackData, refetch: fetchTrackData, isLoading: isTracking } = useTrackOrderById(order?.orderId || orderId);
   const { data: adminAddress, isLoading: addrLoading, isError: addrError } = useAdminAddress();
 
   const defaultAddress = useMemo(() =>
     adminAddress?.find((a) => a.isDefault) || null, [adminAddress]
   );
- useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const data = await getOrderHistory(currentPage, pageSize);
-        setOrdersData(data);
-      } catch (err) {
-        setError(err.response?.data?.message || err.message || "Failed to load orders");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchOrders();
-  }, [currentPage]);
-
-  const orders = useMemo(() => {
-    if (!ordersData) return [];
-    return Array.isArray(ordersData) ? ordersData : [];
-  }, [ordersData]); 
-  
-  useEffect(() => {
-    if (!passedOrder && passedOrderId && orders.length > 0) {
-      const matched = orders.find(o => o.orderId === passedOrderId);
-      if (matched) {
-        setOrder(matched);
-      } else {
-        setError("Order not found");
-      }
-    }
-  }, [passedOrder, passedOrderId, orders]);
 
   useEffect(() => {
     if ((order?.orderId || orderId) && !trackData) fetchTrackData();
@@ -154,9 +113,10 @@ const OrderDetail = () => {
       if (!isConfirmed) return;
 
       // 🔄 Check payment / create new order
-      const paymentResult = await getPaymentStatus(order.orderId);
+      const result = await createReOrder(order.orderId);
+      console.log(result,'paymentResult')
 
-      const newOrderId = paymentResult?.newOrderId;
+      const newOrderId = result?.newOrderId;
 
       if (!newOrderId) {
         console.error("New order ID not returned");
@@ -325,9 +285,12 @@ const OrderDetail = () => {
                 {getStatusLabel(currentStatus)}
               </span>
             </div>
-            <SmartButton onClick={() => setIsStatusModalOpen(true)}>
-              Track Order
-            </SmartButton>
+            <div className=' animate-wobble'>
+              <SmartButton onClick={() => setIsStatusModalOpen(true)} icon={Truck} >
+                Track Order
+              </SmartButton>
+            </div>
+            
           </div>
 
           <div className="grid lg:grid-cols-3 gap-2">
@@ -340,7 +303,7 @@ const OrderDetail = () => {
                 <div className="p-2 space-y-2  overflow-y-auto">
                   {items.map((item) => (
                     <div key={item.id} className="flex gap-2 p-2 bg-[#ffffff] border border-gray-200 rounded-lg hover:shadow-md transition">
-                      <div className="w-10 sm:w-16 h-10 sm:h-16 bg-gray-200 border-1 border-dashed rounded-sm overflow-hidden flex-shrink-0">
+                      <div className="w-10 sm:w-16 h-10 sm:h-16 bg-gray-200 border-1 border-dashed rounded-lg overflow-hidden flex-shrink-0">
                         {item.imagePath ? (
                           <img src={item.imagePath.startsWith('http') ? item.imagePath : `https://app.bmgjewellers.com${item.imagePath}`} alt={item.productName} className="w-full h-full object-cover" />
                         ) : (

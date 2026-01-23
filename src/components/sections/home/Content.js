@@ -4,7 +4,7 @@ import Category from "./Category";
 import Category1 from "./Category1";
 import Condos from "./ShopByPrice";
 import Ourcategory from "./Ourcategory";
-import Handpicked from "../homethree/Handpicked";
+// import Handpicked from "../homethree/Handpicked";
 import ShopByRecipient from "./ShopByRecipient";
 import Ourproducts from "../../layouts/Ourproducts";
 // import TrendingProducts from "./TrendingProducts";
@@ -13,7 +13,6 @@ import FeaturedBanners from "../../layouts/FeaturedProduct";
 import Onsale from "./Onsale";
 import Video from "./Video";
 import RecentlyViewedWrapper from "../../layouts/RecentlyViewedWrapper";
-import Testimonials from "../../Testimonials/Testimonials";
 import Header from "../../layouts/HeaderWithAuth";
 import Footer from "../../layouts/Footerthree";
 import SmoothScroll from "../../layouts/SmoothScroll";
@@ -68,7 +67,7 @@ const Content = () => {
 
     // ------------------------------CategoryImages--------------------------------//
 
-     const { data:CategoryData , isLoading : categoriesLoading, error:CategoryError } = useCategoryBanner();
+    //  const { data:CategoryData , isLoading : categoriesLoading, error:CategoryError } = useCategoryBanner();
 
     
     // ------------------------------Shop for receipient--------------------------------//
@@ -146,7 +145,7 @@ const Content = () => {
            
 
              
-                    <Handpicked data={CategoryData} isLoading ={categoriesLoading} error = {CategoryError} />
+                    {/* <Handpicked data={CategoryData} isLoading ={categoriesLoading} error = {CategoryError} /> */}
           
 
  
@@ -157,9 +156,7 @@ const Content = () => {
                     <Ourproducts banners={latestBanners} isLoading={LatestisLoading} isError={LatestisError} />
   
 
-                {/* <RevealSection intensity={0.3}>
-                    <TrendingProducts />
-                </RevealSection> */}
+               
 
                
 
@@ -182,11 +179,6 @@ const Content = () => {
 
 
                     <RecentlyViewedWrapper />
-       
-
-       
-                    {/* <Testimonials /> */}
-          
 
                 <Footer />
             </Fragment>

@@ -4,16 +4,16 @@
 
 :root {
   --primary-font: 'Gloock', serif;
-  --secondary-font: 'Montserrat', sans-serif;
+  --secondary-font: 'Lato', sans-serif;
   --title-font: 'Dancing Script';
   --primary-color: #f6f5f0;
   --primary-text-color: #041f60;
   --primary-card-color: #f1efe9;
   --primary-hover-color: #cd865c;
   --secondary-card-color: rgb(238, 246, 247);
-  --feature-bg-color:#ece6d3;
-  --cat-bg-color:#f2e7e9;
-  --main-cat-bg-color:#eef7ee;
+  --feature-bg-color: #ece6d3;
+  --cat-bg-color: #f2e7e9;
+  --main-cat-bg-color: #eef7ee;
   --white-color: #ffffff;
   --header-height: 80px;
   --mobile-header-height: 60px;
@@ -53,11 +53,13 @@
   text-align: center;
   margin-bottom: 2rem;
 }
+
 .main-title {
   font-family: var(--primary-font);
   font-size: 2.4rem;
   color: var(--primary-text-color);
 }
+
 .header-description {
   margin-top: .5rem;
   font-size: 1rem;
@@ -70,11 +72,13 @@
   justify-content: center;
   margin-bottom: 2rem;
 }
+
 .nav-tabs {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
 }
+
 .nav-tab {
   position: relative;
   padding: .75rem 1.25rem;
@@ -88,14 +92,17 @@
   align-items: center;
   gap: .5rem;
 }
+
 .nav-tab:hover {
   border-color: var(--primary-hover-color);
   color: var(--primary-hover-color);
 }
+
 .nav-tab-active {
   border: 1px solid var(--primary-hover-color);
   background: var(--white-color);
 }
+
 .tab-highlight {
   position: absolute;
   bottom: -6px;
@@ -122,10 +129,12 @@
   text-align: center;
   margin-bottom: 2rem;
 }
+
 .chart-title {
   font-family: var(--primary-font);
   font-size: 1.8rem;
 }
+
 .chart-description {
   font-size: 1rem;
   color: var(--grey-color);
@@ -148,10 +157,12 @@
   transition: all .3s ease;
   align-items: center;
 }
+
 .size-item:hover {
   background: var(--secondary-card-color);
   transform: translateY(-4px);
 }
+
 .size-item.selected {
   border: 2px solid var(--primary-hover-color);
   background: var(--white-color);
@@ -163,6 +174,7 @@
   align-items: center;
   min-width: 60px;
 }
+
 .ring-circle {
   border: 2px solid var(--primary-hover-color);
   border-radius: 50%;
@@ -170,6 +182,7 @@
   margin-bottom: .5rem;
   transition: all .3s ease;
 }
+
 .size-label {
   font-weight: bold;
   font-size: .9rem;
@@ -178,18 +191,21 @@
 .size-details {
   flex: 1;
 }
+
 .size-header {
   display: flex;
   justify-content: space-between;
   font-weight: 600;
   margin-bottom: .5rem;
 }
+
 .size-measurements {
   display: flex;
   flex-direction: column;
   font-size: .9rem;
   color: var(--grey-color);
 }
+
 .measurement {
   display: flex;
   justify-content: space-between;
@@ -199,6 +215,7 @@
 .popularity-indicator {
   margin-top: .5rem;
 }
+
 .popularity-bar {
   position: relative;
   background: #f0f0f0;
@@ -206,11 +223,13 @@
   border-radius: 6px;
   overflow: hidden;
 }
+
 .popularity-fill {
   background: var(--primary-hover-color);
   height: 100%;
   border-radius: 6px;
 }
+
 .popularity-text {
   font-size: .75rem;
   margin-left: .5rem;
@@ -224,19 +243,23 @@
   border-radius: 15px;
   background: var(--feature-bg-color);
 }
+
 .size-recommendation {
   display: flex;
   align-items: center;
   gap: 2rem;
 }
+
 .recommendation-visual {
   position: relative;
 }
+
 .recommended-ring {
   border: 2px dashed var(--primary-hover-color);
   border-radius: 50%;
   background: var(--secondary-card-color);
 }
+
 .recommendation-hand {
   position: absolute;
   right: -15px;
@@ -248,20 +271,24 @@
 .size-comparison {
   margin-top: 2rem;
 }
+
 .comparison-title {
   font-family: var(--primary-font);
   margin-bottom: 1rem;
 }
+
 .comparison-visual {
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .finger-comparison {
   position: relative;
   width: 120px;
   height: 120px;
 }
+
 .ring-overlay {
   position: absolute;
   border: 2px solid var(--primary-hover-color);
@@ -270,6 +297,7 @@
   top: 50%;
   transform: translate(-50%, -50%);
 }
+
 .comparison-labels {
   margin-top: 1rem;
   display: flex;
@@ -284,14 +312,17 @@
   padding: 1.5rem;
   border-radius: 15px;
 }
+
 .guidance-content {
   display: flex;
   gap: 1rem;
 }
+
 .guidance-icon {
   flex-shrink: 0;
   color: var(--primary-hover-color);
 }
+
 .guidance-title {
   font-weight: 700;
   margin-bottom: .5rem;
@@ -309,13 +340,16 @@
   .main-title {
     font-size: 1.8rem;
   }
+
   .nav-tab {
     padding: .5rem 1rem;
     font-size: .9rem;
   }
+
   .size-chart-container {
     grid-template-columns: 1fr;
   }
+
   .size-recommendation {
     flex-direction: column;
     gap: 1rem;
@@ -326,16 +360,20 @@
   .ring-container {
     padding: 1rem .5rem;
   }
+
   .chart-card {
     padding: 1rem;
   }
+
   .chart-title {
     font-size: 1.4rem;
   }
+
   .size-item {
     flex-direction: column;
     align-items: flex-start;
   }
+
   .size-header {
     flex-direction: column;
     gap: .25rem;

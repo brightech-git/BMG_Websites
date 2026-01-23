@@ -780,6 +780,9 @@
     animation: bounceInDown var(--animation-duration-normal) var(--animation-timing-ease);
 }
 
+.animate-bounce-in-down-infinite {
+    animation: bounceInDown var(--animation-duration-slower) var(--animation-timing-ease) infinite;
+}
 /* ===================================================================
    UTILITY CLASSES - PULSE & SHAKE
    =================================================================== */

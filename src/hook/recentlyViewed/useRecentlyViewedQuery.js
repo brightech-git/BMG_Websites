@@ -17,6 +17,7 @@ export const useRecentlyViewed = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['recentlyViewed'] }); // Refetch after adding
         },
+        
     });
 
     return {

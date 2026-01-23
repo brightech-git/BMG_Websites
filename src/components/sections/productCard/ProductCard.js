@@ -21,11 +21,11 @@ const ProductCard = ({ item }) => {
     const location = useLocation();
 
     const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
-  
+
     const [isWishlisted, setIsWishlisted] = useState(false);
     const [heartAnimation, setHeartAnimation] = useState(false);
     const [cartAnimation, setCartAnimation] = useState(false);
-   
+
 
     const [isTouchDevice, setIsTouchDevice] = useState(false);
     const [loadingState, setLoadingState] = useState(true);
@@ -75,9 +75,9 @@ const ProductCard = ({ item }) => {
     const hasMultipleImages = productImages.length > 1;
     const defaultIndex = isMobile && hasMultipleImages ? 1 : 0;
     const [currentImageIndex, setCurrentImageIndex] = useState(defaultIndex);
-    
 
- 
+
+
     useEffect(() => {
         if (!productImages?.length) return;
 
@@ -285,31 +285,29 @@ const ProductCard = ({ item }) => {
                                     src={productImages[0]}
                                     alt={productName}
                                     className={`  absolute inset-0 w-full h-full object-cover transition-all duration-300 ease-out
-       ${
-                                        isMobile
+       ${isMobile
                                             ? "opacity-0 scale-100"           // 👈 hide on mobile
                                             : hover
                                                 ? "opacity-0 scale-105"
                                                 : "opacity-100 scale-100"
-      }
+                                        }
     `}
                                     loading="eager"
                                     decoding="async"
                                 />
 
                                 {/* Image 2 */}
-                                {hasMultipleImages  && (
+                                {hasMultipleImages && (
                                     <img
                                         src={productImages[1]}
                                         alt={productName}
                                         className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 ease-out
-      ${
-                                            isMobile
+      ${isMobile
                                                 ? "opacity-100 scale-100"       // 👈 show by default on mobile
                                                 : hover
                                                     ? "opacity-100 scale-100"
                                                     : "opacity-0 scale-95"
-        }
+                                            }
       `}
                                         loading="eager"
                                         decoding="async"
@@ -376,7 +374,7 @@ const ProductCard = ({ item }) => {
 
                 <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&display=swap');
-                @import url('https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@100;300;400;600;700&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Gloock&family=Lato:wght@100;300;400;600;700&display=swap');
                 
                 .card-container {
                     width: 100%;
@@ -473,7 +471,7 @@ const ProductCard = ({ item }) => {
                     padding: 4px 8px;
                     border-radius: 12px;
                     font-size: 0.7rem;
-                    font-family: 'Montserrat', sans-serif;
+                    font-family: 'Lato', sans-serif;
                     : 10;
                     backdrop-filter: blur(4px);
                     animation: fadeInOut 3s ease-in-out infinite;
@@ -618,7 +616,7 @@ const ProductCard = ({ item }) => {
                 }
 
                 .item-name {
-                    font-family: 'Montserrat', sans-serif;
+                    font-family: 'Lato', sans-serif;
                     font-size: 1rem;
                     font-weight: 400;
                     color: #041f60;
@@ -638,7 +636,7 @@ const ProductCard = ({ item }) => {
                 }
 
                 .new-price {
-                    font-family: 'Montserrat', sans-serif;
+                    font-family: 'Lato', sans-serif;
                     font-size: 0.9rem;
                     font-weight: 400;
                     color: #041f60;

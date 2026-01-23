@@ -5,7 +5,6 @@ import classNames from "classnames";
 import { ChevronDown, ShoppingCart, Menu, User, Heart, Video } from "lucide-react";
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import "../../assets/css/header.css";
-import Canvas from "./Canvas";
 import Mobilemenu from "./Mobilemenu";
 import Logo from "./logo.png";
 import ItemSearch from "./Search";
@@ -20,7 +19,7 @@ import { useHeaderData } from "../../hook/header/useNavData";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCompanyDetails } from "../../context/clientDetails/clientDetialContext";
 import silvericon from '../../assets/videos/silverIcon.png';
-import goldicon from '../../assets/videos/silverIcon.png';
+import goldicon from '../../assets/videos/goldIcon.png';
 
 
 const Header = ({ isAuthenticated }) => {
@@ -31,12 +30,11 @@ const Header = ({ isAuthenticated }) => {
   const [togglemethod, setTogglemethod] = useState(false);
   const [togglecart, setTogglecart] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
-  const [showRates, setShowRates] = useState(false); // State to toggle rates display
   const dispatch = useDispatch();
   const { data } = useHeaderData();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [open ,setOpen] =useState(false);
   const { details } = useCompanyDetails();
+
 const location =useLocation();
   const getMetalIcon = (key) => {
     const k = key.toLowerCase();
@@ -115,28 +113,28 @@ const location =useLocation();
             value: "rings",
             keyName: "itemCtrName",
             keyValue: "rings",
-            image: "/images/categories/rings.jpg",
+            image: "/assets/videos/goldIcon.png",
           },
           {
             name: "Necklaces",
             value: "necklaces",
             keyName: "itemCtrName",
             keyValue: "necklaces",
-            image: "/images/categories/necklaces.jpg",
+            image: "/assets/videos/goldIcon.png",
           },
           {
             name: "Bracelets",
             value: "bracelets",
             keyName: "itemCtrName",
             keyValue: "bracelets",
-            image: "/images/categories/bracelets.jpg",
+            image: "/assets/videos/goldIcon.png",
           },
           {
             name: "Earrings",
             value: "earrings",
             keyName: "itemCtrName",
             keyValue: "earrings",
-            image: "/images/categories/earrings.jpg",
+            image: "/assets/videos/goldIcon.png",
           },
         ],
       },
@@ -147,25 +145,25 @@ const location =useLocation();
             label: "Under ₹199",
             keyName: "maxGrandTotal",
             keyValue: 199,
-            image: "/images/price/199.jpg",
+            image: "/assets/videos/goldIcon.png",
           },
           {
             label: "Under ₹299",
             keyName: "maxGrandTotal",
             keyValue: 299,
-            image: "/images/price/299.jpg",
+            image: "/assets/videos/goldIcon.png",
           },
           {
             label: "Under ₹399",
             keyName: "maxGrandTotal",
             keyValue: 399,
-            image: "/images/price/399.jpg",
+            image: "/assets/videos/goldIcon.png",
           },
           {
             label: "Under ₹599",
             keyName: "maxGrandTotal",
             keyValue: 599,
-            image: "/images/price/599.jpg",
+            image: "/assets/videos/goldIcon.png",
           },
         ],
       },
@@ -177,21 +175,21 @@ const location =useLocation();
             value: "men",
             keyName: "gender",
             keyValue: "men",
-            image: "/images/gender/men.jpg",
+            image: "/assets/videos/goldIcon.png",
           },
           {
             name: "Women",
             value: "women",
             keyName: "gender",
             keyValue: "women",
-            image: "/images/gender/women.jpg",
+            image: "/assets/videos/goldIcon.png",
           },
           {
             name: "Kids",
             value: "kids",
             keyName: "gender",
             keyValue: "kids",
-            image: "/images/gender/kids.jpg",
+            image: "/assets/videos/goldIcon.png",
           },
         ],
       },
@@ -202,25 +200,25 @@ const location =useLocation();
             name: "Trending",
             keyName: "top_trending",
             keyValue: "true",
-            image: "/images/collections/trending.jpg",
+            image: "/assets/videos/goldIcon.png",
           },
           {
             name: "New Arrivals",
             keyName: "new_arrivals",
             keyValue: "true",
-            image: "/images/collections/new_arrivals.jpg",
+            image: "/assets/videos/goldIcon.png",
           },
           {
             name: "Best Designs",
             keyName: "best_design",
             keyValue: "true",
-            image: "/images/collections/best_design.jpg",
+            image: "/assets/videos/goldIcon.png",
           },
           {
             name: "Featured",
             keyName: "featured",
             keyValue: "true",
-            image: "/images/collections/featured.jpg",
+            image: "/assets/videos/goldIcon.png",
           },
         ],
       },
@@ -231,13 +229,13 @@ const location =useLocation();
             name: "Bridal",
             keyName: "itemCtrName",
             keyValue: "bridal",
-            image: "/images/special/bridal.jpg",
+            image: "/assets/videos/goldIcon.png",
           },
           {
             name: "Clearance",
             keyName: "itemCtrName",
             keyValue: "clearance",
-            image: "/images/special/clearance.jpg",
+            image: "/assets/videos/goldIcon.png",
           },
         ],
       },
@@ -248,13 +246,13 @@ const location =useLocation();
             name: "50% Off",
             keyName: "subItemName",
             keyValue: "matching sets",
-            image: "/images/offers/50percent.jpg",
+            image: "/assets/videos/goldIcon.png",
           },
           {
             name: "Buy 1 Get 1",
             keyName: "subItemName",
             keyValue: "Buy 2 Get 1",
-            image: "/images/offers/b1g1.jpg",
+            image: "/assets/videos/goldIcon.png",
           },
         ],
       },

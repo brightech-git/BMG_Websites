@@ -159,7 +159,7 @@ const ShopRelatedUpdated = ({ itemCtrName }) => {
                             {relatedProducts.map((item, index) => (
                                 <div
                                     key={`${item.id || item._id || index}-${item.name}`}
-                                    className="flex-shrink-0 w-45 md:w-55 lg:w-60 snap-start "
+                                    className="flex-shrink-0 w-[45%] sm:w-[25%] md:w-56 lg:w-60 snap-start"
                                 >
                                   
                                         <ProductCard item={item} />

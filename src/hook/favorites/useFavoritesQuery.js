@@ -10,6 +10,7 @@ export const useFavorites = () => {
     return useQuery({
         queryKey: ['favorites'],
         queryFn: getFavorites,
+        // enabled: isAuthenticated === true
     });
 };
 

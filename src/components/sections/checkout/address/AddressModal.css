@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;500;600;700&display=swap');
 
 :root {
     --primary-color: #f6f5f0;
@@ -21,7 +21,7 @@
 
 /* Base Modal Styles */
 .address-modal {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', sans-serif;
 }
 
 .address-modal .modal-dialog {
@@ -37,7 +37,7 @@
 }
 
 .address-modal-title {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 1.25rem;
     font-weight: 600;
     margin: 0;
@@ -95,7 +95,7 @@
     font-weight: 600;
     color: var(--primary-text-color);
     margin: 0;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', sans-serif;
 }
 
 .default-badge {
@@ -159,7 +159,7 @@
     font-size: 0.85rem;
     font-weight: 500;
     border-radius: 6px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', sans-serif;
     transition: all 0.2s ease;
 }
 
@@ -187,7 +187,7 @@
     background: transparent;
     border-radius: 12px;
     transition: all 0.3s ease;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', sans-serif;
 }
 
 .add-new-address-btn:hover {
@@ -198,7 +198,7 @@
 
 /* Compact Form Styles */
 .compact-address-form {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', sans-serif;
 }
 
 .form-section {
@@ -216,7 +216,7 @@
     margin-bottom: 0.75rem;
     padding-bottom: 0.5rem;
     border-bottom: 2px solid var(--primary-card-color);
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', sans-serif;
 }
 
 .compact-row {
@@ -232,7 +232,7 @@
     font-weight: 500;
     color: var(--primary-text-color);
     margin-bottom: 0.4rem;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', sans-serif;
 }
 
 .compact-input,
@@ -242,7 +242,7 @@
     border: 1px solid var(--light-border);
     border-radius: 6px;
     transition: all 0.2s ease;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', sans-serif;
     background: var(--white-color);
 }
 
@@ -264,7 +264,7 @@
 }
 
 .custom-checkbox {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', sans-serif;
 }
 
 .custom-checkbox .form-check-input {
@@ -303,7 +303,7 @@
 }
 
 .custom-switch {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', sans-serif;
 }
 
 .custom-switch .form-check-input {
@@ -338,7 +338,7 @@
 .cancel-btn {
     padding: 0.6rem 1.5rem;
     font-weight: 500;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', sans-serif;
     border-radius: 6px;
     transition: all 0.2s ease;
 }
@@ -349,7 +349,7 @@
     background: linear-gradient(135deg, var(--primary-hover-color), #b87a56);
     border: none;
     color: var(--white-color);
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', sans-serif;
     border-radius: 6px;
     transition: all 0.2s ease;
 }

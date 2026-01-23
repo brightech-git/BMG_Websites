@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import img1 from './feature.jpg';
-import img2 from './feature2.jpg';
-import img3 from './feature3.jpg';
-import img4 from './feature4.jpg';
 import './FeaturedBanners.css';
 import { getProductImages } from '../../utils/getProductImages';
 

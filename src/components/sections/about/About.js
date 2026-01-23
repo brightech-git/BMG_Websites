@@ -11,7 +11,7 @@ import missionImage from '../../../assets/videos/silverIcon.png'; // Add your mi
 import visionImage from '../../../assets/videos/silverIcon.png';   // Add your vision image path
 
 // Import video
-import craftsmanshipVideo from '../../../assets/videos/craft.mp4';
+// import craftsmanshipVideo from '../../../assets/videos/craft.mp4';
 
 // Memoized Video component with toggle play/pause functionality and accessibility improvements
 const CraftsmanshipVideo = memo(() => {
@@ -83,7 +83,7 @@ const CraftsmanshipVideo = memo(() => {
           <p>Loading video...</p>
         </div>
       )}
-      <video
+      {/* <video
         ref={videoRef}
         muted
         loop
@@ -94,7 +94,7 @@ const CraftsmanshipVideo = memo(() => {
       >
         <source src={craftsmanshipVideo} type="video/mp4" />
         Your browser does not support the video tag.
-      </video>
+      </video> */}
       <div
         className={`bmg-play-button-overlay ${isPlaying ? 'bmg-play-button-overlay-playing' : ''}`}
         role="button"

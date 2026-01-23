@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Lenis from "@studio-freight/lenis";
-import video from "../../assets/videos/3.mp4";
+// import video from "../../assets/videos/3.mp4";
 import image from "../../assets/videos/clouds-back.jpg";
 
 export default function EnchantedHero() {
@@ -38,7 +38,7 @@ export default function EnchantedHero() {
             className="relative min-h-[350vh] bg-gradient-to-b from-sky-300 via-pink-100 to-white overflow-hidden"
         >
             {/* 🌟 Hero Video or Image */}
-            <motion.div
+            {/* <motion.div
                 style={{ scale, opacity }}
                 className="fixed top-0 left-0 w-full h-screen flex justify-center items-center pointer-events-none"
             >
@@ -51,7 +51,7 @@ export default function EnchantedHero() {
                     className="object-cover w-full h-full"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/80" />
-            </motion.div>
+            </motion.div> */}
 
             {/* ☁️ Parallax Clouds (multiple layers) */}
             <motion.img

@@ -807,7 +807,7 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
           bottom: 0;
           background: rgba(0, 0, 0, 0.4);
           backdrop-filter: blur(2px);
-          z-index: 999;
+          z-index: 99;
           animation: fadeIn 0.3s ease-out;
         }
 

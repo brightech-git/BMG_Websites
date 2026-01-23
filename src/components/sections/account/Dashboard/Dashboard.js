@@ -19,7 +19,7 @@ import { useFavorites } from "../../../../hook/favorites/useFavoritesQuery";
 const Dashboard = () => {
   const history = useHistory();
 
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState();
   const [loadingOrders, setLoadingOrders] = useState(true);
 
   const { cartItems = { data: [] }, isLoading: cartLoading } = useCart();
@@ -33,7 +33,7 @@ const Dashboard = () => {
         const response = await getOrderHistory(); // Your service
         const orderList = Array.isArray(response.content)
           ? response.content
-          : Array.isArray(response)
+          : Array.isArray(response.data)
             ? response
             : [];
         setOrders(orderList);
@@ -48,7 +48,7 @@ const Dashboard = () => {
   }, []);
 
   const metrics = [
-    { icon: <FiShoppingBag />, value: orders.length, label: "Orders", to: "/account/orders" },
+    { icon: <FiShoppingBag />, value: orders?.totalOrders ?? 0, label: "Orders", to: "/account/orders" },
     { icon: <FiHeart />, value: wishlistResponse.data?.length || 0, label: "Wishlist", to: "/wishlist" },
     { icon: <FiShoppingCart />, value: cartItems.data?.length || 0, label: "Cart", to: "/cart" },
   ];
@@ -132,7 +132,7 @@ const Dashboard = () => {
             </button>
           </div>
 
-          {orders.length === 0 ? (
+          {orders?.data.length === 0 ? (
             <div className="p-12 text-center">
               <FiPackage className="mx-auto text-6xl text-gray-300 mb-4" />
               <p className="text-gray-600 mb-3">No orders yet</p>
@@ -156,7 +156,7 @@ const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {orders.slice(0, 5).map((order, i) => {
+                  {orders?.data.slice(0, 5).map((order, i) => {
                     const badge = getStatusBadge(order.status);
                     return (
                       <tr

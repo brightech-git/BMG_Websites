@@ -8,24 +8,37 @@ import {
 import { getOrderHistory } from "../../../../service/orderService";
 import { formatCurrency } from "../../../../utils/formatters";
 import { useHistory } from "react-router-dom";
+import SmartButton from "../../../ui/SmartButton";
 
 const Orders = () => {
+
   const [ordersData, setOrdersData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(0);
+ 
+
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [timeFilter, setTimeFilter] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize ,setPageSize] = useState(10);
   const history = useHistory();
-  const pageSize = 10;
+
+
+  const orderPayload = {
+    page:currentPage,
+    size:pageSize,
+    status:statusFilter
+  }
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         setLoading(true);
         setError(null);
-        const data = await getOrderHistory(currentPage, pageSize);
+        const data = await getOrderHistory(orderPayload);
+        console.log(data, 'ordersData')
         setOrdersData(data);
       } catch (err) {
         setError(err.response?.data?.message || err.message || "Failed to load orders");
@@ -34,11 +47,12 @@ const Orders = () => {
       }
     };
     fetchOrders();
-  }, [currentPage]);
+  }, [currentPage ,pageSize , statusFilter]);
+
 
   const orders = useMemo(() => {
     if (!ordersData) return [];
-    return Array.isArray(ordersData) ? ordersData : [];
+    return Array.isArray(ordersData.data) ? ordersData.data : [];
   }, [ordersData]);
 
   const filteredOrders = useMemo(() => {
@@ -56,12 +70,18 @@ const Orders = () => {
 
       return matchesSearch && matchesStatus && matchesTime;
     });
-  }, [orders, searchQuery, statusFilter, timeFilter]);
+  }, [orders, searchQuery, statusFilter, timeFilter ]);
+
 
   const handlePageChange = useCallback((page) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
+
+  const handlePageSizeChange = (e) => {
+    setPageSize(Number(e.target.value));
+    setCurrentPage(0); // 🔥 reset to first page
+  };
 
   const getTimeFilterLabel = (value) => {
     const labels = { "7": "Last 7 Days", "30": "Last 30 Days", "90": "Last 3 Months", "180": "Last 6 Months", "365": "Last Year" };
@@ -84,6 +104,24 @@ const Orders = () => {
     if (!dateString) return "-";
     return new Date(dateString).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
   };
+  const statusOptions = [
+    { label: "Pending", value: "pending" },
+    { label: "Placed", value: "placed" },
+    { label: "Processing", value: "in_processing" },
+    { label: "Packed", value: "packed" },
+    { label: "Shipped", value: "shipped" },
+    { label: "Delivered", value: "delivered" },
+    { label: "Cancelled", value: "cancelled" },
+  ];
+
+  const timeOptions = [
+    { label: "Last 7 Days", value: "7" },
+    { label: "Last 30 Days", value: "30" },
+    { label: "Last 3 Months", value: "90" },
+    { label: "Last 6 Months", value: "180" },
+    { label: "Last Year", value: "365" },
+  ];
+
 
   return (
     <>
@@ -110,7 +148,7 @@ const Orders = () => {
             <input
               type="text"
               placeholder="Search orders..."
-              className="w-full pl-7 pr-3 py-1.5 h-[45px] sm:h-12 bg-white text-sm border border-gray-300 rounded-sm focus:outline-none text-[var(--primary-text-color)]"
+              className="w-full pl-8 pr-3 py-1.5 h-[40px] sm:h-9 bg-white text-sm border border-gray-300 rounded-full focus:outline-none focus:shadow-lg text-[var(--primary-text-color)]"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -121,64 +159,117 @@ const Orders = () => {
             )}
           </div>
 
-          <div className="flex gap-1">
+          <div className="flex gap-2 flex-wrap items-center">
+            {/* STATUS */}
             <div className="relative">
               <select
-                className="appearance-none text-[var(--primary-text-color)] bg-white h-[40px] sm:h-8  border border-gray-300 rounded-sm px-4 py-1.5 pr-6 text-xs cursor-pointer"
+                className="appearance-none bg-white h-8 border border-gray-300 rounded-full px-4 pr-6 text-xs focus:outline-none text-[var(--primary-text-color)]"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
               >
                 <option value="">All Statuses</option>
-                <option value="pending">Pending</option>
-                <option value="placed">Placed</option>
-                <option value="in_processing">Processing</option>
-                <option value="packed">Packed</option>
-                <option value="shipped">Shipped</option>
-                <option value="delivered">Delivered</option>
-                <option value="cancelled">Cancelled</option>
+                {statusOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
               </select>
-              <FontAwesomeIcon icon={faChevronDown} className="absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none text-xs text-gray-500" />
+              <FontAwesomeIcon
+                icon={faChevronDown}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none"
+              />
             </div>
 
+            {/* TIME */}
             <div className="relative">
               <select
-                className="appearance-none bg-white text-[var(--primary-text-color)] h-[40px] sm:h-8  border border-gray-300 rounded-sm px-4 py-1.5 pr-6 text-xs cursor-pointer"
+                className="appearance-none bg-white h-8 border border-gray-300 rounded-full px-4 pr-6 text-xs  focus:outline-none text-[var(--primary-text-color)]"
                 value={timeFilter}
                 onChange={(e) => setTimeFilter(e.target.value)}
               >
                 <option value="">All Time</option>
-                <option value="7">Last 7 Days</option>
-                <option value="30">Last 30 Days</option>
-                <option value="90">Last 3 Months</option>
-                <option value="180">Last 6 Months</option>
-                <option value="365">Last Year</option>
+                {timeOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
               </select>
-              <FontAwesomeIcon icon={faChevronDown} className="absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none text-xs text-gray-500" />
+              <FontAwesomeIcon
+                icon={faChevronDown}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none"
+              />
             </div>
           </div>
+
         </div>
 
         {/* Active Filters */}
         {(statusFilter || timeFilter || searchQuery) && (
-          <div className="flex flex-wrap gap-1 mb-2">
-            {statusFilter && (
-              <span className="inline-flex items-center gap-1 bg-gray-100 text-xs px-2 py-0.5 rounded border">
-                {statusFilter}
-                <button onClick={() => setStatusFilter("")} className="ml-1 hover:text-red-600">
-                  <FontAwesomeIcon icon={faTimes} className="text-xs" />
-                </button>
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-1 p-2 bg-white text-xs">
+            <div className="flex flex-wrap items-center gap-1.5  text-[var(--primary-text-color)] gap-2  text-xs">
+              {/* Label */}
+              <span className="font-semibold text-gray-700">
+                Active Filters:
               </span>
-            )}
-            {timeFilter && (
-              <span className="inline-flex items-center gap-1 bg-gray-100 text-xs px-2 py-0.5 rounded border">
-                {getTimeFilterLabel(timeFilter)}
-                <button onClick={() => setTimeFilter("")} className="ml-1 hover:text-red-600">
-                  <FontAwesomeIcon icon={faTimes} className="text-xs" />
-                </button>
-              </span>
+
+              {/* Status Filter */}
+              {statusFilter && (
+                <span className="inline-flex items-center gap-1 bg-gray-100 px-2 py-0.5 rounded border">
+                  {statusFilter}
+                  <button
+                    onClick={() => setStatusFilter("")}
+                    className="hover:text-red-600"
+                  >
+                    <FontAwesomeIcon icon={faTimes} className="text-xs" />
+                  </button>
+                </span>
+              )}
+
+              {/* Time Filter */}
+              {timeFilter && (
+                <span className="inline-flex items-center gap-1 bg-gray-100 px-2 py-0.5 rounded border">
+                  {getTimeFilterLabel(timeFilter)}
+                  <button
+                    onClick={() => setTimeFilter("")}
+                    className="hover:text-red-600"
+                  >
+                    <FontAwesomeIcon icon={faTimes} className="text-xs" />
+                  </button>
+                </span>
+              )}
+
+              {/* Search Filter (optional, if you use it) */}
+              {searchQuery && (
+                <span className="inline-flex items-center gap-1 bg-gray-100 px-2 py-0.5 rounded border">
+                  "{searchQuery}"
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="hover:text-red-600"
+                  >
+                    <FontAwesomeIcon icon={faTimes} className="text-xs" />
+                  </button>
+                </span>
+              )}
+            </div>
+          
+
+            {/* Clear All */}
+            {(statusFilter || timeFilter || searchQuery) && (
+              <SmartButton
+                onClick={() => {
+                  setStatusFilter("");
+                  setTimeFilter("");
+                  setSearchQuery("");
+                }}
+                size="md"
+                hover
+              >
+                Clear all
+              </SmartButton>
             )}
           </div>
         )}
+
 
         {/* Content */}
         {loading ? (
@@ -256,25 +347,69 @@ const Orders = () => {
             </div>
 
             {/* Pagination */}
-            {ordersData?.totalPages > 0 && (
-              <div className="flex justify-end items-center gap-2 mt-2 text-xs">
-                <button
-                  disabled={currentPage === 0}
-                  onClick={() => handlePageChange(currentPage -1 )}
-                  className="p-1.5 border border-gray-300 rounded disabled:opacity-50 hover:bg-gray-100"
-                >
-                  <FontAwesomeIcon icon={faAngleLeft} />
-                </button>
-                <span>Page {currentPage + 1} of {ordersData.totalPages}</span>
-                <button
-                  disabled={currentPage >= ordersData.totalPages - 1}
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  className="p-1.5 border border-gray-300 rounded disabled:opacity-50 hover:bg-gray-100"
-                >
-                  <FontAwesomeIcon icon={faAngleRight} />
-                </button>
-              </div>
-            )}
+           <div className="flex bg-white  justify-between items-center gap-1 mt-2 text-xs p-2 rounded-md">
+            <div>
+                      <p>Total Orders : {ordersData?.totalOrders || 0} </p>
+              
+            </div>
+
+            
+                    {ordersData && (
+                      <div className="flex justify-between items-center text-xs gap-1 ">
+
+                        {/* LEFT: Pagination */}
+                        <div className="flex items-center gap-2">
+                          <button
+                            disabled={currentPage === 0}
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            className="p-1.5 border border-gray-300 rounded disabled:opacity-50 hover:bg-gray-100"
+                          >
+                            <FontAwesomeIcon icon={faAngleLeft} />
+                          </button>
+
+                          <span>
+                            Page {currentPage + 1} of {ordersData.totalPages}
+                          </span>
+
+                          <button
+                            disabled={currentPage >= ordersData.totalPages - 1}
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            className="p-1.5 border border-gray-300 rounded disabled:opacity-50 hover:bg-gray-100"
+                          >
+                            <FontAwesomeIcon icon={faAngleRight} />
+                          </button>
+                        </div>
+
+                        {/* RIGHT: Page Size Selector */}
+                        <div className="flex items-center gap-1 text-xs">
+                          <span className="text-gray-600">Rows:</span>
+
+                          <select
+                            value={pageSize}
+                            onChange={handlePageSizeChange}
+                            className="
+                            h-8
+      border border-gray-300
+      rounded
+      px-2 py-1
+      bg-white text-gray-700
+      focus:outline-none focus:ring-1 focus:ring-gray-300
+      cursor-pointer
+    "
+                          >
+                            {[5, 10, 20, 50].map((size) => (
+                              <option key={size} value={size}>
+                                {size}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+
+                      </div>
+                    )}
+
+            </div>
           </>
         )}
       </div>

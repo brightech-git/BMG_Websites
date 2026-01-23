@@ -282,7 +282,7 @@
   border: 1px solid rgba(184, 134, 11, 0.3);
   border-radius: 12px;
   pointer-events: none;
-  : 2;
+  z-index: 2;
 }
 
 .bmg-image-container:hover {
@@ -321,7 +321,7 @@
   border: 1px solid rgba(184, 134, 11, 0.3);
   border-radius: 12px;
   pointer-events: none;
-  : 2;
+  z-index: 2;
 }
 
 .bmg-video-container video {
@@ -354,7 +354,7 @@
   background: rgba(0, 0, 0, 0.4);
   transition: all 0.4s ease;
   cursor: pointer;
-  : 10;
+  z-index: 10;
 }
 
 .bmg-play-button-overlay-playing {
@@ -467,7 +467,7 @@
   margin: 0 auto 20px;
   line-height: 1.7;
   position: relative;
-  : 1;
+  z-index: 1;
 }
 
 /* Mission Section Styles */
@@ -537,7 +537,7 @@
   justify-content: center;
   align-items: center;
   background: rgba(255, 255, 255, 0.9);
-  : 5;
+  z-index : 5;
 }
 
 .bmg-video-spinner {

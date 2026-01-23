@@ -2,6 +2,11 @@ import PublicUrl from "../api/publicUrl";
 
 // Add item to recently viewed
 export const addRecentlyViewed = async (itemSno) => {
+    const token = localStorage.getItem('user_token');
+
+    if(!token){
+        return {message:"NO Token Found"}
+    }
     
     const response = await PublicUrl.post(
         '/recently-viewed/add',
@@ -15,6 +20,11 @@ export const addRecentlyViewed = async (itemSno) => {
   
 // Get recently viewed items
 export const getRecentlyViewedItems = async () => {
+    const token = localStorage.getItem('user_token');
+
+    if (!token) {
+        return { message: "NO Token Found" }
+    }
     const response = await PublicUrl.get('/recently-viewed/list',{
     });
     return response.data;

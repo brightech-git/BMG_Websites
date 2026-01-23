@@ -14,6 +14,10 @@ export const removeFavorite = async (itemSno) => {
 
 // Get favorites list
 export const getFavorites = async () => {
+  const token = localStorage.getItem('user_token');
+  if(!token){
+    return [];
+  }
   const response = await publicUrl.get('/favorites/list');
   return response.data;
 };

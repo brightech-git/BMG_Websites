@@ -1,6 +1,7 @@
 
 import { useQuery } from '@tanstack/react-query';
-import { getAllOrders } from '../../service/orderService';
+import { getAllOrders ,getOrderById } from '../../service/orderService';
+
 
 export const useAllOrders = () => {
     return useQuery({
@@ -8,3 +9,12 @@ export const useAllOrders = () => {
         queryFn: () => getAllOrders(),
     });
 };
+export const useGetOrderById = (orderId) =>{
+    return useQuery({
+        queryKey:['getOrderByID'],
+        queryFn: () => getOrderById(orderId),
+        enabled:!!orderId
+
+    }    
+    )
+}

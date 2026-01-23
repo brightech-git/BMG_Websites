@@ -1,9 +1,11 @@
-import React from 'react';
-import { Route, Redirect, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import React from "react";
+import { Route, Redirect, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-    const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+    const isAuthenticated = useSelector(
+        (state) => state.user?.isAuthenticated
+    );
     const location = useLocation();
 
     return (
@@ -15,8 +17,8 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
                 ) : (
                     <Redirect
                         to={{
-                            pathname: '/login',
-                            state: { from: location.pathname + location.search }, // just a string
+                            pathname: "/login",
+                            state: { from: location },
                         }}
                     />
                 )

@@ -251,7 +251,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
           <div className="grid lg:grid-cols-2 bg-[#fff] p-2 rounded-xl">
 
             {/* Image Gallery */}
-            <div >
+            <div className="max-w-full">
               {(images.length >= 0 || videos.length > 0) && (
                 <ImageGallery
                   images={images.map(img => ({ img }))}
@@ -295,7 +295,6 @@ const Shopinfo = ({ sno, Authenticated }) => {
                         <div className="grid grid-cols-2 gap-4 text-center">
                           <ShareButtons
                             sno={sno}
-                         
                           />
 
                         </div>
@@ -307,11 +306,11 @@ const Shopinfo = ({ sno, Authenticated }) => {
 
               {/* Price */}
               <div className="flex items-baseline gap-2">
-                <span className="text-xl font-bold text-[#f16137]">₹{getPrice().toLocaleString("en-IN")}</span>
+                <span className="text-xl line-through font-bold text-[#f16137]">₹{getPrice().toLocaleString("en-IN")}</span>
                 {discount > 0 && (
                   <>
-                    <span className="text-gray-500 text-sm line-through">₹{originalPrice.toLocaleString("en-IN")}</span>
-                    <span className="bg-red-100 text-red-700 px-3 py-1 text-xs rounded-full font-semibold">{discount}% OFF</span>
+                    <span className="text-sm line-through ">₹{originalPrice.toLocaleString("en-IN")}</span>
+                    <span className="bg-red-100 text-red-700 px-3 py-1 text-xs rounded-full font-semibold line-through">{discount}% OFF</span>
                   </>
                 )}
               </div>
@@ -345,10 +344,10 @@ const Shopinfo = ({ sno, Authenticated }) => {
 
               {/* Actions */}
               <div className="flex gap-2 z-[0]">
-                  <SmartButton onClick={handleAddToCart} variant="primary" className="w-full" success={cartSuccess} isLoading={cartLoading} isDisabled ={isInCart ? true : false} >
+                  <SmartButton onClick={handleAddToCart} variant="primary" hover className="w-full" success={cartSuccess} isLoading={cartLoading} isDisabled ={isInCart ? true : false} >
                   {isInCart ? "Already in Cart" : "Add to Cart"}
                 </SmartButton>
-                <SmartButton onClick={handleBuyNow} className="w-full" variant="primary">
+                <SmartButton onClick={handleBuyNow} className="w-full" variant="primary" hover >
                   Buy Now
                 </SmartButton>
               </div>
@@ -359,7 +358,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
                   {(product.CATNAME || product.SUBITEMNAME) && (
                     <div className="flex gap-2 flex-wrap">
                       <span className="text-gray-600">Category:</span>
-                      {product.CATNAME && <span className="font-medium">{product.CATNAME}</span>}
+                      {product.CATNAME && <span className="font-medium ">{product.CATNAME}</span>}
                       {product.SUBITEMNAME && <span className="font-medium">{product.SUBITEMNAME}</span>}
                     </div>
                   )}
@@ -375,7 +374,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
             {/* <h2 className="text-sm font-bold mb-2">Price Breakup & Care Instructions</h2> */}
            
             <div className="mt-2">
-              <h3 className="text-lg font-semibold mb-2">Jewellery Care</h3>
+              <h3 className="text-lg font-semibold mb-2 ">Jewellery Care</h3>
               <div className="grid md:grid-cols-3 gap-3">
                 {[
                   "Avoid contact with water & perfume",
@@ -398,7 +397,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
           <PriceBreakup product={product} />
 
           {/* Related Products */}
-          <div className="mt-12">
+          <div className="mt-11">
             <Shoprelated itemCtrName={product.ITEMCTRNAME} />
           </div>
         </div>

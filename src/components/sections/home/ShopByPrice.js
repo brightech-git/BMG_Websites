@@ -3,7 +3,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import { useBudgetBanners } from '../../../hook/budgetBanner/useBudgetBanners';
 import './PriceUnderSection.css';
 
 const PriceUnderSection = ({budgetBanners ,isLoading ,isError}) => {

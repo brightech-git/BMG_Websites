@@ -375,7 +375,7 @@ const ImageGallery = ({ images, videos = [], badges = {} }) => {
     return (
         <>
             {/* Gallery Container */}
-            <div className="w-full max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+            <div className="w-full max-w-xs sm:max-w-md  mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="container mx-auto">
                     {/* Main Media Display */}
                     <div className="relative bg-gray-100">
@@ -457,7 +457,12 @@ const ImageGallery = ({ images, videos = [], badges = {} }) => {
                 {/* Thumbnail Gallery */}
                 {media.length > 1 && (
                     <div className="bg-white py-2 border-t border-gray-200">
-                        <div className="flex justify-center gap-2 overflow-x-auto p-1.5 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
+                        <div className={`
+    flex items-center gap-2 p-1.5
+    overflow-x-auto
+    scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200
+    ${media.length <= 4 ? 'justify-center' : 'justify-start'}
+  `}>
                             {media.map((item, index) => (
                                 <div
                                     key={index}

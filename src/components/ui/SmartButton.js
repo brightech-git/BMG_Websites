@@ -13,10 +13,11 @@ const SmartButton = ({
     success = false,     // NEW: Show success state
     error = false,       // NEW: Show error state
     className = "",
+    hover=false
 }) => {
     const variants = {
         primary: {
-            base: "bg-[#041f60] text-white hover:bg-[#f16137] shadow-lg hover:shadow-xl",
+            base: "bg-[#041f60] text-white hover:bg-[#f16137] shadow-lg hover:shadow-xl ",
             loading: "bg-[#041f60]/80",
             success: "bg-green-600",
             error: "bg-red-600",
@@ -106,21 +107,24 @@ const SmartButton = ({
                 onClick={onClick}
                 disabled={isActuallyDisabled}
                 className={`
-          ${padding}
-          ${isActuallyDisabled ? disabled : success ? successStyle : error ? errorStyle : isLoading ? loadStyle : base}
-          ${className}
-          ${animation}
-         ${variant === "arrow" ? "rounded-full" : "rounded-lg"}
-          font-semibold
-          flex items-center justify-center gap-2
-          transition-all duration-300 ease-out
-          focus:outline-none focus:ring-4 focus:ring-orange-100
-          disabled:pointer-events-none
-          whitespace-nowrap
-          relative overflow-hidden
-          min-w-fit
-        
-        `}
+                            ${padding}
+                            ${isActuallyDisabled ? disabled : success ? successStyle : error ? errorStyle : isLoading ? loadStyle : base}
+                            ${className}
+                            ${animation}
+
+                            rounded-lg
+                            ${hover ? "hover:rounded-full hover:scale-105" : ""}
+
+                            font-semibold
+                            flex items-center justify-center gap-2
+                            transition-all duration-300 ease-out
+                            focus:outline-none focus:ring-4 focus:ring-orange-100
+                            disabled:pointer-events-none
+                            whitespace-nowrap
+                            relative overflow-hidden
+                            min-w-fit
+                            `}
+
             >
                 {/* Loading State */}
                 {isLoading && (

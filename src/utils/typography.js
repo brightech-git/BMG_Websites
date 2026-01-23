@@ -10,7 +10,7 @@ import { fontSizes, headingSizes } from './fontSizes';
 // Font families mapped to CSS variables
 export const fontFamilies = {
   primary: "var(--primary-font)",      // 'Gloock', 'serif'
-  secondary: "var(--secondary-font)",  // 'Domine', 'Montserrat', 'sans-serif'
+  secondary: "var(--secondary-font)",  // 'Domine', 'Lato', 'sans-serif'
   title: "var(--title-font)",          // 'Dancing Script'
 };
 
@@ -60,7 +60,7 @@ export const typography = {
     letterSpacing: letterSpacing.tight,
     color: 'var(--primary-text-color)',
   },
-  
+
   h2: {
     fontFamily: fontFamilies.primary,
     fontSize: headingSizes.h2,
@@ -69,7 +69,7 @@ export const typography = {
     letterSpacing: letterSpacing.tight,
     color: 'var(--primary-text-color)',
   },
-  
+
   h3: {
     fontFamily: fontFamilies.primary,
     fontSize: headingSizes.h3,
@@ -78,7 +78,7 @@ export const typography = {
     letterSpacing: letterSpacing.normal,
     color: 'var(--primary-text-color)',
   },
-  
+
   h4: {
     fontFamily: fontFamilies.secondary,
     fontSize: headingSizes.h4,
@@ -87,7 +87,7 @@ export const typography = {
     letterSpacing: letterSpacing.normal,
     color: 'var(--primary-text-color)',
   },
-  
+
   h5: {
     fontFamily: fontFamilies.secondary,
     fontSize: headingSizes.h5,
@@ -96,7 +96,7 @@ export const typography = {
     letterSpacing: letterSpacing.normal,
     color: 'var(--primary-text-color)',
   },
-  
+
   h6: {
     fontFamily: fontFamilies.secondary,
     fontSize: headingSizes.h6,
@@ -105,7 +105,7 @@ export const typography = {
     letterSpacing: letterSpacing.normal,
     color: 'var(--primary-text-color)',
   },
-  
+
   // Body text styles
   body: {
     fontFamily: fontFamilies.secondary,
@@ -115,7 +115,7 @@ export const typography = {
     letterSpacing: letterSpacing.normal,
     color: 'var(--primary-text-color)',
   },
-  
+
   bodyLarge: {
     fontFamily: fontFamilies.secondary,
     fontSize: fontSizes.lg,
@@ -124,7 +124,7 @@ export const typography = {
     letterSpacing: letterSpacing.normal,
     color: 'var(--primary-text-color)',
   },
-  
+
   bodySmall: {
     fontFamily: fontFamilies.secondary,
     fontSize: fontSizes.sm,
@@ -133,7 +133,7 @@ export const typography = {
     letterSpacing: letterSpacing.normal,
     color: 'var(--primary-text-color)',
   },
-  
+
   // Title/Display styles
   title: {
     fontFamily: fontFamilies.title,
@@ -143,7 +143,7 @@ export const typography = {
     letterSpacing: letterSpacing.wide,
     color: 'var(--primary-text-color)',
   },
-  
+
   // Caption styles
   caption: {
     fontFamily: fontFamilies.secondary,
@@ -153,7 +153,7 @@ export const typography = {
     letterSpacing: letterSpacing.normal,
     color: 'var(--secondary-text-color)',
   },
-  
+
   captionSmall: {
     fontFamily: fontFamilies.secondary,
     fontSize: fontSizes.xs,
@@ -162,7 +162,7 @@ export const typography = {
     letterSpacing: letterSpacing.normal,
     color: 'var(--secondary-text-color)',
   },
-  
+
   // Label styles
   label: {
     fontFamily: fontFamilies.secondary,
@@ -173,7 +173,7 @@ export const typography = {
     color: 'var(--primary-text-color)',
     textTransform: 'uppercase',
   },
-  
+
   // Button text styles
   button: {
     fontFamily: fontFamilies.secondary,
@@ -183,7 +183,7 @@ export const typography = {
     letterSpacing: letterSpacing.wide,
     textTransform: 'capitalize',
   },
-  
+
   buttonSmall: {
     fontFamily: fontFamilies.secondary,
     fontSize: fontSizes.sm,
@@ -258,7 +258,7 @@ export const getHeadingStyle = (level) => {
     5: typography.h5,
     6: typography.h6,
   };
-  
+
   return headingMap[level] || typography.h3;
 };
 

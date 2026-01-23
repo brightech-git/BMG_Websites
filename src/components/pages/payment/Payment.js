@@ -1,55 +1,37 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import { useLocation } from "react-router-dom/cjs/react-router-dom";
 import { toast } from "react-toastify";
 
 import { useInitiatePayment } from "../../../hook/payment/useInitiatePayment";
 import { getPaymentRedirectUrl } from "../../../service/paymentServiceicici";
-import { useOrderHistory } from "../../../hook/order/useOrderHistoryQuery";
+import { useGetOrderById } from "../../../hook/order/useAllOrdersQuery";
 
 import "./PaymentPage.css";
 
 const PaymentPage = () => {
     const { orderId } = useParams();
     const history = useHistory();
-    const location = useLocation();
 
-    const [totalAmount, setTotalAmount] = useState (null);
-    const [readyToValidate, setReadyToValidate] = useState(false);
+    const [totalAmount, setTotalAmount] = useState(null);
 
     const paymentStartedRef = useRef(false);
     const errorShownRef = useRef(false);
 
-    const { data: orders, isLoading, isFetching } = useOrderHistory();
-    const existingOrders = orders?.orders;
+    const { data: order, isLoading, isFetching } = useGetOrderById(orderId);
+    console.log(order,'single order')
 
     const { mutate: initiatePayment } = useInitiatePayment();
 
-    const orderPayload = location.state?.orderPayload;
-    const customerName = orderPayload?.customerName ?? "Customer";
-
     /* -------------------------------------------------------
-       Mark ready only when loading + fetching are done
+       Extract total amount from single order
     -------------------------------------------------------- */
     useEffect(() => {
-        if (!isLoading && !isFetching && existingOrders !== undefined) {
-            setReadyToValidate(true);
-        }
-    }, [isLoading, isFetching, existingOrders]);
+        if (!orderId || isLoading || isFetching) return;
 
-    /* -------------------------------------------------------
-       Extract total amount safely
-    -------------------------------------------------------- */
-    useEffect(() => {
-        if (!orderId || !readyToValidate) return;
+        // adjust this depending on API shape
+        const amount = order?.totalAmount ?? order?.order?.totalAmount;
 
-        const orderDetails = existingOrders?.find(
-            (order) => order.orderId === orderId
-        );
-
-        console.log("Order Details:", orderDetails);
-
-        if (!orderDetails || orderDetails.totalAmount == null) {
+        if (amount == null) {
             if (!errorShownRef.current) {
                 toast.error("Unable to fetch order amount");
                 errorShownRef.current = true;
@@ -57,8 +39,8 @@ const PaymentPage = () => {
             return;
         }
 
-        setTotalAmount(Number(orderDetails.totalAmount));
-    }, [orderId, readyToValidate, existingOrders]);
+        setTotalAmount(Number(amount));
+    }, [orderId, order, isLoading, isFetching]);
 
     /* -------------------------------------------------------
        Initiate payment (once)
@@ -70,14 +52,13 @@ const PaymentPage = () => {
         paymentStartedRef.current = true;
 
         let cancelled = false;
-        const merchantTxnNo = orderId;
 
         initiatePayment(
             {
-                merchantTxnNo,
+                merchantTxnNo: orderId,
                 amount: totalAmount.toFixed(2),
                 currencyCode: 356,
-                payType: 0,
+                paymentMode: "UPI",
                 transactionType: "SALE",
                 addlParam1: "",
                 addlParam2: "",
@@ -88,9 +69,17 @@ const PaymentPage = () => {
                     if (cancelled) return;
 
                     const { redirectURI, tranCtx } = response;
+                    console.log(response ,'payemntResponse');
+
 
                     if (!redirectURI || !tranCtx) {
-                        toast.error("Invalid payment response");
+                        toast.error(
+                            <>
+                                <div>Invalid payment response</div>
+                                <small>{response?.responseDescription}</small>
+                            </>
+                        );
+
                         history.push("/account");
                         return;
                     }
@@ -101,7 +90,7 @@ const PaymentPage = () => {
                             tranCtx
                         );
                         window.location.href = finalUrl;
-                    } catch (error) {
+                    } catch {
                         toast.error("Failed to redirect to payment gateway");
                         history.push("/account");
                     }

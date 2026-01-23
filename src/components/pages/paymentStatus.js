@@ -17,8 +17,7 @@ import HeaderWithAuth from "../layouts/HeaderWithAuth";
 import Footertwo from "../layouts/Footerthree";
 import { getPaymentStatus } from "../../service/paymentServiceicici";
 import SmartButton from "../../components/ui/SmartButton";
-
-
+import { useCreateReOrder } from "../../hook/order/useReorder";
 
 const PaymentStatus = () => {
     const location = useLocation();
@@ -33,6 +32,8 @@ const PaymentStatus = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     const [retrying, setRetrying] = useState(false);
+
+    const { mutateAsync: createReOrder } = useCreateReOrder();
     useEffect(() => {
         if (!orderId) {
             setIsSuccess(false);
@@ -93,8 +94,9 @@ const PaymentStatus = () => {
             );
 
             if (!isConfirmed) return;
+            
 
-            const res = await getPaymentStatus(orderId);
+            const res = await createReOrder(orderId);
             const newOrderId = res?.newOrderId;
 
             if (!newOrderId) {

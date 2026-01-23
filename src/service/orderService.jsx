@@ -7,11 +7,10 @@ export const createOrder = async (orderData) => {
 };
 
 // Get order history
-export const getOrderHistory = async () => {
-    const payload = {
-        page: '0',
-        size: '5',
-    };
+export const getOrderHistory = async (payload) => {
+   
+
+    console.log(payload, 'payload')
     const response = await publicUrl.get('/order/history', {
         params: payload
     });
@@ -72,6 +71,10 @@ export const trackOrderById = async (orderId) => {
 };
 
 export const getAllOrders = async () => {
+    const token = localStorage.getItem('user_token');
+    if(!token){
+        return [];
+    }
     const response = await publicUrl.get('/order/all-ordersCount');
     return response.data;
 }
@@ -83,5 +86,35 @@ export const refundOrderApi = async (formData) => {
         return response.data;
     } catch (error) {
         throw new Error(error.response?.data?.message || "Failed to refund order");
+    }
+};
+
+
+export const createReOrder = async (orderId) => {
+    console.log(orderId ,'reOrderId')
+    try {
+        const { data } = await publicUrl.post("/order/reorder", {
+            orderId,
+        });
+        
+        return data;
+    } catch (error) {
+        console.error("Reorder API error:", error);
+        throw error; // 🔴 important for react-query onError
+    }
+};
+
+export const getOrderById = async (orderId) => {
+    try {
+        const { data } = await publicUrl.get(
+            "/order/getOrder",
+            {
+                params: { orderId },
+            }
+        );
+        return data;
+    } catch (error) {
+        console.error("GetOrder API error:", error?.response?.data || error);
+        throw error;
     }
 };

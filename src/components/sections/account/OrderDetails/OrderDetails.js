@@ -18,6 +18,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useCreateReOrder } from '../../../../hook/order/useReorder';
 import { useGetOrderById} from '../../../../hook/order/useAllOrdersQuery';
 import { Truck } from 'lucide-react';
+import TrackOrderModal from '../../../wrapper/TrackOrderModal';
 
 const OrderDetail = () => {
 
@@ -385,64 +386,65 @@ const OrderDetail = () => {
 
         {/* Tracking Modal */}
         {isStatusModalOpen && (
-          <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[9999] p-2" onClick={() => setIsStatusModalOpen(false)}>
-            <div className="bg-white rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
-              <div className="bg-[#f7f7f7] border-b px-2 py-2 flex justify-between items-center">
-                <h3 className="text-lg font-bold text-[var(--primary-text-color)]">Order #{order.orderId} Tracking</h3>
-                <button onClick={() => setIsStatusModalOpen(false)} className="text-2xl hover:bg-gray-200 rounded-full w-10 h-10">&times;</button>
-              </div>
+          // <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[9999] p-2" onClick={() => setIsStatusModalOpen(false)}>
+          //   <div className="bg-white rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
+          //     <div className="bg-[#f7f7f7] border-b px-2 py-2 flex justify-between items-center">
+          //       <h3 className="text-lg font-bold text-[var(--primary-text-color)]">Order #{order.orderId} Tracking</h3>
+          //       <button onClick={() => setIsStatusModalOpen(false)} className="text-2xl hover:bg-gray-200 rounded-full w-10 h-10">&times;</button>
+          //     </div>
 
-              <div className="p-2 overflow-y-auto max-h-[70vh]">
-                {/* Current Status */}
-                <div className="flex items-center gap-2 mb-3 p-2 bg-orange-50 rounded-lg border-l-4 border-[#f16137] mb-4">
-                  <div className="w-12 h-12 bg-[#f16137] rounded-full flex items-center justify-center text-white animate-pulse">
-                    <FontAwesomeIcon icon={getStatusIcon(currentStatus)} />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-lg">{getStatusLabel(currentStatus)}</h4>
-                    <p className="text-sm  text-gray-600">Placed on {new Date(order.orderTime).toLocaleDateString('en-IN')}</p>
-                  </div>
-                </div>
+          //     <div className="p-2 overflow-y-auto max-h-[70vh]">
+          //       {/* Current Status */}
+          //       <div className="flex items-center gap-2 mb-3 p-2 bg-orange-50 rounded-lg border-l-4 border-[#f16137] mb-4">
+          //         <div className="w-12 h-12 bg-[#f16137] rounded-full flex items-center justify-center text-white animate-pulse">
+          //           <FontAwesomeIcon icon={getStatusIcon(currentStatus)} />
+          //         </div>
+          //         <div>
+          //           <h4 className="font-bold text-lg">{getStatusLabel(currentStatus)}</h4>
+          //           <p className="text-sm  text-gray-600">Placed on {new Date(order.orderTime).toLocaleDateString('en-IN')}</p>
+          //         </div>
+          //       </div>
 
-                {/* Timeline */}
-                <div className="relative">
-                  {isTracking ? (
-                    <div className="text-center py-2"><FontAwesomeIcon icon={faSpinner} spin className="text-3xl text-[var(--primary-hover-color)]" /></div>
-                  ) : (
-                    timeline.map((step, i) => {
-                      const isActive = i === timeline.length - 1;
-                      const isDone = i < timeline.length - 1 || currentStatus === 'DELIVERED';
-                      return (
-                        <div key={i} className="flex gap-2 pb-2 last:pb-0 relative">
-                          <div className="flex flex-col items-center">
-                            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold z-10 ${isActive ? 'bg-[#f16137] animate-pulse' : isDone ? 'bg-green-500' : 'bg-gray-300'}`}>
-                              <FontAwesomeIcon icon={isActive && currentStatus === 'CANCELLED' ? faTimesCircle : faCheckCircle} />
-                            </div>
-                            {i < timeline.length - 1 && <div className="w-0.5 bg-gray-300 h-full absolute top-10 left-5 -z-0"></div>}
-                          </div>
-                          <div className="flex-1 pb-3">
-                            <div className="flex justify-between items-center">
-                              <h5 className="font-semibold text-sm">{step.label || getStatusLabel(step.status)}</h5>
-                              <span className="text-xs text-gray-500">{new Date(step.updated_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
-                            </div>
-                            {step.remarks && <p className="text-sm text-gray-600 mt-1">{step.remarks}</p>}
-                          </div>
-                        </div>
-                      );
-                    })
-                  )}
-                </div>
+          //       {/* Timeline */}
+          //       <div className="relative">
+          //         {isTracking ? (
+          //           <div className="text-center py-2"><FontAwesomeIcon icon={faSpinner} spin className="text-3xl text-[var(--primary-hover-color)]" /></div>
+          //         ) : (
+          //           timeline.map((step, i) => {
+          //             const isActive = i === timeline.length - 1;
+          //             const isDone = i < timeline.length - 1 || currentStatus === 'DELIVERED';
+          //             return (
+          //               <div key={i} className="flex gap-2 pb-2 last:pb-0 relative">
+          //                 <div className="flex flex-col items-center">
+          //                   <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold z-10 ${isActive ? 'bg-[#f16137] animate-pulse' : isDone ? 'bg-green-500' : 'bg-gray-300'}`}>
+          //                     <FontAwesomeIcon icon={isActive && currentStatus === 'CANCELLED' ? faTimesCircle : faCheckCircle} />
+          //                   </div>
+          //                   {i < timeline.length - 1 && <div className="w-0.5 bg-gray-300 h-full absolute top-10 left-5 -z-0"></div>}
+          //                 </div>
+          //                 <div className="flex-1 pb-3">
+          //                   <div className="flex justify-between items-center">
+          //                     <h5 className="font-semibold text-sm">{step.label || getStatusLabel(step.status)}</h5>
+          //                     <span className="text-xs text-gray-500">{new Date(step.updated_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+          //                   </div>
+          //                   {step.remarks && <p className="text-sm text-gray-600 mt-1">{step.remarks}</p>}
+          //                 </div>
+          //               </div>
+          //             );
+          //           })
+          //         )}
+          //       </div>
 
-                {canCancel && (
-                  <div className="mt-1 pt-2 border-t flex items-center justify-center text-center">
-                    <SmartButton onClick={handleCancel} disabled={isCancelling} >
-                      {isCancelling ? <><FontAwesomeIcon icon={faSpinner} spin /> Cancelling...</> : 'Cancel Order'}
-                    </SmartButton>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+          //       {canCancel && (
+          //         <div className="mt-1 pt-2 border-t flex items-center justify-center text-center">
+          //           <SmartButton onClick={handleCancel} disabled={isCancelling} >
+          //             {isCancelling ? <><FontAwesomeIcon icon={faSpinner} spin /> Cancelling...</> : 'Cancel Order'}
+          //           </SmartButton>
+          //         </div>
+          //       )}
+          //     </div>
+          //   </div>
+          // </div>
+          <TrackOrderModal orderId={orderId} open={isStatusModalOpen} onClose={()=>setIsStatusModalOpen(false)}/>
         )}
       </div>
     </>

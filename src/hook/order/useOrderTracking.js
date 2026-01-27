@@ -1,6 +1,6 @@
 // useOrderTracking.js
 import { useQuery } from "@tanstack/react-query";
-import { trackOrder, trackOrderById } from "../../service/orderService";
+import { trackOrder, trackOrderById, orderTrackingById } from "../../service/orderService";
 
 export const useTrackOrder = (refNumber) => {
   //console.log("Tracking order with refNumber:", refNumber);
@@ -18,6 +18,15 @@ export const useTrackOrderById = (orderId) => {
   return useQuery({
     queryKey: ["trackOrder", orderId],
     queryFn: () => trackOrderById(orderId),
+    enabled: !!orderId, // only run if orderId is provided
+    refetchInterval: 60 * 1000, // auto refresh every 1 min
+  });
+};
+
+export const useTrackingById = (orderId) => {
+  return useQuery({
+    queryKey: ["OrderTrack", orderId],
+    queryFn: () => orderTrackingById(orderId),
     enabled: !!orderId, // only run if orderId is provided
     refetchInterval: 60 * 1000, // auto refresh every 1 min
   });

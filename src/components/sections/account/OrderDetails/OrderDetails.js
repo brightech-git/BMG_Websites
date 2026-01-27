@@ -19,6 +19,10 @@ import { useCreateReOrder } from '../../../../hook/order/useReorder';
 import { useGetOrderById} from '../../../../hook/order/useAllOrdersQuery';
 import { Truck } from 'lucide-react';
 import TrackOrderModal from '../../../wrapper/TrackOrderModal';
+import HorizontalTimeline from '../../../ui/HorizontalTimeLine';
+import { ORDER_STATUS_MASTER } from '../../../../data/orderStatusMaster';
+import { useTrackingById } from '../../../../hook/order/useOrderTracking';
+
 
 const OrderDetail = () => {
 
@@ -38,6 +42,9 @@ const OrderDetail = () => {
   const { mutate: cancelOrder, isLoading: isCancelling } = useCancelOrder();
   const { mutateAsync: createReOrder, isLoading: isReordering } = useCreateReOrder();
   const { data: trackData, refetch: fetchTrackData, isLoading: isTracking } = useTrackOrderById(order?.orderId || orderId);
+  const { data: orderTrackData, refetch: fetchOrderTrackData, isLoading: orderTrackLoading, isError: orderTrackError} = useTrackingById(order?.orderId || orderId);
+
+  console.log(orderTrackData,'ordreTrackData')
   const { data: adminAddress, isLoading: addrLoading, isError: addrError } = useAdminAddress();
 
   const defaultAddress = useMemo(() =>
@@ -275,7 +282,7 @@ const OrderDetail = () => {
         @keyframes shimmer { 0% { background-position: -200px 0; } 100% { background-position: 200px 0; } }
       `}</style>
 
-      <div className=" bg-[#eeece8] text-[var(--primary-text-color)] py-2 mt-[130px] md:mt-0 px-2 lg:px-3">
+      <div className=" bg-[#eeece8] text-[var(--primary-text-color)] py-2 mt-[180px] md:mt-0 px-2 lg:px-3">
         <div className="max-w mx-auto space-y-2">
 
           {/* Status Bar */}
@@ -292,6 +299,9 @@ const OrderDetail = () => {
               </SmartButton>
             </div>
             
+          </div>
+          <div className='bg-white rounded-xl border border-gray-300 shadow-sm overflow-hidden'>
+            <HorizontalTimeline currentStatus={order?.status} statuses={ORDER_STATUS_MASTER}  />
           </div>
 
           <div className="grid lg:grid-cols-3 gap-2">
@@ -444,7 +454,7 @@ const OrderDetail = () => {
           //     </div>
           //   </div>
           // </div>
-          <TrackOrderModal orderId={orderId} open={isStatusModalOpen} onClose={()=>setIsStatusModalOpen(false)}/>
+          <TrackOrderModal orderId={orderId} data={orderTrackData} refetch={fetchOrderTrackData} loading={orderTrackLoading} error={orderTrackError} open={isStatusModalOpen} onClose={()=>setIsStatusModalOpen(false)}/>
         )}
       </div>
     </>

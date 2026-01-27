@@ -70,6 +70,23 @@ export const trackOrderById = async (orderId) => {
     }
 };
 
+export const orderTrackingById = async (orderId) => {
+    if (!orderId) throw new Error("Order ID is required");
+
+    try {
+        const { data } = await publicUrl.get(`/order/tracking/${orderId}`);
+
+        // Map API response to expected structure
+        return data; 
+    } catch (error) {
+        console.error('Error fetching tracking data:', error);
+        throw new Error(error.message || 'Failed to fetch tracking data');
+    }
+};
+
+
+
+
 export const getAllOrders = async () => {
     const token = localStorage.getItem('user_token');
     if(!token){

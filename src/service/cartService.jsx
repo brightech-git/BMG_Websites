@@ -10,8 +10,7 @@ const authHeader = () => ({
 // ✅ Get Cart by phone number
 export const fetchCart = () => {
 
-   
-    const response=  PublicUrl.get(`/cart/cart/`, authHeader());
+    const response=  PublicUrl.get(`/cart/cart`, authHeader());
 
     return response
 };

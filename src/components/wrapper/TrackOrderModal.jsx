@@ -7,11 +7,15 @@ export default function TrackOrderModal({
     open,
     orderId,
     onClose,
+    data,
+    loading,
+    error,
+    refetch,
 }) {
     if (!open || !orderId) return null;
 
     return (
-        <div className="fixed inset-0 z-50 mt-2 flex items-center justify-center">
+        <div className="fixed inset-0 z-50  flex items-center justify-center">
             {/* Backdrop */}
             <div
                 className="absolute inset-0 bg-black/50 animate__animated animate__fadeIn"
@@ -19,7 +23,7 @@ export default function TrackOrderModal({
             />
 
             {/* Modal */}
-            <div className="relative bg-white w-[95%] max-w-3xl rounded-lg shadow-lg
+            <div className="relative mt-[80px] bg-white w-full max-w-xl rounded-lg shadow-lg
                 animate__animated animate__zoomIn"
             >
                 {/* Header */}
@@ -43,9 +47,10 @@ export default function TrackOrderModal({
 
                 {/* Content */}
                 <div className="py-2 max-h-[70vh] overflow-y-auto">
-                    <OrderTrackingTimeline orderId={orderId} />
+                    <OrderTrackingTimeline data={data} isLoading={loading} isError={error} refetch={refetch} />
                 </div>
             </div>
         </div>
     );
 }
+ 

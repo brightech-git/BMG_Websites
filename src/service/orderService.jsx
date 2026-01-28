@@ -135,3 +135,13 @@ export const getOrderById = async (orderId) => {
         throw error;
     }
 };
+
+export const getOrderMaster = async() =>{
+    try{
+        const response = await publicUrl.get('/order/status-master');
+        return response.data
+    }
+    catch(err){
+        throw new Error(err.response?.data?.message || "Failed to fetch order master data");
+    }
+}

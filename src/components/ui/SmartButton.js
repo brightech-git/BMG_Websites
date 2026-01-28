@@ -54,6 +54,11 @@ const SmartButton = ({
             loading: "border-gray-400 text-gray-400",
             disabled: "border-gray-300 text-gray-400 cursor-not-allowed",
         },
+        ghost:{
+            base: "bg-none border-none  text-[var(--red-color)] ",
+            loading: "border-none text-red-800",
+            disabled: "border-none text-red-800 cursor-not-allowed",
+        }
     };
 
     const sizes = {

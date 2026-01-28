@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import clsx from "clsx";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle} from "lucide-react";
 
 const HorizontalTimeline = ({
     statuses,
@@ -88,12 +88,14 @@ const HorizontalTimeline = ({
         (s) => s.key === currentStatus
     );
 
+    console.log(sortedStatuses,'sortedStatuses')
+
     return (
         <div className="w-full px-4 py-6">
             {/* ----------------- Desktop / md+ Horizontal Layout ----------------- */}
             <div className="hidden md:flex flex-row items-center">
                 {sortedStatuses.map((status, index) => {
-                    const Icon = getIcon? (status.icon) : CheckCircle;
+                    const Icon = getIcon ? status?.icon : CheckCircle;
                     const isPast = index < currentIndex;
                     const isCurrent = index === currentIndex;
                     const isLast = index === sortedStatuses.length - 1;
@@ -183,7 +185,7 @@ const HorizontalTimeline = ({
             <div className="md:hidden">
                 <div className="flex flex-col items-center">
                     {sortedStatuses.map((status, index) => {
-                        const Icon = getIcon ? (status.icon) : CheckCircle;
+                        const Icon = getIcon ? status.icon : CheckCircle;
                         const isPast = index < currentIndex;
                         const isCurrent = index === currentIndex;
                         const isLast = index === sortedStatuses.length - 1;

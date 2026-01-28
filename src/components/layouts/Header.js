@@ -492,14 +492,14 @@ const location =useLocation();
                     <ItemSearch />
                   </div>
                 </div>
-                <div className="menu-right-buttons">
-                  <div className="login-btn">
+                <div className="flex items-center gap-3">
+                  <div className="account-btn">
                     <Link to="/account">
                       <User size={20} strokeWidth={1.8} />
                     </Link>
                   </div>
-                  <div className="login-btn">
-                    <Link to="/wishlist">
+                  <div className="whislist-btn">
+                    <Link to="/wishlist" className="">
                       {wishlistCount > 0 ? (
                         <FaHeart size={20} color={"#fa858fff"} />
                       ) : (
@@ -512,7 +512,7 @@ const location =useLocation();
                     </Link>
                   </div>
 
-                  <div className="login-btn">
+                  <div className="cart-btn">
                     <Link to="/cart">
                       {cartCount > 0 ? (
                         <FaShoppingCart size={20} color={"#f78790ff"} />
@@ -561,39 +561,42 @@ const location =useLocation();
                 </div>
               )}
             </div>
-            <div className="login-btns">
-              <Link to="/account">
-                <User size={16} strokeWidth={1.8} />
-              </Link>
-            </div>
-            <div className="login-btns">
-              <Link to="/wishlist">
-                {wishlistCount > 0 ? (
-                  <FaHeart size={20} color={"#f78790ff"} />
-                ) : (
-                  <Heart size={20} strokeWidth={1.8} />
-                )}
-                {wishlistCount > 0 && (
-                  <span className={`icon-badge ${isTop ? "sticky-active" : ""
-                    }`}>{wishlistCount}</span>
-                )}
-              </Link>
-            </div>
+            <div className="flex items-center gap-2">
+              <div className="acc-btn">
+                <Link to="/account">
+                  <User size={16} strokeWidth={1.8} />
+                </Link>
+              </div>
+              <div className="whis-btn">
+                <Link to="/wishlist">
+                  {wishlistCount > 0 ? (
+                    <FaHeart size={20} color={"#f78790ff"} />
+                  ) : (
+                    <Heart size={20} strokeWidth={1.8} />
+                  )}
+                  {wishlistCount > 0 && (
+                    <span className={`icon-badge ${isTop ? "sticky-active" : ""
+                      }`}>{wishlistCount}</span>
+                  )}
+                </Link>
+              </div>
 
-            <div className="login-btns">
-              <Link to="/cart">
-                {cartCount > 0 ? (
-                  <FaShoppingCart size={20} color={"#f78790ff"} />
-                ) : (
-                  <ShoppingCart size={20} strokeWidth={1.8} />
-                )}
-                {cartCount > 0 && (
-                  <span className={`cart-icon-badge ${isTop ? "sticky-active" : ""
-                    }`}>{cartCount}</span>
-                )}
-              </Link>
-            </div>
+              <div className="cart-btns">
+                <Link to="/cart">
+                  {cartCount > 0 ? (
+                    <FaShoppingCart size={20} color={"#f78790ff"} />
+                  ) : (
+                    <ShoppingCart size={20} strokeWidth={1.8} />
+                  )}
+                  {cartCount > 0 && (
+                    <span className={`cart-icon-badge ${isTop ? "sticky-active" : ""
+                      }`}>{cartCount}</span>
+                  )}
+                </Link>
+              </div>
 
+            </div>
+          
             <div className="sigma-hamburger-menu" onClick={toggleClass}>
               <Menu
                 size={20}

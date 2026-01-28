@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useContactFormQuery } from "../../hook/contactForm/useContactFormQuery";
 import { useCompanyDetails } from "../../context/clientDetails/clientDetialContext";
 import './ContactStore.css';
-import largerImg from '../../assets/videos/silverIcon.png';
+import largerImg from '../../assets/videos/store.jpg';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import Headers from "../layouts/HeaderWithAuth";
 import Footertwo from "../layouts/Footerthree";

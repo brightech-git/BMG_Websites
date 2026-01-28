@@ -13,6 +13,7 @@ const scrollRef = React.useRef(null);
 
     const [isAtStart, setIsAtStart] = useState(true);
     const [isAtEnd, setIsAtEnd] = useState(false);
+    
     React.useEffect(() => {
         const ref = scrollRef.current;
         if (!ref) return;

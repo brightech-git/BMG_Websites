@@ -10,7 +10,7 @@
     min-width: 60px;
     height: 40px;
     padding: 0.5rem;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     background-color: var(--primary-text-color);
     color: var(--white-color);
     display: flex;
@@ -29,6 +29,7 @@
     font-size: 0.9rem;
     font-weight: 500;
     border: none;
+
 }
 
 .back-to-top-btn.back-to-top-visible {

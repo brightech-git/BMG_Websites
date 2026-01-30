@@ -1,9 +1,10 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, QueryClient } from "@tanstack/react-query";
 import {
     fetchCart,
     addToCart,
     updateCartItem,
     deleteCartItem,
+    clearCart
 } from "../../service/cartService";
 import {  useSelector } from "react-redux";
 
@@ -19,10 +20,11 @@ export const useCart = () => {
     
 
     const { data: cartItems = [], isLoading, error } = useQuery({
-        queryKey: ["cart", mobileNumber],
+        queryKey: ["cart"],
         queryFn: () => fetchCart(mobileNumber),
         enabled: !!mobileNumber,
         staleTime: 1000 * 60 * 5,
+        refetchInterval:5000,
     });
 
     // ✅ Mutation for adding item
@@ -89,6 +91,15 @@ export const useCart = () => {
             });
         }
     };
+    const clearAllItems = useMutation({
+        mutationFn:clearCart,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["cart"] });
+        },
+        onError: (err) => {
+            console.error("❌ Clear cart failed:", err);
+        },
+    })
 
 
     return {
@@ -98,6 +109,8 @@ export const useCart = () => {
         addToCart: addItem.mutate,
         updateCart: updateItem.mutate,
         deleteCart: deleteItem.mutate,
+        clearCart: clearAllItems.mutate,
         addToCartHandler,
+        clearAllItems
     };
 };

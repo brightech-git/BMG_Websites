@@ -59,8 +59,21 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
   const location = useLocation();
   const dispatch = useDispatch();
 
+  const getInitialPriceRange = () => {
+    const params = new URLSearchParams(location.search);
+
+    if (params.get("priceRange")) {
+      const [min, max] = params.get("priceRange").split("-").map(Number);
+      if (!isNaN(min) && !isNaN(max)) {
+        return [min, max];
+      }
+    }
+
+    return [PRICE_RANGE.min, PRICE_RANGE.max];
+  };
+
   // State management
-  const [priceRange, setPriceRange] = useState([PRICE_RANGE.min, PRICE_RANGE.max]);
+  const [priceRange, setPriceRange] = useState(getInitialPriceRange);
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
   const [localFilters, setLocalFilters] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
@@ -74,7 +87,13 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
     priceRange: true,
     sortBy: true,
   });
-  const [inputValues, setInputValues] = useState({ min: '', max: '' });
+  const [inputValues, setInputValues] = useState(() => {
+    const [min, max] = getInitialPriceRange();
+    return {
+      min: min === PRICE_RANGE.min ? "" : String(min),
+      max: max === PRICE_RANGE.max ? "" : String(max),
+    };
+  });
   const priceInputRef = useRef({ min: null, max: null });
   const searchParams = new URLSearchParams(location.search);
   const itemCtrName = searchParams.get('itemCtrName') || '';
@@ -131,6 +150,9 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
 
   // Sync price range with URL parameters
   useEffect(() => {
+
+    if (!filters.minGrandTotal && !filters.maxGrandTotal) return;
+
     const minPrice = Number(filters.minGrandTotal) || PRICE_RANGE.min;
     const maxPrice = Number(filters.maxGrandTotal) || PRICE_RANGE.max;
     if (!isNaN(minPrice) && !isNaN(maxPrice)) {
@@ -199,58 +221,79 @@ const UnifiedFilterBar = ({ onFiltersChange, totalResults = 0, isLoading = false
     },
     [location.search, history, onFiltersChange]
   );
-  // Initial load: sync slider with URL params
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-
-    let initialMin = PRICE_RANGE.min;
-    let initialMax = PRICE_RANGE.max;
-
-    if (params.get("priceRange")) {
-      const [pmin, pmax] = params.get("priceRange").split("-").map(Number);
-      if (!isNaN(pmin) && !isNaN(pmax)) {
-        initialMin = pmin;
-        initialMax = pmax;
-      }
-    }
-
-    setPriceRange([initialMin, initialMax]);  // <-- updates your slider
-  }, [location.search]);
-
   const debouncedPriceChange = useCallback(
     debounce((min, max) => {
       const params = new URLSearchParams(location.search);
 
-      // Build price range string
       const rangeString = `${min}-${max}`;
-
-      // If full range selected → remove the param
       const isDefaultRange =
         min === PRICE_RANGE.min && max === PRICE_RANGE.max;
 
       if (isDefaultRange) {
-        params.delete('priceRange');   // remove custom range
+        params.delete('priceRange');
       } else {
-        params.set('priceRange', rangeString);  // set 1-199 etc
+        params.set('priceRange', rangeString);
       }
 
-      // Remove old keys
-      params.delete('minGrandTotal');
-      params.delete('maxGrandTotal');
-
-      // Reset pagination
       params.delete('page');
-
-      // Update URL
       history.push({ search: params.toString() });
 
-      // Trigger callback
-      if (onFiltersChange) {
-        onFiltersChange(Object.fromEntries(params));
-      }
-    }, 300),
+      onFiltersChange?.(Object.fromEntries(params));
+    }, 400),
     [location.search, history, onFiltersChange]
   );
+  // Initial load: sync slider with URL params
+  // useEffect(() => {
+  //   const params = new URLSearchParams(location.search);
+
+  //   let initialMin = PRICE_RANGE.min;
+  //   let initialMax = PRICE_RANGE.max;
+
+  //   if (params.get("priceRange")) {
+  //     const [pmin, pmax] = params.get("priceRange").split("-").map(Number);
+  //     if (!isNaN(pmin) && !isNaN(pmax)) {
+  //       initialMin = pmin;
+  //       initialMax = pmax;
+  //     }
+  //   }
+
+  //   setPriceRange([initialMin, initialMax]);  // <-- updates your slider
+  // }, [location.search]);
+
+  // const debouncedPriceChange = useCallback(
+  //   debounce((min, max) => {
+  //     const params = new URLSearchParams(location.search);
+
+  //     // Build price range string
+  //     const rangeString = `${min}-${max}`;
+
+  //     // If full range selected → remove the param
+  //     const isDefaultRange =
+  //       min === PRICE_RANGE.min && max === PRICE_RANGE.max;
+
+  //     if (isDefaultRange) {
+  //       params.delete('priceRange');   // remove custom range
+  //     } else {
+  //       params.set('priceRange', rangeString);  // set 1-199 etc
+  //     }
+
+  //     // Remove old keys
+  //     params.delete('minGrandTotal');
+  //     params.delete('maxGrandTotal');
+
+  //     // Reset pagination
+  //     params.delete('page');
+
+  //     // Update URL
+  //     history.push({ search: params.toString() });
+
+  //     // Trigger callback
+  //     if (onFiltersChange) {
+  //       onFiltersChange(Object.fromEntries(params));
+  //     }
+  //   }, 300),
+  //   [location.search, history, onFiltersChange]
+  // );
 
 
   const handlePriceChange = useCallback(

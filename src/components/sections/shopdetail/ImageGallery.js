@@ -1,671 +1,345 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Pause  , Play } from 'lucide-react';
-import { motion } from 'framer-motion';
-import PinchZoomPan from './PinchZoomPan';
+import React, { useState, useCallback, useEffect, useRef } from "react";
+import {
+    Play,
+    Pause,
+    X,
+    ZoomIn,
+    ZoomOut,
+    RotateCcw,
+    Move
+} from "lucide-react";
 
-const ImageGallery = ({ images, videos = [], badges = {} }) => {
+const ImageGallery = ({ images = [], videos = [] }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
-    const [isZoomed, setIsZoomed] = useState(false);
-    const [zoomLevel, setZoomLevel] = useState(1);
-    const [showZoomPreview, setShowZoomPreview] = useState(false);
-    const [showArrows, setShowArrows] = useState(false);
-    const [isDragging, setIsDragging] = useState(false);
-    const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-    const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
     const [autoScroll, setAutoScroll] = useState(false);
-    const [showControls, setShowControls] = useState(true);
-    const mainImageRef = useRef(null);
-    const zoomTimeoutRef = useRef(null);
-    const containerRef = useRef(null);
-    const zoomImageRef = useRef(null);
-    const touchStartRef = useRef({ x: 0, y: 0 });
-    const touchStartTimeRef = useRef(0);
-    const autoScrollRef = useRef(null);
-    const thumbnailContainerRef = useRef(null);
+    const [isZoomOpen, setIsZoomOpen] = useState(false);
+    const [zoomLevel, setZoomLevel] = useState(1);
+    const [isDragging, setIsDragging] = useState(false);
+    const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
-    // Combine images and videos into a single media array
+    const imageRef = useRef(null);
+    const containerRef = useRef(null);
+
     const media = [
-        ...images.map((img, index) => ({
-            type: 'image',
-            src: img?.img || img,
-            data: img,
-            index
-        })),
-        ...videos.map((video, index) => ({
-            type: 'video',
-            src: video?.video || video,
-            data: video?.video || video,
-            index: images.length + index
-        }))
+        ...images.map(img => ({ type: "image", src: img?.img || img })),
+        ...videos.map(video => ({ type: "video", src: video?.video || video }))
     ];
 
-    // Navigation functions
-    const goToNext = useCallback(() => {
-        setCurrentSlide(prev => (prev + 1) % media.length);
-        resetImagePosition();
-    }, [media.length]);
+    const goNext = useCallback(
+        () => setCurrentSlide(p => (p + 1) % media.length),
+        [media.length]
+    );
 
-    const goToPrev = useCallback(() => {
-        setCurrentSlide(prev => (prev - 1 + media.length) % media.length);
-        resetImagePosition();
-    }, [media.length]);
+    const goPrev = useCallback(
+        () => setCurrentSlide(p => (p - 1 + media.length) % media.length),
+        [media.length]
+    );
 
-    const goToSlide = useCallback((index) => {
-        setCurrentSlide(index);
-        resetImagePosition();
-    }, []);
+    // Handle drag start
+    const handleDragStart = (e) => {
+        if (zoomLevel <= 1) return;
 
-    const resetImagePosition = useCallback(() => {
-        setImagePosition({ x: 0, y: 0 });
-    }, []);
-
-    // Auto-scroll functionality
-    const startAutoScroll = useCallback(() => {
-        if (autoScrollRef.current) {
-            clearInterval(autoScrollRef.current);
-        }
-        autoScrollRef.current = setInterval(goToNext, 5000);
-    }, [goToNext]);
-
-    const stopAutoScroll = useCallback(() => {
-        if (autoScrollRef.current) {
-            clearInterval(autoScrollRef.current);
-            autoScrollRef.current = null;
-        }
-    }, []);
-
-    const toggleAutoScroll = useCallback(() => {
-        if (autoScroll) {
-            stopAutoScroll();
-            setAutoScroll(false);
-        } else {
-            startAutoScroll();
-            setAutoScroll(true);
-        }
-    }, [autoScroll, startAutoScroll, stopAutoScroll]);
-
-    // Auto-scroll to current thumbnail
-    const scrollToCurrentThumbnail = useCallback(() => {
-        if (thumbnailContainerRef.current && media.length > 1) {
-            const thumbnailContainer = thumbnailContainerRef.current;
-            const thumbnails = thumbnailContainer.querySelectorAll('.thumbnail');
-
-            if (thumbnails[currentSlide]) {
-                const thumbnail = thumbnails[currentSlide];
-                const containerRect = thumbnailContainer.getBoundingClientRect();
-                const thumbnailRect = thumbnail.getBoundingClientRect();
-
-                const scrollLeft = thumbnail.offsetLeft - (containerRect.width / 2) + (thumbnailRect.width / 2);
-                thumbnailContainer.scrollTo({
-                    left: scrollLeft,
-                    behavior: 'smooth'
-                });
-            }
-        }
-    }, [currentSlide, media.length]);
-
-    const handleMouseEnter = () => {
-        setShowArrows(true);
-        if (media[currentSlide]?.type === 'image') {
-            zoomTimeoutRef.current = setTimeout(() => {
-                setShowZoomPreview(true);
-            }, 200);
-        }
-    };
-
-    const handleMouseLeave = () => {
-        if (zoomTimeoutRef.current) {
-            clearTimeout(zoomTimeoutRef.current);
-        }
-        setShowZoomPreview(false);
-        setShowArrows(false);
-    };
-
-    // Enhanced Zoom Modal Functions (only for images)
-    const openZoom = useCallback((index) => {
-        // Only open zoom for images, not videos
-        // if (media[index]?.type === 'video') return;
-
-        setCurrentSlide(index);
-        setIsZoomed(true);
-        setZoomLevel(1);
-        resetImagePosition();
-        document.body.style.overflow = 'hidden';
-    }, [media, resetImagePosition]);
-
-    const closeZoom = useCallback(() => {
-        setIsZoomed(false);
-        setZoomLevel(1);
-        resetImagePosition();
-        document.body.style.overflow = 'auto';
-    }, [resetImagePosition]);
-
-    // Enhanced Zoom controls with boundaries (only for images)
-    const zoomIn = useCallback(() => {
-        // Only allow zoom for images
-        if (media[currentSlide]?.type === 'video') return;
-
-        setZoomLevel(prev => {
-            const newZoom = Math.min(prev + 0.5, 5);
-            adjustPositionForZoom(newZoom, prev);
-            return newZoom;
-        });
-    }, [currentSlide, media]);
-
-    const zoomOut = useCallback(() => {
-        // Only allow zoom for images
-        // if (media[currentSlide]?.type === 'video') return;
-
-        setZoomLevel(prev => {
-            const newZoom = Math.max(prev - 0.5, 1);
-            if (newZoom === 1) {
-                resetImagePosition();
-            } else {
-                adjustPositionForZoom(newZoom, prev);
-            }
-            return newZoom;
-        });
-    }, [currentSlide, media, resetImagePosition]);
-
-    const resetZoom = useCallback(() => {
-        // Only allow zoom for images
-        // if (media[currentSlide]?.type === 'video') return;
-
-        setZoomLevel(1);
-        resetImagePosition();
-    }, [currentSlide, media, resetImagePosition]);
-
-    const adjustPositionForZoom = useCallback((newZoom, oldZoom) => {
-        if (newZoom > oldZoom) {
-            // Keep the image centered when zooming in
-            setImagePosition({ x: 0, y: 0 });
-        }
-    }, []);
-
-    // Enhanced Mouse Drag for Zoomed Image (only for images)
-    const handleZoomMouseDown = useCallback((e) => {
-        if (zoomLevel <= 1 || media[currentSlide]?.type === 'video') return;
-
+        e.preventDefault();
         setIsDragging(true);
+        const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+        const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+
         setDragStart({
-            x: e.clientX - imagePosition.x,
-            y: e.clientY - imagePosition.y
+            x: clientX - position.x,
+            y: clientY - position.y
         });
+    };
 
-        if (zoomImageRef.current) {
-            zoomImageRef.current.style.cursor = 'grabbing';
-        }
-    }, [zoomLevel, imagePosition, currentSlide, media]);
+    // Handle drag move
+    const handleDragMove = useCallback((e) => {
+        if (!isDragging || zoomLevel <= 1) return;
 
-    const handleZoomMouseMove = useCallback((e) => {
-        if (!isDragging || zoomLevel <= 1 || media[currentSlide]?.type === 'video') return;
+        e.preventDefault();
+        const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+        const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
 
-        const newX = e.clientX - dragStart.x;
-        const newY = e.clientY - dragStart.y;
+        const newX = clientX - dragStart.x;
+        const newY = clientY - dragStart.y;
 
         // Calculate boundaries based on zoom level
-        const zoomFactor = zoomLevel - 1;
-        const maxDrag = 100 * zoomFactor;
+        const container = containerRef.current;
+        const image = imageRef.current;
 
-        setImagePosition({
-            x: Math.max(-maxDrag, Math.min(maxDrag, newX)),
-            y: Math.max(-maxDrag, Math.min(maxDrag, newY))
-        });
-    }, [isDragging, dragStart, zoomLevel, currentSlide, media]);
+        if (container && image) {
+            const containerRect = container.getBoundingClientRect();
+            const imageRect = image.getBoundingClientRect();
 
-    const handleZoomMouseUp = useCallback(() => {
+            // Calculate max drag distance based on zoom level
+            const maxX = Math.max(0, (imageRect.width - containerRect.width) / 2);
+            const maxY = Math.max(0, (imageRect.height - containerRect.height) / 2);
+
+            // Apply boundaries
+            const boundedX = Math.max(-maxX, Math.min(maxX, newX));
+            const boundedY = Math.max(-maxY, Math.min(maxY, newY));
+
+            setPosition({ x: boundedX, y: boundedY });
+        }
+    }, [isDragging, dragStart, zoomLevel]);
+
+    // Handle drag end
+    const handleDragEnd = () => {
         setIsDragging(false);
-        if (zoomImageRef.current) {
-            zoomImageRef.current.style.cursor = zoomLevel > 1 ? 'grab' : 'default';
-        }
-    }, [zoomLevel]);
+    };
 
-    // Enhanced Touch Events for Mobile Swipe
-    const handleTouchStart = useCallback((e) => {
-        if (!isZoomed) return;
-
-        const touch = e.touches[0];
-        touchStartRef.current = { x: touch.clientX, y: touch.clientY };
-        touchStartTimeRef.current = Date.now();
-
-        if (zoomLevel > 1 && media[currentSlide]?.type === 'image') {
-            setIsDragging(true);
-            setDragStart({
-                x: touch.clientX - imagePosition.x,
-                y: touch.clientY - imagePosition.y
-            });
-        }
-    }, [isZoomed, zoomLevel, imagePosition, currentSlide, media]);
-
-    const handleTouchMove = useCallback((e) => {
-        if (!isZoomed) return;
-
-        const touch = e.touches[0];
-        const deltaX = touch.clientX - touchStartRef.current.x;
-        const deltaY = touch.clientY - touchStartRef.current.y;
-
-        if (zoomLevel > 1 && media[currentSlide]?.type === 'image') {
-            // Dragging zoomed image
-            e.preventDefault();
-            const newX = touch.clientX - dragStart.x;
-            const newY = touch.clientY - dragStart.y;
-
-            const zoomFactor = zoomLevel - 1;
-            const maxDrag = 150 * zoomFactor;
-
-            setImagePosition({
-                x: Math.max(-maxDrag, Math.min(maxDrag, newX)),
-                y: Math.max(-maxDrag, Math.min(maxDrag, newY))
-            });
-        } else {
-            // Swipe navigation for non-zoomed state
-            if (Math.abs(deltaX) > 50 && media.length > 1) {
-                e.preventDefault();
-                if (deltaX > 0) {
-                    goToPrev();
-                } else {
-                    goToNext();
-                }
-                touchStartRef.current = { x: touch.clientX, y: touch.clientY };
-            }
-        }
-    }, [isZoomed, zoomLevel, dragStart, media, currentSlide, goToPrev, goToNext]);
-
-    const handleTouchEnd = useCallback((e) => {
-        if (!isZoomed) return;
-
-        const touch = e.changedTouches[0];
-        const deltaX = touch.clientX - touchStartRef.current.x;
-        const deltaTime = Date.now() - touchStartTimeRef.current;
-
-        // Swipe detection for image navigation (only when not zoomed)
-        if (zoomLevel === 1 && Math.abs(deltaX) > 50 && deltaTime < 300 && media.length > 1) {
-            if (deltaX > 0) {
-                goToPrev();
-            } else {
-                goToNext();
-            }
-        }
-
-        setIsDragging(false);
-    }, [isZoomed, zoomLevel, media.length, goToPrev, goToNext]);
-
-    // Keyboard navigation
+    // Reset position on zoom change or slide change
     useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (isZoomed) {
-                switch (e.key) {
-                    case 'Escape':
-                        closeZoom();
-                        break;
-                    case 'ArrowLeft':
-                        goToPrev();
-                        break;
-                    case 'ArrowRight':
-                        goToNext();
-                        break;
-                    case '+':
-                    case '=':
-                        if (media[currentSlide]?.type === 'image') zoomIn();
-                        break;
-                    case '-':
-                        if (media[currentSlide]?.type === 'image') zoomOut();
-                        break;
-                    case '0':
-                        if (media[currentSlide]?.type === 'image') resetZoom();
-                        break;
-                }
-            }
-        };
+        setPosition({ x: 0, y: 0 });
+    }, [currentSlide, isZoomOpen]);
 
-        document.addEventListener('keydown', handleKeyDown);
-        return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [isZoomed, closeZoom, goToPrev, goToNext, zoomIn, zoomOut, resetZoom, currentSlide, media]);
-
-    // Mouse event listeners for dragging
+    // Auto scroll
     useEffect(() => {
-        if (isDragging) {
-            document.addEventListener('mousemove', handleZoomMouseMove);
-            document.addEventListener('mouseup', handleZoomMouseUp);
-        }
+        if (!autoScroll) return;
+        const i = setInterval(goNext, 4000);
+        return () => clearInterval(i);
+    }, [autoScroll, goNext]);
+
+    // Lock scroll on zoom
+    useEffect(() => {
+        document.body.style.overflow = isZoomOpen ? "hidden" : "auto";
+        return () => (document.body.style.overflow = "auto");
+    }, [isZoomOpen]);
+
+    // Event listeners for dragging
+    useEffect(() => {
+        if (!isZoomOpen || zoomLevel <= 1) return;
+
+        const handleMouseMove = (e) => handleDragMove(e);
+        const handleTouchMove = (e) => handleDragMove(e);
+        const handleMouseUp = () => handleDragEnd();
+        const handleTouchEnd = () => handleDragEnd();
+
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('touchmove', handleTouchMove, { passive: false });
+        document.addEventListener('mouseup', handleMouseUp);
+        document.addEventListener('touchend', handleTouchEnd);
 
         return () => {
-            document.removeEventListener('mousemove', handleZoomMouseMove);
-            document.removeEventListener('mouseup', handleZoomMouseUp);
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('touchmove', handleTouchMove);
+            document.removeEventListener('mouseup', handleMouseUp);
+            document.removeEventListener('touchend', handleTouchEnd);
         };
-    }, [isDragging, handleZoomMouseMove, handleZoomMouseUp]);
+    }, [isZoomOpen, zoomLevel, handleDragMove]);
 
-    // Auto-scroll and thumbnail scrolling effects
-    useEffect(() => {
-        if (autoScroll) {
-            startAutoScroll();
-        } else {
-            stopAutoScroll();
-        }
-
-        return () => {
-            stopAutoScroll();
-        };
-    }, [autoScroll, startAutoScroll, stopAutoScroll]);
-
-    useEffect(() => {
-        scrollToCurrentThumbnail();
-    }, [currentSlide, scrollToCurrentThumbnail]);
-
-    // Cleanup on unmount
-    useEffect(() => {
-        return () => {
-            document.body.style.overflow = 'auto';
-            if (zoomTimeoutRef.current) {
-                clearTimeout(zoomTimeoutRef.current);
-            }
-            stopAutoScroll();
-        };
-    }, [stopAutoScroll]);
-
-    if (!media || media.length === 0) {
-        return <div className="gallery-container">No media available</div>;
-    }
-
-    const currentMedia = media[currentSlide];
-    const hasBadges = badges && Object.keys(badges).length > 0;
-    const isCurrentImage = currentMedia?.type === 'image';
-    const isCurrentVideo = currentMedia?.type === 'video';
+    if (!media.length) return null;
+    const current = media[currentSlide];
 
     return (
         <>
-            {/* Gallery Container */}
-            <div className="w-full max-w-xs sm:max-w-md  mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
-                <div className="container mx-auto">
-                    {/* Main Media Display */}
-                    <div className="relative bg-gray-100">
-                        {/* Media Counter */}
-                        <div className="absolute top-4 right-4 bg-black/70 text-white p-1.5 py-1.5 rounded text-xs font-medium z-10 backdrop-blur-sm flex items-center gap-2">
-                            {currentSlide + 1} / {media.length}
-                            {isCurrentVideo && <span className="bg-red-500 px-2 py-1 rounded text-xs font-bold">VIDEO</span>}
-                        </div>
-
-                        {/* Product Badges */}
-                        {hasBadges && (
-                            <div className="absolute top-4 left-4 flex gap-2 z-10">
-                                {badges.NewArrival && <span className="bg-green-500 text-white px-3 py-1 rounded text-xs font-bold">New</span>}
-                                {badges.Top_Trending && <span className="bg-orange-500 text-white px-3 py-1 rounded text-xs font-bold">Trending</span>}
-                                {badges.discountPercentage > 0 && (
-                                    <span className="bg-red-600 text-white px-3 py-1 rounded text-xs font-bold">-{badges.discountPercentage}%</span>
-                                )}
-                            </div>
-                        )}
-
-                        {/* Main Media Wrapper */}
-                        <div
-                            ref={containerRef}
-                            className="relative w-full aspect-square overflow-hidden bg-white cursor-crosshair"
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
+            {/* MAIN VIEW */}
+            <div className="w-full max-w-md mx-auto">
+                <div
+                    className="relative bg-gray-50 aspect-square rounded-xl overflow-hidden shadow-lg cursor-zoom-in"
+                    onClick={() => setIsZoomOpen(true)}
+                >
+                    {current.type === "image" ? (
+                        <img
+                            src={current.src}
+                            className="w-full h-full object-contain"
+                            alt=""
+                        />
+                    ) : (
+                        <video
+                            className="w-full h-full object-contain"
+                            controls
+                            poster={images[0]?.img || images[0]}
                         >
-                            {isCurrentImage ? (
-                                <img
-                                    ref={mainImageRef}
-                                    src={currentMedia.src}
-                                    alt={`Product view ${currentSlide + 1}`}
-                                    className="w-full h-full object-contain select-none transition-transform duration-300"
-                                    onClick={() => openZoom(currentSlide)}
-                                />
-                            ) : (
-                                <video className="w-full h-full object-contain" controls playsInline preload="metadata">
-                                    <source src={currentMedia.src} type="video/mp4" />
-                                    Your browser does not support the video tag.
-                                </video>
-                            )}
+                            <source src={current.src} type="video/mp4" />
+                        </video>
+                    )}
 
-                            {/* Navigation Arrows */}
-                            {media.length > 1 && (
-                                <>
-                                    <button
-                                        className={`absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 text-gray-800 flex items-center justify-center text-xl font-bold shadow-lg transition-all hover:scale-110 hover:bg-white ${showArrows ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
-                                        onClick={goToPrev}
-                                        aria-label="Previous media"
-                                    >
-                                        ‹
-                                    </button>
-                                    <button
-                                        className={`absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 text-gray-800 flex items-center justify-center text-xl font-bold shadow-lg transition-all hover:scale-110 hover:bg-white ${showArrows ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
-                                        onClick={goToNext}
-                                        aria-label="Next media"
-                                    >
-                                        ›
-                                    </button>
-                                </>
-                            )}
-                        </div>
+                    {/* Arrows */}
+                    {media.length > 1 && (
+                        <>
+                            <button
+                                onClick={e => {
+                                    e.stopPropagation();
+                                    goPrev();
+                                }}
+                                className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 px-3 py-1 rounded-full hover:bg-white transition-all"
+                            >
+                                ‹
+                            </button>
+                            <button
+                                onClick={e => {
+                                    e.stopPropagation();
+                                    goNext();
+                                }}
+                                className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 px-3 py-1 rounded-full hover:bg-white transition-all"
+                            >
+                                ›
+                            </button>
+                        </>
+                    )}
 
-                        {/* Auto-scroll Toggle */}
-                        {media.length > 1 && (
-                            <div className="absolute bottom-3 right-3 z-10">
-                                <button
-                                    className={`w-10 h-10 rounded-full bg-black/60 text-white flex items-center justify-center text-lg transition-all hover:bg-black/80 ${autoScroll ? 'bg-orange-500' : ''}`}
-                                    onClick={toggleAutoScroll}
-                                    aria-label={autoScroll ? 'Stop auto-scroll' : 'Start auto-scroll'}
-                                >
-                                    {autoScroll ? <Pause className='w-3 h-3' /> : <Play className='w-3 h-3' />}
-                                </button>
-                            </div>
-                        )}
-                    </div>
+                    {/* Auto scroll */}
+                    <button
+                        onClick={e => {
+                            e.stopPropagation();
+                            setAutoScroll(p => !p);
+                        }}
+                        className="absolute bottom-2 right-2 bg-black/60 text-white p-2 rounded-full hover:bg-black/80 transition-all"
+                    >
+                        {autoScroll ? <Pause size={14} /> : <Play size={14} />}
+                    </button>
                 </div>
 
-                {/* Thumbnail Gallery */}
-                {media.length > 1 && (
-                    <div className="bg-white py-2 border-t border-gray-200">
-                        <div className={`
-    flex items-center gap-2 p-1.5
-    overflow-x-auto
-    scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200
-    ${media.length <= 4 ? 'justify-center' : 'justify-start'}
-  `}>
-                            {media.map((item, index) => (
-                                <div
-                                    key={index}
-                                    className={`relative flex-shrink-0 w-10  sm:w-16 h-10 sm:h-16 border-2 rounded cursor-pointer transition-all ${index === currentSlide
-                                            ? 'border-blue-500 shadow-md scale-105'
-                                            : 'border-transparent hover:scale-105'
-                                        } ${item.type === 'video' ? 'video-thumbnail' : ''}`}
-                                    onClick={() => goToSlide(index)}
-                                >
-                                    {item.type === 'image' ? (
-                                        <img
-                                            src={item.src}
-                                            alt={`Thumbnail ${index + 1}`}
-                                            className="w-full h-full object-cover rounded"
-                                            loading="lazy"
-                                        />
-                                    ) : (
-                                        <>
-                                            <video className="w-full h-full object-cover rounded" preload="metadata">
-                                                <source src={item.src} type="video/mp4" />
-                                            </video>
-                                            <div className="absolute inset-0 flex items-center justify-center">
-                                                    <div className="bg-black/70 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm"><Play className='w-3 h-3' /> </div>
-                                            </div>
-                                        </>
-                                    )}
+                {/* Thumbnails */}
+                <div className="flex gap-2 mt-3 overflow-x-auto">
+                    {media.map((m, i) => (
+                        <button
+                            key={i}
+                            onClick={() => setCurrentSlide(i)}
+                            className={`w-16 h-16 rounded-lg border-2 transition-all ${i === currentSlide ? "border-blue-500" : "border-transparent hover:border-gray-300"
+                                }`}
+                        >
+                            {m.type === "image" ? (
+                                <img src={m.src} className="w-full h-full object-cover" />
+                            ) : (
+                                <div className="bg-gray-800 w-full h-full flex items-center justify-center rounded-lg">
+                                    <Play size={12} className="text-white" />
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
+                            )}
+                        </button>
+                    ))}
+                </div>
             </div>
 
-            {/* Fullscreen Zoom Modal */}
-            {isZoomed && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.4 }}
-                    className="fixed inset-0 z-[9999] bg-black overflow-hidden"
-                    onClick={(e) => e.target === e.currentTarget && closeZoom()}
+            {/* 🔥 PREMIUM FULLSCREEN ZOOM MODAL WITH DRAG */}
+            {isZoomOpen && (
+                <div
+                    className="fixed inset-0 z-[9999] bg-black"
+                    ref={containerRef}
                 >
-                    {/* Ultra-smooth animated backdrop */}
-                    <motion.div
-                        initial={{ backdropFilter: "blur(0px)" }}
-                        animate={{ backdropFilter: "blur(32px)" }}
-                        transition={{ duration: 0.6, ease: "easeOut" }}
-                        className="absolute inset-0 bg-black/90"
-                    />
+                    {/* Close */}
+                    <button
+                        onClick={() => {
+                            setIsZoomOpen(false);
+                            setZoomLevel(1);
+                            setPosition({ x: 0, y: 0 });
+                        }}
+                        className="absolute z-[9999] top-4 right-4 text-white hover:bg-white/10 p-2 rounded-full transition-all"
+                    >
+                        <X size={28} />
+                    </button>
 
-                    {/* Entire content */}
-                    <div className="relative w-full h-full">
-                        {/* Top bar - ALWAYS VISIBLE NOW */}
-                        <motion.div
-                            initial={{ y: 0 }}
-                            className="absolute top-0 left-0 right-0 z-50 flex justify-between items-center px-safe-or-6 py-safe-or-6 pointer-events-none"
-                        >
-                            <div className="flex items-center gap-4">
-                                <div className="bg-white/10 backdrop-blur-2xl px-5 py-2.5 rounded-full text-white/90 text-sm font-medium border border-white/10">
-                                    {currentSlide + 1} / {media.length}
+                    {/* Zoom controls */}
+                    {current.type === "image" && (
+                        <div className="absolute top-4 z-[9999] left-4 flex gap-2">
+                            <button
+                                onClick={() => setZoomLevel(z => Math.min(z + 0.5, 4))}
+                                className="bg-white/10 text-white p-2 rounded hover:bg-white/20 transition-all"
+                            >
+                                <ZoomIn />
+                            </button>
+                            <button
+                                onClick={() => setZoomLevel(z => Math.max(z - 0.5, 1))}
+                                className="bg-white/10 text-white p-2 rounded hover:bg-white/20 transition-all"
+                            >
+                                <ZoomOut />
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setZoomLevel(1);
+                                    setPosition({ x: 0, y: 0 });
+                                }}
+                                className="bg-white/10 text-white p-2 rounded hover:bg-white/20 transition-all"
+                            >
+                                <RotateCcw />
+                            </button>
+                            {zoomLevel > 1 && (
+                                <div className="flex items-center gap-2 ml-2 text-white/80 text-sm">
+                                    <Move size={16} />
+                                    <span>Drag to pan</span>
                                 </div>
+                            )}
+                        </div>
+                    )}
 
-                                {/* Optional badges - super minimal */}
-                                {hasBadges && (
-                                    <div className="flex gap-2">
-                                        {badges.NewArrival && <span className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-xs px-3 py-1.5 rounded-full font-semibold">New</span>}
-                                        {badges.Top_Trending && <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs px-3 py-1.5 rounded-full font-semibold">Trending</span>}
-                                        {badges.discountPercentage > 0 && (
-                                            <span className="bg-gradient-to-r from-rose-500 to-pink-600 text-white text-xs px-3 py-1.5 rounded-full font-bold">
-                                                -{badges.discountPercentage}%
-                                            </span>
-                                        )}
+                    {/* Media Container */}
+                    <div className="w-full h-full flex items-center justify-center overflow-hidden select-none">
+                        {current.type === "image" ? (
+                            <div className="relative">
+                                <img
+                                    ref={imageRef}
+                                    src={current.src}
+                                    className={`max-w-[90vw] max-h-[90vh] object-contain transition-transform duration-300 ${zoomLevel > 1 ? 'cursor-grab active:cursor-grabbing' : 'cursor-default'}`}
+                                    style={{
+                                        transform: `scale(${zoomLevel}) translate(${position.x}px, ${position.y}px)`,
+                                        transition: isDragging ? 'none' : 'transform 0.15s ease-out'
+                                    }}
+                                    onMouseDown={handleDragStart}
+                                    onTouchStart={handleDragStart}
+                                    alt="Zoomed view"
+                                    draggable="false"
+                                />
+
+                                {/* Zoom level indicator */}
+                                {zoomLevel > 1 && (
+                                    <div className="absolute bottom-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
+                                        {zoomLevel.toFixed(1)}x
                                     </div>
                                 )}
                             </div>
-
-                            <button
-                                onClick={closeZoom}
-                                className="pointer-events-auto size-11 bg-white/10 backdrop-blur-2xl rounded-full flex items-center justify-center hover:bg-white/20 border border-white/10 transition-all duration-300"
-                            >
-                                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </motion.div>
-
-                        {/* Navigation Arrows - ALWAYS VISIBLE NOW */}
-                        {media.length > 1 && (
-                            <>
-                                <button
-                                    onClick={goToPrev}
-                                    className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-40 opacity-100 transition-opacity duration-300 group"
-                                >
-                                    <div className="size-8 md:size-10 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 flex items-center justify-center group-hover:bg-white/20 group-hover:scale-110 transition-all duration-300">
-                                        <svg className="w-3 h-3 md:w-4 md:h-4 text-white -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-                                        </svg>
-                                    </div>
-                                </button>
-
-                                <button
-                                    onClick={goToNext}
-                                    className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-40 opacity-100 transition-opacity duration-300 group"
-                                >
-                                    <div className="size-8 md:size-10 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 flex items-center justify-center group-hover:bg-white/20 group-hover:scale-110 transition-all duration-300">
-                                        <svg className="w-3 h-3 md:w-4 md:h-4 text-white ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                                        </svg>
-                                    </div>
-                                </button>
-                            </>
+                        ) : (
+                            <video
+                                src={current.src}
+                                controls
+                                autoPlay
+                                className="max-w-[90vw] max-h-[90vh]"
+                            />
                         )}
-
-                        {/* MAIN ZOOM CONTAINER - SIMPLIFIED DRAG */}
-                        <div className="h-full w-full flex items-center justify-center">
-                            <PinchZoomPan
-                                key={currentMedia.src}
-                                minScale={1}
-                                maxScale={6}
-                                initialScale={zoomLevel}
-                                onScaleChange={(scale) => {
-                                    setZoomLevel(scale);
-                                }}
-                                onTap={() => setShowControls((prev) => !prev)}
-                                className="w-full h-full"
-                            >
-                                {isCurrentImage ? (
-                                    <motion.img
-                                        src={currentMedia.src}
-                                        alt="Zoomed media"
-                                        className="select-none shadow-2xl rounded-xl"
-                                        style={{
-                                            willChange: "transform",
-                                            maxWidth: "90vw",
-                                            maxHeight: "90vh",
-                                            width: "auto",
-                                            height: "auto",
-                                            display: "block",
-                                        }}
-                                    />
-                                ) : (
-                                    <video
-                                        className="rounded-2xl shadow-2xl"
-                                        style={{
-                                            maxWidth: "90vw",
-                                            maxHeight: "90vh",
-                                            width: "auto",
-                                            height: "auto",
-                                            display: "block",
-                                        }}
-                                        controls={showControls}
-                                        autoPlay
-                                        muted
-                                        loop
-                                        playsInline
-                                    >
-                                        <source src={currentMedia.src} type="video/mp4" />
-                                    </video>
-                                )}
-                            </PinchZoomPan>
-                        </div>
-
-                        {/* Bottom Thumbnail Strip - ALWAYS VISIBLE NOW */}
-                        {media.length > 1 && (
-                            <motion.div
-                                initial={{ y: 0 }}
-                                className="absolute bottom-0 left-0 right-0 pb-safe-or-8 px-4 md:px-6 pointer-events-none"
-                            >
-                                <div className="flex justify-center gap-2 md:gap-3 max-w-5xl mx-auto overflow-x-auto py-2 pointer-events-auto">
-                                    {media.map((item, index) => (
-                                        <motion.button
-                                            key={index}
-                                            whileTap={{ scale: 0.92 }}
-                                            onClick={() => goToSlide(index)}
-                                            className={`relative flex-shrink-0 size-16 md:size-20 rounded-2xl overflow-hidden border-2 transition-all ${index === currentSlide
-                                                ? "border-white/70 shadow-2xl scale-110"
-                                                : "border-white/10 opacity-60 hover:opacity-90"
-                                                }`}
-                                        >
-                                            {item.type === "image" ? (
-                                                <img src={item.src} className="w-full h-full object-cover" alt={`Thumbnail ${index + 1}`} />
-                                            ) : (
-                                                <div className="w-full h-full bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center">
-                                                    <div className="size-8 md:size-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center">
-                                                        <svg className="w-5 h-5 md:w-6 md:h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                                            <path d="M8 5v14l11-7z" />
-                                                        </svg>
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </motion.button>
-                                    ))}
-                                </div>
-                            </motion.div>
-                        )}
-
-                        {/* Double-tap hint - appears only when zoomed out */}
-                        
                     </div>
-                </motion.div>
+
+                    {/* Arrows */}
+                    {media.length > 1 && (
+                        <>
+                            <button
+                                onClick={goPrev}
+                                className="absolute left-4 top-1/2 -translate-y-1/2 text-white text-4xl hover:bg-white/10 p-4 rounded-full transition-all"
+                            >
+                                ‹
+                            </button>
+                            <button
+                                onClick={goNext}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-white text-4xl hover:bg-white/10 p-4 rounded-full transition-all"
+                            >
+                                ›
+                            </button>
+                        </>
+                    )}
+
+                    {/* Thumbnails inside zoom */}
+                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+                        {media.map((m, i) => (
+                            <button
+                                key={i}
+                                onClick={() => {
+                                    setCurrentSlide(i);
+                                    setZoomLevel(1);
+                                    setPosition({ x: 0, y: 0 });
+                                }}
+                                className={`w-14 h-14 border-2 transition-all ${i === currentSlide ? "border-white" : "border-transparent hover:border-white/50"
+                                    }`}
+                            >
+                                {m.type === "image" ? (
+                                    <img src={m.src} className="w-full h-full object-cover" />
+                                ) : (
+                                    <div className="bg-gray-700 w-full h-full flex items-center justify-center">
+                                        <Play size={10} className="text-white" />
+                                    </div>
+                                )}
+                            </button>
+                        ))}
+                    </div>
+                </div>
             )}
-            
         </>
     );
 };

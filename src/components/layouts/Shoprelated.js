@@ -1,12 +1,12 @@
 import React, { useRef } from 'react';
 import ProductCard from '../sections/productCard/ProductCard';
-import useFilterProducts from '../../hook/product/useFilterProducts';
+import { useFilteredProducts } from '../../hook/product/useFilterProducts';
 import { ChevronLeft, ChevronRight, AlertCircle, Loader2 } from 'lucide-react';
 
 const ShopRelatedUpdated = ({ itemCtrName }) => {
     const scrollRef = useRef(null);
 
-    const { data, loading, error } = useFilterProducts(
+    const { data, isLoading, isError } = useFilteredProducts(
         { itemCtrName },
         0,
         10
@@ -50,7 +50,7 @@ const ShopRelatedUpdated = ({ itemCtrName }) => {
                                          transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2
                                          disabled:opacity-50 disabled:cursor-not-allowed"
                                 aria-label="Scroll left"
-                                disabled={loading}
+                                disabled={isLoading}
                             >
                                 <ChevronLeft className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                             </button>
@@ -62,7 +62,7 @@ const ShopRelatedUpdated = ({ itemCtrName }) => {
                                          transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2
                                          disabled:opacity-50 disabled:cursor-not-allowed"
                                 aria-label="Scroll right"
-                                disabled={loading}
+                                disabled={isLoading}
                             >
                                 <ChevronRight className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                             </button>
@@ -71,7 +71,7 @@ const ShopRelatedUpdated = ({ itemCtrName }) => {
                 </div>
 
                 {/* Loading State */}
-                {loading && (
+                {isLoading && (
                     <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory">
                         {[...Array(4)].map((_, i) => (
                             <div
@@ -100,7 +100,7 @@ const ShopRelatedUpdated = ({ itemCtrName }) => {
 
 
                 {/* Error State */}
-                {error && (
+                {isError && (
                     <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 
                                    rounded-xl p-2 mb-2">
                         <div className="flex items-center gap-3">
@@ -110,7 +110,7 @@ const ShopRelatedUpdated = ({ itemCtrName }) => {
                                     Failed to load products
                                 </h3>
                                 <p className="text-red-700 dark:text-red-300 mt-1">
-                                    {typeof error === 'string' ? error : 'Please try again later'}
+                                    {typeof isError === 'string' ? isError : 'Please try again later'}
                                 </p>
                             </div>
                         </div>
@@ -118,7 +118,7 @@ const ShopRelatedUpdated = ({ itemCtrName }) => {
                 )}
 
                 {/* Empty State */}
-                {!loading && !error && relatedProducts.length === 0 && (
+                {!isLoading && !isError && relatedProducts.length === 0 && (
                     <div className="bg-gray-100 dark:bg-gray-800/50 rounded-xl p-12 text-center">
                         <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-200 dark:bg-gray-700 
                                       flex items-center justify-center">
@@ -134,7 +134,7 @@ const ShopRelatedUpdated = ({ itemCtrName }) => {
                 )}
 
                 {/* Products Grid - Horizontal Scroll */}
-                {!loading && !error && relatedProducts.length > 0 && (
+                {!isLoading && !isError && relatedProducts.length > 0 && (
                     <div className="relative">
                         {/* Gradient overlays for better UX */}
                         <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-gray-50 dark:from-gray-900 to-transparent z-10 pointer-events-none" />

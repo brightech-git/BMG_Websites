@@ -50,7 +50,7 @@ import NotificationModal from './components/pages/notificationModal/Notification
 import MaintenanceLogin from './components/pages/MaintenanceLogin';
 import PaymentFailure from './components/pages/PaymentFailure';
 import PaymentStatus from './components/pages/paymentStatus';
-// import Logo from "./assets/img/logo1.jpg";
+import Logo from "./assets/videos/silverIcon.png"
 import './App.css';
 // import PageTransition from './components/layouts/PageTransition';
 // import ProductOrdersModal from './components/layouts/ProductOrdersModal';

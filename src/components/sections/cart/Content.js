@@ -34,7 +34,7 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, onProductData }) => {
             itemId: product?.ITEMID || item.itemId || null,
             tagNo: product?.TAGNO || item.tagNo || null,
         });
-    }, [product, productError, item, onProductData, imageError]);
+    }, []);
 
     const displayImage = imageError ? fallbackImage :
         product?.ImagePath ? `${baseUrl}${JSON.parse(product.ImagePath)[0] || ''}` : fallbackImage;
@@ -156,14 +156,14 @@ const SkeletonCartLoading = () =>{
 }
 const Cart = () => {
     const history = useHistory();
-    const { cartItems, isLoading, deleteCart, clearCart } = useCart();
+    const { cartItems, isLoading, deleteCart, clearAllItems } = useCart();
     const [selectedItems, setSelectedItems] = useState([]);
     const [productDataMap, setProductDataMap] = useState({});
 
     const [modalOpen, setModalOpen] = useState(false);
     const [mobileCheckDone, setMobileCheckDone] = useState(false);
     const mobileNumber = useSelector(state => state.user.user?.contactNumber);
-    console.log(mobileNumber, 'ContactNumber');
+  
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deleteSno, setDeleteSno] = useState(null);
@@ -191,10 +191,13 @@ const Cart = () => {
     
     // Listen for payment success → clear cart
     useEffect(() => {
-        const handlePayment = () => clearCart();
-        window.addEventListener("payment-success", handlePayment);
-        return () => window.removeEventListener("payment-success", handlePayment);
-    }, [clearCart]);
+        const handlePayment = () => {
+            clearAllItems.mutate(); // ✅ directly call the mutate function
+        };
+        window.addEventListener("clear-cart", handlePayment);
+        return () => window.removeEventListener("clear-cart", handlePayment);
+    }, [clearAllItems]); // use clearAllItems, not clearCart
+
 
 
     const isMobileMissing = !mobileNumber;
@@ -234,8 +237,10 @@ const Cart = () => {
                 })),
             totalAmount: totals.total,
         };
+       
 
         history.push("/checkout", payload);
+
     };
 
     if (!modalOpen && isLoading) {

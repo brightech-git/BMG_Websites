@@ -16,7 +16,6 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import '../node_modules/animate.css/animate.css';
 import '../node_modules/magnific-popup/dist/magnific-popup.css';
-import './assets/css/font-awesome.min.css';
 import './assets/css/flaticon.css';
 import './assets/fonts/flaticon/flaticon-2.css';
 import './assets/css/default.css';
@@ -32,7 +31,17 @@ import { Provider } from 'react-redux';
 import { store } from './store/index'; // adjust path
 import { NotificationProvider } from './context/notification/NotificationContext';
 import { CompanyDetailsProvider } from './context/clientDetails/clientDetialContext';
-const queryClient = new QueryClient();
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      cacheTime: 15 * 60 * 1000,
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
 
 // ✅ Use createRoot instead of ReactDOM.render
 const root = ReactDOM.createRoot(document.getElementById('bmg'));

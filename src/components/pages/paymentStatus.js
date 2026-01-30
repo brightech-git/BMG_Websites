@@ -18,6 +18,7 @@ import Footertwo from "../layouts/Footerthree";
 import { getPaymentStatus } from "../../service/paymentServiceicici";
 import SmartButton from "../../components/ui/SmartButton";
 import { useCreateReOrder } from "../../hook/order/useReorder";
+import { useCart } from "../../hook/cart/useCartQuery";
 
 const PaymentStatus = () => {
     const location = useLocation();
@@ -26,6 +27,7 @@ const PaymentStatus = () => {
     const orderId = searchParams.get("orderId");
     const mode = searchParams.get("mode");
     const paymentMode = mode?.toLowerCase() === "cod" ? "COD" : "ONLINE";
+    const {clearCart} = useCart();
 
     const [status, setStatus] = useState(null);
     const [isSuccess, setIsSuccess] = useState(null); // true, false, null (loading)
@@ -47,6 +49,7 @@ const PaymentStatus = () => {
                 if (paymentMode === "COD") {
                     setStatus({ paymentStatus: "Cash on Delivery", message: "Order confirmed" });
                     setIsSuccess(true);
+                    clearCart();
                     return;
                 }
 
@@ -55,6 +58,8 @@ const PaymentStatus = () => {
 
                 if (res?.paymentStatus?.toLowerCase() === "paid") {
                     setIsSuccess(true);
+                    // Dispatch event to clear cart for COD
+                    clearCart(); 
                 } else {
                     setIsSuccess(false);
                 }

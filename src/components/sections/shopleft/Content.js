@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import useFilterProducts from '../../../hook/product/useFilterProducts';
+import { useFilteredProducts } from '../../../hook/product/useFilterProducts';
 import ProductCard from '../productCard/ProductCard';
 import ProductFilterBar from './ProductFilterBar';
 import './ShopContent.css';
@@ -55,12 +55,14 @@ const Content = () => {
     const page = 0;
     const searchParams = new URLSearchParams(location.search);
     const queryFilters = Object.fromEntries(searchParams);
+
     const {
         data,
-        loading: isLoading,
-        error: isError,
+        isLoading,
+        isError,
         refetch,
-    } = useFilterProducts(queryFilters, page, pageSize);
+        isFetching
+    } = useFilteredProducts(queryFilters, page, pageSize);
 
     const { askNotification } = useNotification();
 
@@ -241,7 +243,7 @@ console.log(data ,'dataproducts');
                 {/* Loading indicator or no more products message */}
                 {!hideLoadMore ? (
                     <div ref={loadMoreRef} className="load-more-container">
-                        {isLoading ? (
+                        {isFetching ? (
                             <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '60px' }}>
                                 <div className="placeholder-glow d-flex gap-2">
                                     <div className="spinner-border text-secondary" role="status">

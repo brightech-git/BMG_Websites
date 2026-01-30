@@ -179,42 +179,6 @@ const Shopinfo = ({ sno, Authenticated }) => {
     });
   };
 
-      // const handleOnCheckout = useCallback(() => {
-      //     if (selectedItems.length === 0) {
-      //         alert('Please select at least one item to proceed to checkout.');
-      //         return;
-      //     }
-      //     if (!isDataComplete) {
-      //         alert('Please wait until all product data is loaded before proceeding to checkout.');
-      //         return;
-      //     }
-  
-      //     const selectedCartItems = items
-      //         .filter((item) => selectedItems.includes(item.sno))
-      //         .map((item) => ({
-      //             sno: item.sno,
-      //             itemId: productDataMap[item.sno]?.itemId || item.itemId || null,
-      //             tagNo: productDataMap[item.sno]?.tagNo || item.tagNo || null,
-      //             productName: productDataMap[item.sno]?.productName || item.itemTagSno || 'Unknown Product',
-      //             quantity: item.quantity,
-      //             price: productDataMap[item.sno]?.price || item.amount || 0,
-      //             originalPrice: productDataMap[item.sno]?.originalPrice || 0,
-      //             imagePath: productDataMap[item.sno]?.imagePath || fallbackImage,
-      //             weight: productDataMap[item.sno]?.weight || null,
-      //             purity: productDataMap[item.sno]?.purity || null,
-      //         }));
-  
-      //     const checkoutPayload = {
-      //         items: selectedCartItems,
-      //         totalAmount: total,
-      //         originalAmount: originalSubtotal,
-      //         totalSavings: totalSavings,
-      //     };
-  
-      //     //console.log('Navigating with payload:', checkoutPayload);
-      //     history.push('/checkout', checkoutPayload);
-      // }, [selectedItems, isDataComplete, items, productDataMap, total, originalSubtotal, totalSavings, history]);
-
   const handleWishlist = (e) => {
     e.preventDefault(); e.stopPropagation();
     if (!isAuthenticated) return toast.error("Please login") && history.push("/login");

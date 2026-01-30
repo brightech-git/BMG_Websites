@@ -20,7 +20,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useCompanyDetails } from "../../context/clientDetails/clientDetialContext";
 import silvericon from '../../assets/videos/silverIcon.png';
 import goldicon from '../../assets/videos/goldIcon.png';
-
+import { resetCartState } from "../../redux/slices/cartSlice";
 
 const Header = ({ isAuthenticated }) => {
   const width = useScreenWidth();
@@ -488,7 +488,7 @@ const location =useLocation();
                     </div>
                   </div>
                  
-                  <div  className="headersearch">
+                <div className="flex w-[400px] items-center m-0 ">
                     <ItemSearch />
                   </div>
                 </div>

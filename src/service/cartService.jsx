@@ -29,3 +29,12 @@ export const updateCartItem = (cartItem) => {
 export const deleteCartItem = (id) => {
     return PublicUrl.delete(`/cart/delete/${id}`, authHeader());
 };
+
+export const clearCart = () => {
+    try{
+        return PublicUrl.delete(`/cart/clear`, authHeader());
+    }
+  catch(err){
+    throw new Error(err.response?.data?.error || err.meessage);
+  }
+}

@@ -19,6 +19,9 @@ import { getPaymentStatus } from "../../service/paymentServiceicici";
 import SmartButton from "../../components/ui/SmartButton";
 import { useCreateReOrder } from "../../hook/order/useReorder";
 import { useCart } from "../../hook/cart/useCartQuery";
+import PrintStatement from "../ui/PrintStatement";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { useOrderInvoice } from "../../hook/order/useAllOrdersQuery";
 
 const PaymentStatus = () => {
     const location = useLocation();
@@ -36,6 +39,12 @@ const PaymentStatus = () => {
     const [retrying, setRetrying] = useState(false);
 
     const { mutateAsync: createReOrder } = useCreateReOrder();
+
+    const {data:orderInvoiceData ,isLoading:orderInvoiceLoadinf,isError:orderInvoiceError} = useOrderInvoice(orderId);
+
+    console.log(orderInvoiceData,'orderInvoiceData');
+
+
     useEffect(() => {
         if (!orderId) {
             setIsSuccess(false);
@@ -74,6 +83,8 @@ const PaymentStatus = () => {
 
         fetchStatus();
     }, [orderId, paymentMode]);
+
+
 
     const getStatusColor = () => {
         if (isLoading) return "text-blue-600";
@@ -118,6 +129,7 @@ const PaymentStatus = () => {
         }
     };
 
+   
     return (
         <>
             <HeaderWithAuth />
@@ -275,6 +287,10 @@ const PaymentStatus = () => {
                                     </div>
                                 </div>
                             )}
+                            <>
+                               
+
+                            </>
 
                             {/* Failure: Info */}
                             {isSuccess === false && !isLoading && (
@@ -319,18 +335,11 @@ const PaymentStatus = () => {
 
                                             Continue Shopping
                                         </SmartButton>
-
-                                        <SmartButton variant="outline" className="flex items-center" icon={Download}>
-
-                                            Download Invoice
-                                        </SmartButton>
-
+                                        
 
                                     </>
                                 ) : (
                                     <>
-
-
 
                                         <SmartButton
                                             onClick={() => history.push("/products-page")}
@@ -347,7 +356,6 @@ const PaymentStatus = () => {
                                             >
                                                 {retrying ? "Retrying..." : "Retry Payment"}
                                             </SmartButton>
-
 
                                     </>
                                 )}

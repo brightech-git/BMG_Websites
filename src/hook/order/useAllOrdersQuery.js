@@ -1,6 +1,6 @@
 
 import { useQuery } from '@tanstack/react-query';
-import { getAllOrders ,getOrderById } from '../../service/orderService';
+import { getAllOrders ,getOrderById ,getOrderInvoice} from '../../service/orderService';
 
 
 export const useAllOrders = () => {
@@ -17,4 +17,11 @@ export const useGetOrderById = (orderId) =>{
 
     }    
     )
+}
+export const useOrderInvoice = (orderId) =>{
+    return useQuery({
+        queryKey:['orderInvoice'],
+        queryFn: () => getOrderInvoice(orderId),
+        enabled:!!orderId
+    })
 }

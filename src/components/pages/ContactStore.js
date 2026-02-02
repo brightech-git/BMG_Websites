@@ -8,6 +8,10 @@ import largerImg from '../../assets/videos/store.jpg';
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import Headers from "../layouts/HeaderWithAuth";
 import Footertwo from "../layouts/Footerthree";
+import SmartButton from "../ui/SmartButton";
+import PrintStatement from '../../components/ui/PrintStatement';
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { Download } from "lucide-react";
 
 const ContactStore = () => {
     const [formData, setFormData] = useState({
@@ -42,6 +46,12 @@ const history =useHistory()
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    const res = {
+        "items": [
+            { product_name: 'ring', quantity: 1, price: 1500 },
+            { product_name: 'ring', quantity: 1, price: 1500 },
+        ]
+    }
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -149,7 +159,7 @@ const history =useHistory()
       
        
                     <Headers />
-   
+           
    
         <section className="contact-main-section animate-fade-in m-2 ">
             {/* Header Section */}
@@ -164,6 +174,44 @@ const history =useHistory()
                                
                                
                             </div>
+                        <PDFDownloadLink
+                            document={
+                                <PrintStatement
+                                    orderId={'ORD-105060'}
+                                    orderDate={'10-01-2026'}
+                                    originAddress={{
+                                        name: "BMG JEWELLERS PRIVATE LIMITED",
+                                        lines: [
+                                            "160, West Masi Street, Madurai",
+                                            "contact@bmgjewellers.in",
+                                            "GSTIN : 33AAICB0416C1ZG"
+                                        ]
+                                    }}
+                                    customerName={'Aswinkumar'}
+                                    customerMobile={99898989898}
+                                    customerAddress={[  "160, West Masi Street, Madurai",
+                                                        "contact@bmgjewellers.in",
+                                                                "GSTIN : 33AAICB0416C1ZG ,Tamil Nadu, India"]}
+                                    paymentMode={'ONLINE'}
+                                    paymentStatus={'PAID'}
+                                    transactionId={'TRAN-505050'}
+                                    items={res.items.map(i => ({
+                                        name: i.product_name,
+                                        qty: i.quantity,
+                                        amount: i.price
+                                    }))}
+                                    totalAmount={1500}
+                                />
+                            }
+                            fileName={`BMG_Receipt_${res.orderId}.pdf`}
+                        >
+                            {({ loading }) => (
+                                <SmartButton variant="outline" className="flex items-center" icon={Download}>
+                                    {loading ? "Generating PDF..." : "Download Receipt"}
+                                </SmartButton>
+                            )}
+
+                        </PDFDownloadLink>
                 </div>
             </div>
             {/* Banner Image */}

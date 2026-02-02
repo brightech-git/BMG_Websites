@@ -270,11 +270,11 @@ const Shopinfo = ({ sno, Authenticated }) => {
 
               {/* Price */}
               <div className="flex items-baseline gap-2">
-                <span className="text-xl line-through font-bold text-[#f16137]">₹{getPrice().toLocaleString("en-IN")}</span>
+                <span className="text-xl font-bold text-[#f16137]">₹{getPrice().toLocaleString("en-IN")}</span>
                 {discount > 0 && (
                   <>
-                    <span className="text-sm line-through ">₹{originalPrice.toLocaleString("en-IN")}</span>
-                    <span className="bg-red-100 text-red-700 px-3 py-1 text-xs rounded-full font-semibold line-through">{discount}% OFF</span>
+                    <span className="text-sm line-through">₹{originalPrice.toLocaleString("en-IN")}</span>
+                    <span className="bg-red-100 text-red-700 px-3 py-1 text-xs rounded-full font-semibold">{discount}% OFF</span>
                   </>
                 )}
               </div>

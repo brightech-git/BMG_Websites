@@ -257,16 +257,24 @@ const Footertwo = () => {
         </div>
 
         {/* Quick Search Section */}
-        {/* <div className="footer-quick-search">
+        <div className="footer-quick-search">
           <div className="footer-container">
             <h5 className="quick-search-title">Quick Search</h5>
             <div className="quick-search-content">
-              <span className="search-label">Categories</span>
-              <div className="search-categories">
+              <span className="search-label">Categories :</span>
+              <div className="search categories">
                 {footerCategory.map((item, idx) => (
                   <React.Fragment key={idx}>
                     <span
-                      className="category-link"
+                      className="
+  text-[var(--primary-text-color)]
+  text-xs
+  cursor-pointer
+  hover:underline
+  transition-colors
+  duration-200
+"
+
                       onClick={() => item.link && history.push(item.link)}
                     >
                       {item.title}
@@ -277,7 +285,7 @@ const Footertwo = () => {
               </div>
             </div>
           </div>
-        </div> */}
+        </div>
 
         {/* Copyright Section */}
         <div className="footer-copyright">

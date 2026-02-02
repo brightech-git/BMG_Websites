@@ -145,3 +145,11 @@ export const getOrderMaster = async() =>{
         throw new Error(err.response?.data?.message || "Failed to fetch order master data");
     }
 }
+export const getOrderInvoice = async (orderId) => {
+    try {
+        const response = await publicUrl.get(`/order/invoice/${orderId}`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || "Failed to fetch invoice");
+    }  
+}

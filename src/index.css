@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* your custom styles */
 html, body {
   scroll-behavior: auto !important; /* Disable native smooth scroll */
   overflow-x: hidden;

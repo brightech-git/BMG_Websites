@@ -3,7 +3,7 @@
 /* Main Container */
 .shop-container {
     max-width: 100%;
-    margin: 0 auto;
+    margin: 0px auto 60px;
     padding: 20px 50px;
     font-family: var(--secondary-font);
     background-color: var(--primary-color);
@@ -36,7 +36,7 @@
 /* Product Grid - Fixed to eliminate spaces */
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1rem;
     width: 100%;
     margin: 0;
@@ -135,7 +135,7 @@
 /* Loading container improvements */
 .load-more-container {
     text-align: center;
-    margin-top: 30px;
+    margin-bottom: 250px !important;
     margin: 0 auto ;
     padding: 20px;
 }

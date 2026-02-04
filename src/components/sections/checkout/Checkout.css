@@ -1,8 +1,7 @@
 /* Base checkout container */
 .checkout-wrapper {
   min-height: 100vh;
-  margin-top: 150px;
-  background: var(--primary-color);
+  background: var(--primary-card-color);
   font-family: var(--secondary-font);
   color: var(--primary-text-color);
   font-size: clamp(12px, 2.5vw, 14px);
@@ -12,7 +11,7 @@
 /* Main layout */
 .checkout-layout {
   max-width: 1200px;
-  margin: 0 auto;
+    margin: 150px auto 0px;
   display: grid;
   grid-template-columns: 1fr 400px;
   gap: 1rem;
@@ -932,6 +931,7 @@ Step Content */
   .checkout-layout {
     grid-template-columns: 1fr;
     gap: 0.5rem;
+      margin: 40px auto 0px;
   }
 
   .checkout-aside {
@@ -983,6 +983,7 @@ Step Content */
 
   .checkout-layout {
     padding: 0.5rem;
+      margin: 90px auto 10px;
   }
 
   .step-section,

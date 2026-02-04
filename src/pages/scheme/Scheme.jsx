@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import HeroBanner from "../../components/banner/Banner";
 import { useSchemeDetails } from "../../hook/schemeDetails/useSchemeHook";
-import { getLanguage ,setLanguage} from "../../utils/language/language";
+import { getLanguage, setLanguage } from "../../utils/language/language";
 import HeroBannerDownload from "../../components/banner/HeroBanner";
 import { FaGooglePlay, FaApple, FaAndroid } from "react-icons/fa";
 import androidIcon from '../../assets/icons/android.jpeg';
@@ -12,7 +12,7 @@ import { useCompanyDetails } from "../../context/clientDetails/clientDetialConte
 import { useAnimateCSSOnScroll } from "../../hook/animation/useAnimateCSSOnScroll";
 import './schemeDetails.css'
 import HeaderWithAuth from "../../components/layouts/HeaderWithAuth";
-import Footertwo from "../../components/layouts/Footerthree";
+import Footertwo from "../../components/layouts/Footer";
 
 function SchemePage() {
     const BASE_URL = "https://scheme.bmgjewellers.com";
@@ -40,7 +40,7 @@ function SchemePage() {
     const { data, isLoading, isError } = useSchemeDetails({ language });
     const schemeData = Array.isArray(data?.data) ? data.data : [];
 
-
+    console.log(schemeData,'schemeData')
     const banner = "banner";
     const android = "android";
     const ios = "ios";
@@ -63,12 +63,12 @@ function SchemePage() {
     useAnimateCSSOnScroll(".download-section", "animate__fadeInUp");
     useAnimateCSSOnScroll(".download-text", "animate__fadeInLeft");
     useAnimateCSSOnScroll(".download-btn", "animate__fadeInUp");
- 
+
 
 
     if (isError) return <p>Error loading schemes</p>;
 
-  
+
 
     const handleLanguageChange = (lang) => {
         setLang(lang);
@@ -78,12 +78,12 @@ function SchemePage() {
 
     return (
         <>
-        <header >
-            <HeaderWithAuth />
-        </header>
+            <header >
+                <HeaderWithAuth />
+            </header>
 
-        <div className="scheme-main-container">
-            <section className="p-2 m-2 flex items-right">
+            <div className="scheme-main-container">
+                <section className="p-2 m-2 flex items-right">
                     <div
                         className="
                             relative flex items-center
@@ -118,23 +118,23 @@ function SchemePage() {
                             TA
                         </button>
                     </div>
-            </section>
+                </section>
 
-            <section>
-                {singleBanner.map((banner) => (
-                    <HeroBannerDownload
-                        key={banner.Id}
-                        desktopImg={`${BASE_URL}${banner.BigSchemeImage}`}
-                        mobileImg={`${BASE_URL}${banner.SchemeImage}`}
-                        alt={banner.SchemeName}
+                <section>
+                    {singleBanner.map((banner) => (
+                        <HeroBannerDownload
+                            key={banner.Id}
+                            desktopImg={`${BASE_URL}${banner.BigSchemeImage}`}
+                            mobileImg={`${BASE_URL}${banner.SchemeImage}`}
+                            alt={banner.SchemeName}
 
-                    />
-                ))}
+                        />
+                    ))}
 
-            </section>
-            {/* <section>
-                <BannerCarousel
-                    banners={schemeData.map((scheme: any) => ({
+                </section>
+                <section>
+                {/* <BannerCarousel
+                    banners={schemeData.map((scheme) => ({
                         desktopImg: `${BASE_URL}${scheme.BigSchemeImage}`,
                         mobileImg: `${BASE_URL}${scheme.SchemeImage}`,
                         alt: scheme.SchemeName,
@@ -142,113 +142,113 @@ function SchemePage() {
                             console.log("Clicked scheme:", scheme.SchemeName);
                         },
                     }))}
-                />
-                </section> */}
+                /> */}
+                </section>
 
-            {/* Download App Section */}
-            <section className="download-section">
-                {/* Ambient glow */}
-                <div className="download-glow">
-                    <div className="glow-left" />
-                    <div className="glow-right" />
-                </div>
-
-                {/* Left text */}
-                <div className="download-text">
-                    <h2>Experience BMG Jewellers App</h2>
-                    <p>
-                        Track schemes, monitor gold rates, manage payments, and stay connected —
-                        all in one secure and elegantly crafted mobile experience.
-                    </p>
-                </div>
-
-                {/* Right content */}
-                <div className="download-actions">
-                    <div className="qr-group">
-                        {androidQR && (
-                            <div className="qr-card">
-                                <img src={`${BASE_URL}${androidQR}`} alt="Android QR" />
-                                <p>Scan for Android</p>
-                            </div>
-                        )}
-
-                        {iosQR && (
-                            <div className="qr-card">
-                                <img src={`${BASE_URL}${iosQR}`} alt="iOS QR" />
-                                <p>Scan for iOS</p>
-                            </div>
-                        )}
+                {/* Download App Section */}
+                <section className="download-section">
+                    {/* Ambient glow */}
+                    <div className="download-glow">
+                        <div className="glow-left" />
+                        <div className="glow-right" />
                     </div>
 
-                    <div className="store-buttons">
-                        <button
-                            className="store-btn"
-                            onClick={() => window.open(playStoreLink, "_blank")}
-                        >
-                            <img src={androidIcon} alt="Android" />
-                            <div className="flex flex-col">
-                                <span>Get it on</span>
-                                <strong>Android App</strong>
-                            </div>
-                        </button>
-
-                        <button
-                            className="store-btn"
-                            onClick={() => window.open(appStoreLink, "_blank")}
-                        >
-                            <FaApple size={26} />
-                            <div className="flex flex-col">
-                                <span>Download on the</span>
-                                <strong>App Store</strong>
-                            </div>
-                        </button>
+                    {/* Left text */}
+                    <div className="download-text">
+                        <h2>Experience BMG Jewellers App</h2>
+                        <p>
+                            Track schemes, monitor gold rates, manage payments, and stay connected —
+                            all in one secure and elegantly crafted mobile experience.
+                        </p>
                     </div>
+
+                    {/* Right content */}
+                    <div className="download-actions">
+                        <div className="qr-group">
+                            {androidQR && (
+                                <div className="qr-card">
+                                    <img src={`${BASE_URL}${androidQR}`} alt="Android QR" />
+                                    <p>Scan for Android</p>
+                                </div>
+                            )}
+
+                            {iosQR && (
+                                <div className="qr-card">
+                                    <img src={`${BASE_URL}${iosQR}`} alt="iOS QR" />
+                                    <p>Scan for iOS</p>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="store-buttons">
+                            <button
+                                className="store-btn"
+                                onClick={() => window.open(playStoreLink, "_blank")}
+                            >
+                                <img src={androidIcon} alt="Android" />
+                                <div className="flex flex-col">
+                                    <span>Get it on</span>
+                                    <strong>Android App</strong>
+                                </div>
+                            </button>
+
+                            <button
+                                className="store-btn"
+                                onClick={() => window.open(appStoreLink, "_blank")}
+                            >
+                                <FaApple size={26} />
+                                <div className="flex flex-col">
+                                    <span>Download on the</span>
+                                    <strong>App Store</strong>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+
+
+
+                {/* Available Schemes Header */}
+                <div className="mx-auto">
+                    <h2 className="text-base sm:text-xl  font-bold mb-2">Available Schemes</h2>
                 </div>
-            </section>
 
-
-
-
-            {/* Available Schemes Header */}
-            <div className="mx-auto">
-                <h2 className="text-base sm:text-xl  font-bold mb-2">Available Schemes</h2>
-            </div>
-
-            {/* Schemes List */}
-            {isLoading
-                ? Array.from({ length: 3 }).map((_, index) => (
-                    <div
-                        key={index}
-                        className="rounded-2xl overflow-hidden shadow-lg bg-gray-200 animate-pulse h-48 sm:h-64 md:h-80"
-                    />
-                ))
-                : schemeData.map((scheme, index) => (
-                    <div
-                        key={index}
-                        className="hero-animate rounded-2xl overflow-hidden shadow-lg"
-                        style={{ transformOrigin: "center bottom" }}
-                    >
-                        <HeroBanner
-                            desktopImg={`${BASE_URL}${scheme.BigSchemeImage}`}
-                            mobileImg={`${BASE_URL}${scheme.SchemeImage}`}
-                            alt={scheme.SchemeName || "Scheme Banner"}
-
+                {/* Schemes List */}
+                {isLoading
+                    ? Array.from({ length: 3 }).map((_, index) => (
+                        <div
+                            key={index}
+                            className="rounded-2xl overflow-hidden shadow-lg bg-gray-200 animate-pulse h-48 sm:h-64 md:h-80"
                         />
+                    ))
+                    : schemeData.map((scheme, index) => (
+                        <div
+                            key={index}
+                            className="hero-animate rounded-2xl overflow-hidden shadow-lg"
+                            style={{ transformOrigin: "center bottom" }}
+                        >
+                            <HeroBanner
+                                desktopImg={`${BASE_URL}${scheme.BigSchemeImage}`}
+                                mobileImg={`${BASE_URL}${scheme.SchemeImage}`}
+                                alt={scheme.SchemeName || "Scheme Banner"}
 
-                    </div>
-                ))}
+                            />
+
+                        </div>
+                    ))}
 
 
-            <section className="gap-2">
-                <h4 className=" text-sm sm:text-lg text-[var(--color-body-text)] text-center font-bold"> Frequently Asked Questions </h4>
+                <section className="gap-2">
+                    <h4 className=" text-sm sm:text-lg text-[var(--color-body-text)] text-center font-bold"> Frequently Asked Questions </h4>
 
-                <FaqPage />
+                    <FaqPage />
 
-            </section>
-        </div>
-        <footer>
-            <Footertwo />
-        </footer>
+                </section>
+            </div>
+            <footer>
+                <Footertwo />
+            </footer>
         </>
     );
 }

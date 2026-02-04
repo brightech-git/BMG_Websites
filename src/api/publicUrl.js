@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { logout } from "../redux/slices/userSlice";
 import { store } from "../store";
 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+const BASE_URL = 'https://app.bmgjewellers.com/api/v1';
 
 const PublicUrl = axios.create({
     baseURL: BASE_URL,

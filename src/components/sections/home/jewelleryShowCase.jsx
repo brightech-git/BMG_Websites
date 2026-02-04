@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import './JewelleryShowCAse.css';
@@ -10,7 +10,7 @@ import { getProductImages } from '../../../utils/getProductImages';
 
 const JewelryShowcase = ({banners , isLoading ,isError}) => {
 
-    const history = useHistory();
+    const navigate = useNavigate();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const bannerContainerRef = useRef(null);
@@ -67,7 +67,7 @@ const JewelryShowcase = ({banners , isLoading ,isError}) => {
     const handleSeeAll = () => {
         const queryParams =new URLSearchParams();
         queryParams.append('itemCtrName', 'BEST_DESIGNED');
-        history.push(`/products-page?${queryParams.toString()}`);
+        navigate(`/products-page?${queryParams.toString()}`);
     }
 
     if(isLoading) return <p>Loading Banner</p>

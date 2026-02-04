@@ -1,4 +1,4 @@
-import { param } from "jquery";
+
 import PublicUrl from "../api/publicUrl";
 
 // Create Address

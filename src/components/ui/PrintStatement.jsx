@@ -9,6 +9,7 @@ import {
 } from "@react-pdf/renderer";
 import invoiceImg from './invoice.jpeg';
 
+
 export default function InvoiceDocument({
     orderId,
     orderDate,
@@ -26,8 +27,8 @@ export default function InvoiceDocument({
     Font.register({
         family: "NotoSans",
         fonts: [
-            { src: require("../../assets/fonts/noto/NotoSans-Regular.ttf") },
-            { src: require("../../assets/fonts/noto/NotoSans-Bold.ttf"), fontWeight: "bold" }
+            { src: "/font/noto/NotoSans-Regular.ttf" },
+            { src: "/font/noto/NotoSans-Bold.ttf", fontWeight: "bold" }
         ]
     });
     const styles = StyleSheet.create({

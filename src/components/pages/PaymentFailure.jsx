@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { XCircle, RotateCcw, Home } from "lucide-react";
 import HeaderWithAuth from "../layouts/HeaderWithAuth";
 import Footertwo from "../layouts/Footerthree";
@@ -8,7 +8,7 @@ import "./PaymentFailure.css";
 
 const PaymentFailure = () => {
     const location = useLocation();
-    const history = useHistory();
+    const navigate = useNavigate();
     const searchParams = new URLSearchParams(location.search);
     const orderId = searchParams.get("orderId");
 
@@ -63,13 +63,13 @@ const PaymentFailure = () => {
                 <div className="failure-actions">
                     <button
                         className="btn-secondary"
-                        onClick={() => history.push("/products-page")}
+                        onClick={() => navigate("/products-page")}
                     >
                         <Home size={20} className="button-icon" /> Back to Shop
                     </button>
                     <button
                         className="btn-primary"
-                        onClick={() => history.push(`/checkout?retryOrder=${orderId}`)}
+                        onClick={() => navigate(`/checkout?retryOrder=${orderId}`)}
                     >
                         <RotateCcw size={20} className="button-icon" /> Retry Payment
                     </button>

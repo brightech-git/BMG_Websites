@@ -1,4 +1,3 @@
-import { param } from "jquery";
 import PublicUrl from "../api/publicUrl";
 
 // Send contact form data

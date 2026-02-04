@@ -1,0 +1,831 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import { Modal, Button, Badge, Form, InputGroup } from 'react-bootstrap';
+import { Check, Plus, Edit, Trash2, Phone, Home, ShoppingBag, MapPin, User, CreditCard } from 'lucide-react';
+import { useCreateOrder } from '../../../hook/order/useOrderMutation';
+import { useCurrentProfile } from '../../../hook/userProfile/useUserProfileQuery';
+import { useCreateAddress, useUpdateAddress, useAddressesByCustomer, useDeleteAddress } from '../../../hook/address/useNewAddress';
+import { toast } from 'react-toastify';
+import './Checkout.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen, faTrash, faPhone } from '@fortawesome/free-solid-svg-icons';
+import GeoLocationPicker from '../../address/GeoLocationPicker';
+import SmartButton from '../../ui/SmartButton';
+import { useAddressesByPincode } from '../../../hook/address/useGetAddressByPincode';
+import { useNavigate } from 'react-router-dom';
+
+// Enhanced Progress Stepper with Icon-Centered Dividers
+const ProgressStepper = ({ currentStep }) => {
+  const steps = [
+    { id: 1, name: 'Delivery Address', icon: MapPin },
+    { id: 2, name: 'Order Summary', icon: ShoppingBag },
+    { id: 3, name: 'Payment Method', icon: CreditCard }
+  ];
+
+  return (
+    <div className="progress-stepper">
+      <div className="stepper-container">
+        {steps.map((step, index) => {
+          const Icon = step.icon;
+          const isActive = currentStep === step.id;
+          const isCompleted = currentStep > step.id;
+          const isLastStep = index === steps.length - 1;
+
+          return (
+            <React.Fragment key={step.id}>
+              <div className={`stepper-step ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`}>
+                <div className="step-indicator">
+                  <div className="step-icon-container">
+                    {isCompleted ? (
+                      <div className="step-completed-icon">
+                        <Check size={14} />
+                      </div>
+                    ) : (
+                      <div className="step-default-icon">
+                        <Icon size={14} />
+                      </div>
+                    )}
+                  </div>
+                  <div className="step-content">
+                    {/* <span className="step-number">Step {step.id}</span> */}
+                    <span className="step-label">{step.name}</span>
+                  </div>
+                </div>
+
+                {/* Connector Line positioned at icon level */}
+                {!isLastStep && (
+                  <div className="step-connector">
+                    <div className={`connector-line ${isCompleted ? 'completed' : ''}`}></div>
+                  </div>
+                )}
+              </div>
+            </React.Fragment>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+// Address Modal
+const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddress, onSaveAddress, onDeleteAddress, customerProfile, onPincodeChange, pincodeAddress }) => {
+
+  console.log(pincodeAddress, 'pincodeAddress');
+
+
+
+  //console.log(customerProfile,'cust');
+  const [clear, setClear] = useState(false);
+  const [showLocations, setShowLocations] = useState(false);
+  const [mode, setMode] = useState('list');
+  const [currentAddress, setCurrentAddress] = useState(null);
+  const [showPostOfficeList, setShowPostOfficeList] = useState(false);
+
+  const [pincodeVerified, setPincodeVerified] = useState(false);
+
+  const [formData, setFormData] = useState({
+
+    name: customerProfile?.username || customerProfile?.name || '',
+    phone: customerProfile?.contactNumber || '',
+    addressLine: '',
+    city: '',
+    state: '',
+    pincode: '',
+    country: 'India',
+    locality: '',
+    landmark: '',
+    gstNumber: '',
+    companyName: '',
+    alternatePhone: '',
+    isDefault: false
+
+  });
+  const postOffices = pincodeAddress?.[0]?.PostOffice || [];
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+  };
+
+  useEffect(() => {
+    if (postOffices.length > 0) {
+      setPincodeVerified(false);
+      setShowPostOfficeList(false);
+    }
+  }, [postOffices]);
+
+
+  useEffect(() => {
+    // 👇 When pincode is cleared or invalid
+    if (!/^\d{6}$/.test(formData.pincode)) {
+      setShowPostOfficeList(false);
+      setPincodeVerified(false);
+      onPincodeChange(null); // 👈 THIS IS THE MISSING LINE
+      return;
+    }
+
+    // 👇 Only when valid
+    onPincodeChange(formData.pincode);
+
+  }, [formData.pincode]);
+
+  const handleAddNew = () => {
+    setCurrentAddress(null);
+    setShowLocations(true);
+    setFormData({
+      name: customerProfile?.name || customerProfile?.username || '',
+      phone: customerProfile?.contactNumber || '',
+      addressLine: '',
+      city: '',
+      state: '',
+      pincode: '',
+      country: 'India',
+      locality: '',
+      landmark: '',
+      gstNumber: '',
+      companyName: '',
+      alternatePhone: '',
+      isDefault: false,
+    });
+    setMode('add');
+  };
+  const handleClear = () => {
+    setFormData({
+      name: '',
+      phone: '',
+      addressLine: '',
+      city: '',
+      state: '',
+      pincode: '',
+      country: 'India',
+      locality: '',
+      landmark: '',
+      gstNumber: '',
+      companyName: '',
+      alternatePhone: '',
+      isDefault: false,
+    });
+
+    setClear(true); // stop the location from auto-filling
+  };
+
+  const handlePostOfficeSelect = (po) => {
+    setFormData(prev => ({
+      ...prev,
+      city: po.District || '',
+      state: po.State || '',
+      country: po.Country || 'India',
+      locality: po.Name || '',
+      pincode: po.Pincode || prev.pincode,
+    }));
+
+    setShowPostOfficeList(false); // close list after selection
+  };
+
+
+  const handleGeoFill = (geoRes) => {
+
+    console.log(geoRes, 'geoRes')
+    setFormData(prev => ({
+      ...prev, // keep previous values
+      addressLine: geoRes.addressLine || prev.addressLine,
+      city: geoRes.city || prev.city,
+      state: geoRes.state || prev.state,
+      pincode: geoRes.pincode || prev.pincode,
+      locality: geoRes.locality || prev.locality,
+      landmark: geoRes.landmark || prev.landmark,
+
+      // If you want to store these too:
+      latitude: geoRes.latitude,
+      longitude: geoRes.longitude
+    }));
+    setClear(true);
+  };
+
+  const handleEdit = (address) => {
+    setCurrentAddress(address);
+    setShowLocations(true);
+    setShowPostOfficeList(false); // 👈 DO NOT open dropdown
+    setPincodeVerified(true);     // 👈 already verified
+    setFormData({
+      name: address.name,
+      phone: address.phone,
+      addressLine: address.addressLine,
+      city: address.city,
+      state: address.state,
+      pincode: address.pincode,
+      country: address.country || 'India',
+      locality: address.locality || '',
+      landmark: address.landmark || '',
+      gstNumber: address.gstNumber || '',
+      companyName: address.companyName || '',
+      alternatePhone: address.alternatePhone || '',
+      isDefault: address.isDefault,
+
+    });
+    setMode('edit');
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!formData.name || !formData.phone || !formData.addressLine || !formData.city || !formData.state || !formData.pincode) {
+      toast.error('Please fill all required fields');
+      return;
+    }
+    if (!/^\d{10}$/.test(formData.phone)) {
+      toast.error('Phone number must be 10 digits');
+      return;
+    }
+    if (!/^\d{6}$/.test(formData.pincode)) {
+      toast.error('Pincode must be 6 digits');
+      return;
+    }
+    onSaveAddress(currentAddress?.id ? { id: currentAddress.id, ...formData } : formData);
+
+    setClear(true);
+    setMode('list');
+  };
+
+  const handleDelete = (addressId) => {
+    if (window.confirm('Are you sure you want to delete this address?')) {
+      onDeleteAddress(addressId);
+    }
+  };
+
+  console.log(showLocations, 'showlocation')
+  return (
+    <Modal show={show} onHide={onHide} centered className="address-modal">
+      <Modal.Header closeButton className="modal-header-styled">
+        <Modal.Title className="modal-title-styled">
+          {mode === 'list' ? 'Select Address' : mode === 'add' ? 'Add Address' : 'Edit Address'}
+
+        </Modal.Title>
+        {mode !== 'list' && <GeoLocationPicker onAddressSelected={handleGeoFill} clear={clear} />}
+      </Modal.Header>
+      <Modal.Body className="modal-body-styled">
+        {mode === 'list' ? (
+          <div className="address-list">
+            {addresses.map(address => (
+              <div key={address.id} className={`address-item ${selectedAddress?.id === address.id ? 'selected' : ''}`}>
+                <div className="address-content">
+                  <div className="address-heading">
+                    <div className="address-name-section">
+                      <h6 className="address-name">{address.name}</h6>
+                      {address.isDefault && <Badge bg="success" className="default-badge">Default</Badge>}
+                    </div>
+                    <div className="address-actions">
+                      <button className="action-button edit-buttons" onClick={() => handleEdit(address)} title="Edit address">
+                        <FontAwesomeIcon icon={faPen} size="sm" />
+                      </button>
+                      {!address.isDefault && (
+                        <button className="action-button delete-button" onClick={() => handleDelete(address.id)} title="Delete address">
+                          <FontAwesomeIcon icon={faTrash} size="sm" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  <div className="address-info">
+                    <p className="address-line">{address.addressLine}</p>
+                    <p className="address-line">{[address.locality, address.city].filter(Boolean).join(', ')}</p>
+                    <p className="address-line">{address.state} - {address.pincode}, {address.country || 'India'}</p>
+                    {address.landmark && <p className="landmark-line">Landmark: {address.landmark}</p>}
+                    <p className="phone-info">
+                      <FontAwesomeIcon icon={faPhone} size="sm" className="phone-icon" /> {address.phone}
+                    </p>
+                  </div>
+                </div>
+                <div className="address-select-area">
+                  <Button
+                    variant={selectedAddress?.id === address.id ? 'success' : 'outline-primary'}
+                    onClick={() => { onSelectAddress(address); onHide(); }}
+                    className="select-button"
+                  >
+                    {selectedAddress?.id === address.id ? (
+                      <>
+                        <Check size={15} className="check-icon" /> Selected
+                      </>
+                    ) : (
+                      'Deliver Here'
+                    )}
+                  </Button>
+                </div>
+              </div>
+            ))}
+            <button className="add-new-address-button" onClick={handleAddNew}>
+              <Plus size={14} className="plus-icon" /> Add New Address
+            </button>
+          </div>
+        ) : (
+          <Form onSubmit={handleSubmit} className="address-form-container">
+            <div className="row mb-2">
+              <div className="col-12 col-md-6 mb-2 mb-md-0">
+                <Form.Group>
+                  <Form.Label className="form-label">Full Name*</Form.Label>
+                  <Form.Control type="text" name="name" value={formData.name} onChange={handleChange} className="form-control" required />
+                </Form.Group>
+              </div>
+              <div className="col-12 col-md-6">
+                <Form.Group>
+                  <Form.Label className="form-label">Phone Number*</Form.Label>
+                  <Form.Control type="tel" name="phone" value={formData.phone} onChange={handleChange} className="form-control" pattern="[0-9]{10}" required />
+                </Form.Group>
+              </div>
+            </div>
+            <Form.Group className="mb-2">
+              <Form.Label className="form-label">Address Line*</Form.Label>
+              <Form.Control as="textarea" name="addressLine" value={formData.addressLine} onChange={handleChange} className="form-control-text-area" rows={3} required />
+            </Form.Group>
+            <div className="row mb-2">
+              <div className="col-12 col-md-6 mb-2 pincode-wrapper">
+                <Form.Group>
+                  <Form.Label className="form-label">Pincode*</Form.Label>
+
+                  <InputGroup>
+                    <Form.Control
+                      type="text"
+                      name="pincode"
+                      value={formData.pincode}
+                      onChange={handleChange}
+                      pattern="[0-9]{6}"
+                      maxLength={6}
+                      required
+                    />
+
+                    {postOffices.length > 0 && (
+                      <InputGroup.Text
+                        role="button"
+                        className="bg-white border-start-0"
+                        onClick={() => {
+                          setShowPostOfficeList(prev => !prev);
+                          setPincodeVerified(true);
+                        }}
+                      >
+                        <Check className="text-success" />
+                      </InputGroup.Text>
+                    )}
+                  </InputGroup>
+                </Form.Group>
+
+                {/^\d{6}$/.test(formData.pincode) && showPostOfficeList && postOffices.length > 0 && (
+                  <div className="postoffice-dropdown">
+                    {postOffices.map((po, index) => (
+                      <div
+                        key={index}
+                        className="postoffice-item"
+                        onClick={() => {
+                          handlePostOfficeSelect(po);
+                          setShowPostOfficeList(false);
+                        }}
+                      >
+                        <strong>{po.Name}</strong>
+                        <div className="small text-muted">
+                          {po.Block}, {po.District}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+              </div>
+              <div className="col-12 col-md-6 mb-2 mb-md-0">
+                <Form.Group>
+                  <Form.Label className="form-label">Locality*</Form.Label>
+                  <Form.Control type="text" name="locality" value={formData.locality} onChange={handleChange} className="form-control" required />
+                </Form.Group>
+              </div>
+
+            </div>
+            <div className="row mb-2">
+              <div className="col-12 col-md-6 mb-2 ">
+                <Form.Group>
+                  <Form.Label className="form-label">District*</Form.Label>
+                  <Form.Control type="text" name="city" value={formData.city} onChange={handleChange} className="form-control" required />
+                </Form.Group>
+              </div>
+              <div className="col-12 col-md-6 mb-2 ">
+                <Form.Group>
+                  <Form.Label className="form-label">State*</Form.Label>
+                  <Form.Control type="text" name="state" value={formData.state} onChange={handleChange} className="form-control" required />
+                </Form.Group>
+              </div>
+
+              {/* <div className="col-12 col-md-4">
+                <Form.Group>
+                  <Form.Label className="form-label">GstNumber</Form.Label>
+                  <Form.Control type="text" name="gstNumber" value={formData.gstNumber} onChange={handleChange} className="form-control" />
+                </Form.Group>
+              </div>
+              <div className="col-12 col-md-4">
+                <Form.Group>
+                  <Form.Label className="form-label">CompanyName</Form.Label>
+                  <Form.Control type="text" name="companyName" value={formData.companyName} onChange={handleChange} className="form-control" />
+                </Form.Group>
+              </div> */}
+
+              <div className="col-12 col-md-6">
+                <Form.Group>
+                  <Form.Label className="form-label">Landmark</Form.Label>
+                  <Form.Control type="text" name="landmark" value={formData.landmark} onChange={handleChange} className="form-control" />
+                </Form.Group>
+              </div>
+
+              <div className='col-12 col-md-6 '>
+                <Form.Group>
+                  <Form.Label className="form-label">Mobile 2</Form.Label>
+                  <Form.Control type="text" name="alternatePhone" value={formData.alternatePhone} onChange={handleChange} className="form-control" pattern="[0-9]{10}" />
+                </Form.Group>
+              </div>
+
+            </div>
+            <Form.Group className="mb-2">
+              <Form.Check
+                type="checkbox"
+                name="isDefault"
+                label="Set as default address"
+                checked={formData.isDefault}
+                onChange={handleChange}
+                className="form-check"
+              />
+            </Form.Group>
+            <div className="form-actions">
+              <Button variant="outline-secondary" onClick={handleClear} className="cancel-button">Clear</Button>
+              <Button variant="outline-secondary" onClick={() => setMode('list')} className="cancel-button">Cancel</Button>
+              <Button variant="primary" type="submit" className="save-button">{currentAddress ? 'Update' : 'Save'}</Button>
+            </div>
+          </Form>
+        )}
+      </Modal.Body>
+    </Modal>
+  );
+};
+
+// Order Summary Panel
+const OrderSummaryPanel = ({ items, subtotal, total, isCompact = false }) => {
+
+
+  return (
+    <div className={`order-panel ${isCompact ? 'compact' : ''}`}>
+      <div className="order-header">
+        <h4 className="order-title"><ShoppingBag size={14} className="order-icon" /> Order Summary</h4>
+        <span className="item-count-badge">{items.length} item{items.length > 1 ? 's' : ''}</span>
+      </div>
+      <div className="order-items">
+        {items.map((item, index) => (
+          <div key={index} className="order-item">
+            <div className="item-image-container">
+              <img src={item.imagePath || 'https://via.placeholder.com/40x40'} alt={item.productName || item.name} onError={(e) => { e.target.src = 'https://via.placeholder.com/40x40'; }} />
+            </div>
+            <div className="item-details">
+              <h6 className="order-item-name">{item.productName || item.name}</h6>
+              <p className="item-variant">SKU: {item.itemId}-{item.tagNo}</p>
+              {item?.weight && <p className="item-variant">Weight: {item?.weight.toFixed(3) || item?.tagNo}</p>}
+            </div>
+            <div className="item-price">₹{(item?.price).toFixed(2)}</div>
+
+          </div>
+        ))}
+      </div>
+      <div className="order-totals">
+        <div className="total-row"><span>Subtotal</span><span>₹{subtotal.toFixed(2)}</span></div>
+        <div className="total-row"><span>Shipping</span><span className="free-shipping">FREE</span></div>
+        <div className="total-row final-total"><span>Total</span><span>₹{total.toFixed(2)}</span></div>
+      </div>
+    </div>
+  );
+};
+
+// Main Checkout Component
+const EnhancedCheckout = ({ initialCartItems, initialTotalAmount }) => {
+
+  const navigate = useNavigate();
+  
+  // const { state: checkoutPayload = {} } = location || {};
+  // const { items: initialCartItems = [], totalAmount: initialTotalAmount = 0 } = checkoutPayload;
+
+
+  console.log(initialCartItems, 'initialCartItems');
+
+
+  const [cartItems, setCartItems] = useState(initialCartItems);
+  const [totalAmount, setTotalAmount] = useState(initialTotalAmount);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [paymentMode, setPaymentMode] = useState('ONLINE');
+  const [showAddressModal, setShowAddressModal] = useState(false);
+  const [summaryOpen, setSummaryOpen] = useState(false);
+
+  const [pincode, setPincode] = useState(null);
+
+  const { data: profile, isLoading: profileLoading } = useCurrentProfile();
+
+  const { data: addressByPincode } = useAddressesByPincode(pincode);
+
+  const { data: addresses, isLoading: addressesLoading, refetch: refetchAddresses } = useAddressesByCustomer(profile?.id);
+
+
+  console.log('Profile:', profile);
+  //console.log('Addresses:', addresses);
+  //console.log('Selected Address:', selectedAddress);
+  const { mutate: createOrder } = useCreateOrder();
+  const { mutate: createAddress } = useCreateAddress();
+
+  const { mutate: updateAddress } = useUpdateAddress();
+  const { mutate: deleteAddress } = useDeleteAddress();
+
+  useEffect(() => {
+    const storedCart = localStorage.getItem('cartitems');
+    if (!cartItems.length && storedCart) {
+      try {
+        const parsedCart = JSON.parse(storedCart);
+        setCartItems(parsedCart.items || []);
+        setTotalAmount(parsedCart.totalAmount.toFixed(2) || 0);
+      } catch (error) {
+        console.error('Failed to parse cart from localStorage:', error);
+      }
+    }
+  }, []);
+
+
+
+  useEffect(() => {
+    localStorage.setItem('cartitems', JSON.stringify({ items: cartItems, totalAmount }));
+  }, [cartItems, totalAmount]);
+
+  useEffect(() => {
+    if (addresses && addresses.length > 0) {
+      const defaultAddress = addresses.find(addr => addr.isDefault) || addresses[0];
+      setSelectedAddress(defaultAddress);
+    }
+  }, [addresses]);
+
+  // const formatAddress = useCallback((address) => {
+  //   if (!address) return '';
+  //   return `${address.addressLine}, ${address.locality}, ${address.city}, ${address.state} - ${address.pincode}, ${address.country || 'India'}`;
+  // }, []);
+
+  const handleSaveAddress = (addressData) => {
+    const payload = { ...addressData, customerId: profile.id };
+    if (addressData.id) {
+      updateAddress({ id: addressData.id, addressData: payload }, {
+        onSuccess: () => { refetchAddresses(); },
+        onError: (error) => { toast.error(error.response?.data || 'Failed to update address'); }
+      });
+    } else {
+      createAddress(payload, {
+        onSuccess: () => { refetchAddresses(); },
+        onError: (error) => { toast.error(error.response?.data || 'Failed to create address'); }
+      });
+    }
+  };
+
+  const handleDeleteAddress = (addressId) => {
+    deleteAddress(addressId, {
+      onSuccess: () => {
+        refetchAddresses();
+        if (selectedAddress?.id === addressId) setSelectedAddress(null);
+      },
+      onError: (error) => { toast.error(error.response?.data || 'Failed to delete address'); }
+    });
+  };
+
+  const handleNextStep = () => {
+    if (currentStep === 1 && !selectedAddress) {
+      toast.error('Please select a delivery address');
+      return;
+    }
+    setCurrentStep(prev => Math.min(prev + 1, 3));
+  };
+
+  const handlePrevStep = () => {
+    setCurrentStep(prev => Math.max(prev - 1, 1));
+  };
+
+  const submitOrder = useCallback(() => {
+    if (!selectedAddress) {
+      toast.error('Please select a delivery address');
+      return;
+    }
+    if (!cartItems || cartItems.length === 0) {
+      toast.error('Your cart is empty');
+      return;
+    }
+
+    const orderPayload = {
+      customerName: selectedAddress.name,
+      contact: selectedAddress.phone,
+      email: profile?.email,
+      totalAmount,
+      address: {
+        addressLine: selectedAddress.addressLine,
+        locality: selectedAddress.locality,
+        landmark: selectedAddress.landmark,
+        name: selectedAddress.name,
+        phone: selectedAddress.phone,
+        alternatePhone: selectedAddress.alternatePhone,
+        isDefault: selectedAddress.isDefault,
+        id: selectedAddress.id,
+        customerId: selectedAddress.customerId,
+        gstNumber: selectedAddress.gstNumber,
+        companyName: selectedAddress.companyName,
+        city: selectedAddress.city,
+        state: selectedAddress.state,
+        country: selectedAddress.country || "India",
+        pincode: selectedAddress.pincode,
+      },
+      paymentMode,
+      items: cartItems.map((item) => ({
+        productId: `${item.itemId}-${item.tagNo}`, // fixed, string concat not subtraction
+        productName: item.productName,
+        price: parseFloat(item.price),
+        itemId: item.itemId,
+        tagNo: item.tagNo,
+        sno: item.sno,
+        imagePath: item.imagePath,
+        quantity: item.quantity,
+      })),
+    };
+
+    console.log('Order Payload:', orderPayload);
+
+    // ✅ Store in localStorage (with JSON.stringify)
+    localStorage.setItem('order', JSON.stringify(orderPayload));
+
+    createOrder(orderPayload, {
+      onSuccess: (data) => {
+        console.log("Order created successfully:", data,);
+
+        if (data.orderId) {
+          if (paymentMode === "ONLINE") {
+            navigate({
+              pathname: `/payment/${data.orderId}`,
+              state: { orderPayload }, // ✅ pass in router state
+            });
+          } else if (paymentMode === "COD") {
+            navigate({
+              pathname: `/payment-success`,
+              search: `?orderId=${data.orderId}&mode=COD`,
+              state: { orderPayload }, // ✅ pass here too
+            });
+          }
+        } else {
+          toast.error("Order created but orderId not returned.");
+        }
+      },
+      onError: (error) => {
+        console.error("Order creation failed:", error);
+        toast.error("Failed to create order: " + error.message);
+      },
+    });
+  }, [cartItems, totalAmount, selectedAddress, profile?.email, paymentMode, navigate, createOrder]);
+
+
+  const subtotal = cartItems.reduce((sum, item) => sum + item.price, 0);
+
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentStep]);
+  return (
+    <div className="checkout-wrapper">
+      <div className="mobile-order-toggle">
+        <button className="toggle-button" onClick={() => setSummaryOpen(!summaryOpen)}>
+          <div className="toggle-content">
+            <span>Order Summary</span>
+            <span className="toggle-arrow">{summaryOpen ? '▲' : '▼'}</span>
+          </div>
+          <div className="toggle-total">₹{totalAmount.toFixed(2)}</div>
+        </button>
+        {summaryOpen && (
+          <div className="mobile-order-panel">
+            <OrderSummaryPanel items={cartItems} subtotal={totalAmount} total={totalAmount} isCompact />
+          </div>
+        )}
+      </div>
+      <div className="checkout-layout">
+        <div className="checkout-main">
+          <ProgressStepper currentStep={currentStep} />
+          <div className="step-section">
+            {currentStep === 1 && (
+              <div className="step-section">
+                <div className="section-heading">
+                  <h3 className="checkout-section-title"><MapPin size={14} className="section-icon" /> Delivery Address</h3>
+                </div>
+                <div className="contact-details">
+                  <div className="contact-row">
+                    <User size={12} className="contact-icon" />
+                    <div>
+                      <span className="contact-label">Contact:</span>
+                      <span className="contact-value">{profileLoading ? 'Loading...' : profile?.contactNumber || 'Not provided'}</span>
+                    </div>
+                  </div>
+                </div>
+                {addressesLoading ? (
+                  <div className="loading-container">
+                    <div className="loading-spinner"></div>
+                    <p>Loading addresses...</p>
+                  </div>
+                ) : selectedAddress ? (
+                  <div className="address-display">
+                    <div className="address-item selected">
+                      <div className="address-content" onClick={() => setShowAddressModal(true)}>
+                        <div className="address-heading">
+                          <h6 className="address-name">{selectedAddress.name}</h6>
+                          {selectedAddress.isDefault && <Badge bg="success">Default</Badge>}
+                        </div>
+                        <div className="address-info">
+                          <p>{selectedAddress.addressLine}</p>
+                          <p>{selectedAddress.locality}, {selectedAddress.city}</p>
+                          <p>{selectedAddress.state} - {selectedAddress.pincode}</p>
+                          <p className="phone-info"><Phone size={10} className="phone-icon" /> {selectedAddress.phone}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <button className="change-address-button" onClick={() => setShowAddressModal(true)}>Change Address</button>
+                  </div>
+                ) : (
+                  <div className="no-address-state">
+                    <div className="no-address-content">
+                      <MapPin size={24} className="no-address-icon" />
+                      <h5>No address selected</h5>
+                      <p>Add a delivery address to continue</p>
+                      <button className="add-address-button primary" onClick={() => setShowAddressModal(true)}>
+                        <Plus size={12} className="plus-icon" /> Add Address
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+            {currentStep === 2 && (
+              <div className="step-section">
+                <div className="section-heading">
+                  <h3 className="checkout-section-title"><ShoppingBag size={14} className="order-icon" /> Order Summary</h3>
+                </div>
+                <OrderSummaryPanel items={cartItems} subtotal={subtotal} total={totalAmount} />
+              </div>
+            )}
+            {currentStep === 3 && (
+              <div className="step-section">
+                <div className="section-heading">
+                  <h3 className="checkout-section-title"><CreditCard size={14} className="section-icon" /> Payment Method</h3>
+                </div>
+                <div className="payment-area">
+                  <p className="payment-hint">All transactions are secure and encrypted.</p>
+                  <div className="payment-options">
+                    <div className="payment-option">
+                      <input type="radio" id="online" name="payment" value="ONLINE" checked={paymentMode === 'ONLINE'} onChange={(e) => setPaymentMode(e.target.value)} />
+                      <label htmlFor="online">
+                        <CreditCard size={12} className="payment-icon" /> Online Payment
+                        <span className="payment-desc">UPI, Cards, Net Banking</span>
+                      </label>
+                    </div>
+                    <div className="payment-option">
+                      <input type="radio" id="cod" name="payment" value="COD" checked={paymentMode === 'COD'} onChange={(e) => setPaymentMode(e.target.value)} />
+                      <label htmlFor="cod">
+                        <Home size={12} className="payment-icon" /> Cash on Delivery
+                        <span className="payment-desc">Pay on delivery</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div className="order-total-final">
+                    <div className="total-breakdown">
+                      <div className="total-row"><span>Subtotal</span><span>₹{subtotal.toFixed(2)}</span></div>
+                      <div className="total-row"><span>Shipping</span><span>FREE</span></div>
+                      <div className="total-row final"><span>Total</span><span>₹{totalAmount.toFixed(2)}</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="step-controls">
+
+            {currentStep > 1 && <SmartButton variant='outline' size='md' onClick={handlePrevStep}>Back</SmartButton>}
+            {currentStep < 3 ? (
+              <SmartButton onClick={handleNextStep} size='lg' isDisabled={currentStep === 1 && !selectedAddress}>Continue</SmartButton>
+            ) : (
+              <SmartButton size='md' variant='success' onClick={submitOrder} isDisabled={!selectedAddress}>
+                Place Order - ₹{totalAmount.toFixed(2)}
+              </SmartButton>
+            )}
+          </div>
+        </div>
+        <div className="checkout-aside">
+          <OrderSummaryPanel items={cartItems} subtotal={totalAmount} total={totalAmount} />
+        </div>
+      </div>
+      <AddressModal
+        show={showAddressModal}
+        onHide={() => setShowAddressModal(false)}
+        addresses={addresses || []}
+        selectedAddress={selectedAddress}
+        onSelectAddress={setSelectedAddress}
+        onSaveAddress={handleSaveAddress}
+        onDeleteAddress={handleDeleteAddress}
+        customerProfile={profile}
+        onPincodeChange={setPincode}           // 👈 CALLBACK
+        pincodeAddress={addressByPincode}      // 👈 API RESULT
+
+      />
+    </div>
+  );
+};
+
+export default EnhancedCheckout;

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import 'animate.css';
 import { useNavigate } from 'react-router-dom'; // or your navigation method
+import { getImage } from '../../utils/getProductImages';
+
 
 const HeroBanner = ({
     title,
@@ -21,11 +22,7 @@ const HeroBanner = ({
     const navigate = useNavigate(); // React Router navigation
 
     useEffect(() => {
-        const elements = document.querySelectorAll('.animate-init');
-        elements.forEach((el) => {
-            el.classList.add('animate__animated');
-        });
-
+       
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 768);
         };
@@ -36,28 +33,10 @@ const HeroBanner = ({
     }, []);
 
     // Handle image click
-    const handleImageClick = (image, index) => {
-        if (onImageClick) {
-            // Use provided callback
-            onImageClick(image, index);
-        } else if (image.link) {
-            // Handle link based on type
-            if (image.link.type === 'internal') {
-                navigate(image.link.url);
-            } else if (image.link.type === 'external') {
-                window.open(image.link.url, '_blank');
-            } else if (image.link.type === 'query') {
-                // Handle query params like your example
-                const queryParams = new URLSearchParams();
-                if (image.link.itemCtrName) queryParams.append('itemCtrName', image.link.itemCtrName);
-                if (image.link.subItemName) queryParams.append('subItemName', image.link.subItemName);
-                const fixedQuery = queryParams.toString().replace(/\+/g, '%20');
-                navigate(`${image.link.url}?${fixedQuery}`);
-            }
-        } else if (image.onClick) {
-            // Direct onClick function
-            image.onClick();
-        }
+    const handleImageClick = (imageData) => {
+        if (!imageData?.link) return;
+
+        navigate(`/products-page?${imageData.link}`);
     };
 
     // Get image data
@@ -72,39 +51,42 @@ const HeroBanner = ({
         }
 
         if (image && typeof image === 'object') {
+            // Case 1: has desktop/mobile keys
             if (image.desktop) {
                 if (isMobile) {
                     return {
                         url: image.mobile?.url || image.desktop.url,
-                        ratio: image.mobile?.ratio || image.ratio || mobileRatio,
+                        ratio: image.mobile?.ratio || mobileRatio,
                         alt: image.alt || `Image ${index + 1}`,
-                        link: image.link,
+                        link: image.mobile?.link || image.desktop?.link || null,
                     };
                 } else {
                     return {
                         url: image.desktop.url,
                         ratio: image.desktop.ratio || defaultRatio,
                         alt: image.alt || `Image ${index + 1}`,
-                        link: image.link,
+                        link: image.desktop?.link || null,
                     };
                 }
-            } else {
-                return {
-                    url: image.url || '',
-                    ratio: (image.ratio || defaultRatio),
-                    alt: image.alt || `Image ${index + 1}`,
-                    link: image.link,
-                };
             }
+            // Case 2: plain object (new API format)
+            return {
+                url: image.url || '',
+                ratio: image.ratio || (isMobile ? mobileRatio : defaultRatio),
+                alt: image.alt || `Image ${index + 1}`,
+                link: image.link || null,
+            };
         }
 
+        // fallback
         return {
             url: '',
-            ratio: defaultRatio,
+            ratio: isMobile ? mobileRatio : defaultRatio,
             alt: 'Missing image',
             link: null,
         };
     };
+
 
     // Parse aspect ratio
     const parseRatio = (ratio) => {
@@ -215,7 +197,6 @@ const HeroBanner = ({
                 {title && (
                     <h1
                         className="
-                            animate-init animate__fadeInDown 
                             text-lg md:text-2xl font-bold 
                             mb-2
                             text-[var(--primary-text-color)]
@@ -229,7 +210,6 @@ const HeroBanner = ({
                 {description && (
                     <p
                         className={`
-                            animate-init animate__fadeInUp
                             text-lg md:text-xl text-[var(--primary-text-color)]
                             mb-4 max-w-3xl
                             ${centered ? 'mx-auto' : ''}
@@ -243,7 +223,6 @@ const HeroBanner = ({
                 {images.length > 0 && (
                     <div
                         className={`
-                            animate-init animate__zoomIn
                             w-full ${centered ? 'flex justify-center' : ''}
                         `}
                         style={{ animationDelay: '500ms' }}
@@ -267,15 +246,16 @@ const HeroBanner = ({
                                             .slice(0, rowIndex)
                                             .reduce((acc, r) => acc + r.length, 0) + imgIndex;
                                         const imageData = getImageData(image, globalIndex);
+                                        console.log(getImage(imageData.url), 'imageData')
 
                                         return (
                                             <div
                                                 key={globalIndex}
                                                 className={`
-                                                    animate-init animate__fadeIn
+                                               
                                                     relative overflow-hidden 
                                                     group
-                                                    ${imageData.link ? 'cursor-pointer hover:shadow-lg transition-shadow duration-300' : ''}
+                                                    ${imageData.link ? 'cursor-pointer' : ''}
                                                 `}
                                                 style={{
                                                     paddingBottom: `${parseRatio(imageData.ratio)}%`,
@@ -294,12 +274,12 @@ const HeroBanner = ({
                                                     <picture>
                                                         {imageData.url && (
                                                             <source
-                                                                srcSet={imageData.url.replace(/\.[^.]+$/, '.webp')}
+                                                              
                                                                 type="image/webp"
                                                             />
                                                         )}
                                                         <img
-                                                            src={imageData.url}
+                                                            src={getImage(imageData.url)}
                                                             alt={imageData.alt}
                                                             className="
                                                                 w-full h-full object-cover

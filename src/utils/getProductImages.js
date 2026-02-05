@@ -14,3 +14,26 @@ export const getProductImages = (imageData, fallbackImage = "/fallback.png") => 
         return [fallbackImage];
     }
 };
+
+export const getImage = (imageData, fallbackImage = "/fallback.png") => {
+    try {
+        if (!imageData) return fallbackImage;
+
+        // If backend accidentally sends JSON array as string
+        const parsedImage =
+            typeof imageData === "string" && imageData.startsWith("[")
+                ? JSON.parse(imageData)[0]
+                : Array.isArray(imageData)
+                    ? imageData[0]
+                    : imageData;
+
+        if (!parsedImage) return fallbackImage;
+
+        return parsedImage.startsWith("http")
+            ? parsedImage
+            : `https://app.bmgjewellers.com${parsedImage}`;
+    } catch (error) {
+        console.error("Error parsing image:", error);
+        return fallbackImage;
+    }
+};

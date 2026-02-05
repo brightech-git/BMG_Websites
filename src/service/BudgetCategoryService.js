@@ -2,6 +2,6 @@
 import PublicUrl from "../api/publicUrl";
 
 export const getAllBudgetBanners = async () => {
-    const response = await PublicUrl.get("/budget-categories/all");
+    const response = await PublicUrl.get("/budget-categories/getAll");
     return response.data;
 };

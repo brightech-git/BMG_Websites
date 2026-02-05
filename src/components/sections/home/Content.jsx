@@ -64,7 +64,9 @@ const Content = () => {
     const { data: budgetBanner, isLoading: budgerLoading, isError: budgetError } = useBudgetBanners();
 
     // Ensure it's an array and take only first 4 items
-    const budgetBanners = Array.isArray(budgetBanner?.categories) ? budgetBanner?.categories.reverse().slice(0, 4) : [];
+    const budgetBanners = budgetBanner?.data?.budget_banner;
+
+    console.log(budgetBanners, 'budgetBanners')
 
 
     // ------------------------------CategoryImages--------------------------------//
@@ -130,6 +132,25 @@ const Content = () => {
 
                 {/* 🌟 Hero Section (no animation wrapper — stays full width) */}
                 <Banner banners={banners} isLoading={mainBannerLoading} />
+
+                {budgetBanners && (
+                    <HeroBanner
+                        title={budgetBanners.title}
+                        description={budgetBanners.description}
+                        backgroundColor={budgetBanners.backgroundColor}
+                        centered={budgetBanners.centered}
+                        gap={budgetBanners.gap}
+                        full={budgetBanners.full}
+
+                        images={(budgetBanners?.images) ? budgetBanners.images : []}
+
+                        // desktopColumns={Number(budgetBanners.desktopColumns) || 1}
+                        desktopRatio="16 / 7.3"
+                        defaultRatio="16/7.3" // All images use this ratio
+                        mobileRows={budgetBanners.mobileRows || [1]}
+                        mobileRatio="16 / 7.3"
+                    />
+                )}
                 {/* <HeroBanner
                     title="Hero Banner With 2 Images"
                     backgroundColor="bg-red"

@@ -27,11 +27,27 @@ import { useBestDesignedBanners } from '../../../hook/BestDesignedBanner/useBest
 import { useFeaturedBanner } from "../../../hook/featuredBanner/useFeaturedBanner";
 import { useFestivalBanner } from "../../../hook/banner/useFestivalBanner";
 import HeroBanner from "../../../component/banner/HeroBanner";
+import GridBanner from "../../../component/banner/StackBanner";
 import img1 from '../../../assets/images/Her_10_1_Desktop.webp';
 import img2 from '../../../assets/images/Him_12_Desktop.webp';
 import img3 from '../../../assets/images/2.allyours_desktop_1.webp';
 import img4 from '../../../assets/images/Couple_Bands_1_2.webp';
 import img5 from '../../../assets/images/px_2.webp';
+
+import image1 from '../../../assets/images/grid_1.1.jpeg';
+import image6 from '../../../assets/images/grid_1.2.jpeg';
+import image2 from '../../../assets/images/grid_2.1.jpeg';
+import image3 from '../../../assets/images/grid_2.2.jpeg';
+import image4 from '../../../assets/images/grid_2.3.jpeg';
+import image5 from '../../../assets/images/grid_2.4.jpeg';
+
+import images1 from '../../../assets/images/img1.jpeg';
+import images2 from '../../../assets/images/img2.jpeg';
+import images3 from '../../../assets/images/img3.jpeg';
+import images4 from '../../../assets/images/img4.jpeg';
+
+
+
 const Content = () => {
 
     //-----------------------------MainBanner--------------------------//
@@ -144,92 +160,61 @@ const Content = () => {
 
                         images={(budgetBanners?.images) ? budgetBanners.images : []}
 
-                        // desktopColumns={Number(budgetBanners.desktopColumns) || 1}
+                        desktopColumns={Number(budgetBanners.desktopColumns) || 2}
                         desktopRatio="16 / 7.3"
                         defaultRatio="16/7.3" // All images use this ratio
                         mobileRows={budgetBanners.mobileRows || [1]}
                         mobileRatio="16 / 7.3"
                     />
                 )}
-                {/* <HeroBanner
-                    title="Hero Banner With 2 Images"
-                    backgroundColor="bg-red"
-                    description="Dual image"
-                    gap={true}
-                    centered={true}
-                    mobileRows={[2, 2]}
-                    images={[
-                        {
-                            url: img2,
-                            ratio: "2/3",
-                            alt: "First image"
-                        },
-                        {
-                            url: img1,
-                            ratio: "2/3",
-                            alt: "Second image"
-                        },
-                        {
-                            url: img2,
-                            ratio: "2/3",
-                            alt: "First image"
-                        },
-                        {
-                            url: img2,
-                            ratio: "2/3",
-                            alt: "First image"
-                        },
-                    ]}
-                    defaultRatio="2/8" 
-                    
-                />
-                <HeroBanner
-                    title="Hero Banner With 3 Images"
+               
+                <GridBanner
+                    title="Hero Banner"
+                    centered
                     gap={false}
-                    full={true}
-                    centered={true}
-                    mobileRows={[1,2]}
-                    mobileGap={true}
-                    desktopColumns="auto"
-                    images={[
-                        {
-                            url: img3,
-                            ratio: "16/4",
-                            alt: "Wide image"
-                        },
-                        {
-                            url: img2,
-                            ratio: "5/4",
-                            alt: "Medium image"
-                        },
-                        {
-                            url: img1,
-                            ratio: "5/4",
-                            alt: "Medium image"
-                        }
-                    ]}
-                    defaultRatio="16/4" // Fallback for images without ratio
-                />
-                <HeroBanner
-                    title="Hero Banner With 2 Images"
-                    description=""
-                    gap={true}
-                    centered={true}
-                    images={[
-                        {
-                            url: img4,
-                            // No ratio - will use defaultRatio
-                            alt: "Image 4"
-                        },
-                        {
-                            url: img5,
-                            // No ratio - will use defaultRatio  
-                            alt: "Image 5"
-                        }
-                    ]}
-                    defaultRatio="16/7.3" // All images use this ratio
-                /> */}
 
+                    images={[
+                        { url: image1 }, // 👈 BIG image
+                        { url: image2 },
+                        { url: image3 },
+                        { url: image6 },
+                        { url: image4 },
+                        { url: image5 },
+                       
+                    ]}
+                    desktopLayout={{
+                        columns: [2, 1, 1], // 3 columns
+                        rows: 2,            // 2 rows
+                    }}
+                    mobileLayout={{
+                        columns: [2, 1, 1], // 3 columns
+                        rows: 2,            // 2 rows
+                    }}
+                />
+
+                <GridBanner
+                    title="Hero Banner"
+                    centered
+                    gap={false}
+
+                    images={[
+                        { url: images1 }, // 👈 BIG image
+                        { url: images2 },
+                        { url: images3 },
+                        { url: images4 },
+
+                    ]}
+                    desktopLayout={{
+                        columns: [15, 11], // 3 columns
+                        rows: 1,            // 2 rows
+                    }}
+                    mobileLayout={{
+                        columns: [2, 1, 1], // 3 columns
+                        rows: 2,            // 2 rows
+                    }}
+                />
+
+              
                 <Category banners={occasionbanners} isLoading={occasionLoading} error={occasionbannersError} />
 
 

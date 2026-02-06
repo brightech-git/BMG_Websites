@@ -19,21 +19,30 @@ export const getImage = (imageData, fallbackImage = "/fallback.png") => {
     try {
         if (!imageData) return fallbackImage;
 
-        // If backend accidentally sends JSON array as string
-        const parsedImage =
-            typeof imageData === "string" && imageData.startsWith("[")
-                ? JSON.parse(imageData)[0]
-                : Array.isArray(imageData)
-                    ? imageData[0]
-                    : imageData;
+        let image = imageData;
 
-        if (!parsedImage) return fallbackImage;
+        // JSON string array
+        if (typeof image === "string" && image.trim().startsWith("[")) {
+            const parsed = JSON.parse(image);
+            image = Array.isArray(parsed) ? parsed[0] : null;
+        }
 
-        return parsedImage.startsWith("http")
-            ? parsedImage
-            : `https://app.bmgjewellers.com${parsedImage}`;
-    } catch (error) {
-        console.error("Error parsing image:", error);
+        // Array
+        if (Array.isArray(image)) {
+            image = image[0];
+        }
+
+        if (!image || typeof image !== "string") return fallbackImage;
+
+        // ✅ Backend-relative images ONLY
+        if (image.startsWith("/uploads") || image.startsWith("/images")) {
+            return `https://app.bmgjewellers.com${image}`;
+        }
+
+        // ✅ Everything else (Vite imports, CDN, assets)
+        return image;
+    } catch (e) {
+        console.error("getImage error:", e);
         return fallbackImage;
     }
 };

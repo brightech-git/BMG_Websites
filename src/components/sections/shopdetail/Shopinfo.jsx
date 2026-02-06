@@ -18,7 +18,7 @@ import UpdateMobileModal from "../../layouts/UpdateMobileModal";
 import { useSelector } from "react-redux";
 import { ShareButtons } from "../../share/Share";
 import SmartButton from "../../ui/SmartButton";
-
+import PincodeChecker from "../../../component/pincode/PincodeCheck";
 
 const ProductSkeleton = () => (
   <div className="animate-pulse bg-[#eeece8] min-h-screen p-4">
@@ -58,7 +58,6 @@ const Shopinfo = ({ sno, Authenticated }) => {
   const shareRef = useRef();
 
   const { data: product, isLoading, error } = useSingleProductQuery(sno);
-
 
 
   const [cartLoading, setCartLoading] = useState(false);
@@ -281,7 +280,18 @@ const Shopinfo = ({ sno, Authenticated }) => {
                 )}
               </div>
 
-              {/* Meta Info */}
+
+              {/*Pincode Availability Checking */}
+              {isAuthenticated && 
+              <div>
+                  <PincodeChecker />
+                </div>
+              }
+            
+         
+
+
+{/* Meta Info */}
               {(product.NETWT || product.PURITY || product.MaterialFinish || product.ITEMID) && (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-2 border-y border-gray-200">
                   {product.NETWT && <div><span className="text-gray-600">Weight:</span> <strong>{product.NETWT.toFixed(3)}g</strong></div>}

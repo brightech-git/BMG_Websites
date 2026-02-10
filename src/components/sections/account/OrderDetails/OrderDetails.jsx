@@ -34,8 +34,14 @@ const OrderDetail = () => {
   const { mutateAsync: createReOrder, isLoading: isReordering } = useCreateReOrder();
 
   const { data: orderStatusMaster, isLoading: orderStatusMasterLoading, isError: statusMasterError, refetch: refetchStatusmaster } = useOrderStatusMaster();
+
+
+  console.log(orderTrackData,'orderTrackData');
+  const paidBy = orderTrackData?.payment_mode || "Retry";
   const paymentStatus = orderTrackData?.payment_status || "PENDING";
+  const shippingFee = orderTrackData?.shipping_fee || "Not Calculated" ;
   const currentStatus = orderTrackData?.current_status || "PLACED";
+  const totalAmount = orderTrackData?.total_amount|| "Retry" ;
   const canCancel = orderTrackData?.canCancel;
   const canReorder = orderTrackData?.canReorder;
   const items = orderTrackData?.items || [];
@@ -371,13 +377,13 @@ const OrderDetail = () => {
                 <FontAwesomeIcon icon={faReceipt} className="text-[var(--primary-hover-color)]" /> Order Summary
               </h3>
               <div className="space-y-3 text-sm">
-                <div className="flex justify-between"><span>Subtotal</span><span>{formatCurrency(2000)}</span></div>
-                <div className="flex justify-between"><span>Shipping</span><span>{orderTrackData.shippingFee ? `${orderTrackData.shippingFee}` : 'Free'}</span></div>
-                <div className="flex justify-between text-gray-600"><span>Paid via</span><span>{orderTrackData?.paymentMode || "ONLINE"}</span></div>
-                <div className="flex justify-between text-gray-600"><span>Status</span><span>{paymentStatus}</span></div>
+                <div className="flex justify-between"><span>Subtotal</span><span>{formatCurrency(totalAmount)}</span></div>
+                <div className="flex justify-between"><span>Shipping</span><span>{shippingFee}</span></div>
+                <div className="flex justify-between text-gray-600"><span>Paid via</span><span>{paidBy || "ONLINE"}</span></div>
+                <div className="flex justify-between text-gray-600"><span>Payment Status</span><span>{paymentStatus}</span></div>
                 <div className="border-t pt-3 font-bold text-lg flex justify-between text-[var(--primary-hover-color)]">
                   <span>Total</span>
-                  <span>{formatCurrency(2000)}</span>
+                  <span>{formatCurrency(totalAmount)}</span>
                 </div>
               </div>
             </div>

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import clsx from "clsx";
-import { CheckCircle} from "lucide-react";
+import { CheckCircle, XCircle } from "lucide-react";
 
 const HorizontalTimeline = ({
     statuses,
@@ -80,7 +80,18 @@ const HorizontalTimeline = ({
         );
     }
 
-    const sortedStatuses = [...statuses].sort(
+    // Check if current status is cancelled
+    const isCancelled = currentStatus?.toLowerCase().includes("cancel");
+
+    // Filter statuses - only show cancelled if current status is cancelled
+    const filteredStatuses = isCancelled
+        ? statuses // Show all statuses including cancelled if current is cancelled
+        : statuses.filter(status =>
+            !status.key.toLowerCase().includes("cancel") &&
+            !status.label.toLowerCase().includes("cancel")
+        );
+
+    const sortedStatuses = [...filteredStatuses].sort(
         (a, b) => a.sequence - b.sequence
     );
 
@@ -88,22 +99,31 @@ const HorizontalTimeline = ({
         (s) => s.key === currentStatus
     );
 
-    console.log(sortedStatuses,'sortedStatuses')
+    console.log(sortedStatuses, 'sortedStatuses')
+
+    // Get appropriate icon based on status
+    const getStatusIcon = (status) => {
+        if (isCancelled && status.key === currentStatus) {
+            return XCircle; // Red X icon for cancelled status
+        }
+        return getIcon ? status?.icon : CheckCircle;
+    };
 
     return (
         <div className="w-full px-4 py-6">
             {/* ----------------- Desktop / md+ Horizontal Layout ----------------- */}
             <div className="hidden md:flex flex-row items-center">
                 {sortedStatuses.map((status, index) => {
-                    const Icon = getIcon ? status?.icon : CheckCircle;
+                    const Icon = getStatusIcon(status);
                     const isPast = index < currentIndex;
                     const isCurrent = index === currentIndex;
                     const isLast = index === sortedStatuses.length - 1;
                     const willBeActive = index > currentIndex;
+                    const isCancelledStatus = status.key === currentStatus && isCancelled;
 
                     return (
-                        <div 
-                            key={status.key} 
+                        <div
+                            key={status.key}
                             ref={el => timelineRefs.current[index] = el}
                             className="relative flex flex-1 flex-col items-center opacity-1 translate-y-2 animate-slideUp"
                             style={{
@@ -117,19 +137,24 @@ const HorizontalTimeline = ({
                                     <div
                                         className={clsx(
                                             "h-full transition-all duration-1000 origin-left",
-                                            isPast 
+                                            isPast && !isCancelledStatus
                                                 ? "bg-gradient-to-r from-[var(--green-color)] to-green-400 scale-x-100 animate-lineFill"
-                                                : willBeActive
-                                                    ? "bg-gradient-to-r from-gray-300 to-gray-300 scale-x-100"
-                                                    : "bg-gradient-to-r from-gray-300 to-gray-300 scale-x-0"
+                                                : isCancelledStatus && isPast
+                                                    ? "bg-gradient-to-r from-red-500 to-red-400 scale-x-100 animate-lineFill"
+                                                    : willBeActive
+                                                        ? "bg-gradient-to-r from-gray-300 to-gray-300 scale-x-100"
+                                                        : "bg-gradient-to-r from-gray-300 to-gray-300 scale-x-0"
                                         )}
                                         style={{
                                             animationDelay: `${index * 0.2}s`
                                         }}
                                     />
                                     {/* Glowing effect for past connectors */}
-                                    {isPast && !isCurrent && (
+                                    {isPast && !isCurrent && !isCancelledStatus && (
                                         <div className="absolute inset-0 bg-green-400 blur-sm opacity-30 animate-pulse" />
+                                    )}
+                                    {isPast && !isCurrent && isCancelledStatus && (
+                                        <div className="absolute inset-0 bg-red-400 blur-sm opacity-30 animate-pulse" />
                                     )}
                                 </div>
                             )}
@@ -138,11 +163,13 @@ const HorizontalTimeline = ({
                             <div
                                 className={clsx(
                                     "relative z-10 w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-500 transform",
-                                    isPast
+                                    isPast && !isCancelledStatus
                                         ? "bg-[var(--green-color)] border-[var(--green-color)] text-white shadow-lg scale-105"
-                                        : isCurrent
-                                            ? "bg-white border-[var(--green-color)] text-[var(--green-color)] ring-2 ring-[var(--green-color)] ring-opacity-50 current-step-animate"
-                                            : "bg-white border-gray-300 text-gray-400 hover:scale-105 hover:border-gray-400 transition-transform duration-200"
+                                        : isCancelledStatus
+                                            ? "bg-red-500 border-red-500 text-white shadow-lg scale-105"
+                                            : isCurrent && !isCancelledStatus
+                                                ? "bg-white border-[var(--green-color)] text-[var(--green-color)] ring-2 ring-[var(--green-color)] ring-opacity-50 current-step-animate"
+                                                : "bg-white border-gray-300 text-gray-400 hover:scale-105 hover:border-gray-400 transition-transform duration-200"
                                 )}
                                 style={{
                                     animationDelay: `${index * 0.25}s`
@@ -150,9 +177,15 @@ const HorizontalTimeline = ({
                             >
                                 <Icon className="w-4 h-4" />
                                 {/* Success checkmark animation for past steps */}
-                                {isPast && (
+                                {isPast && !isCancelledStatus && (
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         <div className="w-full h-full rounded-full bg-green-500 animate-ping opacity-20" />
+                                    </div>
+                                )}
+                                {/* Red pulse for cancelled status */}
+                                {isCancelledStatus && (
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <div className="w-full h-full rounded-full bg-red-700 animate-ping opacity-20" />
                                     </div>
                                 )}
                             </div>
@@ -161,17 +194,24 @@ const HorizontalTimeline = ({
                             <span
                                 className={clsx(
                                     "mt-2 text-xs font-semibold text-center transition-all duration-300 transform",
-                                    isPast 
+                                    isPast && !isCancelledStatus
                                         ? "text-[var(--green-color)] scale-105"
-                                        : isCurrent
-                                            ? "text-[var(--green-color)] font-bold scale-110"
-                                            : "text-gray-400 hover:text-gray-600"
+                                        : isCancelledStatus
+                                            ? "text-red-500 font-bold scale-110"
+                                            : isCurrent && !isCancelledStatus
+                                                ? "text-[var(--green-color)] font-bold scale-110"
+                                                : "text-gray-400 hover:text-gray-600"
                                 )}
                             >
                                 {status.label}
                                 {/* Current status indicator */}
-                                {isCurrent && (
+                                {isCurrent && !isCancelledStatus && (
                                     <span className="absolute -top-1 left-1/2 transform -translate-x-1/2 -translate-y-full text-xs text-[var(--green-color)] font-bold animate-bounce">
+                                        ●
+                                    </span>
+                                )}
+                                {isCancelledStatus && (
+                                    <span className="absolute -top-1 left-1/2 transform -translate-x-1/2 -translate-y-full text-xs text-red-500 font-bold animate-bounce">
                                         ●
                                     </span>
                                 )}
@@ -185,13 +225,14 @@ const HorizontalTimeline = ({
             <div className="md:hidden">
                 <div className="flex flex-col items-center">
                     {sortedStatuses.map((status, index) => {
-                        const Icon = getIcon ? status.icon : CheckCircle;
+                        const Icon = getStatusIcon(status);
                         const isPast = index < currentIndex;
                         const isCurrent = index === currentIndex;
                         const isLast = index === sortedStatuses.length - 1;
+                        const isCancelledStatus = status.key === currentStatus && isCancelled;
 
                         return (
-                            <div 
+                            <div
                                 key={status.key}
                                 ref={el => timelineRefs.current[index] = el}
                                 className="relative flex items-center mb-[40px] w-full opacity-1 translate-x-4 animate-slideRight"
@@ -206,11 +247,13 @@ const HorizontalTimeline = ({
                                     <div
                                         className={clsx(
                                             "z-10 w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-500 transform",
-                                            isPast
+                                            isPast && !isCancelledStatus
                                                 ? "bg-[var(--green-color)] border-[var(--green-color)] text-white shadow-lg scale-105"
-                                                : isCurrent
-                                                    ? "bg-white border-[var(--green-color)] text-[var(--green-color)] ring-2 ring-[var(--green-color)] ring-opacity-50 current-step-animate"
-                                                    : "bg-white border-gray-300 text-gray-400"
+                                                : isCancelledStatus
+                                                    ? "bg-red-500 border-red-500 text-white shadow-lg scale-105"
+                                                    : isCurrent && !isCancelledStatus
+                                                        ? "bg-white border-[var(--green-color)] text-[var(--green-color)] ring-2 ring-[var(--green-color)] ring-opacity-50 current-step-animate"
+                                                        : "bg-white border-gray-300 text-gray-400"
                                         )}
                                     >
                                         <Icon className="w-5 h-5" />
@@ -222,9 +265,11 @@ const HorizontalTimeline = ({
                                             <div
                                                 className={clsx(
                                                     "w-full h-full transition-all duration-1000 origin-top",
-                                                    isPast 
+                                                    isPast && !isCancelledStatus
                                                         ? "bg-gradient-to-b from-[var(--green-color)] to-green-400 scale-y-100 animate-lineFillVertical"
-                                                        : "scale-y-0"
+                                                        : isCancelledStatus && isPast
+                                                            ? "bg-gradient-to-b from-red-500 to-red-400 scale-y-100 animate-lineFillVertical"
+                                                            : "scale-y-0"
                                                 )}
                                                 style={{
                                                     animationDelay: `${index * 0.2}s`
@@ -238,15 +283,22 @@ const HorizontalTimeline = ({
                                 <span
                                     className={clsx(
                                         "ml-4 text-sm font-medium transition-all duration-300",
-                                        isPast || isCurrent 
+                                        isPast && !isCancelledStatus || (isCurrent && !isCancelledStatus)
                                             ? "text-[var(--green-color)] font-bold transform translate-x-1"
-                                            : "text-gray-400"
+                                            : isCancelledStatus
+                                                ? "text-red-500 font-bold transform translate-x-1"
+                                                : "text-gray-400"
                                     )}
                                 >
                                     {status.label}
-                                    {isCurrent && (
+                                    {isCurrent && !isCancelledStatus && (
                                         <span className="ml-2 text-xs text-[var(--green-color)] animate-pulse">
                                             ← Current
+                                        </span>
+                                    )}
+                                    {isCancelledStatus && (
+                                        <span className="ml-2 text-xs text-red-500 animate-pulse">
+                                            ← Cancelled
                                         </span>
                                     )}
                                 </span>
@@ -309,13 +361,13 @@ const HorizontalTimeline = ({
                 
                 @keyframes pulse-ring {
                     0% {
-                        box-shadow: 0 0 0 0 rgba(var(--green-color-rgb), 0.4);
+                        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
                     }
                     70% {
-                        box-shadow: 0 0 0 10px rgba(var(--green-color-rgb), 0);
+                        box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
                     }
                     100% {
-                        box-shadow: 0 0 0 0 rgba(var(--green-color-rgb), 0);
+                        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
                     }
                 }
                 
@@ -360,6 +412,23 @@ const HorizontalTimeline = ({
                 @keyframes fadeIn {
                     from { opacity: 0; }
                     to { opacity: 1; }
+                }
+                
+                /* Red pulse ring for cancelled status */
+                .current-step-animate.cancelled {
+                    animation: pulse-ring-red 2s infinite;
+                }
+                
+                @keyframes pulse-ring-red {
+                    0% {
+                        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+                    }
+                    70% {
+                        box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+                    }
+                    100% {
+                        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+                    }
                 }
             `}</style>
         </div>

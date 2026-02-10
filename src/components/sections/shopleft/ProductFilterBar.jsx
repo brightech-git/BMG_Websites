@@ -426,7 +426,7 @@ export default function UnifiedFilterBar({
   const MobileFilterBar = () => (
     <>
       {/* Bottom Fixed Bar */}
-      <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 flex justify-around items-center p-2">
+      <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-10 flex justify-around items-center p-2">
         {/* Filter Button */}
         <button
           onClick={() => setIsFilterPanelOpen(true)}

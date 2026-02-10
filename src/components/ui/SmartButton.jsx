@@ -159,7 +159,7 @@ const SmartButton = ({
                 {!isLoading && !success && !error && (
                     <>
                         {Icon && <Icon className="w-5 h-5" />}
-                        <span>{children}</span>
+                        <span className="text-xs sm:text-sm">{children}</span>
                     </>
                 )}
             </button>

@@ -2,16 +2,16 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./ShopByRecipient.css";
 
-const ShopByRecipient = ({banners}) => {
+const ShopByRecipient = ({ banners }) => {
     const navigate = useNavigate();
-   
-console.log(banners ,'genderbanner')
+
+    console.log(banners, 'genderbanner')
     const baseUrl = "https://app.bmgjewellers.com";
 
     const handleCategoryClick = (itemName) => {
         const queryParams = new URLSearchParams();
         if (itemName) queryParams.append("itemCtrName", itemName);
-       
+
         navigate(`/products-page?${queryParams.toString()}`);
     };
 

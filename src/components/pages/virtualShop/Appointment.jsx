@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../../layouts/Header';
+import HeaderWithAuth from '../../layouts/HeaderWithAuth';
 import Breadcrumbs from '../../layouts/Breadcrumbs';
 import Footer from '../../layouts/Footer';
 import AppointmentPage from './VirtualShop';
@@ -16,7 +16,7 @@ function Appointment(){
 return(
 
         <>
-            <Header />
+        <HeaderWithAuth />
             {/* Pass query params into breadcrumb just like ShopLeft */}
             <Breadcrumbs pages={"Virtual Appointment"} />
             <AppointmentPage />

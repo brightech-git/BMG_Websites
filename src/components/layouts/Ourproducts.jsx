@@ -5,17 +5,17 @@ import './NewArrival.css';
 import { getProductImages } from '../../utils/getProductImages';
 
 
-const NewArrival = ({banners ,isLoading ,isError}) => {
+const NewArrival = ({ banners, isLoading, isError }) => {
 
     const bannerContainerRef = useRef(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [mousePosition, setMousePosition] = useState({ x: 0.5, y: 0.5 });
     const [isMobile, setIsMobile] = useState(false);
- 
-    
+
+
     console.log(banners, "bannerdata");
 
-    const bannerImages = banners?.map((item) => getProductImages(item.Image) )|| [];
+    const bannerImages = banners?.map((item) => getProductImages(item.Image)) || [];
 
     console.log(bannerImages, "bannerImages");
 
@@ -131,7 +131,7 @@ const NewArrival = ({banners ,isLoading ,isError}) => {
                             onMouseMove={handleMouseMove}
                             onMouseLeave={handleMouseLeave}
                         >
-                   
+
                             <div className="arrival-banner-wrapper">
                                 {bannerImages.map((img, index) => (
                                     <img

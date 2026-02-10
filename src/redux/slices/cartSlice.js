@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
     fetchCart,
     addToCart,
-    updateCartItem,
     deleteCartItem,
 } from "../../service/cartService";
 
@@ -27,15 +26,7 @@ export const addToCartAsync = createAsyncThunk("cart/addToCart", async (item, th
     }
 });
 
-export const updateCartAsync = createAsyncThunk("cart/updateCart", async (item, thunkAPI) => {
-    try {
-        const res = await updateCartItem(item);
-        thunkAPI.dispatch(fetchCartAsync());
-        return res.data;
-    } catch (err) {
-        return thunkAPI.rejectWithValue(err.response?.data || err.message);
-    }
-});
+
 
 export const deleteCartAsync = createAsyncThunk("cart/deleteCart", async (id, thunkAPI) => {
     try {
@@ -80,9 +71,6 @@ const cartSlice = createSlice({
             })
                         .addCase(addToCartAsync.pending, (state) => {
                 state.actionStatus = "adding";
-            })
-            .addCase(updateCartAsync.pending, (state) => {
-                state.actionStatus = "updating";
             })
             .addCase(deleteCartAsync.pending, (state) => {
                 state.actionStatus = "deleting";

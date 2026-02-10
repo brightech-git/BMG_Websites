@@ -247,13 +247,13 @@ const ItemSearch = () => {
   const showDropdown = isFocused && (query.trim() || searchHistory.length > 0);
 
   return (
-    <div ref={containerRef} className="relative w-full max-w-xl mx-auto ">
-      <div className="relative flex items-center">
+    <div ref={containerRef} className="relative w-full max-w-xl mx-auto">
+      <div className="relative flex items-center gap-1">
         <input
           ref={inputRef}
           type="text"
-          className="w-full px-6 py-3 pl-12 pr-12 text-[var(--primary-text-color)] h-[40px] bg-white border border-[var(--primary-hover-color)] rounded-md focus:outline-none focus:border-[var(--primary-hover-color)] focus:ring-2 focus:ring-[var(--primary-hover-color)] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-          placeholder={isListening ? "🎤 Listening... Speak now" : "Search jewelry, rings, necklaces..."}
+          className="w-full px-4 py-3 pl-12 pr-12 text-[var(--primary-text-color)] h-[40px] bg-white border border-[var(--primary-hover-color)] rounded-md focus:outline-none focus:border-[var(--primary-hover-color)] focus:ring-2 focus:ring-[var(--primary-hover-color)] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          placeholder={isListening ? "🎤 Listening... Speak now" : "Search rings, necklaces..."}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -263,8 +263,8 @@ const ItemSearch = () => {
         />
 
         <Search
-          className="absolute left-2 text-[var(--primary-hover-color)]"
-          size={18}
+          className="absolute left-1 text-[var(--primary-hover-color)]"
+          size={16}
           aria-hidden="true"
         />
 
@@ -272,10 +272,10 @@ const ItemSearch = () => {
           <button
             type="button"
             onClick={handleClear}
-            className="absolute right-24 p-1 text-[var(--primary-hover-color)] hover:text-[var(--primary-hover-color)] transition-colors duration-200"
+            className="absolute right-20 p-1 text-[var(--primary-hover-color)] hover:text-[var(--primary-hover-color)] transition-colors duration-200"
             aria-label="Clear search"
           >
-            <X size={18} />
+            <X size={16} />
           </button>
         )}
 
@@ -283,7 +283,7 @@ const ItemSearch = () => {
           <button
             type="button"
             onClick={handleVoiceSearch}
-            className={`absolute right-14 p-2 rounded-full transition-all duration-200 ${isListening
+            className={`absolute right-10 p-2 rounded-full transition-all duration-200 ${isListening
               ? "text-red-600 bg-red-50 animate-pulse"
               : "text-gray-400 hover:text-[var(--primary-hover-color)] hover:bg-gray-100"
               }`}
@@ -298,10 +298,10 @@ const ItemSearch = () => {
           type="button"
           onClick={() => handleSearch()}
           disabled={isListening || !query.trim()}
-          className="absolute right-4 p-2 text-white bg-[var(--primary-hover-color)] rounded-full hover:bg-[var(--primary-hover-color)] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary-hover-color)] focus:ring-offset-2"
+          className="absolute right-2 p-1 text-white bg-[var(--primary-hover-color)] rounded-full hover:bg-[var(--primary-hover-color)] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary-hover-color)] focus:ring-offset-2"
           aria-label="Search"
         >
-          <Search size={18} />
+          <Search size={16} />
         </button>
       </div>
 

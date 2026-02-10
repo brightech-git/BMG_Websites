@@ -62,21 +62,25 @@ const GridBanner = ({
     return (
         <section
             className={`
-                relative w-full py-2 overflow-hidden
-                ${centered ? "flex justify-center" : ""}
-                ${full ? "px-0" : "px-2 md:px-4"}
+                relative w-full py-2 
+                overflow-hidden ${backgroundColor === 'white' ? 'bg-white' : `bg-${backgroundColor}`}
+                ${centered ? 'flex items-center justify-center' : ''}
+                ${full ? 'px-0' : 'px-2 md:px-4 lg:px-4'}
             `}
-            style={{ backgroundColor }}
+            style={backgroundColor !== 'white' && !backgroundColor.startsWith('bg-') ?
+                { backgroundColor } : {}}
+            role="banner"
+            aria-label="Hero banner"
         >
             <div className={`${full ? "w-full" : "container mx-auto"}`}>
                 {title && (
-                    <h2 className="text-lg md:text-2xl font-bold mb-2">
+                    <h2 className={`text-lg md:text-2xl font-bold mb-2 text-[var(--primary-text-color)]  ${centered ? " flex justify-center items-center" : ""}`}>
                         {title}
                     </h2>
                 )}
 
                 {description && (
-                    <p className="text-base md:text-lg mb-4">
+                    <p className={`"text-base md:text-lg mb-4" ${centered ? " flex justify-center items-center" : ""}`}>
                         {description}
                     </p>
                 )}

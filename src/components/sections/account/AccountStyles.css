@@ -182,17 +182,12 @@
   background: #ccc;
   cursor: not-allowed;
 }
-@media (max-width: 975px){
-  .account-container {
-      margin-top: 80px;
-    }
-}
 
 /* Responsive */
 @media (max-width: 768px) {
 
   .account-container {
-    margin-top:0px;
+    margin-top:20px;
   }
   .account-layout {
     flex-direction: column;

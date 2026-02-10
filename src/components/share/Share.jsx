@@ -1,9 +1,9 @@
 import { FaWhatsapp, FaTwitter } from "react-icons/fa";
 
-export const ShareButtons = ({ sno }) => {
+export const ShareButtons = ({ tagKey }) => {
 
     // Hardcode the OG page URL (this is the only correct thing WhatsApp needs)
-    const ogShareUrl = `https://app.bmgjewellers.com/product/whatsapp-link?sno=${sno}`;
+    const ogShareUrl = `https://app.bmgjewellers.com/product/whatsapp-link?sno=${tagKey}`;
 
     // WhatsApp share link with preview support
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(ogShareUrl)}`;

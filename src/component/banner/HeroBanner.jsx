@@ -22,7 +22,7 @@ const HeroBanner = ({
     const navigate = useNavigate(); // React Router navigation
 
     useEffect(() => {
-       
+
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 768);
         };
@@ -274,7 +274,7 @@ const HeroBanner = ({
                                                     <picture>
                                                         {imageData.url && (
                                                             <source
-                                                              
+
                                                                 type="image/webp"
                                                             />
                                                         )}

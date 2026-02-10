@@ -4,11 +4,11 @@ import './FeaturedBanners.css';
 import { getProductImages } from '../../utils/getProductImages';
 
 
-const FeaturedBanners = ({banners ,isLoading ,isError}) => {
+const FeaturedBanners = ({ banners, isLoading, isError }) => {
   const navigate = useNavigate();
- 
 
-  
+
+
 
   const handleBannerClick = () => {
 
@@ -29,7 +29,7 @@ const FeaturedBanners = ({banners ,isLoading ,isError}) => {
             <div className="col-auto">
               <h2 className="fb-main-title">Curated Just for You</h2>
             </div>
-        
+
           </div>
 
           {/* Banner Grid */}
@@ -71,7 +71,7 @@ const FeaturedBanners = ({banners ,isLoading ,isError}) => {
                           className="fb-banner-image"
                           loading="lazy"
                         />
-                     
+
                       </div>
                     </div>
                   </div>

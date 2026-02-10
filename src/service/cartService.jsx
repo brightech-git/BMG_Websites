@@ -8,26 +8,46 @@ const authHeader = () => ({
 });
 
 // ✅ Get Cart by phone number
-export const fetchCart = () => {
+export const fetchCart = async (pincode) => {
+    try {
+        const config = {
+            ...authHeader(),
+            params: {}, // start empty
+        };
 
-    const response=  PublicUrl.get(`/cart/cart`, authHeader());
+        // Only add pincode if it exists
+        if (pincode) {
+            config.params.pincode = pincode;
+        }
 
-    return response
+        const response = await PublicUrl.get("/cart/summary", config);
+        return response.data; // return only data
+    } catch (err) {
+        throw new Error(
+            err.response?.data?.error || err.message || "Failed to fetch cart"
+        );
+    }
 };
+
+
 
 // ✅ Add item to cart
 export const addToCart = (cartItem) => {
-    return PublicUrl.post("/cart/create", cartItem, authHeader());
+
+    console.log(cartItem,'cartItems')
+    return PublicUrl.post("/cart/product", cartItem, authHeader());
 };
 
-// ✅ Update existing cart item
-export const updateCartItem = (cartItem) => {
-    return PublicUrl.put("/cart/update", cartItem, authHeader());
-};
 
 // ✅ Delete item from cart
-export const deleteCartItem = (id) => {
-    return PublicUrl.delete(`/cart/delete/${id}`, authHeader());
+export const deleteCartItem = async (tagKey) => {
+    try {
+        const response = await PublicUrl.delete(`/cart/delete/${tagKey}`, authHeader());
+        return response.data;
+    } catch (err) {
+        console.error("❌ Delete cart service error:", err);
+        throw err; // re-throw so mutation's onError catches it
+    }
 };
 
 export const clearCart = () => {

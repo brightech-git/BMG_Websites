@@ -5,7 +5,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import './PriceUnderSection.css';
 
-const PriceUnderSection = ({budgetBanners ,isLoading ,isError}) => {
+const PriceUnderSection = ({ budgetBanners, isLoading, isError }) => {
   const baseURL = "https://app.bmgjewellers.com";
   const navigate = useNavigate();
 
@@ -20,7 +20,7 @@ const PriceUnderSection = ({budgetBanners ,isLoading ,isError}) => {
 
   const handleCategoryNavigation = (minPrice, maxPrice) => {
     const searchParams = new URLSearchParams();
-    if (minPrice,maxPrice) searchParams.append('priceRange',minPrice + '-' + maxPrice)
+    if (minPrice, maxPrice) searchParams.append('priceRange', minPrice + '-' + maxPrice)
     // if (maxPrice) searchParams.append('maxGrandTotal', maxPrice);
     const formattedQuery = searchParams.toString().replace(/\+/g, '%20');
     navigate(`/products-page?${formattedQuery}`);
@@ -76,8 +76,8 @@ const PriceUnderSection = ({budgetBanners ,isLoading ,isError}) => {
             Discover curated collections tailored to your budget for every style and occasion
           </p> */}
         </div>
-        
-      
+
+
 
         <div className="pus-card-container">
           <div className="pus-budget-cards-grid">

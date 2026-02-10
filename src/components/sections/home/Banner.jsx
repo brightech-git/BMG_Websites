@@ -14,8 +14,8 @@ const BannerSkeleton = () => (
                 <div
                     key={pos}
                     className={`flex-shrink-0 flex items-center ${isMain
-                            ? "w-full md:w-[78%] lg:w-[66%]"
-                            : "w-full md:w-[58%] lg:w-[50%]"
+                        ? "w-full md:w-[78%] lg:w-[66%]"
+                        : "w-full md:w-[58%] lg:w-[50%]"
                         }`}
                 >
                     <div className="relative w-full rounded-2xl overflow-hidden bg-gray-200 animate-pulse">
@@ -178,8 +178,8 @@ function BannerCarousel({ banners = [], isLoading = false }) {
                                 <div
                                     key={position}
                                     className={`flex-shrink-0 flex items-center transition-transform duration-700 ease-out ${isMain
-                                            ? "w-full md:w-[78%] lg:w-[66%] scale-100 z-10"
-                                            : "w-full md:w-[58%] lg:w-[50%] scale-95 opacity-80"
+                                        ? "w-full md:w-[78%] lg:w-[66%] scale-100 z-10"
+                                        : "w-full md:w-[58%] lg:w-[50%] scale-95 opacity-80"
                                         }`}
                                 >
                                     <div
@@ -231,8 +231,8 @@ function BannerCarousel({ banners = [], isLoading = false }) {
                             <button key={i} onClick={() => goToSlide(i)}>
                                 <div
                                     className={`h-2.5 rounded-full transition-all duration-300 ${i === currentIndex
-                                            ? "w-10 bg-amber-600"
-                                            : "w-2.5 bg-gray-400"
+                                        ? "w-10 bg-amber-600"
+                                        : "w-2.5 bg-gray-400"
                                         }`}
                                 />
                             </button>

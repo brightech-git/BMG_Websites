@@ -1,12 +1,12 @@
 // src/hook/product/useSingleProductQuery.js
 import { useQuery } from '@tanstack/react-query';
-import { getProductBySno ,getWhatsappLink} from '../../service/ProductService';
+import { getProductByTagKey ,getWhatsappLink} from '../../service/ProductService';
 
-export const useSingleProductQuery = (sno) => {
+export const useSingleProductQuery = (tagKey) => {
     return useQuery({
-        queryKey: ['singleProduct', sno],
-        queryFn: () => getProductBySno((sno)),
-        enabled: !!sno,
+        queryKey: ['singleProduct', tagKey],
+        queryFn: () => getProductByTagKey((tagKey)),
+        enabled: !!tagKey,
     });
 };
 

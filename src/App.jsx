@@ -14,8 +14,8 @@ import ContactStore from "./components/pages/ContactStore";
 import Error from "./components/pages/Error";
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
-import Shopdetail from "./components/pages/Shopdetail";
-import Shopleft from "./components/pages/Shopleft";
+import ProductDetailPage from "./components/pages/productDetail";
+import ProductsPage from "./components/pages/productsPage";
 import Wishlist from "./components/pages/Wishlist";
 
 import PrivacyPolicy from "./components/pages/Policies/Privacy";
@@ -71,8 +71,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/products-page" element={<Shopleft />} />
-          <Route path="/products-page/:sno" element={<Shopdetail />} />
+          <Route path="/products-page" element={<ProductsPage />} />
+          <Route path="/product-detail/:tagKey" element={<ProductDetailPage />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/contactstore" element={<ContactStore />} />
           <Route path="/contactstore/success" element={<Success />} />

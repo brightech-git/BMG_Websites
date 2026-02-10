@@ -4,17 +4,16 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Heart, Trash2, ShoppingCart, Star } from "lucide-react";
 import { useFavorites, useRemoveFavorite } from "../../../hook/favorites/useFavoritesQuery";
-import { useSingleProductQuery } from "../../../hook/product/useSingleProductQuery";
 import { useCart } from "../../../hook/cart/useCartQuery";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import SmartButton from "../../ui/SmartButton";
 
-const WishlistItem = ({ sno, onRemove, cartItems, addToCartHandler, mobileNumber, setModalOpen }) => {
-  const { data: item, isLoading } = useSingleProductQuery(sno);
+const WishlistItem = ({ item, onRemove, cartItems, addToCartHandler, mobileNumber, setModalOpen }) => {
+
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
-  const history = useNavigate();
-  console.log(cartItems?.data, 'cartItems');
+  const navigate = useNavigate();
+
   console.log(item, 'cartItems');
 
   const isInCart = Array.isArray(cartItems?.data) && cartItems?.data?.some(i => i.itemTagSno === item?.SNO);
@@ -82,7 +81,7 @@ const WishlistItem = ({ sno, onRemove, cartItems, addToCartHandler, mobileNumber
   return (
     <div className="group relative bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-md hover:shadow-lg  transition-all duration-300">
       {/* Image */}
-      <Link to={`/products-page/${sno}`} className="block">
+      <Link to={`/product-detail/${sno}`} className="block">
         <div className="aspect-square overflow-hidden bg-gray-50">
           <img
             src={imageUrl}
@@ -145,8 +144,8 @@ const Wishlist = () => {
   const mobileNumber = useSelector(state => state.user.user?.contactNumber);
   console.log(mobileNumber, 'ContactNumber');
 
-  const history = useNavigate();
-  const items = favorites?.data || [];
+  const navigate = useNavigate();
+  const items = favorites?.data?.products || [];
 
   const handleRemove = (sno) => {
     if (window.confirm("Remove from wishlist?")) {
@@ -214,7 +213,7 @@ const Wishlist = () => {
 
           <div className="flex justify-center animate-shake-infinite">
             <SmartButton
-              onClick={() => navigate('products-page')}
+              onClick={() => navigate('/products-page')}
               variant="primary"
             >
               Explore Collection
@@ -241,10 +240,10 @@ const Wishlist = () => {
 
         {/* Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 lg:gap-4">
-          {items.map((sno) => (
+          {items.map((item) => (
             <WishlistItem
-              key={sno}
-              sno={sno}
+              key={item.ItemTagSno}
+              item={item}
               onRemove={handleRemove}
               cartItems={cartItems}
               addToCartHandler={addToCartHandler}

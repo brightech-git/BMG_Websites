@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Heart, RefreshCw } from 'lucide-react';
 import { useFavorites, useAddFavorite, useRemoveFavorite } from '../../../hook/favorites/useFavoritesQuery';
@@ -9,35 +10,48 @@ import fallbackImage from './fallback-image.jpg';
 import UpdateMobileModal from '../../layouts/UpdateMobileModal';
 
 const ProductCard = ({ item }) => {
-
     const { data: favorites, isFavoritesLoading } = useFavorites();
+
+const favoriteItems = favorites?.data?.products;
+
     const addFavorite = useAddFavorite();
     const removeFavorite = useRemoveFavorite();
-    const { cartItems, addToCartHandler } = useCart();
-    const isAuthenticated = useSelector((state) => state.user.isAuthenticated)
+    const { cartItems, addToCartHandler ,isLoading } = useCart();
+
+    const cartProducts = cartItems?.data?.products || [] ; 
+
+    const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
     const [isAnimating, setIsAnimating] = useState(false);
     const mobileNumber = useSelector((state) => state.user.user?.contactNumber) || null;
-    const history = useNavigate();
+    const navigate = useNavigate();
     const location = useLocation();
 
+    const pincode = localStorage.getItem('pinCode');
     const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
 
     const [isWishlisted, setIsWishlisted] = useState(false);
     const [heartAnimation, setHeartAnimation] = useState(false);
     const [cartAnimation, setCartAnimation] = useState(false);
-
-
     const [isTouchDevice, setIsTouchDevice] = useState(false);
     const [loadingState, setLoadingState] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
     const [hover, setHover] = useState(false);
+
+    // Check if item is in wishlist
+    useEffect(() => {
+        if (!isFavoritesLoading && favoriteItems && item?.TAGKEY) {
+            const isInWishlist = favoriteItems.some(product =>
+                product.ItemTagSno === item.TAGKEY || product === item.TAGKEY
+            );
+            setIsWishlisted(isInWishlist);
+        }
+    }, [favorites, item?.TAGKEY, isFavoritesLoading]);
 
     useEffect(() => {
         const timer = setTimeout(() => setLoadingState(false), 500);
         return () => clearTimeout(timer);
     }, []);
 
-    // Detect touch device
     useEffect(() => {
         const checkTouchDevice = () => {
             setIsTouchDevice(('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
@@ -46,6 +60,7 @@ const ProductCard = ({ item }) => {
         window.addEventListener('resize', checkTouchDevice);
         return () => window.removeEventListener('resize', checkTouchDevice);
     }, []);
+
     const getProductImages = () => {
         try {
             const imageData = item?.ImagePath;
@@ -71,21 +86,11 @@ const ProductCard = ({ item }) => {
             return [fallbackImage];
         }
     };
+
     const productImages = getProductImages();
     const hasMultipleImages = productImages.length > 1;
     const defaultIndex = isMobile && hasMultipleImages ? 1 : 0;
     const [currentImageIndex, setCurrentImageIndex] = useState(defaultIndex);
-
-
-
-    useEffect(() => {
-        if (!productImages?.length) return;
-
-        productImages.slice(0, 2).forEach((src) => {
-            const img = new Image();
-            img.src = src;
-        });
-    }, [productImages]);
 
     useEffect(() => {
         if (isMobile && hasMultipleImages) {
@@ -98,24 +103,6 @@ const ProductCard = ({ item }) => {
         ? parseFloat(item.GrandTotal)
         : parseFloat(item?.RATE || 0);
 
-    useEffect(() => {
-        if (!isFavoritesLoading && favorites?.data && item?.SNO) {
-            setIsWishlisted(favorites.data.includes(item.SNO));
-        }
-    }, [favorites, item?.SNO, isFavoritesLoading]);
-
-    // Touch image navigation
-    // const handleImageTouch = (e) => {
-    //     e.preventDefault();
-    //     e.stopPropagation();
-
-    //     if (!hasMultipleImages) return;
-
-    //     const nextIndex = (currentImageIndex + 1) % productImages.length;
-    //     setCurrentImageIndex(nextIndex);
-    // };
-
-    // Mouse hover for desktop
     const handleMouseEnter = () => {
         if (!isTouchDevice && hasMultipleImages) {
             setIsAnimating(true);
@@ -142,7 +129,7 @@ const ProductCard = ({ item }) => {
 
         if (!isAuthenticated) {
             toast.info('🔐 Please log in to add items to your cart.');
-            navigate('/login', { from: location.pathname });
+            navigate('/login', { state: { from: location.pathname } });
             return;
         }
         if (!mobileNumber) {
@@ -150,8 +137,8 @@ const ProductCard = ({ item }) => {
             return;
         }
 
-        if (!item?.SNO) {
-            console.warn('Missing item SNO');
+        if (!item?.TAGKEY) {
+            console.warn('Missing item TAGKEY');
             return;
         }
 
@@ -161,23 +148,13 @@ const ProductCard = ({ item }) => {
         }
 
         const cartItem = {
-            itemSno: item.SNO,
-            itemTagSno: item.SNO,
-            itemId: item.ITEMID,
-            tagNo: item.TAGNO,
-            grsWt: item.GRSWT,
-            netWt: item.NETWT,
-            stnWt: item?.STNWT || 0,
-            amount: item.GrandTotal || item.RATE,
-            stnAmount: item?.STNAMT || 0,
-            itemCtrName: item.ITEMCTRNAME || item.SUBITEMNAME,
-            price: item.GrandTotal,
-            image: productImages[1],
+            tagKey: item.TAGKEY,
+            quantity: 1,
+            shippingPincode: pincode || '360004'
         };
 
         addToCartHandler(cartItem);
         setCartAnimation(true);
-        toast.success('🛒 Item added to cart!');
         setTimeout(() => setCartAnimation(false), 600);
     };
 
@@ -187,23 +164,32 @@ const ProductCard = ({ item }) => {
 
         if (!isAuthenticated) {
             toast.info('🔐 Please log in to add items to your favorite.');
-            navigate('/login', { from: location.pathname });
+            navigate('/login', { state: { from: location.pathname } });
             return;
         }
 
-        if (!item?.SNO) return;
+        if (!item?.TAGKEY) return;
 
         setHeartAnimation(true);
 
+        // Prepare the data object that your backend expects
+        const wishlistData = {
+            tagKey: item.TAGKEY,
+            quantity:1
+        };
+
         if (isWishlisted) {
-            removeFavorite.mutate(item.SNO, {
+            // Remove from wishlist
+            removeFavorite.mutate(item.TAGKEY, {
                 onSuccess: () => {
+                    setIsWishlisted(false);
                     toast.info('💔 Removed from Wishlist', {
                         position: 'top-right',
                         autoClose: 2000,
                     });
                 },
-                onError: () => {
+                onError: (error) => {
+                    console.error('Remove wishlist error:', error);
                     toast.error('❌ Failed to remove from Wishlist', {
                         position: 'top-right',
                         autoClose: 2000,
@@ -211,14 +197,17 @@ const ProductCard = ({ item }) => {
                 },
             });
         } else {
-            addFavorite.mutate(item.SNO, {
+            // Add to wishlist - wrap data in { data: wishlistData } object
+            addFavorite.mutate(wishlistData, {
                 onSuccess: () => {
+                    setIsWishlisted(true);
                     toast.success('❤️ Added to Wishlist!', {
                         position: 'top-right',
                         autoClose: 2000,
                     });
                 },
-                onError: () => {
+                onError: (error) => {
+                    console.error('Add wishlist error:', error);
                     toast.error('❌ Failed to add to Wishlist', {
                         position: 'top-right',
                         autoClose: 2000,
@@ -227,21 +216,19 @@ const ProductCard = ({ item }) => {
             });
         }
 
-        setIsWishlisted(!isWishlisted);
         setTimeout(() => setHeartAnimation(false), 600);
     };
 
-
-
     const clickProduct = (e) => {
-        //console.log('productcard triggered', ` ${item?.SNO}`)
         e.preventDefault();
         e.stopPropagation();
-        window.location.href = `/products-page/${item?.SNO}`;
+        navigate(`/product-detail/${item?.TAGKEY}`);
     };
 
-    const isInCart = Array.isArray(cartItems?.data) &&
-        cartItems.data.some(cartItem => cartItem.itemTagSno === item?.SNO);
+    // Check if item is in cart
+
+    const isInCart = Array.isArray(cartProducts) &&
+        cartProducts.some(cartItem => cartItem.ItemTagSno === item?.TAGKEY);
 
     if (loadingState || !item) {
         return (
@@ -267,14 +254,12 @@ const ProductCard = ({ item }) => {
                     className="product-item"
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
-
                 >
-                    <div className="image-wrapper" >
+                    <div className="image-wrapper">
                         <div
                             className="image-container"
                             onClick={clickProduct}
                         >
-                            {/* Main Image with smooth transition */}
                             <div
                                 className="relative w-full h-full overflow-hidden"
                                 onMouseEnter={() => !isTouchDevice && setHover(true)}
@@ -284,14 +269,13 @@ const ProductCard = ({ item }) => {
                                 <img
                                     src={productImages[0]}
                                     alt={productName}
-                                    className={`  absolute inset-0 w-full h-full object-cover transition-all duration-300 ease-out
-       ${isMobile
-                                            ? "opacity-0 scale-100"           // 👈 hide on mobile
+                                    className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 ease-out
+                                        ${isMobile
+                                            ? "opacity-0 scale-100"
                                             : hover
                                                 ? "opacity-0 scale-105"
                                                 : "opacity-100 scale-100"
-                                        }
-    `}
+                                        }`}
                                     loading="eager"
                                     decoding="async"
                                 />
@@ -302,48 +286,20 @@ const ProductCard = ({ item }) => {
                                         src={productImages[1]}
                                         alt={productName}
                                         className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 ease-out
-      ${isMobile
-                                                ? "opacity-100 scale-100"       // 👈 show by default on mobile
+                                            ${isMobile
+                                                ? "opacity-100 scale-100"
                                                 : hover
                                                     ? "opacity-100 scale-100"
                                                     : "opacity-0 scale-95"
-                                            }
-      `}
+                                            }`}
                                         loading="eager"
                                         decoding="async"
                                     />
                                 )}
                             </div>
-
-
-                            {/* Previous image for hover-out effect */}
-
-                            {/* Image Indicator for multiple images */}
-                            {/* {hasMultipleImages && (
-                            <div className="image-indicator">
-                                {productImages.map((_, index) => (
-                                    <div
-                                        key={index}
-                                        className={`indicator-dot ${index === currentImageIndex ? 'active' : ''}`}
-                                    />
-                                ))}
-                            </div>
-                        )} */}
-
-
-
                         </div>
 
                         <div className="quick-actions">
-                            {/* <button
-                            className={`action-buttons add-cart-btn ${cartAnimation ? 'cart-animation' : ''}`}
-                            onClick={addItemToCart}
-                            aria-label="Add to Cart"
-                            title="Add to Cart"
-                        >
-                            <span className="add-button-text">{isInCart ? 'In Cart' : 'Add to Cart'}</span>
-                        </button> */}
-
                             <button
                                 className={`action-button wish-btn ${heartAnimation ? 'heart-animation' : ''}`}
                                 onClick={toggleWishlist}
@@ -354,6 +310,7 @@ const ProductCard = ({ item }) => {
                                     size={14}
                                     fill={isWishlisted ? '#dc3545' : 'none'}
                                     color={isWishlisted ? '#dc3545' : 'currentColor'}
+                                    className="transition-colors duration-200"
                                 />
                             </button>
                         </div>
@@ -368,14 +325,16 @@ const ProductCard = ({ item }) => {
                         </div>
                     </div>
 
-                    <button className='product-addToCart' onClick={addItemToCart}>   {isInCart ? "In Cart" : "Add to Cart"} </button>
-
+                    <button
+                        className='product-addToCart'
+                        onClick={addItemToCart}
+                    >
+                        {isInCart ? "In Cart" : "Add to Cart"}
+                    </button>
                 </div>
 
                 <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600&display=swap');
-                @import url('https://fonts.googleapis.com/css2?family=Gloock&family=Lato:wght@100;300;400;600;700&display=swap');
-                
+
                 .card-container {
                     width: 100%;
                     max-width:400px;
@@ -649,8 +608,7 @@ const ProductCard = ({ item }) => {
   transform: translateX(-50%);
   padding: 5px 10px;
   font-size: 12px;
-  background: var(--addtocart-product-color);
-  color: var(--green-color);
+ background: linear-gradient(135deg, pink 80%, pink 70%);
   border: none;
   font-weight:bold;
   border-radius: 4px;

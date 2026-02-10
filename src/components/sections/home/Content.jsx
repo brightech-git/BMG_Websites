@@ -28,25 +28,6 @@ import { useFeaturedBanner } from "../../../hook/featuredBanner/useFeaturedBanne
 import { useFestivalBanner } from "../../../hook/banner/useFestivalBanner";
 import HeroBanner from "../../../component/banner/HeroBanner";
 import GridBanner from "../../../component/banner/StackBanner";
-import img1 from '../../../assets/images/Her_10_1_Desktop.webp';
-import img2 from '../../../assets/images/Him_12_Desktop.webp';
-import img3 from '../../../assets/images/2.allyours_desktop_1.webp';
-import img4 from '../../../assets/images/Couple_Bands_1_2.webp';
-import img5 from '../../../assets/images/px_2.webp';
-
-import image1 from '../../../assets/images/grid_1.1.jpeg';
-import image6 from '../../../assets/images/grid_1.2.jpeg';
-import image2 from '../../../assets/images/grid_2.1.jpeg';
-import image3 from '../../../assets/images/grid_2.2.jpeg';
-import image4 from '../../../assets/images/grid_2.3.jpeg';
-import image5 from '../../../assets/images/grid_2.4.jpeg';
-
-import images1 from '../../../assets/images/img1.jpeg';
-import images2 from '../../../assets/images/img2.jpeg';
-import images3 from '../../../assets/images/img3.jpeg';
-import images4 from '../../../assets/images/img4.jpeg';
-
-
 
 const Content = () => {
 
@@ -80,7 +61,7 @@ const Content = () => {
     const { data: budgetBanner, isLoading: budgerLoading, isError: budgetError } = useBudgetBanners();
 
     // Ensure it's an array and take only first 4 items
-    const budgetBanners = budgetBanner?.data?.budget_banner;
+    const budgetBanners = budgetBanner?.data;
 
     console.log(budgetBanners, 'budgetBanners')
 
@@ -148,73 +129,45 @@ const Content = () => {
 
                 {/* 🌟 Hero Section (no animation wrapper — stays full width) */}
                 <Banner banners={banners} isLoading={mainBannerLoading} />
+                {budgetBanners &&
+                    Object.keys(budgetBanners).map((key) => {
+                        const banner = budgetBanners[key];
 
-                {budgetBanners && (
-                    <HeroBanner
-                        title={budgetBanners.title}
-                        description={budgetBanners.description}
-                        backgroundColor={budgetBanners.backgroundColor}
-                        centered={budgetBanners.centered}
-                        gap={budgetBanners.gap}
-                        full={budgetBanners.full}
+                        console.log(banner,'bannerbanner')
+                        // Skip invisible banners
+                        if (!banner.isVisible) return null;
 
-                        images={(budgetBanners?.images) ? budgetBanners.images : []}
+                        return banner.isGrid ? (
+                            <GridBanner
+                                key={banner.imageKey || key}
+                                title={banner.title}
+                                centered={banner.centered}
+                                gap={banner.gap}
+                                full={banner.full}
+                                backgroundColor={banner.backgroundColor}
+                                images={banner.images || []}
+                                desktopLayout={banner.desktopLayout || { columns: [1, 1], rows: 1 }}
+                                mobileLayout={banner.mobileLayout || { columns: [1, 1, 1], rows: 1 }}
+                            />
+                        ) : (
+                            <HeroBanner
+                                key={banner.imageKey || key}
+                                title={banner.title}
+                                description={banner.description}
+                                backgroundColor={banner.backgroundColor}
+                                centered={banner.centered}
+                                gap={banner.gap}
+                                full={banner.full}
+                                images={banner.images || []}
+                                desktopColumns={banner.desktopLayout?.columns?.length || 2}
+                                desktopRatio={banner.defaultRatio || "16/7.3"}
+                                defaultRatio={banner.defaultRatio || "16/7.3"}
+                                mobileRows={banner.mobileLayout?.rows || [1]}
+                                mobileRatio={banner.mobileRatio || "16/7.3"}
+                            />
+                        );
+                    })}
 
-                        desktopColumns={Number(budgetBanners.desktopColumns) || 2}
-                        desktopRatio="16 / 7.3"
-                        defaultRatio="16/7.3" // All images use this ratio
-                        mobileRows={budgetBanners.mobileRows || [1]}
-                        mobileRatio="16 / 7.3"
-                    />
-                )}
-               
-                <GridBanner
-                    title="Hero Banner"
-                    centered
-                    gap={false}
-
-                    images={[
-                        { url: image1 }, // 👈 BIG image
-                        { url: image2 },
-                        { url: image3 },
-                        { url: image6 },
-                        { url: image4 },
-                        { url: image5 },
-                       
-                    ]}
-                    desktopLayout={{
-                        columns: [2, 1, 1], // 3 columns
-                        rows: 2,            // 2 rows
-                    }}
-                    mobileLayout={{
-                        columns: [2, 1, 1], // 3 columns
-                        rows: 2,            // 2 rows
-                    }}
-                />
-
-                <GridBanner
-                    title="Hero Banner"
-                    centered
-                    gap={false}
-
-                    images={[
-                        { url: images1 }, // 👈 BIG image
-                        { url: images2 },
-                        { url: images3 },
-                        { url: images4 },
-
-                    ]}
-                    desktopLayout={{
-                        columns: [15, 11], // 3 columns
-                        rows: 1,            // 2 rows
-                    }}
-                    mobileLayout={{
-                        columns: [2, 1, 1], // 3 columns
-                        rows: 2,            // 2 rows
-                    }}
-                />
-
-              
                 <Category banners={occasionbanners} isLoading={occasionLoading} error={occasionbannersError} />
 
 
@@ -226,7 +179,7 @@ const Content = () => {
                 <Category1 banners={offerBanners} isLoading={offerLoading} error={offerError} />
 
 
-                <Condos budgetBanners={budgetBanners} isLoading={budgerLoading} isError={budgetError} />
+                {/* <Condos budgetBanners={budgetBanners} isLoading={budgerLoading} isError={budgetError} /> */}
 
 
 

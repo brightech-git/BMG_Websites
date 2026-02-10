@@ -1,14 +1,21 @@
 import publicUrl from '../api/publicUrl'; // axios instance with Authorization header
 
 // Add to favorites
-export const addFavorite = async (itemSno) => {
-  const response = await publicUrl.post(`/favorites/add?itemSno=${itemSno}`);
-  return response.data;
+export const addFavorite = async (wishlistData) => {
+  try {
+    console.log("Data for payload:", wishlistData);
+    const response = await publicUrl.post(`/wishlist`, wishlistData);
+    return response.data;
+  } catch (err) {
+    console.error("Failed to add favorite:", err.response?.data || err.message);
+    throw new Error(err.response?.data?.message || "Failed to add favorite");
+  }
 };
 
+
 // Remove from favorites
-export const removeFavorite = async (itemSno) => {
-  const response = await publicUrl.delete(`/favorites/remove/${itemSno}`);
+export const removeFavorite = async (tagKey) => {
+  const response = await publicUrl.delete(`/wishlist/${tagKey}`);
   return response.data;
 };
 
@@ -18,6 +25,6 @@ export const getFavorites = async () => {
   if(!token){
     return [];
   }
-  const response = await publicUrl.get('/favorites/list');
+  const response = await publicUrl.get('/wishlist');
   return response.data;
 };

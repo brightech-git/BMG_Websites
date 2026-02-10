@@ -10,7 +10,7 @@ import Content from '../sections/shopleft/Content';
 import SmoothScroll from '../layouts/SmoothScroll';
 import { useDocumentMeta } from '../../utils/meta/useMeta';
 
-const Shopleft = () => {
+const ProductsPage = () => {
   const location = useLocation();
   const { itemCtrName } = queryString.parse(location.search);
 
@@ -38,4 +38,4 @@ const Shopleft = () => {
   );
 };
 
-export default Shopleft;
+export default ProductsPage;

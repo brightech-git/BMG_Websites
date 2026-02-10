@@ -5,7 +5,7 @@ import './Category1.css';
 
 
 const CategoryCard = ({ item }) => {
-    const navigate= useNavigate();
+    const navigate = useNavigate();
     const baseUrl = "https://app.bmgjewellers.com";
 
     const handleShopNow = (itemCtrName, subItemName) => {
@@ -46,13 +46,13 @@ const CategoryCard = ({ item }) => {
                     e.target.src = '/fallback-image.jpg';
                 }}
             />
-           
+
         </div>
     );
 };
 
 const Category1 = ({ banners, isLoading, error }) => {
- 
+
     if (isLoading) {
         return (
             <div className="offer-container">

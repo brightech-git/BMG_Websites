@@ -8,7 +8,7 @@ import Content from '../sections/shopdetail/Content';
 import SmoothScroll from '../layouts/SmoothScroll';
 import { useDocumentMeta } from '../../utils/meta/useMeta';
 
-const Shopdetail = () => {
+const ProductDetailPage = () => {
     // Set the page title and meta description
     useDocumentMeta({
         title: 'BMG | Shop Detail',
@@ -27,4 +27,4 @@ const Shopdetail = () => {
     );
 };
 
-export default Shopdetail;
+export default ProductDetailPage;

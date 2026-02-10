@@ -47,7 +47,7 @@ const ProductSkeleton = () => (
   </div>
 );
 
-const Shopinfo = ({ sno, Authenticated }) => {
+const ProductInfo = ({ tagKey, Authenticated }) => {
   const isAuthenticated = useSelector(state => state.user.isAuthenticated) || Authenticated;
   const mobileNumber = useSelector(state => state.user.user?.contactNumber);
   const navigate = useNavigate();
@@ -57,17 +57,24 @@ const Shopinfo = ({ sno, Authenticated }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const shareRef = useRef();
 
-  const { data: product, isLoading, error } = useSingleProductQuery(sno);
+  const pincode = localStorage.getItem('userPincode');
+  const { data: product, isLoading, error } = useSingleProductQuery(tagKey);
+  console.log("product data", product);
 
 
   const [cartLoading, setCartLoading] = useState(false);
-  const [buyLoading, setBuyLoading] = useState(false);
   const [cartSuccess, setCartSuccess] = useState(false);
-  const [buySuccess, setBuySuccess] = useState(false);
 
   const { addItem } = useRecentlyViewed();
   const { cartItems, addToCartHandler } = useCart();
   const { data: favorites } = useFavorites();
+
+  const cartProducts = cartItems?.data?.products;
+  console.log(cartProducts,'cartProducts')
+  const favoriteProducts = favorites?.data?.products;
+
+
+  console.log(favorites ,'favorites');
   const addFavorite = useAddFavorite();
   const removeFavorite = useRemoveFavorite();
 
@@ -80,14 +87,20 @@ const Shopinfo = ({ sno, Authenticated }) => {
 
 
   useEffect(() => {
-    if (product?.SNO && favorites?.data) {
-      setIsWishlisted(favorites.data.includes(product.SNO));
+    if (product?.TAGKEY && favoriteProducts?.length) {
+      // Check if product.TAGKEY exists in favoriteProducts' ItemTagSno
+      const isFav = favoriteProducts.some(
+        (fav) => fav.ItemTagSno === product.TAGKEY
+      );
+      setIsWishlisted(isFav);
+      console.log(favoriteProducts, product?.TAGKEY, 'isWishlisted:', isFav);
     }
-  }, [product, favorites]);
+  }, [product, favoriteProducts]);
+
 
   useEffect(() => {
-    if (product?.SNO) addItem(product.SNO);
-  }, [product?.SNO, addItem]);
+    if (product?.TAGKEY) addItem(product.TAGKEY);
+  }, [product?.TAGKEY, addItem]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -105,8 +118,9 @@ const Shopinfo = ({ sno, Authenticated }) => {
 
 
   const isInCart =
-    Array.isArray(cartItems?.data) &&
-    cartItems.data.some((item) => item.itemTagSno === product?.SNO);
+    Array.isArray(cartProducts) &&
+    cartProducts.some((item) => item.ItemTagSno === product?.TAGKEY);
+
 
   const handleAddToCart = (e) => {
     e.preventDefault();
@@ -140,11 +154,9 @@ const Shopinfo = ({ sno, Authenticated }) => {
       : "";
 
     addToCartHandler({
-      itemSno: product.SNO,
-      itemTagSno: product.SNO,
-      itemCtrName: product.ITEMCTRNAME,
-      price: getPrice(),
-      image: getEncodedImageUrl(image),
+      tagKey:product.TAGKEY,
+      quantity:1,
+      shippingPincode: pincode || '360004'
     });
 
     toast.success("Added to cart!");
@@ -181,19 +193,43 @@ const Shopinfo = ({ sno, Authenticated }) => {
   };
 
   const handleWishlist = (e) => {
-    e.preventDefault(); e.stopPropagation();
-    if (!isAuthenticated) return toast.error("Please login") && navigate("/login");
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!isAuthenticated) {
+      toast.error("Please login");
+      navigate("/login");
+      return;
+    }
 
     setAnimateHeart(true);
-    const mutate = isWishlisted ? removeFavorite : addFavorite;
-    mutate.mutate(product.SNO, {
-      onSuccess: () => {
-        setIsWishlisted(!isWishlisted);
-        toast.success(isWishlisted ? "Removed from wishlist" : "Added to wishlist");
-      },
-      onSettled: () => setTimeout(() => setAnimateHeart(false), 600),
-    });
+
+    if (isWishlisted) {
+      // Remove from wishlist
+      removeFavorite.mutate(product.TAGKEY, {
+        onSuccess: () => {
+          setIsWishlisted(false);
+          toast.info("💔 Removed from wishlist");
+        },
+        onSettled: () => setTimeout(() => setAnimateHeart(false), 600),
+      });
+    } else {
+      // Add to wishlist
+      const wishlistData = {
+        tagKey: product.TAGKEY, // or product.TAGKEY if that's the correct key
+        quantity: 1
+      };
+
+      addFavorite.mutate(wishlistData, {
+        onSuccess: () => {
+          setIsWishlisted(true);
+          toast.success("❤️ Added to wishlist");
+        },
+        onSettled: () => setTimeout(() => setAnimateHeart(false), 600),
+      });
+    }
   };
+
 
   const images = product?.ImagePath ? JSON.parse(product.ImagePath).map(getEncodedImageUrl) : [];
   const videos = product?.VideoPath ? JSON.parse(product.VideoPath).map(getEncodedImageUrl) : [];
@@ -259,7 +295,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
                       <div className="absolute right-0 mt-1 w-40 bg-white rounded-lg shadow-lg border border-gray-200 p-4 z-0 animate-fadeIn">
                         <div className="grid grid-cols-2 gap-4 text-center">
                           <ShareButtons
-                            sno={sno}
+                            tagKey={tagKey}
                           />
 
                         </div>
@@ -294,7 +330,7 @@ const Shopinfo = ({ sno, Authenticated }) => {
 {/* Meta Info */}
               {(product.NETWT || product.PURITY || product.MaterialFinish || product.ITEMID) && (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-2 border-y border-gray-200">
-                  {product.NETWT && <div><span className="text-gray-600">Weight:</span> <strong>{product.NETWT.toFixed(3)}g</strong></div>}
+                  {/* {product.NETWT && <div><span className="text-gray-600">Weight:</span> <strong>{product.NETWT.toFixed(3)}g</strong></div>} */}
                   {product.PURITY && <div><span className="text-gray-600">Purity:</span> <strong>{product.PURITY}%</strong></div>}
                   {product.MaterialFinish && <div><span className="text-gray-600">Material:</span> <strong>{product.MaterialFinish}</strong></div>}
                   {(product.ITEMID || product.TAGNO) && <div><span className="text-gray-600">SKU:</span> <strong>{product.ITEMID}-{product.TAGNO}</strong></div>}
@@ -382,4 +418,4 @@ const Shopinfo = ({ sno, Authenticated }) => {
   );
 };
 
-export default Shopinfo;
+export default ProductInfo;

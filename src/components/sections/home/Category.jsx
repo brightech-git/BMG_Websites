@@ -89,7 +89,7 @@ const Category = ({ banners, isLoading, error }) => {
         <div className="category-container">
             <div className='title-container'>
                 <h4 className='occ-title'> Shop By Occasion</h4>
-              
+
             </div>
 
 

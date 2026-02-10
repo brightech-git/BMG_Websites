@@ -1,10 +1,19 @@
 // src/components/layouts/Header.js
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import classNames from "classnames";
-import { ChevronDown, ShoppingCart, Menu, User, Heart, Video } from "lucide-react";
+import {
+  ChevronDown,
+  ShoppingCart,
+  Menu,
+  User,
+  Heart,
+  Video,
+  LogOut,
+  LogIn,
+  MapPin
+} from "lucide-react";
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
-import "../../assets/css/header.css";
+import { motion, AnimatePresence } from "framer-motion";
 import Mobilemenu from "./Mobilemenu";
 import Logo from "./logo.png";
 import ItemSearch from "./Search";
@@ -13,653 +22,573 @@ import { useDispatch } from "react-redux";
 import { logout } from "../../redux/slices/userSlice";
 import { useFavorites } from "../../hook/favorites/useFavoritesQuery";
 import { useCart } from "../../hook/cart/useCartQuery";
-import { useRatesQuery } from "../../hook/rate/useRatesQuery"; // Add this import
-import './Header.css';
-import { useHeaderData } from "../../hook/header/useNavData";
-import { motion, AnimatePresence } from "framer-motion";
+import { useRatesQuery } from "../../hook/rate/useRatesQuery";
 import { useCompanyDetails } from "../../context/clientDetails/clientDetialContext";
-import silvericon from '../../assets/videos/silverIcon.png';
-import goldicon from '../../assets/videos/goldIcon.png';
-import { resetCartState } from "../../redux/slices/cartSlice";
+import PincodeModal from "./DeliveryPincodeHeader";
+import useHeaderNavByShopId from "./headerNavByShopId";
+import './HeaderScroll.css'
+import RatesDropdown from "./RatesDropdown";
+
 
 const Header = ({ isAuthenticated }) => {
   const width = useScreenWidth();
   const navigate = useNavigate();
-  const [isTop, setIsTop] = useState(false);
-  const [classmethod, setClassmethod] = useState(false);
-  const [togglemethod, setTogglemethod] = useState(false);
-  const [togglecart, setTogglecart] = useState(false);
-  const [activeTab, setActiveTab] = useState(0);
+  const location = useLocation();
   const dispatch = useDispatch();
-  const { data } = useHeaderData();
-  const [isScrolled, setIsScrolled] = useState(false);
+
+  const headerNavData = useHeaderNavByShopId();
+
+  const headerRef = useRef(null);
+  const [scrollY, setScrollY] = useState(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [isCategoriesHovered, setIsCategoriesHovered] = useState(false);
+  const [pincode, setPincode] = useState(localStorage.getItem("userPincode") || "");
+  const [headerHeight, setHeaderHeight] = useState(0);
+  const [shouldShow, setShouldShow] = useState(true);
+  const [isNavigating, setIsNavigating] = useState(false);
+
+
   const { details } = useCompanyDetails();
 
-  const location = useLocation();
-  const getMetalIcon = (key) => {
-    const k = key.toLowerCase();
-    console.log(k, 'rates')
-    if (k.includes("silver")) return silvericon;
-    if (k.includes("gold")) return goldicon;
-    return "/icons/gold.png"; // deault gold
-  };
+  // Queries
+  const { data: ratesData } = useRatesQuery();
+  const { data: favoritesData, isLoading: favoritesLoading } = useFavorites({ enabled: isAuthenticated });
+
+  console.log(favoritesData,'favoritesData')
+  const { cartItems, isLoading: cartLoading } = useCart({ enabled: isAuthenticated });
+
+  // Measure header height on mount and resize
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
+    const updateHeaderHeight = () => {
+      if (headerRef.current) {
+        setHeaderHeight(headerRef.current.offsetHeight);
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    updateHeaderHeight();
+    window.addEventListener('resize', updateHeaderHeight);
+
+    return () => window.removeEventListener('resize', updateHeaderHeight);
   }, []);
 
-  const companyData = details || {};
-  console.log(companyData, 'detailsAboutcompany');
-  const NavData = data
-  //console.log('NacData', NavData)
+  // Reset header visibility on page navigation
+  useEffect(() => {
+    setShouldShow(true);
+    setIsNavigating(false);
+  }, [location.pathname]);
 
-  const baseUrl = "https://app.bmgjewellers.com"
+  // Smooth scroll tracking with RAF for better performance
+  useEffect(() => {
+    let ticking = false;
+    let lastScrollTop = 0;
 
-  // Add rates query
-  const {
-    data: ratesData,
-    isLoading: ratesLoading,
-    error: ratesError,
-  } = useRatesQuery();
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          setScrollY(currentScrollY);
 
-  const {
-    data: favoritesData,
-    error: favoritesError,
-    refetch: refetchFavorites,
-    isLoading: favoritesLoading,
-  } = useFavorites({ enabled: isAuthenticated });
+          // Don't hide header during navigation or when at top
+          if (currentScrollY === 0 || isNavigating) {
+            setShouldShow(true);
+          } else if (currentScrollY > 100) {
+            if (currentScrollY > lastScrollTop) {
+              // Scrolling down
+              setShouldShow(false);
+            } else {
+              // Scrolling up
+              setShouldShow(true);
+            }
+          } else {
+            setShouldShow(true);
+          }
 
-  const {
-    cartItems,
-    error: cartError,
-    isLoading: cartLoading,
-  } = useCart({
-    enabled: isAuthenticated,
-  });
+          lastScrollTop = currentScrollY;
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
 
-  const wishlistCount = favoritesLoading
-    ? 0
-    : isAuthenticated && Array.isArray(favoritesData?.data)
-      ? favoritesData.data.length
-      : 0;
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isNavigating]);
 
-  const cartCount = cartLoading
-    ? 0
-    : isAuthenticated && Array.isArray(cartItems?.data)
-      ? cartItems.data.length
-      : 0;
+  // Update pincode in localStorage
+  useEffect(() => {
+    if (pincode) {
+      localStorage.setItem("userPincode", pincode);
+    }
+  }, [pincode]);
 
-  const addClass = () => setClassmethod(true);
-  const removeClass = () => setClassmethod(false);
-  const toggleClass = () => setTogglemethod((prev) => !prev);
-  const toggleCartm = () => setTogglecart((prev) => !prev);
-
-  const headerNavData = NavData || {
-    shopId: 2,
-    menuSections: [
-      {
-        label: "Shop by Category",
-        items: [
-          {
-            name: "Rings",
-            value: "rings",
-            keyName: "itemCtrName",
-            keyValue: "rings",
-            image: "/assets/videos/goldIcon.png",
-          },
-          {
-            name: "Necklaces",
-            value: "necklaces",
-            keyName: "itemCtrName",
-            keyValue: "necklaces",
-            image: "/assets/videos/goldIcon.png",
-          },
-          {
-            name: "Bracelets",
-            value: "bracelets",
-            keyName: "itemCtrName",
-            keyValue: "bracelets",
-            image: "/assets/videos/goldIcon.png",
-          },
-          {
-            name: "Earrings",
-            value: "earrings",
-            keyName: "itemCtrName",
-            keyValue: "earrings",
-            image: "/assets/videos/goldIcon.png",
-          },
-        ],
-      },
-      {
-        label: "Shop by Price",
-        items: [
-          {
-            label: "Under ₹199",
-            keyName: "maxGrandTotal",
-            keyValue: 199,
-            image: "/assets/videos/goldIcon.png",
-          },
-          {
-            label: "Under ₹299",
-            keyName: "maxGrandTotal",
-            keyValue: 299,
-            image: "/assets/videos/goldIcon.png",
-          },
-          {
-            label: "Under ₹399",
-            keyName: "maxGrandTotal",
-            keyValue: 399,
-            image: "/assets/videos/goldIcon.png",
-          },
-          {
-            label: "Under ₹599",
-            keyName: "maxGrandTotal",
-            keyValue: 599,
-            image: "/assets/videos/goldIcon.png",
-          },
-        ],
-      },
-      {
-        label: "Shop by Gender",
-        items: [
-          {
-            name: "Men",
-            value: "men",
-            keyName: "gender",
-            keyValue: "men",
-            image: "/assets/videos/goldIcon.png",
-          },
-          {
-            name: "Women",
-            value: "women",
-            keyName: "gender",
-            keyValue: "women",
-            image: "/assets/videos/goldIcon.png",
-          },
-          {
-            name: "Kids",
-            value: "kids",
-            keyName: "gender",
-            keyValue: "kids",
-            image: "/assets/videos/goldIcon.png",
-          },
-        ],
-      },
-      {
-        label: "Featured Collections",
-        items: [
-          {
-            name: "Trending",
-            keyName: "top_trending",
-            keyValue: "true",
-            image: "/assets/videos/goldIcon.png",
-          },
-          {
-            name: "New Arrivals",
-            keyName: "new_arrivals",
-            keyValue: "true",
-            image: "/assets/videos/goldIcon.png",
-          },
-          {
-            name: "Best Designs",
-            keyName: "best_design",
-            keyValue: "true",
-            image: "/assets/videos/goldIcon.png",
-          },
-          {
-            name: "Featured",
-            keyName: "featured",
-            keyValue: "true",
-            image: "/assets/videos/goldIcon.png",
-          },
-        ],
-      },
-      {
-        label: "Special Editions",
-        items: [
-          {
-            name: "Bridal",
-            keyName: "itemCtrName",
-            keyValue: "bridal",
-            image: "/assets/videos/goldIcon.png",
-          },
-          {
-            name: "Clearance",
-            keyName: "itemCtrName",
-            keyValue: "clearance",
-            image: "/assets/videos/goldIcon.png",
-          },
-        ],
-      },
-      {
-        label: "Current Offers",
-        items: [
-          {
-            name: "50% Off",
-            keyName: "subItemName",
-            keyValue: "matching sets",
-            image: "/assets/videos/goldIcon.png",
-          },
-          {
-            name: "Buy 1 Get 1",
-            keyName: "subItemName",
-            keyValue: "Buy 2 Get 1",
-            image: "/assets/videos/goldIcon.png",
-          },
-        ],
-      },
-    ],
+  // Set navigating state when clicking links
+  const handleNavigation = (e) => {
+    setIsNavigating(true);
   };
 
+  // Derived states from scroll position
+  const isTopBarHidden = scrollY > 30;
+  const isSticky = scrollY > 100;
+
+  // Calculate opacity and translate based on scroll
+  const headerTranslate = shouldShow ? 0 : -5;
+
+  // Calculate counts
+  const wishlistCount = favoritesLoading ? 0 : favoritesData?.data?.totalItems;
+  const cartCount = cartLoading ? 0 : cartItems?.data?.totalItems;
+
+  
 
   const handleLogout = (e) => {
     e.preventDefault();
     e.stopPropagation();
-
-    dispatch(logout()); // Clear user state
-    navigate("/login"); // Navigate to login page
-    window.location.reload(); // Reset app state (optional)
+    dispatch(logout());
+    navigate("/login");
   };
 
-
-
-  const handleClick = (keyName, keyValue) => {
+  const handleCategoryClick = (keyName, keyValue) => {
+    setIsNavigating(true);
     const queryParams = new URLSearchParams();
     queryParams.append(keyName, keyValue);
     navigate(`/products-page?${queryParams.toString()}`);
+    setIsCategoriesHovered(false);
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsTop(window.scrollY > 60);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-  const [animationType, setAnimationType] = useState('pulse'); // Default animation
-  const [isHovered, setIsHovered] = useState(false);
+  const navItems = [
+    { path: "/", label: "Home" },
+    { path: "/products-page", label: "Shop" },
+    { path: "/contactstore", label: "Contact" },
+  ];
 
-  // Optional: Cycle through animations for demonstration
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setAnimationType(prev => {
-        const animations = ['pulse', 'glow', 'bounce', 'shake', 'color-change'];
-        const currentIndex = animations.indexOf(prev);
-        return animations[(currentIndex + 1) % animations.length];
-      });
-    }, 3000);
+  const baseUrl = "https://app.bmgjewellers.com";
 
-    return () => clearInterval(interval);
-  }, []);
+
 
   return (
-    <Fragment>
+    <>
+      <style>
+        {`
+          body {
+            transition: padding-top 0.3s ease;
+          }
+          
+          @keyframes slideDown {
+            from {
+              transform: translateY(-100%);
+            }
+            to {
+              transform: translateY(0);
+            }
+          }
+          
+          @keyframes slideUp {
+            from {
+              transform: translateY(0);
+            }
+            to {
+              transform: translateY(-100%);
+            }
+          }
+        `}
+      </style>
+
       <header
-        className={`header-three header-absolute sticky-header sigma-header ${isTop ? "sticky-active" : ""
+        ref={headerRef}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out ${isSticky ? 'bg-white shadow-lg' : 'bg-gradient-to-b from-white/95 via-white/90 to-white '
           }`}
-        id="header"
+        style={{
+          transform: `translateY(${headerTranslate}px)`,
+          backdropFilter: 'blur(10px)',
+        }}
       >
-        {width > 991 && (
-          <div className={isScrolled ? "header-top-hide" : "header-top"}>
-
-            <div className="header-top-content">
-
-              <div
-                className={`welcome-section welcome-${animationType} ${isHovered ? 'welcome-hover' : ''}`}
-                onClick={() => navigate("/appointment")}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
+        {/* Top Bar - Desktop Only */}
+        <motion.div
+          className={`bg-gradient-to-r from-orange-600 to-orange-500 p-1 text-white overflow-hidden ${width > 991 ? '' : 'hidden'
+            }`}
+          animate={{
+            height: isTopBarHidden ? 0 : 'auto',
+            opacity: isTopBarHidden ? 0 : 1
+          }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+        >
+          <div className="mx-auto px-2 py-2">
+            <div className="flex items-center justify-between">
+              {/* BMG Live Button */}
+              <motion.button
+                onClick={() => {
+                  setIsNavigating(true);
+                  navigate("/appointment");
+                }}
+                className="flex items-center gap-2 px-4 py-1.5 bg-gradient-to-r from-amber-700 to-amber-600 rounded-full hover:from-amber-600 hover:to-amber-500 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <Video size={22} />
-                <span className="welcome-text">
-                  BMG Live
-                </span>
+                <Video size={18} className="animate-pulse" />
+                <span className="font-semibold tracking-wide">BMG Live</span>
+              </motion.button>
 
-              </div>
+              {/* Rates and Auth */}
+              <div className="flex items-center gap-6">
+                {/* Rates */}
+                <RatesDropdown ratesData={ratesData} />
 
-
-
-
-
-              <div className="header-top-right-container">
-                <div className="rates-horizontal-container">
-                  {ratesData && Object.entries(ratesData).map(([key, value], index) => (
-                    <div key={index} className="rate-item-horizontal">
-                      <img src={getMetalIcon(key)} className="rate-icon coin " alt="" />
-
-                      <span className="rate-text primary-text">
-                        {key.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
-                        &nbsp;- ₹ {value}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-                <div className="auth-actions">
+                {/* Auth Button */}
+                <div>
                   {isAuthenticated ? (
-                    <div className="authLogin-button logout-trigger" onClick={handleLogout}>
-                      <span className="auth-icon logout-icon"></span>
-                      <span className="auth-text">Log Out</span>
-                    </div>
-                  ) : (
-                    <div
-                      className="authLogin-button login-trigger"
-                      onClick={() => navigate("/login")}
+                    <motion.button
+                      onClick={handleLogout}
+                      className="flex items-center gap-2 px-4 py-1.5 bg-gradient-to-r from-red-600 to-red-500 rounded-full hover:from-red-500 hover:to-red-400 transition-all duration-300 hover:scale-105 active:scale-95"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                     >
-                      <span className="auth-icon login-icon">🔐</span>
-                      <span className="auth-text">Log In</span>
-                    </div>
-
+                      <LogOut size={16} />
+                      <span className="font-medium">Log Out</span>
+                    </motion.button>
+                  ) : (
+                    <motion.button
+                      onClick={() => {
+                        setIsNavigating(true);
+                        navigate("/login");
+                      }}
+                      className="flex items-center gap-2 px-4 py-1.5 bg-gradient-to-r from-green-600 to-green-500 rounded-full hover:from-green-500 hover:to-green-400 transition-all duration-300 hover:scale-105 active:scale-95"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <LogIn size={16} />
+                      <span className="font-medium">Log In</span>
+                    </motion.button>
                   )}
                 </div>
               </div>
             </div>
-
           </div>
-        )}
-        <div className={`${isScrolled ? "main-header" : ""}`}>
-          <div className="main-menu-area">
+        </motion.div>
 
-            <div className="nav-container d-flex align-items-center  justify-content-between">
-              <div className="nav-menu d-lg-flex align-items-center justify-content-between">
-                <div className="navbar-close">
+        {/* Main Header */}
+        <div className={`border-b border-gray-200/50 transition-all duration-300 ${isSticky ? 'shadow-md' : ''
+          }`}>
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-between py-1 lg:py-3">
+              {/* Logo */}
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
+                <Link to="/" onClick={handleNavigation} className="flex items-center flex-shrink-0">
+                  <img
+                    src={Logo}
+                    alt="BMG Jewellers"
+                    className="w-20 lg:w-28 h-auto transition-all duration-300"
+                  />
+                </Link>
+              </motion.div>
 
-                </div>
-                <div className="site-logo site-logo-text">
-                  <Link to="/">
-                    <img
-                      src={Logo}
-                      alt="Diamond Icon"
-                      style={{
-                        width: "100px",
-                        height: "auto",
-                        marginRight: "10px",
-                      }}
-                    />
-                  </Link>
-                </div>
-                <div className="sigma-header-nav">
-                  <div className="container">
-                    <div className="sigma-header-nav-inner">
-                      <nav>
-                        <ul className="sigma-main-menu">
-                          <li className={location.pathname === "/" ? "menu-item-active" : "menu-item"}>
-                            <Link to="/">Home</Link>
-                          </li>
+              {/* Desktop Navigation */}
+              {width > 991 && (
+                <nav className="flex-1 flex items-center justify-between ml-8">
+                  {/* Left Nav Items */}
+                  <div className="flex items-center space-x-6 xl:space-x-8">
+                    {navItems.map((item) => (
+                      <motion.div
+                        key={item.path}
+                        whileHover={{ y: -2 }}
+                        transition={{ type: "spring", stiffness: 400 }}
+                      >
+                        <Link
+                          to={item.path}
+                          onClick={handleNavigation}
+                          className={`font-medium sm:text-base no-underline transition-all duration-200 hover:text-amber-700 relative group ${location.pathname === item.path
+                            ? 'text-amber-700'
+                            : 'text-gray-700'
+                            }`}
+                        >
+                          {item.label}
+                          <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-700 transition-all duration-300 group-hover:w-full ${location.pathname === item.path ? 'w-full' : ''
+                            }`} />
+                        </Link>
+                      </motion.div>
+                    ))}
 
+                    {/* Categories Dropdown */}
+                    <div
+                      className="relative group"
+                      onMouseEnter={() => setIsCategoriesHovered(true)}
+                      onMouseLeave={() => setIsCategoriesHovered(false)}
+                    >
+                      <motion.button
+                        className="flex items-center sm:text-base font-medium text-gray-700 hover:text-amber-700 transition-all duration-200 relative group"
+                        whileHover={{ y: -2 }}
+                        transition={{ type: "spring", stiffness: 400 }}
+                      >
+                        Categories
+                        <ChevronDown
+                          size={16}
+                          className={`ml-1 transition-transform duration-300 ${isCategoriesHovered ? 'rotate-180' : ''
+                            }`}
+                        />
+                        <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-700 transition-all duration-300 group-hover:w-full" />
+                      </motion.button>
 
-                          <li className={location.pathname === "/#" ? "menu-item-active" : "menu-item  menu-item-has-children menu-item-has-megamenu"}>
-                            <Link to="#">
-                              Categories{" "}
-                              <ChevronDown size={16} className="dropdown-icon" />
-                            </Link>
+                      {/* Mega Menu */}
+                      <AnimatePresence>
+                        {isCategoriesHovered && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                            transition={{
+                              type: "spring",
+                              stiffness: 300,
+                              damping: 25,
+                              mass: 0.8
+                            }}
+                            className="absolute w-[800px] left-0 top-full mt-2 bg-white shadow-2xl rounded-lg p-6 z-50"
 
-                            <div className="sub-menu">
-                              <div className="container">
-                                <div className="row">
-                                  {/* Left side nav tabs */}
-                                  <div className="col-lg-3">
-                                    <ul className="sigm-megamenu-nav nav nav-tabs">
-                                      {headerNavData?.menuSections?.map((section, index) => (
-                                        <li className="nav-item" key={section.label}>
-                                          <Link
-                                            to="#"
-                                            className={`nav-link ${activeTab === index ? "active" : ""
-                                              }`}
-                                            onClick={() => setActiveTab(index)}
-                                            onMouseEnter={() => setActiveTab(index)}
-                                          >
-                                            {section.label}
-                                          </Link>
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  </div>
-
-                                  {/* Right side tab content */}
-                                  <div className="col-lg-9">
-                                    <div className="tab-content">
-                                      {headerNavData?.menuSections?.map((section, index) => (
-                                        <div
-                                          className={`tab-pane fade ${activeTab === index ? "show active" : ""
-                                            }`}
-                                          id={`tab${index + 1}`}
-                                          key={section.label}
-                                        >
-                                          <div className="row g-1">
-                                            {section.items?.map((item, idx) => (
-                                              <div
-                                                className="col-6 col-sm-4 col-md-3 col-lg-2"
-                                                key={idx}
-                                              >
-                                                <div
-                                                  className="header-enhanced-card"
-                                                  onClick={() =>
-                                                    handleClick(item.keyName, item.keyValue)
-                                                  }
-                                                >
-                                                  {item.image && (
-                                                    <div className="menu-card-img-wrapper">
-                                                      <img
-                                                        src={`${baseUrl}${item.image}`}
-                                                        alt={item.name || item.label}
-                                                        className="menu-card-img"
-                                                        onError={(e) => {
-                                                          e.target.onerror = null;
-                                                          e.target.src = "/fallback-image.jpg";
-                                                        }}
-                                                      />
-
-                                                    </div>
-                                                  )}
-                                                  {/* <span className="menu-card-label">
-                                                      {item.name || item.label}
-                                                    </span> */}
-                                                </div>
-                                              </div>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  </div>
+                          >
+                            <div className="flex gap-2">
+                              {/* Left Tabs */}
+                              <div className="w-1/4">
+                                <div className="space-y-1">
+                                  {headerNavData.menuSections.map((section, index) => (
+                                    <motion.button
+                                      key={section.label}
+                                      onClick={() => setActiveTab(index)}
+                                      onMouseEnter={() => setActiveTab(index)}
+                                      className={`w-full text-left px-2 py-3 rounded-lg transition-all duration-200 ${activeTab === index
+                                        ? 'bg-amber-50 text-amber-700 font-medium shadow-sm'
+                                        : 'text-gray-600 hover:bg-gray-50'
+                                        }`}
+                                      whileHover={{ x: 4 }}
+                                      whileTap={{ scale: 0.98 }}
+                                    >
+                                      {section.label}
+                                    </motion.button>
+                                  ))}
                                 </div>
                               </div>
+
+                              {/* Right Content */}
+                              <div className="w-3/4">
+                                <AnimatePresence mode="wait">
+                                  <motion.div
+                                    key={activeTab}
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="grid grid-cols-4 gap-3"
+                                  >
+                                    {headerNavData.menuSections[activeTab]?.items.map((item, idx) => (
+                                      <motion.button
+                                        key={idx}
+                                        onClick={() => handleCategoryClick(item.keyName, item.keyValue)}
+                                        className="group flex flex-col items-center p-1 rounded-lg hover:bg-amber-50 transition-all duration-200 hover:shadow-sm"
+                                        whileHover={{ scale: 1.05, y: -2 }}
+                                        whileTap={{ scale: 0.95 }}
+                                      >
+                                        {item.image && (
+                                          <div className="w-20 h-20 mb-2 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                                            <img
+                                              src={`${baseUrl}${item.image}`}
+                                              alt={item.name || item.label}
+                                              className="w-20 h-20 object-cover"
+                                              onError={(e) => {
+                                                e.target.onerror = null;
+                                                e.target.src = "/fallback-image.jpg";
+                                              }}
+                                            />
+                                          </div>
+                                        )}
+                                        <span className="text-xs font-semibold text-[var(--primary-text-color)] text-center transition-colors duration-200">
+                                          {item.name || item.label}
+                                        </span>
+                                      </motion.button>
+                                    ))}
+                                  </motion.div>
+                                </AnimatePresence>
+                              </div>
                             </div>
-                          </li>
-
-
-                          <li className={location.pathname === "/products-page" ? "menu-item-active" : "menu-item"}>
-                            <Link to="/products-page">Shop</Link>
-                          </li>
-                          <li className={location.pathname === "/contactstore" ? "menu-item-active" : "menu-item"}>
-                            <Link to="/contactstore">Contact</Link>
-                          </li>
-                        </ul>
-                      </nav>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
                   </div>
-                </div>
 
-                <div className="flex w-[400px] items-center m-0 ">
-                  <ItemSearch />
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="account-btn">
-                  <Link to="/account">
-                    <User size={20} strokeWidth={1.8} />
-                  </Link>
-                </div>
-                <div className="whislist-btn">
-                  <Link to="/wishlist" className="">
-                    {wishlistCount > 0 ? (
-                      <FaHeart size={20} color={"#fa858fff"} />
-                    ) : (
-                      <Heart size={20} strokeWidth={1.8} />
-                    )}
-                    {wishlistCount > 0 && (
-                      <span className={`icon-badge ${isTop ? "sticky-active" : ""
-                        }`}>{wishlistCount}</span>
-                    )}
-                  </Link>
-                </div>
+                  {/* Right Side */}
+                  <div className="flex items-center gap-2">
+                    {/* Pincode Modal */}
+                    <PincodeModal
+                      isOpen={modalOpen}
+                      onClose={() => setModalOpen(false)}
+                      pincode={pincode}
+                      setPincode={setPincode}
+                    />
 
-                <div className="cart-btn">
-                  <Link to="/cart">
-                    {cartCount > 0 ? (
-                      <FaShoppingCart size={20} color={"#f78790ff"} />
-                    ) : (
-                      <ShoppingCart size={20} strokeWidth={1.8} />
-                    )}
-                    {cartCount > 0 && (
-                      <span className={`cart-icon-badge ${isTop ? "sticky-active" : ""
-                        }`}>{cartCount}</span>
-                    )}
-                  </Link>
-                </div>
+                    {/* Search */}
+                    <motion.div
+                      className="w-64 sm:w-80"
+                      whileHover={{ scale: 1.02 }}
+                    >
+                      <ItemSearch />
+                    </motion.div>
 
-                <div className="navbar-toggler" onClick={toggleClass}>
-                  <span />
-                  <span />
-                  <span />
-                </div>
-              </div>
-            </div>
+                    {/* Icons */}
+                    <div className="flex items-center gap-3">
+                      <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                        <Link
+                          to="/account"
+                          onClick={handleNavigation}
+                          className="p-2 text-gray-600 hover:text-amber-700 transition-all duration-200"
+                        >
+                          <User size={20} />
+                        </Link>
+                      </motion.div>
 
-          </div>
-        </div>
-        <div className="sigma-mobile-header">
-          <div className="sigma-mobile-header-inner">
-            <div className="site-logo site-logo-text">
-              <Link to="/home">
-                <img
-                  src={Logo}
-                  alt="Diamond Icon"
-                  style={{
-                    width: "100px",
-                    height: "auto",
-                    marginRight: "10px",
-                  }}
-                />
-              </Link>
-            </div>
-            <div className="search-container">
-              {width >= 768 && (
-                <div
-                  className="search-item"
-                  style={{ marginLeft: "-300px", marginRight: "20px" }}
-                >
-                  <ItemSearch />
+                      <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                        <Link
+                          to="/wishlist"
+                          onClick={handleNavigation}
+                          className="relative p-2 text-gray-600 hover:text-amber-700 transition-all duration-200"
+                        >
+                          {wishlistCount > 0 ? (
+                            <FaHeart size={20} className="text-red-500" />
+                          ) : (
+                            <Heart size={20} />
+                          )}
+                          {wishlistCount > 0 && (
+                            <motion.span
+                              className="absolute top-4 -right-5 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center "
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              transition={{ type: "spring", stiffness: 500 }}
+                            >
+                              {wishlistCount}
+                            </motion.span>
+                          )}
+                        </Link>
+                      </motion.div>
+
+                      <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                        <Link
+                          to="/cart"
+                          onClick={handleNavigation}
+                          className="relative p-2 text-gray-600 hover:text-amber-700 transition-all duration-200"
+                        >
+                          {cartCount > 0 ? (
+                            <FaShoppingCart size={20} className="text-red-500" />
+                          ) : (
+                            <ShoppingCart size={20} />
+                          )}
+                          {cartCount > 0 && (
+                            <motion.span
+                              className="absolute top-4 -right-6 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium"
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              transition={{ type: "spring", stiffness: 500 }}
+                            >
+                              {cartCount}
+                            </motion.span>
+                          )}
+                        </Link>
+                      </motion.div>
+                    </div>
+                  </div>
+                </nav>
+              )}
+
+              {/* Mobile Menu Toggle */}
+              {width <= 991 && (
+                <div className="flex items-center gap-3">
+                  <motion.div whileTap={{ scale: 0.95 }}>
+                    <Link to="/account" onClick={handleNavigation} className="p-2">
+                      <User size={20} />
+                    </Link>
+                  </motion.div>
+                  <motion.div whileTap={{ scale: 0.95 }}>
+                    <Link to="/wishlist" onClick={handleNavigation} className="relative p-2">
+                      {wishlistCount > 0 ? (
+                        <FaHeart size={20} className="text-red-500" />
+                      ) : (
+                        <Heart size={20} />
+                      )}
+                      {wishlistCount > 0 && (
+                        <span className="absolute top-4 -right-6 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
+                          {wishlistCount}
+                        </span>
+                      )}
+                    </Link>
+                  </motion.div>
+                  <motion.div whileTap={{ scale: 0.95 }}>
+                    <Link to="/cart" onClick={handleNavigation} className="relative p-2">
+                      {cartCount > 0 ? (
+                        <FaShoppingCart size={20} className="text-red-500" />
+                      ) : (
+                        <ShoppingCart size={20} />
+                      )}
+                      {cartCount > 0 && (
+                        <span className="absolute top-4 -right-5 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
+                          {cartCount}
+                        </span>
+                      )}
+                    </Link>
+                  </motion.div>
+                  <motion.button
+                    onClick={() => setMobileMenuOpen(true)}
+                    className="p-2 text-gray-700"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Menu size={24} />
+                  </motion.button>
                 </div>
               )}
             </div>
-            <div className="flex items-center gap-2">
-              <div className="acc-btn">
-                <Link to="/account">
-                  <User size={16} strokeWidth={1.8} />
-                </Link>
-              </div>
-              <div className="whis-btn">
-                <Link to="/wishlist">
-                  {wishlistCount > 0 ? (
-                    <FaHeart size={20} color={"#f78790ff"} />
-                  ) : (
-                    <Heart size={20} strokeWidth={1.8} />
-                  )}
-                  {wishlistCount > 0 && (
-                    <span className={`icon-badge ${isTop ? "sticky-active" : ""
-                      }`}>{wishlistCount}</span>
-                  )}
-                </Link>
-              </div>
 
-              <div className="cart-btns">
-                <Link to="/cart">
-                  {cartCount > 0 ? (
-                    <FaShoppingCart size={20} color={"#f78790ff"} />
-                  ) : (
-                    <ShoppingCart size={20} strokeWidth={1.8} />
-                  )}
-                  {cartCount > 0 && (
-                    <span className={`cart-icon-badge ${isTop ? "sticky-active" : ""
-                      }`}>{cartCount}</span>
-                  )}
-                </Link>
-              </div>
+            {/* Mobile Search and Pincode - Grouped together */}
+            {width <= 991 && (
+              <motion.div
+                className="pb-2 flex flex-col gap-1"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                {/* Pincode Button */}
+                <div className="flex items-center justify-between">
+                  <motion.button
+                    className="flex items-center gap-1 bg-gradient-to-r from-amber-50 to-amber-100 rounded-lg text-amber-700 hover:from-amber-100 hover:to-amber-200 transition-all duration-200"
 
-            </div>
+                  >
+                    <PincodeModal
+                      isOpen={modalOpen}
+                      onClose={() => setModalOpen(false)}
+                      pincode={pincode}
+                      setPincode={setPincode}
 
-            <div className="sigma-hamburger-menu" onClick={toggleClass}>
-              <Menu
-                size={20}
-                strokeWidth={1.8}
-                className={classNames("lucide-hamburger", {
-                  active: togglemethod,
-                })}
-              />
-            </div>
+                    />
+
+                  </motion.button>
+                </div>
+
+                {/* Search Bar */}
+                <motion.div whileHover={{ scale: 1.01 }}>
+                  <ItemSearch />
+                </motion.div>
+              </motion.div>
+            )}
           </div>
         </div>
-        {width < 768 && (
-          <div
-            style={{
-              background: "#fff",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: "5px 25px 5px 10px",
-              width: "105%",
-              margin: "0px -10px 0px -10px",
-            }}
-            className="search-items"
-          >
-            <ItemSearch />
-          </div>
-        )}
-        <AnimatePresence>
-          {togglemethod && (
-            <>
-              {/* Background Overlay */}
-              <motion.div
-                key="overlay"
-                className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60]"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                onClick={() => setTogglemethod(false)}
-              />
-
-              {/* Sidebar */}
-              <motion.aside
-                key="mobile-menu"
-                className="fixed top-0 left-0 h-full w-[70%] sm:w-[60%]  z-[70] shadow-2xl overflow-y-auto"
-                initial={{ x: "-100%" }}
-                animate={{ x: 0 }}
-                exit={{ x: "-100%" }}
-                transition={{
-                  type: "spring",
-                  stiffness: 90,
-                  damping: 15,
-                  mass: 0.7,
-                }}
-              >
-                <Mobilemenu onClose={() => setTogglemethod(false)} />
-              </motion.aside>
-            </>
-          )}
-        </AnimatePresence>
       </header>
 
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
 
-    </Fragment>
+          <Mobilemenu onClose={() => setMobileMenuOpen(false)} cartCount={cartCount} wishlistCount={wishlistCount} ratesData={ratesData} />
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 

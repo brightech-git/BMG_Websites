@@ -1,20 +1,22 @@
-import React ,{useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './OurCategory.css';
 import SmartButton from '../../ui/SmartButton';
 import { FaArrowAltCircleRight } from 'react-icons/fa';
-import { ChevronLeft ,ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-const OurCategory = ({subcategories ,isCategoriesLoading}) => {
+const OurCategory = ({ subcategories, isCategoriesLoading }) => {
 
-const scrollRef = React.useRef(null);
+    const scrollRef = React.useRef(null);
+
+    console.log(subcategories, 'subcategories')
 
     const navigate = useNavigate();
     const baseUrl = "https://app.bmgjewellers.com";
 
     const [isAtStart, setIsAtStart] = useState(true);
     const [isAtEnd, setIsAtEnd] = useState(false);
-    
+
     React.useEffect(() => {
         const ref = scrollRef.current;
         if (!ref) return;
@@ -89,9 +91,9 @@ const scrollRef = React.useRef(null);
                 <div className="elegant-header">
                     <h2 className="cat-content-title">Bmg World</h2>
                     <div className='flex gap-2'>
-                        <SmartButton variant="arrow" isDisabled = {isAtStart} onClick={() => scroll('left')} className='rounded-full w-2'> <ChevronLeft className="w-4 h-4 group-hover:translate-x-1 transition" /> </SmartButton>
-                        <SmartButton variant="arrow" isDisabled = {isAtEnd} onClick={() => scroll('right')} className='rounded-full w-2' > <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition" /> </SmartButton>
-                     
+                        <SmartButton variant="arrow" isDisabled={isAtStart} onClick={() => scroll('left')} className='rounded-full w-2'> <ChevronLeft className="w-4 h-4 group-hover:translate-x-1 transition" /> </SmartButton>
+                        <SmartButton variant="arrow" isDisabled={isAtEnd} onClick={() => scroll('right')} className='rounded-full w-2' > <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition" /> </SmartButton>
+
                     </div>
                 </div>
 
@@ -103,26 +105,27 @@ const scrollRef = React.useRef(null);
                     >
 
                         {[...subcategories].reverse().map((category) => (
-                        <div
-                            key={category.id}
-                            className="elegant-cards"
-                            onClick={() => handleItemClick(category.item_name)}
-                        >
-                            <div className="elegant-image-containers">
-                                <img
-                                    src={`${baseUrl}${category.image_path}`}
-                                    alt={formatItemName(category.item_name)}
-                                    className="elegant-images"
-                                    loading="lazy"
-                                />
-                            </div>
-                       
-                        </div>
-                    ))}
-                    </div>
-                    </div>
+                            <div
+                                key={category.id}
+                                className="elegant-cards"
+                                onClick={() => handleItemClick(category.item_name)}
+                            >
+                                <div className="elegant-image-containers">
+                                    <img
+                                        src={`${baseUrl}${category.image_path}`}
+                                        alt={formatItemName(category.item_name)}
+                                        className="elegant-images"
+                                        loading="lazy"
+                                    />
 
-         
+                                </div>
+                                <p className='flex items-center justify-center text-[var(--primary-text-color)] font-bold '>{category.item_name} </p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+
             </div>
         </section>
     );

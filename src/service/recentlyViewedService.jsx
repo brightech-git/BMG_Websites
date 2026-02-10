@@ -1,7 +1,7 @@
 import PublicUrl from "../api/publicUrl";
 
 // Add item to recently viewed
-export const addRecentlyViewed = async (itemSno) => {
+export const addRecentlyViewed = async (tagKey) => {
     const token = localStorage.getItem('user_token');
 
     if(!token){
@@ -12,7 +12,7 @@ export const addRecentlyViewed = async (itemSno) => {
         '/recently-viewed/add',
         null,
         {
-            params: { itemSno },
+            params: { tagKey },
         }
     );
     return response.data;

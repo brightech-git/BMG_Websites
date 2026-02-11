@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { usePincode } from "../../context/pinocde/PincodeContext";
 import { useCheckPincode } from "../../hook/pincode/usePincode";
 import "animate.css";
 
 function PincodeChecker() {
-    const [pincode, setPincode] = useState("");
-    const [storedPincode, setStoredPincode] = useState("");
+    const { pincode: currentPincode, pincodeData: currentPincodeData, updatePincode } = usePincode(); // Get from context
+
+    const [pincode, setPincode] = useState(currentPincode);
     const [statusMessage, setStatusMessage] = useState("");
     const [isChecking, setIsChecking] = useState(false);
     const [animationKey, setAnimationKey] = useState(0);
@@ -15,20 +17,15 @@ function PincodeChecker() {
 
     const { data, isLoading: loading, isError: error } = useCheckPincode(pincode);
 
-    // Load stored pincode on initial render
+    // Sync local pincode state with context
     useEffect(() => {
-        const savedPincode = localStorage.getItem("userPincode");
-        if (savedPincode) {
-            setStoredPincode(savedPincode);
-            // Automatically check the saved pincode
-            setPincode(savedPincode);
-        }
-    }, []);
+        setPincode(currentPincode);
+    }, [currentPincode]);
 
     const handleChange = (e) => {
-        let value = e.target.value.replace(/\D/g, ""); // remove non-digits
-        if (value.length > 6) return; // max 6 digits
-        if (value && !allowedStart.includes(value[0])) return; // enforce starting digit
+        let value = e.target.value.replace(/\D/g, "");
+        if (value.length > 6) return;
+        if (value && !allowedStart.includes(value[0])) return;
         setPincode(value);
     };
 
@@ -38,40 +35,44 @@ function PincodeChecker() {
             setAnimationKey(prev => prev + 1);
             return;
         }
-
         setIsChecking(true);
-        // The actual check will happen in the useEffect when pincode changes
     };
 
-    const handleSavePincode = () => {
+    const handleSavePincode = async () => {
         if (pincode.length !== 6) {
             setStatusMessage("Please enter a valid 6-digit pincode!");
             setAnimationKey(prev => prev + 1);
             return;
         }
 
-        // Save to localStorage
-        localStorage.setItem("userPincode", pincode);
-        setStoredPincode(pincode);
-        setShowUpdateForm(false);
+        // Use context to update pincode (this will update everywhere)
+        await updatePincode(pincode, {
+            serviceable: data?.status || false,
+            message: data?.status ?
+                "Available for shipping" :
+                "Not available for shipping",
+            pincode: pincode,
+            checkedAt: new Date().toISOString()
+        });
 
-        // Show success message
+        setShowUpdateForm(false);
         setStatusMessage(`Pincode ${pincode} saved successfully!`);
         setAnimationKey(prev => prev + 1);
     };
 
     const handleUpdateClick = () => {
         setShowUpdateForm(true);
-        setPincode(storedPincode || "");
+        setPincode(currentPincode || "");
         setStatusMessage("");
     };
 
     const handleCancelUpdate = () => {
         setShowUpdateForm(false);
-        setPincode(storedPincode || "");
+        setPincode(currentPincode || "");
         setStatusMessage("");
     };
 
+    // Handle API response
     useEffect(() => {
         if (!pincode || pincode.length !== 6 || !isChecking) return;
 
@@ -107,8 +108,11 @@ function PincodeChecker() {
         return "animate__animated animate__fadeIn";
     };
 
-    // Render delivery info if we have a stored pincode and not showing update form
-    if (storedPincode && !showUpdateForm) {
+    // When we already have pincode data and not showing update form
+    if (currentPincode && !showUpdateForm) {
+        // Use API data if available, otherwise use stored data
+        const isServiceable = data?.status ?? currentPincodeData?.serviceable;
+
         return (
             <div className="flex flex-col w-80 font-sans animate__animated animate__fadeIn">
                 <div className="mb-2 font-semibold text-gray-700">
@@ -117,14 +121,14 @@ function PincodeChecker() {
 
                 <div className="flex items-center justify-between p-2 rounded-md border border-gray-200 bg-gray-50">
                     <div>
-                        <div className="text-sm text-gray-600">Deliver to {storedPincode}</div>
-                        {data?.status ? (
+                        <div className="text-sm text-gray-600">Deliver to {currentPincode}</div>
+                        {isServiceable ? (
                             <div className="text-green-600 font-medium mt-1">
                                 ✓ Available for shipping
                             </div>
                         ) : (
                             <div className="text-red-600 font-medium mt-1">
-                                 Not available for shipping
+                                Not available for shipping
                             </div>
                         )}
                     </div>
@@ -135,7 +139,6 @@ function PincodeChecker() {
                         Change
                     </button>
                 </div>
-
             </div>
         );
     }
@@ -144,7 +147,7 @@ function PincodeChecker() {
     return (
         <div className="flex flex-col w-80 font-sans">
             <label className="mb-2 font-semibold text-gray-700 animate__animated animate__fadeIn">
-                {storedPincode ? "Update Your Delivery Pincode" : "Check Availability of Your Pincode"}
+                {currentPincode ? "Update Your Delivery Pincode" : "Check Availability of Your Pincode"}
             </label>
 
             <div className="flex mb-2">
@@ -164,7 +167,7 @@ function PincodeChecker() {
                 </button>
             </div>
 
-            {/* {showUpdateForm && (
+            {showUpdateForm && (
                 <div className="flex gap-2 mb-3">
                     <button
                         onClick={handleCancelUpdate}
@@ -174,12 +177,13 @@ function PincodeChecker() {
                     </button>
                     <button
                         onClick={handleSavePincode}
-                        className="px-4 py-2 text-sm bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
+                        disabled={!data && !statusMessage.includes("Available")}
+                        className="px-4 py-2 text-sm bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         Save & Update
                     </button>
                 </div>
-            )} */}
+            )}
 
             {/* Status messages */}
             {pincode.length === 6 && statusMessage && (
@@ -208,7 +212,7 @@ function PincodeChecker() {
             )}
 
             {/* Only show save option after successful check (for new users) */}
-            {data && !storedPincode && !showUpdateForm && data.status && (
+            {data && !currentPincode && !showUpdateForm && data.status && (
                 <button
                     onClick={handleSavePincode}
                     className="mt-3 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors animate__animated animate__fadeInUp"

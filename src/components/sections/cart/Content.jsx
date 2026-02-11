@@ -16,17 +16,20 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, loading }) => {
     const displayImage = imageError ? fallbackImage :
         item?.ImagePath ? `${baseUrl}${JSON.parse(item.ImagePath)[0] || ''}` : fallbackImage;
 
-    const displayPrice = Number(item?.TotalAmount || 0);
-    const displayWeight = item?.NetWt;
-    const displayPurity = item?.Purity;
-    const displayTagNo = item?.TagNo;
-    const displayItemId = item?.ItemId;
-    const displayItemTagSno = item?.ItemTagSno;
-    const ItemTagSno = item?.ItemTagSno;
+    console.log(item,'itemsitem')
+    const displayPrice = Number(item?.GrandTotal || 0);
+    const displayWeight = Number(item?.NETWT) || 0;
+    // const displayPurity = item?.PURITY||0;
+    const displayTagNo = item?.TAGNO || 0;
+    const displayItemId = item?.ITEMID || 0;
+    const displayTagKey = item?.TAGKEY ||0;
+    const ItemTagKey = item?.TAGKEY || 0;
+
+ 
 
     return (
         <div
-            onClick={() => onSelect(ItemTagSno)}
+            onClick={() => onSelect(ItemTagKey)}
             className={`flex items-center gap-1.5 sm:gap-3 p-2 sm:p-3 mb-2 border ${isSelected ? "border-[#f16137]" : "border-gray-200"} ${isSelected ? "bg-[var(--primary-card-color)]" : "white"} rounded-lg hover:shadow-lg transition-all duration-300 cursor-pointer`}
         >
             <input
@@ -52,11 +55,11 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, loading }) => {
             <div className="flex-1 min-w-0">
                 <h3 className="text-xs sm:text-sm font-semibold text-[#041f60] truncate">
                     <Link
-                        to={`/product-detail/${displayItemTagSno}`}
+                        to={`/product-detail/${displayTagKey}`}
                         className="hover:text-[#f16137] transition block truncate"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        {item.ItemName}
+                        {item.ITEMCTRNAME || item.SUBITEMNAME || item.ITEMNAME }
                     </Link>
                 </h3>
                 <p className="text-xs text-gray-600 mt-1 truncate">
@@ -66,9 +69,9 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, loading }) => {
                     {displayWeight && (
                         <span className="bg-gray-50 px-2 py-0.5 rounded">Weight: {displayWeight.toFixed(3)}g</span>
                     )}
-                    {displayPurity && (
+                    {/* {displayPurity && (
                         <span className="bg-gray-50 px-2 py-0.5 rounded">Purity: {displayPurity}%</span>
-                    )}
+                    )} */}
                 </div>
             </div>
 
@@ -82,7 +85,7 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, loading }) => {
             <button
                 onClick={(e) => {
                     e.stopPropagation();
-                    onRemove(ItemTagSno);
+                    onRemove(ItemTagKey);
                 }}
                 className="ml-2 p-2 text-red-600 hover:bg-red-50 rounded-xl transition"
                 disabled={loading}
@@ -154,16 +157,27 @@ const Cart = () => {
     const productsInCart = cartDetails?.products || []; 
 
     // Calculate totals directly from selected items
-    const selectedItemsData = productsInCart.filter(item => selectedItems.includes(item.Sno));
-    const subtotal = selectedItemsData.reduce((sum, item) => sum + (item.TotalAmount || 0), 0);
+    const selectedItemsData = productsInCart.filter(item =>
+        selectedItems.includes(item.TAGKEY)
+    );
+
+    const subtotal = selectedItemsData.reduce((sum, item) => {
+        const price = Number(item.GrandTotal) || 0;
+        return sum + price ;
+    }, 0);
+
     const shippingFee = cartDetails?.shipping?.totalAmount ;
+
     const totalAmount = subtotal + shippingFee;
 
+    
+
+    console.log(subtotal,'selectedItemsData')
     // Auto-select all items on load
     useEffect(() => {
         if (productsInCart.length > 0 && selectedItems.length === 0) {
-            const allSno = productsInCart.map(item => item.Sno).filter(Boolean);
-            setSelectedItems(allSno);
+            const allTagKey = productsInCart.map(item => item.TAGKEY).filter(Boolean);
+            setSelectedItems(allTagKey);
         }
     }, [productsInCart.length]);
 
@@ -175,18 +189,21 @@ const Cart = () => {
 
         const payload = {
             items: selectedItemsData.map(item => ({
-                sno: item.Sno,
-                itemId: item.ItemId,
-                tagNo: item.TagNo,
-                itemTagSno: item.ItemTagSno,
-                amount: item.Amount,
-                weight: item.NetWt,
-                purity: item.Purity,
-                shipping_fee: item.shipping_fee
+                productId:item.TAGKEY,
+                productName: item.ITEMCTRNAME || item.SUBITEMNAME || item.ITEMNAME,
+                price: parseFloat(item.GrandTotal),
+                itemId: item.ITEMID,
+                tagNo: item.TAGNO,
+                sno: item.SNO,
+                weight: parseFloat(item.NETWT),
+                imagePath: item.ImagePath ? JSON.parse(item.ImagePath)[0] : "",
+                quantity: 1,
+                gstType: item.GSTType,
+                gstPer: item.GSTPercentValue,
+                gstAmount: item.GSTAmount,
+
             })),
             subtotal,
-            shippingFee,
-            totalAmount
         };
 
         navigate("/checkout", { state: payload });
@@ -210,8 +227,8 @@ const Cart = () => {
         if (selectedItems.length === productsInCart.length) {
             setSelectedItems([]);
         } else {
-            const allSno = productsInCart.map(item => item.Sno).filter(Boolean);
-            setSelectedItems(allSno);
+            const allTagKey = productsInCart.map(item => item.TAGKEY).filter(Boolean);
+            setSelectedItems(allTagKey);
         }
     };
 
@@ -302,17 +319,17 @@ const Cart = () => {
                             <div className="space-y-2">
                                 {productsInCart.map((item) => (
                                     <CartItem
-                                        key={item.Sno}
+                                        key={item.TAGKEY}
                                         item={item}
-                                        onRemove={() => handleDeleteClick(item.ItemTagSno)}
-                                        onSelect={(sno) => {
+                                        onRemove={() => handleDeleteClick(item.TAGKEY)}
+                                        onSelect={(TAGKEY) => {
                                             setSelectedItems(prev =>
-                                                prev.includes(sno)
-                                                    ? prev.filter(x => x !== sno)
-                                                    : [...prev, sno]
+                                                prev.includes(TAGKEY)
+                                                    ? prev.filter(x => x !== TAGKEY)
+                                                    : [...prev, TAGKEY]
                                             );
                                         }}
-                                        isSelected={selectedItems.includes(item.Sno)}
+                                        isSelected={selectedItems.includes(item.TAGKEY)}
                                         loading={isLoading}
                                     />
                                 ))}
@@ -338,7 +355,12 @@ const Cart = () => {
                                 <div className="flex justify-between items-center">
                                     <span >Shipping Fee</span>
                                     <span className={`font-semibold ${shippingFee === 0 ? 'text-green-600' : ''}`}>
-                                        {shippingFee === 0 ? 'FREE' : `₹${shippingFee.toLocaleString('en-IN')}`}
+                                        {shippingFee == null
+                                            ? "Update your pincode"
+                                            : shippingFee === 0
+                                                ? "FREE"
+                                                : `₹${shippingFee.toLocaleString("en-IN")}`}
+
                                     </span>
                                 </div>
 

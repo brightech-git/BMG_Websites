@@ -8,8 +8,6 @@ import {
   FaPhone,
 } from "react-icons/fa";
 import "./CancellationReturnPolicy.css";
-import Footertwo from "../../layouts/Footer";
-import HeaderWithAuth from "../../layouts/HeaderWithAuth";
 
 const CancellationReturnPolicy = () => {
   const orderCancellationList = [
@@ -39,7 +37,6 @@ const CancellationReturnPolicy = () => {
 
   return (
     <>
-      <HeaderWithAuth />
       <div className="crp-wrapper">
         <h1 className="crp-heading">Cancellation & Return Policy</h1>
 
@@ -106,7 +103,6 @@ const CancellationReturnPolicy = () => {
           </div>
         </details>
       </div>
-      <Footertwo />
     </>
   );
 };

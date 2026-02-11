@@ -89,7 +89,7 @@
 .register-btn {
     width: 100%;
     padding: 12px;
-    background: var(--login-button-background);
+background: var(--primary-hover-color);
     color: white;
     font-weight: 600;
     border-radius: 8px;

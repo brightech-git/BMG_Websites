@@ -1,31 +1,115 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, Navigate } from 'react-router-dom';
+import {
+    AlertCircle,
+    Home,
+    Search,
+    Clock,
+    Sparkles
+} from 'lucide-react';
 
 import errorimg from '../../../assets/videos/silverIcon.png';
 
-class Content extends Component {
-    render() {
-        return (
-            <section className="error bg-center bg-cover bg-norepeat" style={{ backgroundImage: "url(" + errorimg + ")" }}>
-                <div className="container">
-                    <div className="error-texts text-center">
-                        {/* <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" width={45} height={45} x={0} y={0} viewBox="0 0 512 512" xmlSpace="preserve">
-                            <path d="M369.853,250.251l-100-241C267.53,3.65,262.062,0,255.999,0s-11.531,3.65-13.854,9.251l-100,241    c-1.527,3.681-1.527,7.817,0,11.498l100,241c2.323,5.601,7.791,9.251,13.854,9.251s11.531-3.65,13.854-9.251l100-241    C371.381,258.068,371.381,253.932,369.853,250.251z M255.999,457.861L172.239,256l83.76-201.861L339.759,256L255.999,457.861z" fill="#ffffff" />
-                            <path className="diamond-spark spark-1" d="M139.606,118.393l-63-63c-5.858-5.857-15.356-5.857-21.213,0c-5.858,5.858-5.858,15.356,0,21.213l63,63    c2.928,2.929,6.767,4.394,10.606,4.394s7.678-1.465,10.607-4.394C145.465,133.748,145.465,124.25,139.606,118.393z" fill="#ffffff" />
-                            <path className="diamond-spark spark-2" d="M456.607,55.393c-5.858-5.857-15.356-5.857-21.213,0l-63,63c-5.858,5.858-5.858,15.356,0,21.213    c2.928,2.929,6.767,4.394,10.606,4.394s7.678-1.465,10.607-4.394l63-63C462.465,70.748,462.465,61.25,456.607,55.393z" fill="#ffffff" />
-                            <path className="diamond-spark spark-3" d="M139.606,372.393c-5.858-5.857-15.356-5.857-21.213,0l-63,63c-5.858,5.858-5.858,15.356,0,21.213    C58.322,459.535,62.16,461,65.999,461s7.678-1.465,10.607-4.394l63-63C145.465,387.748,145.465,378.25,139.606,372.393z" fill="#ffffff" />
-                            <path className="diamond-spark spark-4" d="M456.607,435.393l-63-63c-5.858-5.857-15.356-5.857-21.213,0c-5.858,5.858-5.858,15.356,0,21.213l63,63    c2.928,2.929,6.767,4.394,10.606,4.394s7.678-1.465,10.607-4.394C462.465,450.748,462.465,441.25,456.607,435.393z" fill="#ffffff" />
-                        </svg> */}
-                        <h1>404</h1>
-                        <h2>Ooops! That page doesn't exist!</h2>
-                        <p>Nulla quis lorem ut libero malesuada feugiat. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi.</p>
-                        <Link to="/home" className="main-btn btn-filled">Back to Home</Link>
-                    </div>
-                </div>
-            </section>
+const Content = () => {
+    const [redirect, setRedirect] = useState(false);
+    const [countdown, setCountdown] = useState(10);
 
-        );
+    useEffect(() => {
+        // Start countdown for auto-redirect
+        const countdownInterval = setInterval(() => {
+            setCountdown(prev => {
+                if (prev <= 1) {
+                    clearInterval(countdownInterval);
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+
+        // Auto-redirect after 5 seconds
+        const redirectTimeout = setTimeout(() => {
+            setRedirect(true);
+        }, 10000);
+
+        // Cleanup
+        return () => {
+            clearInterval(countdownInterval);
+            clearTimeout(redirectTimeout);
+        };
+    }, []);
+
+    // Redirect to home after countdown
+    if (redirect) {
+        return <Navigate to="/home" replace />;
     }
-}
+
+    return (
+        <section
+            className="error-page min-h-screen flex items-center justify-center p-4"
+        >
+            <div className="container max-w-4xl mx-auto">
+                <div className="error-content text-center text-white animate__animated animate__fadeInUp">
+
+                    {/* Animated Alert Icon */}
+                    <div className="mb-6 animate__animated animate__pulse animate__infinite">
+                        <AlertCircle className="w-24 h-24 mx-auto text-red-400" strokeWidth={1.5} />
+                    </div>
+
+                    {/* Error Code with Sparkles */}
+                    <div className="relative mb-4">
+                        <Sparkles className="w-8 h-8 text-yellow-400 absolute -top-4 -left-4 animate__animated animate__tada" />
+                        <h1 className="text-9xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">
+                            404
+                        </h1>
+                        <Sparkles className="w-8 h-8 text-yellow-400 absolute -top-4 -right-4 animate__animated animate__tada animate__delay-1s" />
+                    </div>
+
+                    {/* Main Error Message */}
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                        Oops! Page Not Found
+                    </h2>
+
+                    <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+                        The page you're looking for doesn't exist or has been moved.
+                        You'll be redirected automatically in {countdown} seconds.
+                    </p>
+
+                    {/* Countdown Timer */}
+                    <div className="flex items-center justify-center gap-2 mb-8 text-yellow-300">
+                        <Clock className="w-5 h-5" />
+                        <span className="font-semibold">Redirecting in {countdown} seconds...</span>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <Link
+                            to="/home"
+                            className="flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-red-500 to-orange-500 text-white font-semibold rounded-full hover:from-red-600 hover:to-orange-600 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                        >
+                            <Home className="w-5 h-5" />
+                            Back to Homepage
+                        </Link>
+
+                        <Link
+                            to="/products-page"
+                            className="flex items-center gap-2 px-8 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-black transition-all duration-300"
+                        >
+                            <Search className="w-5 h-5" />
+                            Browse Products
+                        </Link>
+                    </div>
+
+                    {/* Help Text */}
+                    <p className="mt-8 text-gray-400 text-sm">
+                        Need help? Contact our support team or check our{' '}
+                        <Link to="/help" className="text-blue-300 hover:text-blue-200 underline">
+                            help center
+                        </Link>
+                    </p>
+                </div>
+            </div>
+        </section>
+    );
+};
 
 export default Content;

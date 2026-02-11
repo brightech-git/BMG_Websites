@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { XCircle, RotateCcw, Home } from "lucide-react";
-import HeaderWithAuth from "../layouts/HeaderWithAuth";
 import Footertwo from "../layouts/Footerthree";
 import { getPaymentStatus } from "../../service/paymentServiceicici";
 import "./PaymentFailure.css";
@@ -29,7 +28,7 @@ const PaymentFailure = () => {
 
     return (
         <>
-            <HeaderWithAuth />
+
             <div className="payment-failure-container">
                 <div className="failure-icon">
                     <XCircle size={96} color="var(--red-color)" className="icon-pulse" />
@@ -82,7 +81,6 @@ const PaymentFailure = () => {
                     </a>
                 </p>
             </div>
-            <Footertwo />
         </>
     );
 };

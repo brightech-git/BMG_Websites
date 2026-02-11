@@ -11,8 +11,6 @@ import FaqPage from "../faq/FaqPage";
 import { useCompanyDetails } from "../../context/clientDetails/clientDetialContext";
 import { useAnimateCSSOnScroll } from "../../hook/animation/useAnimateCSSOnScroll";
 import './schemeDetails.css'
-import HeaderWithAuth from "../../components/layouts/HeaderWithAuth";
-import Footertwo from "../../components/layouts/Footer";
 
 function SchemePage() {
     const BASE_URL = "https://scheme.bmgjewellers.com";
@@ -78,9 +76,7 @@ function SchemePage() {
 
     return (
         <>
-            <header >
-                <HeaderWithAuth />
-            </header>
+           
 
             <div className="scheme-main-container">
                 <section className="p-2 m-2 flex items-right">
@@ -246,9 +242,7 @@ function SchemePage() {
 
                 </section>
             </div>
-            <footer>
-                <Footertwo />
-            </footer>
+         
         </>
     );
 }

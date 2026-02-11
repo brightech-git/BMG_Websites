@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import HeaderWithAuth from "./HeaderWithAuth";
 import Footertwo from "./Footer";
 import { useNavigate } from "react-router-dom";
 import SmartButton from "../ui/SmartButton";
@@ -84,7 +83,7 @@ const FAQ = ({ languages, content }) => {
 
     return (
         <div className="min-h-screen mt-[120px] bg-[var(--primary-card-color)] p-2">
-            <HeaderWithAuth />
+
 
             <div className="container mx-auto px-2 py-2 max-w-6xl">
                 {/* Header Section */}
@@ -303,7 +302,6 @@ const FAQ = ({ languages, content }) => {
                 </div>
             </div>  
 
-            <Footertwo />
         </div>
     );
 };

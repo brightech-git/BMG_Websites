@@ -11,8 +11,7 @@ import FeaturedBanners from "../../layouts/FeaturedProduct";
 import Onsale from "./Onsale";
 import Video from "./Video";
 import RecentlyViewedWrapper from "../../layouts/RecentlyViewedWrapper";
-import Header from "../../layouts/HeaderWithAuth";
-import Footer from "../../layouts/Footer";
+
 import SmoothScroll from "../../layouts/SmoothScroll";
 import RevealSection from "../../animations/RevealSection";
 import { useBanners } from "../../../hook/banner/useBannerQueries";
@@ -125,7 +124,7 @@ const Content = () => {
     return (
         <SmoothScroll>
             <Fragment>
-                <Header />
+           
 
                 {/* 🌟 Hero Section (no animation wrapper — stays full width) */}
                 <Banner banners={banners} isLoading={mainBannerLoading} />
@@ -215,7 +214,6 @@ const Content = () => {
 
                 <RecentlyViewedWrapper />
 
-                <Footer />
             </Fragment>
         </SmoothScroll>
     );

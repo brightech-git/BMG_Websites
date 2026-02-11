@@ -28,7 +28,7 @@ import PincodeModal from "./DeliveryPincodeHeader";
 import useHeaderNavByShopId from "./headerNavByShopId";
 import './HeaderScroll.css'
 import RatesDropdown from "./RatesDropdown";
-
+import { usePincode } from "../../context/pinocde/PincodeContext";
 
 const Header = ({ isAuthenticated }) => {
   const width = useScreenWidth();
@@ -42,9 +42,7 @@ const Header = ({ isAuthenticated }) => {
   const [scrollY, setScrollY] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
-  const [modalOpen, setModalOpen] = useState(false);
   const [isCategoriesHovered, setIsCategoriesHovered] = useState(false);
-  const [pincode, setPincode] = useState(localStorage.getItem("userPincode") || "");
   const [headerHeight, setHeaderHeight] = useState(0);
   const [shouldShow, setShouldShow] = useState(true);
   const [isNavigating, setIsNavigating] = useState(false);
@@ -54,10 +52,10 @@ const Header = ({ isAuthenticated }) => {
 
   // Queries
   const { data: ratesData } = useRatesQuery();
-  const { data: favoritesData, isLoading: favoritesLoading } = useFavorites({ enabled: isAuthenticated });
+  const { isLoading:favoriteLoading, favoritesCount } = useFavorites({ enabled: isAuthenticated });
+  const {pincode} = usePincode();
 
-  console.log(favoritesData,'favoritesData')
-  const { cartItems, isLoading: cartLoading } = useCart({ enabled: isAuthenticated });
+  const {  isLoading: cartLoading, cartCount } = useCart({ enabled: isAuthenticated });
 
   // Measure header height on mount and resize
   useEffect(() => {
@@ -136,8 +134,7 @@ const Header = ({ isAuthenticated }) => {
   const headerTranslate = shouldShow ? 0 : -5;
 
   // Calculate counts
-  const wishlistCount = favoritesLoading ? 0 : favoritesData?.data?.totalItems;
-  const cartCount = cartLoading ? 0 : cartItems?.data?.totalItems;
+  const wishlistCount = favoriteLoading ? 0 : favoritesCount;
 
   
 
@@ -344,7 +341,7 @@ const Header = ({ isAuthenticated }) => {
                               damping: 25,
                               mass: 0.8
                             }}
-                            className="absolute w-[800px] left-0 top-full mt-2 bg-white shadow-2xl rounded-lg p-6 z-50"
+                            className="absolute w-[650px] xl:w-[800px] left-0 top-full mt-2 bg-white shadow-2xl rounded-lg p-6 z-50"
 
                           >
                             <div className="flex gap-2">
@@ -419,12 +416,7 @@ const Header = ({ isAuthenticated }) => {
                   {/* Right Side */}
                   <div className="flex items-center gap-2">
                     {/* Pincode Modal */}
-                    <PincodeModal
-                      isOpen={modalOpen}
-                      onClose={() => setModalOpen(false)}
-                      pincode={pincode}
-                      setPincode={setPincode}
-                    />
+                    <PincodeModal/>
 
                     {/* Search */}
                     <motion.div
@@ -560,13 +552,7 @@ const Header = ({ isAuthenticated }) => {
                     className="flex items-center gap-1 bg-gradient-to-r from-amber-50 to-amber-100 rounded-lg text-amber-700 hover:from-amber-100 hover:to-amber-200 transition-all duration-200"
 
                   >
-                    <PincodeModal
-                      isOpen={modalOpen}
-                      onClose={() => setModalOpen(false)}
-                      pincode={pincode}
-                      setPincode={setPincode}
-
-                    />
+                    <PincodeModal/>
 
                   </motion.button>
                 </div>

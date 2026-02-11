@@ -7,7 +7,6 @@ import './Contact.css';
 import largerImg from '../../../assets/videos/silverIcon.png';
 import mobileImg from '../../../assets/videos/silverIcon.png';
 import { useNavigate } from "react-router-dom";
-import Headers from "../../layouts/HeaderWithAuth";
 import SmartButton from "../../ui/SmartButton";
 import { PDFDownloadLink } from '@react-pdf/renderer';
 
@@ -139,11 +138,7 @@ const Contact = () => {
     return (
         <>
 
-
-            <Headers />
-
-
-            <section className="contact-main-section animate-fade-in m-2 ">
+         <section className="contact-main-section animate-fade-in m-2 ">
                 {/* Header Section */}
                 <div className="contacts-header-section">
 

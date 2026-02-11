@@ -1,10 +1,25 @@
 import publicUrl from '../api/publicUrl'; // axios instance with token
 
 // Create a new order
+// services/orderService.js
+
 export const createOrder = async (orderData) => {
-    const response = await publicUrl.post('/order/create', orderData);
-    return response.data;
+    try {
+        console.log(orderData, "createOrderData");
+
+        const response = await publicUrl.post('/order/create', orderData);
+
+        return response.data;
+    } catch (error) {
+        throw new Error(
+            error.response?.data?.message ||
+            error.response?.data?.error ||
+            error.message ||
+            "Order creation failed"
+        );
+    }
 };
+
 
 // Get order history
 export const getOrderHistory = async (payload) => {

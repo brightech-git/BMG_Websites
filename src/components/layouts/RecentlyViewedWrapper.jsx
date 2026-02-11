@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-// import RecentlyViewed from './RecentlyViewed';
+import RecentlyViewed from './RecentlyViewed';
 
 const RecentlyViewedWrapper = () => {
     const isAuthenticated = useSelector((state) => state.user?.isAuthenticated);
@@ -8,7 +8,7 @@ const RecentlyViewedWrapper = () => {
 
     if (!isAuthenticated) return null; // User not logged in
 
-    return null;
+    return <RecentlyViewed />;
 };
 
 export default RecentlyViewedWrapper;

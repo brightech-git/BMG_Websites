@@ -9,8 +9,6 @@ import {
     FaBalanceScale
 } from 'react-icons/fa';
 import './TermsConditions.css';
-import HeaderWithAuth from '../../layouts/HeaderWithAuth';
-import Footertwo from '../../layouts/Footer';
 
 const TermsConditions = () => {
     const lastUpdated = new Date().toLocaleDateString('en-IN', {
@@ -21,7 +19,6 @@ const TermsConditions = () => {
 
     return (
         <>
-            <HeaderWithAuth />
             <div className="terms-wrapper">
                 <div className="terms-container">
                     <h1 className="terms-heading">Terms & Conditions</h1>
@@ -130,7 +127,6 @@ const TermsConditions = () => {
                     </div> */}
                 </div>
             </div>
-            <Footertwo />
         </>
     );
 };

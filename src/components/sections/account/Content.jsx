@@ -3,8 +3,6 @@ import { useDispatch } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 import { logout } from "../../../redux/slices/userSlice";
 import AccountSidebar from "./AccountSidebar/AccountSideBar";
-import Header from "../../layouts/HeaderWithAuth";
-import Footertwo from "../../layouts/Footer";
 import "./AccountStyles.css";
 import "./logout.css";
 
@@ -21,7 +19,6 @@ const AccountPage = () => {
 
   return (
     <>
-      <Header />
 
       <section className="account-with-header">
         <div className="account-container">
@@ -37,8 +34,6 @@ const AccountPage = () => {
           </div>
         </div>
       </section>
-
-      <Footertwo />
 
       {/* Logout Modal */}
       {isModalOpen && (

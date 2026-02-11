@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./SupportPage.css";
-
-import HeaderWithAuth from "../layouts/HeaderWithAuth";
-
 import { getCompanyDetails } from "../../service/companyDetials";
 
 function SupportPage() {
@@ -46,7 +43,7 @@ function SupportPage() {
     return (
         <div className="support-container">
             <div className="support-bg">
-                <HeaderWithAuth/>
+             
 
                 <div className="support-content">
                     {/* QUICK ACTION GRID */}

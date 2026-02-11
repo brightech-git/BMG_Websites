@@ -11,7 +11,7 @@
 /* Main layout */
 .checkout-layout {
   max-width: 1200px;
-    margin: 150px auto 0px;
+    margin: 130px auto 0px;
   display: grid;
   grid-template-columns: 1fr 400px;
   gap: 1rem;
@@ -931,7 +931,7 @@ Step Content */
   .checkout-layout {
     grid-template-columns: 1fr;
     gap: 0.5rem;
-      margin: 40px auto 0px;
+      margin: 140px auto 0px;
   }
 
   .checkout-aside {
@@ -983,7 +983,7 @@ Step Content */
 
   .checkout-layout {
     padding: 0.5rem;
-      margin: 90px auto 10px;
+      margin: 110px auto 10px;
   }
 
   .step-section,

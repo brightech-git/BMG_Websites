@@ -1,15 +1,11 @@
 import React from "react";
 import './Success.css';
-import Headers from "../layouts/HeaderWithAuth";
-import Footertwo from "../layouts/Footer";
 
 const Success = () => {
     return (
 
         <>
-            <section>
-                <Headers />
-            </section>
+          
             <div className="success-page-container">
                 <div className="success-card animate-fade-in">
                     <i className="fas fa-check-circle success-icon"></i>
@@ -26,9 +22,7 @@ const Success = () => {
 
                 </div>
             </div>
-            <section>
-                <Footertwo />
-            </section>
+         
         </>
     );
 };

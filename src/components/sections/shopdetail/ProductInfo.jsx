@@ -6,7 +6,7 @@ import {
 import { Gem, ShieldCheck, RefreshCw, Star, Share2 } from "lucide-react";
 import { useSingleProductQuery } from "../../../hook/product/useSingleProductQuery";
 import { useCart } from "../../../hook/cart/useCartQuery";
-import { useFavorites, useAddFavorite, useRemoveFavorite } from "../../../hook/favorites/useFavoritesQuery";
+import { useFavorites} from "../../../hook/favorites/useFavoritesQuery";
 import { useRecentlyViewed } from "../../../hook/recentlyViewed/useRecentlyViewedQuery";
 import { toast } from "react-toastify";
 import ImageGallery from "./ImageGallery";
@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 import { ShareButtons } from "../../share/Share";
 import SmartButton from "../../ui/SmartButton";
 import PincodeChecker from "../../../component/pincode/PincodeCheck";
+import { usePincode } from "../../../context/pinocde/PincodeContext";
 
 const ProductSkeleton = () => (
   <div className="animate-pulse bg-[#eeece8] min-h-screen p-4">
@@ -51,15 +52,15 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
   const isAuthenticated = useSelector(state => state.user.isAuthenticated) || Authenticated;
   const mobileNumber = useSelector(state => state.user.user?.contactNumber);
   const navigate = useNavigate();
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [animateHeart, setAnimateHeart] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const shareRef = useRef();
 
-  const pincode = localStorage.getItem('userPincode');
+
   const { data: product, isLoading, error } = useSingleProductQuery(tagKey);
-  console.log("product data", product);
+      const { pincode: currentPincode, pincodeData: currentPincodeData, updatePincode } = usePincode(); // Get from context
+  console.log("currentPincode", currentPincode, currentPincodeData );
 
 
   const [cartLoading, setCartLoading] = useState(false);
@@ -67,16 +68,15 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
 
   const { addItem } = useRecentlyViewed();
   const { cartItems, addToCartHandler } = useCart();
-  const { data: favorites } = useFavorites();
+  const { favorites , addToFavorite ,removeFavorite ,isFavorite } = useFavorites();
 
   const cartProducts = cartItems?.data?.products;
-  console.log(cartProducts,'cartProducts')
+  const isWishlisted = isFavorite(tagKey);
+
   const favoriteProducts = favorites?.data?.products;
 
-
-  console.log(favorites ,'favorites');
-  const addFavorite = useAddFavorite();
-  const removeFavorite = useRemoveFavorite();
+ 
+ 
 
   const Base_URL = "https://app.bmgjewellers.com";
 
@@ -113,13 +113,14 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
   }, []);
 
   const getPrice = () => Number(product?.GrandTotal || product?.RATE || 0);
-  const originalPrice = product?.GrandTotal ? product.GrandTotal * 1.25 : 0;
+
+  const originalPrice = product?.GrandTotal ? product.GrandTotal * 2.25 : 0;
   const discount = originalPrice ? Math.round(((originalPrice - getPrice()) / originalPrice) * 100) : 0;
 
 
   const isInCart =
     Array.isArray(cartProducts) &&
-    cartProducts.some((item) => item.ItemTagSno === product?.TAGKEY);
+    cartProducts.some((item) => item.TAGKEY === product?.TAGKEY);
 
 
   const handleAddToCart = (e) => {
@@ -139,27 +140,8 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
       return;
     }
 
-    // ❌ Already in cart
-    if (isInCart) {
-      toast.info("Already in cart");
-      return;
-    }
+    addToCartHandler(product);
 
-    // ✅ NOW start loading
-    setCartLoading(true);
-    setCartSuccess(false);
-
-    const image = product.ImagePath
-      ? JSON.parse(product.ImagePath)[0]
-      : "";
-
-    addToCartHandler({
-      tagKey:product.TAGKEY,
-      quantity:1,
-      shippingPincode: pincode || '360004'
-    });
-
-    toast.success("Added to cart!");
     setCartLoading(false);
     setCartSuccess(true);
 
@@ -174,19 +156,25 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
     if (!mobileNumber) return setModalOpen(true);
     console.log(product, 'products');
     const image = product.ImagePath ? JSON.parse(product.ImagePath)[0] : "";
+
+    console.log(product ,'checkoutProduct')
     navigate("/checkout", {
       state: {
         items: [{
-          sno: product.SNO,
+          productId:product.TAGKEY,
+          productName: product.ITEMCTRNAME || product.SUBITEMNAME || product.ITEMNAME,
+          price: parseFloat(product.GrandTotal),
           itemId: product.ITEMID,
           tagNo: product.TAGNO,
-          productName: product.ITEMCTRNAME,
-          price: getPrice(),
+          sno: product.SNO,
+          weight: parseFloat(product.NETWT),
+          imagePath: image,
           quantity: 1,
-          imagePath: getEncodedImageUrl(image),
-          weight: product.NETWT || 0,
+          gstType: product.GSTType,
+          gstPer: product.GSTPercentValue,
+          gstAmount: product.GSTAmount,
         }],
-        totalAmount: getPrice(),
+        subtotal: getPrice(),
       },
     });
 
@@ -206,27 +194,9 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
 
     if (isWishlisted) {
       // Remove from wishlist
-      removeFavorite.mutate(product.TAGKEY, {
-        onSuccess: () => {
-          setIsWishlisted(false);
-          toast.info("💔 Removed from wishlist");
-        },
-        onSettled: () => setTimeout(() => setAnimateHeart(false), 600),
-      });
+      removeFavorite(product.TAGKEY);
     } else {
-      // Add to wishlist
-      const wishlistData = {
-        tagKey: product.TAGKEY, // or product.TAGKEY if that's the correct key
-        quantity: 1
-      };
-
-      addFavorite.mutate(wishlistData, {
-        onSuccess: () => {
-          setIsWishlisted(true);
-          toast.success("❤️ Added to wishlist");
-        },
-        onSettled: () => setTimeout(() => setAnimateHeart(false), 600),
-      });
+      addToFavorite(product);
     }
   };
 

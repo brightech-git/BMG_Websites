@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import HeaderWithAuth from "../../layouts/HeaderWithAuth";
-import Footer from "../../layouts/Footer";
 
 const sections = [
     {
@@ -69,7 +67,7 @@ const PolicyPage = () => {
 
     return (
         <>
-            <HeaderWithAuth />
+         
 
             <div className="min-h-screen mt-[150px] sm:mt-[140px] bg-[--primary-color]">
                 <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -183,7 +181,7 @@ const PolicyPage = () => {
                 </div>
             </div>
 
-            <Footer />
+        
         </>
     );
 };

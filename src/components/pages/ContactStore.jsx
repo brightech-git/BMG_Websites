@@ -6,8 +6,6 @@ import { useCompanyDetails } from "../../context/clientDetails/clientDetialConte
 import './ContactStore.css';
 import largerImg from '../../assets/videos/store.jpg';
 import { useNavigate } from "react-router-dom";
-import Headers from "../layouts/HeaderWithAuth";
-import Footertwo from "../layouts/Footer";
 import SmartButton from "../ui/SmartButton";
 import PrintStatement from '../ui/PrintStatement';
 import { PDFDownloadLink } from "@react-pdf/renderer";
@@ -156,9 +154,6 @@ const ContactStore = () => {
 
     return (
         <>
-
-
-            <Headers />
 
 
             <section className="contact-main-section animate-fade-in m-2 ">
@@ -440,7 +435,6 @@ const ContactStore = () => {
 
                 </div>
             </section>
-            <Footertwo />
         </>
     );
 };

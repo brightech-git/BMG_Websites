@@ -37,6 +37,10 @@
     --primary-card-color: #eeece8;
     --secondary-card-color: #f7f7f7;
 
+    --brand-background-color: linear-gradient(to right,
+            #ffb889,
+            #ddb7f3);
+
     --white-color: #ffffff;
     --black-color: #101010;
     --grey-color: #A9A9A9;

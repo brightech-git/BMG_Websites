@@ -1,6 +1,4 @@
 import React from "react";
-import HeaderWithAuth from "../../layouts/HeaderWithAuth";
-import Footer from "../../layouts/Footer";
 import "./ShippingPolicy.css";
 
 const shippingSections = [
@@ -54,7 +52,6 @@ const shippingSections = [
 const ShippingPolicy = () => {
   return (
     <>
-      <HeaderWithAuth />
       <div className="shipping-policy">
         <div className="policy-wrapper">
           <h2 className="policy-title">Shipping Policy</h2>
@@ -75,7 +72,6 @@ const ShippingPolicy = () => {
           ))}
         </div>
       </div>
-      <Footer />
     </>
   );
 };

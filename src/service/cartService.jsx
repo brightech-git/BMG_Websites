@@ -42,7 +42,7 @@ export const addToCart = (cartItem) => {
 // ✅ Delete item from cart
 export const deleteCartItem = async (tagKey) => {
     try {
-        const response = await PublicUrl.delete(`/cart/delete/${tagKey}`, authHeader());
+        const response = await PublicUrl.delete(`/cart/item/${tagKey}`, authHeader());
         return response.data;
     } catch (err) {
         console.error("❌ Delete cart service error:", err);

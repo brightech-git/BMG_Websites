@@ -17,3 +17,4 @@ export const formatCurrency = (amount) => {
     maximumFractionDigits: 2
   }).format(amount);
 };
+

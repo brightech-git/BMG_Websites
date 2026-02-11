@@ -24,6 +24,8 @@ import './assets/css/animations.css';
 import './assets/css/utils.css';
 
 import './index.css'
+import { PincodeProvider } from './context/pinocde/PincodeContext';
+import MainLayout from './component/layout/MainLayout';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -43,7 +45,11 @@ root.render(
         <NotificationProvider>
           <CompanyDetailsProvider>
             <BrowserRouter>
+            <PincodeProvider>
+              <MainLayout>
               <App />
+              </MainLayout>
+              </PincodeProvider>
               <ToastContainer
                 position="top-right"
                 autoClose={2000}

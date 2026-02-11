@@ -13,8 +13,6 @@ import {
     Truck,
     Package,
 } from "lucide-react";
-import HeaderWithAuth from "../layouts/HeaderWithAuth";
-import Footertwo from "../layouts/Footer";
 import { getPaymentStatus } from "../../service/paymentServiceicici";
 import SmartButton from "../ui/SmartButton";
 import { useCreateReOrder } from "../../hook/order/useReorder";
@@ -132,8 +130,7 @@ const PaymentStatus = () => {
 
     return (
         <>
-            <HeaderWithAuth />
-
+          
             {/* Confetti Rain - Only on Success */}
             {isSuccess && !isLoading && (
                 <div className="absolute inset-0 mt-[130px] pointer-events-none z-[10] overflow-hidden">
@@ -389,7 +386,6 @@ const PaymentStatus = () => {
                 </div>
             </main>
 
-            <Footertwo />
         </>
     );
 };

@@ -1,6 +1,4 @@
 import React, { Fragment } from 'react';
-import Header from '../layouts/HeaderWithAuth';
-import Footer from '../layouts/Footer';
 import ForgotPasswordContent from '../sections/home/forgot-password/Content';
 import { useDocumentMeta } from "../../utils/meta/useMeta";
 
@@ -13,10 +11,10 @@ const ForgotPassword = () => {
 
     return (
         <Fragment>
-            <Header />
+         
             {/* <Breadcrumb breadcrumb={{ pagename: 'Forgot Password' }} /> */}
             <ForgotPasswordContent />
-            <Footer />
+       
         </Fragment>
     );
 };

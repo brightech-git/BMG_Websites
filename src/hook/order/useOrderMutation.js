@@ -1,12 +1,38 @@
 // src/hooks/order/useOrderMutation.js
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createOrder, cancelOrder, refundOrderApi } from '../../service/orderService';
+import { toast } from 'react-toastify';
 
-export const useCreateOrder = () => {
+export const useCreateOrder = (navigate) => {
     return useMutation({
-        mutationFn: createOrder, 
+        mutationFn: createOrder,
+
+        onSuccess: (data, variables) => {
+            if (!data?.orderId) {
+                toast.error("Order created but orderId not returned.");
+                return;
+            }
+
+            toast.success("Order created successfully 🎉");
+
+            if (variables.paymentMode === "ONLINE") {
+                navigate(`/payment/${data.orderId}`, {
+                    state: { orderPayload: variables },
+                });
+            } else {
+                navigate(`/payment-success?orderId=${data.orderId}&mode=COD`, {
+                    state: { orderPayload: variables },
+                });
+            }
+        },
+
+        onError: (error) => {
+            console.error("Order creation failed:", error);
+            toast.error(error.message || "Failed to create order");
+        },
     });
 };
+
 
 export const useCancelOrder = () => {
     const queryClient = useQueryClient(); // For cache invalidation

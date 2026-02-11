@@ -2,13 +2,11 @@ import React from 'react';
 import { FaTag, FaAward, FaLock, FaMoneyBillWave, FaExchangeAlt, FaInfinity } from 'react-icons/fa';
 import { FaFacebook, FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
 import './WhyChooseUsStyles.css'
-import Footertwo from '../../layouts/Footer';
-import HeaderWithAuth from '../../layouts/HeaderWithAuth';
 
 const BMGJewellers = () => {
   return (
     <>
-      <HeaderWithAuth />
+   
       <div className="bmg-jewellers">
 
 
@@ -105,7 +103,7 @@ const BMGJewellers = () => {
         </section>
 
 
-        <Footertwo />
+    
       </div>
     </>
   );

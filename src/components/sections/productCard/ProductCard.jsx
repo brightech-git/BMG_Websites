@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Heart, RefreshCw } from 'lucide-react';
-import { useFavorites, useAddFavorite, useRemoveFavorite } from '../../../hook/favorites/useFavoritesQuery';
+import {useFavorites} from '../../../hook/favorites/useFavoritesQuery';
 import { useCart } from '../../../hook/cart/useCartQuery';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -10,12 +10,11 @@ import fallbackImage from './fallback-image.jpg';
 import UpdateMobileModal from '../../layouts/UpdateMobileModal';
 
 const ProductCard = ({ item }) => {
-    const { data: favorites, isFavoritesLoading } = useFavorites();
+    const { favorites , isFavorite , addToFavorite ,removeFavorite ,isLoading:isFavoritesLoading } = useFavorites();
 
 const favoriteItems = favorites?.data?.products;
 
-    const addFavorite = useAddFavorite();
-    const removeFavorite = useRemoveFavorite();
+   
     const { cartItems, addToCartHandler ,isLoading } = useCart();
 
     const cartProducts = cartItems?.data?.products || [] ; 
@@ -29,7 +28,6 @@ const favoriteItems = favorites?.data?.products;
     const pincode = localStorage.getItem('pinCode');
     const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
 
-    const [isWishlisted, setIsWishlisted] = useState(false);
     const [heartAnimation, setHeartAnimation] = useState(false);
     const [cartAnimation, setCartAnimation] = useState(false);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
@@ -38,14 +36,7 @@ const favoriteItems = favorites?.data?.products;
     const [hover, setHover] = useState(false);
 
     // Check if item is in wishlist
-    useEffect(() => {
-        if (!isFavoritesLoading && favoriteItems && item?.TAGKEY) {
-            const isInWishlist = favoriteItems.some(product =>
-                product.ItemTagSno === item.TAGKEY || product === item.TAGKEY
-            );
-            setIsWishlisted(isInWishlist);
-        }
-    }, [favorites, item?.TAGKEY, isFavoritesLoading]);
+    const isWishlisted = isFavorite(item?.TAGKEY);
 
     useEffect(() => {
         const timer = setTimeout(() => setLoadingState(false), 500);
@@ -127,33 +118,21 @@ const favoriteItems = favorites?.data?.products;
         e.preventDefault();
         e.stopPropagation();
 
-        if (!isAuthenticated) {
-            toast.info('🔐 Please log in to add items to your cart.');
-            navigate('/login', { state: { from: location.pathname } });
-            return;
-        }
-        if (!mobileNumber) {
-            setModalOpen(true);
-            return;
-        }
 
-        if (!item?.TAGKEY) {
-            console.warn('Missing item TAGKEY');
-            return;
-        }
+         // ❌ NOT logged in
+            if (!isAuthenticated) {
+              toast.error("Please login to add to cart");
+              navigate("/login");
+              return;
+            }
+        
+            // ❌ Logged in but no mobile (Google login case)
+            if (!mobileNumber) {
+              setModalOpen(true);
+              return;
+            }
 
-        if (isInCart) {
-            console.warn('Item already in cart');
-            return;
-        }
-
-        const cartItem = {
-            tagKey: item.TAGKEY,
-            quantity: 1,
-            shippingPincode: pincode || '360004'
-        };
-
-        addToCartHandler(cartItem);
+        addToCartHandler(item);
         setCartAnimation(true);
         setTimeout(() => setCartAnimation(false), 600);
     };
@@ -172,48 +151,13 @@ const favoriteItems = favorites?.data?.products;
 
         setHeartAnimation(true);
 
-        // Prepare the data object that your backend expects
-        const wishlistData = {
-            tagKey: item.TAGKEY,
-            quantity:1
-        };
-
+    
         if (isWishlisted) {
             // Remove from wishlist
-            removeFavorite.mutate(item.TAGKEY, {
-                onSuccess: () => {
-                    setIsWishlisted(false);
-                    toast.info('💔 Removed from Wishlist', {
-                        position: 'top-right',
-                        autoClose: 2000,
-                    });
-                },
-                onError: (error) => {
-                    console.error('Remove wishlist error:', error);
-                    toast.error('❌ Failed to remove from Wishlist', {
-                        position: 'top-right',
-                        autoClose: 2000,
-                    });
-                },
-            });
+            removeFavorite(item.TAGKEY);
         } else {
             // Add to wishlist - wrap data in { data: wishlistData } object
-            addFavorite.mutate(wishlistData, {
-                onSuccess: () => {
-                    setIsWishlisted(true);
-                    toast.success('❤️ Added to Wishlist!', {
-                        position: 'top-right',
-                        autoClose: 2000,
-                    });
-                },
-                onError: (error) => {
-                    console.error('Add wishlist error:', error);
-                    toast.error('❌ Failed to add to Wishlist', {
-                        position: 'top-right',
-                        autoClose: 2000,
-                    });
-                },
-            });
+            addToFavorite(item);
         }
 
         setTimeout(() => setHeartAnimation(false), 600);
@@ -228,7 +172,7 @@ const favoriteItems = favorites?.data?.products;
     // Check if item is in cart
 
     const isInCart = Array.isArray(cartProducts) &&
-        cartProducts.some(cartItem => cartItem.ItemTagSno === item?.TAGKEY);
+        cartProducts.some(cartItem => cartItem.TAGKEY === item?.TAGKEY);
 
     if (loadingState || !item) {
         return (

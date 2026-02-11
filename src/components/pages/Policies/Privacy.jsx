@@ -1,12 +1,9 @@
 import React from "react";
 import "./PrivacyStyles.css";
-import HeaderWithAuth from "../../layouts/HeaderWithAuth";
-import Footertwo from "../../layouts/Footer";
 
 const PrivacyPolicy = () => {
   return (
     <>
-      <HeaderWithAuth />
 
       <div className="privacy-wrapper">
         <h1 className="privacy-heading">Privacy Policy</h1>
@@ -66,8 +63,6 @@ const PrivacyPolicy = () => {
           Note: Your data is encrypted and securely stored as per industry standards.
         </p>
       </div>
-
-      <Footertwo />
     </>
   );
 };

@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 import "./SchemePrivacyPolicy.css";
-import HeaderWithAuth from "../layouts/HeaderWithAuth";
-import Footertwo from "../layouts/Footer";
 
 function SchemePrivacyPolicy() {
     const handleExternalLink = (url) => {
@@ -98,7 +96,6 @@ function SchemePrivacyPolicy() {
     return (
         <div className="privacy-container">
             <div className="privacy-bg">
-                <HeaderWithAuth />
 
                 <div className="content-wrapper">
                     {policySections.map((section, index) => (
@@ -167,7 +164,6 @@ function SchemePrivacyPolicy() {
                     </div>
                 </div>
 
-                <Footertwo />
             </div>
         </div>
     );

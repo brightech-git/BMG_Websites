@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import HeroBanner from "../../components/banner/Banner";
+import HeroBanner from "../../components/schemeBanners/Banner";
 import { useSchemeDetails } from "../../hook/schemeDetails/useSchemeHook";
 import { getLanguage, setLanguage } from "../../utils/language/language";
-import HeroBannerDownload from "../../components/banner/HeroBanner";
+import HeroBannerDownload from "../../components/schemeBanners/HeroBanner";
 import { FaGooglePlay, FaApple, FaAndroid } from "react-icons/fa";
 import androidIcon from '../../assets/icons/android.jpeg';
 import FaqPage from "../faq/FaqPage";
@@ -38,7 +38,7 @@ function SchemePage() {
     const { data, isLoading, isError } = useSchemeDetails({ language });
     const schemeData = Array.isArray(data?.data) ? data.data : [];
 
-    console.log(schemeData,'schemeData')
+    console.log(schemeData, 'schemeData')
     const banner = "banner";
     const android = "android";
     const ios = "ios";
@@ -76,7 +76,7 @@ function SchemePage() {
 
     return (
         <>
-           
+
 
             <div className="scheme-main-container">
                 <section className="p-2 m-2 flex items-right">
@@ -129,7 +129,7 @@ function SchemePage() {
 
                 </section>
                 <section>
-                {/* <BannerCarousel
+                    {/* <BannerCarousel
                     banners={schemeData.map((scheme) => ({
                         desktopImg: `${BASE_URL}${scheme.BigSchemeImage}`,
                         mobileImg: `${BASE_URL}${scheme.SchemeImage}`,
@@ -242,7 +242,7 @@ function SchemePage() {
 
                 </section>
             </div>
-         
+
         </>
     );
 }

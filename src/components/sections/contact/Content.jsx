@@ -5,7 +5,6 @@ import { useContactFormQuery } from "../../../hook/contactForm/useContactFormQue
 import { useCompanyDetails } from "../../../context/clientDetails/clientDetialContext";
 import './Contact.css';
 import largerImg from '../../../assets/videos/silverIcon.png';
-import mobileImg from '../../../assets/videos/silverIcon.png';
 import { useNavigate } from "react-router-dom";
 import SmartButton from "../../ui/SmartButton";
 import { PDFDownloadLink } from '@react-pdf/renderer';
@@ -149,44 +148,6 @@ const Contact = () => {
                                 உங்களுக்காக புதிய தங்கம் ஜொலிக்கும் வெள்ளி நகைகள் உலகம்
                             </h1>
 
-                            <PDFDownloadLink
-                                document={
-                                    <PrintStatement
-                                        orderId={'ORD-105060'}
-                                        orderDate={'10-01-2026'}
-                                        originAddress={{
-                                            name: "BMG JEWELLERS PRIVATE LIMITED",
-                                            lines: [
-                                                "160, West Masi Street, Madurai",
-                                                "contact@bmgjewellers.in",
-                                                "GSTIN : 33AAICB0416C1ZG"
-                                            ]
-                                        }}
-                                        customerName={'Aswinkumar'}
-                                        customerMobile={99898989898}
-                                        customerAddress={["160, West Masi Street, Madurai",
-                                            "contact@bmgjewellers.in",
-                                            "GSTIN : 33AAICB0416C1ZG ,Tamil Nadu, India"]}
-                                        paymentMode={'ONLINE'}
-                                        paymentStatus={'PAID'}
-                                        transactionId={'TRAN-505050'}
-                                        items={res.items.map(i => ({
-                                            name: i.product_name,
-                                            qty: i.quantity,
-                                            amount: i.price
-                                        }))}
-                                        totalAmount={1500}
-                                    />
-                                }
-                                fileName={`BMG_Receipt_${res.orderId}.pdf`}
-                            >
-                                {({ loading }) => (
-                                    <SmartButton variant="outline" className="flex items-center" icon={Download}>
-                                        {loading ? "Generating PDF..." : "Download Receipt"}
-                                    </SmartButton>
-                                )}
-
-                            </PDFDownloadLink>
                         </div>
                     </div>
                 </div>

@@ -1,40 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
-import Home from "./components/pages/Home";
-import About from "./components/pages/About";
-import Account from "./components/pages/Account";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Account from "./pages/Account";
 import FAQ from "./components/layouts/faq";
 import { faqContent, languages } from "./components/layouts/faqContent";
-import Cart from "./components/pages/Cart";
-import Checkout from "./components/pages/Checkout";
-import Comingsoon from "./components/pages/Comingsoon";
-import Contact from "./components/pages/Contact";
-import ContactStore from "./components/pages/ContactStore";
-import Error from "./components/pages/Error";
-import Login from "./components/pages/Login";
-import Register from "./components/pages/Register";
-import ProductDetailPage from "./components/pages/productDetail";
-import ProductsPage from "./components/pages/productsPage";
-import Wishlist from "./components/pages/Wishlist";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import Comingsoon from "./pages/Comingsoon";
+import Contact from "./pages/Contact";
+import ContactStore from "./pages/ContactStore";
+import Error from "./pages/Error";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ProductDetailPage from "./pages/productDetail";
+import ProductsPage from "./pages/productsPage";
+import Wishlist from "./pages/Wishlist";
 
-import PrivacyPolicy from "./components/pages/Policies/Privacy";
-import CancellationReturnPolicy from "./components/pages/Policies/CancellationReturnPolicy";
-import RefundPolicy from "./components/pages/Policies/RefundPolicy";
-import TermsConditions from "./components/pages/Policies/TermsConditions";
-import DeliveryShippingPolicy from "./components/pages/Policies/DeliveryAndShipping";
-import WhyChooseUs from "./components/pages/Policies/WhyChooseUs";
+import PrivacyPolicy from "./pages/Policies/Privacy";
+import CancellationReturnPolicy from "./pages/Policies/CancellationReturnPolicy";
+import RefundPolicy from "./pages/Policies/RefundPolicy";
+import TermsConditions from "./pages/Policies/TermsConditions";
+import DeliveryShippingPolicy from "./pages/Policies/DeliveryAndShipping";
+import WhyChooseUs from "./pages/Policies/WhyChooseUs";
 
-import ForgotPassword from "./components/pages/ForgotPassword";
-import Appointment from "./components/pages/virtualShop/Appointment";
-import BangleSizeGuide from "./components/pages/SizeGuide/BangleSize";
-import RingSizeGuide from "./components/pages/SizeGuide/RingSize";
-import PaymentPage from "./components/pages/payment/Payment";
-import PaymentStatus from "./components/pages/paymentStatus";
+import ForgotPassword from "./pages/ForgotPassword";
+import Appointment from "./pages/virtualShop/Appointment";
+import BangleSizeGuide from "./pages/SizeGuide/BangleSize";
+import RingSizeGuide from "./pages/SizeGuide/RingSize";
+import PaymentPage from "./pages/payment/Payment";
+import PaymentStatus from "./pages/paymentStatus";
 
-import SchemePrivacyPolicy from "./components/pages/SchemePrivacyPolicy";
-import SupportPage from "./components/pages/SchemeSupport";
-import Success from "./components/pages/Success";
+import SchemePrivacyPolicy from "./pages/SchemePrivacyPolicy";
+import SupportPage from "./pages/SchemeSupport";
+import Success from "./pages/Success";
 
 import AccountPage from "./components/sections/account/Content";
 import ChangePassword from "./components/sections/account/ChangePassword/ChangePassword";
@@ -46,10 +46,11 @@ import Dashboard from "./components/sections/account/Dashboard/Dashboard";
 import SchemePage from "./pages/scheme/Scheme";
 
 import ScrollToTop from "./components/layouts/ScrolltoTop";
-import NotificationModal from "./components/pages/notificationModal/NotificationModal";
+import NotificationModal from "./pages/notificationModal/NotificationModal";
 import { OrderNotification } from "./components/layouts/ProductOrdersModal";
-import PolicyPage from './components/pages/Policies/Risk Mitigation & Compliance Policy';
+import PolicyPage from './pages/Policies/Risk Mitigation & Compliance Policy';
 import PrivateRoute from "./route/UserPrivateRoute";
+import MainHeaderLayout from "./component/layout/MainHeaderLayout";
 
 import "./App.css";
 
@@ -110,14 +111,18 @@ function App() {
             <Route path="/payment/:orderId" element={<PaymentPage />} />
             <Route path="/payment-success" element={<PaymentStatus />} />
 
-            <Route path="/account" element={<AccountPage />}>
-              <Route index element={<Dashboard />} />
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="orders" element={<Orders />} />
-              <Route path="orderdetails/:id" element={<OrderDetail />} />
-              <Route path="address" element={<AddressManager />} />
-              <Route path="change-password" element={<ChangePassword />} />
-            </Route>
+          
+
+              <Route path="/account" element={<AccountPage />}>
+                <Route index element={<Dashboard />} />
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="orders" element={<Orders />} />
+                <Route path="orderdetails/:id" element={<OrderDetail />} />
+                <Route path="address" element={<AddressManager />} />
+                <Route path="change-password" element={<ChangePassword />} />
+              </Route>
+
+
           </Route>
 
           {/* 404 */}

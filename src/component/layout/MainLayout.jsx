@@ -1,14 +1,13 @@
 import HeaderWithAuth from "../../components/layouts/HeaderWithAuth";
 import Footer from "../../components/layouts/Footer";
-import { Outlet } from "react-router-dom";
 
-const MainLayout = ({children}) => {
+const MainLayout = ({ children }) => {
     return (
         <>
             <HeaderWithAuth />
-            <main className="min-h-100vh">
-                {children}
-            </main>
+                <main className="min-h-screen pt-[160px] sm:pt-[150px] md:pt-[150px]">
+                    {children}
+                </main>
             <Footer />
         </>
     );

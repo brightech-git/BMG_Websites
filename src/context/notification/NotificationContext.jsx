@@ -1,6 +1,6 @@
 // src/context/NotificationContext.js
 import React, { createContext, useState, useContext, useEffect } from "react";
-import NotificationModal from "../../components/pages/notificationModal/NotificationModal";
+import NotificationModal from "../../pages/notificationModal/NotificationModal";
 import { useNotification as useRegisterNotification } from "../../hook/notification/useNotificationQuery";
 import { requestForToken, onMessageListener } from "../../notification/firebase";
 import { v4 as uuidv4 } from "uuid";
@@ -13,7 +13,7 @@ export const useNotification = () => useContext(NotificationContext);
 
 export const NotificationProvider = ({ children }) => {
     const [showPermissionModal, setShowPermissionModal] = useState(false);
-    const user = useSelector((state) => state.user.user) || {}; 
+    const user = useSelector((state) => state.user.user) || {};
     const [notifData, setNotifData] = useState({ title: "", message: "", image: "" });
     const { mutate: registerDevice } = useRegisterNotification();
 
@@ -35,7 +35,7 @@ export const NotificationProvider = ({ children }) => {
                 fcmToken,
             });
         }
-console.log(fcmToken ,'fcmToken')
+        console.log(fcmToken, 'fcmToken')
         setShowPermissionModal(false);
     };
 
@@ -44,7 +44,7 @@ console.log(fcmToken ,'fcmToken')
         const unsubscribe = onMessageListener()
             .then((payload) => {
                 console.log("FCM foreground payload: ", payload);
-                const { title, body, image ,url} = payload.data;
+                const { title, body, image, url } = payload.data;
 
                 toast.info(
                     <div style={{ display: "flex", alignItems: "center" }}>
@@ -64,7 +64,7 @@ console.log(fcmToken ,'fcmToken')
                         <div>
                             <strong>{title}</strong>
                             <div>{body}</div>
-                         
+
                         </div>
                     </div>,
                     {
@@ -81,23 +81,23 @@ console.log(fcmToken ,'fcmToken')
             .catch((err) => console.log("FCM foreground error: ", err));
 
         return () => unsubscribe;
-            }, []);
+    }, []);
 
 
-        return (
-            <NotificationContext.Provider value={{ askNotification }}>
-                {children}
+    return (
+        <NotificationContext.Provider value={{ askNotification }}>
+            {children}
 
-                {/* Permission modal (only for asking notification permission) */}
-                <NotificationModal
-                    show={showPermissionModal}
-                    title={notifData.title}
-                    message={notifData.message}
-                    image={notifData.image}
-                    type="permission"
-                    onClose={() => setShowPermissionModal(false)}
-                    onAllow={handleEnable}
-                />
-            </NotificationContext.Provider>
-        );
-    };
+            {/* Permission modal (only for asking notification permission) */}
+            <NotificationModal
+                show={showPermissionModal}
+                title={notifData.title}
+                message={notifData.message}
+                image={notifData.image}
+                type="permission"
+                onClose={() => setShowPermissionModal(false)}
+                onAllow={handleEnable}
+            />
+        </NotificationContext.Provider>
+    );
+};

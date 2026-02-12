@@ -166,9 +166,11 @@ const Cart = () => {
         return sum + price ;
     }, 0);
 
-    const shippingFee = cartDetails?.shipping?.totalAmount ;
+    const shippingFee = cartDetails?.shipping?.totalAmount ?? 0;
+    const hasShipping = cartDetails?.shipping?.totalAmount != null;
 
     const totalAmount = subtotal + shippingFee;
+
 
     
 
@@ -366,13 +368,24 @@ const Cart = () => {
 
                                 <div className="border-t-2 border-dashed border-gray-300 pt-2">
                                     <div className="flex justify-between items-center">
-                                        <span className="font-bold ">Total Amount</span>
-                                        <span className="text-lg font-bold text-[var(--primary-hover-color)]">
-                                            ₹{totalAmount.toLocaleString('en-IN')}
-                                        </span>
+                                        <span className="font-bold">Total Amount</span>
+
+                                        {hasShipping ? (
+                                            <span className="text-lg font-bold text-[var(--primary-hover-color)]">
+                                                ₹{totalAmount.toLocaleString('en-IN')}
+                                            </span>
+                                        ) : (
+                                            <span className="text-sm font-medium text-gray-500">
+                                                Will be calculated in next step
+                                            </span>
+                                        )}
                                     </div>
-                                    <p className="text-xs text-gray-500 mt-1">Inclusive of all taxes</p>
+
+                                    <p className="text-xs text-gray-500 mt-1">
+                                        Inclusive of all taxes
+                                    </p>
                                 </div>
+
                             </div>
                             <div className='flex items-center justify-center'>
                                 <SmartButton

@@ -33,17 +33,17 @@
     --primary-text-color: #041f60;
     --secondary-text-color: #0843ce;
 
-    --primary-hover-color: #f16137;
-    --primary-card-color: #eeece8;
-    --secondary-card-color: #f7f7f7;
+    --primary-hover-color: #f97316;
+    --primary-card-color: #fff7ed;
+    --secondary-card-color: #ffedd5;
 
     --brand-background-color: linear-gradient(to right,
             #ffb889,
-            #ddb7f3);
+            #fed7aa);
 
     --white-color: #ffffff;
     --black-color: #101010;
-    --grey-color: #A9A9A9;
+    --grey-color: #9a3412;
 
     --header-height: 80px;
     --mobile-header-height: 60px;
@@ -51,9 +51,21 @@
     --green-color: #024908;
     --gold-color: #e6d710;
 
-    --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-    --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+    --orange-50: #fff7ed;
+    --orange-100: #ffedd5;
+    --orange-200: #fed7aa;
+    --orange-300: #fdba74;
+    --orange-400: #fb923c;
+    --orange-500: #f97316;
+    --orange-600: #ea580c;
+    --orange-700: #c2410c;
+    --orange-800: #9a3412;
+    --orange-900: #7c2d12;
+    --orange-950: #431407;
+
+    --shadow-sm: 0 0.125rem 0.25rem rgba(249, 115, 22, 0.075);
+    --shadow-md: 0 0.5rem 1rem rgba(249, 115, 22, 0.15);
+    --shadow-lg: 0 1rem 3rem rgba(249, 115, 22, 0.175);
 
     --transition: all 0.3s ease;
     --transition-fast: all 0.15s ease;
@@ -128,7 +140,6 @@ select,
 textarea {
     width: 100%;
     height: 70px;
-    border: none;
     padding: 0 40px;
 
     font-family: var(--primary-font);
@@ -156,7 +167,6 @@ textarea {
     font-family: var(--primary-font);
     color: var(--primary-text-color);
     background: transparent;
-    border: none;
 
     cursor: pointer;
     transition: var(--transition);

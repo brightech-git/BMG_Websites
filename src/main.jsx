@@ -21,21 +21,13 @@ import { CompanyDetailsProvider } from './context/clientDetails/clientDetialCont
 
 import './assets/css/style.css';
 import './assets/css/animations.css';
-import './assets/css/utils.css';
+// import './assets/css/utils.css';
 
 import './index.css'
 import { PincodeProvider } from './context/pinocde/PincodeContext';
 import MainLayout from './component/layout/MainLayout';
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000,
-      cacheTime: 15 * 60 * 1000,
-      refetchOnWindowFocus: false,
-      retry: 1,
-    },
-  },
-}); 
+import { queryClient } from './component/reactQuery/queryClient';
+
 
 const root = createRoot(document.getElementById('root'));
 root.render(

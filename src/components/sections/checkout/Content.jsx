@@ -1,21 +1,22 @@
-import React, { useState, useEffect, useCallback ,useMemo} from 'react';
-import { Modal, Button, Badge, Form, InputGroup } from 'react-bootstrap';
-import { Check, Plus, Edit, Trash2, Phone, Home, ShoppingBag, MapPin, User, CreditCard } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { Check, Plus, Edit, Trash2, Phone, Home, ShoppingBag, MapPin, User, CreditCard, X, ChevronDown, ChevronUp, Map, Shield, Truck, Edit2, Building, Globe, Tag, Star } from 'lucide-react';
 import { useCreateOrder } from '../../../hook/order/useOrderMutation';
 import { useCurrentProfile } from '../../../hook/userProfile/useUserProfileQuery';
 import { useCreateAddress, useUpdateAddress, useAddressesByCustomer, useDeleteAddress } from '../../../hook/address/useNewAddress';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrash, faPhone } from '@fortawesome/free-solid-svg-icons';
-import GeoLocationPicker from '../../address/GeoLocationPicker';
+import GeoLocationPicker from '../../location/GeoLocationPicker';
 import SmartButton from '../../ui/SmartButton';
 import { useAddressesByPincode } from '../../../hook/address/useGetAddressByPincode';
 import { useNavigate } from 'react-router-dom';
 import { useCheckShippingPrice } from '../../../hook/pincode/usePincode';
 import { usePincode } from '../../../context/pinocde/PincodeContext';
-import  {getImage} from '../../../utils/getProductImages';
+import { getImage } from '../../../utils/getProductImages';
 import { formatCurrency } from '../../../utils/formatters';
-// Enhanced Progress Stepper with Icon-Centered Dividers
+import "animate.css";
+
+// ========== PROGRESS STEPPER ==========
 const ProgressStepper = ({ currentStep }) => {
   const steps = [
     { id: 1, name: 'Delivery Address', icon: MapPin },
@@ -24,7 +25,7 @@ const ProgressStepper = ({ currentStep }) => {
   ];
 
   return (
-    <div className="w-full py-2 bg-transparent">
+    <div className="w-full py-3 px-2 bg-transparent animate__animated animate__fadeIn">
       <div className="flex items-start justify-between max-w-4xl mx-auto relative">
         {steps.map((step, index) => {
           const Icon = step.icon;
@@ -35,42 +36,46 @@ const ProgressStepper = ({ currentStep }) => {
           return (
             <React.Fragment key={step.id}>
               <div className="flex flex-col items-center relative z-10 flex-1">
-                <div className="flex flex-col items-center text-center gap-2 relative z-20">
+                <div className="flex flex-col items-center text-center gap-1.5 relative z-20">
+                  {/* Step Circle */}
                   <div className={`
-                    w-12 h-12 rounded-full flex items-center justify-center relative transition-all duration-300
-                    border-2 ${isCompleted ? 'border-[#116e05] bg-[#116e05] shadow-lg shadow-green-500/30' :
-                      isActive ? 'border-[#f16137] bg-[#f16137]' : 'border-gray-300 bg-white shadow-sm'}
+                    w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center relative transition-all duration-500
+                    border-2 transform hover:scale-110
+                    ${isCompleted ? 'border-[#10B981] bg-[#10B981] shadow-lg shadow-[#10B981]/30' :
+                      isActive ? 'border-[#F97316] bg-[#F97316] shadow-lg shadow-[#F97316]/30 animate-pulse' :
+                        'border-[#FED7AA] bg-white hover:border-[#FDBA74]'}
                   `}>
                     {isCompleted ? (
-                      <div className="text-white">
-                        <Check size={18} />
-                      </div>
+                      <Check size={16} className="text-white" />
                     ) : (
-                      <div className={`${isActive ? 'text-white' : 'text-gray-600'}`}>
-                        <Icon size={18} />
-                      </div>
+                      <Icon size={16} className={`${isActive ? 'text-white' : 'text-[#9A3412]'}`} />
+                    )}
+
+                    {isActive && !isCompleted && (
+                      <span className="absolute -top-1 -right-1 w-3 h-3 bg-[#F97316] rounded-full border-2 border-white animate-ping"></span>
                     )}
                   </div>
-                  <div className="flex flex-col gap-1 mt-2">
-                    {/* <span className="text-xs font-medium uppercase tracking-wider text-gray-700">
-                      Step {step.id}
-                    </span> */}
-                    <span className={`
-                     text-xs sm:text-sm font-medium whitespace-nowrap
-                      ${isCompleted ? 'text-[#116e05] font-semibold' :
-                        isActive ? 'text-[#041f60] font-semibold' : 'text-gray-700'}
-                    `}>
-                      {step.name}
-                    </span>
-                  </div>
+
+                  {/* Step Name */}
+                  <span className={`
+                    text-[10px] sm:text-xs font-medium whitespace-nowrap px-2 py-1 rounded-full
+                    ${isCompleted ? 'text-[#10B981] bg-[#10B981]/10' :
+                      isActive ? 'text-[#F97316] bg-[#FFF7ED] font-semibold' :
+                        'text-[#9A3412] bg-transparent'}
+                  `}>
+                    {step.name}
+                  </span>
                 </div>
 
+                {/* Connector Line */}
                 {!isLastStep && (
-                  <div className="absolute top-6 left-1/2 right-[-50%] h-0.5 -translate-y-1/2 z-0">
+                  <div className="absolute top-5 left-[60%] right-[-40%] h-0.5 -translate-y-1/2 z-0  block">
                     <div className={`
-                      h-0.5 w-full transition-all duration-300
-                      ${isCompleted ? 'bg-[#116e05]' : 'bg-gray-300'}
-                    `}></div>
+                      h-0.5 w-full transition-all duration-700
+                      ${isCompleted ? 'bg-[#10B981]' : 'bg-[#FED7AA]'}
+                    `}>
+
+                    </div>
                   </div>
                 )}
               </div>
@@ -82,8 +87,19 @@ const ProgressStepper = ({ currentStep }) => {
   );
 };
 
-// Address Modal
-const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddress, onSaveAddress, onDeleteAddress, customerProfile, onPincodeChange, pincodeAddress }) => {
+// ========== ADDRESS MODAL ==========
+const AddressModal = ({
+  show,
+  onHide,
+  addresses,
+  selectedAddress,
+  onSelectAddress,
+  onSaveAddress,
+  onDeleteAddress,
+  customerProfile,
+  onPincodeChange,
+  pincodeAddress
+}) => {
   const [clear, setClear] = useState(false);
   const [mode, setMode] = useState('list');
   const [currentAddress, setCurrentAddress] = useState(null);
@@ -127,7 +143,7 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
       return;
     }
     onPincodeChange(formData.pincode);
-  }, [formData.pincode]);
+  }, [formData.pincode, onPincodeChange]);
 
   const handleAddNew = () => {
     setCurrentAddress(null);
@@ -242,33 +258,71 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
     }
   };
 
+  if (!show) return null;
+
   return (
-    <Modal show={show} onHide={onHide} centered className="!max-w-2xl ">
-      <Modal.Header closeButton className="border-b border-gray-200 px-2 py-2 gap-2">
-        <Modal.Title className="font-semibold text-lg text-[#041f60]">
-          {mode === 'list' ? 'Select Address' : mode === 'add' ? 'Add Address' : 'Edit Address'}
-        </Modal.Title>
-        {mode !== 'list' && <GeoLocationPicker onAddressSelected={handleGeoFill} clear={clear} />}
-      </Modal.Header>
-      <Modal.Body className="px-2 py-2">
-        {mode === 'list' ? (
-          <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
-            {addresses.map(address => (
-              <div key={address.id} className={`
-                border rounded-lg transition-all duration-200
-                ${selectedAddress?.id === address.id ? 'border-[#f16137] ring-1 ring-[#f16137]' : 'border-gray-200'}
-              `}>
-                <div className="p-3">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 animate__animated animate__fadeIn">
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onHide}></div>
+
+      {/* Modal Content */}
+      <div className="relative bg-white/95 backdrop-blur-md rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl border-2 border-[#FED7AA] animate__animated animate__fadeInUp">
+
+        {/* Header */}
+        <div className="sticky top-0 bg-gradient-to-r from-[#FFF7ED] to-[#FFEDD5] border-b border-[#FED7AA] px-4 py-3 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-gradient-to-br from-[#F97316] to-[#EA580C] rounded-lg flex items-center justify-center shadow-md">
+              <MapPin className="w-4 h-4 text-white" />
+            </div>
+            <h3 className="font-bold text-[#7C2D12] text-lg">
+              {mode === 'list' ? 'Select Address' : mode === 'add' ? 'Add Address' : 'Edit Address'}
+            </h3>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {mode !== 'list' && (
+              <GeoLocationPicker onAddressSelected={handleGeoFill} clear={clear} />
+            )}
+            <button
+              onClick={onHide}
+              className="w-8 h-8 rounded-lg hover:bg-white/80 flex items-center justify-center transition-colors"
+            >
+              <X className="w-4 h-4 text-[#9A3412]" />
+            </button>
+          </div>
+        </div>
+
+        {/* Body */}
+        <div className="px-4 py-4 overflow-y-auto max-h-[calc(90vh-80px)]">
+          {mode === 'list' ? (
+            <div className="space-y-4">
+              {addresses.map(address => (
+                <div
+                  key={address.id}
+                  className={`
+                    border-2 rounded-xl p-4 transition-all duration-300 animate__animated animate__fadeIn
+                    ${selectedAddress?.id === address.id
+                      ? 'border-[#F97316] bg-[#FFF7ED]/30 shadow-lg shadow-[#F97316]/10'
+                      : 'border-[#FED7AA] hover:border-[#FDBA74] hover:shadow-md'
+                    }
+                  `}
+                >
                   <div className="flex justify-between items-start mb-3">
                     <div className="flex items-center gap-2">
-                      <h6 className="font-semibold text-[#041f60]">{address.name}</h6>
+                      <div className="w-8 h-8 bg-[#FFF7ED] rounded-lg flex items-center justify-center">
+                        <User className="w-4 h-4 text-[#F97316]" />
+                      </div>
+                      <h6 className="font-semibold text-[#7C2D12]">{address.name}</h6>
                       {address.isDefault && (
-                        <Badge className="bg-[#024908] text-white text-xs px-2 py-1 rounded">Default</Badge>
+                        <span className="bg-gradient-to-r from-[#10B981] to-[#059669] text-white text-[10px] px-2 py-1 rounded-full">
+                          Default
+                        </span>
                       )}
                     </div>
-                    <div className="flex gap-2">
+
+                    <div className="flex gap-1.5">
                       <button
-                        className="w-8 h-8 rounded-lg bg-gray-100 text-[#023a72] flex items-center justify-center hover:bg-gray-200 transition-colors"
+                        className="w-7 h-7 rounded-lg bg-[#FFF7ED] text-[#F97316] flex items-center justify-center hover:bg-[#FFEDD5] transition-colors"
                         onClick={() => handleEdit(address)}
                         title="Edit address"
                       >
@@ -276,7 +330,7 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
                       </button>
                       {!address.isDefault && (
                         <button
-                          className="w-8 h-8 rounded-lg bg-gray-100 text-red-600 flex items-center justify-center hover:bg-red-50 transition-colors"
+                          className="w-7 h-7 rounded-lg bg-rose-50 text-rose-500 flex items-center justify-center hover:bg-rose-100 transition-colors"
                           onClick={() => handleDelete(address.id)}
                           title="Delete address"
                         >
@@ -285,230 +339,317 @@ const AddressModal = ({ show, onHide, addresses, selectedAddress, onSelectAddres
                       )}
                     </div>
                   </div>
-                  <div className="space-y-1 text-sm text-gray-700">
-                    <p>{address.addressLine}</p>
+
+                  <div className="text-xs sm:text-sm text-[#9A3412] space-y-1 ml-10">
+                    <p className="text-[#7C2D12] font-medium">{address.addressLine}</p>
                     <p>{[address.locality, address.city].filter(Boolean).join(', ')}</p>
-                    <p>{address.state} - {address.pincode}, {address.country || 'India'}</p>
-                    {address.landmark && <p className="text-gray-600">Landmark: {address.landmark}</p>}
-                    <p className="flex items-center gap-2 mt-2 text-gray-800">
-                      <FontAwesomeIcon icon={faPhone} size="sm" className="text-[#f16137]" /> {address.phone}
+                    <p>{address.state} - <span className="font-semibold">{address.pincode}</span></p>
+                    {address.landmark && (
+                      <p className="text-[#F97316]">Landmark: {address.landmark}</p>
+                    )}
+                    <p className="flex items-center gap-1.5 mt-2 text-[#7C2D12]">
+                      <Phone className="w-3.5 h-3.5 text-[#F97316]" />
+                      {address.phone}
                     </p>
                   </div>
-                  <div className="mt-4 pt-3 border-t border-gray-100">
-                    <SmartButton
-                      variant={selectedAddress?.id === address.id ? 'success' : 'outline-primary'}
+
+                  <div className="mt-4 pt-3 border-t border-[#FED7AA]">
+                    <button
                       onClick={() => { onSelectAddress(address); onHide(); }}
-                      className="w-full flex flex-row"
-                      children={ selectedAddress?.id === address.id ? (
-                        <>
-                          {/* <Check size={16} />  */}
-                          Selected
-                        </>
+                      className={`
+                        w-full py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-300
+                        ${selectedAddress?.id === address.id
+                          ? 'bg-gradient-to-r from-[#10B981] to-[#059669] text-white shadow-md hover:shadow-lg'
+                          : 'border-2 border-[#F97316] text-[#F97316] hover:bg-[#FFF7ED] hover:border-[#EA580C]'
+                        }
+                      `}
+                    >
+                      {selectedAddress?.id === address.id ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <Check className="w-4 h-4" /> Selected
+                        </span>
                       ) : (
                         'Deliver Here'
                       )}
-                    />
-                     
-                   
+                    </button>
                   </div>
                 </div>
-              </div>
-            ))}
-            <button
-              className="w-full py-3 border-2 border-dashed border-[#f16137] rounded-lg text-[#f16137] font-medium hover:border-solid hover:bg-[#f16137]/5 transition-all duration-200 flex items-center justify-center gap-2"
-              onClick={handleAddNew}
-            >
-              <Plus size={16} /> Add New Address
-            </button>
-          </div>
-        ) : (
-          <Form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Form.Group>
-                <Form.Label className="font-medium text-sm text-[#041f60] mb-1">Full Name*</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="border-gray-300 focus:border-[#f16137] focus:ring-[#f16137] rounded-lg h-10 transition-colors"
-                  required
-                />
-              </Form.Group>
-              <Form.Group>
-                <Form.Label className="font-medium text-sm text-[#041f60] mb-1">Phone Number*</Form.Label>
-                <Form.Control
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                    className="border-gray-300 h-10 focus:border-[#f16137] focus:ring-[#f16137] rounded-lg transition-colors"
-                  pattern="[0-9]{10}"
-                  required
-                />
-              </Form.Group>
+              ))}
+
+              <button
+                className="w-full py-3 border-2 border-dashed border-[#F97316] rounded-xl text-[#F97316] font-medium hover:bg-[#FFF7ED] hover:border-solid transition-all duration-300 flex items-center justify-center gap-2 group"
+                onClick={handleAddNew}
+              >
+                <Plus className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" />
+                Add New Address
+              </button>
             </div>
-
-            <Form.Group>
-              <Form.Label className="font-medium text-sm text-[#041f60] mb-1">Address Line*</Form.Label>
-              <Form.Control
-                as="textarea"
-                name="addressLine"
-                value={formData.addressLine}
-                onChange={handleChange}
-                  className="border-gray-300 focus:border-[#f16137] focus:ring-[#f16137] rounded-lg h-20 transition-colors min-h-[80px]"
-                rows={3}
-                required
-              />
-            </Form.Group>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Form.Group className="relative">
-                  <Form.Label className="font-medium text-sm   text-[#041f60] mb-1">Pincode*</Form.Label>
-                <InputGroup>
-                  <Form.Control
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Full Name */}
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-[#7C2D12] flex items-center gap-1.5">
+                    <User className="w-3.5 h-3.5 text-[#F97316]" />
+                    Full Name <span className="text-rose-500">*</span>
+                  </label>
+                  <input
                     type="text"
-                    name="pincode"
-                    value={formData.pincode}
+                    name="name"
+                    value={formData.name}
                     onChange={handleChange}
-                    pattern="[0-9]{6}"
-                    maxLength={6}
-                      className="border-gray-300 focus:border-[#f16137] h-10 focus:ring-[#f16137] rounded-lg transition-colors"
+                    className="w-full px-3 py-2 h-10 bg-white border-2 border-[#FED7AA] rounded-xl text-[#7C2D12] placeholder:text-[#FDBA74]/70 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20 outline-none transition-all"
                     required
                   />
-                  {postOffices.length > 0 && (
-                    <InputGroup.Text
-                      role="button"
-                      className="bg-white border-gray-300 cursor-pointer"
-                      onClick={() => {
-                        setShowPostOfficeList(prev => !prev);
-                        setPincodeVerified(true);
-                      }}
-                    >
-                      <Check className="text-[#024908]" size={16} />
-                    </InputGroup.Text>
-                  )}
-                </InputGroup>
+                </div>
 
-                {/^\d{6}$/.test(formData.pincode) && showPostOfficeList && postOffices.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 z-50 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto mt-1">
-                    {postOffices.map((po, index) => (
-                      <div
-                        key={index}
-                        className="px-3 py-2 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
-                        onClick={() => handlePostOfficeSelect(po)}
+                {/* Phone Number */}
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-[#7C2D12] flex items-center gap-1.5">
+                    <Phone className="w-3.5 h-3.5 text-[#F97316]" />
+                    Phone Number <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    pattern="[0-9]{10}"
+                    maxLength="10"
+                    className="w-full px-3 py-2 h-10 bg-white border-2 border-[#FED7AA] rounded-xl text-[#7C2D12] placeholder:text-[#FDBA74]/70 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20 outline-none transition-all"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Address Line */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-[#7C2D12] flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-[#F97316]" />
+                  Address Line <span className="text-rose-500">*</span>
+                </label>
+                <textarea
+                  name="addressLine"
+                  value={formData.addressLine}
+                  onChange={handleChange}
+                  rows={3}
+                  className="w-full px-3 py-2 bg-white border-2 border-[#FED7AA] rounded-xl text-[#7C2D12] placeholder:text-[#FDBA74]/70 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20 outline-none transition-all resize-none"
+                  required
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Pincode */}
+                <div className="space-y-1.5 relative">
+                  <label className="text-xs font-semibold text-[#7C2D12] flex items-center gap-1.5">
+                    <Map className="w-3.5 h-3.5 text-[#F97316]" />
+                    Pincode <span className="text-rose-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="pincode"
+                      value={formData.pincode}
+                      onChange={handleChange}
+                      pattern="[0-9]{6}"
+                      maxLength={6}
+                      className="w-full px-3 py-2 h-10 bg-white border-2 border-[#FED7AA] rounded-xl text-[#7C2D12] placeholder:text-[#FDBA74]/70 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20 outline-none transition-all pr-10"
+                      required
+                    />
+                    {postOffices.length > 0 && (
+                      <button
+                        type="button"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 bg-[#10B981]/10 rounded-lg flex items-center justify-center hover:bg-[#10B981]/20 transition-colors"
+                        onClick={() => {
+                          setShowPostOfficeList(prev => !prev);
+                          setPincodeVerified(true);
+                        }}
                       >
-                        <div className="font-medium text-gray-800">{po.Name}</div>
-                        <div className="text-xs text-gray-600">
-                          {po.Block}, {po.District}
-                        </div>
-                      </div>
-                    ))}
+                        <Check className="w-3.5 h-3.5 text-[#10B981]" />
+                      </button>
+                    )}
                   </div>
-                )}
-              </Form.Group>
 
-              <Form.Group>
-                <Form.Label className="font-medium text-sm text-[#041f60] mb-1">Locality*</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="locality"
-                  value={formData.locality}
-                  onChange={handleChange}
-                    className="border-gray-300 focus:border-[#f16137] h-10 focus:ring-[#f16137] rounded-lg transition-colors"
-                  required
-                />
-              </Form.Group>
-            </div>
+                  {/^\d{6}$/.test(formData.pincode) && showPostOfficeList && postOffices.length > 0 && (
+                    <div className="absolute top-full left-0 right-0 z-50 bg-white border-2 border-[#FED7AA] rounded-xl shadow-lg max-h-48 overflow-y-auto mt-1 animate__animated animate__fadeIn">
+                      {postOffices.map((po, index) => (
+                        <div
+                          key={index}
+                          className="px-3 py-2 hover:bg-[#FFF7ED] cursor-pointer border-b border-[#FED7AA] last:border-b-0 transition-colors"
+                          onClick={() => handlePostOfficeSelect(po)}
+                        >
+                          <div className="font-medium text-[#7C2D12]">{po.Name}</div>
+                          <div className="text-xs text-[#9A3412]">
+                            {po.Block}, {po.District}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Form.Group>
-                <Form.Label className="font-medium text-sm text-[#041f60] mb-1">District*</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleChange}
-                    className="border-gray-300 focus:border-[#f16137] h-10 focus:ring-[#f16137] rounded-lg transition-colors"
-                  required
-                />
-              </Form.Group>
-              <Form.Group>
-                <Form.Label className="font-medium text-sm text-[#041f60] mb-1">State*</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="state"
-                  value={formData.state}
-                  onChange={handleChange}
-                    className="border-gray-300 focus:border-[#f16137] h-10 focus:ring-[#f16137] rounded-lg transition-colors"
-                  required
-                />
-              </Form.Group>
-            </div>
+                {/* Locality */}
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-[#7C2D12] flex items-center gap-1.5">
+                    <Map className="w-3.5 h-3.5 text-[#F97316]" />
+                    Locality <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="locality"
+                    value={formData.locality}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 h-10 bg-white border-2 border-[#FED7AA] rounded-xl text-[#7C2D12] placeholder:text-[#FDBA74]/70 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20 outline-none transition-all"
+                    required
+                  />
+                </div>
+              </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Form.Group>
-                <Form.Label className="font-medium text-sm text-[#041f60] mb-1">Landmark</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="landmark"
-                  value={formData.landmark}
-                  onChange={handleChange}
-                    className="border-gray-300 focus:border-[#f16137] h-10 focus:ring-[#f16137] rounded-lg transition-colors"
-                />
-              </Form.Group>
-              <Form.Group>
-                <Form.Label className="font-medium text-sm text-[#041f60] mb-1">Mobile 2</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="alternatePhone"
-                  value={formData.alternatePhone}
-                  onChange={handleChange}
-                    className="border-gray-300 focus:border-[#f16137] h-10 focus:ring-[#f16137] rounded-lg transition-colors"
-                  pattern="[0-9]{10}"
-                />
-              </Form.Group>
-            </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* City */}
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-[#7C2D12] flex items-center gap-1.5">
+                    <Building className="w-3.5 h-3.5 text-[#F97316]" />
+                    City <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 h-10 bg-white border-2 border-[#FED7AA] rounded-xl text-[#7C2D12] placeholder:text-[#FDBA74]/70 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20 outline-none transition-all"
+                    required
+                  />
+                </div>
 
-            <Form.Group className="flex items-center gap-2">
-              <Form.Check
-                type="checkbox"
-                name="isDefault"
-                checked={formData.isDefault}
-                onChange={handleChange}
-                className="!border-gray-300 !rounded focus:ring-[#f16137]"
-              />
-              <Form.Label className="text-sm text-gray-700 mb-0">Set as default address</Form.Label>
-            </Form.Group>
+                {/* State */}
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-[#7C2D12] flex items-center gap-1.5">
+                    <Globe className="w-3.5 h-3.5 text-[#F97316]" />
+                    State <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="state"
+                    value={formData.state}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 h-10 bg-white border-2 border-[#FED7AA] rounded-xl text-[#7C2D12] placeholder:text-[#FDBA74]/70 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20 outline-none transition-all"
+                    required
+                  />
+                </div>
+              </div>
 
-            <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
-                <SmartButton
-                onClick={handleClear}
-                className="px-4 py-2 rounded-lg font-medium"
-              >
-                Clear
-              </SmartButton>
-                <SmartButton
-                onClick={() => setMode('list')}
-                className="px-4 py-2 rounded-lg font-medium"
-              >
-                Cancel
-                </SmartButton>
-                <SmartButton
-                type="submit"
-                className="px-4 py-2 rounded-lg font-medium bg-[#f16137] border-[#f16137] hover:bg-[#d3542e]"
-              >
-                {currentAddress ? 'Update' : 'Save'}
-                </SmartButton>
-            </div>
-          </Form>
-        )}
-      </Modal.Body>
-    </Modal>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Landmark */}
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-[#7C2D12] flex items-center gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-[#F97316]" />
+                    Landmark <span className="text-[#9A3412] font-normal">(Optional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="landmark"
+                    value={formData.landmark}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 h-10 bg-white border-2 border-[#FED7AA] rounded-xl text-[#7C2D12] placeholder:text-[#FDBA74]/70 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20 outline-none transition-all"
+                  />
+                </div>
+
+                {/* Alternate Phone */}
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-[#7C2D12] flex items-center gap-1.5">
+                    <Phone className="w-3.5 h-3.5 text-[#F97316]" />
+                    Alternate Phone <span className="text-[#9A3412] font-normal">(Optional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="alternatePhone"
+                    value={formData.alternatePhone}
+                    onChange={handleChange}
+                    pattern="[0-9]{10}"
+                    maxLength="10"
+                    className="w-full px-3 py-2 h-10 bg-white border-2 border-[#FED7AA] rounded-xl text-[#7C2D12] placeholder:text-[#FDBA74]/70 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20 outline-none transition-all"
+                  />
+                </div>
+              </div>
+
+              {/* Company Fields - Work Address */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-[#7C2D12] flex items-center gap-1.5">
+                    <Building className="w-3.5 h-3.5 text-[#F97316]" />
+                    Company Name
+                  </label>
+                  <input
+                    type="text"
+                    name="companyName"
+                    value={formData.companyName}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 h-10 bg-white border-2 border-[#FED7AA] rounded-xl text-[#7C2D12] placeholder:text-[#FDBA74]/70 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20 outline-none transition-all"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-[#7C2D12] flex items-center gap-1.5">
+                    <Tag className="w-3.5 h-3.5 text-[#F97316]" />
+                    GST Number
+                  </label>
+                  <input
+                    type="text"
+                    name="gstNumber"
+                    value={formData.gstNumber}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 h-10 bg-white border-2 border-[#FED7AA] rounded-xl text-[#7C2D12] placeholder:text-[#FDBA74]/70 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20 outline-none transition-all"
+                  />
+                </div>
+              </div>
+
+              {/* Default Address Checkbox */}
+              <div className="flex items-center gap-3 pt-2">
+                <input
+                  type="checkbox"
+                  name="isDefault"
+                  checked={formData.isDefault}
+                  onChange={handleChange}
+                  className="w-4 h-4 text-[#F97316] border-2 border-[#FED7AA] rounded-lg focus:ring-[#F97316]/20 transition-all"
+                />
+                <label className="text-xs sm:text-sm text-[#7C2D12] flex items-center gap-1.5">
+                  <Star className="w-3.5 h-3.5 text-[#FDBA74]" />
+                  Set as default address
+                </label>
+              </div>
+
+              {/* Form Actions */}
+              <div className="flex justify-end gap-3 pt-4 border-t-2 border-[#FED7AA]">
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  className="px-4 py-2 border-2 border-[#FED7AA] text-[#7C2D12] rounded-xl text-xs font-medium hover:bg-[#FFF7ED] hover:border-[#FDBA74] transition-all duration-300"
+                >
+                  Clear
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMode('list')}
+                  className="px-4 py-2 border-2 border-[#FED7AA] text-[#7C2D12] rounded-xl text-xs font-medium hover:bg-[#FFF7ED] hover:border-[#FDBA74] transition-all duration-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2 bg-gradient-to-r from-[#F97316] to-[#EA580C] text-white rounded-xl text-xs font-medium hover:shadow-lg hover:shadow-[#F97316]/30 transition-all duration-300 transform hover:scale-105"
+                >
+                  {currentAddress ? 'Update' : 'Save'} Address
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 
-// Order Summary Panel
+// ========== ORDER SUMMARY PANEL ==========
 const OrderSummaryPanel = ({
   items = [],
   subtotal = 0,
@@ -516,14 +657,6 @@ const OrderSummaryPanel = ({
   total = 0,
   isCompact = false
 }) => {
-  console.log(items,'itemsitems')
-  const formatCurrency = (value) => {
-    if (typeof value !== 'number' || isNaN(value)) return '₹0.00';
-    return `₹${value.toFixed(2)}`;
-  };
-
-  
-
   const getSafeImagePath = (item) => {
     const imagePath = getImage(item?.imagePath) || item?.image;
     if (!imagePath || typeof imagePath !== 'string') {
@@ -540,15 +673,15 @@ const OrderSummaryPanel = ({
     const itemId = item?.itemId;
     const tagNo = item?.tagNo;
     if (itemId && tagNo) return `SKU: ${itemId}-${tagNo}`;
-    else if (itemId) return `SKU: ${itemId}`;
-    else if (tagNo) return `Tag: ${tagNo}`;
+    if (itemId) return `SKU: ${itemId}`;
+    if (tagNo) return `Tag: ${tagNo}`;
     return 'SKU: Not Available';
   };
 
   const getWeightText = (item) => {
     const weight = item?.weight;
     if (typeof weight === 'number' && !isNaN(weight)) {
-      return `Weight: ${weight.toFixed(3)}`;
+      return `Weight: ${weight.toFixed(3)}g`;
     }
     return null;
   };
@@ -559,45 +692,54 @@ const OrderSummaryPanel = ({
 
   return (
     <div className={`
-      bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden
-      ${isCompact ? 'p-2' : 'p-3'}
+      bg-white/95 backdrop-blur-md rounded-2xl border-2 border-[#FED7AA] shadow-lg shadow-[#F97316]/5 overflow-hidden
+      ${isCompact ? 'p-3' : 'p-4'}
+      hover:shadow-xl hover:border-[#FDBA74] transition-all duration-300
     `}>
-      <div className="flex justify-between items-center mb-2 pb-1 border-b border-gray-200">
-        <h4 className="font-semibold text-lg text-[#041f60] flex items-center gap-2">
-          <ShoppingBag size={18} className="text-[#f16137]" />
+      <div className="flex justify-between items-center mb-3 pb-2 border-b border-[#FED7AA]">
+        <h4 className="font-bold text-[#7C2D12] flex items-center gap-2">
+          <div className="w-6 h-6 bg-gradient-to-br from-[#F97316] to-[#EA580C] rounded-lg flex items-center justify-center shadow-md">
+            <ShoppingBag className="w-3.5 h-3.5 text-white" />
+          </div>
           Order Summary
         </h4>
         {itemCount > 0 && (
-          <span className="bg-[#f16137] text-white text-xs font-medium px-3 py-1 rounded-full">
+          <span className="bg-gradient-to-r from-[#F97316] to-[#EA580C] text-white text-[10px] font-medium px-2.5 py-1 rounded-full shadow-md">
             {itemCountText}
           </span>
         )}
       </div>
 
       {itemCount > 0 ? (
-        <div className="space-y-2 mb-3">
+        <div className="space-y-3 mb-4 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
           {items.map((item, index) => {
             const weightText = getWeightText(item);
             return (
-              <div key={item?.id || index} className="flex items-start gap-3 pb-3 border-b border-gray-100 last:border-0 last:pb-0">
-                <div className="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0">
+              <div
+                key={item?.id || index}
+                className="flex items-start gap-3 pb-3 border-b border-[#FED7AA] last:border-0 last:pb-0 group animate__animated animate__fadeIn"
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
+                <div className="w-16 h-16 rounded-xl overflow-hidden border-2 border-[#FED7AA] flex-shrink-0 group-hover:border-[#F97316] transition-all duration-300">
                   <img
                     src={getSafeImagePath(item)}
                     alt={getProductName(item)}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     onError={(e) => {
                       e.target.src = 'https://via.placeholder.com/40x40';
                     }}
                   />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h6 className="font-medium text-sm text-[#041f60] truncate">{getProductName(item)}</h6>
-                  <p className="text-xs text-gray-600 mt-1">{getSkuText(item)}</p>
+                  <h6 className="font-semibold text-sm text-[#7C2D12] truncate group-hover:text-[#F97316] transition-colors">
+                    {getProductName(item)}
+                  </h6>
+                  <p className="text-[10px] sm:text-xs text-[#9A3412] mt-0.5">{getSkuText(item)}</p>
                   {weightText && (
-                    <p className="text-xs text-gray-600">{weightText}</p>
+                    <p className="text-[10px] sm:text-xs text-[#9A3412]">{weightText}</p>
                   )}
                 </div>
-                <div className="font-semibold text-sm text-[#f16137] whitespace-nowrap">
+                <div className="font-bold text-sm text-[#F97316] whitespace-nowrap">
                   {formatCurrency(item?.price)}
                 </div>
               </div>
@@ -605,69 +747,63 @@ const OrderSummaryPanel = ({
           })}
         </div>
       ) : (
-        <div className="py-3 text-center">
-          <p className="text-gray-500">No items in order</p>
+        <div className="py-6 text-center animate__animated animate__fadeIn">
+          <ShoppingBag className="w-12 h-12 text-[#FDBA74] mx-auto mb-2" />
+          <p className="text-[#9A3412]">No items in order</p>
         </div>
       )}
 
-      <div className="space-y-2 pt-2 border-t border-gray-200">
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-700">Subtotal</span>
-          <span className="font-medium text-gray-900">{formatCurrency(subtotal)}</span>
+      <div className="space-y-2 pt-3 border-t-2 border-[#FED7AA]">
+        <div className="flex justify-between text-xs sm:text-sm">
+          <span className="text-[#9A3412]">Subtotal</span>
+          <span className="font-semibold text-[#7C2D12]">{formatCurrency(subtotal)}</span>
         </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-700">Shipping</span>
-          <span className={shippingFee === 0 ? "font-medium text-[#024908]" : "font-medium text-gray-900"}>
+        <div className="flex justify-between text-xs sm:text-sm">
+          <span className="text-[#9A3412] flex items-center gap-1.5">
+            <Truck className="w-3.5 h-3.5 text-[#F97316]" />
+            Shipping
+          </span>
+          <span className={`font-semibold ${shippingFee === 0 ? 'text-[#10B981]' : 'text-[#7C2D12]'}`}>
             {shippingText}
           </span>
         </div>
-        <div className="flex justify-between text-base pt-3 border-t border-gray-200">
-          <span className="font-semibold text-[#041f60]">Total</span>
-          <span className="font-bold text-sm text-[#f16137]">{formatCurrency(total)}</span>
+        <div className="flex justify-between text-sm sm:text-base pt-3 border-t-2 border-[#FED7AA]">
+          <span className="font-bold text-[#7C2D12]">Total</span>
+          <span className="font-bold text-lg text-[#F97316]">{formatCurrency(total)}</span>
         </div>
       </div>
     </div>
   );
 };
 
-// Main Checkout Component
+// ========== MAIN CHECKOUT COMPONENT ==========
 const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
-
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState(initialCartItems);
-  const [totalAmount, setTotalAmount] = useState();
+  const [totalAmount, setTotalAmount] = useState(subtotal || 0);
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [paymentMode, setPaymentMode] = useState('ONLINE');
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [summaryOpen, setSummaryOpen] = useState(false);
   const [pincode, setPincode] = useState(null);
-  const [shippingFee ,setShippingFee] = useState();
-
-
+  const [shippingFee, setShippingFee] = useState(0);
 
   const { data: profile, isLoading: profileLoading } = useCurrentProfile();
   const { data: addressByPincode } = useAddressesByPincode(pincode);
   const { pincode: storedPincode } = usePincode();
   const { data: addresses, isLoading: addressesLoading, refetch: refetchAddresses } = useAddressesByCustomer(profile?.id);
   const { mutate: createOrderMutation } = useCreateOrder(navigate);
-
   const { mutate: createAddress } = useCreateAddress();
   const { mutate: updateAddress } = useUpdateAddress();
   const { mutate: deleteAddress } = useDeleteAddress();
-  console.log(storedPincode,'storedPincode')
 
   const finalPincode = selectedAddress?.pincode || storedPincode || pincode || null;
 
   const totalWeight = useMemo(() => {
     if (!cartItems?.length) return 0;
-
-    return cartItems.reduce((total, item) => {
-      return total + (item.weight || 0);
-    }, 0);
+    return cartItems.reduce((total, item) => total + (item.weight || 0), 0);
   }, [cartItems]);
-
-  console.log(finalPincode, totalWeight,'finalPincode, totalWeight')
 
   const {
     data: shippingData,
@@ -675,20 +811,12 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
     error: shippingError
   } = useCheckShippingPrice(finalPincode, totalWeight);
 
-
-  console.log(shippingData,'shippingData')
   useEffect(() => {
     if (shippingData?.totalAmount) {
       setShippingFee(shippingData.totalAmount);
-      setTotalAmount(subtotal + shippingData.totalAmount);
+      setTotalAmount((subtotal || 0) + shippingData.totalAmount);
     }
   }, [shippingData, subtotal]);
-  
-  console.log(selectedAddress?.
-    pincode,'selectedAddress')
-
-
-
 
   useEffect(() => {
     const storedCart = localStorage.getItem('cartitems');
@@ -696,16 +824,12 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
       try {
         const parsedCart = JSON.parse(storedCart);
         setCartItems(parsedCart.items || []);
-        setTotalAmount(parsedCart.totalAmount.toFixed(2) || 0);
+        setTotalAmount(parsedCart.totalAmount || 0);
       } catch (error) {
         console.error('Failed to parse cart from localStorage:', error);
       }
     }
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem('cartitems', JSON.stringify({ items: cartItems, totalAmount }));
-  }, [cartItems, totalAmount]);
 
   useEffect(() => {
     if (addresses && addresses.length > 0) {
@@ -715,19 +839,25 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
   }, [addresses]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentStep]);
 
   const handleSaveAddress = (addressData) => {
-    const payload = { ...addressData, customerId: profile.id };
+    const payload = { ...addressData, customerId: profile?.id };
     if (addressData.id) {
       updateAddress({ id: addressData.id, addressData: payload }, {
-        onSuccess: () => { refetchAddresses(); },
+        onSuccess: () => {
+          refetchAddresses();
+          toast.success('Address updated successfully');
+        },
         onError: (error) => { toast.error(error.response?.data || 'Failed to update address'); }
       });
     } else {
       createAddress(payload, {
-        onSuccess: () => { refetchAddresses(); },
+        onSuccess: () => {
+          refetchAddresses();
+          toast.success('Address added successfully');
+        },
         onError: (error) => { toast.error(error.response?.data || 'Failed to create address'); }
       });
     }
@@ -738,6 +868,7 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
       onSuccess: () => {
         refetchAddresses();
         if (selectedAddress?.id === addressId) setSelectedAddress(null);
+        toast.success('Address deleted successfully');
       },
       onError: (error) => { toast.error(error.response?.data || 'Failed to delete address'); }
     });
@@ -772,27 +903,15 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
       email: profile?.email,
       totalAmount,
       paymentMode,
-      paymentStatus:"PENDING",
+      paymentStatus: "PENDING",
       shippingPincode: finalPincode,
-      // shippingFee: parseFloat(shippingFee) || 0,
       address: {
         addressLine: `${selectedAddress.addressLine} ${selectedAddress.locality || ''} ${selectedAddress.city || ''} ${selectedAddress.state || ''} ${selectedAddress.country || ''} - ${selectedAddress.pincode || ''}`,
-        // locality: selectedAddress.locality,
-        // landmark: selectedAddress.landmark,
-        // name: selectedAddress.name,
-        // phone: selectedAddress.phone,
-        // alternatePhone: selectedAddress.alternatePhone,
-        // isDefault: selectedAddress.isDefault,
-        // id: selectedAddress.id,
-        // customerId: selectedAddress.customerId,
-        // gstNumber: selectedAddress.gstNumber,
-        // companyName: selectedAddress.companyName,
         city: selectedAddress.city,
         state: selectedAddress.state,
         country: selectedAddress.country || "India",
         pincode: selectedAddress.pincode,
       },
-
       items: cartItems.map((item) => ({
         productId: `${item.itemId}-${item.tagNo}`,
         productName: item.productName,
@@ -801,170 +920,225 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
         itemId: item.itemId,
         tagNo: item.tagNo,
         sno: item.sno,
-        netWt:item.weight,
-        grsWt:item.weight,
+        netWt: item.weight,
+        grsWt: item.weight,
         imagePath: item.imagePath,
         quantity: item.quantity,
         gstType: item.gstType,
         gstPer: parseFloat(item.gstPer),
         gstAmount: Number(item.gstAmount) || 0,
-
-
       })),
     };
 
     localStorage.setItem('order', JSON.stringify(orderPayload));
-
     createOrderMutation(orderPayload);
-
-  }, [
-    cartItems,
-    totalAmount,
-    selectedAddress,
-    profile?.email,
-    paymentMode,
-    shippingFee,
-    finalPincode,
-    createOrderMutation
-  ]);
+  }, [cartItems, totalAmount, selectedAddress, profile?.email, paymentMode, finalPincode, createOrderMutation]);
 
   return (
-    <div className="min-h-screen bg-[#eeece8] font-sans text-[#041f60] mt-[150px] sm:mt-[130px]">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFF7ED] via-[#FFEDD5] to-[#FFF3E6]">
+
+      {/* Decorative Elements */}
+      <div className="fixed top-20 left-10 w-64 h-64 bg-[#F97316]/5 rounded-full blur-3xl -z-10 animate-float"></div>
+      <div className="fixed bottom-20 right-10 w-80 h-80 bg-[#FB923C]/5 rounded-full blur-3xl -z-10 animate-float" style={{ animationDelay: '2s' }}></div>
+
+      <style>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-5px); }
+        }
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #FED7AA;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #F97316;
+          border-radius: 10px;
+        }
+      `}</style>
+
       {/* Mobile Order Toggle */}
-      <div className="lg:hidden p-4">
+      <div className="lg:hidden px-4 pt-4">
         <button
-          className="w-full bg-white rounded-lg border border-gray-200 p-3 flex justify-between items-center shadow-sm"
+          className="w-full bg-white/95 backdrop-blur-md border-2 border-[#FED7AA] rounded-xl p-4 flex justify-between items-center shadow-lg hover:border-[#FDBA74] transition-all duration-300 group"
           onClick={() => setSummaryOpen(!summaryOpen)}
         >
-          <div className="flex items-center gap-2">
-            <span className="font-medium text-sm">Order Summary</span>
-            <span className="text-xs">{summaryOpen ? '▲' : '▼'}</span>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-gradient-to-br from-[#F97316] to-[#EA580C] rounded-lg flex items-center justify-center shadow-md">
+              <ShoppingBag className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <span className="font-semibold text-[#7C2D12] text-sm">Order Summary</span>
+              <p className="text-[10px] text-[#9A3412]">{cartItems?.length || 0} items</p>
+            </div>
           </div>
-          {/* <div className="font-bold text-[#f16137]">₹{totalAmount.toFixed(2)}</div> */}
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-[#F97316]">{formatCurrency(totalAmount)}</span>
+            {summaryOpen ? (
+              <ChevronUp className="w-4 h-4 text-[#F97316] group-hover:scale-110 transition-transform" />
+            ) : (
+              <ChevronDown className="w-4 h-4 text-[#F97316] group-hover:scale-110 transition-transform" />
+            )}
+          </div>
         </button>
+
         {summaryOpen && (
-          <div className="mt-2 animate-fadeIn">
+          <div className="mt-3 animate__animated animate__fadeIn">
             <OrderSummaryPanel
               items={cartItems}
               subtotal={subtotal}
               total={totalAmount}
-              isCompact
               shippingFee={shippingFee}
+              isCompact
             />
           </div>
         )}
       </div>
 
-      <div className="max-w-7xl mx-auto px-3 py-2 lg:grid lg:grid-cols-1 lg:gap-3 xl:grid-cols-3">
-        <div className="lg:col-span-2 space-y-3">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 lg:grid lg:grid-cols-1 lg:gap-4 xl:grid-cols-3">
+
+        {/* Left Column - Steps & Content */}
+        <div className="lg:col-span-2 space-y-4">
+
           {/* Progress Stepper */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-1">
+          <div className="bg-white/95 backdrop-blur-md border-2 border-[#FED7AA] rounded-2xl shadow-lg shadow-[#F97316]/5 p-2 hover:border-[#FDBA74] transition-all duration-300">
             <ProgressStepper currentStep={currentStep} />
           </div>
 
-          {/* Step Content */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="p-6">
+          {/* Step Content Card */}
+          <div className="bg-white/95 backdrop-blur-md border-2 border-[#FED7AA] rounded-2xl shadow-lg shadow-[#F97316]/5 overflow-hidden hover:border-[#FDBA74] transition-all duration-300">
+
+            <div className="p-4 sm:p-6">
+              {/* STEP 1: DELIVERY ADDRESS */}
               {currentStep === 1 && (
-                <div className="space-y-4">
-                  <div className="border-b border-gray-200 ">
-                    <h3 className="text-lg font-semibold text-[#041f60] flex items-center gap-2">
-                      <MapPin size={16} className="text-[#f16137]"  />
-                      Delivery Address
-                    </h3>
+                <div className="space-y-4 animate__animated animate__fadeIn">
+                  <div className="flex items-center gap-2 pb-2 border-b-2 border-[#FED7AA]">
+                    <div className="w-7 h-7 bg-gradient-to-br from-[#F97316] to-[#EA580C] rounded-lg flex items-center justify-center shadow-md">
+                      <MapPin className="w-4 h-4 text-white" />
+                    </div>
+                    <h3 className="text-lg font-bold text-[#7C2D12]">Delivery Address</h3>
                   </div>
 
-                  <div className="bg-[#eeece8] rounded-lg p-2">
-                    <div className="flex items-center gap-3">
-                      <User size={16} className="text-[#f16137]" />
-                      <div>
-                        <span className="font-medium text-sm">Contact: </span>
-                        <span className="font-semibold text-gray-900">
-                          {profileLoading ? 'Loading...' : profile?.contactNumber || 'Not provided'}
-                        </span>
-                      </div>
+                  {/* Contact Info */}
+                  <div className="bg-[#FFF7ED] border-2 border-[#FED7AA] rounded-xl p-3 flex items-center gap-3">
+                    <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+                      <User className="w-4 h-4 text-[#F97316]" />
+                    </div>
+                    <div>
+                      <span className="text-xs text-[#9A3412]">Contact</span>
+                      <p className="font-semibold text-[#7C2D12] text-sm">
+                        {profileLoading ? 'Loading...' : profile?.contactNumber || 'Not provided'}
+                      </p>
                     </div>
                   </div>
 
+                  {/* Address Display */}
                   {addressesLoading ? (
-                    <div className="flex flex-col items-center justify-center py-4">
-                      <div className="w-8 h-8 border-2 border-[#f16137] border-t-transparent rounded-full animate-spin mb-4"></div>
-                      <p className="text-gray-600">Loading addresses...</p>
+                    <div className="flex flex-col items-center justify-center py-8 animate__animated animate__fadeIn">
+                      <div className="w-10 h-10 border-4 border-[#FED7AA] border-t-[#F97316] rounded-full animate-spin mb-4"></div>
+                      <p className="text-[#9A3412]">Loading addresses...</p>
                     </div>
                   ) : selectedAddress ? (
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       <div
-                        className="border border-gray-200 rounded-lg p-4 hover:border-[#f16137] transition-colors cursor-pointer"
+                        className="border-2 border-[#FED7AA] rounded-xl p-4 hover:border-[#F97316] transition-all duration-300 cursor-pointer group"
                         onClick={() => setShowAddressModal(true)}
                       >
-                        <div className="flex justify-between items-start mb-3">
+                        <div className="flex justify-between items-start mb-2">
                           <div className="flex items-center gap-2">
-                            <h6 className="font-semibold text-[#041f60]">{selectedAddress.name}</h6>
+                            <div className="w-8 h-8 bg-[#FFF7ED] rounded-lg flex items-center justify-center group-hover:bg-[#FFEDD5] transition-colors">
+                              <User className="w-4 h-4 text-[#F97316]" />
+                            </div>
+                            <h6 className="font-semibold text-[#7C2D12]">{selectedAddress.name}</h6>
                             {selectedAddress.isDefault && (
-                              <span className="bg-[#024908] text-white text-xs px-2 py-1 rounded">Default</span>
+                              <span className="bg-gradient-to-r from-[#10B981] to-[#059669] text-white text-[10px] px-2 py-1 rounded-full">
+                                Default
+                              </span>
                             )}
                           </div>
                         </div>
-                        <div className="space-y-1 text-sm text-gray-700">
-                          <p>{selectedAddress.addressLine}</p>
+                        <div className="text-xs sm:text-sm text-[#9A3412] space-y-1 ml-10">
+                          <p className="text-[#7C2D12]">{selectedAddress.addressLine}</p>
                           <p>{selectedAddress.locality}, {selectedAddress.city}</p>
-                          <p>{selectedAddress.state} - {selectedAddress.pincode}</p>
-                          <p className="flex items-center gap-2 mt-2 text-gray-800">
-                            <Phone size={14} className="text-[#f16137]" /> {selectedAddress.phone}
+                          <p>{selectedAddress.state} - <span className="font-semibold">{selectedAddress.pincode}</span></p>
+                          <p className="flex items-center gap-1.5 mt-2">
+                            <Phone className="w-3.5 h-3.5 text-[#F97316]" />
+                            {selectedAddress.phone}
                           </p>
                         </div>
                       </div>
+
                       <button
-                        className="w-full py-2 border border-[#f16137] text-[#f16137] rounded-lg font-medium hover:bg-[#f16137] hover:text-white transition-colors"
+                        className="w-full py-2.5 border-2 border-[#F97316] text-[#F97316] rounded-xl font-medium hover:bg-[#FFF7ED] hover:border-[#EA580C] transition-all duration-300 flex items-center justify-center gap-2 group"
                         onClick={() => setShowAddressModal(true)}
                       >
+                        <Edit2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
                         Change Address
                       </button>
                     </div>
                   ) : (
-                    <div className="text-center py-8">
-                      <MapPin size={48} className="text-gray-400 mx-auto mb-4" />
-                      <h5 className="font-medium text-gray-900 mb-2">No address selected</h5>
-                      <p className="text-gray-600 mb-4">Add a delivery address to continue</p>
+                    <div className="text-center py-8 animate__animated animate__fadeIn">
+                      <div className="relative inline-block">
+                        <MapPin className="w-16 h-16 text-[#FDBA74] mx-auto mb-3" />
+                        <div className="absolute inset-0 bg-[#F97316]/10 rounded-full blur-2xl"></div>
+                      </div>
+                      <h5 className="font-bold text-[#7C2D12] mb-1">No address selected</h5>
+                      <p className="text-[#9A3412] text-sm mb-4">Add a delivery address to continue</p>
                       <button
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-[#f16137] text-white rounded-lg font-medium hover:bg-[#d3542e] transition-colors"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#F97316] to-[#EA580C] text-white rounded-xl font-medium hover:shadow-lg hover:shadow-[#F97316]/30 transition-all duration-300 transform hover:scale-105"
                         onClick={() => setShowAddressModal(true)}
                       >
-                        <Plus size={16} /> Add Address
+                        <Plus className="w-4 h-4" />
+                        Add Address
                       </button>
                     </div>
                   )}
                 </div>
               )}
 
+              {/* STEP 2: ORDER SUMMARY */}
               {currentStep === 2 && (
-                <div className="space-y-3">
-                  <div className="border-b border-gray-200 ">
-                    <h3 className="text-lg font-semibold text-[#041f60] flex items-center gap-2">
-                      <ShoppingBag size={18} className="text-[#f16137]" />
-                      Order Summary
-                    </h3>
+                <div className="space-y-4 animate__animated animate__fadeIn">
+                  <div className="flex items-center gap-2 pb-2 border-b-2 border-[#FED7AA]">
+                    <div className="w-7 h-7 bg-gradient-to-br from-[#F97316] to-[#EA580C] rounded-lg flex items-center justify-center shadow-md">
+                      <ShoppingBag className="w-4 h-4 text-white" />
+                    </div>
+                    <h3 className="text-lg font-bold text-[#7C2D12]">Order Summary</h3>
                   </div>
-                  <OrderSummaryPanel items={cartItems} subtotal={subtotal} total={totalAmount} shippingFee={shippingFee} />
+                  <OrderSummaryPanel
+                    items={cartItems}
+                    subtotal={subtotal}
+                    total={totalAmount}
+                    shippingFee={shippingFee}
+                  />
                 </div>
               )}
 
+              {/* STEP 3: PAYMENT METHOD */}
               {currentStep === 3 && (
-                <div className="space-y-3">
-                  <div className="border-b border-gray-200 ">
-                    <h3 className="text-lg font-semibold text-[#041f60] flex items-center gap-2">
-                      <CreditCard size={18} className="text-[#f16137]" />
-                      Payment Method
-                    </h3>
+                <div className="space-y-4 animate__animated animate__fadeIn">
+                  <div className="flex items-center gap-2 pb-2 border-b-2 border-[#FED7AA]">
+                    <div className="w-7 h-7 bg-gradient-to-br from-[#F97316] to-[#EA580C] rounded-lg flex items-center justify-center shadow-md">
+                      <CreditCard className="w-4 h-4 text-white" />
+                    </div>
+                    <h3 className="text-lg font-bold text-[#7C2D12]">Payment Method</h3>
                   </div>
 
-                  <div className="space-y-3">
-                    <p className="text-sm text-gray-600 bg-[#eeece8] p-2 rounded-lg">
-                      All transactions are secure and encrypted.
-                    </p>
+                  <div className="space-y-4">
+                    <div className="bg-[#FFF7ED] border-2 border-[#FED7AA] rounded-xl p-3">
+                      <p className="text-xs text-[#9A3412] flex items-center gap-2">
+                        <Shield className="w-4 h-4 text-[#F97316]" />
+                        All transactions are secure and encrypted.
+                      </p>
+                    </div>
 
-                    <div className="space-y-2">
-                      <div className="flex items-center space-x-3">
+                    <div className="space-y-3">
+                      {/* Online Payment */}
+                      <div className="flex items-center gap-3">
                         <input
                           type="radio"
                           id="online"
@@ -972,23 +1146,27 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
                           value="ONLINE"
                           checked={paymentMode === 'ONLINE'}
                           onChange={(e) => setPaymentMode(e.target.value)}
-                          className="w-4 h-4 text-[#f16137] focus:ring-[#f16137] border-gray-300"
+                          className="w-4 h-4 text-[#F97316] border-2 border-[#FED7AA] focus:ring-[#F97316]/20 focus:ring-2"
                         />
                         <label htmlFor="online" className="flex-1 cursor-pointer">
                           <div className={`
-                            border rounded-lg p-3 transition-all duration-200
-                            ${paymentMode === 'ONLINE' ? 'border-[#f16137] bg-[#f16137]/5' : 'border-gray-200 hover:border-gray-300'}
+                            border-2 rounded-xl p-3 transition-all duration-300
+                            ${paymentMode === 'ONLINE'
+                              ? 'border-[#F97316] bg-[#FFF7ED] shadow-md'
+                              : 'border-[#FED7AA] hover:border-[#FDBA74]'
+                            }
                           `}>
                             <div className="flex items-center gap-2">
-                              <CreditCard size={16} className={paymentMode === 'ONLINE' ? 'text-[#f16137]' : 'text-gray-600'} />
-                              <span className="font-medium">Online Payment</span>
+                              <CreditCard className={`w-4 h-4 ${paymentMode === 'ONLINE' ? 'text-[#F97316]' : 'text-[#9A3412]'}`} />
+                              <span className="font-medium text-[#7C2D12]">Online Payment</span>
                             </div>
-                            <p className="text-xs text-gray-600 mt-1 ml-6">UPI, Cards, Net Banking</p>
+                            <p className="text-xs text-[#9A3412] mt-1 ml-6">UPI, Cards, Net Banking</p>
                           </div>
                         </label>
                       </div>
 
-                      <div className="flex items-center space-x-3">
+                      {/* Cash on Delivery */}
+                      <div className="flex items-center gap-3">
                         <input
                           type="radio"
                           id="cod"
@@ -996,36 +1174,43 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
                           value="COD"
                           checked={paymentMode === 'COD'}
                           onChange={(e) => setPaymentMode(e.target.value)}
-                          className="w-4 h-4 text-[#f16137] focus:ring-[#f16137] border-gray-300"
+                          className="w-4 h-4 text-[#F97316] border-2 border-[#FED7AA] focus:ring-[#F97316]/20 focus:ring-2"
                         />
                         <label htmlFor="cod" className="flex-1 cursor-pointer">
                           <div className={`
-                            border rounded-lg p-3 transition-all duration-200
-                            ${paymentMode === 'COD' ? 'border-[#f16137] bg-[#f16137]/5' : 'border-gray-200 hover:border-gray-300'}
+                            border-2 rounded-xl p-3 transition-all duration-300
+                            ${paymentMode === 'COD'
+                              ? 'border-[#F97316] bg-[#FFF7ED] shadow-md'
+                              : 'border-[#FED7AA] hover:border-[#FDBA74]'
+                            }
                           `}>
                             <div className="flex items-center gap-2">
-                              <Home size={16} className={paymentMode === 'COD' ? 'text-[#f16137]' : 'text-gray-600'} />
-                              <span className="font-medium">Cash on Delivery</span>
+                              <Home className={`w-4 h-4 ${paymentMode === 'COD' ? 'text-[#F97316]' : 'text-[#9A3412]'}`} />
+                              <span className="font-medium text-[#7C2D12]">Cash on Delivery</span>
                             </div>
-                            <p className="text-xs text-gray-600 mt-1 ml-6">Pay on delivery</p>
+                            <p className="text-xs text-[#9A3412] mt-1 ml-6">Pay on delivery</p>
                           </div>
                         </label>
                       </div>
                     </div>
 
-                    <div className="bg-[#eeece8] rounded-lg p-4">
+                    {/* Order Total Summary */}
+                    <div className="bg-white border-2 border-[#FED7AA] rounded-xl p-4 mt-4">
                       <div className="space-y-2">
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-700">Subtotal</span>
-                          <span className="font-medium">₹{subtotal.toFixed(2)}</span>
+                          <span className="text-[#9A3412]">Subtotal</span>
+                          <span className="font-semibold text-[#7C2D12]">{formatCurrency(subtotal)}</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-700">Shipping</span>
-                          <span className="font-medium text-[#024908]">{shippingFee > 0 ? `₹${shippingFee.toFixed(2)}` : 'FREE'}</span>
+                          <span className="text-[#9A3412]">Shipping</span>
+                          <span className={`font-semibold ${shippingFee === 0 ? 'text-[#10B981]' : 'text-[#7C2D12]'}`}>
+                            {shippingFee === 0 ? 'FREE' : formatCurrency(shippingFee)}
+                          </span>
                         </div>
-                        <div className="flex justify-between text-base pt-2 border-t border-gray-300">
-                          <span className="font-semibold">Total</span>
-                          <span className="font-bold text-lg text-[#f16137]">₹{totalAmount.toFixed(2)}</span>
+                        <div className="border-t-2 border-[#FED7AA] my-2"></div>
+                        <div className="flex justify-between items-center">
+                          <span className="font-bold text-[#7C2D12]">Total Amount</span>
+                          <span className="font-bold text-xl text-[#F97316]">{formatCurrency(totalAmount)}</span>
                         </div>
                       </div>
                     </div>
@@ -1035,36 +1220,36 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
             </div>
 
             {/* Step Controls */}
-            <div className="border-t border-gray-200 p-6">
+            <div className="border-t-2 border-[#FED7AA] p-4 bg-gradient-to-r from-[#FFF7ED]/50 to-[#FFEDD5]/50">
               <div className="flex justify-between">
                 {currentStep > 1 && (
                   <SmartButton
-                    variant='outline'
-                    size='md'
+                    variant="outline"
+                    size="md"
                     onClick={handlePrevStep}
-                    className="border-gray-300 text-gray-700 hover:border-gray-400"
+                    className="border-2 border-[#FED7AA] text-[#7C2D12] hover:bg-[#FFF7ED] hover:border-[#FDBA74]"
                   >
                     Back
                   </SmartButton>
                 )}
+
                 {currentStep < 3 ? (
                   <SmartButton
                     onClick={handleNextStep}
-                    size='lg'
+                    size="lg"
                     isDisabled={currentStep === 1 && !selectedAddress}
-                    className="ml-auto bg-[#f16137] hover:bg-[#d3542e]"
+                    className="ml-auto bg-gradient-to-r from-[#F97316] to-[#EA580C] text-white hover:shadow-lg hover:shadow-[#F97316]/30"
                   >
                     Continue
                   </SmartButton>
                 ) : (
                   <SmartButton
-                    size='md'
-                    variant='success'
+                    size="lg"
                     onClick={submitOrder}
                     isDisabled={!selectedAddress}
-                    className="ml-auto bg-[#024908] hover:bg-[#013506]"
+                    className="ml-auto bg-gradient-to-r from-[#10B981] to-[#059669] text-white hover:shadow-lg hover:shadow-[#10B981]/30"
                   >
-                      Place Order - ₹{formatCurrency(totalAmount)}
+                    Place Order • {formatCurrency(totalAmount)}
                   </SmartButton>
                 )}
               </div>
@@ -1072,15 +1257,25 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
           </div>
         </div>
 
-        {/* Desktop Order Summary */}
-        <div className="hidden lg:block lg:sticky lg:top-4 lg:self-start">
+        {/* Desktop Order Summary - Right Column */}
+        <div className="hidden lg:block lg:sticky lg:top-4 lg:self-start animate__animated animate__fadeInRight">
           <OrderSummaryPanel
             items={cartItems}
             subtotal={subtotal}
             shippingFee={shippingFee}
             total={totalAmount}
-
           />
+
+          {/* Secure Checkout Badge */}
+          <div className="mt-4 bg-white/95 backdrop-blur-md border-2 border-[#FED7AA] rounded-xl p-4 shadow-lg text-center">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Shield className="w-5 h-5 text-[#F97316]" />
+              <span className="font-semibold text-[#7C2D12] text-sm">Secure Checkout</span>
+            </div>
+            <p className="text-[10px] text-[#9A3412]">
+              Your information is encrypted and secure
+            </p>
+          </div>
         </div>
       </div>
 

@@ -29,6 +29,8 @@ import useHeaderNavByShopId from "./headerNavByShopId";
 import './HeaderScroll.css'
 import RatesDropdown from "./RatesDropdown";
 import { usePincode } from "../../context/pinocde/PincodeContext";
+import { queryClient } from "../../component/reactQuery/queryClient";
+
 
 const Header = ({ isAuthenticated }) => {
   const width = useScreenWidth();
@@ -142,6 +144,11 @@ const Header = ({ isAuthenticated }) => {
     e.preventDefault();
     e.stopPropagation();
     dispatch(logout());
+    localStorage.removeItem('user');
+    localStorage.removeItem('user_token');
+    localStorage.removeItem('userMobileNumber');
+    localStorage.removeItem('pendingUser');
+    queryClient.clear();
     navigate("/login");
   };
 
@@ -193,7 +200,7 @@ const Header = ({ isAuthenticated }) => {
 
       <header
         ref={headerRef}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out ${isSticky ? 'bg-white shadow-lg' : 'bg-gradient-to-b from-white/95 via-white/90 to-white '
+        className={`fixed top-0 left-0 right-0 z-20 transition-all duration-300 ease-out ${isSticky ? 'bg-white shadow-lg' : 'bg-gradient-to-b from-white/95 via-white/90 to-white '
           }`}
         style={{
           transform: `translateY(${headerTranslate}px)`,
@@ -341,7 +348,7 @@ const Header = ({ isAuthenticated }) => {
                               damping: 25,
                               mass: 0.8
                             }}
-                            className="absolute w-[650px] xl:w-[800px] left-0 top-full mt-2 bg-white shadow-2xl rounded-lg p-6 z-50"
+                            className="absolute w-[650px] xl:w-[800px] left-0 top-full mt-2 bg-white shadow-2xl rounded-lg p-6 z-20"
 
                           >
                             <div className="flex gap-2">

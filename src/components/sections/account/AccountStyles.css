@@ -1,7 +1,6 @@
 /* Layout */
 .account-container {
   display: flex;
-  margin-top: 150px;
 }
 
 .account-layout {
@@ -186,9 +185,6 @@
 /* Responsive */
 @media (max-width: 768px) {
 
-  .account-container {
-    margin-top:20px;
-  }
   .account-layout {
     flex-direction: column;
     /* Stack sidebar and content vertically */
@@ -198,7 +194,6 @@
     position: relative;
     width: 100%;
     height: auto;
-    margin-top: -50px !important;
   }
 
   .account-content {

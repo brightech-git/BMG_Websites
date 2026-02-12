@@ -150,7 +150,7 @@ const ShopRelatedUpdated = ({ itemCtrName }) => {
                             }}
                         >
                             {/* Hide scrollbar for Chrome/Safari */}
-                            <style jsx>{`
+                            <style >{`
                                 .scrollbar-hide::-webkit-scrollbar {
                                     display: none;
                                 }

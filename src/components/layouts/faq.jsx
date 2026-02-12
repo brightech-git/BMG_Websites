@@ -82,7 +82,7 @@ const FAQ = ({ languages, content }) => {
     const matchedQuestions = searchTerm ? totalQuestions : null;
 
     return (
-        <div className="min-h-screen mt-[120px] bg-[var(--primary-card-color)] p-2">
+        <div className="min-h-screen bg-[var(--primary-card-color)] p-2">
 
 
             <div className="container mx-auto px-2 py-2 max-w-6xl">

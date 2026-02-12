@@ -1,32 +1,34 @@
 import React, { Fragment, useEffect, useState } from "react";
-import Banner from "./Banner";
-import Category from "./Category";
-import Category1 from "./Category1";
-import Condos from "./ShopByPrice";
-import Ourcategory from "./Ourcategory";
-import ShopByRecipient from "./ShopByRecipient";
-import Ourproducts from "../../layouts/Ourproducts";
-import JewelryShowcase from "./jewelleryShowCase";
-import FeaturedBanners from "../../layouts/FeaturedProduct";
-import Onsale from "./Onsale";
-import Video from "./Video";
+import BannerCarousel from "./BannerCarousel";
 import RecentlyViewedWrapper from "../../layouts/RecentlyViewedWrapper";
-
 import SmoothScroll from "../../layouts/SmoothScroll";
-import RevealSection from "../../animations/RevealSection";
-import { useBanners } from "../../../hook/banner/useBannerQueries";
-import { useVideos } from "../../../hook/video/useVideoQuery";
-import { useOccasionBanners } from "../../../hook/banner/useOccasionBanners";
-import { useCategoryImages } from "../../../hook/categorywithImage/useCategoryQuery";
-import { useOfferBanners } from "../../../hook/banner/useOfferBanner";
 import { useBudgetBanners } from "../../../hook/budgetBanner/useBudgetBanners";
-import { useGenderBanner } from "../../../hook/genderBanner/useGender";
-import { useLatestBanner } from "../../../hook/lastestCollectionBanner/useLatestCollectionBanner";
-import { useBestDesignedBanners } from '../../../hook/BestDesignedBanner/useBestDesignedbanner';
-import { useFeaturedBanner } from "../../../hook/featuredBanner/useFeaturedBanner";
-import { useFestivalBanner } from "../../../hook/banner/useFestivalBanner";
 import HeroBanner from "../../../component/banner/HeroBanner";
 import GridBanner from "../../../component/banner/StackBanner";
+import { BannerSkeleton } from "../../../component/banner/BannerSkelaton";
+
+// import Category from "./Category";
+// import Category1 from "./Category1";
+// import Condos from "./ShopByPrice";
+import Ourcategory from "./Ourcategory";
+// import ShopByRecipient from "./ShopByRecipient";
+// import Ourproducts from "../../layouts/Ourproducts";
+// import JewelryShowcase from "./jewelleryShowCase";
+// import FeaturedBanners from "../../layouts/FeaturedProduct";
+// import Onsale from "./Onsale";
+// import Video from "./Video";
+
+
+import { useBanners } from "../../../hook/banner/useBannerQueries";
+// import { useVideos } from "../../../hook/video/useVideoQuery";
+// import { useOccasionBanners } from "../../../hook/banner/useOccasionBanners";
+import { useCategoryImages } from "../../../hook/categorywithImage/useCategoryQuery";
+// import { useOfferBanners } from "../../../hook/banner/useOfferBanner";
+// import { useGenderBanner } from "../../../hook/genderBanner/useGender";
+// import { useLatestBanner } from "../../../hook/lastestCollectionBanner/useLatestCollectionBanner";
+// import { useBestDesignedBanners } from '../../../hook/BestDesignedBanner/useBestDesignedbanner';
+// import { useFeaturedBanner } from "../../../hook/featuredBanner/useFeaturedBanner";
+// import { useFestivalBanner } from "../../../hook/banner/useFestivalBanner";
 
 const Content = () => {
 
@@ -38,10 +40,10 @@ const Content = () => {
 
     // ------------------------------Category--------------------------------//
 
-    const { data: occasion, isLoading: occasionLoading, error: occasionbannersError } = useOccasionBanners();
-    const occasionbanners = occasion?.data || [];
+    // const { data: occasion, isLoading: occasionLoading, error: occasionbannersError } = useOccasionBanners();
+    // const occasionbanners = occasion?.data || [];
 
-    // ------------------------------Category--------------------------------//
+    // // ------------------------------Category--------------------------------//
 
     const { data: categories = [], isLoading: isCategoriesLoading } = useCategoryImages();
     const subcategories = categories.length ? [...categories] : [];
@@ -51,18 +53,11 @@ const Content = () => {
 
 
 
-    const { data: offerBanner, isLoading: offerLoading, error: offerError } = useOfferBanners();
+    // const { data: offerBanner, isLoading: offerLoading, error: offerError } = useOfferBanners();
 
-    const offerBanners = offerBanner?.data || [];
+    // const offerBanners = offerBanner?.data || [];
 
-    // ------------------------------BudgetBanner--------------------------------//
 
-    const { data: budgetBanner, isLoading: budgerLoading, isError: budgetError } = useBudgetBanners();
-
-    // Ensure it's an array and take only first 4 items
-    const budgetBanners = budgetBanner?.data;
-
-    console.log(budgetBanners, 'budgetBanners')
 
 
     // ------------------------------CategoryImages--------------------------------//
@@ -71,69 +66,80 @@ const Content = () => {
 
 
     // ------------------------------Shop for receipient--------------------------------//
-    const { data: genderBannerResponse } = useGenderBanner();
-    const recipientBanners = genderBannerResponse ?? [];
+    // const { data: genderBannerResponse } = useGenderBanner();
+    // const recipientBanners = genderBannerResponse ?? [];
 
     // ------------------------------Latest Banner Images --------------------------------//
-    const { data: LastestData, LatestisLoading, LatestisError } = useLatestBanner();
+    // const { data: LastestData, LatestisLoading, LatestisError } = useLatestBanner();
 
-    const [latestBanners, setLatestBanners] = useState();
+    // const [latestBanners, setLatestBanners] = useState();
 
-    useEffect(() => {
-        if (LastestData) {
-            setLatestBanners(LastestData)
-        }
+    // useEffect(() => {
+    //     if (LastestData) {
+    //         setLatestBanners(LastestData)
+    //     }
 
-    }, [LastestData]);
+    // }, [LastestData]);
 
     // ------------------------------Best Designed Products--------------------------------//
-    const { data: bestData, bestIsLoading, bestIsError } = useBestDesignedBanners();
+    // const { data: bestData, bestIsLoading, bestIsError } = useBestDesignedBanners();
 
-    const [bestBanners, setBestBanners] = useState();
+    // const [bestBanners, setBestBanners] = useState();
 
-    useEffect(() => {
-        if (bestData) {
-            setBestBanners(bestData)
-        }
+    // useEffect(() => {
+    //     if (bestData) {
+    //         setBestBanners(bestData)
+    //     }
 
-    }, [bestData]);
+    // }, [bestData]);
 
     // ------------------------------Featured Banners--------------------------------//
-    const { data: FeaturedBanner, featureIsLoading, FeatureIsError } = useFeaturedBanner();
-    const [featureBanner, setFeatureBanner] = useState();
+    // const { data: FeaturedBanner, featureIsLoading, FeatureIsError } = useFeaturedBanner();
+    // const [featureBanner, setFeatureBanner] = useState();
 
-    useEffect(() => {
-        if (!FeaturedBanner)
-            return;
-        else {
-            setFeatureBanner(FeaturedBanner);
-        }
-    }, [FeaturedBanner]);
+    // useEffect(() => {
+    //     if (!FeaturedBanner)
+    //         return;
+    //     else {
+    //         setFeatureBanner(FeaturedBanner);
+    //     }
+    // }, [FeaturedBanner]);
 
     //------------------------------Festival Banners--------------------//
-    const { data: festivalBannerResponse, festivalIsLoading, FestivalIsError } = useFestivalBanner();
+    // const { data: festivalBannerResponse, festivalIsLoading, FestivalIsError } = useFestivalBanner();
 
-    const festivalBanners = festivalBannerResponse?.data || [];
+    // const festivalBanners = festivalBannerResponse?.data || [];
 
 
     // ------------------------------Video--------------------------------//
-    const { data: videos, isLoading: videoLoading, isError: videoError } = useVideos();
-    const videoList = videos?.data || [];
-    const isVideo = videoList.lenght > 0;
+    // const { data: videos, isLoading: videoLoading, isError: videoError } = useVideos();
+    // const videoList = videos?.data || [];
+    // const isVideo = videoList.lenght > 0;
+
+
+
+    // ------------------------------ ALL  BANNERS --------------------------------//
+
+    const { data: budgetBanner, isLoading: budgetLoading, isError: budgetError } = useBudgetBanners();
+
+    // Ensure it's an array and take only first 4 items
+    const budgetBanners = budgetBanner?.data;
+
+    console.log(budgetBanners, 'budgetBanners')
 
     return (
         <SmoothScroll>
+
             <Fragment>
-           
+                {/* ✅ SHOW SKELETON WHILE LOADING */}
 
-                {/* 🌟 Hero Section (no animation wrapper — stays full width) */}
-                <Banner banners={banners} isLoading={mainBannerLoading} />
-                {budgetBanners &&
-                    Object.keys(budgetBanners).map((key) => {
+                <BannerCarousel banners={banners} isLoading={mainBannerLoading} />
+                {budgetLoading ? (
+                    <BannerSkeleton />
+                ) : (
+                    /* ✅ SHOW ACTUAL BANNERS WHEN LOADED */
+                    budgetBanners && Object.keys(budgetBanners).map((key) => {
                         const banner = budgetBanners[key];
-
-                        console.log(banner,'bannerbanner')
-                        // Skip invisible banners
                         if (!banner.isVisible) return null;
 
                         return banner.isGrid ? (
@@ -158,24 +164,30 @@ const Content = () => {
                                 gap={banner.gap}
                                 full={banner.full}
                                 images={banner.images || []}
-                                desktopColumns={banner.desktopLayout?.columns?.length || 2}
+                                desktopColumns={banner.desktopColumns || 3}
                                 desktopRatio={banner.defaultRatio || "16/7.3"}
                                 defaultRatio={banner.defaultRatio || "16/7.3"}
-                                mobileRows={banner.mobileLayout?.rows || [1]}
+                                mobileRows={banner.mobileRows || [1]}
                                 mobileRatio={banner.mobileRatio || "16/7.3"}
                             />
                         );
-                    })}
-
-                <Category banners={occasionbanners} isLoading={occasionLoading} error={occasionbannersError} />
-
+                    })
+                )}
 
 
                 <Ourcategory subcategories={subcategories} isCategoriesLoading={isCategoriesLoading} />
 
+                {/* 🌟 Hero Section (no animation wrapper — stays full width) */}
+               
+{/* 
+                <Category banners={occasionbanners} isLoading={occasionLoading} error={occasionbannersError} />
 
 
-                <Category1 banners={offerBanners} isLoading={offerLoading} error={offerError} />
+
+
+
+
+                <Category1 banners={offerBanners} isLoading={offerLoading} error={offerError} /> */}
 
 
                 {/* <Condos budgetBanners={budgetBanners} isLoading={budgerLoading} isError={budgetError} /> */}
@@ -185,7 +197,7 @@ const Content = () => {
                 {/* <Handpicked data={CategoryData} isLoading ={categoriesLoading} error = {CategoryError} /> */}
 
 
-
+{/* 
                 <ShopByRecipient banners={recipientBanners} />
 
 
@@ -203,12 +215,12 @@ const Content = () => {
 
 
 
-                <JewelryShowcase banners={bestBanners} isLoading={bestIsLoading} isError={bestIsError} />
+                <JewelryShowcase banners={bestBanners} isLoading={bestIsLoading} isError={bestIsError} /> */}
 
 
-                {isVideo && <RevealSection intensity={0.3}>
+                {/* {isVideo &&
                     <Video videoList={videoList} isLoading={videoLoading} isError={videoError} />
-                </RevealSection>}
+                } */}
 
 
 

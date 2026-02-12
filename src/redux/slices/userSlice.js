@@ -240,11 +240,7 @@ const userSlice = createSlice({
             state.user = null;
             state.isAuthenticated = false;
             state.error = null;
-            localStorage.removeItem('user');
-            localStorage.removeItem('user_token');
-            localStorage.removeItem('userMobileNumber');
-            localStorage.removeItem('pendingUser');
-            localStorage.clear();
+
             toast.error('Logged out successfully!', {
                 position: 'top-right',
                 autoClose: 3000,

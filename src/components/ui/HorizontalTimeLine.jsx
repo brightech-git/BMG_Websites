@@ -309,7 +309,7 @@ const HorizontalTimeline = ({
             </div>
 
             {/* Add CSS animations to global styles */}
-            <style jsx global>{`
+            <style>{`
                 @keyframes slideUp {
                     from {
                         opacity: 0;

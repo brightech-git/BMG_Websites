@@ -107,7 +107,7 @@ const Mobilemenu = ({ onClose, wishlistCount, cartCount, ratesData }) => {
         {
             id: 6,
             linkText: 'Contact',
-            link: '/contact',
+            link: '/contactStore',
             icon: <Mail size={20} />,
             color: 'text-indigo-600'
         },

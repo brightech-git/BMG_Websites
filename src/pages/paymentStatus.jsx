@@ -163,7 +163,7 @@ const PaymentStatus = () => {
                 </div>
             )}
 
-            <main className={`mt-[130px] bg-gradient-to-br ${getBgGradient()} py-4 px-2`}>
+            <main className={`bg-gradient-to-br ${getBgGradient()} py-4 px-2`}>
                 <div className="max-w-3xl mx-auto">
                     <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-white/50">
                         {/* Top Status Bar */}

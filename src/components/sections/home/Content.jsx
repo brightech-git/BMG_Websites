@@ -1,16 +1,20 @@
 import React, { Fragment, useEffect, useState } from "react";
-import BannerCarousel from "./BannerCarousel";
+
 import RecentlyViewedWrapper from "../../layouts/RecentlyViewedWrapper";
 import SmoothScroll from "../../layouts/SmoothScroll";
-import { useBudgetBanners } from "../../../hook/budgetBanner/useBudgetBanners";
 import HeroBanner from "../../../component/banner/HeroBanner";
 import GridBanner from "../../../component/banner/StackBanner";
 import { BannerSkeleton } from "../../../component/banner/BannerSkelaton";
+import Ourcategory from "./Ourcategory";
 
+
+import { useBudgetBanners } from "../../../hook/budgetBanner/useBudgetBanners";
+import { useCategoryImages } from "../../../hook/categorywithImage/useCategoryQuery";
+// import BannerCarousel from "./BannerCarousel";
 // import Category from "./Category";
 // import Category1 from "./Category1";
 // import Condos from "./ShopByPrice";
-import Ourcategory from "./Ourcategory";
+
 // import ShopByRecipient from "./ShopByRecipient";
 // import Ourproducts from "../../layouts/Ourproducts";
 // import JewelryShowcase from "./jewelleryShowCase";
@@ -19,10 +23,10 @@ import Ourcategory from "./Ourcategory";
 // import Video from "./Video";
 
 
-import { useBanners } from "../../../hook/banner/useBannerQueries";
+// import { useBanners } from "../../../hook/banner/useBannerQueries";
 // import { useVideos } from "../../../hook/video/useVideoQuery";
 // import { useOccasionBanners } from "../../../hook/banner/useOccasionBanners";
-import { useCategoryImages } from "../../../hook/categorywithImage/useCategoryQuery";
+
 // import { useOfferBanners } from "../../../hook/banner/useOfferBanner";
 // import { useGenderBanner } from "../../../hook/genderBanner/useGender";
 // import { useLatestBanner } from "../../../hook/lastestCollectionBanner/useLatestCollectionBanner";
@@ -34,8 +38,8 @@ const Content = () => {
 
     //-----------------------------MainBanner--------------------------//
 
-    const { data: bannerResponse = {}, isLoading: mainBannerLoading } = useBanners();
-    const banners = bannerResponse?.data ?? [];
+    // const { data: bannerResponse = {}, isLoading: mainBannerLoading } = useBanners();
+    // const banners = bannerResponse?.data ?? [];
 
 
     // ------------------------------Category--------------------------------//
@@ -133,7 +137,8 @@ const Content = () => {
             <Fragment>
                 {/* ✅ SHOW SKELETON WHILE LOADING */}
 
-                <BannerCarousel banners={banners} isLoading={mainBannerLoading} />
+                {/* <BannerCarousel banners={banners} isLoading={mainBannerLoading} /> */}
+
                 {budgetLoading ? (
                     <BannerSkeleton />
                 ) : (
@@ -141,6 +146,11 @@ const Content = () => {
                     budgetBanners && Object.keys(budgetBanners).map((key) => {
                         const banner = budgetBanners[key];
                         if (!banner.isVisible) return null;
+
+                        const parsedVisibleCount =
+                            typeof banner.visibleCount === "string"
+                                ? JSON.parse(banner.visibleCount)
+                                : banner.visibleCount;
 
                         return banner.isGrid ? (
                             <GridBanner
@@ -169,6 +179,12 @@ const Content = () => {
                                 defaultRatio={banner.defaultRatio || "16/7.3"}
                                 mobileRows={banner.mobileRows || [1]}
                                 mobileRatio={banner.mobileRatio || "16/7.3"}
+                                autoScroll={banner.autoscroll || false}
+                                scrollable={banner.scrollable}
+                                visibleCount={parsedVisibleCount || { desktop: 3, tablet: 2, mobile: 2 }}
+                                scrollInterval = {banner.scrollInterval}
+                                infinite = {banner.infinite || false}
+                                dots = {banner.dots || false}
                             />
                         );
                     })

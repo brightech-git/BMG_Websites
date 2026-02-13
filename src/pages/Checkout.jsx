@@ -10,42 +10,41 @@ const Checkout = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // fallback from localStorage if page refreshed
-    const storedPayload = JSON.parse(localStorage.getItem('checkoutPayload') || '{}');
+    const storedPayload = JSON.parse(localStorage.getItem('checkoutPayload') || 'null');
 
-    const { state: checkoutPayload = storedPayload } = location || {};
+    const checkoutPayload = location?.state || storedPayload;
 
-    const { items: initialCartItems = [], totalAmount: initialTotalAmount = 0, shippingFee:shippingFee=0, subtotal:subtotal=0} = checkoutPayload;
-    console.log(initialCartItems, initialTotalAmount, shippingFee, subtotal, 'checkoutPayload');
+    const {
+        items: initialCartItems = [],
+        totalAmount: initialTotalAmount = 0,
+        shippingFee = 0,
+        subtotal = 0
+    } = checkoutPayload || {};
 
     const hasItems = Array.isArray(initialCartItems) && initialCartItems.length > 0;
 
-    // Redirect if no items
-    useEffect(() => {
-        if (!hasItems) {
-            navigate('/', { replace: true });
-        } else {
-            // store in localStorage for page refresh
-            localStorage.setItem('checkoutPayload', JSON.stringify(checkoutPayload));
-        }
-    }, [hasItems, navigate, checkoutPayload]);
+    // 🔴 Immediate redirect (before render)
+    if (!hasItems) {
+        navigate('/', { replace: true });
+        return null;
+    }
 
-    // Set page meta
+    // Save payload for refresh
+    useEffect(() => {
+        localStorage.setItem('checkoutPayload', JSON.stringify(checkoutPayload));
+    }, [checkoutPayload]);
+
     useDocumentMeta({
         title: 'Checkout',
         description: '#',
     });
 
-    if (!hasItems) return null;
-
     return (
         <Fragment>
-       
             <Content initialCartItems={initialCartItems} subtotal={subtotal} />
-         
-
         </Fragment>
     );
 };
+
 
 export default Checkout;

@@ -1,11 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { Alert } from "react-bootstrap";
 import { toast } from 'react-toastify';
 import { useContactFormQuery } from "../hook/contactForm/useContactFormQuery";
 import { useCompanyDetails } from "../context/clientDetails/clientDetialContext";
-import './ContactStore.css';
 import largerImg from '../assets/videos/store.jpg';
 import { useNavigate } from "react-router-dom";
+import {
+    MapPin,
+    Phone,
+    Mail,
+    FileText,
+    Facebook,
+    Twitter,
+    Instagram,
+    Youtube,
+    Loader,
+    Send,
+    CheckCircle,
+    AlertTriangle,
+    Navigation,
+    Clock,
+    CreditCard,
+    ParkingCircle
+} from 'lucide-react';
+import 'animate.css';
 
 const ContactStore = () => {
     const [formData, setFormData] = useState({
@@ -14,38 +31,23 @@ const ContactStore = () => {
         mobileNumber: "",
         comment: "",
     });
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const { details: companyDetails } = useCompanyDetails();
     const mutation = useContactFormQuery();
 
     const [banner, setBanner] = useState(largerImg);
     const [isMobile, setIsMobile] = useState(false);
+
     useEffect(() => {
         const handleResize = () => {
-            // If width is less than 768px, use portrait, else landscape
-            if (window.innerWidth < 768) {
-                setBanner(largerImg);
-            } else {
-                setBanner(largerImg);
-            }
-            const checkWidth = () => setIsMobile(window.innerWidth <= 767);
-            checkWidth(); // initial check
-            window.addEventListener("resize", checkWidth);
-            return () => window.removeEventListener("resize", checkWidth);
+            setBanner(largerImg);
+            setIsMobile(window.innerWidth <= 767);
         };
 
-        handleResize(); // Set initial image
-        window.addEventListener('resize', handleResize); // Update on resize
-
+        handleResize();
+        window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
-
-    const res = {
-        "items": [
-            { product_name: 'ring', quantity: 1, price: 1500 },
-            { product_name: 'ring', quantity: 1, price: 1500 },
-        ]
-    }
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -75,7 +77,6 @@ const ContactStore = () => {
                     formName: "Contact Form",
                 });
 
-                console.log("GTM Event Pushed:", window.dataLayer);
                 toast.success("Message submitted successfully!");
                 setFormData({
                     name: "",
@@ -92,7 +93,6 @@ const ContactStore = () => {
         });
     };
 
-
     useEffect(() => {
         if (mutation.isSuccess || mutation.isError) {
             const timer = setTimeout(() => {
@@ -102,336 +102,328 @@ const ContactStore = () => {
         }
     }, [mutation.isSuccess, mutation.isError]);
 
-    // Contact information items
     const logo = `https://app.bmgjewellers.com${companyDetails?.logo?.trim()}`;
-
-
-
-    // Build full address
     const fullAddress = `${companyDetails?.ADDRESS1 || ""}, ${companyDetails?.ADDRESS2 || ""} - ${companyDetails?.AREACODE || ""}`;
 
-    // Contact info for left column
     const contactInfo = [
         {
-            icon: "fas fa-map-marker-alt",
+            icon: MapPin,
             title: "Address",
             content: fullAddress,
-            link: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(fullAddress)
+            link: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(fullAddress),
+            bgColor: "bg-[var(--orange-100)]",
+            iconColor: "text-[var(--orange-600)]"
         },
-
         {
-            icon: "fas fa-phone",
+            icon: Phone,
             title: "Phone",
             content: companyDetails?.PHONE ? `Mobile: ${companyDetails.PHONE}` : "Not Available",
-            link: `tel:${companyDetails?.PHONE || ""}`
+            link: `tel:${companyDetails?.PHONE || ""}`,
+            bgColor: "bg-[var(--orange-50)]",
+            iconColor: "text-[var(--orange-500)]"
         },
         {
-            icon: "fas fa-envelope",
+            icon: Mail,
             title: "Email",
             content: companyDetails?.EMAIL || "Not Available",
-            link: `mailto:${companyDetails?.EMAIL || ""}`
+            link: `mailto:${companyDetails?.EMAIL || ""}`,
+            bgColor: "bg-[var(--orange-100)]",
+            iconColor: "text-[var(--orange-600)]"
         },
         {
-            icon: "fas fa-file-invoice",
+            icon: FileText,
             title: "GST Number",
             content: companyDetails?.GSTNO || "Not Available",
-            link: "#"
+            link: "#",
+            bgColor: "bg-[var(--orange-50)]",
+            iconColor: "text-[var(--orange-500)]"
         }
     ];
 
-    // Social links (kept blank if API has none)
     const socialLinks = [
-        { icon: "fab fa-facebook-f", url: companyDetails?.FACEBOOKLINK || "#" },
-        { icon: "fab fa-twitter", url: companyDetails?.TWITTERLINK || "#" },
-        { icon: "fab fa-instagram", url: companyDetails?.INSTALINK || "#" },
-        { icon: "fab fa-youtube", url: companyDetails?.YOUTUBELINK || "#" }
+        { icon: Facebook, url: companyDetails?.FACEBOOKLINK || "#", bgColor: "bg-[var(--orange-500)]" },
+        { icon: Twitter, url: companyDetails?.TWITTERLINK || "#", bgColor: "bg-[var(--orange-600)]" },
+        { icon: Instagram, url: companyDetails?.INSTALINK || "#", bgColor: "bg-[var(--orange-500)]" },
+        { icon: Youtube, url: companyDetails?.YOUTUBELINK || "#", bgColor: "bg-[var(--orange-600)]" }
     ];
 
-
     return (
-        <>
+        <section className="max-w-7xl mx-auto px-4 py-8 animate__animated animate__fadeIn font-primary">
+            {/* Header Section */}
+            <div className="text-center mb-8 animate__animated animate__fadeInDown">
+                <h1 className="text-lg md:text-xl lg:text-2xl font-bold text-[var(--primary-text-color)] mb-4 font-secondary">
+                    உங்களுக்காக புதிய தங்கம் ஜொலிக்கும் வெள்ளி நகைகள் உலகம்
+                </h1>
+                <div className="w-24 h-1 bg-gradient-to-r from-[var(--orange-500)] to-[var(--orange-600)] mx-auto"></div>
+            </div>
 
-
-            <section className="contact-main-section animate-fade-in m-2 ">
-                {/* Header Section */}
-                <div className="contacts-header-section">
-
-                    <div className="header-title-sections row align-items-center">
-
-                        <div className="contact-header-content">
-                            <h1 className="contact-main-title">
-                                உங்களுக்காக புதிய தங்கம் ஜொலிக்கும் வெள்ளி நகைகள் உலகம்
-                            </h1>
-
-
-                        </div>
-                      
-                    </div>
+            {/* Banner Image */}
+            <div className="mb-12 animate__animated animate__slideInLeft">
+                <div className="relative overflow-hidden rounded-2xl shadow-[var(--shadow-lg)]">
+                    <img
+                        src={banner}
+                        alt="Contact Banner"
+                        className="w-full h-[300px] md:h-[400px] object-cover transform hover:scale-105 transition-[var(--transition)] duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                 </div>
-                {/* Banner Image */}
-                <div className="banner-containers">
-                    <div
-                        className="contact-banner-container animate-slide-in-left"
+            </div>
 
-                    >
-                        <picture>
-                            <img src={banner} alt="Contact Banner" className="contact-banner-img" />
-                        </picture>
-                    </div>
-                </div>
-
-                {/* Main Contact Section */}
-
-                <div className="row">
-                    <div className="col-lg-7">
-                        <div className="contact-form-wrapper animate-slide-in-right">
-                            <div className="form-header">
-                                <h2>உங்கள் தகவலை பகிருங்கள்</h2>
-                                <p>புதிய கலெக்ஷன் preview-களும், லாஞ்ச் நாள் சிறப்பு ஆஃபர்களும் நேரடியாக உங்களைச் சேரும்.</p>
-                            </div>
-
-                            <form id="contactForm" onSubmit={handleSubmit} className="contact-form">
-                                <div className="row">
-                                    <div className="col-md-6">
-                                        <div className="form-group">
-                                            <label htmlFor="name">Full Name *</label>
-                                            <input
-                                                type="text"
-                                                id="name"
-                                                name="name"
-                                                placeholder="Enter your full name"
-                                                value={formData.name}
-                                                onChange={handleChange}
-                                                required
-                                                className="form-control-input"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="col-md-6">
-                                        <div className="form-group">
-                                            <label htmlFor="email">Email Address</label>
-                                            <input
-                                                type="email"
-                                                id="email"
-                                                name="email"
-                                                placeholder="Enter your email"
-                                                value={formData.email}
-                                                onChange={handleChange}
-                                                className="form-control-input"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="mobileNumber">Mobile Number</label>
-                                    <input
-                                        type="tel"
-                                        id="mobileNumber"
-                                        name="mobileNumber"
-                                        placeholder="Enter your mobile number"
-                                        value={formData.mobileNumber}
-                                        onChange={handleChange}
-                                        className="form-control-input"
-                                    />
-                                </div>
-
-                                {/* <div className="form-group">
-                                    <label htmlFor="comment">Your Message *</label>
-                                    <textarea
-                                        id="comment"
-                                        name="comment"
-                                        placeholder="Tell us about your requirements..."
-                                        value={formData.comment}
-                                        onChange={handleChange}
-                                        required
-                                        rows="5"
-                                        className="form-control-input"
-                                    />
-                                </div> */}
-                                <div className="form-actions">
-                                    <a
-                                        href="#"
-                                        className="btn-submit"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            document.getElementById("contactForm").requestSubmit();
-                                        }}
-                                    >
-                                        {mutation.isLoading ? (
-                                            <>
-                                                <i className="fas fa-spinner fa-spin" />
-                                                Sending Message...
-                                            </>
-                                        ) : (
-                                            <>
-                                                <i className="fas fa-paper-plane" />
-                                                Send Message
-                                            </>
-                                        )}
-                                    </a>
-
-                                </div>
-
-                                {mutation.isSuccess && (
-                                    <Alert variant="success" className="mt-4">
-                                        <i className="fas fa-check-circle" />
-                                        <strong>Success!</strong> Your message has been sent successfully. We'll get back to you soon.
-                                    </Alert>
-                                )}
-                                {mutation.isError && (
-                                    <Alert variant="danger" className="mt-4">
-                                        <i className="fas fa-exclamation-triangle" />
-                                        <strong>Error!</strong> Failed to send message. Please try again later.
-                                    </Alert>
-                                )}
-                            </form>
+            {/* Main Contact Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                {/* Left Info Column */}
+                <div className="lg:col-span-5 animate__animated animate__slideInLeft">
+                    <div className="bg-[var(--primary-color)] rounded-2xl shadow-[var(--shadow-lg)] p-8 sticky top-8">
+                        <div className="mb-8">
+                            <h3 className="text-lg md:text-xl font-bold text-[var(--primary-text-color)] mb-2">Contact Information</h3>
+                            <p className="text-xs md:text-sm text-[var(--secondary-text-color)]">Say something to start a live chat!</p>
                         </div>
-                    </div>
-                    {/* Left Info Column */}
-                    <div className="col-lg-5">
-                        <div className="contact-info-wrapper">
-                            <div className="contact-info-header">
-                                <h3>Contact Information</h3>
-                                <p>Say something to start a live chat!</p>
-                            </div>
-                            <div className="contact-info-list">
-                                {contactInfo.map((item, index) => (
+
+                        <div className="space-y-4">
+                            {contactInfo.map((item, index) => {
+                                const Icon = item.icon;
+                                return (
                                     <a
                                         key={index}
                                         href={item.link}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="contact-info-item animate-slide-in-left contact-info-clickable"
+                                        className={`flex items-start gap-4 p-4 rounded-xl transition-[var(--transition)] hover:shadow-[var(--shadow-md)] group animate__animated animate__fadeInLeft ${item.bgColor}`}
+                                        style={{ animationDelay: `${index * 0.1}s` }}
                                     >
-                                        <div className="info-icon">
-                                            <i className={item.icon} />
+                                        <div className={`p-3 rounded-lg bg-[var(--white-color)] group-hover:scale-110 transition-[var(--transition)] ${item.iconColor}`}>
+                                            <Icon className="w-5 h-5" />
                                         </div>
-                                        <div className="info-content">
-                                            <h4>{item.title}</h4>
-                                            <p>{item.content}</p>
+                                        <div>
+                                            <h4 className="text-sm font-semibold text-[var(--primary-text-color)]">{item.title}</h4>
+                                            <p className="text-xs text-[var(--secondary-text-color)] mt-1">{item.content}</p>
                                         </div>
                                     </a>
-                                ))}
-                            </div>
+                                );
+                            })}
+                        </div>
 
-
-                            {/* Social Connect */}
-                            <div className="social-connect">
-                                <h4>Follow Us</h4>
-                                <div className="social-icons">
-                                    {socialLinks.map((social, index) => (
+                        {/* Social Connect */}
+                        <div className="mt-8 pt-8 border-t border-[var(--orange-200)]">
+                            <h4 className="text-base md:text-lg font-semibold text-[var(--primary-text-color)] mb-4">Follow Us</h4>
+                            <div className="flex gap-3">
+                                {socialLinks.map((social, index) => {
+                                    const Icon = social.icon;
+                                    return (
                                         <a
                                             key={index}
                                             href={social.url}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="social-icon-link animate-bounce-in"
+                                            className={`p-3 rounded-full ${social.bgColor} text-[var(--white-color)] hover:opacity-80 transition-[var(--transition)] transform hover:scale-110 animate__animated animate__bounceIn`}
                                             style={{ animationDelay: `${index * 0.1}s` }}
                                         >
-                                            <i className={social.icon} />
+                                            <Icon className="w-4 h-4" />
                                         </a>
-                                    ))}
-                                </div>
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>
-
-                    {/* Right Form Column */}
-
                 </div>
 
+                {/* Right Form Column */}
+                <div className="lg:col-span-7 animate__animated animate__slideInRight">
+                    <div className="bg-[var(--primary-color)] rounded-2xl shadow-[var(--shadow-lg)] p-8">
+                        <div className="mb-8">
+                            <h2 className="text-lg md:text-xl font-bold text-[var(--primary-text-color)] mb-2 font-secondary">உங்கள் தகவலை பகிருங்கள்</h2>
+                            <p className="text-xs md:text-sm text-[var(--secondary-text-color)]">
+                                புதிய கலெக்ஷன் preview-களும், லாஞ்ச் நாள் சிறப்பு ஆஃபர்களும் நேரடியாக உங்களைச் சேரும்.
+                            </p>
+                        </div>
 
-                {/* Store Location Section */}
-                <div className="store-location-section">
+                        <form id="contactForm" onSubmit={handleSubmit} className="space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label htmlFor="name" className="text-xs md:text-sm font-medium text-[var(--primary-text-color)]">
+                                        Full Name <span className="text-[var(--orange-600)]">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        name="name"
+                                        placeholder="Enter your full name"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                        required
+                                        className="w-full px-4 py-3 text-sm rounded-lg border border-[var(--orange-200)] focus:border-[var(--orange-500)] focus:ring-2 focus:ring-[var(--orange-200)] transition-[var(--transition)] outline-none bg-[var(--white-color)] text-[var(--primary-text-color)] placeholder:text-[var(--secondary-text-color)]/50"
+                                    />
+                                </div>
 
-                    <div className="section-header text-center">
-                        <h2>Visit Our Store</h2>
-                        <p>Come experience the brilliance of BMG Jewellers in person</p>
-                    </div>
-
-                    <div className="row align-items-center">
-                        {/* <div className="col-lg-4">
-                            <div className="location-content">
-                                <div className="location-card">
-                                    <div className="location-header">
-                                        <h3>BMG Jewellers</h3>
-                                        <span className="location-badge">Main Store</span>
-                                    </div>
-
-                                    <div className="location-details">
-                                        <div className="detail-item">
-                                            <i className="fas fa-map-marker-alt" />
-                                            <span>{fullAddress || "M/s. BMG Jewellers Pvt Ltd, 160, Melamasi St, Madurai-625001"}</span>
-                                        </div>
-                                        <div className="detail-item">
-                                            <i className="fas fa-phone" />
-                                            <span>{companyDetails?.phone || "+91-95143 33601"}</span>
-                                        </div>
-                                        <div className="detail-item">
-                                            <i className="fas fa-envelope" />
-                                            <span>{companyDetails?.email || "Contact@bmgjewellers.in"}</span>
-                                        </div>
-                                        <div className="detail-item">
-                                            <i className="fas fa-clock" />
-                                            <span>{companyDetails?.businessHours || "Mon - Sun: 10:00 AM - 9:00 PM"}</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="location-features">
-                                        <div className="feature-item">
-                                            <i className="fas fa-parking" />
-                                            <span>Parking Available</span>
-                                        </div>
-                                        {/* <div className="feature-item">
-                                            <i className="fas fa-wheelchair" />
-                                            <span>Wheelchair Accessible</span>
-                                        </div> */}
-                        {/* <div className="feature-item">
-                                            <i className="fas fa-credit-card" />
-                                            <span>All Cards Accepted</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="location-actions">
-                                        <a
-                                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="btn-directions"
-                                        >
-                                            <i className="fas fa-directions" />
-                                            Get Directions
-                                        </a>
-                                        <a
-                                            href={`tel:${companyDetails?.phone || '+91-95143-33601'}`}
-                                            className="btn-call"
-                                        >
-                                            <i className="fas fa-phone" />
-                                            Call Now
-                                        </a>
-                                    </div>
+                                <div className="space-y-2">
+                                    <label htmlFor="email" className="text-xs md:text-sm font-medium text-[var(--primary-text-color)]">
+                                        Email Address
+                                    </label>
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        placeholder="Enter your email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        className="w-full px-4 py-3 text-sm rounded-lg border border-[var(--orange-200)] focus:border-[var(--orange-500)] focus:ring-2 focus:ring-[var(--orange-200)] transition-[var(--transition)] outline-none bg-[var(--white-color)] text-[var(--primary-text-color)] placeholder:text-[var(--secondary-text-color)]/50"
+                                    />
                                 </div>
                             </div>
-                        </div> */}
 
-                        <div className="">
-                            <div className="map-container">
-                                <iframe
-                                    title="BMG Jewellers Location"
-                                    src={companyDetails?.MAPEMBED || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3807.394863191887!2d78.11334837488296!3d9.916122890185033!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00c52cde0dc627%3A0x8f265e55e17fdc92!2sBMG%20Jewellers!5e1!3m2!1sen!2sin!4v1764324069943!5m2!1sen!2sin"}
-                                    className="google-map"
-                                    allowFullScreen
-                                    loading="lazy"
-                                    referrerPolicy="no-referrer-when-downgrade"
+                            <div className="space-y-2">
+                                <label htmlFor="mobileNumber" className="text-xs md:text-sm font-medium text-[var(--primary-text-color)]">
+                                    Mobile Number
+                                </label>
+                                <input
+                                    type="tel"
+                                    id="mobileNumber"
+                                    name="mobileNumber"
+                                    placeholder="Enter your mobile number"
+                                    value={formData.mobileNumber}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-3 text-sm rounded-lg border border-[var(--orange-200)] focus:border-[var(--orange-500)] focus:ring-2 focus:ring-[var(--orange-200)] transition-[var(--transition)] outline-none bg-[var(--white-color)] text-[var(--primary-text-color)] placeholder:text-[var(--secondary-text-color)]/50"
                                 />
                             </div>
+
+                            <div className="pt-4">
+                                <button
+                                    type="submit"
+                                    disabled={mutation.isLoading}
+                                    className="w-full md:w-auto px-8 py-4 bg-gradient-to-r from-[var(--orange-500)] to-[var(--orange-600)] text-[var(--white-color)] text-sm font-semibold rounded-lg hover:from-[var(--orange-600)] hover:to-[var(--orange-700)] transform hover:scale-105 transition-[var(--transition)] shadow-[var(--shadow-lg)] hover:shadow-[var(--shadow-lg)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 animate__animated animate__pulse animate__infinite animate__slow"
+                                >
+                                    {mutation.isLoading ? (
+                                        <>
+                                            <Loader className="w-4 h-4 animate-spin" />
+                                            <span className="text-xs md:text-sm">Sending Message...</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Send className="w-4 h-4" />
+                                            <span className="text-xs md:text-sm">Send Message</span>
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+
+                            {mutation.isSuccess && (
+                                <div className="mt-6 p-4 bg-[var(--green-color)]/10 border border-[var(--green-color)] rounded-lg animate__animated animate__fadeInUp">
+                                    <div className="flex items-center gap-3 text-[var(--green-color)]">
+                                        <CheckCircle className="w-5 h-5" />
+                                        <div>
+                                            <strong className="text-sm font-semibold">Success!</strong>
+                                            <p className="text-xs">Your message has been sent successfully. We'll get back to you soon.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {mutation.isError && (
+                                <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg animate__animated animate__shakeX">
+                                    <div className="flex items-center gap-3 text-red-700">
+                                        <AlertTriangle className="w-5 h-5" />
+                                        <div>
+                                            <strong className="text-sm font-semibold">Error!</strong>
+                                            <p className="text-xs">Failed to send message. Please try again later.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {/* Store Location Section */}
+            <div className="mt-16 animate__animated animate__fadeInUp">
+                <div className="text-center mb-8">
+                    <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-[var(--primary-text-color)] mb-2">Visit Our Store</h2>
+                    <p className="text-xs md:text-sm text-[var(--secondary-text-color)]">Come experience the brilliance of BMG Jewellers in person</p>
+                    <div className="w-24 h-1 bg-gradient-to-r from-[var(--orange-500)] to-[var(--orange-600)] mx-auto mt-4"></div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    {/* Store Info Card */}
+                    <div className="lg:col-span-4">
+                        <div className="bg-[var(--primary-color)] rounded-2xl shadow-[var(--shadow-lg)] p-6 h-full animate__animated animate__fadeInLeft">
+                            <div className="mb-6">
+                                <h3 className="text-base md:text-lg font-bold text-[var(--primary-text-color)]">BMG Jewellers</h3>
+                                <span className="inline-block px-3 py-1 bg-[var(--orange-100)] text-[var(--orange-700)] text-xs font-semibold rounded-full mt-2">
+                                    Main Store
+                                </span>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div className="flex items-start gap-3">
+                                    <MapPin className="w-4 h-4 text-[var(--orange-500)] flex-shrink-0 mt-1" />
+                                    <span className="text-xs text-[var(--secondary-text-color)]">{fullAddress || "M/s. BMG Jewellers Pvt Ltd, 160, Melamasi St, Madurai-625001"}</span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <Phone className="w-4 h-4 text-[var(--orange-500)]" />
+                                    <span className="text-xs text-[var(--secondary-text-color)]">{companyDetails?.phone || "+91-95143 33601"}</span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <Mail className="w-4 h-4 text-[var(--orange-500)]" />
+                                    <span className="text-xs text-[var(--secondary-text-color)]">{companyDetails?.email || "Contact@bmgjewellers.in"}</span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <Clock className="w-4 h-4 text-[var(--orange-500)]" />
+                                    <span className="text-xs text-[var(--secondary-text-color)]">{companyDetails?.businessHours || "Mon - Sun: 10:00 AM - 9:00 PM"}</span>
+                                </div>
+                            </div>
+
+                            <div className="mt-6 grid grid-cols-3 gap-2">
+                                <div className="text-center p-2 bg-[var(--orange-50)] rounded-lg">
+                                    <ParkingCircle className="w-4 h-4 text-[var(--orange-500)] mx-auto mb-1" />
+                                    <span className="text-[10px] md:text-xs text-[var(--secondary-text-color)]">Parking</span>
+                                </div>
+                                <div className="text-center p-2 bg-[var(--orange-50)] rounded-lg">
+                                    <CreditCard className="w-4 h-4 text-[var(--orange-500)] mx-auto mb-1" />
+                                    <span className="text-[10px] md:text-xs text-[var(--secondary-text-color)]">Cards</span>
+                                </div>
+                                <div className="text-center p-2 bg-[var(--orange-50)] rounded-lg">
+                                    <Navigation className="w-4 h-4 text-[var(--orange-500)] mx-auto mb-1" />
+                                    <span className="text-[10px] md:text-xs text-[var(--secondary-text-color)]">GPS</span>
+                                </div>
+                            </div>
+
+                            <div className="mt-6 flex gap-3">
+                                <a
+                                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex-1 px-4 py-2 bg-[var(--orange-500)] text-[var(--white-color)] text-xs font-semibold rounded-lg hover:bg-[var(--orange-600)] transition-[var(--transition)] flex items-center justify-center gap-2"
+                                >
+                                    <Navigation className="w-3 h-3" />
+                                    Directions
+                                </a>
+                                <a
+                                    href={`tel:${companyDetails?.phone || '+91-95143-33601'}`}
+                                    className="flex-1 px-4 py-2 bg-[var(--orange-600)] text-[var(--white-color)] text-xs font-semibold rounded-lg hover:bg-[var(--orange-700)] transition-[var(--transition)] flex items-center justify-center gap-2"
+                                >
+                                    <Phone className="w-3 h-3" />
+                                    Call Now
+                                </a>
+                            </div>
                         </div>
                     </div>
 
+                    {/* Map Container */}
+                    <div className="lg:col-span-8 animate__animated animate__fadeInRight">
+                        <div className="bg-[var(--primary-color)] rounded-2xl shadow-[var(--shadow-lg)] overflow-hidden h-[450px]">
+                            <iframe
+                                title="BMG Jewellers Location"
+                                src={companyDetails?.MAPEMBED || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3807.394863191887!2d78.11334837488296!3d9.916122890185033!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00c52cde0dc627%3A0x8f265e55e17fdc92!2sBMG%20Jewellers!5e1!3m2!1sen!2sin!4v1764324069943!5m2!1sen!2sin"}
+                                className="w-full h-full"
+                                allowFullScreen
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                            />
+                        </div>
+                    </div>
                 </div>
-            </section>
-        </>
+            </div>
+        </section>
     );
 };
 

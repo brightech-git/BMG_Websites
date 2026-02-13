@@ -9,6 +9,7 @@ import {
   FiLogOut,
 } from "react-icons/fi";
 import "animate.css";
+import LogoutModal from "../../../../component/logout/Logout";
 
 const AccountSidebar = ({ openLogoutModal }) => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const AccountSidebar = ({ openLogoutModal }) => {
   const user = useSelector((state) => state.user.user);
   const [activeItem, setActiveItem] = useState("dashboard");
   const [isHovered, setIsHovered] = useState(false);
-
+ 
   const menuItems = [
     {
       key: "dashboard",
@@ -77,7 +78,7 @@ const AccountSidebar = ({ openLogoutModal }) => {
   };
 
   return (
-    <aside className="w-full animate__animated animate__fadeIn">
+    <aside className="w-full animate__animated animate__fadeIn mt-4">
 
       {/* ========== MOBILE LAYOUT - Fixed ========== */}
       <div className="block md:hidden space-y-3">
@@ -172,6 +173,12 @@ const AccountSidebar = ({ openLogoutModal }) => {
             ">
               Sign Out
             </span>
+            <>
+              
+
+              
+              
+            </>
           </button>
         </div>
       </div>

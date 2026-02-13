@@ -315,7 +315,7 @@ export default function UnifiedFilterBar({
     <>
       <div
         ref={dropdownContainerRef}
-        className="bg-pink-50 border-b border-gray-200 px-4 py-1.5"
+        className="bg-[var(--primary-card-color)] border-b border-gray-200 px-4 py-1.5"
       >
         <div className="flex items-center gap-4">
           {/* Price */}
@@ -453,7 +453,7 @@ export default function UnifiedFilterBar({
   const MobileFilterBar = () => (
     <>
       {/* Bottom Fixed Bar */}
-      <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-10 flex justify-around items-center p-2">
+      <div className="fixed bottom-0 left-0 w-full bg-[var(--primary-card-color)] border-t border-gray-200 z-20 flex justify-around items-center p-2">
         {/* Filter Button */}
         <button
           onClick={() => setIsFilterPanelOpen(true)}
@@ -492,8 +492,8 @@ export default function UnifiedFilterBar({
             </button>
           </div>
 
-          <div className="flex-1 flex overflow-hidden">
-            <div className="w-2/5 border-r border-gray-200 overflow-y-auto">
+          <div className="flex-1 flex overflow-hidden ">
+            <div className="w-2/5 border-r border-gray-200 overflow-y-auto bg-[var(--primary-card-color)]">
               <button
                 onClick={() => setActiveMobileFilter("price")}
                 className={`w-full text-left px-4 py-3 border-b border-gray-200 text-sm ${activeMobileFilter === "price" ? "bg-gray-50 text-amber-600 font-medium" : "text-gray-700"
@@ -501,6 +501,7 @@ export default function UnifiedFilterBar({
               >
                 Price
               </button>
+
             </div>
 
             <div className="flex-1 overflow-y-auto p-4">

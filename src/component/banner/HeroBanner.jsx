@@ -199,6 +199,8 @@ const HeroBanner = ({
             return;
         }
 
+        console.log(`Navigating to: ${imageData}`)
+
         if (!imageData?.link) return;
         navigate(`/products-page?${imageData.link}`);
     };
@@ -210,7 +212,7 @@ const HeroBanner = ({
                 url: image,
                 ratio: isMobile ? mobileRatio : defaultRatio,
                 alt: `Image ${index + 1}`,
-                link: null,
+                link: image.mobile?.link || image.desktop?.link || null,
             };
         }
 
@@ -244,7 +246,7 @@ const HeroBanner = ({
             url: '',
             ratio: isMobile ? mobileRatio : defaultRatio,
             alt: 'Missing image',
-            link: null,
+            link: image.mobile?.link || image.desktop?.link || null,
         };
     };
 
@@ -455,6 +457,7 @@ const HeroBanner = ({
                                             ? (currentIndex + imgIndex) % totalSlides
                                             : rows.slice(0, rowIndex).reduce((acc, r) => acc + r.length, 0) + imgIndex;
                                         const imageData = getImageData(image, globalIndex);
+                                    
 
                                         return (
                                             <div

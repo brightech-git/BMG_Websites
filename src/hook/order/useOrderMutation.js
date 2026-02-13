@@ -51,14 +51,18 @@ export const useCancelOrder = () => {
     });
 };
 
-export const useRefundOrder = () => {
+export const useRefundOrder = (onSuccessCallback) => {
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: refundOrderApi,
-        onSuccess: () => {
+        onSuccess: (data) => {
             queryClient.invalidateQueries(['orderHistory']);
             queryClient.invalidateQueries(['orderDetails']);
+
+            if (onSuccessCallback) {
+                onSuccessCallback(data);
+            }
         },
         onError: (error) => {
             console.error('Refund submission failed:', error);

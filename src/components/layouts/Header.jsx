@@ -30,7 +30,7 @@ import './HeaderScroll.css'
 import RatesDropdown from "./RatesDropdown";
 import { usePincode } from "../../context/pinocde/PincodeContext";
 import { queryClient } from "../../component/reactQuery/queryClient";
-
+import LogoutModal from "../../component/logout/Logout";
 
 const Header = ({ isAuthenticated }) => {
   const width = useScreenWidth();
@@ -48,7 +48,7 @@ const Header = ({ isAuthenticated }) => {
   const [headerHeight, setHeaderHeight] = useState(0);
   const [shouldShow, setShouldShow] = useState(true);
   const [isNavigating, setIsNavigating] = useState(false);
-
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const { details } = useCompanyDetails();
 
@@ -152,6 +152,21 @@ const Header = ({ isAuthenticated }) => {
     navigate("/login");
   };
 
+  const openLogoutModal = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsLogoutModalOpen(true);
+  };
+
+  const closeLogoutModal = () => {
+    setIsLogoutModalOpen(false);
+  };
+
+  const confirmLogout = () => {
+    handleLogout(new Event('submit')); // Pass a dummy event
+  };
+
+
   const handleCategoryClick = (keyName, keyValue) => {
     setIsNavigating(true);
     const queryParams = new URLSearchParams();
@@ -241,15 +256,32 @@ const Header = ({ isAuthenticated }) => {
                 {/* Auth Button */}
                 <div>
                   {isAuthenticated ? (
-                    <motion.button
-                      onClick={handleLogout}
-                      className="flex items-center gap-2 px-4 py-1.5 bg-gradient-to-r from-red-600 to-red-500 rounded-full hover:from-red-500 hover:to-red-400 transition-all duration-300 hover:scale-105 active:scale-95"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <LogOut size={16} />
-                      <span className="font-medium">Log Out</span>
-                    </motion.button>
+                    <>
+                      {/* Your component JSX */}
+                      <motion.button
+                        onClick={openLogoutModal}
+                        className="flex items-center gap-2 px-4 py-1.5 bg-gradient-to-r from-red-600 to-red-500 rounded-full hover:from-red-500 hover:to-red-400 transition-all duration-300 hover:scale-105 active:scale-95"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <LogOut size={16} />
+                        <span className="font-medium">Log Out</span>
+                      </motion.button>
+
+                      {/* Logout Modal */}
+                      <LogoutModal
+                        isOpen={isLogoutModalOpen}
+                        onClose={closeLogoutModal}
+                        onConfirm={confirmLogout}
+                        title="Ready to Leave?"
+                        message="Are you sure you want to logout? You'll need to login again to access your account."
+                        confirmText="Yes, Logout"
+                        cancelText="Stay Logged In"
+                        size="md"
+                        confirmButtonClass="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400"
+                        icon={<LogOut className="text-4xl text-red-500" />}
+                      />
+                    </>
                   ) : (
                     <motion.button
                       onClick={() => {

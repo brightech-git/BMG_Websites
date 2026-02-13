@@ -6,23 +6,41 @@ import AccountSidebar from "./AccountSidebar/AccountSideBar";
 import "./AccountStyles.css";
 import "./logout.css";
 import { queryClient } from "../../../component/reactQuery/queryClient";
+import LogoutModal from "../../../component/logout/Logout";
+import { LogOut } from "lucide-react";
 
 const AccountPage = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    dispatch(logout());
-    localStorage.removeItem('user');
-    localStorage.removeItem('user_token');
-    localStorage.removeItem('userMobileNumber');
-    localStorage.removeItem('pendingUser');
-    queryClient.clear();
-    navigate("/login", { replace: true });
-    setIsModalOpen(false);
-  };
-
+   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  
+     const handleLogout = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dispatch(logout());
+        localStorage.removeItem('user');
+        localStorage.removeItem('user_token');
+        localStorage.removeItem('userMobileNumber');
+        localStorage.removeItem('pendingUser');
+        queryClient.clear();
+        navigate("/login");
+      };
+    
+      const openLogoutModal = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsLogoutModalOpen(true);
+      };
+    
+      const closeLogoutModal = () => {
+        setIsLogoutModalOpen(false);
+      };
+    
+      const confirmLogout = () => {
+        handleLogout(new Event('submit')); // Pass a dummy event
+      };
+      
   return (
     <>
       <section className="account-with-header">
@@ -30,7 +48,7 @@ const AccountPage = () => {
           <div className="account-layout">
             {/* Fixed: Removed margin-bottom on mobile */}
             <aside className="w-full md:w-auto">
-              <AccountSidebar openLogoutModal={() => setIsModalOpen(true)} />
+              <AccountSidebar openLogoutModal={() => setIsLogoutModalOpen(true)} />
             </aside>
 
             <main className="account-content flex-1 min-w-0">
@@ -40,29 +58,21 @@ const AccountPage = () => {
         </div>
       </section>
 
-      {/* Logout Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate__animated animate__fadeIn">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl animate__animated animate__fadeInUp" onClick={(e) => e.stopPropagation()}>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Confirm Logout</h2>
-            <p className="text-gray-600 mb-6">Are you sure you want to log out?</p>
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 bg-gradient-to-r from-rose-500 to-pink-600 text-white rounded-lg hover:shadow-lg transition"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+    
+  
+        <LogoutModal
+          isOpen={isLogoutModalOpen}
+          onClose={closeLogoutModal}
+          onConfirm={confirmLogout}
+          title="Ready to Leave?"
+          message="Are you sure you want to logout? You'll need to login again to access your account."
+          confirmText="Yes, Logout"
+          cancelText="Stay Logged In"
+          size="md"
+          confirmButtonClass="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400"
+          icon={<LogOut className="text-4xl text-red-500" />}
+        />
+    
     </>
   );
 };

@@ -21,12 +21,15 @@ import { ORDER_STATUS_MASTER } from '../../../../data/orderStatusMaster';
 import { useTrackingById } from '../../../../hook/order/useOrderTracking';
 import { useOrderStatusMaster } from '../../../../hook/order/useOrderTracking';
 import "animate.css";
+import {getImage} from '../../../../utils/getProductImages';
+
+
 
 const OrderDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
-  const [expandedItem, setExpandedItem] = useState(null);
+
 
   const { data: orderTrackData, refetch: fetchOrderTrackData, isLoading: orderTrackLoading, isError: orderTrackError } = useTrackingById(id);
   const { mutate: cancelOrder, isLoading: isCancelling } = useCancelOrder();
@@ -45,6 +48,10 @@ const OrderDetail = () => {
   const deliveryAddress = orderTrackData?.delivery_address;
   const originAddress = orderTrackData?.origin_address;
   const orderDate = orderTrackData?.order_date || orderTrackData?.created_at;
+
+  const canReturn = orderTrackData?.canReturn || orderTrackData?.current_status?.toLowerCase() === "delivered" || true;
+
+
   console.log(orderTrackData, orderDate ,'ordersss')
   const handleCancel = () => {
     const reason = prompt("Why do you want to cancel this order?");
@@ -79,6 +86,12 @@ const OrderDetail = () => {
       navigate(`/payment/${result.newOrderId}`);
     }
   };
+
+  const handleReturn = () =>{
+    const confirm = window.confirm("Do you want to return this order ?");
+    if (!confirm) return;
+      navigate(`/return` ,{state:orderTrackData});
+  }
 
   const getStatusColor = (status) => {
     const map = {
@@ -315,13 +328,11 @@ const OrderDetail = () => {
                       key={item.id}
                       className="group flex gap-3 p-2.5 sm:p-3 bg-white border border-[#FED7AA] rounded-xl hover:shadow-lg hover:border-[#F97316]/30 transition-all duration-300 animate__animated animate__fadeInUp"
                       style={{ animationDelay: `${index * 50}ms` }}
-                      onMouseEnter={() => setExpandedItem(item.id)}
-                      onMouseLeave={() => setExpandedItem(null)}
                     >
                       <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-[#FFF7ED] to-[#FFEDD5] border-2 border-[#FED7AA] rounded-xl overflow-hidden flex-shrink-0 group-hover:border-[#F97316] transition-all duration-300">
-                        {item.imagePath ? (
+                        {item.image_path ? (
                           <img
-                            src={item.imagePath.startsWith('http') ? item.imagePath : `https://app.bmgjewellers.com${item.imagePath}`}
+                            src={getImage(item.image_path || item.imagePath)}
                             alt={item.productName}
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                           />
@@ -332,7 +343,7 @@ const OrderDetail = () => {
                         )}
                       </div>
 
-                      <div className="flex-1 flex flex-col xs:flex-row justify-between items-start xs:items-center gap-2">
+                      <div className="flex-1 flex flex-row justify-between items-center gap-2">
                         <div className="flex-1">
                           <h4 className="font-semibold text-[#7C2D12] text-xs sm:text-sm line-clamp-2 group-hover:text-[#F97316] transition-colors">
                             {item.productName}
@@ -343,11 +354,11 @@ const OrderDetail = () => {
                               Weight: {item.weight}
                             </p>
                           )}
-                          {expandedItem === item.id && (
-                            <p className="text-[10px] text-[#F97316] mt-1 animate__animated animate__fadeIn">
+                    
+                            <p className="text-[10px] text-[#F97316] mt-1 ">
                               Item ID: {item.id}
                             </p>
-                          )}
+                        
                         </div>
                         <div className="flex items-center gap-2">
                           {item.quantity > 1 && (
@@ -499,22 +510,33 @@ const OrderDetail = () => {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="pt-4 space-y-2">
+                  <div className="pt-2 space-y-2">
                     {canReorder && (
                       <SmartButton
                         onClick={handleReorder}
-                        disabled={isReordering}
                         className="w-full bg-gradient-to-r from-[#F97316] to-[#EA580C] text-white px-4 py-2.5 rounded-xl font-medium hover:shadow-lg hover:shadow-[#F97316]/30 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 text-sm group"
                       >
                         <FontAwesomeIcon
                           icon={faShoppingBag}
                           className="group-hover:rotate-12 transition-transform duration-300"
                         />
-                        {isReordering ? 'Processing...' : 'Reorder'}
-                        {isReordering && <FontAwesomeIcon icon={faSpinner} spin className="ml-1" />}
+                              Reorder
                       </SmartButton>
                     )}
-
+                      {canReturn && (
+                        <SmartButton
+                          onClick={handleReturn}
+                          disabled={isReordering}
+                          className="w-full bg-gradient-to-r from-[#F97316] to-[#EA580C] text-white px-4 py-2.5 rounded-xl font-medium hover:shadow-lg hover:shadow-[#F97316]/30 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 text-sm group"
+                        >
+                          <FontAwesomeIcon
+                            icon={faShoppingBag}
+                            className="group-hover:rotate-12 transition-transform duration-300"
+                          />
+                          {isReordering ? 'Processing...' : 'Return'}
+                          {isReordering && <FontAwesomeIcon icon={faSpinner} spin className="ml-1" />}
+                        </SmartButton>
+                      )}
                     <button
                       onClick={() => navigate('/products-page')}
                       className="w-full bg-white border-2 border-[#FED7AA] text-[#7C2D12] px-4 py-2.5 rounded-xl font-medium hover:bg-[#FFF7ED] hover:border-[#F97316] transition-all duration-300 flex items-center justify-center gap-2 text-sm group"
@@ -525,6 +547,7 @@ const OrderDetail = () => {
                       />
                       Continue Shopping
                     </button>
+                    
                   </div>
                 </div>
               </div>

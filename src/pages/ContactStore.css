@@ -38,7 +38,7 @@
 ---------------------------------------------- */
 .contact-main-section {
     max-width: 1400px;
-    margin: 150px auto 0px auto!important;
+    margin: 0px auto!important;
     font-family: var(--secondary-font);
     color: var(--primary-text-color);
 }

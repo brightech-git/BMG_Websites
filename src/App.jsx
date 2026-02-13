@@ -53,6 +53,7 @@ import PrivateRoute from "./route/UserPrivateRoute";
 import MainHeaderLayout from "./component/layout/MainHeaderLayout";
 
 import "./App.css";
+import ReturnReplaceFlow from "./components/sections/return/Return";
 
 function App() {
   const [showHome, setShowHome] = useState(true);
@@ -121,6 +122,8 @@ function App() {
                 <Route path="address" element={<AddressManager />} />
                 <Route path="change-password" element={<ChangePassword />} />
               </Route>
+
+              <Route path="/return" element={<ReturnReplaceFlow/>} />
 
 
           </Route>

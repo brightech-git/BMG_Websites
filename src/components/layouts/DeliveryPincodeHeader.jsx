@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "animate.css";
 import SmartButton from "../ui/SmartButton";
 import { ChevronDown } from "lucide-react";
 import { MapPin } from "lucide-react";

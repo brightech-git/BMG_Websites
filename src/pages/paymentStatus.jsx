@@ -17,9 +17,10 @@ import { getPaymentStatus } from "../service/paymentServiceicici";
 import SmartButton from "../components/ui/SmartButton";
 import { useCreateReOrder } from "../hook/order/useReorder";
 import { useCart } from "../hook/cart/useCartQuery";
-import printStatement from '../components/ui/PrintStatement';
+import InvoiceDocument from '../components/ui/PrintStatement';
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { useOrderInvoice } from "../hook/order/useAllOrdersQuery";
+import { toWords } from "number-to-words";
 
 const PaymentStatus = () => {
     const location = useLocation();
@@ -38,10 +39,45 @@ const PaymentStatus = () => {
 
     const { mutateAsync: createReOrder } = useCreateReOrder();
 
-    const { data: orderInvoiceData, isLoading: orderInvoiceLoadinf, isError: orderInvoiceError } = useOrderInvoice(orderId);
 
-    console.log(orderInvoiceData, 'orderInvoiceData');
+    const { data: orderInvoiceData, isLoading: orderInvoiceLoading, isError: orderInvoiceError } = useOrderInvoice(orderId);
 
+    const orderData = orderInvoiceData;
+
+    // Map items with correct field names
+    const pdfItems = orderData?.items?.map(item => ({
+        productName: item.product_name,  // Changed from product_name to productName
+        quantity: item.quantity,
+        price: item.price,
+        sno: item.sno,
+        tagNo: item.tagno,  // Changed from tagno to tagNo
+        imagePath: item.image_path,  // Changed from image_path to imagePath
+        returnStatus: item.return_status,  // Changed from return_status to returnStatus
+    })) || [];
+
+    function convertAmountToWords(amount) {
+        if (!amount) return '';
+        const [integerPart, decimalPart] = amount?.toFixed(2).split('.');
+        let words = toWords(Number(integerPart)) + ' rupees';
+        if (Number(decimalPart) > 0) {
+            words += ' and ' + toWords(Number(decimalPart)) + ' paise';
+        }
+        return words;
+    }
+
+    // Combine address with null checks
+    const customerAddress = orderData?.address ?
+        `${orderData.address.addressLine || ''}, ${orderData.address.locality || ''}, ${orderData.address.city || ''}, ${orderData.address.state || ''} - ${orderData.address.pincode || ''}`.replace(/, ,/g, ',').replace(/^,|,$/g, '')
+        : '';
+
+    // Amount in words
+    const amountInWords = convertAmountToWords(orderData?.totalAmount);
+
+    // Format order date from offsetDateTime
+    const orderDateFormatted = orderData?.orderTime?.offsetDateTime || orderData?.orderTime?.timestamp || '';
+
+    // Get transaction ID from payphiResponse
+    const transactionId = orderData?.payphiResponse?.txn_id || '';
 
     useEffect(() => {
         if (!orderId) {
@@ -331,6 +367,30 @@ const PaymentStatus = () => {
                                         >
 
                                             Continue Shopping
+                                        </SmartButton>
+
+                                        <SmartButton>
+                                            <PDFDownloadLink
+                                                document={
+                                                    <InvoiceDocument
+                                                        orderId={orderData.orderId}
+                                                        orderDate={orderData.orderTime.offsetDateTime}
+                                                        originAddress="Your Company Address Here"
+                                                        customerName={orderData.customerName}
+                                                        customerMobile={orderData.contact || orderData.customerMobile}
+                                                        customerAddress={customerAddress}
+                                                        paymentMode={orderData.paymentMode}
+                                                        paymentStatus={orderData.paymentStatus}
+                                                        transactionId={orderData.payphiResponse?.txn_id}
+                                                        items={pdfItems}
+                                                        totalAmount={orderData.totalAmount}
+                                                        amountInWords={amountInWords}
+                                                    />
+                                                }
+                                                fileName={`${orderData.orderId}.pdf`}
+                                            >
+                                                {({ loading }) => (loading ? 'Loading document...' : 'Download Invoice')}
+                                            </PDFDownloadLink>
                                         </SmartButton>
 
 

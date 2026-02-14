@@ -11,7 +11,7 @@ import { useCheckShippingPrice } from '../../../hook/pincode/usePincode';
 import { usePincode } from '../../../context/pinocde/PincodeContext';
 import { getImage } from '../../../utils/getProductImages';
 import { formatCurrency } from '../../../utils/formatters';
-import "animate.css";
+
 import { AddressModal } from '../address/AddressModal';
 import PaymentOptionsDialog from './PaymentOption';
 // ========== PROGRESS STEPPER ==========

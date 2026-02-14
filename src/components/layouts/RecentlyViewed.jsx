@@ -2,7 +2,6 @@ import React, { useRef, useState, useCallback, useEffect } from "react";
 import { useRecentlyViewed } from "../../hook/recentlyViewed/useRecentlyViewedQuery";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "../sections/productCard/ProductCard";
-import "animate.css";
 
 const ProductCarousel = () => {
     const navigate = useNavigate();
@@ -205,12 +204,12 @@ const ProductCarousel = () => {
                     <div
                         ref={carouselRef}
                         onScroll={handleScroll}
-                        className="hide-scrollbar flex gap-6 overflow-x-auto overflow-y-hidden scroll-smooth px-1 pb-2 "
+                        className="hide-scrollbar flex gap-2 sm:gap-4 overflow-x-auto overflow-y-hidden scroll-smooth px-1 pb-2 "
                     >
                         {products.map((product, index) => (
                             <div
                                 key={product.TAGKEY}
-                                className="animate__animated animate__fadeInUp flex w-[220px] sm:w-[250px] flex-none transform transition-all duration-300 hover:-translate-y-1 lg:w-[280px]"
+                                className="animate__animated animate__fadeInUp flex w-[160px] sm:w-[250px] flex-none transform transition-all duration-300 hover:-translate-y-1 lg:w-[280px]"
                                 style={{ animationDelay: `${index * 0.1}s` }}
                             >
                                 <div className="w-full overflow-hidden rounded-xl bg-white shadow-md transition-shadow duration-300 hover:shadow-xl">

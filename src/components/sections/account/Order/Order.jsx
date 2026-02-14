@@ -9,7 +9,6 @@ import { getOrderHistory } from "../../../../service/orderService";
 import { formatCurrency } from "../../../../utils/formatters";
 import { useNavigate } from "react-router-dom";
 import SmartButton from "../../../ui/SmartButton";
-import "animate.css";
 
 const Orders = () => {
   const [ordersData, setOrdersData] = useState(null);

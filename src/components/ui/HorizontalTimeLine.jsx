@@ -3,8 +3,6 @@
 import React, { useEffect, useRef } from "react";
 import clsx from "clsx";
 import { CheckCircle, XCircle, Clock, AlertCircle } from "lucide-react";
-import "animate.css";
-
 // Icon mapping for status icons
 const iconMap = {
     'clock': Clock,

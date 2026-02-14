@@ -20,7 +20,6 @@ import HorizontalTimeline from '../../../ui/HorizontalTimeLine';
 import { ORDER_STATUS_MASTER } from '../../../../data/orderStatusMaster';
 import { useTrackingById } from '../../../../hook/order/useOrderTracking';
 import { useOrderStatusMaster } from '../../../../hook/order/useOrderTracking';
-import "animate.css";
 import {getImage} from '../../../../utils/getProductImages';
 
 
@@ -49,7 +48,7 @@ const OrderDetail = () => {
   const originAddress = orderTrackData?.origin_address;
   const orderDate = orderTrackData?.order_date || orderTrackData?.created_at;
 
-  const canReturn = orderTrackData?.canReturn || orderTrackData?.current_status?.toLowerCase() === "delivered" || true;
+  const canReturn = orderTrackData?.canReturn || orderTrackData?.current_status?.toLowerCase() === "delivered" ;
 
 
   console.log(orderTrackData, orderDate ,'ordersss')

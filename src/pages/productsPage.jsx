@@ -4,7 +4,6 @@ import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import Breadcrumbs from '../components/layouts/Breadcrumbs';
 import Content from '../components/sections/productsPage/Content'
-import SmoothScroll from '../components/layouts/SmoothScroll';
 import { useDocumentMeta } from '../utils/meta/useMeta';
 
 const ProductsPage = () => {
@@ -26,9 +25,9 @@ const ProductsPage = () => {
       {/* Pass query params to Breadcrumb */}
       <Breadcrumbs itemCtrName={itemCtrName} pages="products-page" />
 
-      <SmoothScroll>
-        <Content />
-      </SmoothScroll>
+  
+        <Content itemCtrName={itemCtrName} />
+  
 
    
     </Fragment>

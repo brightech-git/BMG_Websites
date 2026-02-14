@@ -7,7 +7,7 @@ export const fetchFilteredProducts = createAsyncThunk(
     async (filters, { rejectWithValue }) => {
         //console.log(filters,'filter in service');
         try {
-            const response = await PublicUrl.post('/product/items/filter', null, { params: filters });
+            const response = await PublicUrl.get('/product/items/filter', null, { params: filters });
             //console.log(response.data,'response');
             return response.data;
 

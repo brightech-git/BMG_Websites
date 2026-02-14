@@ -7,19 +7,20 @@ import {
     DollarSign, Camera, Image, FileText, ChevronRight,
     AlertCircle, Home, Truck, Plus, User, Phone, Map, Building, Star, Tag, Globe, ShoppingBag, Calendar, CreditCard
 } from "lucide-react";
-import "animate.css";
 import { AddressModal } from '../address/AddressModal';
 import { useAddressesByCustomer, useCreateAddress, useUpdateAddress, useDeleteAddress } from '../../../hook/address/useAddress';
 import { toast } from 'react-toastify';
 import { useRefundOrder } from "../../../hook/order/useOrderMutation";
+import { getImage } from "../../../utils/getProductImages";
 // ========== PROGRESS STEPPER ==========
 const ProgressStepper = ({ currentStep }) => {
     const steps = [
-        { id: 1, name: 'Select Reason', icon: FileText },
-        { id: 2, name: 'Upload Photos', icon: Camera },
-        { id: 3, name: 'Pickup Address', icon: MapPin },
-        { id: 4, name: 'Choose Option', icon: RefreshCw },
-        { id: 5, name: 'Submit', icon: Check }
+        { id: 1, name: 'Select Products', icon: ShoppingBag },
+        { id: 2, name: 'Select Reason', icon: FileText },
+        { id: 3, name: 'Upload Photos', icon: Camera },
+        { id: 4, name: 'Pickup Address', icon: MapPin },
+        { id: 5, name: 'Choose Option', icon: RefreshCw },
+        { id: 6, name: 'Submit', icon: Check }
     ];
 
     return (
@@ -53,17 +54,16 @@ const ProgressStepper = ({ currentStep }) => {
                                     </div>
                                     <span
                                         className={`
-    text-[8px] xs:text-[10px] sm:text-xs font-medium
-    px-1.5 py-0.5 rounded-full text-center leading-tight
-    whitespace-normal line-clamp-2
-    ${isCompleted ? 'text-[#10B981] bg-[#10B981]/10' :
+                                            text-[8px] xs:text-[10px] sm:text-xs font-medium
+                                            px-1.5 py-0.5 rounded-full text-center leading-tight
+                                            whitespace-normal line-clamp-2
+                                            ${isCompleted ? 'text-[#10B981] bg-[#10B981]/10' :
                                                 isActive ? 'text-[#F97316] bg-[#FFF7ED] font-semibold' :
                                                     'text-[#9A3412] bg-transparent'}
-  `}
+                                        `}
                                     >
                                         {step.name}
                                     </span>
-
                                 </div>
                                 {!isLastStep && (
                                     <div className="absolute top-4 left-[60%] right-[-40%] h-0.5 -translate-y-1/2 z-0 block">
@@ -78,6 +78,118 @@ const ProgressStepper = ({ currentStep }) => {
                     );
                 })}
             </div>
+        </div>
+    );
+};
+
+// ========== PRODUCT SELECTION STEP ==========
+const ProductSelectionStep = ({ orderItems, selectedProducts, onProductSelect, onSelectAll }) => {
+    const allSelected = orderItems?.length > 0 && selectedProducts.length === orderItems.length;
+
+    return (
+        <div className="space-y-4 animate__animated animate__fadeIn">
+            {/* Select All Option */}
+            {orderItems?.length > 1 && (
+                <button
+                    onClick={onSelectAll}
+                    className="w-full p-3 border-2 border-[#FED7AA] rounded-xl hover:border-[#F97316] hover:bg-[#FFF7ED]/30 transition-all flex items-center justify-between"
+                >
+                    <div className="flex items-center gap-2">
+                        <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all
+                            ${allSelected ? 'bg-[#F97316] border-[#F97316]' : 'border-[#FED7AA]'}`}>
+                            {allSelected && <Check size={14} className="text-white" />}
+                        </div>
+                        <span className="text-xs font-medium text-[#7C2D12]">Select All Products</span>
+                    </div>
+                    <span className="text-[10px] text-[#9A3412]">{selectedProducts.length} of {orderItems?.length} selected</span>
+                </button>
+            )}
+
+            {/* Product List */}
+            <div className="space-y-3 max-h-[350px] overflow-y-auto pr-1">
+                {orderItems?.map((item, idx) => {
+                    const isSelected = selectedProducts.some(p => p.id === item.id || p.sno === item.sno);
+
+                    return (
+                        <div
+                            key={item.id || idx}
+                            className={`
+                                border-2 rounded-xl p-3 transition-all duration-300 cursor-pointer
+                                ${isSelected
+                                    ? 'border-[#F97316] bg-[#FFF7ED]/30 shadow-lg shadow-[#F97316]/10'
+                                    : 'border-[#FED7AA] hover:border-[#FDBA74] hover:bg-[#FFF7ED]/50'}
+                            `}
+                            onClick={() => onProductSelect(item)}
+                        >
+                            <div className="flex gap-3">
+                                {/* Product Image */}
+                                <div className="w-16 h-16 bg-white rounded-lg border-2 border-[#FED7AA] flex items-center justify-center flex-shrink-0">
+                                    {item.image_path ? (
+                                        <img src={getImage(item.image_path)} alt={item.productName} className="w-full h-full object-cover rounded-lg" />
+                                    ) : (
+                                        <Package size={24} className="text-[#9A3412]" />
+                                    )}
+                                </div>
+
+                                {/* Product Details */}
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex items-start justify-between gap-2">
+                                        <div>
+                                            <h4 className="text-sm font-medium text-[#7C2D12] truncate">{item.productName}</h4>
+                                            <p className="text-[10px] text-[#9A3412] mt-0.5">SNO: {item.sno}</p>
+                                        </div>
+
+                                        {/* Selection Checkbox */}
+                                        <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-all
+                                            ${isSelected ? 'bg-[#F97316] border-[#F97316]' : 'border-[#FED7AA]'}`}>
+                                            {isSelected && <Check size={14} className="text-white" />}
+                                        </div>
+                                    </div>
+
+                                    {/* Product Attributes */}
+                                    <div className="flex flex-wrap gap-2 mt-2">
+                                        {item.metal && (
+                                            <span className="text-[8px] bg-[#FFEDD5] text-[#9A3412] px-2 py-0.5 rounded-full">
+                                                {item.metal}
+                                            </span>
+                                        )}
+                                        {item.carat && (
+                                            <span className="text-[8px] bg-[#FFEDD5] text-[#9A3412] px-2 py-0.5 rounded-full">
+                                                {item.carat}K
+                                            </span>
+                                        )}
+                                        {item.gross_weight && (
+                                            <span className="text-[8px] bg-[#FFEDD5] text-[#9A3412] px-2 py-0.5 rounded-full">
+                                                {item.gross_weight}g
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    {/* Price and Quantity */}
+                                    <div className="flex justify-between items-center mt-2">
+                                        <span className="text-[10px] text-[#9A3412]">Qty: {item.quantity}</span>
+                                        <span className="text-sm font-bold text-[#F97316]">₹{item.price?.toFixed(2)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+
+            {/* Selection Summary */}
+            {selectedProducts.length > 0 && (
+                <div className="bg-[#10B981]/10 rounded-xl p-3 border border-[#10B981]/20">
+                    <div className="flex items-center justify-between">
+                        <span className="text-xs font-medium text-[#7C2D12]">Selected Products:</span>
+                        <span className="text-xs font-bold text-[#F97316]">{selectedProducts.length}</span>
+                    </div>
+                    <div className="flex justify-between text-[10px] text-[#9A3412] mt-1">
+                        <span>Total Amount:</span>
+                        <span className="font-medium">₹{selectedProducts.reduce((sum, p) => sum + (p.price * p.quantity), 0).toFixed(2)}</span>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
@@ -355,7 +467,7 @@ const OrderDetailsSidebar = ({ orderData }) => {
                         {new Date(orderData.history?.[0]?.updated_at).toLocaleDateString()}
                     </p>
                 </div>
-            </div> 
+            </div>
 
             {/* Order Items */}
             <div className="py-3 space-y-3">
@@ -481,12 +593,17 @@ const ReturnReplaceFlow = () => {
     const location = useLocation();
     const orderData = location.state;
 
+    const refunOrder = useRefundOrder((data) => {
+        // Show the modal after successful refund
+        setShowSuccessModal(true);
+    });
 
-    const refunOrder = useRefundOrder();
+    console.log(orderData,'orderData')
 
     // Redirect if no order data
     useEffect(() => {
         if (!orderData) {
+
             toast.error('Order details not found');
             navigate(-1);
             return;
@@ -496,13 +613,14 @@ const ReturnReplaceFlow = () => {
     // Address hooks
     const customerId = orderData?.user?.contact || orderData?.delivery_address?.customerId;
 
-    console.log(customerId,'customerId')
+    console.log(customerId, 'customerId')
     const { data: addressesData, isLoading: addressesLoading } = useAddressesByCustomer(10085);
     const createAddress = useCreateAddress();
     const updateAddress = useUpdateAddress();
     const deleteAddress = useDeleteAddress();
 
     const [currentStep, setCurrentStep] = useState(1);
+    const [selectedProducts, setSelectedProducts] = useState([]);
     const [selectedReason, setSelectedReason] = useState(null);
     const [description, setDescription] = useState('');
     const [photos, setPhotos] = useState([]);
@@ -512,7 +630,11 @@ const ReturnReplaceFlow = () => {
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [pincodeAddress, setPincodeAddress] = useState(null);
 
-    console.log(addressesData,'addressesData')
+    console.log(addressesData, 'addressesData')
+
+   
+
+    
     // Set default selected address
     useEffect(() => {
         if (addressesData?.length && !selectedAddress) {
@@ -521,9 +643,30 @@ const ReturnReplaceFlow = () => {
         }
     }, [addressesData, selectedAddress]);
 
-    console.log(selectedAddress,'selectedAddress')
+  
 
     if (!orderData) return null;
+
+    const handleProductSelect = (product) => {
+        setSelectedProducts(prev => {
+            const exists = prev.some(p => p.id === product.id || p.sno === product.sno);
+            if (exists) {
+                // Remove product
+                return prev.filter(p => p.id !== product.id && p.sno !== product.sno);
+            } else {
+                // Add product
+                return [...prev, product];
+            }
+        });
+    };
+
+    const handleSelectAll = () => {
+        if (selectedProducts.length === orderData.items.length) {
+            setSelectedProducts([]); // deselect all
+        } else {
+            setSelectedProducts([...orderData.items]); // select all
+        }
+    };
 
     const handlePincodeChange = useCallback(async (pincode) => {
         if (pincode?.length === 6) {
@@ -563,23 +706,27 @@ const ReturnReplaceFlow = () => {
     };
 
     const handleNext = () => {
-        if (currentStep === 1 && !selectedReason) {
+        if (currentStep === 1 && selectedProducts.length === 0) {
+            toast.error('Please select at least one product');
+            return;
+        }
+        if (currentStep === 2 && !selectedReason) {
             toast.error('Please select a reason');
             return;
         }
-        if (currentStep === 2 && photos.length === 0) {
+        if (currentStep === 3 && photos.length === 0) {
             toast.error('Please upload at least 1 photo');
             return;
         }
-        if (currentStep === 3 && !selectedAddress) {
+        if (currentStep === 4 && !selectedAddress) {
             toast.error('Please select pickup address');
             return;
         }
-        if (currentStep === 4 && !selectedOption) {
+        if (currentStep === 5 && !selectedOption) {
             toast.error('Please select return or replacement');
             return;
         }
-        if (currentStep === 5) {
+        if (currentStep === 6) {
             handleSubmit();
         } else {
             setCurrentStep(prev => prev + 1);
@@ -589,26 +736,62 @@ const ReturnReplaceFlow = () => {
     const handleBack = () => {
         setCurrentStep(prev => prev - 1);
     };
+    console.log(selectedProducts,'selectedProducts')
 
     const handleSubmit = () => {
-        if (!selectedReason || !selectedOption || !selectedAddress) {
+        if (!selectedProducts.length || !selectedReason || !selectedOption || !selectedAddress) {
             alert("Please complete all required fields.");
             return;
         }
 
+        // Map products
+        const formattedProducts = selectedProducts.map(product => ({
+            itemId: product.itemid,
+            tagNo: product.tagno,
+            quantity: product.quantity,
+        }));
+
+        // Format address
+        const formattedAddress = {
+            addressLine: selectedAddress.addressLine,
+            city: selectedAddress.city,
+            state: selectedAddress.state,
+            pincode: selectedAddress.pincode,
+            country: "India",
+        };
+
+        // Create the refund object
+        const refundPayload = {
+            orderId: orderData?.order_id,
+            reason: selectedReason,
+            comments: description || '',
+            action: selectedOption,
+            address: formattedAddress,
+            products: formattedProducts,
+        };
+
+        // Wrap everything inside "refund" key in FormData
         const formData = new FormData();
+        formData.append('refund', JSON.stringify(refundPayload));
 
-        formData.append('orderId', orderData?.order_id);
-        formData.append('reason', selectedReason);
-        formData.append('comments', description || '');
-        formData.append('action', selectedOption);
-        formData.append('addresses', JSON.stringify(selectedAddress));
-        formData.append('products', JSON.stringify(orderData?.items || []));
-        formData.append('image', photos); // better to use same key if backend expects array
+        // Append images (if any)
+        // photos is an array of File objects from input[type="file"]
+        if (photos?.length) {
+            photos.forEach((photo, index) => {
+                formData.append('image', photo); // backend can accept multiple files under 'images'
+            });
+        }
 
+        // Debug: check FormData contents
+        console.log("FormData with refund + images:");
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
 
+        // Send API
         refunOrder.mutate(formData);
     };
+
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-6">
@@ -625,6 +808,15 @@ const ReturnReplaceFlow = () => {
                         {/* Step Content */}
                         <div className="min-h-[350px] py-2">
                             {currentStep === 1 && (
+                                <ProductSelectionStep
+                                    orderItems={orderData.items}
+                                    selectedProducts={selectedProducts}
+                                    onProductSelect={handleProductSelect}
+                                    onSelectAll={handleSelectAll}
+                                />
+                            )}
+
+                            {currentStep === 2 && (
                                 <ReasonStep
                                     selectedReason={selectedReason}
                                     onSelectReason={setSelectedReason}
@@ -633,7 +825,7 @@ const ReturnReplaceFlow = () => {
                                 />
                             )}
 
-                            {currentStep === 2 && (
+                            {currentStep === 3 && (
                                 <PhotoUploadStep
                                     photos={photos}
                                     onUpload={setPhotos}
@@ -641,7 +833,7 @@ const ReturnReplaceFlow = () => {
                                 />
                             )}
 
-                            {currentStep === 3 && (
+                            {currentStep === 4 && (
                                 <AddressSelectionStep
                                     addresses={addressesData || []}
                                     selectedAddress={selectedAddress}
@@ -651,14 +843,14 @@ const ReturnReplaceFlow = () => {
                                 />
                             )}
 
-                            {currentStep === 4 && (
+                            {currentStep === 5 && (
                                 <OptionStep
                                     selectedOption={selectedOption}
                                     onSelectOption={setSelectedOption}
                                 />
                             )}
 
-                            {currentStep === 5 && (
+                            {currentStep === 6 && (
                                 <div className="space-y-4 animate__animated animate__fadeIn">
                                     <h4 className="text-xs font-bold text-[#7C2D12] flex items-center gap-1.5">
                                         <FileText size={14} className="text-[#F97316]" />
@@ -668,6 +860,10 @@ const ReturnReplaceFlow = () => {
                                         <div className="flex justify-between text-xs">
                                             <span className="text-[#9A3412]">Order ID:</span>
                                             <span className="font-medium text-[#7C2D12]">{orderData.order_id}</span>
+                                        </div>
+                                        <div className="flex justify-between text-xs">
+                                            <span className="text-[#9A3412]">Products:</span>
+                                            <span className="font-medium text-[#7C2D12]">{selectedProducts.length} selected</span>
                                         </div>
                                         <div className="flex justify-between text-xs">
                                             <span className="text-[#9A3412]">Reason:</span>
@@ -720,8 +916,8 @@ const ReturnReplaceFlow = () => {
                                 onClick={handleNext}
                                 className="px-6 py-2 bg-gradient-to-r from-[#F97316] to-[#EA580C] text-white rounded-xl text-xs font-medium hover:shadow-lg hover:shadow-[#F97316]/30 transition-all transform hover:scale-105 flex items-center gap-1.5"
                             >
-                                {currentStep === 5 ? 'Submit Request' : 'Next'}
-                                {currentStep !== 5 && <ChevronRight size={14} />}
+                                {currentStep === 6 ? 'Submit Request' : 'Next'}
+                                {currentStep !== 6 && <ChevronRight size={14} />}
                             </button>
                         </div>
                     </div>
@@ -760,7 +956,7 @@ const ReturnReplaceFlow = () => {
                 show={showSuccessModal}
                 onClose={() => {
                     setShowSuccessModal(false);
-                    navigate(`/account/orderdetails/${orderData.order_id}`); // Navigate to orders page
+                    navigate(`/account/orderdetails/${orderData.order_id}`);
                 }}
                 type={selectedOption}
                 orderId={orderData.order_id}

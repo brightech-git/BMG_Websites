@@ -11,7 +11,6 @@ import {
   useUpdateAddress,
   useDeleteAddress,
 } from "../../../../hook/address/useAddress";
-import "animate.css";
 
 const AddressManager = () => {
   const user = useSelector((state) => state.user.user);

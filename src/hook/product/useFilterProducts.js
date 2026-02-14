@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { filterProducts } from "../../service/ProductService";
+import { filterProducts ,getProductsFilter } from "../../service/ProductService";
 
 export const useFilteredProducts = (filters, page, pageSize) => {
     return useQuery({
@@ -19,3 +19,14 @@ export const useFilteredProducts = (filters, page, pageSize) => {
         retry: 1,
     });
 };
+
+
+export const useGetFilters = (itemName) => {
+    return useQuery({
+        queryKey: ["filters", itemName], // Include itemName in queryKey for caching
+        queryFn: () => getProductsFilter(itemName),
+        staleTime: 5 * 60 * 1000,
+        cacheTime: 15 * 60 * 1000,
+        enabled: !!itemName, // Only run if itemName is provided
+    });
+}

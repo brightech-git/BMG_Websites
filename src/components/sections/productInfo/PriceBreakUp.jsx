@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { FaInfoCircle, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
-const PriceBreakup = ({ product }) => {
-    const [isExpanded, setIsExpanded] = useState(false);
+const PriceBreakup = ({ product, showPriceBreakup }) => {
+    const [isExpanded, setIsExpanded] = useState(showPriceBreakup);
 
     if (!product) return null;
 
@@ -35,33 +35,15 @@ const PriceBreakup = ({ product }) => {
 
     const hasDetailedPricing = grandTotal > 0 && calculatedGrossAmount > 0;
     const displayPrice = hasDetailedPricing ? grandTotal : rate;
-    const discount = 0;
 
     const formatPrice = (value) =>
         value === 0 ? '-' : `₹${value.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
 
     return (
-        <div className="bg-white border border-gray-300 rounded-lg mt-2 overflow-hidden shadow-sm">
+        <div className="bg-white border border-gray-300 rounded-lg  overflow-hidden shadow-sm">
 
             {/* Summary Header */}
-            <button
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="w-full px-4 py-2 flex items-center justify-between hover:bg-gray-50 transition"
-            >
-                <div className="flex items-center gap-3">
-                    <FaInfoCircle className="w-5 h-5 text-[#f16137]" />
-                    <div className="text-left">
-                        <p className="text-sm text-gray-600">Total Amount</p>
-                        <p className="text-sm font-bold text-[#041f60]">
-                            ₹{displayPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                        </p>
-                    </div>
-                </div>
-                <div className="flex items-center gap-2 text-sm font-medium text-[#041f60]">
-                    {isExpanded ? "Hide" : "View"} Breakdown
-                    {isExpanded ? <FaChevronUp /> : <FaChevronDown />}
-                </div>
-            </button>
+         
 
             {/* Expanded Details */}
             {isExpanded && (
@@ -71,7 +53,6 @@ const PriceBreakup = ({ product }) => {
                             <tr className="border-b border-gray-300 text-gray-700 font-semibold">
                                 <th>Component</th>
                                 <th className="text-right">Value</th>
-                                <th className="text-right">Discount</th>
                                 <th className="text-right">Final</th>
                             </tr>
                         </thead>
@@ -82,45 +63,23 @@ const PriceBreakup = ({ product }) => {
                                     {isWeightBased ? (
                                         <>
                                             <tr className="border-b text-xs bg-gray-100 ">
-                                                <td colSpan="4" className="py-2 font-semibold text-center">
+                                                <td colSpan="3" className="py-2 font-semibold text-center">
                                                     Gross Amount Calculation (Weight Based)
                                                 </td>
                                             </tr>
 
-                                            {/* <tr className="text-xs">
-                                                <td>Net Weight</td>
-                                                <td colSpan="3" className="text-right">{netWt.toFixed(3)} g</td>
-                                            </tr>
-
-                                            <tr className="text-xs">
-                                                <td>Wastage</td>
-                                                <td colSpan="3" className="text-right">{maxWt.toFixed(3)} g</td>
-                                            </tr>
-
-                                            <tr className="text-xs font-medium">
-                                                <td>Total Weight</td>
-                                                <td colSpan="3" className="text-right">
-                                                    {weightRate.toFixed(2)} 
-                                                </td>
-                                            </tr>
-
-                                            <tr className="text-xs">
-                                                <td>Rate</td>
-                                                <td colSpan="3" className="text-right">
-                                                    {formatPrice(rateValue)}
-                                                </td>
-                                            </tr> */}
+                                            
 
                                             <tr className="text-xs font-medium">
                                                 <td>Rate</td>
-                                                <td colSpan="3" className="text-right">
+                                                <td colSpan="2" className="text-right">
                                                     {formatPrice((netWt + maxWt) * rateValue)}
                                                 </td>
                                             </tr>
 
                                             <tr className="text-xs">
                                                 <td>Making Charge</td>
-                                                <td colSpan="3" className="text-right py-1 text-right font-semibold text-[#f16137]">
+                                                <td colSpan="2" className="text-right py-1 text-right font-semibold text-[#f16137]">
                                                     +{formatPrice(mc)}
                                                 </td>
                                             </tr>
@@ -128,7 +87,7 @@ const PriceBreakup = ({ product }) => {
                                             {stoneAmt > 0 && (
                                                 <tr className="text-xs">
                                                     <td>Stone Amount</td>
-                                                    <td colSpan="3" className="text-right">
+                                                    <td colSpan="2" className="text-right">
                                                         {formatPrice(stoneAmt)}
                                                     </td>
                                                 </tr>
@@ -138,14 +97,14 @@ const PriceBreakup = ({ product }) => {
                                         /* ================= PIECE / RATE BASED ================= */
                                         <>
                                             <tr className="border-b text-xs bg-gray-100">
-                                                <td colSpan="4" className="py-2 font-semibold">
+                                                <td colSpan="3" className="py-2 font-semibold">
                                                     Price Calculation (Piece Based)
                                                 </td>
                                             </tr>
 
                                             <tr className="text-xs font-medium">
                                                 <td>Piece Rate</td>
-                                                <td colSpan="3" className="text-right">
+                                                <td colSpan="2" className="text-right">
                                                     {formatPrice(grossAmount)}
                                                 </td>
                                             </tr>
@@ -158,10 +117,7 @@ const PriceBreakup = ({ product }) => {
                                             {formatPrice(grossAmount)}
                                         </td>
                                         <td className="py-2 text-right">
-                                            {formatPrice(discount)}
-                                        </td>
-                                        <td className="py-2 text-right">
-                                            {formatPrice(grossAmount-discount)}
+                                            {formatPrice(grossAmount)}
                                         </td>
                                     </tr>
 
@@ -171,7 +127,7 @@ const PriceBreakup = ({ product }) => {
                                         <td className="py-2 text-right">
                                             {formatPrice(gstAmount)}
                                         </td>
-                                        <td className="py-2 text-right"> </td>
+                                        
                                         <td className="py-2  text-right font-semibold text-[#f16137]">
                                             +{formatPrice(gstAmount)}
                                         </td>
@@ -179,7 +135,7 @@ const PriceBreakup = ({ product }) => {
 
                                     {/* Grand Total */}
                                     <tr className="font-bold bg-orange-50">
-                                        <td colSpan="3" className="py-2 text-[#041f60]">
+                                        <td colSpan="2" className="py-2 text-[#041f60]">
                                             Grand Total
                                         </td>
                                         <td className="py-2 text-right text-[#f16137]">
@@ -189,7 +145,7 @@ const PriceBreakup = ({ product }) => {
                                 </>
                             ) : (
                                 <tr className="bg-orange-50">
-                                    <td colSpan="3" className="py-2 font-bold text-[#041f60]">
+                                    <td colSpan="2" className="py-2 font-bold text-[#041f60]">
                                         Price
                                     </td>
                                     <td className="py-4 text-right text-[#f16137] text-lg font-bold">

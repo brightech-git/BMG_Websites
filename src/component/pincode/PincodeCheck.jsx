@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { usePincode } from "../../context/pinocde/PincodeContext";
 import { useCheckPincode } from "../../hook/pincode/usePincode";
-import "animate.css";
 
 function PincodeChecker() {
     const { pincode: currentPincode, pincodeData: currentPincodeData, updatePincode } = usePincode(); // Get from context
@@ -114,10 +113,8 @@ function PincodeChecker() {
         const isServiceable = data?.status ?? currentPincodeData?.serviceable;
 
         return (
-            <div className="flex flex-col w-80 font-sans animate__animated animate__fadeIn">
-                <div className="mb-2 font-semibold text-gray-700">
-                    Delivery Information
-                </div>
+            <div className="flex flex-col w-70 font-sans animate__animated animate__fadeIn">
+             
 
                 <div className="flex items-center justify-between p-2 rounded-md border border-gray-200 bg-gray-50">
                     <div>
@@ -145,7 +142,7 @@ function PincodeChecker() {
 
     // Render the pincode input form (for new users or when updating)
     return (
-        <div className="flex flex-col w-80 font-sans">
+        <div className="flex flex-col w-[80%] ">
             <label className="mb-2 font-semibold text-gray-700 animate__animated animate__fadeIn">
                 {currentPincode ? "Update Your Delivery Pincode" : "Check Availability of Your Pincode"}
             </label>

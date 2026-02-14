@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import { login, clearError } from "../../../redux/slices/userSlice";
 import GoogleLoginButton from "../register/GoogleLoginButton";
-import "animate.css";
 
 const LoginContent = () => {
     const [contactOrEmailOrUsername, setContact] = useState("");
@@ -129,7 +128,7 @@ const LoginContent = () => {
             </motion.div>
 
             {/* Right Side - Login Form */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
+            <div className="w-full lg:w-1/2 flex items-center justify-center p-2 sm:p-6">
                 <motion.div
                     initial="hidden"
                     animate="visible"
@@ -139,7 +138,7 @@ const LoginContent = () => {
                     {/* Main Card */}
                     <motion.div
                         variants={itemVariants}
-                        className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-8 border border-orange-100"
+                        className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-4 sm:p-8 border border-orange-100"
                     >
                         {/* Error Message */}
                         <AnimatePresence mode="wait">

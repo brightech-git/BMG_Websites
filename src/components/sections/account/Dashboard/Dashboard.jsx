@@ -19,7 +19,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { getOrderHistory } from "../../../../service/orderService";
 import { useCart } from "../../../../hook/cart/useCartQuery";
 import { useFavorites } from "../../../../hook/favorites/useFavoritesQuery";
-import "animate.css";
+
 
 const Dashboard = () => {
   const navigate = useNavigate();

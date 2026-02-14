@@ -1,32 +1,24 @@
-
 import React, { useEffect, useState } from 'react';
-import { Heart, RefreshCw } from 'lucide-react';
-import {useFavorites} from '../../../hook/favorites/useFavoritesQuery';
+import { Heart, ShoppingCart, Check, Loader2 } from 'lucide-react';
+import { useFavorites } from '../../../hook/favorites/useFavoritesQuery';
 import { useCart } from '../../../hook/cart/useCartQuery';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import fallbackImage from './fallback-image.jpg';
 import UpdateMobileModal from '../../layouts/UpdateMobileModal';
+import "animate.css";
 
 const ProductCard = ({ item }) => {
-    const { favorites , isFavorite , addToFavorite ,removeFavorite ,isLoading:isFavoritesLoading } = useFavorites();
+    const { isFavorite, addToFavorite, removeFavorite } = useFavorites();
+    const { cartItems, addToCartHandler, isLoading: isCartLoading } = useCart();
 
-const favoriteItems = favorites?.data?.products;
-
-   
-    const { cartItems, addToCartHandler ,isLoading } = useCart();
-
-    const cartProducts = cartItems?.data?.products || [] ; 
-
+    const cartProducts = cartItems?.data?.products || [];
     const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
     const [isAnimating, setIsAnimating] = useState(false);
     const mobileNumber = useSelector((state) => state.user.user?.contactNumber) || null;
     const navigate = useNavigate();
     const location = useLocation();
-
-    const pincode = localStorage.getItem('pinCode');
-    const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
 
     const [heartAnimation, setHeartAnimation] = useState(false);
     const [cartAnimation, setCartAnimation] = useState(false);
@@ -34,6 +26,7 @@ const favoriteItems = favorites?.data?.products;
     const [loadingState, setLoadingState] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
     const [hover, setHover] = useState(false);
+    const [imageLoaded, setImageLoaded] = useState(false);
 
     // Check if item is in wishlist
     const isWishlisted = isFavorite(item?.TAGKEY);
@@ -80,6 +73,7 @@ const favoriteItems = favorites?.data?.products;
 
     const productImages = getProductImages();
     const hasMultipleImages = productImages.length > 1;
+    const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
     const defaultIndex = isMobile && hasMultipleImages ? 1 : 0;
     const [currentImageIndex, setCurrentImageIndex] = useState(defaultIndex);
 
@@ -90,6 +84,7 @@ const favoriteItems = favorites?.data?.products;
     }, [isMobile, hasMultipleImages]);
 
     const productName = (item?.SUBITEMNAME || item?.ITEMCTRNAME || 'Jewelry Item').toLowerCase();
+    
     const currentPrice = parseFloat(item?.GrandTotal) > 0
         ? parseFloat(item.GrandTotal)
         : parseFloat(item?.RATE || 0);
@@ -118,19 +113,16 @@ const favoriteItems = favorites?.data?.products;
         e.preventDefault();
         e.stopPropagation();
 
+        if (!isAuthenticated) {
+            toast.error("Please login to add to cart");
+            navigate("/login");
+            return;
+        }
 
-         // ❌ NOT logged in
-            if (!isAuthenticated) {
-              toast.error("Please login to add to cart");
-              navigate("/login");
-              return;
-            }
-        
-            // ❌ Logged in but no mobile (Google login case)
-            if (!mobileNumber) {
-              setModalOpen(true);
-              return;
-            }
+        if (!mobileNumber) {
+            setModalOpen(true);
+            return;
+        }
 
         addToCartHandler(item);
         setCartAnimation(true);
@@ -151,13 +143,12 @@ const favoriteItems = favorites?.data?.products;
 
         setHeartAnimation(true);
 
-    
         if (isWishlisted) {
-            // Remove from wishlist
             removeFavorite(item.TAGKEY);
+            toast.success('Removed from wishlist');
         } else {
-            // Add to wishlist - wrap data in { data: wishlistData } object
             addToFavorite(item);
+            toast.success('Added to wishlist');
         }
 
         setTimeout(() => setHeartAnimation(false), 600);
@@ -169,21 +160,22 @@ const favoriteItems = favorites?.data?.products;
         navigate(`/product-detail/${item?.TAGKEY}`);
     };
 
-    // Check if item is in cart
-
     const isInCart = Array.isArray(cartProducts) &&
         cartProducts.some(cartItem => cartItem.TAGKEY === item?.TAGKEY);
 
     if (loadingState || !item) {
         return (
-            <div className="card-container">
-                <div className="product-item loading">
-                    <div className="image-wrapper">
-                        <div className="placeholder placeholder-wave" style={{ width: '100%', height: '100%' }}></div>
+            <div className="w-full max-w-[400px] mx-auto">
+                <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 animate-pulse">
+                    <div className="relative w-full pt-[100%] bg-gradient-to-r from-gray-200 to-gray-300">
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <Loader2 className="w-8 h-8 text-gray-400 animate-spin" />
+                        </div>
                     </div>
-                    <div className="item-info">
-                        <div className="placeholder placeholder-wave mb-2" style={{ height: '16px', width: '75%', margin: '0 auto' }}></div>
-                        <div className="placeholder placeholder-wave" style={{ height: '18px', width: '50%', margin: '0 auto' }}></div>
+                    <div className="p-4 space-y-3">
+                        <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto"></div>
+                        <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
+                        <div className="h-10 bg-gray-200 rounded w-full"></div>
                     </div>
                 </div>
             </div>
@@ -192,523 +184,252 @@ const favoriteItems = favorites?.data?.products;
 
     return (
         <>
-            <div className="card-container">
+            <div className="w-full max-w-[400px] mx-auto group/card">
                 <UpdateMobileModal open={modalOpen} onClose={() => setModalOpen(false)} />
+
                 <div
-                    className="product-item"
+                    className="relative bg-transparent overflow-hidden transition-all duration-500 cursor-pointer rounded-2xl group"
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
                 >
-                    <div className="image-wrapper">
+                    <div className="relative w-full aspect-square overflow-hidden rounded-2xl">
                         <div
-                            className="image-container"
+                            className="relative w-full h-full cursor-pointer"
                             onClick={clickProduct}
                         >
                             <div
-                                className="relative w-full h-full overflow-hidden"
+                                className="relative w-full h-full overflow-hidden group/image"
                                 onMouseEnter={() => !isTouchDevice && setHover(true)}
                                 onMouseLeave={() => !isTouchDevice && setHover(false)}
                             >
-                                {/* Image 1 */}
+                                {/* Image 1 - Fades out on hover */}
                                 <img
                                     src={productImages[0]}
                                     alt={productName}
-                                    className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 ease-out
-                                        ${isMobile
+                                    onLoad={() => setImageLoaded(true)}
+                                    className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-out
+            ${isMobile
                                             ? "opacity-0 scale-100"
                                             : hover
-                                                ? "opacity-0 scale-105"
+                                                ? "opacity-0 scale-105 blur-[2px]"
                                                 : "opacity-100 scale-100"
-                                        }`}
+                                        } ${!imageLoaded ? 'opacity-0' : ''}`}
+                                    style={{
+                                        transition: 'opacity 500ms cubic-bezier(0.4, 0, 0.2, 1), transform 500ms cubic-bezier(0.4, 0, 0.2, 1), filter 500ms ease'
+                                    }}
                                     loading="eager"
                                     decoding="async"
                                 />
 
-                                {/* Image 2 */}
+                                {/* Image 2 - Zooms in on hover */}
                                 {hasMultipleImages && (
                                     <img
                                         src={productImages[1]}
                                         alt={productName}
-                                        className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 ease-out
-                                            ${isMobile
-                                                ? "opacity-100 scale-100"
+                                        className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out
+                ${isMobile
+                                                ? "opacity-100 scale-105"
                                                 : hover
-                                                    ? "opacity-100 scale-100"
-                                                    : "opacity-0 scale-95"
+                                                    ? "opacity-100 scale-110 brightness-105"
+                                                    : "opacity-0 scale-100"
                                             }`}
+                                        style={{
+                                            transition: 'opacity 500ms cubic-bezier(0.4, 0, 0.2, 1), transform 700ms cubic-bezier(0.34, 1.56, 0.64, 1), filter 500ms ease'
+                                        }}
                                         loading="eager"
                                         decoding="async"
                                     />
                                 )}
+
+                                {/* Image 2 with alternative zoom effect - subtle movement */}
+                                {hasMultipleImages && (
+                                    <img
+                                        src={productImages[1]}
+                                        alt={productName}
+                                        className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out
+                ${isMobile
+                                                ? "opacity-100 scale-105 translate-y-0"
+                                                : hover
+                                                    ? "opacity-100 scale-110 translate-y-[-2%] brightness-105"
+                                                    : "opacity-0 scale-100 translate-y-0"
+                                            }`}
+                                        style={{
+                                            transition: 'opacity 500ms cubic-bezier(0.4, 0, 0.2, 1), transform 700ms cubic-bezier(0.34, 1.56, 0.64, 1), filter 500ms ease'
+                                        }}
+                                        loading="eager"
+                                        decoding="async"
+                                    />
+                                )}
+
+                                {/* Alternative: Smooth zoom with rotate effect */}
+                                {/* {hasMultipleImages && (
+                                    <img
+                                        src={productImages[1]}
+                                        alt={productName}
+                                        className={`absolute inset-0 w-full h-full object-cover transition-all duration-800 ease-out
+                                                ${isMobile
+                                                ? "opacity-100 scale-105 rotate-0"
+                                                : hover
+                                                    ? "opacity-100 scale-110 rotate-[2deg] brightness-110"
+                                                    : "opacity-0 scale-100 rotate-0"
+                                            }`}
+                                        style={{
+                                            transition: 'opacity 500ms cubic-bezier(0.4, 0, 0.2, 1), transform 800ms cubic-bezier(0.34, 1.56, 0.64, 1), filter 500ms ease'
+                                        }}
+                                        loading="eager"
+                                        decoding="async"
+                                    />
+                                )} */}
+
+                                {/* Loading Overlay */}
+                                {!imageLoaded && (
+                                    <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+                                        <div className="relative">
+                                            <Loader2 className="w-8 h-8 text-[#f16137] animate-spin" />
+                                            <div className="absolute inset-0 blur-xl bg-[#f16137]/20 animate-pulse"></div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
-                        <div className="quick-actions">
+                        {/* Quick Actions */}
+                        <div className={`absolute top-2 right-2 opacity-0 group-hover/card:opacity-100 transition-all duration-300 z-10
+                            ${isTouchDevice ? 'opacity-100' : ''}`}
+                        >
                             <button
-                                className={`action-button wish-btn ${heartAnimation ? 'heart-animation' : ''}`}
+                                className={`flex items-center justify-center w-9 h-9 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95
+                                    ${heartAnimation ? 'animate__animated animate__heartBeat' : ''}`}
                                 onClick={toggleWishlist}
                                 aria-label={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
-                                title={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
                             >
                                 <Heart
                                     size={14}
                                     fill={isWishlisted ? '#dc3545' : 'none'}
-                                    color={isWishlisted ? '#dc3545' : 'currentColor'}
+                                    color={isWishlisted ? '#dc3545' : '#041f60'}
                                     className="transition-colors duration-200"
                                 />
                             </button>
                         </div>
+
+                        {/* Image Indicator Dots */}
+                        {/* {hasMultipleImages && (
+                            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1.5 z-10">
+                                {productImages.slice(0, 3).map((_, idx) => (
+                                    <div
+                                        key={idx}
+                                        className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${currentImageIndex === idx
+                                                ? 'w-4 bg-gradient-to-r from-[#f16137] to-[#d84a22]'
+                                                : 'bg-white/60'
+                                            }`}
+                                    />
+                                ))}
+                            </div>
+                        )} */}
+
+                        {/* Touch Hint */}
+                        {/* {isTouchDevice && hasMultipleImages && (
+                            <div className="absolute top-2 left-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs backdrop-blur-sm animate-pulse z-10">
+                                Swipe to see more
+                            </div>
+                        )} */}
                     </div>
 
-                    <div className="item-info">
-                        <h3 className="item-name">{productName}</h3>
-                        <div className="price-section">
-                            <span className="new-price">
+                    <div className="flex flex-col items-start p-3 text-center bg-transparent">
+                        <div className="flex items-center justify-center gap-2 flex-wrap mt-1">
+                            <span className="font-lato text-sm md:text-base font-semibold text-[var(--primary-hover-color)]">
                                 ₹{currentPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                             </span>
                         </div>
+                        <h3 className="font-lato text-sm md:text-base text-[var(--primary-hover-color)] capitalize font-semibold truncate">
+                            {productName}
+                        </h3>
+
+                        
                     </div>
 
+                    {/* Add to Cart Button */}
                     <button
-                        className='product-addToCart'
+                        className={`w-full py-2 px-3 text-xs font-bold rounded-md transition-all duration-300
+                            ${isInCart
+                                ? 'bg-gradient-to-r from-green-500 to-green-600 text-white'
+                                : 'bg-gradient-to-r from-pink-400 to-pink-500 text-white'
+                            }
+                            ${isTouchDevice ? 'opacity-100' : 'opacity-0 group-hover/card:opacity-100'}
+                            ${cartAnimation ? 'animate__animated animate__bounceIn' : ''}`}
                         onClick={addItemToCart}
                     >
-                        {isInCart ? "In Cart" : "Add to Cart"}
+                        {isCartLoading ? (
+                            <Loader2 className="w-4 h-4 animate-spin mx-auto" />
+                        ) : isInCart ? (
+                            <span className="flex items-center justify-center gap-2">
+                                <Check size={14} />
+                                In Cart
+                            </span>
+                        ) : (
+                            <span className="flex items-center justify-center gap-2">
+                                <ShoppingCart size={14} />
+                                Add to Cart
+                            </span>
+                        )}
                     </button>
                 </div>
 
-                <style>{`
-
-                .card-container {
-                    width: 100%;
-                    max-width:400px;
-                    margin: 0 auto;
-                }
-
-                .product-item {
-                    position: relative;
-                    background: transparent;
-                    border-radius: 0px;
-                    overflow: hidden;
-                    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                    cursor: pointer;
-                    border:none ;
-                }
-
-                .product-item:hover {
-                    transform: translateY(-4px);
-
-                    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-                }
-
-                .product-item.loading {
-                    animation: pulse 1.5s ease-in-out infinite;
-                }
-
-                @keyframes pulse {
-                    0%, 100% { opacity: 1; }
-                    50% { opacity: 0.8; }
-                }
-
-                .image-wrapper {
-                    position: relative;
-                    width: 100%;
-                    aspect-ratio: 1;
-                    overflow: hidden;
-                    border-radius: 18px;
-                }
-
-                .image-container {
-                    position: relative;
-                    width: 100%;
-                    height: 100%;
-                    cursor: pointer;
-                    
-                }
-
-                .product-image {
-                    width: 100%;
-        
-                    height: 100%;
-                    object-fit: cover;
-                    transition: opacity 0.5s ease-in-out;
-                    filter: brightness(1.02);
-                }
-
-
-                /* Image Indicator */
-                .image-indicator {
-                    position: absolute;
-                    bottom: 8px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    display: flex;
-                    gap: 6px;
-                    : 10;
-                    background: rgba(0, 0, 0, 0.5);
-                    padding: 4px 8px;
-                    border-radius: 12px;
-                    backdrop-filter: blur(4px);
-                }
-
-                .indicator-dot {
-                    width: 6px;
-                    height: 6px;
-                    border-radius: 50%;
-                    background: rgba(255, 255, 255, 0.6);
-                    transition: all 0.3s ease;
-                }
-
-                .indicator-dot.active {
-                    background: #ffffff;
-                    transform: scale(1.2);
-                }
-
-                /* Touch Hint */
-                .touch-hint {
-                    position: absolute;
-                    top: 8px;
-                    right: 8px;
-                    background: rgba(0, 0, 0, 0.7);
-                    color: white;
-                    padding: 4px 8px;
-                    border-radius: 12px;
-                    font-size: 0.7rem;
-                    font-family: 'Lato', sans-serif;
-                    : 10;
-                    backdrop-filter: blur(4px);
-                    animation: fadeInOut 3s ease-in-out infinite;
-                }
-
-                @keyframes fadeInOut {
-                    0%, 100% { opacity: 0.7; }
-                    50% { opacity: 1; }
-                }
-
-                .quick-actions {
-                    position: absolute;
-                    top: 6px;
-                    right: -15px;
-                    transform: translateX(-50%);
-                    display: flex;
-                    gap: 0px;
-                    opacity: 0;
-                    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                    : 10;
-                }
-
-                .product-item:hover .quick-actions {
-                    opacity: 1;
-                    transform: translateX(-50%) translateY(-5px);
-                }
-
-                /* Show actions on touch devices when image is tapped */
-                .image-container:active ~ .quick-actions,
-                .quick-actions:active {
-                    opacity: 1;
-                }
-
-                .action-button {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    min-width: 36px;
-                    height: 36px;
-                    border: none;
-                    color: #041f60;
-                    border-radius: 18px;
-                    padding: 0 10px;
-                    background: #ffffff;
-                    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                    cursor: pointer;
-                    touch-action: manipulation;
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                }
-
-                .action-buttons {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    min-width: 36px;
-                    height: 36px;
-                    border: none;
-                    color: #041f60;
-                    border-radius: 18px;
-                    padding: 0 10px;
-                    background: #fff;
-                    cursor: pointer;
-                    font-size: clamp(0.4rem, 1vw, 0.2rem) !important;
-                    touch-action: manipulation;
-                    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                }
-
-                .add-cart-btn {
-                    color: #041f60;
-                    font-family: 'Gloock', serif;
-                    font-weight: bolder;
-                    min-width: auto;
-                    border: none !important;
-                    padding: 0 12px;
-                }
-
-                .action-button:hover {
-                    background: #ffffff;
-                    color: #cd865c;
-                    transform: translateY(-2px) scale(1.05);
-                    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-                }
-
-                .add-cart-btn:hover {
-                    color: #cd865c;
-                    background: #fff;
-                }
-
-                .action-button:active {
-                    transform: scale(0.95);
-                }
-
-                .wish-btn [fill="#dc3545"] {
-                    color: #dc3545;
-                }
-
-                .heart-animation {
-                    animation: heartPulse 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                }
-
-                .cart-animation {
-                    animation: cartBounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                }
-
-                @keyframes heartPulse {
-                    0%, 100% { transform: scale(1); }
-                    50% { transform: scale(1.2); }
-                }
-
-                @keyframes cartBounce {
-                    0%, 100% { transform: translateY(0); }
-                    50% { transform: translateY(-4px); }
-                }
-                    .flip {
-  transform-style: preserve-3d;
-}
-
-.front {
-  backface-visibility: hidden;
-}
-
-.back {
-  transform: rotateY(180deg);
-  backface-visibility: hidden;
-}
-
-.flip-hover {
-  transform: rotateY(180deg);
-}
-
-
-                .add-button-text {
-                    font-size: 14px !important;
-                    font-weight: bolder;
-                    white-space: nowrap;
-                }
-
-                .item-info {
-                    padding: 10px 8px;
-                    text-align: center;
-                    background: transparent;
-                }
-
-                .item-name {
-                    font-family: 'Lato', sans-serif;
-                    font-size: 1rem;
-                    font-weight: 400;
-                    color: #041f60;
-                    margin: 0 auto;
-                    text-transform: capitalize;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                }
-
-                .price-section {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 8px;
-                    flex-wrap: wrap;
-                }
-
-                .new-price {
-                    font-family: 'Lato', sans-serif;
-                    font-size: 0.9rem;
-                    font-weight: 400;
-                    color: #041f60;
-                }
-                     .product-addToCart {
-  position: relative;
-  width:100%;
-  bottom:0px;
-  left:50%;
-  transform: translateX(-50%);
-  padding: 5px 10px;
-  font-size: 12px;
- background: linear-gradient(135deg, pink 80%, pink 70%);
-  border: none;
-  font-weight:bold;
-  border-radius: 4px;
-
-  opacity: 0;         /* hidden */
-  pointer-events: none; /* not clickable when hidden */
-  transition: opacity 0.3s ease;
-}
-
-/* Show on hover */
-.product-item:hover .product-addToCart {
-  opacity: 1;
-  pointer-events: auto; /* enable interaction */
-}
-
-                /* Touch Device Optimizations */
-                @media (hover: none) and (pointer: coarse) {
-                    .product-item:hover {
-                        transform: none;
-                        box-shadow: none;
-                    }
-                    
-                    .product-item:active {
-                        transform: scale(0.98);
-                    }
-                    
-                    .quick-actions {
-                        opacity: 1;
-                        transform: translateX(-50%) translateY(5px);
-                    }
-                    
-                    .touch-hint {
-                        display: block;
-                    }
-                    
-                    /* Hide touch hint after first interaction */
-                    .image-container:active ~ .touch-hint {
-                        opacity: 0;
-                        transition: opacity 0.3s ease;
-                    }
-                }
-
-                /* Hide touch hint on desktop */
-                @media (hover: hover) and (pointer: fine) {
-                    .touch-hint {
-                        display: none;
-                    }
-                }
-
-                /* Mobile Optimizations */
-                @media (max-width: 768px) {
-                    .card-container {
-                        max-width: 300px;
-                    }
-                    .add-button-text {
-                        font-size: 12px !important;
-                    }
-                   
-                    .item-info {
-                        padding: 12px 8px;
-                    }
-                    .add-cart-btn {
-                        padding: 0 10px;
-                    }
-                    .item-name {
-                        font-size: 0.82rem;
-                        margin-bottom: 6px;
-                    }
-                    .new-price {
-                        font-size: 0.8rem;
-                    }
-                    .action-button {
-                        min-width: 32px;
-                        height: 32px;
-                        padding: 0 8px;
-                    }
-                    .action-buttons {
-                        min-width: 32px;
-                        height: 32px;
-                        padding: 0 8px;
-                    }
-                   
-                    .touch-hint {
-                        font-size: 0.65rem;
-                        padding: 3px 6px;
-                    }
-                        .product-addToCart{
-                      opacity: 1; 
+                {/* Responsive Overrides */}
+                <style jsx>{`
+                    @media (max-width: 768px) {
+                        .group\\/card {
+                            max-width: 300px;
+                        }
+                        .group\\/card button {
+                            font-size: 12px;
+                        }
+                        .group\\/card .absolute.top-2.right-2 {
+                            opacity: 1;
+                        }
+                        .group\\/card .w-full.py-2 {
+                            opacity: 1;
                         }
                         img {
-    transition-duration: 200ms;
-  }
-                }
+                            transition-duration: 200ms;
+                        }
+                    }
+                    
+                    @media (max-width: 480px) {
+                        .group\\/card {
+                            max-width: 240px;
+                        }
+                        .group\\/card h3 {
+                            font-size: 0.75rem;
+                        }
+                        .group\\/card span {
+                            font-size: 0.7rem;
+                        }
+                        .group\\/card .w-9.h-9 {
+                            width: 26px;
+                            height: 26px;
+                        }
+                    }
+                    
+                    @media (max-width: 360px) {
+                        .group\\/card {
+                            max-width: 220px;
+                        }
+                    }
 
-                @media (max-width: 480px) {
-                    .card-container {
-                        max-width: 240px;
+                    @media (hover: none) and (pointer: coarse) {
+                        .group\\/card:hover {
+                            transform: none;
+                            box-shadow: none;
+                        }
+                        .group\\/card:active {
+                            transform: scale(0.98);
+                        }
+                        .group\\/card .absolute.top-2.right-2 {
+                            opacity: 1;
+                        }
                     }
-                    .add-button-text {
-                        font-size: 10px !important;
-                    }
-                    .item-info {
-                        padding: 10px 6px;
-                    }
-                    .item-name {
-                        font-size: 0.75rem;
-                        margin-bottom: 4px;
-                    }
-                    .new-price {
-                        font-size: 0.7rem;
-                    }
-                    .action-button {
-                        min-width: 26px;
-                        height: 26px;
-                        padding: 0 6px;
-                    }
-                    .action-buttons {
-                        min-width: 26px;
-                        height: 26px;
-                        padding: 0 6px;
-                    }
-                    .add-cart-btn {
-                        padding: 0 6px;
-                    }
-                    .touch-hint {
-                        font-size: 0.6rem;
-                    padding: 2px 4px;
-                    }
-                }
-
-                @media (max-width: 360px) {
-                    .card-container {
-                        max-width: 220px;
-                    }
-                    .add-button-text {
-                        font-size: 10px !important;
-                    }
-                    .item-name {
-                        font-size: 0.7rem;
-                    }
-                    .new-price {
-                        font-size: 0.6rem;
-                    }
-                    .action-button {
-                        min-width: 24px;
-                        height: 24px;
-                    }
-                    .action-buttons {
-                        min-width: 24px;
-                        height: 24px;
-                    }
-                       
-
-
-                }
-            `}</style>
+                `}</style>
             </div>
         </>
     );

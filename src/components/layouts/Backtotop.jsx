@@ -13,13 +13,13 @@ const BackToTop = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = (scrollTop / docHeight) * 100;
-
+      
       setScrollProgress(progress);
       setIsVisible(scrollTop > 300);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-
+    
     // Cleanup
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -35,13 +35,13 @@ const BackToTop = () => {
 
   // Animation variants
   const buttonVariants = {
-    hidden: {
-      opacity: 0,
+    hidden: { 
+      opacity: 0, 
       scale: 0.5,
       y: 20,
     },
-    visible: {
-      opacity: 1,
+    visible: { 
+      opacity: 1, 
       scale: 1,
       y: 0,
       transition: {
@@ -50,8 +50,8 @@ const BackToTop = () => {
         damping: 20,
       }
     },
-    exit: {
-      opacity: 0,
+    exit: { 
+      opacity: 0, 
       scale: 0.5,
       y: 20,
       transition: {
@@ -73,7 +73,7 @@ const BackToTop = () => {
 
   const progressVariants = {
     hidden: { pathLength: 0 },
-    visible: {
+    visible: { 
       pathLength: scrollProgress / 100,
       transition: { duration: 0.3 }
     }
@@ -145,22 +145,22 @@ const BackToTop = () => {
                   whileHover={{ scale: 2, opacity: 0 }}
                   transition={{ duration: 0.5 }}
                 />
-
+                
                 {/* Icon Container */}
                 <div className="relative flex flex-col items-center justify-center">
                   <motion.div
                     animate={{ y: [0, -3, 0] }}
-                    transition={{
-                      duration: 1.5,
+                    transition={{ 
+                      duration: 1.5, 
                       repeat: Infinity,
                       ease: "easeInOut"
                     }}
                   >
                     <ArrowUp size={20} strokeWidth={2.5} />
                   </motion.div>
-
+                  
                   {/* Progress Percentage (shown on hover) */}
-                  <motion.span
+                  <motion.span 
                     className="absolute -bottom-1 text-[8px] font-bold opacity-0 group-hover:opacity-100 transition-opacity"
                     initial={{ y: 5 }}
                     whileHover={{ y: 0 }}
@@ -198,44 +198,6 @@ const BackToTop = () => {
   );
 };
 
-// Optional: Alternative minimal version
-export const BackToTopMinimal = () => {
-  const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsVisible(window.scrollY > 300);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToTop = (e) => {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.button
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0 }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={scrollToTop}
-          className="fixed bottom-6 right-6 w-12 h-12 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full shadow-lg flex items-center justify-center text-white z-50 hover:shadow-xl transition-shadow group"
-          aria-label="Back to top"
-        >
-          <ChevronUp size={24} />
-          <span className="absolute right-full mr-2 bg-gray-900 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-            Back to Top
-          </span>
-        </motion.button>
-      )}
-    </AnimatePresence>
-  );
-};
 
 export default BackToTop;

@@ -8,8 +8,6 @@ import {
   FiLock,
   FiLogOut,
 } from "react-icons/fi";
-import "animate.css";
-import LogoutModal from "../../../../component/logout/Logout";
 
 const AccountSidebar = ({ openLogoutModal }) => {
   const navigate = useNavigate();

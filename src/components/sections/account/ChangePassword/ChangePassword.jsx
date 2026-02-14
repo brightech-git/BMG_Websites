@@ -2,8 +2,6 @@ import { useState } from "react";
 import { Lock, Eye, EyeOff, CheckCircle, AlertCircle, Loader2, Shield, Key } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { changePassword } from "../../../../redux/slices/userSlice";
-import "animate.css";
-
 export default function ChangePassword() {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.user);

@@ -33,13 +33,13 @@
     --primary-text-color: #041f60;
     --secondary-text-color: #ea580c;
 
-    --primary-hover-color: #f97316;
+    --primary-hover-color: #ea580c;
     --primary-card-color: #fff7ed;
     --secondary-card-color: #ffedd5;
 
     --brand-background-color: linear-gradient(to right,
-            #ffb889,
-            #fed7aa);
+            #89edff,
+            #d8aafe);
 
     --white-color: #ffffff;
     --black-color: #101010;

@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import ProductCard from '../sections/productCard/ProductCard';
 import { useFilteredProducts } from '../../hook/product/useFilterProducts';
-import { ChevronLeft, ChevronRight, AlertCircle, Loader2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, AlertCircle, Loader2, Sparkles } from 'lucide-react';
 
 const ShopRelatedUpdated = ({ itemCtrName }) => {
     const scrollRef = useRef(null);
@@ -29,14 +29,12 @@ const ShopRelatedUpdated = ({ itemCtrName }) => {
         <section className="py-2 bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-base">
             <div className="container mx-auto px-2 max-w-7xl">
                 {/* Header with navigation */}
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-4 bg-[var(--primary-card-color)]">
                     <div>
-                        <h2 className="text-sm md:text-lg font-bold text-gray-900 dark:text-white">
-                            Related Products
+                         <h2 className="text-xl font-bold text-gray-800  flex items-center gap-2">
+                                     <Sparkles className="w-6 h-6 text-[#f16137]" />
+                                     You May Also Like
                         </h2>
-                        <p className="text-gray-600 text-xs  dark:text-gray-400 mt-1">
-                            Discover products similar to what you're viewing
-                        </p>
                     </div>
 
                     {/* Navigation buttons - Only show if there are products */}
@@ -159,7 +157,7 @@ const ShopRelatedUpdated = ({ itemCtrName }) => {
                             {relatedProducts.map((item, index) => (
                                 <div
                                     key={`${item.id || item._id || index}-${item.name}`}
-                                    className="flex-shrink-0 w-[45%] sm:w-[25%] md:w-56 lg:w-60 snap-start"
+                                    className="flex-shrink-0 w-[45%] sm:w-[25%] md:w-66 lg:w-74 snap-start"
                                 >
                                   
                                         <ProductCard item={item} />
@@ -168,30 +166,7 @@ const ShopRelatedUpdated = ({ itemCtrName }) => {
                             ))}
                         </div>
 
-                        {/* Scroll indicators - Only show if scrollable */}
-                        {/* {relatedProducts.length > 3 && (
-                            <div className="flex justify-center mt-6 space-x-2">
-                                {[...Array(Math.min(5, Math.ceil(relatedProducts.length / 2)))].map((_, i) => (
-                                    <button
-                                        key={i}
-                                        onClick={() => {
-                                            if (scrollRef.current) {
-                                                const scrollWidth = scrollRef.current.scrollWidth;
-                                                const itemWidth = 288; // Approximate width of each card
-                                                const visibleItems = Math.floor(scrollRef.current.clientWidth / itemWidth);
-                                                const targetScroll = i * visibleItems * itemWidth;
-                                                scrollRef.current.scrollTo({
-                                                    left: targetScroll,
-                                                    behavior: 'smooth'
-                                                });
-                                            }
-                                        }}
-                                        className="w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-700 hover:bg-primary transition-colors duration-200"
-                                        aria-label={`Go to page ${i + 1}`}
-                                    />
-                                ))}
-                            </div>
-                        )} */}
+                     
                     </div>
                 )}
 

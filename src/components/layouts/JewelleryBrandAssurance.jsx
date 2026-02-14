@@ -3,7 +3,6 @@ import React from "react";
 import { ShieldCheck, Gem, RefreshCw } from "lucide-react";
 import { motion } from "framer-motion";
 import DragScrollComponent from './DragScrollComponent';
-import "./JewelleryBrandAssurance.css";
 
 const JewelleryBrandAssurance = ({
     assurances = [],
@@ -28,32 +27,52 @@ const JewelleryBrandAssurance = ({
         : defaultAssurances;
 
     return (
-        <div className="brand-assurance-wrapper">
+        <div className="w-80 overflow-hidden">
             <DragScrollComponent>
-                <div
-                    className="brand-assurance-container"
-                    style={{ background: bgColor, color: textColor }}
+                <motion.div
+                    className="flex flex-row items-center gap-2 px-2 py-2"
+                    style={{ backgroundColor: bgColor, color: textColor }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
                 >
                     {assuranceList.map((item, index) => (
                         <motion.div
                             key={index}
-                            className="brand-assurance-item"
+                            className="flex flex-col items-center justify-center flex-shrink-0 min-w-[80px] md:min-w-[100px] p-2 md:p-3 rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg active:scale-95 touch-manipulation"
+                            style={{
+                                backgroundColor: backgroundColor,
+                            }}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.4, delay: index * 0.1 }}
-                            style={{
-                                background: backgroundColor
-                                
-                            }}
+                            viewport={{ once: true, margin: "-50px" }}
+                            whileHover={{ y: -2 }}
+                            whileTap={{ scale: 0.98 }}
                         >
-                            <span className="brand-icon" style={{ color: iconColor, background: backGroundColor, }}>
-                                {item.icon}
+                            <span
+                                className="flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full mb-2 transition-all duration-300 group-hover:scale-110"
+                                style={{
+                                    backgroundColor: backGroundColor,
+                                    color: iconColor
+                                }}
+                            >
+                                <span className="transform transition-transform duration-300 group-hover:rotate-12">
+                                    {item.icon}
+                                </span>
                             </span>
-                            <span className="brand-text">{item.label}</span>
+                            <span
+                                className="text-xs md:text-sm text-center leading-tight font-medium max-w-[100px] md:max-w-[120px] break-words"
+                                style={{ color: textColor }}
+                            >
+                                {item.label}
+                            </span>
                         </motion.div>
                     ))}
-                </div>
+                </motion.div>
             </DragScrollComponent>
+
+
         </div>
     );
 };

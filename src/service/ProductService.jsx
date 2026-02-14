@@ -56,3 +56,24 @@ export const getProductByTagKey = async (tagKey) => {
    
 };
 
+
+
+export const getProductsFilter = async (itemName) => {
+    try {
+        const response = await PublicUrl.get('/item-sizes/combined', {
+            params: { itemName }
+        });
+        return response.data;
+    } catch (error) {
+        console.error("filterProducts error:", error.response?.data || error.message);
+        // Return a safe fallback structure
+        return {
+            success: false,
+            data: {
+                sizes: [],
+                subItems: []
+            },
+            error: error.response?.data || error.message,
+        };
+    }
+}

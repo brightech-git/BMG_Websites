@@ -235,7 +235,7 @@ const ForgotPassword = () => {
     };
 
     return (
-        <div className="min-h-screen flex bg-gradient-to-br from-orange-50 via-white to-orange-100">
+        <div className=" flex bg-gradient-to-br from-orange-50 via-white to-orange-100">
             {/* Left Side - Branding/Illustration */}
             <motion.div
                 initial={{ opacity: 0, x: -50 }}
@@ -285,7 +285,7 @@ const ForgotPassword = () => {
                         </motion.div>
 
                         {/* Progress Steps */}
-                        <motion.div variants={itemVariants} className="mb-10">
+                        <motion.div variants={itemVariants} className="mb-6 sm:mb-10">
                             <div className="relative flex justify-between items-center">
 
                                 {/* Background Line */}
@@ -357,7 +357,7 @@ const ForgotPassword = () => {
                                         animate={{ opacity: 1, x: 0 }}
                                         exit={{ opacity: 0, x: 20 }}
                                         onSubmit={handleSendOtp}
-                                        className="space-y-6"
+                                        className="space-y-3 sm:space-y-6"
                                     >
                                         {/* Mobile Number Input */}
                                         <div className="space-y-2">
@@ -435,7 +435,7 @@ const ForgotPassword = () => {
                                             animate={{ opacity: 1, x: 0 }}
                                             exit={{ opacity: 0, x: -20 }}
                                             onSubmit={handleVerifyOtp}
-                                            className="space-y-6"
+                                            className="space-y-4 sm:space-y-6"
                                         >
                                             {/* OTP Input - Single Field */}
                                             <div className="space-y-2">
@@ -571,7 +571,7 @@ const ForgotPassword = () => {
                                         animate={{ opacity: 1, x: 0 }}
                                         exit={{ opacity: 0, x: -20 }}
                                         onSubmit={handleResetPassword}
-                                        className="space-y-6"
+                                                className="space-y-4 sm:space-y-6"
                                     >
                                         {/* New Password */}
                                         <div className="space-y-2">

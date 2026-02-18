@@ -45,7 +45,6 @@ const Header = ({ isAuthenticated }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [isCategoriesHovered, setIsCategoriesHovered] = useState(false);
-  const [headerHeight, setHeaderHeight] = useState(0);
   const [shouldShow, setShouldShow] = useState(true);
   const [isNavigating, setIsNavigating] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -59,19 +58,6 @@ const Header = ({ isAuthenticated }) => {
 
   const {  isLoading: cartLoading, cartCount } = useCart({ enabled: isAuthenticated });
 
-  // Measure header height on mount and resize
-  useEffect(() => {
-    const updateHeaderHeight = () => {
-      if (headerRef.current) {
-        setHeaderHeight(headerRef.current.offsetHeight);
-      }
-    };
-
-    updateHeaderHeight();
-    window.addEventListener('resize', updateHeaderHeight);
-
-    return () => window.removeEventListener('resize', updateHeaderHeight);
-  }, []);
 
   // Reset header visibility on page navigation
   useEffect(() => {
@@ -316,7 +302,7 @@ const Header = ({ isAuthenticated }) => {
                   <img
                     src={Logo}
                     alt="BMG Jewellers"
-                    className="w-20 lg:w-28 h-auto transition-all duration-300"
+                    className="w-28  h-auto transition-all duration-300"
                   />
                 </Link>
               </motion.div>

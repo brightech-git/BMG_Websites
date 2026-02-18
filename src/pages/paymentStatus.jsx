@@ -27,6 +27,7 @@ const PaymentStatus = () => {
     const navigate = useNavigate();
     const searchParams = new URLSearchParams(location.search);
     const orderId = searchParams.get("orderId");
+
     const mode = searchParams.get("mode");
     const paymentMode = mode?.toLowerCase() === "cod" ? "COD" : "ONLINE";
     const { clearCart } = useCart();
@@ -370,27 +371,30 @@ const PaymentStatus = () => {
                                         </SmartButton>
 
                                         <SmartButton>
-                                            <PDFDownloadLink
-                                                document={
-                                                    <InvoiceDocument
-                                                        orderId={orderData.orderId}
-                                                        orderDate={orderData.orderTime.offsetDateTime}
-                                                        originAddress="Your Company Address Here"
-                                                        customerName={orderData.customerName}
-                                                        customerMobile={orderData.contact || orderData.customerMobile}
-                                                        customerAddress={customerAddress}
-                                                        paymentMode={orderData.paymentMode}
-                                                        paymentStatus={orderData.paymentStatus}
-                                                        transactionId={orderData.payphiResponse?.txn_id}
-                                                        items={pdfItems}
-                                                        totalAmount={orderData.totalAmount}
-                                                        amountInWords={amountInWords}
-                                                    />
-                                                }
-                                                fileName={`${orderData.orderId}.pdf`}
-                                            >
-                                                {({ loading }) => (loading ? 'Loading document...' : 'Download Invoice')}
-                                            </PDFDownloadLink>
+                                            {orderData && (
+                                                <PDFDownloadLink
+                                                    document={
+                                                        <InvoiceDocument
+                                                            orderId={orderData.orderId}
+                                                            orderDate={orderData.orderTime?.offsetDateTime}
+                                                            originAddress="Your Company Address Here"
+                                                            customerName={orderData.customerName}
+                                                            customerMobile={orderData.contact || orderData.customerMobile}
+                                                            customerAddress={customerAddress}
+                                                            paymentMode={orderData.paymentMode}
+                                                            paymentStatus={orderData.paymentStatus}
+                                                            transactionId={orderData.payphiResponse?.txn_id}
+                                                            items={pdfItems}
+                                                            totalAmount={orderData.totalAmount}
+                                                            amountInWords={amountInWords}
+                                                        />
+                                                    }
+                                                    fileName={`${orderData.orderId}.pdf`}
+                                                >
+                                                    {({ loading }) => (loading ? 'Loading document...' : 'Download Invoice')}
+                                                </PDFDownloadLink>
+                                            )}
+
                                         </SmartButton>
 
 

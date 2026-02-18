@@ -511,14 +511,14 @@ const HeroBanner = ({
                             <>
                                 <button
                                     onClick={prevSlide}
-                                    className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/80 shadow hover:bg-white flex items-center justify-center text-xl md:text-2xl"
+                                    className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2  w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/80 shadow hover:bg-white flex items-center justify-center text-xl md:text-2xl"
                                     aria-label="Previous slide"
                                 >
                                     ‹
                                 </button>
                                 <button
                                     onClick={nextSlide}
-                                    className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/80 shadow hover:bg-white flex items-center justify-center text-xl md:text-2xl"
+                                    className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2  w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/80 shadow hover:bg-white flex items-center justify-center text-xl md:text-2xl"
                                     aria-label="Next slide"
                                 >
                                     ›

@@ -1,19 +1,17 @@
 import React, { useRef } from 'react';
 import ProductCard from '../sections/productCard/ProductCard';
-import { useFilteredProducts } from '../../hook/product/useFilterProducts';
+import { useRelatedProducts } from '../../hook/product/useFilterProducts';
 import { ChevronLeft, ChevronRight, AlertCircle, Loader2, Sparkles } from 'lucide-react';
 
-const ShopRelatedUpdated = ({ itemCtrName }) => {
+const ShopRelatedUpdated = ({ itemCtrId }) => {
     const scrollRef = useRef(null);
 
-    const { data, isLoading, isError } = useFilteredProducts(
-        { itemCtrName },
-        0,
-        10
-    );
+    const { data, isLoading, isError } = useRelatedProducts(itemCtrId);
 
-    const relatedProducts = Array.isArray(data?.data?.data)
-        ? data.data.data
+    console.log(data,'datadata')
+
+    const relatedProducts = Array.isArray(data)
+        ? data
         : [];
 
     const scroll = (direction) => {

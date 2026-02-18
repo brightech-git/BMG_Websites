@@ -29,7 +29,7 @@ export const NotificationProvider = ({ children }) => {
         const fcmToken = await requestForToken();
         if (fcmToken) {
             registerDevice({
-                userId: user?.id || 10001,
+                userId: user?.id || '',
                 deviceId: uuidv4(),
                 deviceType: "WEB",
                 fcmToken,

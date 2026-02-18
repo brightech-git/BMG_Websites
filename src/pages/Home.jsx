@@ -2,6 +2,7 @@
 import React, { Fragment } from 'react';
 import Content from '../components/sections/home/Content';
 import { useDocumentMeta } from '../utils/meta/useMeta'; // relative import
+import SmoothScroll from '../components/layouts/SmoothScroll';
 
 const Home = () => {
     // Set page meta
@@ -12,7 +13,10 @@ const Home = () => {
 
     return (
         <Fragment>
-            <Content />
+            <SmoothScroll> 
+                <Content />
+            </SmoothScroll>
+           
         </Fragment>
     );
 };

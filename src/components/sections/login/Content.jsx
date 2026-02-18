@@ -115,7 +115,7 @@ const LoginContent = () => {
     };
 
     return (
-        <div className="min-h-screen flex bg-gradient-to-br from-orange-50 via-white to-orange-100">
+        <div className=" flex bg-gradient-to-br from-orange-50 via-white to-orange-100">
             {/* Left Side - Illustration/Content */}
             <motion.div
                 initial={{ opacity: 0, x: -50 }}
@@ -128,7 +128,7 @@ const LoginContent = () => {
             </motion.div>
 
             {/* Right Side - Login Form */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center p-2 sm:p-6">
+            <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6">
                 <motion.div
                     initial="hidden"
                     animate="visible"
@@ -138,7 +138,7 @@ const LoginContent = () => {
                     {/* Main Card */}
                     <motion.div
                         variants={itemVariants}
-                        className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-4 sm:p-8 border border-orange-100"
+                        className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-4 sm:p-6 border border-orange-100"
                     >
                         {/* Error Message */}
                         <AnimatePresence mode="wait">
@@ -167,16 +167,16 @@ const LoginContent = () => {
                             variants={itemVariants}
                             className="text-center mb-8"
                         >
-                            <h2 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
+                            <h2 className="text-xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
                                 Sign In
                             </h2>
-                            <p className="mt-2 text-sm text-gray-600">
+                            <p className="mt-1 text-xs text-gray-600">
                                 Welcome back! Please enter your details
                             </p>
                         </motion.div>
 
                         {/* Form */}
-                        <form onSubmit={handleLogin} className="space-y-6">
+                        <form onSubmit={handleLogin} className="space-y-3 sm:space-y-6">
                             {/* Mobile Number Field */}
                             <motion.div variants={itemVariants}>
                                 <label className="block text-sm font-medium text-gray-700 mb-2">

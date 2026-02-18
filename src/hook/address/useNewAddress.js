@@ -73,6 +73,7 @@ export const useDeleteAddress = () => {
     return useMutation({
         mutationFn: deleteAddress,
         onSuccess: () => {
+            
             toast.success("Address deleted successfully");
             queryClient.invalidateQueries(["addresses"]);
         },

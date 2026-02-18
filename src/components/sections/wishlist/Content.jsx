@@ -37,7 +37,7 @@ const WishlistItem = ({ item, onRemove, cartItems, addToCartHandler, mobileNumbe
       return;
     }
 
-  
+
     addToCartHandler(item);
 
 
@@ -48,7 +48,7 @@ const WishlistItem = ({ item, onRemove, cartItems, addToCartHandler, mobileNumbe
   return (
     <div className="group relative bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300">
       {/* Image - Link to product-info page using TAGKEY */}
-      <Link to={`/product-detail/${item.TAGKEY}`} className="block">
+      <Link to={`/products-page/${item.TAGKEY}`} className="block">
         <div className="aspect-square overflow-hidden bg-gray-50">
           <img
             src={imageUrl}

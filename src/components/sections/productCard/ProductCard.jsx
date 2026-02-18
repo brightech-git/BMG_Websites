@@ -84,7 +84,7 @@ const ProductCard = ({ item }) => {
     }, [isMobile, hasMultipleImages]);
 
     const productName = (item?.SUBITEMNAME || item?.ITEMCTRNAME || 'Jewelry Item').toLowerCase();
-    
+
     const currentPrice = parseFloat(item?.GrandTotal) > 0
         ? parseFloat(item.GrandTotal)
         : parseFloat(item?.RATE || 0);
@@ -157,7 +157,7 @@ const ProductCard = ({ item }) => {
     const clickProduct = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        navigate(`/product-detail/${item?.TAGKEY}`);
+        navigate(`/products-page/${item?.TAGKEY}`);
     };
 
     const isInCart = Array.isArray(cartProducts) &&
@@ -184,8 +184,10 @@ const ProductCard = ({ item }) => {
 
     return (
         <>
+            <UpdateMobileModal open={modalOpen} onClose={() => setModalOpen(false)} />
+
             <div className="w-full max-w-[400px] mx-auto group/card">
-                <UpdateMobileModal open={modalOpen} onClose={() => setModalOpen(false)} />
+
 
                 <div
                     className="relative bg-transparent overflow-hidden transition-all duration-500 cursor-pointer rounded-2xl group"
@@ -261,25 +263,7 @@ const ProductCard = ({ item }) => {
                                     />
                                 )}
 
-                                {/* Alternative: Smooth zoom with rotate effect */}
-                                {/* {hasMultipleImages && (
-                                    <img
-                                        src={productImages[1]}
-                                        alt={productName}
-                                        className={`absolute inset-0 w-full h-full object-cover transition-all duration-800 ease-out
-                                                ${isMobile
-                                                ? "opacity-100 scale-105 rotate-0"
-                                                : hover
-                                                    ? "opacity-100 scale-110 rotate-[2deg] brightness-110"
-                                                    : "opacity-0 scale-100 rotate-0"
-                                            }`}
-                                        style={{
-                                            transition: 'opacity 500ms cubic-bezier(0.4, 0, 0.2, 1), transform 800ms cubic-bezier(0.34, 1.56, 0.64, 1), filter 500ms ease'
-                                        }}
-                                        loading="eager"
-                                        decoding="async"
-                                    />
-                                )} */}
+                               
 
                                 {/* Loading Overlay */}
                                 {!imageLoaded && (
@@ -312,27 +296,6 @@ const ProductCard = ({ item }) => {
                             </button>
                         </div>
 
-                        {/* Image Indicator Dots */}
-                        {/* {hasMultipleImages && (
-                            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1.5 z-10">
-                                {productImages.slice(0, 3).map((_, idx) => (
-                                    <div
-                                        key={idx}
-                                        className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${currentImageIndex === idx
-                                                ? 'w-4 bg-gradient-to-r from-[#f16137] to-[#d84a22]'
-                                                : 'bg-white/60'
-                                            }`}
-                                    />
-                                ))}
-                            </div>
-                        )} */}
-
-                        {/* Touch Hint */}
-                        {/* {isTouchDevice && hasMultipleImages && (
-                            <div className="absolute top-2 left-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs backdrop-blur-sm animate-pulse z-10">
-                                Swipe to see more
-                            </div>
-                        )} */}
                     </div>
 
                     <div className="flex flex-col items-start p-3 text-center bg-transparent">
@@ -345,7 +308,7 @@ const ProductCard = ({ item }) => {
                             {productName}
                         </h3>
 
-                        
+
                     </div>
 
                     {/* Add to Cart Button */}

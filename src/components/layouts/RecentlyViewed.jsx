@@ -11,8 +11,8 @@ const ProductCarousel = () => {
     const [isHovered, setIsHovered] = useState(false);
 
     const { data: recentlyViewedData, isLoading, isError, error } = useRecentlyViewed();
-    const products = recentlyViewedData?.data || [];
 
+    const products = recentlyViewedData?.data || [];
     const handleScroll = useCallback(() => {
         if (carouselRef.current) {
             const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
@@ -132,9 +132,9 @@ const ProductCarousel = () => {
     // Main carousel
     return (
         <section className="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white py-16">
-            <div className="container overflow-hidden  mx-auto px-6">
+            <div className="container overflow-hidden  mx-auto mx-2">
                 {/* Header with navigation arrows */}
-                <div className="mb-6 flex flex-wrap items-center justify-between gap-2">
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
                     <div className="animate__animated animate__fadeInLeft flex-1">
                         
                         <h2 className="font-title bg-gradient-to-r from-amber-600 to-amber-800 bg-clip-text text-lg font-black text-transparent drop-shadow-md md:text-2xl">
@@ -209,7 +209,7 @@ const ProductCarousel = () => {
                         {products.map((product, index) => (
                             <div
                                 key={product.TAGKEY}
-                                className="animate__animated animate__fadeInUp flex w-[160px] sm:w-[250px] flex-none transform transition-all duration-300 hover:-translate-y-1 lg:w-[280px]"
+                                className="flex-shrink-0 w-[160px] sm:w-[200px] lg:w-[240px] xl:w-[270px]"
                                 style={{ animationDelay: `${index * 0.1}s` }}
                             >
                                 <div className="w-full overflow-hidden rounded-xl bg-white shadow-md transition-shadow duration-300 hover:shadow-xl">

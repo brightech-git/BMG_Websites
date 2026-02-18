@@ -16,16 +16,16 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, loading }) => {
     const displayImage = imageError ? fallbackImage :
         item?.ImagePath ? `${baseUrl}${JSON.parse(item.ImagePath)[0] || ''}` : fallbackImage;
 
-    console.log(item,'itemsitem')
+    console.log(item, 'itemsitem')
     const displayPrice = Number(item?.GrandTotal || 0);
     const displayWeight = Number(item?.NETWT) || 0;
     // const displayPurity = item?.PURITY||0;
     const displayTagNo = item?.TAGNO || 0;
     const displayItemId = item?.ITEMID || 0;
-    const displayTagKey = item?.TAGKEY ||0;
+    const displayTagKey = item?.TAGKEY || 0;
     const ItemTagKey = item?.TAGKEY || 0;
 
- 
+
 
     return (
         <div
@@ -55,11 +55,11 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, loading }) => {
             <div className="flex-1 min-w-0">
                 <h3 className="text-xs sm:text-sm font-semibold text-[#041f60] truncate">
                     <Link
-                        to={`/product-detail/${displayTagKey}`}
+                        to={`/products-page/${displayTagKey}`}
                         className="hover:text-[#f16137] transition block truncate"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        {item.ITEMCTRNAME || item.SUBITEMNAME || item.ITEMNAME }
+                        {item.ITEMCTRNAME || item.SUBITEMNAME || item.ITEMNAME}
                     </Link>
                 </h3>
                 <p className="text-xs text-gray-600 mt-1 truncate">
@@ -150,11 +150,11 @@ const Cart = () => {
     const mobileNumber = useSelector(state => state.user.user?.contactNumber);
 
     // Get items from API response
-    console.log(cartItems ,'cartItems');
+    console.log(cartItems, 'cartItems');
 
     const cartDetails = cartItems?.data;
 
-    const productsInCart = cartDetails?.products || []; 
+    const productsInCart = cartDetails?.products || [];
 
     // Calculate totals directly from selected items
     const selectedItemsData = productsInCart.filter(item =>
@@ -163,7 +163,7 @@ const Cart = () => {
 
     const subtotal = selectedItemsData.reduce((sum, item) => {
         const price = Number(item.GrandTotal) || 0;
-        return sum + price ;
+        return sum + price;
     }, 0);
 
     const shippingFee = cartDetails?.shipping?.totalAmount ?? 0;
@@ -172,9 +172,9 @@ const Cart = () => {
     const totalAmount = subtotal + shippingFee;
 
 
-    
 
-    console.log(subtotal,'selectedItemsData')
+
+    console.log(subtotal, 'selectedItemsData')
     // Auto-select all items on load
     useEffect(() => {
         if (productsInCart.length > 0 && selectedItems.length === 0) {
@@ -191,7 +191,7 @@ const Cart = () => {
 
         const payload = {
             items: selectedItemsData.map(item => ({
-                productId:item.TAGKEY,
+                productId: item.TAGKEY,
                 productName: item.ITEMCTRNAME || item.SUBITEMNAME || item.ITEMNAME,
                 price: parseFloat(item.GrandTotal),
                 itemId: item.ITEMID,
@@ -357,11 +357,9 @@ const Cart = () => {
                                 <div className="flex justify-between items-center">
                                     <span >Shipping Fee</span>
                                     <span className={`font-semibold ${shippingFee === 0 ? 'text-green-600' : ''}`}>
-                                        {shippingFee == null
+                                        {shippingFee == 0
                                             ? "Update your pincode"
-                                            : shippingFee === 0
-                                                ? "FREE"
-                                                : `₹${shippingFee.toLocaleString("en-IN")}`}
+                                            : `₹${shippingFee.toLocaleString("en-IN")}`}
 
                                     </span>
                                 </div>
@@ -394,12 +392,12 @@ const Cart = () => {
                                     className="  text-base font-semibold"
                                     variant="primary"
                                     children={`Proceed to Checkout (${selectedItems.length} items)`}
-                                    
+
                                 />
-                                   
-                           
-                            </div>        
-                          
+
+
+                            </div>
+
 
                             <div className="pt-2 ">
                                 <p className="text-center text-xs text-gray-600 mb-2">

@@ -110,8 +110,8 @@ const Content = ({ itemCtrName }) => { // Note the curly braces around itemCtrNa
         refetch,
     } = useFilteredProducts(queryFilters, page, PAGE_SIZE);
 
-    const productsData = data?.data?.data || [];
-    const totalItems = data?.data?.totalProducts || 0;
+    const productsData = data?.data || [];
+    const totalItems = data?.totalProducts || 0;
 
     /* ---------------------------------- */
     /* Notifications                      */
@@ -154,6 +154,10 @@ const Content = ({ itemCtrName }) => { // Note the curly braces around itemCtrNa
         }
 
         setProducts((prev) => {
+            // If page === 0, filters changed → replace products (no flicker)
+            if (page === 0) return newItems;
+
+            // Otherwise, append unique items
             const unique = newItems.filter(
                 (item) => !prev.some((p) => p.SNO === item.SNO)
             );
@@ -257,7 +261,7 @@ const Content = ({ itemCtrName }) => { // Note the curly braces around itemCtrNa
             </div>
 
             <div className="mb-8">
-                <ProductFilterBar itemCtrName={itemCtrName} /> {/* Pass the prop here */}
+                <ProductFilterBar itemCtrName={itemCtrName} totalResults={totalItems}/> {/* Pass the prop here */}
             </div>
             <div className="product-area">
                 {/* Product Header */}
@@ -341,16 +345,6 @@ const Content = ({ itemCtrName }) => { // Note the curly braces around itemCtrNa
                 )}
             </div>
 
-            {/* Scroll to Top Button */}
-            {/* {showScrollTop && (
-                <button
-                    onClick={scrollToTop}
-                    className="fixed bottom-8 right-8 bg-gradient-to-r from-[#f16137] to-[#d84a22] text-white p-3 rounded-full shadow-xl hover:shadow-2xl transform hover:scale-110 transition-all duration-300 animate__animated animate__bounceIn"
-                    aria-label="Scroll to top"
-                >
-                    <ChevronRight className="w-6 h-6 rotate-[-90deg]" />
-                </button>
-            )} */}
         </section>
     );
 };

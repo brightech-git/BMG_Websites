@@ -3,7 +3,6 @@ import { Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
 import About from "./pages/About";
-import Account from "./pages/Account";
 import FAQ from "./components/layouts/faq";
 import { faqContent, languages } from "./components/layouts/faqContent";
 import Cart from "./pages/Cart";
@@ -46,11 +45,8 @@ import Dashboard from "./components/sections/account/Dashboard/Dashboard";
 import SchemePage from "./pages/scheme/Scheme";
 
 import ScrollToTop from "./components/layouts/ScrolltoTop";
-import NotificationModal from "./pages/notificationModal/NotificationModal";
-import { OrderNotification } from "./components/layouts/ProductOrdersModal";
 import PolicyPage from './pages/Policies/Risk Mitigation & Compliance Policy';
 import PrivateRoute from "./route/UserPrivateRoute";
-import MainHeaderLayout from "./component/layout/MainHeaderLayout";
 
 import "./App.css";
 import ReturnReplaceFlow from "./components/sections/return/Return";
@@ -74,7 +70,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/products-page" element={<ProductsPage />} />
-          <Route path="/product-detail/:tagKey" element={<ProductDetailPage />} />
+          <Route path="/products-page/:tagKey" element={<ProductDetailPage />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/contactstore" element={<ContactStore />} />
           <Route path="/contactstore/success" element={<Success />} />

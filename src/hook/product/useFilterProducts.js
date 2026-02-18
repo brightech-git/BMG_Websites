@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { filterProducts ,getProductsFilter } from "../../service/ProductService";
+import { filterProducts ,getProductsFilter ,getRelatedProducts } from "../../service/ProductService";
 
 export const useFilteredProducts = (filters, page, pageSize) => {
     return useQuery({
@@ -15,6 +15,7 @@ export const useFilteredProducts = (filters, page, pageSize) => {
         cacheTime: 15 * 60 * 1000,
 
         keepPreviousData: true,
+        placeholderData: (prev) => prev,  // 🔥 smoothest
         refetchOnWindowFocus: false,
         retry: 1,
     });
@@ -28,5 +29,15 @@ export const useGetFilters = (itemName) => {
         staleTime: 5 * 60 * 1000,
         cacheTime: 15 * 60 * 1000,
         enabled: !!itemName, // Only run if itemName is provided
+    });
+}
+
+export const useRelatedProducts = (itemCtrId) =>{
+    return useQuery({
+        queryKey: ["relatedProducts", itemCtrId],
+        queryFn: () => getRelatedProducts(itemCtrId),
+        staleTime: 5 * 60 * 1000,
+        cacheTime: 15 * 60 * 1000,
+        enabled: !!itemCtrId,
     });
 }

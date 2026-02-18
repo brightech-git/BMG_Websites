@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 
 import RecentlyViewedWrapper from "../../layouts/RecentlyViewedWrapper";
-import SmoothScroll from "../../layouts/SmoothScroll";
 import HeroBanner from "../../../component/banner/HeroBanner";
 import GridBanner from "../../../component/banner/StackBanner";
 import { BannerSkeleton } from "../../../component/banner/BannerSkelaton";
@@ -10,6 +9,10 @@ import Ourcategory from "./Ourcategory";
 
 import { useBudgetBanners } from "../../../hook/budgetBanner/useBudgetBanners";
 import { useCategoryImages } from "../../../hook/categorywithImage/useCategoryQuery";
+import classNames from "classnames";
+
+
+
 // import BannerCarousel from "./BannerCarousel";
 // import Category from "./Category";
 // import Category1 from "./Category1";
@@ -129,15 +132,12 @@ const Content = () => {
     // Ensure it's an array and take only first 4 items
     const budgetBanners = budgetBanner?.data;
 
-    console.log(budgetBanners, 'budgetBanners')
 
     return (
-        <SmoothScroll>
 
             <Fragment>
                 {/* ✅ SHOW SKELETON WHILE LOADING */}
-
-                {/* <BannerCarousel banners={banners} isLoading={mainBannerLoading} /> */}
+            <div className="p-2 sm:p-4 ">
 
                 {budgetLoading ? (
                     <BannerSkeleton />
@@ -182,9 +182,9 @@ const Content = () => {
                                 autoScroll={banner.autoscroll || false}
                                 scrollable={banner.scrollable}
                                 visibleCount={parsedVisibleCount || { desktop: 3, tablet: 2, mobile: 2 }}
-                                scrollInterval = {banner.scrollInterval}
-                                infinite = {banner.infinite || false}
-                                dots = {banner.dots || false}
+                                scrollInterval={banner.scrollInterval}
+                                infinite={banner.infinite || false}
+                                dots={banner.dots || false}
                             />
                         );
                     })
@@ -192,6 +192,12 @@ const Content = () => {
 
 
                 <Ourcategory subcategories={subcategories} isCategoriesLoading={isCategoriesLoading} />
+
+
+                <RecentlyViewedWrapper />
+            </div>
+                {/* <BannerCarousel banners={banners} isLoading={mainBannerLoading} /> */}
+
 
                 {/* 🌟 Hero Section (no animation wrapper — stays full width) */}
                
@@ -240,10 +246,9 @@ const Content = () => {
 
 
 
-                <RecentlyViewedWrapper />
 
-            </Fragment>
-        </SmoothScroll>
+            </Fragment >
+    
     );
 };
 

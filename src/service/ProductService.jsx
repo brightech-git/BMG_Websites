@@ -27,11 +27,7 @@ export const filterProducts = async (filters) => {
 
         const response = await PublicUrl.get(`/product/items/filter?${queryString}`);
 
-        return {
-            success: true,
-            data: response.data,
-            error: null,
-        };
+        return response.data;
 
     } catch (error) {
         console.error("filterProducts error:", error.response?.data || error.message);
@@ -75,5 +71,17 @@ export const getProductsFilter = async (itemName) => {
             },
             error: error.response?.data || error.message,
         };
+    }
+}
+
+export const getRelatedProducts = async (itemCtrId) => {
+    try {
+        const response = await PublicUrl.get(`/product/related`,{
+            params: {itemCtrId}
+        });
+        return response.data;
+    } catch (error) {
+        console.error("getRelatedProducts error:", error.response?.data || error.message);
+        return [];
     }
 }

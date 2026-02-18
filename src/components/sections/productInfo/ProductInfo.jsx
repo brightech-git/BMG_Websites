@@ -74,7 +74,8 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
   const shareRef = useRef();
 
   const { data: product, isLoading, error } = useSingleProductQuery(tagKey);
-  const { pincode: currentPincode, pincodeData: currentPincodeData, updatePincode } = usePincode();
+
+  console.log(product,'product')
 
   const [cartLoading, setCartLoading] = useState(false);
   const [cartSuccess, setCartSuccess] = useState(false);
@@ -488,7 +489,7 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
           {/* Related Products */}
           <div className="mt-6 animate__animated animate__fadeIn">
            
-            <Shoprelated itemCtrName={product.ITEMCTRNAME} />
+            <Shoprelated itemCtrId={product.ITEMCTRID} />
           </div>
         </div>
       </div>

@@ -286,17 +286,15 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
       updateAddress({ id: addressData.id, addressData: payload }, {
         onSuccess: () => {
           refetchAddresses();
-          toast.success('Address updated successfully');
-        },
-        onError: (error) => { toast.error(error.response?.data || 'Failed to update address'); }
+        }
+      
       });
     } else {
       createAddress(payload, {
         onSuccess: () => {
           refetchAddresses();
-          toast.success('Address added successfully');
         },
-        onError: (error) => { toast.error(error.response?.data || 'Failed to create address'); }
+    
       });
     }
   };
@@ -306,9 +304,9 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
       onSuccess: () => {
         refetchAddresses();
         if (selectedAddress?.id === addressId) setSelectedAddress(null);
-        toast.success('Address deleted successfully');
+   
       },
-      onError: (error) => { toast.error(error.response?.data || 'Failed to delete address'); }
+ 
     });
   };
 

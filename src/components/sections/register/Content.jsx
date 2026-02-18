@@ -151,7 +151,7 @@ const RegisterContent = () => {
     ];
 
     return (
-        <div className="min-h-screen flex bg-gradient-to-br from-orange-50 via-white to-orange-100">
+        <div className="flex bg-gradient-to-br from-orange-50 via-white to-orange-100">
             {/* Left Side - Illustration/Branding */}
             <motion.div
                 initial={{ opacity: 0, x: -50 }}
@@ -162,7 +162,7 @@ const RegisterContent = () => {
             </motion.div>
 
             {/* Right Side - Registration Form */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center p-4 overflow-y-auto">
+            <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 overflow-y-auto">
                 <motion.div
                     initial="hidden"
                     animate="visible"
@@ -171,7 +171,7 @@ const RegisterContent = () => {
                 >
                     <motion.div
                         variants={itemVariants}
-                        className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-6 border border-orange-100"
+                        className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-4 sm:p-8 border border-orange-100"
                     >
                         {/* Error Message */}
                         <AnimatePresence mode="wait">
@@ -207,7 +207,7 @@ const RegisterContent = () => {
 
                         {/* Form */}
                         {!showOtpModal ? (
-                            <form onSubmit={handleRegister} className="space-y-4" autoComplete="off">
+                            <form onSubmit={handleRegister} className="space-y-3 sm:space-y-6" autoComplete="off">
                                 {formFields.map((f) => {
                                     const isPassword = f.name === 'password';
                                     return (
@@ -358,7 +358,7 @@ const RegisterContent = () => {
                             </form>
                         ) : (
                             // OTP Verification Form
-                            <form onSubmit={handleVerifyOtp} className="space-y-6">
+                            <form onSubmit={handleVerifyOtp} className="space-y-2 sm:space-y-6">
                                 <motion.div className="text-center">
                                     <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                         <svg className="w-10 h-10 text-orange-600" viewBox="0 0 24 24" fill="currentColor">

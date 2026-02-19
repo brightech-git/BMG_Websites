@@ -335,13 +335,7 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
       paymentType: selectedPaymentMethod, // 'CARD', 'UPI', or 'NETBANKING'
       paymentStatus: "PENDING",
       shippingPincode: finalPincode,
-      address: {
-        addressLine: `${selectedAddress.addressLine} ${selectedAddress.locality || ''} ${selectedAddress.city || ''} ${selectedAddress.state || ''} ${selectedAddress.country || ''} - ${selectedAddress.pincode || ''}`,
-        city: selectedAddress.city,
-        state: selectedAddress.state,
-        country: selectedAddress.country || "India",
-        pincode: selectedAddress.pincode,
-      },
+      address:selectedAddress ,
       items: cartItems.map((item) => ({
         productId: `${item.itemId}-${item.tagNo}`,
         productName: item.productName,

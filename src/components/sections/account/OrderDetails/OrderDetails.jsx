@@ -46,6 +46,8 @@ const OrderDetail = () => {
   const items = orderTrackData?.items || [];
   const deliveryAddress = orderTrackData?.delivery_address;
   const originAddress = orderTrackData?.origin_address;
+
+  console.log(originAddress,'originAddress')
   const orderDate = orderTrackData?.order_date || orderTrackData?.created_at;
 
   const canReturn = orderTrackData?.canReturn || orderTrackData?.current_status?.toLowerCase() === "delivered" ;
@@ -390,7 +392,7 @@ const OrderDetail = () => {
                     <p className="font-semibold text-[#7C2D12]">{originAddress?.name}</p>
                     <p className="flex items-start gap-1.5">
                       <FontAwesomeIcon icon={faMapMarkerAlt} className="text-[#F97316] text-[10px] mt-0.5" />
-                      <span>{originAddress?.address_line_1}</span>
+                        <span>{originAddress?.addressLine1}</span>
                     </p>
                     {originAddress?.addressLine2 && <p className="ml-4">{originAddress.addressLine2}</p>}
                     <p className="ml-4">{originAddress?.city}, {originAddress?.state} - {originAddress?.pincode}</p>
@@ -398,6 +400,10 @@ const OrderDetail = () => {
                       <span className="w-1 h-1 rounded-full bg-[#F97316]"></span>
                       Phone: {originAddress?.phone}
                     </p>
+                      <p className="pt-1 font-medium flex items-center gap-1.5">
+                        <span className="w-1 h-1 rounded-full bg-[#F97316]"></span>
+                        Alternate Phone: {originAddress?.alternatePhone}
+                      </p>
                   </div>
                 </div>
 

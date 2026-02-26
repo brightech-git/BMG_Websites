@@ -7,7 +7,6 @@ import FAQ from "./components/layouts/faq";
 import { faqContent, languages } from "./components/layouts/faqContent";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
-import Comingsoon from "./pages/Comingsoon";
 import Contact from "./pages/Contact";
 import ContactStore from "./pages/ContactStore";
 import Error from "./pages/Error";
@@ -74,7 +73,6 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/contactstore" element={<ContactStore />} />
           <Route path="/contactstore/success" element={<Success />} />
-          <Route path="/coming-soon" element={<Comingsoon />} />
 
           <Route
             path="/faq"

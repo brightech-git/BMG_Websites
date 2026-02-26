@@ -2,13 +2,12 @@ import React, { useRef, useEffect, useState, memo } from 'react';
 import './Styles.css';
 
 // Import images directly
-import ourStoryImage from '../../../assets/videos/store.jpg';
-import whyChooseUsImage from '../../../assets/videos/store.jpg';
-import ourPromiseImage from '../../../assets/videos/store.jpg';
-import productImage from '../../../assets/videos/silverIcon.png';
+import ourStoryImage from '../../../assets/images/store.jpg';
+import whyChooseUsImage from '../../../assets/images/store.jpg';
+import ourPromiseImage from '../../../assets/images/store.jpg';
 // Import new images for mission and vision sections
-import missionImage from '../../../assets/videos/store.jpg'; // Add your mission image path
-import visionImage from '../../../assets/videos/store.jpg';   // Add your vision image path
+import missionImage from '../../../assets/images/store.jpg'; // Add your mission image path
+import visionImage from '../../../assets/images/store.jpg';   // Add your vision image path
 
 // Import video
 // import craftsmanshipVideo from '../../../assets/videos/craft.mp4';

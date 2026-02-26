@@ -15,7 +15,7 @@ import {
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Mobilemenu from "./Mobilemenu";
-import Logo from "./logo.png";
+import Logo from "../../assets/icons/logo.png";
 import ItemSearch from "./Search";
 import useScreenWidth from "./useScreenWidth";
 import { useDispatch } from "react-redux";
@@ -23,7 +23,6 @@ import { logout } from "../../redux/slices/userSlice";
 import { useFavorites } from "../../hook/favorites/useFavoritesQuery";
 import { useCart } from "../../hook/cart/useCartQuery";
 import { useRatesQuery } from "../../hook/rate/useRatesQuery";
-import { useCompanyDetails } from "../../context/clientDetails/clientDetialContext";
 import PincodeModal from "./DeliveryPincodeHeader";
 import useHeaderNavByShopId from "./headerNavByShopId";
 import './HeaderScroll.css'
@@ -49,7 +48,6 @@ const Header = ({ isAuthenticated }) => {
   const [isNavigating, setIsNavigating] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
-  const { details } = useCompanyDetails();
 
   // Queries
   const { data: ratesData } = useRatesQuery();

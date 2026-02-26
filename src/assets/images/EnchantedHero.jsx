@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Lenis from "@studio-freight/lenis";
 // import video from "../../assets/videos/3.mp4";
-import image from "../../assets/videos/clouds-back.jpg";
+import image from "./clouds-back.jpg";
 
 export default function EnchantedHero() {
     const sectionRef = useRef(null);

@@ -8,7 +8,6 @@ import {
     Sparkles
 } from 'lucide-react';
 
-import errorimg from '../../../assets/videos/silverIcon.png';
 
 const Content = () => {
     const [redirect, setRedirect] = useState(false);

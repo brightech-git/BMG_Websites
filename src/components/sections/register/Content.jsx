@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { signup, verifyOtp, clearError } from '../../../redux/slices/userSlice';
 import GoogleLoginButton from './GoogleLoginButton';
 import 'animate.css';
+import registerImg from '../../../assets/images/register.jpeg'
 
 const RegisterContent = () => {
     const [username, setUsername] = useState('');
@@ -157,8 +158,9 @@ const RegisterContent = () => {
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
-                className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-orange-600 to-orange-500 p-12 flex-col justify-between"
+                className="hidden lg:flex lg:w-1/2 relative overflow-hidden p-2 flex-col justify-between"
             >
+                <img src={registerImg} className='object-cover rounded-2xl' />
             </motion.div>
 
             {/* Right Side - Registration Form */}
@@ -232,8 +234,8 @@ const RegisterContent = () => {
                                                         }
                                                     }}
                                                     className={`w-full p-2  h-12 rounded-lg border ${errors[f.name]
-                                                            ? 'border-red-500 focus:border-red-500 focus:ring-red-200'
-                                                            : 'border-gray-300 focus:border-orange-500 focus:ring-orange-200'
+                                                        ? 'border-red-500 focus:border-red-500 focus:ring-red-200'
+                                                        : 'border-gray-300 focus:border-orange-500 focus:ring-orange-200'
                                                         } focus:ring-2 transition-all duration-200 outline-none pl-8`}
                                                 />
                                                 <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400">
@@ -267,8 +269,8 @@ const RegisterContent = () => {
                                                             <div
                                                                 key={level}
                                                                 className={`flex-1 h-full rounded-full transition-all duration-300 ${level <= passwordStrength
-                                                                        ? getStrengthInfo().color
-                                                                        : 'bg-gray-200'
+                                                                    ? getStrengthInfo().color
+                                                                    : 'bg-gray-200'
                                                                     }`}
                                                             />
                                                         ))}

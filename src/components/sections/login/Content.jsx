@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import { login, clearError } from "../../../redux/slices/userSlice";
 import GoogleLoginButton from "../register/GoogleLoginButton";
-
+import loginImage from '../../../assets/images/login.png';
 const LoginContent = () => {
     const [contactOrEmailOrUsername, setContact] = useState("");
     const [password, setPassword] = useState("");
@@ -121,10 +121,12 @@ const LoginContent = () => {
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
-                className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-orange-600 to-orange-500 p-12 flex-col justify-between"
+                className="hidden lg:flex lg:w-1/2 relative overflow-hidden  p-2 flex-col justify-between"
             >
                 {/* Background Pattern */}
-              
+                <div>
+                    <img src={loginImage} style={{ objectFit: 'cover' }} />
+                </div>
             </motion.div>
 
             {/* Right Side - Login Form */}
@@ -134,12 +136,14 @@ const LoginContent = () => {
                     animate="visible"
                     variants={containerVariants}
                     className="max-w-md w-full"
+
                 >
                     {/* Main Card */}
                     <motion.div
                         variants={itemVariants}
                         className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-4 sm:p-6 border border-orange-100"
                     >
+
                         {/* Error Message */}
                         <AnimatePresence mode="wait">
                             {localError && (
@@ -149,14 +153,9 @@ const LoginContent = () => {
                                     animate="animate"
                                     exit="exit"
                                     className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-r-lg flex items-center gap-3"
+
                                 >
-                                    <svg
-                                        className="w-5 h-5 text-red-500 flex-shrink-0"
-                                        viewBox="0 0 24 24"
-                                        fill="currentColor"
-                                    >
-                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v2h-2v-2zm0-8h2v6h-2V9z" />
-                                    </svg>
+
                                     <span className="text-sm text-red-700">{localError}</span>
                                 </motion.div>
                             )}

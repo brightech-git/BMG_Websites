@@ -21,6 +21,7 @@ import InvoiceDocument from '../components/ui/PrintStatement';
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { useOrderInvoice } from "../hook/order/useAllOrdersQuery";
 import { toWords } from "number-to-words";
+import { useCompanyDetails } from "../context/clientDetails/clientDetialContext";
 
 const PaymentStatus = () => {
     const location = useLocation();
@@ -33,52 +34,101 @@ const PaymentStatus = () => {
     const { clearCart } = useCart();
 
     const [status, setStatus] = useState(null);
-    const [isSuccess, setIsSuccess] = useState(null); // true, false, null (loading)
+    const [isSuccess, setIsSuccess] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-
     const [retrying, setRetrying] = useState(false);
 
     const { mutateAsync: createReOrder } = useCreateReOrder();
-
-
     const { data: orderInvoiceData, isLoading: orderInvoiceLoading, isError: orderInvoiceError } = useOrderInvoice(orderId);
+    const {details}  = useCompanyDetails();
+    
+    const baseUrl = details?.BASEURL?.trim() || '';
+    const logoPath = details?.LOGO || '';
+    
+    const logo = baseUrl && logoPath
+            ? `${baseUrl.replace(/\/$/, '')}/${logoPath.replace(/^\//, '')}`
+            : '';
+    
+    const companyName = details?.COMPANYNAME || "BMG JEWELLERS PRIVATE LIMITED";
+
+
 
     const orderData = orderInvoiceData;
+    console.log(orderData ,'items')
 
-    // Map items with correct field names
-    const pdfItems = orderData?.items?.map(item => ({
-        productName: item.product_name,  // Changed from product_name to productName
-        quantity: item.quantity,
-        price: item.price,
-        sno: item.sno,
-        tagNo: item.tagno,  // Changed from tagno to tagNo
-        imagePath: item.image_path,  // Changed from image_path to imagePath
-        returnStatus: item.return_status,  // Changed from return_status to returnStatus
+    // Map items with correct field names for PDF
+    const pdfItems = orderData?.items?.map((item, index) => ({
+        sno: index + 1,
+        name: item.product_name || item.productName || '',
+        itemId: item.tagno || item.tagNo || '',
+        desc: item.description || '',
+        qty: item.quantity || 0,
+        grsAmt: item.gross_amount || item.price || 0,
+        tax: item.tax || '0',
+        taxType: item.taxType || 'GST',
+        taxAmount: item.taxAmount || 0,
+        totalAmount: item.price || item.totalAmount ||  0 
     })) || [];
 
     function convertAmountToWords(amount) {
         if (!amount) return '';
+
         const [integerPart, decimalPart] = amount?.toFixed(2).split('.');
         let words = toWords(Number(integerPart)) + ' rupees';
+
         if (Number(decimalPart) > 0) {
             words += ' and ' + toWords(Number(decimalPart)) + ' paise';
         }
-        return words;
+
+        words += ' only';
+
+        // Convert to Title Case
+        return words.replace(/\w\S*/g, (txt) =>
+            txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+        );
     }
 
     // Combine address with null checks
     const customerAddress = orderData?.address ?
-        `${orderData.address.addressLine || ''}, ${orderData.address.locality || ''}, ${orderData.address.city || ''}, ${orderData.address.state || ''} - ${orderData.address.pincode || ''}`.replace(/, ,/g, ',').replace(/^,|,$/g, '')
-        : '';
+        [
+            orderData.address.addressLine || '',
+            orderData.address.locality || '',
+            orderData.address.city || '',
+            orderData.address.state || '',
+            orderData.address.pincode || ''
+        ].filter(line => line.trim() !== '') : [];
 
     // Amount in words
     const amountInWords = convertAmountToWords(orderData?.totalAmount);
 
-    // Format order date from offsetDateTime
-    const orderDateFormatted = orderData?.orderTime?.offsetDateTime || orderData?.orderTime?.timestamp || '';
+    function formatDateTime(dateInput) {
+        const date = new Date(dateInput);
+        const pad = (n) => n.toString().padStart(2, '0');
+
+        return `${pad(date.getDate())}-${pad(date.getMonth() + 1)}-${date.getFullYear()} ` +
+            `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    }
+
+    const orderDateFormatted = formatDateTime(
+        orderData?.orderTime?.offsetDateTime ||
+        orderData?.orderTime?.timestamp ||
+        new Date()
+    );
 
     // Get transaction ID from payphiResponse
     const transactionId = orderData?.payphiResponse?.txn_id || '';
+
+    // Origin address for the PDF
+    const originAddress = {
+        name: "Your Company Name",
+        lines: [
+            "Your Company Address Line 1",
+            "Your Company Address Line 2",
+            "City, State - PIN Code",
+            "Phone: +91 1234567890",
+            "Email: support@yourcompany.com"
+        ]
+    };
 
     useEffect(() => {
         if (!orderId) {
@@ -94,6 +144,7 @@ const PaymentStatus = () => {
                     setStatus({ paymentStatus: "Cash on Delivery", message: "Order confirmed" });
                     setIsSuccess(true);
                     clearCart();
+                    setIsLoading(false);
                     return;
                 }
 
@@ -102,7 +153,6 @@ const PaymentStatus = () => {
 
                 if (res?.paymentStatus?.toLowerCase() === "paid") {
                     setIsSuccess(true);
-                    // Dispatch event to clear cart for COD
                     clearCart();
                 } else {
                     setIsSuccess(false);
@@ -117,9 +167,7 @@ const PaymentStatus = () => {
         };
 
         fetchStatus();
-    }, [orderId, paymentMode]);
-
-
+    }, [orderId, paymentMode, clearCart]);
 
     const getStatusColor = () => {
         if (isLoading) return "text-blue-600";
@@ -132,8 +180,6 @@ const PaymentStatus = () => {
         if (isSuccess) return "from-emerald-50 via-green-50 to-teal-50";
         return "from-red-50 to-rose-50";
     };
-    console.log(status, 'status');
-
 
     const handleReorder = async () => {
         if (retrying) return;
@@ -145,7 +191,6 @@ const PaymentStatus = () => {
             );
 
             if (!isConfirmed) return;
-
 
             const res = await createReOrder(orderId);
             const newOrderId = res?.newOrderId;
@@ -164,10 +209,8 @@ const PaymentStatus = () => {
         }
     };
 
-
     return (
         <>
-          
             {/* Confetti Rain - Only on Success */}
             {isSuccess && !isLoading && (
                 <div className="absolute inset-0 mt-[130px] pointer-events-none z-[10] overflow-hidden">
@@ -200,13 +243,13 @@ const PaymentStatus = () => {
                 </div>
             )}
 
-            <main className={`bg-gradient-to-br ${getBgGradient()} py-4 px-2`}>
+            <main className={`bg-gradient-to-br ${getBgGradient()} py-4 px-2 min-h-screen`}>
                 <div className="max-w-3xl mx-auto">
                     <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-white/50">
                         {/* Top Status Bar */}
                         <div className={`h-2 bg-gradient-to-r ${isSuccess ? "from-emerald-500 to-teal-600" : isSuccess === false ? "from-red-500 to-rose-600" : "from-blue-500 to-indigo-600"}`} />
 
-                        <div className="p-2  text-center">
+                        <div className="p-2 text-center">
                             {/* Icon */}
                             <div className="inline-flex items-center justify-center w-20 h-20 mx-auto mb-2 rounded-full bg-white shadow-xl">
                                 {isLoading ? (
@@ -321,10 +364,6 @@ const PaymentStatus = () => {
                                     </div>
                                 </div>
                             )}
-                            <>
-
-
-                            </>
 
                             {/* Failure: Info */}
                             {isSuccess === false && !isLoading && (
@@ -351,73 +390,75 @@ const PaymentStatus = () => {
                             <div className="mt-3 grid sm:grid-cols-3 px-4 sm:px-6 items-center sm:justify-center gap-2 animate-fade-up animation-delay-600">
                                 {isSuccess ? (
                                     <>
-
                                         <SmartButton
-                                            onClick={() => navigate("/account/orderdetails", { orderId: orderId })}
+                                            onClick={() => navigate(`/account/orderdetails/${orderId}`)}
                                             variant="secondary"
                                             icon={ShoppingBag}
                                         >
-
                                             View Orders
                                         </SmartButton>
+
                                         <SmartButton
                                             onClick={() => navigate("/products-page")}
                                             variant="primary"
                                             className="flex items-center justify-center"
                                             icon={Home}
                                         >
-
                                             Continue Shopping
                                         </SmartButton>
 
-                                        <SmartButton>
-                                            {orderData && (
-                                                <PDFDownloadLink
-                                                    document={
-                                                        <InvoiceDocument
-                                                            orderId={orderData.orderId}
-                                                            orderDate={orderData.orderTime?.offsetDateTime}
-                                                            originAddress="Your Company Address Here"
-                                                            customerName={orderData.customerName}
-                                                            customerMobile={orderData.contact || orderData.customerMobile}
-                                                            customerAddress={customerAddress}
-                                                            paymentMode={orderData.paymentMode}
-                                                            paymentStatus={orderData.paymentStatus}
-                                                            transactionId={orderData.payphiResponse?.txn_id}
-                                                            items={pdfItems}
-                                                            totalAmount={orderData.totalAmount}
-                                                            amountInWords={amountInWords}
-                                                        />
-                                                    }
-                                                    fileName={`${orderData.orderId}.pdf`}
-                                                >
-                                                    {({ loading }) => (loading ? 'Loading document...' : 'Download Invoice')}
-                                                </PDFDownloadLink>
-                                            )}
-
-                                        </SmartButton>
-
-
+                                        {orderData && !orderInvoiceLoading && (
+                                            <PDFDownloadLink
+                                                document={
+                                                    <InvoiceDocument
+                                                        orderId={orderData.orderId || orderId}
+                                                        orderDate={orderDateFormatted}
+                                                        originAddress={originAddress}
+                                                        customerName={orderData.customerName || 'Customer'}
+                                                        customerMobile={orderData.contact || orderData.customerMobile || ''}
+                                                        customerAddress={customerAddress}
+                                                        paymentMode={paymentMode}
+                                                        paymentStatus={status?.paymentStatus || 'Paid'}
+                                                        transactionId={transactionId}
+                                                        items={pdfItems}
+                                                        totalAmount={orderData.totalAmount || 0}
+                                                        amountInWords={amountInWords}
+                                                        logo={logo}
+                                                        companyName={companyName}
+                                                    />
+                                                }
+                                                fileName={`Invoice_${orderId}.pdf`}
+                                            >
+                                                {({ loading }) => (
+                                                    <SmartButton
+                                                        variant="secondary"
+                                                        icon={Download}
+                                                        disabled={loading}
+                                                        className="w-full"
+                                                    >
+                                                        {loading ? 'Generating PDF...' : 'Download Invoice'}
+                                                    </SmartButton>
+                                                )}
+                                            </PDFDownloadLink>
+                                        )}
                                     </>
                                 ) : (
                                     <>
-
                                         <SmartButton
                                             onClick={() => navigate("/products-page")}
-
+                                            variant="secondary"
                                         >
                                             Back to Shop
                                         </SmartButton>
-
 
                                         <SmartButton
                                             onClick={handleReorder}
                                             disabled={retrying}
                                             icon={RotateCcw}
+                                            variant="primary"
                                         >
                                             {retrying ? "Retrying..." : "Retry Payment"}
                                         </SmartButton>
-
                                     </>
                                 )}
                             </div>
@@ -432,14 +473,14 @@ const PaymentStatus = () => {
                                 </div>
                                 <div className="flex flex-wrap gap-1">
                                     <a
-                                        href="/contact"
+                                        href="/contactStore"
                                         className="text-emerald-600 text-sm font-medium hover:underline"
                                     >
                                         Contact Support →
                                     </a>
                                     <a
-                                        href="/help"
-                                        className="text-emerald-600  text-sm font-medium hover:underline"
+                                        href="/contactStore"
+                                        className="text-emerald-600 text-sm font-medium hover:underline"
                                     >
                                         Help Center →
                                     </a>
@@ -449,7 +490,6 @@ const PaymentStatus = () => {
                     </div>
                 </div>
             </main>
-
         </>
     );
 };

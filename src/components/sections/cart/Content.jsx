@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Trash2, ShoppingBag } from 'lucide-react';
 import { useCart } from '../../../hook/cart/useCartQuery';
-import fallbackImage from '../../../assets/videos/silverIcon.png';
+import fallbackImage from '../../../assets/icons/silverIcon.png';
 import SmartButton from '../../ui/SmartButton';
 import UpdateMobileModal from '../../layouts/UpdateMobileModal';
 import { useSelector } from 'react-redux';

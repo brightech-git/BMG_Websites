@@ -5,7 +5,7 @@ import { useCart } from '../../../hook/cart/useCartQuery';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import fallbackImage from './fallback-image.jpg';
+import fallbackImage from '../../../assets/icons/fallback.jpg';
 import UpdateMobileModal from '../../layouts/UpdateMobileModal';
 import "animate.css";
 
@@ -145,10 +145,10 @@ const ProductCard = ({ item }) => {
 
         if (isWishlisted) {
             removeFavorite(item.TAGKEY);
-            toast.success('Removed from wishlist');
+      
         } else {
             addToFavorite(item);
-            toast.success('Added to wishlist');
+       
         }
 
         setTimeout(() => setHeartAnimation(false), 600);

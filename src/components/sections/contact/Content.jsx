@@ -4,10 +4,8 @@ import { toast } from 'react-toastify';
 import { useContactFormQuery } from "../../../hook/contactForm/useContactFormQuery";
 import { useCompanyDetails } from "../../../context/clientDetails/clientDetialContext";
 import './Contact.css';
-import largerImg from '../../../assets/videos/silverIcon.png';
+import largerImg from '../../../assets/icons/silverIcon.png';
 import { useNavigate } from "react-router-dom";
-import SmartButton from "../../ui/SmartButton";
-import { PDFDownloadLink } from '@react-pdf/renderer';
 
 const Contact = () => {
     const [formData, setFormData] = useState({

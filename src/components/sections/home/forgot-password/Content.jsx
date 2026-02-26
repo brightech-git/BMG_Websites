@@ -10,6 +10,7 @@ import {
 } from 'react-icons/fa';
 import { MdOutlineMarkEmailUnread } from 'react-icons/md';
 import 'animate.css';
+import forgotImg from '../../../../assets/images/forgot.jpeg';
 
 const ForgotPassword = () => {
     const [contactNumber, setContactNumber] = useState('');
@@ -151,7 +152,7 @@ const ForgotPassword = () => {
         } catch (err) {
             setErrors({ otp: 'Invalid OTP. Please try again.' });
         } finally {
-         
+
         }
     };
     // const handleOtpChange = (index, value) => {
@@ -241,10 +242,10 @@ const ForgotPassword = () => {
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
-                className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-orange-600 to-orange-500 p-12 flex-col justify-between"
+                className="hidden lg:flex lg:w-1/2 relative overflow-hidden p-2 flex-col justify-between"
             >
-                {/* Background Pattern */}
-            
+                <img src={forgotImg} className='object-cover rounded-2xl' />
+
             </motion.div>
 
             {/* Right Side - Form */}
@@ -294,7 +295,7 @@ const ForgotPassword = () => {
                                 {/* Active Progress Line */}
                                 <div
                                     className="absolute top-1/2 left-0 h-1 -translate-y-1/2 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full transition-all duration-500"
-                                    style={{ width: `${(step -1) * 50}%` }}
+                                    style={{ width: `${(step - 1) * 50}%` }}
                                 />
 
                                 {[1, 2, 3].map((s) => (
@@ -429,141 +430,141 @@ const ForgotPassword = () => {
                                         </div>
                                     </motion.form>
                                 ) : step === 2 ? (
-                                        <motion.form
-                                            key="step2"
-                                            initial={{ opacity: 0, x: 20 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            exit={{ opacity: 0, x: -20 }}
-                                            onSubmit={handleVerifyOtp}
-                                            className="space-y-4 sm:space-y-6"
-                                        >
-                                            {/* OTP Input - Single Field */}
-                                            <div className="space-y-2">
-                                                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                                                    <MdOutlineMarkEmailUnread className="text-orange-500" />
-                                                    Enter OTP
-                                                </label>
+                                    <motion.form
+                                        key="step2"
+                                        initial={{ opacity: 0, x: 20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        exit={{ opacity: 0, x: -20 }}
+                                        onSubmit={handleVerifyOtp}
+                                        className="space-y-4 sm:space-y-6"
+                                    >
+                                        {/* OTP Input - Single Field */}
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                                                <MdOutlineMarkEmailUnread className="text-orange-500" />
+                                                Enter OTP
+                                            </label>
 
-                                                <div className="flex justify-center">
-                                                    <input
-                                                        type="text"
-                                                        inputMode="numeric"
-                                                        value={otp.join('')}
-                                                        onChange={(e) => {
-                                                            const value = e.target.value.replace(/\D/g, '').slice(0, 6);
-                                                            const newOtp = [...Array(6)].map((_, i) => value[i] || '');
-                                                            setOtp(newOtp);
-                                                            if (errors.otp) setErrors({ ...errors, otp: '' });
+                                            <div className="flex justify-center">
+                                                <input
+                                                    type="text"
+                                                    inputMode="numeric"
+                                                    value={otp.join('')}
+                                                    onChange={(e) => {
+                                                        const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+                                                        const newOtp = [...Array(6)].map((_, i) => value[i] || '');
+                                                        setOtp(newOtp);
+                                                        if (errors.otp) setErrors({ ...errors, otp: '' });
 
-                                                            // Auto-submit if 6 digits are entered
-                                                            if (value.length === 6) {
-                                                                handleVerifyOtp(e);
-                                                            }
-                                                        }}
-                                                        onPaste={handlePaste}
-                                                        placeholder="Enter 6-digit OTP"
-                                                        className={`
+                                                        // Auto-submit if 6 digits are entered
+                                                        if (value.length === 6) {
+                                                            handleVerifyOtp(e);
+                                                        }
+                                                    }}
+                                                    onPaste={handlePaste}
+                                                    placeholder="Enter 6-digit OTP"
+                                                    className={`
                     w-full max-w-xs px-4 py-3 h-12 text-center text-2xl tracking-[0.5em] font-semibold 
                     rounded-lg border-2 outline-none transition-all duration-200
                     ${errors.otp
-                                                                ? 'border-red-500 focus:ring-2 focus:ring-red-200'
-                                                                : otp.join('').length === 6
-                                                                    ? 'border-orange-500 bg-orange-50'
-                                                                    : 'border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200'
-                                                            }
+                                                            ? 'border-red-500 focus:ring-2 focus:ring-red-200'
+                                                            : otp.join('').length === 6
+                                                                ? 'border-orange-500 bg-orange-50'
+                                                                : 'border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200'
+                                                        }
                 `}
-                                                        autoFocus
-                                                    />
-                                                </div>
+                                                    autoFocus
+                                                />
+                                            </div>
 
-                                                {/* Visual OTP Indicator */}
-                                                <div className="flex justify-center gap-2 mt-3">
-                                                    {[0, 1, 2, 3, 4, 5].map((index) => (
-                                                        <div
-                                                            key={index}
-                                                            className={`
+                                            {/* Visual OTP Indicator */}
+                                            <div className="flex justify-center gap-2 mt-3">
+                                                {[0, 1, 2, 3, 4, 5].map((index) => (
+                                                    <div
+                                                        key={index}
+                                                        className={`
                         w-3 h-3 rounded-full transition-all duration-200
                         ${otp[index]
-                                                                    ? 'bg-orange-500 scale-110'
-                                                                    : index < otp.join('').length
-                                                                        ? 'bg-orange-300'
-                                                                        : 'bg-gray-200'
-                                                                }
+                                                                ? 'bg-orange-500 scale-110'
+                                                                : index < otp.join('').length
+                                                                    ? 'bg-orange-300'
+                                                                    : 'bg-gray-200'
+                                                            }
                     `}
-                                                        />
-                                                    ))}
-                                                </div>
-
-                                                {errors.otp && (
-                                                    <p className="text-xs text-red-500 flex items-center justify-center gap-1 mt-1">
-                                                        <FaExclamationTriangle size={10} />
-                                                        {errors.otp}
-                                                    </p>
-                                                )}
+                                                    />
+                                                ))}
                                             </div>
 
-                                            {/* Timer */}
-                                            <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
-                                                <FaClock className="text-orange-500" />
-                                                OTP expires in:
-                                                <span className="font-semibold text-orange-600">
-                                                    {Math.floor(resendTimer / 60)}:{(resendTimer % 60).toString().padStart(2, '0')}
-                                                </span>
-                                            </div>
+                                            {errors.otp && (
+                                                <p className="text-xs text-red-500 flex items-center justify-center gap-1 mt-1">
+                                                    <FaExclamationTriangle size={10} />
+                                                    {errors.otp}
+                                                </p>
+                                            )}
+                                        </div>
 
-                                            <button
-                                                type="submit"
-                                                disabled={loading || otp.join('').length !== 6}
-                                                className={`
+                                        {/* Timer */}
+                                        <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
+                                            <FaClock className="text-orange-500" />
+                                            OTP expires in:
+                                            <span className="font-semibold text-orange-600">
+                                                {Math.floor(resendTimer / 60)}:{(resendTimer % 60).toString().padStart(2, '0')}
+                                            </span>
+                                        </div>
+
+                                        <button
+                                            type="submit"
+                                            disabled={loading || otp.join('').length !== 6}
+                                            className={`
             w-full py-3 px-4 rounded-lg text-white font-medium
             transition-all duration-300 transform
             ${loading || otp.join('').length !== 6
-                                                        ? 'bg-orange-300 cursor-not-allowed'
-                                                        : 'bg-gradient-to-r from-orange-600 to-orange-500 hover:scale-105 hover:shadow-lg'
-                                                    }
+                                                    ? 'bg-orange-300 cursor-not-allowed'
+                                                    : 'bg-gradient-to-r from-orange-600 to-orange-500 hover:scale-105 hover:shadow-lg'
+                                                }
         `}
-                                            >
-                                                {loading ? (
-                                                    <span className="flex items-center justify-center gap-2">
-                                                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                                        Verifying...
-                                                    </span>
-                                                ) : (
-                                                    'Verify OTP'
-                                                )}
-                                            </button>
+                                        >
+                                            {loading ? (
+                                                <span className="flex items-center justify-center gap-2">
+                                                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                                    Verifying...
+                                                </span>
+                                            ) : (
+                                                'Verify OTP'
+                                            )}
+                                        </button>
 
-                                            {/* Resend OTP */}
-                                            <div className="text-center space-y-2">
-                                                <p className="text-sm text-gray-600">
-                                                    Didn't receive OTP?{' '}
-                                                    <button
-                                                        type="button"
-                                                        onClick={handleResendOtp}
-                                                        disabled={resendTimer > 0}
-                                                        className={`
-                    font-medium inline-flex items-center gap-1
-                    ${resendTimer > 0
-                                                                ? 'text-gray-400 cursor-not-allowed'
-                                                                : 'text-orange-500 hover:text-orange-600'
-                                                            }
-                `}
-                                                    >
-                                                        <FaRedoAlt size={12} className={resendTimer > 0 ? '' : 'group-hover:rotate-180 transition-transform'} />
-                                                        Resend {resendTimer > 0 && `(${resendTimer}s)`}
-                                                    </button>
-                                                </p>
-
+                                        {/* Resend OTP */}
+                                        <div className="text-center space-y-2">
+                                            <p className="text-sm text-gray-600">
+                                                Didn't receive OTP?{' '}
                                                 <button
                                                     type="button"
-                                                    onClick={() => setStep(1)}
-                                                    className="text-sm text-gray-500 hover:text-orange-500 transition-colors inline-flex items-center gap-1 group"
+                                                    onClick={handleResendOtp}
+                                                    disabled={resendTimer > 0}
+                                                    className={`
+                    font-medium inline-flex items-center gap-1
+                    ${resendTimer > 0
+                                                            ? 'text-gray-400 cursor-not-allowed'
+                                                            : 'text-orange-500 hover:text-orange-600'
+                                                        }
+                `}
                                                 >
-                                                    <FaArrowLeft size={12} className="group-hover:-translate-x-1 transition-transform" />
-                                                    Change mobile number
+                                                    <FaRedoAlt size={12} className={resendTimer > 0 ? '' : 'group-hover:rotate-180 transition-transform'} />
+                                                    Resend {resendTimer > 0 && `(${resendTimer}s)`}
                                                 </button>
-                                            </div>
-                                        </motion.form>
+                                            </p>
+
+                                            <button
+                                                type="button"
+                                                onClick={() => setStep(1)}
+                                                className="text-sm text-gray-500 hover:text-orange-500 transition-colors inline-flex items-center gap-1 group"
+                                            >
+                                                <FaArrowLeft size={12} className="group-hover:-translate-x-1 transition-transform" />
+                                                Change mobile number
+                                            </button>
+                                        </div>
+                                    </motion.form>
                                 ) : (
                                     <motion.form
                                         key="step3"
@@ -571,7 +572,7 @@ const ForgotPassword = () => {
                                         animate={{ opacity: 1, x: 0 }}
                                         exit={{ opacity: 0, x: -20 }}
                                         onSubmit={handleResetPassword}
-                                                className="space-y-4 sm:space-y-6"
+                                        className="space-y-4 sm:space-y-6"
                                     >
                                         {/* New Password */}
                                         <div className="space-y-2">
@@ -614,8 +615,8 @@ const ForgotPassword = () => {
                                                             <div
                                                                 key={level}
                                                                 className={`flex-1 h-full rounded-full transition-all duration-300 ${level <= passwordStrength
-                                                                        ? getStrengthInfo().color
-                                                                        : 'bg-gray-200'
+                                                                    ? getStrengthInfo().color
+                                                                    : 'bg-gray-200'
                                                                     }`}
                                                             />
                                                         ))}

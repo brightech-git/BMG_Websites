@@ -8,7 +8,7 @@ import {
     Font
 } from "@react-pdf/renderer";
 import invoiceImg from './invoice.jpeg';
-
+import logo from '../../assets/icons/fallback.jpg'
 
 export default function InvoiceDocument({
     orderId,
@@ -23,6 +23,8 @@ export default function InvoiceDocument({
     items,
     totalAmount,
     amountInWords,
+
+    companyName
 }) {
     Font.register({
         family: "NotoSans",
@@ -31,6 +33,7 @@ export default function InvoiceDocument({
             { src: "/font/noto/NotoSans-Bold.ttf", fontWeight: "bold" }
         ]
     });
+
     const styles = StyleSheet.create({
         page: {
             fontSize: 10,
@@ -61,12 +64,12 @@ export default function InvoiceDocument({
             marginBottom: 10
         },
         companyLogo: {
-            width: 110,
+            width: 120,
         },
         documentTitle: {
-            fontSize: 18,
+            fontSize: 14,
             fontWeight: "bold",
-            color: "#1a1a1a",
+            color: "#f16137",
         },
         documentSubtitle: {
             fontSize: 10,
@@ -111,7 +114,7 @@ export default function InvoiceDocument({
             borderRadius: 3
         },
         addressLine: {
-            fontSize: 8,
+            fontSize: 10,
             color: "#555",
             lineHeight: 1.4
         },
@@ -128,7 +131,7 @@ export default function InvoiceDocument({
             borderTopRightRadius: 4
         },
         headerCell: {
-            fontSize: 8,
+            fontSize: 9,
             fontWeight: "bold",
             color: "#FFFFFF",
             textAlign: "center"
@@ -140,7 +143,7 @@ export default function InvoiceDocument({
             borderBottom: "0.5 solid #eaeaea"
         },
         tableCell: {
-            fontSize: 8,
+            fontSize: 9,
             color: "#444",
             textAlign: "center"
         },
@@ -161,13 +164,13 @@ export default function InvoiceDocument({
             borderLeft: "3 solid #f16137"
         },
         amountLabel: {
-            fontSize: 8,
+            fontSize: 9,
             fontWeight: "bold",
             color: "#444",
             marginBottom: 3
         },
         amountWords: {
-            fontSize: 9,
+            fontSize: 12,
             color: "#222",
             fontStyle: "italic"
         },
@@ -181,7 +184,7 @@ export default function InvoiceDocument({
             borderRadius: 4
         },
         totalLabel: {
-            fontSize: 10,
+            fontSize: 11,
             fontWeight: "bold",
             color: "#FFFFFF"
         },
@@ -197,7 +200,7 @@ export default function InvoiceDocument({
             left: 30,
             right: 30,
             textAlign: "center",
-            fontSize: 7,
+            fontSize: 8,
             color: "#777",
             borderTop: "0.5 solid #ddd",
             paddingTop: 12
@@ -207,7 +210,7 @@ export default function InvoiceDocument({
             marginBottom: 4
         },
         pageInfo: {
-            fontSize: 6,
+            fontSize: 8,
             color: "#999"
         }
     });
@@ -232,15 +235,15 @@ export default function InvoiceDocument({
                 <Image src={invoiceImg} style={styles.backgroundImage} fixed />
                 <View style={styles.pageBody}>
                 {/* Accent Bar */}
-                <View style={styles.accentBar} />
+                {/* <View style={styles.accentBar} /> */}
 
                 {/* Header */}
                 <View style={styles.headerSection}>
                     <View>
-                        <Text style={styles.documentTitle}>INVOICE</Text>
+                        <Text style={styles.documentTitle}>{companyName}</Text>
                         <Text style={styles.documentSubtitle}>TAX INVOICE</Text>
                     </View>
-                        <Image src="/fallback-image.jpg" style={styles.companyLogo} />
+                        <Image src={logo} style={styles.companyLogo} />
                 </View>
 
                 {/* Order & Customer Details */}

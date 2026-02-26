@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
 import { useContactFormQuery } from "../hook/contactForm/useContactFormQuery";
 import { useCompanyDetails } from "../context/clientDetails/clientDetialContext";
-import largerImg from '../assets/videos/store.jpg';
+import largerImg from '../assets/images/store.jpg';
 import { useNavigate } from "react-router-dom";
 import {
     MapPin,

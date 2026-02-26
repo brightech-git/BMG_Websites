@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import silvericon from '../../assets/videos/silverIcon.png';
-import goldicon from '../../assets/videos/goldIcon.png';
+import silvericon from '../../assets/icons/silverIcon.png';
+import goldicon from '../../assets/icons/goldIcon.png';
 
 // Function to format metal names and display types
 const formatMetalDisplay = (key, value) => {
@@ -220,7 +220,7 @@ const RatesDropdown = ({ ratesData }) => {
                                                         className="w-5 h-5"
                                                     />
                                                     <span className="text-sm font-medium text-gray-800">
-                                                       SILVER
+                                                        SILVER
                                                     </span>
                                                 </div>
                                                 <span className="font-bold text-[var(--primary-text-color)]">

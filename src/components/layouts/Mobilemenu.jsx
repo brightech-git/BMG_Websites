@@ -18,7 +18,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import headerNavByShopId from './headerNavByShopId';
 import './MobileMenu.css';
-import Logo from "./logo.png";
+import Logo from "../../assets/icons/logo.png";
 import RatesDropdown from './RatesDropdown';
 
 const Mobilemenu = ({ onClose, wishlistCount, cartCount, ratesData }) => {

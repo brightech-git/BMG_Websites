@@ -102,7 +102,7 @@ const DeliveryPincodeHeader = () => {
     };
 
     return (
-        <>
+        <div>
             {/* Header Pincode Display */}
             {isSmallScreen ? (
                 <button
@@ -223,7 +223,7 @@ const DeliveryPincodeHeader = () => {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 };
 

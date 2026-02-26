@@ -39,6 +39,7 @@ const WishlistItem = ({ item, onRemove, cartItems, addToCartHandler, mobileNumbe
 
 
     addToCartHandler(item);
+    onRemove(item.TAGKEY , 'cart');
 
 
   };
@@ -61,7 +62,7 @@ const WishlistItem = ({ item, onRemove, cartItems, addToCartHandler, mobileNumbe
 
       {/* Remove Button */}
       <button
-        onClick={() => onRemove(item.TAGKEY)}
+        onClick={() => onRemove(item.TAGKEY , 'remove')}
         className="absolute top-1 right-1 p-2 bg-white/90 text-red-400 backdrop-blur-sm rounded-full shadow-lg transition-all hover:bg-red-50 hover:text-red-600"
       >
         <Trash2 className="w-3 h-3" />
@@ -113,10 +114,14 @@ const Wishlist = () => {
   // Use favorites directly from the hook
   const items = favorites;
 
-  const handleRemove = (tagKey) => {
-    if (window.confirm("Remove from wishlist?")) {
-      removeFavorite(tagKey);
+  const handleRemove = (tagKey,key) => {
+    if(key === 'remove' ){
+      if (window.confirm("Remove from wishlist?")) {
+        removeFavorite(tagKey);
+      }
     }
+    removeFavorite(tagKey);
+   
   };
 
   if (isLoading) {

@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Backtotop from "./Backtotop";
-import logo from "./logo.png";
+import logo from "../../assets/icons/logo.png";
 import "./Footer.css";
-import btsLogo from './btsLogo.jpg';
+import btsLogo from '../../assets/icons/btsLogo.jpg';
 import { useFooterContent } from "../../hook/footer/useFooterContent";
 import {  NavLink } from "react-router-dom";
 import { useCompanyDetails } from "../../context/clientDetails/clientDetialContext";

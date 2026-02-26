@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useCategoryBanner } from "../../hook/banner/useCategoryBanner";
-import fallbackImage from "../../assets/videos/clouds-back.jpg";
+import fallbackImage from "../../assets/images/clouds-back.jpg";
 import "./BreadStyles.css";
 
 const Breadcrumbs = ({ itemCtrName,  pages, occasion, gender }) => {

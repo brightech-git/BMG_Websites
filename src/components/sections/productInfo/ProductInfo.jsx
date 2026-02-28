@@ -75,7 +75,7 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
 
   const { data: product, isLoading, error } = useSingleProductQuery(tagKey);
 
-  console.log(product,'product')
+  console.log(product,'productDetail')
 
   const [cartLoading, setCartLoading] = useState(false);
   const [cartSuccess, setCartSuccess] = useState(false);
@@ -148,23 +148,29 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
     if (!isAuthenticated) return toast.error("Please login") && navigate("/login");
     if (!mobileNumber) return setModalOpen(true);
 
-    const image = product.ImagePath ? JSON.parse(product.ImagePath)[0] : "";
 
     navigate("/checkout", {
       state: {
         items: [{
           productId: product.TAGKEY,
-          productName: product.ITEMCTRNAME || product.SUBITEMNAME || product.ITEMNAME,
-          price: parseFloat(product.GrandTotal),
           itemId: product.ITEMID,
           tagNo: product.TAGNO,
           sno: product.SNO,
-          weight: parseFloat(product.NETWT),
-          imagePath: image,
+
+          productName: product.ITEMCTRNAME || item.SUBITEMNAME || item.ITEMNAME,
+
+          grossAmount: parseFloat(product.GrossAmount),
+          price: parseFloat(product.GrandTotal),
+
+          grsWt: parseFloat(product.GRSWT),
+          netWt: parseFloat(product.NETWT),
+
+          imagePath: product.ImagePath ? JSON.parse(product.ImagePath)[0] : "",
           quantity: 1,
+
           gstType: product.GSTType,
-          gstPer: product.GSTPercentValue,
-          gstAmount: product.GSTAmount,
+          gstPer: product.GSTPer,
+          gstAmount: parseFloat(product.GSTAmount),
         }],
         subtotal: getPrice(),
       },
@@ -320,7 +326,7 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
 
               {/* Pincode Availability Checking */}
               {isAuthenticated && (
-                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-2 sm:p-4 rounded-xl border border-blue-100 w-[100%] md:w-full">
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-2 sm:p-4 rounded-xl border border-blue-100  ">
                   <div className="flex items-center gap-1 mb-2 text-[var(--orange-600)]">
                     <Truck className="w-4 sm:w-5 h-4 sm:h-5 " />
                     <h3 className="font-semibold text-lg md:text-xl text-[var(--orange-600)]">Check Delivery</h3>
@@ -333,7 +339,7 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
                 </div>
               )}
 
-              <div className="w-[50%] md:w-full animate__animated animate__fadeIn">
+    
                 <JewelleryBrandAssurance
                   assurances={[
                     { icon: <Gem className="w-4 h-4" />, label: "Sterling Silver" },
@@ -341,9 +347,10 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
                     { icon: <RefreshCw className="w-4 h-4" />, label: "30-Day Returns" },
                     { icon: <Truck className="w-4 h-4" />, label: "Free Shipping" },
                   ].filter(Boolean)}
-                  bgColor="transparent"
+                
+               
                 />
-              </div>
+
 
               {/* Description with animation */}
               {product.Description && product.Description !== "null" && (

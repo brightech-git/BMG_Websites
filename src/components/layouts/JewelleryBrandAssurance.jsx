@@ -9,8 +9,9 @@ const JewelleryBrandAssurance = ({
     bgColor = "#f9f9f9",
     textColor = "#222",
     iconColor = "#c0a060",
-    backGroundColor = "#fff",
-    backgroundColor = "var(--brand-background-color)",
+    backgroundColor = "#f9f9f9",
+    cardBackGround = "#F9E6F9"
+
 }) => {
     const defaultAssurances = [
         { icon: <Gem color={iconColor} size={22} />, label: "Pure Silver Jewellery" },
@@ -27,11 +28,11 @@ const JewelleryBrandAssurance = ({
         : defaultAssurances;
 
     return (
-        <div className="w-80 overflow-hidden">
+        <div className="w-full overflow-hidden">
             <DragScrollComponent>
                 <motion.div
-                    className="flex flex-row items-center gap-2 px-2 py-2"
-                    style={{ backgroundColor: bgColor, color: textColor }}
+                    className={`flex flex-row items-center gap-2 px-2 py-2 bg-[${bgColor}] text-[${textColor}]`}
+               
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.5 }}
@@ -39,10 +40,8 @@ const JewelleryBrandAssurance = ({
                     {assuranceList.map((item, index) => (
                         <motion.div
                             key={index}
-                            className="flex flex-col items-center justify-center flex-shrink-0 min-w-[80px] md:min-w-[100px] p-2 md:p-3 rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg active:scale-95 touch-manipulation"
-                            style={{
-                                backgroundColor: backgroundColor,
-                            }}
+                            className={`flex flex-col items-center justify-center flex-shrink-0 bg-[${cardBackGround}]  p-2 md:p-3 rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg active:scale-95 touch-manipulation`}
+                           
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.4, delay: index * 0.1 }}
@@ -51,19 +50,15 @@ const JewelleryBrandAssurance = ({
                             whileTap={{ scale: 0.98 }}
                         >
                             <span
-                                className="flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full mb-2 transition-all duration-300 group-hover:scale-110"
-                                style={{
-                                    backgroundColor: backGroundColor,
-                                    color: iconColor
-                                }}
+                                className={`flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full mb-2 transition-all duration-300 group-hover:scale-110 bg-[${backgroundColor}] text-[${iconColor}]`}
+                             
                             >
                                 <span className="transform transition-transform duration-300 group-hover:rotate-12">
                                     {item.icon}
                                 </span>
                             </span>
                             <span
-                                className="text-xs md:text-sm text-center leading-tight font-medium max-w-[100px] md:max-w-[120px] break-words"
-                                style={{ color: textColor }}
+                                className={`text-xs md:text-sm text-center leading-tight font-medium max-w-[100px] md:max-w-[120px] break-words text-[${textColor}]`}
                             >
                                 {item.label}
                             </span>

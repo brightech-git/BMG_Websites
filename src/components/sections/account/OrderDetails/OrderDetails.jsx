@@ -10,16 +10,22 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { formatCurrency } from '../../../../utils/formatters';
 import { Link } from 'react-router-dom';
-import { useCancelOrder } from '../../../../hook/order/useOrderMutation';
+
 import { toast } from 'react-toastify';
 import SmartButton from '../../../ui/SmartButton';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useCreateReOrder } from '../../../../hook/order/useReorder';
+
 import TrackOrderModal from '../../../wrapper/TrackOrderModal';
 import HorizontalTimeline from '../../../ui/HorizontalTimeLine';
 import { ORDER_STATUS_MASTER } from '../../../../data/orderStatusMaster';
+
+
+import { useCreateReOrder } from '../../../../hook/order/useReorder';
+import { useCancelOrder } from '../../../../hook/order/useOrderMutation';
 import { useTrackingById } from '../../../../hook/order/useOrderTracking';
 import { useOrderStatusMaster } from '../../../../hook/order/useOrderTracking';
+
+
 import {getImage} from '../../../../utils/getProductImages';
 
 
@@ -40,16 +46,17 @@ const OrderDetail = () => {
   const shippingFee = orderTrackData?.shipping_fee || "Free";
   const currentStatus = orderTrackData?.current_status || "PLACED";
   const totalAmount = orderTrackData?.total_amount || 0;
-  const subtotal = orderTrackData?.subtotal || totalAmount;
-  const canCancel = orderTrackData?.canCancel;
-  const canReorder = orderTrackData?.canReorder;
-  const items = orderTrackData?.items || [];
+  const subtotal = orderTrackData?.products_grandTotal || orderTrackData?.subtotal;
+
+  const items = orderTrackData?.order_items || [];
   const deliveryAddress = orderTrackData?.delivery_address;
   const originAddress = orderTrackData?.origin_address;
 
-  console.log(originAddress,'originAddress')
+  console.log(orderTrackData,'orderTrackData');
   const orderDate = orderTrackData?.order_date || orderTrackData?.created_at;
-
+  
+  const canCancel = orderTrackData?.canCancel;
+  const canReorder = orderTrackData?.canRetryPayment;
   const canReturn = orderTrackData?.canReturn || orderTrackData?.current_status?.toLowerCase() === "delivered" ;
 
 
@@ -347,28 +354,28 @@ const OrderDetail = () => {
                       <div className="flex-1 flex flex-row justify-between items-center gap-2">
                         <div className="flex-1">
                           <h4 className="font-semibold text-[#7C2D12] text-xs sm:text-sm line-clamp-2 group-hover:text-[#F97316] transition-colors">
-                            {item.productName}
+                            {item.product_name}
                           </h4>
                           {item?.weight && (
                             <p className="text-[10px] sm:text-xs text-[#9A3412] mt-0.5 flex items-center gap-1">
                               <span className="w-1 h-1 rounded-full bg-[#FDBA74]"></span>
-                              Weight: {item.weight}
+                              Weight: {item.net_wt}
                             </p>
                           )}
                     
                             <p className="text-[10px] text-[#F97316] mt-1 ">
-                              Item ID: {item.id}
+                            Item ID: {item.itemid} - {item.tagno}
                             </p>
                         
                         </div>
                         <div className="flex items-center gap-2">
-                          {item.quantity > 1 && (
+                          {item.quantity >= 1 && (
                             <span className="text-[10px] text-[#9A3412] bg-[#FFF7ED] px-2 py-1 rounded-full border border-[#FED7AA]">
                               x{item.quantity}
                             </span>
                           )}
                           <p className="font-bold text-[#F97316] text-xs sm:text-sm">
-                            ₹{item.price.toFixed(2)}
+                            {formatCurrency(item.price)}
                           </p>
                         </div>
                       </div>

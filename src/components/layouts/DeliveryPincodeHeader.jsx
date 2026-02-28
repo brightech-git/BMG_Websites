@@ -192,7 +192,7 @@ const DeliveryPincodeHeader = () => {
                                                 : "border-red-200 bg-red-50 text-red-700"
                                             }`}
                                     >
-                                        <div className="flex items-center gap-3">
+                                        <div className="flex items-center gap-3" >
                                             {/* Status icons */}
                                             <span className="text-xs">{statusMessage}</span>
                                         </div>

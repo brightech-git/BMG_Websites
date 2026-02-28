@@ -14,6 +14,7 @@ import { formatCurrency } from '../../../utils/formatters';
 
 import { AddressModal } from '../address/AddressModal';
 import PaymentOptionsDialog from './PaymentOption';
+import Loader from '../../../component/loader/Loader'
 // ========== PROGRESS STEPPER ==========
 const ProgressStepper = ({ currentStep }) => {
   const steps = [
@@ -215,6 +216,8 @@ const OrderSummaryPanel = ({
 
 // ========== MAIN CHECKOUT COMPONENT ==========
 const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
+
+
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState(initialCartItems);
   const [totalAmount, setTotalAmount] = useState(subtotal || 0);
@@ -226,6 +229,8 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
   const [pincode, setPincode] = useState(null);
   const [shippingFee, setShippingFee] = useState(0);
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+
+  const [isProcessing ,setIsProcessing] = useState(false);
 
   const { data: profile, isLoading: profileLoading } = useCurrentProfile();
   const { data: addressByPincode } = useAddressesByPincode(pincode);
@@ -240,7 +245,7 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
 
   const totalWeight = useMemo(() => {
     if (!cartItems?.length) return 0;
-    return cartItems.reduce((total, item) => total + (item.weight || 0), 0);
+    return cartItems.reduce((total, item) => total + (item.netWt || 0), 0);
   }, [cartItems]);
 
   const {
@@ -255,6 +260,9 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
       setTotalAmount((subtotal || 0) + shippingData.totalAmount);
     }
   }, [shippingData, subtotal]);
+
+  console.log(shippingData,'shippingData')
+
 
   useEffect(() => {
     const storedCart = localStorage.getItem('cartitems');
@@ -321,133 +329,107 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
   const handlePrevStep = () => {
     setCurrentStep(prev => Math.max(prev - 1, 1));
   };
+  console.log(cartItems,'cartItems')
 
+  const proceedWithOrder = useCallback(
+    (paymentMode, paymentType = null) => {
+      // Build the payload
+      const orderPayload = {
+        customerName: selectedAddress.name,
+        contact: selectedAddress.phone,
+        email: profile?.email,
+        totalAmount,
+        paymentMode,          // 'ONLINE' or 'COD'
+        paymentType,          // only used for online
+        paymentStatus: "PENDING",
+        shippingPincode: finalPincode,
+        address:selectedAddress,
+        items: cartItems.map((item) => ({
+          itemId: item.itemId,
+          productName: item.productName,
+          grossAmount: parseFloat(item.grossAmount),
+          price: parseFloat(item.price),
+          tagNo: item.tagNo,
+          sno: item.sno,
+          grsWt: parseFloat(item.grsWt),
+          netWt: parseFloat(item.netWt),
+          imagePath: item.imagePath,
+          quantity: item.quantity,
+          gstType: item.gstType,
+          gstPer: parseFloat(item.gstPer),
+          gstAmount: Number(item.gstAmount) || 0,
+        })),
+      };
+      console.log(orderPayload, 'orderPayload');
+    
+    
+      // Save to localStorage
+      localStorage.setItem("order", JSON.stringify(orderPayload));
 
+      setIsProcessing(true); // start loader
 
-  // Update proceedWithOrder for online payments only
-  const proceedWithOnlineOrder = useCallback((selectedPaymentMethod) => {
-    const orderPayload = {
-      customerName: selectedAddress.name,
-      contact: selectedAddress.phone,
-      email: profile?.email,
-      totalAmount,
-      paymentMode: "ONLINE",
-      paymentType: selectedPaymentMethod, // 'CARD', 'UPI', or 'NETBANKING'
-      paymentStatus: "PENDING",
-      shippingPincode: finalPincode,
-      address:selectedAddress ,
-      items: cartItems.map((item) => ({
-        productId: `${item.itemId}-${item.tagNo}`,
-        productName: item.productName,
-        price: parseFloat(item.price),
-        grossAmount: parseFloat(item.price),
-        itemId: item.itemId,
-        tagNo: item.tagNo,
-        sno: item.sno,
-        netWt: item.weight,
-        grsWt: item.weight,
-        imagePath: item.imagePath,
-        quantity: item.quantity,
-        gstType: item.gstType,
-        gstPer: parseFloat(item.gstPer),
-        gstAmount: Number(item.gstAmount) || 0,
-      })),
-    };
+      createOrderMutation(orderPayload, {
+        onSuccess: (response) => {
+          setIsProcessing(false); // stop loader
 
-    localStorage.setItem('order', JSON.stringify(orderPayload));
-
-    createOrderMutation(orderPayload, {
-      onSuccess: (response) => {
-        // Navigate to payment page only for online orders
-        navigate(`/payment/${response.orderId}`, {
-          state: {
-            paymentMode: "ONLINE",
-            paymentType: selectedPaymentMethod,
-            isOnlinePayment: true
+          if (paymentMode === "ONLINE") {
+            navigate(`/payment/${response.orderId}`, {
+              state: { paymentMode, paymentType, isOnlinePayment: true },
+            });
+          } else {
+            toast.success("Order placed successfully!");
+            navigate(`/payment-success?orderId=${response.orderId}&mode=cod`);
           }
-        });
-      }
-    });
-  }, [cartItems, totalAmount, selectedAddress, profile?.email, finalPincode, createOrderMutation, navigate]);
-
-  // Add proceedWithCOD for cash on delivery
-  const proceedWithCOD = useCallback(() => {
-    const orderPayload = {
-      customerName: selectedAddress.name,
-      contact: selectedAddress.phone,
-      email: profile?.email,
-      totalAmount,
-      paymentMode: "COD",
-      paymentStatus: "PENDING",
-      shippingPincode: finalPincode,
-      address: {
-        addressLine: `${selectedAddress.addressLine} ${selectedAddress.locality || ''} ${selectedAddress.city || ''} ${selectedAddress.state || ''} ${selectedAddress.country || ''} - ${selectedAddress.pincode || ''}`,
-        city: selectedAddress.city,
-        state: selectedAddress.state,
-        country: selectedAddress.country || "India",
-        pincode: selectedAddress.pincode,
-      },
-      items: cartItems.map((item) => ({
-        productId: `${item.itemId}-${item.tagNo}`,
-        productName: item.productName,
-        price: parseFloat(item.price),
-        grossAmount: parseFloat(item.price),
-        itemId: item.itemId,
-        tagNo: item.tagNo,
-        sno: item.sno,
-        netWt: item.weight,
-        grsWt: item.weight,
-        imagePath: item.imagePath,
-        quantity: item.quantity,
-        gstType: item.gstType,
-        gstPer: parseFloat(item.gstPer),
-        gstAmount: Number(item.gstAmount) || 0,
-      })),
-    };
-
-    localStorage.setItem('order', JSON.stringify(orderPayload));
-
-    createOrderMutation(orderPayload, {
-      onSuccess: (response) => {
-        // For COD, navigate directly to order confirmation/success page
-        toast.success('Order placed successfully!');
-        navigate(`/payment-success?orderId=${orderId}&mode=cod`);
-      }
-    });
-  }, [cartItems, totalAmount, selectedAddress, profile?.email, finalPincode, createOrderMutation, navigate]);
+        },
+        onError: (error) => {
+          setIsProcessing(false); // stop loader on error
+          toast.error("Failed to create order. Please try again.");
+        },
+      });
+    },
+    [cartItems, totalAmount, selectedAddress, profile?.email, finalPincode, createOrderMutation, navigate]
+  );
 
   // Handle payment method selection from dialog (only for online)
   const handlePaymentMethodSelect = (method) => {
-    proceedWithOnlineOrder(method);
+    // Pass both mode and method to the unified function
+    proceedWithOrder("ONLINE", method);
+    setShowPaymentDialog(false); // close the dialog
   };
 
-  // Update submitOrder function
   const submitOrder = useCallback(() => {
     if (!selectedAddress) {
-      toast.error('Please select a delivery address');
+      toast.error("Please select a delivery address");
       return;
     }
 
     if (!cartItems || cartItems.length === 0) {
-      toast.error('Your cart is empty');
+      toast.error("Your cart is empty");
       return;
     }
 
-    // If payment mode is online, show payment options dialog
-    if (paymentMode === 'ONLINE') {
+    if (paymentMode === "ONLINE") {
+      // Show payment options dialog
       setShowPaymentDialog(true);
       return;
     }
 
-    // For COD, proceed directly
-    if (paymentMode === 'COD') {
-      proceedWithCOD();
-      return;
+    if (paymentMode === "COD") {
+      // Directly proceed with COD
+      proceedWithOrder("COD");
     }
-  }, [selectedAddress, cartItems, paymentMode, proceedWithCOD]);
+  }, [selectedAddress, cartItems, paymentMode, proceedWithOrder]);
 
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FFF7ED] via-[#FFEDD5] to-[#FFF3E6]">
+      {isProcessing && (
+        <Loader
+          message="Creating your order, please wait..."
+          size={16} // spinner size (Tailwind w-16 h-16)
+          color="blue" // spinner color
+        />
+      )}
 
       {/* Decorative Elements */}
       <div className="fixed top-20 left-10 w-64 h-64 bg-[#F97316]/5 rounded-full blur-3xl -z-10 animate-float"></div>

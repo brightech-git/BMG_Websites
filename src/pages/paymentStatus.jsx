@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
     CheckCircle2,
@@ -29,6 +29,7 @@ const PaymentStatus = () => {
     const searchParams = new URLSearchParams(location.search);
     const orderId = searchParams.get("orderId");
 
+
     const mode = searchParams.get("mode");
     const paymentMode = mode?.toLowerCase() === "cod" ? "COD" : "ONLINE";
     const { clearCart } = useCart();
@@ -37,37 +38,52 @@ const PaymentStatus = () => {
     const [isSuccess, setIsSuccess] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [retrying, setRetrying] = useState(false);
+    console.log(status ,'paymentstatus')
+
+    // Add a ref to track if this order has been processed
+    const processedOrderRef = useRef(null);
+
+    // Add state to track if this is a return visit
+    const [isReturnVisit, setIsReturnVisit] = useState(false);
 
     const { mutateAsync: createReOrder } = useCreateReOrder();
+
     const { data: orderInvoiceData, isLoading: orderInvoiceLoading, isError: orderInvoiceError } = useOrderInvoice(orderId);
-    const {details}  = useCompanyDetails();
-    
+    console.log("orderInvoiceData", orderInvoiceData)
+    const { details } = useCompanyDetails();
+
     const baseUrl = details?.BASEURL?.trim() || '';
     const logoPath = details?.LOGO || '';
-    
+
     const logo = baseUrl && logoPath
-            ? `${baseUrl.replace(/\/$/, '')}/${logoPath.replace(/^\//, '')}`
-            : '';
-    
+        ? `${baseUrl.replace(/\/$/, '')}/${logoPath.replace(/^\//, '')}`
+        : '';
+
     const companyName = details?.COMPANYNAME || "BMG JEWELLERS PRIVATE LIMITED";
 
-
-
     const orderData = orderInvoiceData;
-    console.log(orderData ,'items')
+
+    console.log(orderData,'orderData')
 
     // Map items with correct field names for PDF
     const pdfItems = orderData?.items?.map((item, index) => ({
+
         sno: index + 1,
-        name: item.product_name || item.productName || '',
-        itemId: item.tagno || item.tagNo || '',
+        name: item.product_name || '',
+        itemId: `${item.itemid}${item.tagno}` || '',
         desc: item.description || '',
-        qty: item.quantity || 0,
-        grsAmt: item.gross_amount || item.price || 0,
-        tax: item.tax || '0',
-        taxType: item.taxType || 'GST',
-        taxAmount: item.taxAmount || 0,
-        totalAmount: item.price || item.totalAmount ||  0 
+        qty: item.quantity || 1,
+
+        grsWt: item.grs_wt || '',
+        netWt: item.net_wt|| '',
+
+        tax: item.gst_per || '0',
+        taxType: item.gst_type || 'GST',
+        taxAmount: item.gst_amount || 0,
+
+        grsAmt: item.gross_amount || 0,
+        totalAmount: item.price|| 0
+
     })) || [];
 
     function convertAmountToWords(amount) {
@@ -88,15 +104,6 @@ const PaymentStatus = () => {
         );
     }
 
-    // Combine address with null checks
-    const customerAddress = orderData?.address ?
-        [
-            orderData.address.addressLine || '',
-            orderData.address.locality || '',
-            orderData.address.city || '',
-            orderData.address.state || '',
-            orderData.address.pincode || ''
-        ].filter(line => line.trim() !== '') : [];
 
     // Amount in words
     const amountInWords = convertAmountToWords(orderData?.totalAmount);
@@ -118,17 +125,42 @@ const PaymentStatus = () => {
     // Get transaction ID from payphiResponse
     const transactionId = orderData?.payphiResponse?.txn_id || '';
 
+    const invoiceId = orderData?.invoiceNo || '';
+    const shippingFee = orderData?.shippingFee || 0;
+
     // Origin address for the PDF
+    const customerAddress = orderData?.address
+        ? [
+            orderData.address.addressLine,
+            orderData.address.locality,
+            `${orderData.address.city || ""} ${orderData.address.state || ""}`.trim(),
+            orderData.address.pincode,
+        ].filter(Boolean)
+        : [];
+
     const originAddress = {
-        name: "Your Company Name",
+        name: details?.COMPANYNAME || "BMG JEWELLERS PRIVATE LIMITED",
         lines: [
-            "Your Company Address Line 1",
-            "Your Company Address Line 2",
-            "City, State - PIN Code",
-            "Phone: +91 1234567890",
-            "Email: support@yourcompany.com"
-        ]
+            orderData?.origin_address?.addressLine1,
+            `${orderData?.origin_address?.city || ""} ${orderData?.origin_address?.state || ""}`.trim(),
+            orderData?.origin_address?.pincode,
+            orderData?.origin_address?.phone
+                ? `Phone: ${orderData.origin_address.phone}`
+                : "",
+        ].filter(Boolean),
     };
+
+    // Check if this is a return visit by looking at session storage
+    useEffect(() => {
+        if (orderId) {
+            const processedKey = `payment_processed_${orderId}`;
+            const hasBeenProcessed = sessionStorage.getItem(processedKey);
+
+            if (hasBeenProcessed) {
+                setIsReturnVisit(true);
+            }
+        }
+    }, [orderId]);
 
     useEffect(() => {
         if (!orderId) {
@@ -138,24 +170,60 @@ const PaymentStatus = () => {
             return;
         }
 
+        // Check if this order has already been processed in this session
+        const processedKey = `payment_processed_${orderId}`;
+        const hasBeenProcessed = sessionStorage.getItem(processedKey);
+
+        // If already processed and we're just returning to the page, don't re-run the verification
+        if (hasBeenProcessed && processedOrderRef.current === orderId) {
+            console.log('Return visit detected, skipping payment verification');
+            setIsLoading(false);
+            return;
+        }
+
+        // If we're processing a different order, reset the return visit flag
+        if (processedOrderRef.current !== orderId) {
+            setIsReturnVisit(false);
+        }
+
         const fetchStatus = async () => {
             try {
                 if (paymentMode === "COD") {
                     setStatus({ paymentStatus: "Cash on Delivery", message: "Order confirmed" });
                     setIsSuccess(true);
                     clearCart();
+
+                    // Mark as processed only for successful COD
+                    if (!hasBeenProcessed) {
+                        sessionStorage.setItem(processedKey, 'true');
+                        processedOrderRef.current = orderId;
+                    }
+
                     setIsLoading(false);
                     return;
                 }
 
-                const res = await getPaymentStatus(orderId);
-                setStatus(res);
+                // Only fetch payment status if not already processed or if it's a new order
+                if (!hasBeenProcessed || processedOrderRef.current !== orderId) {
+                    const res = await getPaymentStatus(orderId);
+                    setStatus(res);
 
-                if (res?.paymentStatus?.toLowerCase() === "paid") {
-                    setIsSuccess(true);
-                    clearCart();
+                    if (res?.paymentStatus?.toLowerCase() === "paid") {
+                        setIsSuccess(true);
+                        clearCart();
+
+                        // Mark as processed for successful payments
+                        sessionStorage.setItem(processedKey, 'true');
+                        processedOrderRef.current = orderId;
+                    } else {
+                        setIsSuccess(false);
+                        // For failed payments, we might want to allow re-fetching
+                        // So don't mark as processed
+                    }
                 } else {
-                    setIsSuccess(false);
+                    // If already processed, just set the state based on stored data
+                    // You might want to retrieve the stored status from somewhere
+                    setIsSuccess(true); // or false based on your needs
                 }
             } catch (err) {
                 console.error(err);
@@ -167,6 +235,12 @@ const PaymentStatus = () => {
         };
 
         fetchStatus();
+
+        // Cleanup function
+        return () => {
+            // Don't clear session storage on unmount
+            // This keeps the processed flag for return visits
+        };
     }, [orderId, paymentMode, clearCart]);
 
     const getStatusColor = () => {
@@ -200,6 +274,11 @@ const PaymentStatus = () => {
                 return;
             }
 
+            // Clear the processed flag for the old order when retrying
+            if (orderId) {
+                sessionStorage.removeItem(`payment_processed_${orderId}`);
+            }
+
             navigate(`/payment/${newOrderId}`);
         } catch (e) {
             console.error(e);
@@ -209,10 +288,13 @@ const PaymentStatus = () => {
         }
     };
 
+    // Don't show notifications/messages for return visits
+    const shouldShowNotifications = !isReturnVisit || isLoading;
+
     return (
         <>
-            {/* Confetti Rain - Only on Success */}
-            {isSuccess && !isLoading && (
+            {/* Confetti Rain - Only on Success and not return visit */}
+            {isSuccess && !isLoading && !isReturnVisit && (
                 <div className="absolute inset-0 mt-[130px] pointer-events-none z-[10] overflow-hidden">
                     {[...Array(100)].map((_, i) => (
                         <svg
@@ -261,25 +343,27 @@ const PaymentStatus = () => {
                                 )}
                             </div>
 
-                            {/* Title */}
+                            {/* Title - Show different title for return visits */}
                             <h1 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 animate-fade-up">
                                 {isLoading
                                     ? "Verifying Your Payment..."
                                     : isSuccess
-                                        ? paymentMode === "COD"
-                                            ? "Order Confirmed!"
-                                            : "Payment Successful!"
+                                        ? isReturnVisit
+                                            ? "Order Details"
+                                            : (paymentMode === "COD" ? "Order Confirmed!" : "Payment Successful!")
                                         : "Payment Failed"}
                             </h1>
 
-                            {/* Subtitle */}
+                            {/* Subtitle - Show different subtitle for return visits */}
                             <p className="text-xs sm:text-sm text-gray-600 mb-2 mx-auto animate-fade-up animation-delay-200">
                                 {isLoading
                                     ? "Please wait while we confirm your transaction. This won't take long."
                                     : isSuccess
-                                        ? paymentMode === "COD"
-                                            ? "Your order has been placed successfully with Cash on Delivery."
-                                            : "Thank you! Your payment was processed successfully."
+                                        ? isReturnVisit
+                                            ? "You're viewing a previously placed order."
+                                            : (paymentMode === "COD"
+                                                ? "Your order has been placed successfully with Cash on Delivery."
+                                                : "Thank you! Your payment was processed successfully.")
                                         : "We couldn't process your payment. No charges were made."}
                             </p>
 
@@ -320,8 +404,8 @@ const PaymentStatus = () => {
                                 )}
                             </div>
 
-                            {/* Success: Next Steps */}
-                            {isSuccess && !isLoading && (
+                            {/* Success: Next Steps - Only show for first visit */}
+                            {isSuccess && !isLoading && !isReturnVisit && (
                                 <div className="mt-2 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl p-2 animate-fade-up animation-delay-500">
                                     <h3 className="text-sm sm:text-base font-bold text-gray-800 mb-3">What Happens Next?</h3>
                                     <div className="grid grid-cols-2 gap-2 items-center justify-center px-4">
@@ -339,7 +423,7 @@ const PaymentStatus = () => {
                                                 <Mail className="w-4 h-4 text-emerald-700" />
                                             </div>
                                             <div className="text-xs">
-                                                <p className="font-semibold text-xs">Confirmation SMS</p>
+                                                <p className="font-semibold text-xs">Confirmation WhatsApp Message</p>
                                                 <p className="text-gray-600 text-xs ">Sent within 5 minutes</p>
                                             </div>
                                         </div>
@@ -365,8 +449,20 @@ const PaymentStatus = () => {
                                 </div>
                             )}
 
-                            {/* Failure: Info */}
-                            {isSuccess === false && !isLoading && (
+                            {/* For return visits, show order summary instead of next steps */}
+                            {isSuccess && !isLoading && isReturnVisit && orderData && (
+                                <div className="mt-2 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-2 animate-fade-up animation-delay-500">
+                                    <h3 className="text-sm sm:text-base font-bold text-gray-800 mb-2">Order Summary</h3>
+                                    <div className="text-xs text-gray-600">
+                                        <p>Total Amount: ₹{orderData.totalAmount?.toFixed(2) || '0.00'}</p>
+                                        <p>Payment Mode: {paymentMode}</p>
+                                        <p>Order Date: {orderDateFormatted}</p>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Failure: Info - Only show for first visit */}
+                            {isSuccess === false && !isLoading && !isReturnVisit && (
                                 <div className="mt-3 bg-red-50 border border-red-200 rounded-xl p-2 animate-fade-up animation-delay-500">
                                     <h3 className="text-base sm:text-lg font-bold text-red-800 mb-2">Don't worry — you're safe</h3>
                                     <ul className="text-left space-y-2 text-gray-700">
@@ -425,6 +521,7 @@ const PaymentStatus = () => {
                                                         amountInWords={amountInWords}
                                                         logo={logo}
                                                         companyName={companyName}
+                                                        shippingFee={shippingFee}
                                                     />
                                                 }
                                                 fileName={`Invoice_${orderId}.pdf`}
@@ -459,6 +556,42 @@ const PaymentStatus = () => {
                                         >
                                             {retrying ? "Retrying..." : "Retry Payment"}
                                         </SmartButton>
+
+                                            {/* {orderData && !orderInvoiceLoading && (
+                                                <PDFDownloadLink
+                                                    document={
+                                                        <InvoiceDocument
+                                                            orderId={orderData.orderId || orderId}
+                                                            orderDate={orderDateFormatted}
+                                                            originAddress={originAddress}
+                                                            customerName={orderData.customerName || 'Customer'}
+                                                            customerMobile={orderData.contact || orderData.customerMobile || ''}
+                                                            customerAddress={customerAddress}
+                                                            paymentMode={paymentMode}
+                                                            paymentStatus={status?.paymentStatus || 'Paid'}
+                                                            transactionId={transactionId}
+                                                            items={pdfItems}
+                                                            totalAmount={orderData.totalAmount || 0}
+                                                            amountInWords={amountInWords}
+                                                            logo={logo}
+                                                            companyName={companyName}
+                                                            shippingFee={shippingFee}
+                                                        />
+                                                    }
+                                                    fileName={`Invoice_${orderId}.pdf`}
+                                                >
+                                                    {({ loading }) => (
+                                                        <SmartButton
+                                                            variant="secondary"
+                                                            icon={Download}
+                                                            disabled={loading}
+                                                            className="w-full"
+                                                        >
+                                                            {loading ? 'Generating PDF...' : 'Download Invoice'}
+                                                        </SmartButton>
+                                                    )}
+                                                </PDFDownloadLink>
+                                            )} */}
                                     </>
                                 )}
                             </div>

@@ -9,6 +9,7 @@ import {
 } from "@react-pdf/renderer";
 import invoiceImg from './invoice.jpeg';
 import logo from '../../assets/icons/fallback.jpg'
+import { formatCurrency } from "../../utils/formatters";
 
 export default function InvoiceDocument({
     orderId,
@@ -23,7 +24,7 @@ export default function InvoiceDocument({
     items,
     totalAmount,
     amountInWords,
-
+    shippingFee,
     companyName
 }) {
     Font.register({
@@ -79,7 +80,7 @@ export default function InvoiceDocument({
         detailsContainer: {
             flexDirection: "row",
             justifyContent: "space-between",
-            marginBottom: 20
+            marginBottom: 10
         },
         column: {
             width: "48%"
@@ -114,63 +115,106 @@ export default function InvoiceDocument({
             borderRadius: 3
         },
         addressLine: {
-            fontSize: 10,
+            fontSize: 9,
             color: "#555",
             lineHeight: 1.4
         },
-        tableContainer: {
-            marginTop: 5,
-            marginBottom: 15
-        },
-        tableHeader: {
-            flexDirection: "row",
-            backgroundColor: "#2c3e50",
-            paddingVertical: 8,
-            paddingHorizontal: 5,
-            borderTopLeftRadius: 4,
-            borderTopRightRadius: 4
-        },
-        headerCell: {
-            fontSize: 9,
+
+            tableContainer: {
+                marginVertical: 10,
+                borderWidth: 1,
+                
+                borderColor: "#ccc",
+                borderRadius: 6,
+                overflow: "hidden",
+                backgroundColor: "#fff",
+            },
+        tableHeaderName: {
+            padding:5,
+            fontSize: 10,
             fontWeight: "bold",
-            color: "#FFFFFF",
-            textAlign: "center"
-        },
-        tableRow: {
-            flexDirection: "row",
-            paddingVertical: 7,
-            paddingHorizontal: 5,
-            borderBottom: "0.5 solid #eaeaea"
-        },
-        tableCell: {
-            fontSize: 9,
             color: "#444",
-            textAlign: "center"
+            marginBottom: 5,
+
         },
-        colSno: { width: "5%" },
-        colItemId: { width: "10%" },
-        colName: { width: "20%" },
-        colDesc: { width: "15%" },
-        colQty: { width: "8%" },
-        colGross: { width: "10%" },
-        colTax: { width: "8%" },
-        colTaxType: { width: "8%" },
-        colTaxAmount: { width: "8%" },
-        colTotal: { width: "8%" },
+            tableHeader: {
+                flexDirection: "row",
+                backgroundColor: "#2c3e50",
+            },
+            headerCell: {
+                flex: 1,
+                fontSize: 10,
+                fontWeight: "600",
+                color: "#fff",
+                textAlign: "center", // All headers centered by default
+                paddingVertical: 5,
+                borderRightWidth: 0.5,
+                borderRightColor: "#fff", // Optional: subtle separation
+            },
+            tableRow: {
+                flexDirection: "row",
+                alignItems: "center",
+                borderBottomWidth: 0.5,
+                borderBottomColor: "#444",
+                paddingVertical: 5,
+            },
+            tableCell: {
+                flex: 1,
+                fontSize: 10,
+                color: "#222",
+                paddingHorizontal: 5,
+            },
+            // Column-specific widths and alignment
+            colSno: { flex: 0.5, textAlign: "center" },
+            colItemId: { flex: 1, textAlign: "left" },
+            colName: { flex: 2, textAlign: "left" ,fontSize:8 ,fontWeight:'semibold'},
+            colQty: { flex: 1, textAlign: "center" },
+            weight: { flex: 1, textAlign: "right" },
+            colGross: { flex: 1, textAlign: "right" },
+            colTax: { flex: 1, textAlign: "center" },
+        colTaxType: { flex: 1, textAlign: "center", fontSize: 6, fontWeight: 'semibold' },
+            colTaxAmount: { flex: 1, textAlign: "right" },
+            colTotal: { flex: 2, textAlign: "right" },
+            collapsibleContent: {
+                backgroundColor: "#f9f9f9",
+                paddingVertical: 8,
+                paddingHorizontal: 10,
+                borderBottomWidth: 0.5,
+                borderBottomColor: "#ccc",
+            },
+        shippingContainer: {
+            marginTop: 2,
+            paddingHorizontal: 5,
+        },
+
+        shippingRow: {
+            flexDirection: "row",
+            justifyContent: "space-between",
+        },
+
+        shippingLabel: {
+            fontSize: 10,
+            fontWeight: "semibold",
+        },
+
+        shippingAmount: {
+            fontSize: 10,
+            fontFamily: "NotoSans",
+        },
         amountInWordsSection: {
-            marginTop: 15,
-            padding: 12,
+            marginTop: 5,
+            padding: 6,
             backgroundColor: "#f8f9fa",
             borderLeft: "3 solid #f16137"
         },
         amountLabel: {
-            fontSize: 9,
+            fontSize: 10,
             fontWeight: "bold",
             color: "#444",
             marginBottom: 3
         },
         amountWords: {
-            fontSize: 12,
+            fontSize: 9,
             color: "#222",
             fontStyle: "italic"
         },
@@ -178,8 +222,8 @@ export default function InvoiceDocument({
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            marginTop: 20,
-            padding: 10,
+            marginTop: 10,
+            padding: 5,
             backgroundColor: "#f16137",
             borderRadius: 4
         },
@@ -200,7 +244,7 @@ export default function InvoiceDocument({
             left: 30,
             right: 30,
             textAlign: "center",
-            fontSize: 8,
+            fontSize: 7,
             color: "#777",
             borderTop: "0.5 solid #ddd",
             paddingTop: 12
@@ -219,11 +263,11 @@ export default function InvoiceDocument({
         { key: "sno", label: "S.No", style: styles.colSno },
         { key: "itemId", label: "Item ID", style: styles.colItemId },
         { key: "name", label: "Product Name", style: styles.colName },
-        { key: "desc", label: "Description", style: styles.colDesc },
         { key: "qty", label: "Qty", style: styles.colQty },
+        { key: "weight", label: "Net Weight", style: styles.weight },
         { key: "grsAmt", label: "Gross Amt", style: styles.colGross },
-        { key: "tax", label: "Tax %", style: styles.colTax },
         { key: "taxType", label: "Tax Type", style: styles.colTaxType },
+        { key: "tax", label: "Tax %", style: styles.colTax },
         { key: "taxAmount", label: "Tax Amt", style: styles.colTaxAmount },
         { key: "total", label: "Total", style: styles.colTotal },
     ];
@@ -264,9 +308,9 @@ export default function InvoiceDocument({
 
                         <Text style={[styles.sectionTitle, { marginTop: 12 }]}>SHIPPED FROM</Text>
                         <View style={styles.addressContainer}>
-                            <Text style={[styles.originName, { marginBottom: 4 }]}>{originAddress.name}</Text>
+                            <Text style={[styles.originName, { marginBottom: 2 }]}>{originAddress.name}</Text>
                             {originAddress.lines.map((line, i) => (
-                                <Text key={i} style={styles.addressLine}>{line}</Text>
+                                <Text key={i} style={styles.addressLine}>{(line || "").toUpperCase()}</Text>
                             ))}
                         </View>
                     </View>
@@ -309,38 +353,69 @@ export default function InvoiceDocument({
 
                         <Text style={[styles.sectionTitle, { marginTop: 12 }]}>SHIPPING ADDRESS</Text>
                         <View style={styles.addressContainer}>
+                                <Text style={[styles.originName, { marginBottom: 2}]}>{customerName}</Text>
                             {customerAddress.map((line, i) => (
-                                <Text key={i} style={styles.addressLine}>{line}</Text>
+                                
+                                        <Text key={i} style={styles.addressLine}>
+                                            {(line || "").toUpperCase()}
+                                        </Text>
+
                             ))}
                         </View>
                     </View>
                 </View>
 
                 {/* Items Table */}
-                <View style={styles.tableContainer}>
-                    <View style={styles.tableHeader}>
-                        {tableHeaders.map((col, i) => (
-                            <Text key={i} style={[styles.headerCell, col.style]}>
-                                {col.label}
-                            </Text>
+                    <View style={styles.tableContainer}>
+                        {/* Table Header */}
+                        <View>
+                            <Text style={styles.tableHeaderName}>ORDER ITEMS </Text>
+                        </View>
+                        <View style={styles.tableHeader}>
+                            {tableHeaders.map((col, i) => (
+                                <Text key={i} style={[styles.headerCell, col.style, { textAlign: "center" }, { fontSize: 10}]}>
+                                    {col.label}
+                                </Text>
+                            ))}
+                        </View>
+
+                        {/* Table Rows */}
+                        {items.map((item, i) => (
+                            <View key={i}>
+                                <View
+                                    style={styles.tableRow}
+                                >
+                                    <Text style={[styles.tableCell, styles.colSno]}>{i + 1}</Text>
+                                    <Text style={[styles.tableCell, styles.colItemId]}>{item.itemId || "-"}</Text>
+                                    <Text style={[styles.tableCell, styles.colName]}>{item.name || "-"}</Text>
+                                    <Text style={[styles.tableCell, styles.colQty]}>{Number(item.qty) || "-"}</Text>
+                                    <Text style={[styles.tableCell, styles.weight]}>{Number(item.netWt)?.toFixed(3) || "-"}</Text>
+                                    <Text style={[styles.tableCell, styles.colGross]}>{Number(item.grsAmt)?.toFixed(2) || "0.00"}</Text>
+                                    <Text style={[styles.tableCell, styles.colTaxType]}>{item.taxType || "-"}</Text>
+                                    <Text style={[styles.tableCell, styles.colTax]}>{item.tax || "-"}</Text>
+                                    <Text style={[styles.tableCell, styles.colTaxAmount]}>{Number(item.taxAmount)?.toFixed(2) || "0.00"}</Text>
+                                    <Text style={[styles.tableCell, styles.colTotal]}>{Number(item.totalAmount)?.toFixed(2) || "0.00"}</Text>
+                                </View>
+                             
+                            </View>
                         ))}
                     </View>
-
-                    {items.map((item, i) => (
-                        <View style={styles.tableRow} key={i}>
-                            <Text style={[styles.tableCell, styles.colSno]}>{i + 1}</Text>
-                            <Text style={[styles.tableCell, styles.colItemId]}>{item.itemId || "—"}</Text>
-                            <Text style={[styles.tableCell, styles.colName]}>{item.name || "—"}</Text>
-                            <Text style={[styles.tableCell, styles.colDesc]}>{item.desc || "—"}</Text>
-                            <Text style={[styles.tableCell, styles.colQty]}>{item.qty || "—"}</Text>
-                            <Text style={[styles.tableCell, styles.colGross]}>₹{item.grsAmt?.toFixed(2) || "0.00"}</Text>
-                            <Text style={[styles.tableCell, styles.colTax]}>{item.tax || "—"}</Text>
-                            <Text style={[styles.tableCell, styles.colTaxType]}>{item.taxType || "—"}</Text>
-                            <Text style={[styles.tableCell, styles.colTaxAmount]}>₹{item.taxAmount?.toFixed(2) || "0.00"}</Text>
-                            <Text style={[styles.tableCell, styles.colTotal]}>₹{item.totalAmount?.toFixed(2) || "0.00"}</Text>
+                    {shippingFee > 0 && (
+                        <View style={styles.shippingContainer}>
+                            <View style={styles.shippingRow}>
+                                <Text style={styles.shippingLabel}>Shipping Fee</Text>
+                                <Text style={styles.shippingAmount}>
+                                    {Number(shippingFee).toFixed(2)}
+                                </Text>
+                            </View>
                         </View>
-                    ))}
-                </View>
+                    )}
+
+                    {/* Total Amount */}
+                    <View style={styles.totalSection}>
+                        <Text style={styles.totalLabel}>GRAND TOTAL</Text>
+                        <Text style={styles.totalAmount}> ₹ {Number(totalAmount).toFixed(2)}</Text>
+                    </View>
 
                 {/* Amount in Words */}
                 <View style={styles.amountInWordsSection}>
@@ -348,11 +423,7 @@ export default function InvoiceDocument({
                     <Text style={styles.amountWords}>{amountInWords}</Text>
                 </View>
 
-                {/* Total Amount */}
-                <View style={styles.totalSection}>
-                    <Text style={styles.totalLabel}>GRAND TOTAL</Text>
-                    <Text style={styles.totalAmount}> ₹ {totalAmount.toFixed(2)}</Text>
-                </View>
+                
 
                 
             </View>

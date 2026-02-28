@@ -8,6 +8,7 @@ import fallbackImage from '../../../assets/icons/silverIcon.png';
 import SmartButton from '../../ui/SmartButton';
 import UpdateMobileModal from '../../layouts/UpdateMobileModal';
 import { useSelector } from 'react-redux';
+import { formatCurrency } from '../../../utils/formatters';
 
 const CartItem = ({ item, onRemove, onSelect, isSelected, loading }) => {
     const [imageError, setImageError] = useState(false);
@@ -77,7 +78,7 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, loading }) => {
 
             <div className="text-right flex-shrink-0">
                 <p className="text-base font-semibold text-[#f16137] whitespace-nowrap">
-                    ₹{displayPrice.toLocaleString('en-IN')}
+                    {formatCurrency(displayPrice)}
                 </p>
                 <p className="text-xs text-gray-500 mt-0.5">per item</p>
             </div>
@@ -174,7 +175,6 @@ const Cart = () => {
 
 
 
-    console.log(subtotal, 'selectedItemsData')
     // Auto-select all items on load
     useEffect(() => {
         if (productsInCart.length > 0 && selectedItems.length === 0) {
@@ -188,26 +188,34 @@ const Cart = () => {
             alert("Please select items");
             return;
         }
+        console.log(selectedItemsData,'selectedItemsData')
 
         const payload = {
             items: selectedItemsData.map(item => ({
                 productId: item.TAGKEY,
-                productName: item.ITEMCTRNAME || item.SUBITEMNAME || item.ITEMNAME,
-                price: parseFloat(item.GrandTotal),
                 itemId: item.ITEMID,
                 tagNo: item.TAGNO,
                 sno: item.SNO,
-                weight: parseFloat(item.NETWT),
+
+                productName: item.ITEMCTRNAME || item.SUBITEMNAME || item.ITEMNAME,
+
+                grossAmount: parseFloat(item.GrossAmount),
+                price: parseFloat(item.GrandTotal),
+                
+                netWt: parseFloat(item.NETWT),
+                grsWt: parseFloat(item.GRSWT),
+
                 imagePath: item.ImagePath ? JSON.parse(item.ImagePath)[0] : "",
                 quantity: 1,
+
                 gstType: item.GSTType,
-                gstPer: item.GSTPercentValue,
+                gstPer: item.GSTPER,
                 gstAmount: item.GSTAmount,
 
             })),
             subtotal,
         };
-
+        console.log(payload, 'orderPayload');
         navigate("/checkout", { state: payload });
     };
 
@@ -350,7 +358,7 @@ const Cart = () => {
                                 <div className="flex justify-between items-center">
                                     <span >Subtotal ({selectedItems.length} items)</span>
                                     <span className="font-semibold text-base">
-                                        ₹{subtotal.toLocaleString('en-IN')}
+                                        {formatCurrency(subtotal)}
                                     </span>
                                 </div>
 
@@ -359,7 +367,7 @@ const Cart = () => {
                                     <span className={`font-semibold ${shippingFee === 0 ? 'text-green-600' : ''}`}>
                                         {shippingFee == 0
                                             ? "Update your pincode"
-                                            : `₹${shippingFee.toLocaleString("en-IN")}`}
+                                            : `${formatCurrency(shippingFee)}`}
 
                                     </span>
                                 </div>
@@ -370,7 +378,7 @@ const Cart = () => {
 
                                         {hasShipping ? (
                                             <span className="text-lg font-bold text-[var(--primary-hover-color)]">
-                                                ₹{totalAmount.toLocaleString('en-IN')}
+                                                {formatCurrency(totalAmount)}
                                             </span>
                                         ) : (
                                             <span className="text-sm font-medium text-gray-500">

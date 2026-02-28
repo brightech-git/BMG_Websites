@@ -113,7 +113,7 @@ function PincodeChecker() {
         const isServiceable = data?.status ?? currentPincodeData?.serviceable;
 
         return (
-            <div className="flex flex-col w-70 font-sans animate__animated animate__fadeIn">
+            <div className="flex flex-col font-sans animate__animated animate__fadeIn">
              
 
                 <div className="flex items-center justify-between p-2 rounded-md border border-gray-200 bg-gray-50">
@@ -142,7 +142,7 @@ function PincodeChecker() {
 
     // Render the pincode input form (for new users or when updating)
     return (
-        <div className="flex flex-col w-[80%] ">
+        <div className="flex flex-col">
             <label className="mb-2 font-semibold text-gray-700 animate__animated animate__fadeIn">
                 {currentPincode ? "Update Your Delivery Pincode" : "Check Availability of Your Pincode"}
             </label>

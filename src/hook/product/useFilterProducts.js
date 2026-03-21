@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { filterProducts ,getProductsFilter ,getRelatedProducts } from "../../service/ProductService";
+import { filterProducts, getProductsFilter, getRelatedProducts, getProductsFiltersContent } from "../../service/ProductService";
 
 export const useFilteredProducts = (filters, page, pageSize) => {
     return useQuery({
@@ -41,3 +41,10 @@ export const useRelatedProducts = (itemCtrId) =>{
         enabled: !!itemCtrId,
     });
 }
+
+export const useGetProductsFilters = () => {
+    return useQuery({
+        queryKey: ["productsFilters"],
+        queryFn: getProductsFiltersContent,
+    });
+};

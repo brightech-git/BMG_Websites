@@ -1,37 +1,109 @@
-// ProductFilterBar.jsx (Main Component)
+// ProductFilterBar.jsx
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { X, ChevronDown, RotateCcw, Filter, ChevronUp } from "lucide-react";
 import { useDispatch } from "react-redux";
+
+
 import { resetFilters } from "../../../redux/slices/filterSlice";
 import debounce from "lodash/debounce";
-import { useGetFilters } from "../../../hook/product/useFilterProducts";
-
-// Import constants
-import {
-  SORT_OPTIONS,
-  PRICE_BRACKETS,
-  WEIGHT_BRACKETS,
-  PRICE_RANGE,
-  WEIGHT_RANGE,
-  GENDER_OPTIONS,
-  METAL_FINISH_OPTIONS,
-} from "../../../component/filter/filterConstants";
-
-// Import components
-import { FilterDropdown } from "../../../component/filter/FilterDropdown";
-import { FilterOptionsList } from "../../../component/filter/FilterOptionsList";
-import { RangeFilterContent } from "../../../component/filter/RangeFilterContent";
-import { FilterChipList } from "../../../component/filter/FilterChipList";
-import { MobileCheckboxOption, MobileRadioOption } from "../../../component/filter/MobileFilterOptions";
-
-export default function ProductFilterBar({
-  onFiltersChange,
-  totalResults = 0,
-  itemCtrName
-}) {
+import { useGetFilters, useGetProductsFilters } from "../../../hook/product/useFilterProducts";
 
 
+import { MobileFilterBar } from "../../../component/filter/MobileFilterBar";
+import { DesktopFilterBar } from "../../../component/filter/DesktopFilterBar";
+
+// ─── Fallback slider bounds ───────────────────────────────────────────────────
+const PRICE_RANGE = { min: 0, max: 100000, step: 100 };
+const WEIGHT_RANGE = { min: 0, max: 1000, step: 1 };
+
+const SORT_OPTIONS = [
+  { label: "Price – Low to High", value: "priceLowToHigh" },
+  { label: "Price – High to Low", value: "priceHighToLow" },
+];
+
+// ─── URL helpers ──────────────────────────────────────────────────────────────
+const parseIds = (str) =>
+  new Set((str || "").split(",").map(Number).filter(Boolean));
+
+const stringifyIds = (ids) => {
+  const arr = [...ids].filter(Boolean);
+  return arr.length ? arr.join(",") : null;
+};
+
+// ─── Shared range-slider ──────────────────────────────────────────────────────
+function RangeSlider({ range, setRange, applyRange, rangeConfig, isDraggingRef, isPrice }) {
+  const sliderRef = useRef(null);
+  const [local, setLocal] = useState(range);
+  const [drag, setDrag] = useState(null);
+
+  useEffect(() => setLocal(range), [range]);
+
+  const pct = (v) =>
+    ((v - rangeConfig.min) / (rangeConfig.max - rangeConfig.min)) * 100;
+
+  const move = (e) => {
+    if (drag === null || !sliderRef.current) return;
+    const rect = sliderRef.current.getBoundingClientRect();
+    const x = e.touches?.[0]?.clientX ?? e.clientX;
+    let v = rangeConfig.min + ((x - rect.left) / rect.width) * (rangeConfig.max - rangeConfig.min);
+    v = Math.round(v / rangeConfig.step) * rangeConfig.step;
+    v = Math.max(rangeConfig.min, Math.min(v, rangeConfig.max));
+    const next = [...local];
+    if (drag === 0 && v < next[1]) next[0] = v;
+    if (drag === 1 && v > next[0]) next[1] = v;
+    setLocal(next);
+  };
+
+  const end = () => {
+    if (drag !== null) {
+      isDraggingRef.current = false;
+      setRange(local);
+      applyRange(local[0], local[1]);
+    }
+    setDrag(null);
+  };
+
+  useEffect(() => {
+    if (drag === null) return; // only attach when actively dragging
+    document.addEventListener("mousemove", move);
+    document.addEventListener("mouseup", end);
+    document.addEventListener("touchmove", move, { passive: false });
+    document.addEventListener("touchend", end);
+    return () => {
+      document.removeEventListener("mousemove", move);
+      document.removeEventListener("mouseup", end);
+      document.removeEventListener("touchmove", move);
+      document.removeEventListener("touchend", end);
+    };
+  }, [drag]); // ← depend on drag
+
+  return (
+    <div className="w-full px-2">
+      <div ref={sliderRef} className="relative h-2 bg-gray-200 rounded">
+        <div
+          className="absolute h-full bg-[var(--primary-hover-color)] rounded"
+          style={{ left: `${pct(local[0])}%`, width: `${pct(local[1]) - pct(local[0])}%` }}
+        />
+        {[0, 1].map((i) => (
+          <div
+            key={i}
+            onMouseDown={() => { isDraggingRef.current = true; setDrag(i); }}
+            onTouchStart={() => { isDraggingRef.current = true; setDrag(i); }}
+            className="absolute w-5 h-5 bg-white border-2 border-[var(--primary-hover-color)] rounded-full -top-1.5 cursor-grab active:cursor-grabbing"
+            style={{ left: `${pct(local[i])}%`, marginLeft: "-10px" }}
+          />
+        ))}
+      </div>
+      <div className="flex justify-between text-sm mt-2 text-gray-600">
+        <span>{isPrice ? `₹${local[0].toLocaleString()}` : `${local[0]}g`}</span>
+        <span>{isPrice ? `₹${local[1].toLocaleString()}` : `${local[1]}g`}</span>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main component ───────────────────────────────────────────────────────────
+export default function ProductFilterBar({ onFiltersChange, totalResults = 0, itemCtrName }) {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -39,220 +111,230 @@ export default function ProductFilterBar({
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
-  const [activeMobileFilter, setActiveMobileFilter] = useState("price");
+  const [activeMobileFilter, setActiveMobileFilter] = useState(null);
   const [isSortPanelOpen, setIsSortPanelOpen] = useState(false);
 
-  const dropdownContainerRef = useRef(null);
+  // const dropdownContainerRef = useRef(null);
   const isDraggingRef = useRef(false);
 
-  // Fetch dynamic filters based on itemCtrName
-  const { data: filterData, isLoading: filtersLoading } = useGetFilters(itemCtrName);
+  // ── Fetch filters ─────────────────────────────────────────────────────────
+  // rawApiFilters → itemCtrName-specific: has { sizes, subItems }
+  // productFilters → global grouped filters: { Price: [...], Gender: [...], ... }
+  const { data: rawApiFilters, isLoading: filtersLoading } = useGetFilters(itemCtrName);
+  const { data: productFilters, isLoading: productFiltersLoading } = useGetProductsFilters();
 
-  /* ---------- Parse dynamic filters from API ---------- */
-  const [sizeNameFilters, setSizeFilters] = useState([]);
-  const [subItemNameFilters, setSubCategoryFilters] = useState([]);
+  // ── Grouped filters (from productFilters) ─────────────────────────────────
+  // Shape: { Price: [{id, filterTitle, min, max, isRange, ...}], Gender: [...], ... }
+  const [apiFilters, setApiFilters] = useState({});
+
+  // ── Item-specific filters (from rawApiFilters) ────────────────────────────
+  // sizes:    [{ id, sizeId, sizeName, itemName }]
+  // subItems: ["CASTING LADIES RING DT", ...]
+  const [sizeOptions, setSizeOptions] = useState([]);
+  const [subItemOptions, setSubItemOptions] = useState([]);
 
   useEffect(() => {
-    if (filterData) {
-      if (filterData.sizes) {
-        setSizeFilters(filterData.sizes);
-      }
-      if (filterData.subItems) {
-        setSubCategoryFilters(filterData.subItems.map((item, index) => ({
-          id: index,
-          name: item,
-          value: item
-        })));
-      }
+    if (productFilters && typeof productFilters === "object") {
+      const cleaned = {};
+      Object.entries(productFilters).forEach(([key, items]) => {
+        const active = (items || []).filter((i) => i.isActive !== false);
+        if (active.length) cleaned[key] = active;
+      });
+      setApiFilters(cleaned);
+      const firstKey = Object.keys(cleaned)[0];
+      if (firstKey && !activeMobileFilter) setActiveMobileFilter(firstKey);
     }
-  }, [filterData]);
+  }, [productFilters]);
 
-  /* ---------- Get URL Params ---------- */
-  const getURLParams = () => {
-    const params = new URLSearchParams(location.search);
-    return {
-      sortBy: params.get("sortBy"),
-      priceRange: params.get("priceRange") || null,
-      weightRange: params.get("weightRange") || null,
-      gender: params.get("gender") || null,
-      sizeName: params.get("sizeName") || null,
-      subItemName: params.get("subItemName") || null,
-      metalType: params.get("metalType") || null,
-    };
-  };
-
-  const [selectedFilters, setSelectedFilters] = useState(getURLParams());
-
-  /* ---------- Individual Filter States ---------- */
-  const getInitialSize = () => new URLSearchParams(location.search).get("sizeName") || null;
-  const [selectedSize, setSelectedSize] = useState(getInitialSize);
-
-  const getInitialSubCategory = () => new URLSearchParams(location.search).get("subItemName") || null;
-  const [selectedSubCategory, setSelectedSubCategory] = useState(getInitialSubCategory);
-
-  const getInitialMetalFinish = () => new URLSearchParams(location.search).get("metalType") || null;
-  const [selectedMetalFinish, setSelectedMetalFinish] = useState(getInitialMetalFinish);
-
-  const getInitialPriceRange = () => {
-    const p = new URLSearchParams(location.search).get("priceRange");
-    if (!p) return [PRICE_RANGE.min, PRICE_RANGE.max];
-    const [min, max] = p.split("-").map(Number);
-    return isNaN(min) || isNaN(max) ? [PRICE_RANGE.min, PRICE_RANGE.max] : [min, max];
-  };
-  const [priceRange, setPriceRange] = useState(getInitialPriceRange);
-
-  const getInitialWeightRange = () => {
-    const w = new URLSearchParams(location.search).get("weightRange");
-    if (!w) return [WEIGHT_RANGE.min, WEIGHT_RANGE.max];
-    const [min, max] = w.split("-").map(Number);
-    return isNaN(min) || isNaN(max) ? [WEIGHT_RANGE.min, WEIGHT_RANGE.max] : [min, max];
-  };
-  const [weightRange, setWeightRange] = useState(getInitialWeightRange);
-
-  const getInitialGender = () => new URLSearchParams(location.search).get("gender") || null;
-  const [selectedGender, setSelectedGender] = useState(getInitialGender);
-
-  /* ---------- Responsive ---------- */
   useEffect(() => {
-    const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    if (!rawApiFilters) return;
+    if (rawApiFilters.sizes) setSizeOptions(rawApiFilters.sizes);
+    if (rawApiFilters.subItems) setSubItemOptions(rawApiFilters.subItems);
+  }, [rawApiFilters]);
 
-  /* ---------- Outside click ---------- */
-  useEffect(() => {
-    const handler = (e) => {
-      if (isDraggingRef.current) return;
-      if (dropdownContainerRef.current && !dropdownContainerRef.current.contains(e.target)) {
-        setOpenDropdown(null);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
+  // ── Range-filter detection ────────────────────────────────────────────────
+  const isRangeFilter = useCallback(
+    (key) => (apiFilters[key] || []).some((i) => i.isRange === true),
+    [apiFilters]
+  );
 
-  /* ---------- Sync with URL ---------- */
-  useEffect(() => {
-    const urlFilters = getURLParams();
-    setSelectedFilters((prev) => ({ ...prev, ...urlFilters }));
+  const getSliderConfig = useCallback(
+    (key) => {
+      const items = apiFilters[key] || [];
+      const allMin = items.map((i) => i.min).filter((v) => v !== 0);
+      const allMax = items.map((i) => i.max).filter((v) => v !== 0);
+      const step = items[0]?.step || 1;
+      const fallback = key.toLowerCase() === "weight" ? WEIGHT_RANGE : PRICE_RANGE;
+      return {
+        min: allMin.length ? Math.min(...allMin) : fallback.min,
+        max: allMax.length ? Math.max(...allMax) : fallback.max,
+        step: step || fallback.step,
+      };
+    },
+    [apiFilters]
+  );
 
-    const [priceMin, priceMax] = getInitialPriceRange();
-    if (priceMin !== priceRange[0] || priceMax !== priceRange[1]) {
-      setPriceRange([priceMin, priceMax]);
-    }
+  // ══════════════════════════════════════════════════════════════════════════
+  // URL STATE
+  // ══════════════════════════════════════════════════════════════════════════
 
-    const [weightMin, weightMax] = getInitialWeightRange();
-    if (weightMin !== weightRange[0] || weightMax !== weightRange[1]) {
-      setWeightRange([weightMin, weightMax]);
-    }
-
-    const gender = getInitialGender();
-    if (gender !== selectedGender) setSelectedGender(gender);
-
-    const sizeName = getInitialSize();
-    if (sizeName !== selectedSize) setSelectedSize(sizeName);
-
-    const subItemName = getInitialSubCategory();
-    if (subItemName !== selectedSubCategory) setSelectedSubCategory(subItemName);
-
-    const metalType = getInitialMetalFinish();
-    if (metalType !== selectedMetalFinish) setSelectedMetalFinish(metalType);
+  // Parse URL → Set
+  const parseURLSelectedIds = useCallback(() => {
+    const raw = new URLSearchParams(location.search).get("filterIds");
+    return parseIds(raw);
   }, [location.search]);
 
-  /* ================= URL UPDATE ================= */
-  const updateURL = useCallback(
-    (newFilters) => {
-      const params = new URLSearchParams(location.search);
-      const filterParams = ["priceRange", "weightRange", "gender", "sizeName", "subItemName", "metalType", "sortBy"];
+  const parseURLRanges = useCallback(() => {
+    const params = new URLSearchParams(location.search);
+    const ranges = {};
+    params.forEach((value, key) => {
+      if (!key.endsWith("Range")) return;
+      const rawKey = key.replace("Range", "");
+      const filterKey = Object.keys(apiFilters).find(
+        (k) => k.toLowerCase() === rawKey.toLowerCase()
+      );
+      if (!filterKey) return;
+      const [min, max] = value.split("-").map(Number);
+      if (!isNaN(min) && !isNaN(max)) ranges[filterKey] = [min, max];
+    });
+    return ranges;
+  }, [location.search, apiFilters]);
+  
+  const parseURLSizes = useCallback(() => {
+    const raw = new URLSearchParams(location.search).get("sizeName");
+    return new Set((raw || "").split(",").filter(Boolean));
+  }, [location.search]);
 
-      filterParams.forEach(param => {
-        if (newFilters[param] !== undefined) {
-          if (newFilters[param]) params.set(param, newFilters[param]);
-          else params.delete(param);
-        }
+  const parseURLSubItems = useCallback(() => {
+    const raw = new URLSearchParams(location.search).get("subItemName");
+    return new Set((raw || "").split(",").filter(Boolean));
+  }, [location.search]);
+
+  const [selectedSize, setSelectedSize] = useState(parseURLSizes);
+  const [selectedSubItem, setSelectedSubItem] = useState(parseURLSubItems);
+
+  const [selectedIds, setSelectedIds] = useState(parseURLSelectedIds);
+  const [rangeMap, setRangeMap] = useState(parseURLRanges);
+  const [sortBy, setSortBy] = useState(() => new URLSearchParams(location.search).get("sortBy") || "");
+
+  // Sync on URL change
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    setSelectedIds(parseURLSelectedIds());
+    setRangeMap(parseURLRanges());
+    setSelectedSize(parseURLSizes());
+    setSelectedSubItem(parseURLSubItems());
+    setSortBy(params.get("sortBy") || "");
+  }, [location.search, apiFilters]);
+
+  // ── Core URL writer ───────────────────────────────────────────────────────
+  const updateURL = useCallback(
+    (newSelectedIds, newRangeMap, newSize, newSubItem, newSortBy) => {
+      const params = new URLSearchParams(location.search);
+
+      // Only delete KNOWN filter params — never touch itemCtrName or other page params
+      const MANAGED_PARAMS = ["filterIds", "sizeName", "subItemName", "sortBy"];
+      // Also delete any *Range params we manage
+      [...params.keys()].forEach((k) => {
+        if (
+          MANAGED_PARAMS.includes(k) ||
+          k.endsWith("Range")
+        ) params.delete(k);
       });
 
+      // Grouped filter IDs (non-range)
+      const idsStr = stringifyIds(newSelectedIds);
+      if (idsStr) params.set("filterIds", idsStr);
+
+      // Range filters → named param e.g. priceRange, weightRange
+      Object.entries(newRangeMap).forEach(([key, [min, max]]) => {
+        const cfg = getSliderConfig(key);
+        if (min !== cfg.min || max !== cfg.max)
+          params.set(`${key.charAt(0).toLowerCase() + key.slice(1)}Range`, `${min}-${max}`);
+      });
+
+      // Size — comma-separated sizeName values
+      if (newSize && newSize.size > 0) params.set("sizeName", [...newSize].join(","));
+
+      // SubItem — comma-separated subItem strings
+      if (newSubItem && newSubItem.size > 0) params.set("subItemName", [...newSubItem].join(","));
+
+      if (newSortBy) params.set("sortBy", newSortBy);
       params.delete("page");
+
       navigate({ search: params.toString() });
       onFiltersChange?.(Object.fromEntries(params));
     },
-    [navigate, onFiltersChange, location.search]
+    [navigate, onFiltersChange, location.search, getSliderConfig]
+  );
+  // ── Toggle grouped filter ID ──────────────────────────────────────────────
+  const toggleId = useCallback(
+    (id) => {
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        if (next.has(id)) next.delete(id);
+        else next.add(id);
+        updateURL(next, rangeMap, selectedSize, selectedSubItem, sortBy);
+        return next;
+      });
+    },
+    [rangeMap, selectedSize, selectedSubItem, sortBy, updateURL]
   );
 
-  const applyPriceToURL = useCallback(
-    debounce((min, max) => {
-      const isDefault = min === PRICE_RANGE.min && max === PRICE_RANGE.max;
-      updateURL({ ...selectedFilters, priceRange: isDefault ? null : `${min}-${max}` });
+  const handleSizeChange = (sizeName) => {
+    setSelectedSize((prev) => {
+      const next = new Set(prev);
+      if (next.has(sizeName)) next.delete(sizeName);
+      else next.add(sizeName);
+      updateURL(selectedIds, rangeMap, next, selectedSubItem, sortBy);
+      return next;
+    });
+  };
+
+  const handleSubItemChange = (subItem) => {
+    setSelectedSubItem((prev) => {
+      const next = new Set(prev);
+      if (next.has(subItem)) next.delete(subItem);
+      else next.add(subItem);
+      updateURL(selectedIds, rangeMap, selectedSize, next, sortBy);
+      return next;
+    });
+  };
+
+  // ── Slider handlers ───────────────────────────────────────────────────────
+  const applyRangeDebounced = useCallback(
+    debounce((filterKey, min, max) => {
+      setRangeMap((prev) => {
+        const next = { ...prev, [filterKey]: [min, max] };
+        updateURL(selectedIds, next, selectedSize, selectedSubItem, sortBy);
+        return next;
+      });
     }, 400),
-    [selectedFilters, updateURL]
+    [selectedIds, selectedSize, selectedSubItem, sortBy, updateURL]
   );
 
-  const applyWeightToURL = useCallback(
-    debounce((min, max) => {
-      const isDefault = min === WEIGHT_RANGE.min && max === WEIGHT_RANGE.max;
-      updateURL({ ...selectedFilters, weightRange: isDefault ? null : `${min}-${max}` });
-    }, 400),
-    [selectedFilters, updateURL]
-  );
-
-  /* ================= HANDLERS ================= */
-  const selectPriceBracket = (min, max, keepOpen = false) => {
-    const isDefault = min === PRICE_RANGE.min && max === PRICE_RANGE.max;
-    setPriceRange([min, max]);
-    setSelectedFilters((prev) => ({ ...prev, priceRange: isDefault ? null : `${min}-${max}` }));
-    applyPriceToURL(min, max);
-    if (!keepOpen && isDesktop) setOpenDropdown(null);
+  const handleRangeChange = (filterKey, min, max) => {
+    setRangeMap((prev) => ({ ...prev, [filterKey]: [min, max] }));
+    applyRangeDebounced(filterKey, min, max);
   };
 
-  const selectWeightBracket = (min, max, keepOpen = false) => {
-    const isDefault = min === WEIGHT_RANGE.min && max === WEIGHT_RANGE.max;
-    setWeightRange([min, max]);
-    setSelectedFilters((prev) => ({ ...prev, weightRange: isDefault ? null : `${min}-${max}` }));
-    applyWeightToURL(min, max);
-    if (!keepOpen && isDesktop) setOpenDropdown(null);
-  };
-
-  const handleGenderChange = (value) => {
-    setSelectedGender(value);
-    updateURL({ ...selectedFilters, gender: value });
-    setOpenDropdown(null);
-  };
-
-  const handleSizeChange = (sizeNameValue) => {
-    setSelectedSize(sizeNameValue);
-    updateURL({ ...selectedFilters, sizeName: sizeNameValue });
-    setOpenDropdown(null);
-  };
-
-  const handleSubCategoryChange = (subItemNameValue) => {
-    setSelectedSubCategory(subItemNameValue);
-    updateURL({ ...selectedFilters, subItemName: subItemNameValue });
-    setOpenDropdown(null);
-  };
-
-  const handleMetalFinishChange = (metalTypeValue) => {
-    setSelectedMetalFinish(metalTypeValue);
-    updateURL({ ...selectedFilters, metalType: metalTypeValue });
-    setOpenDropdown(null);
-  };
-
+  // ── Sort ──────────────────────────────────────────────────────────────────
   const handleSortChange = (value) => {
-    updateURL({ ...selectedFilters, sortBy: value });
+    setSortBy(value);
+    updateURL(selectedIds, rangeMap, selectedSize, selectedSubItem, value);
     setOpenDropdown(null);
     setIsSortPanelOpen(false);
   };
 
+  // ── Clear all ─────────────────────────────────────────────────────────────
   const clearAll = () => {
-    const params = new URLSearchParams(window.location.search);
-    ["sortBy", "priceRange", "weightRange", "gender", "sizeName", "subItemName", "metalType"].forEach(p => params.delete(p));
-    navigate({ search: params.toString() });
-
-    setSelectedGender(null);
-    setSelectedSize(null);
-    setSelectedSubCategory(null);
-    setSelectedMetalFinish(null);
-    setPriceRange([PRICE_RANGE.min, PRICE_RANGE.max]);
-    setWeightRange([WEIGHT_RANGE.min, WEIGHT_RANGE.max]);
+    const empty = new Set();
+    setSelectedIds(empty);
+    setRangeMap({});
+    setSelectedSize(new Set());
+    setSelectedSubItem(new Set());
+    updateURL(empty, {}, new Set(), new Set(), "");
+    setSortBy("");
     setOpenDropdown(null);
     setIsFilterPanelOpen(false);
     setIsSortPanelOpen(false);
@@ -260,567 +342,245 @@ export default function ProductFilterBar({
     onFiltersChange?.({});
   };
 
-  /* ================= UTILITY FUNCTIONS ================= */
+  // ── Counts ────────────────────────────────────────────────────────────────
   const getActiveFilterCount = () => {
-    let count = 0;
-    if (priceRange[0] !== PRICE_RANGE.min || priceRange[1] !== PRICE_RANGE.max) count += 1;
-    if (weightRange[0] !== WEIGHT_RANGE.min || weightRange[1] !== WEIGHT_RANGE.max) count += 1;
-    if (selectedGender) count += 1;
-    if (selectedSize) count += 1;
-    if (selectedSubCategory) count += 1;
-    if (selectedMetalFinish) count += 1;
+    let count = selectedIds.size;
+
+    Object.entries(rangeMap).forEach(([key, [min, max]]) => {
+      const cfg = getSliderConfig(key);
+      if (min !== cfg.min || max !== cfg.max) count += 1;
+    });
+    if (selectedSize.size > 0) count += selectedSize.size;
+    if (selectedSubItem.size > 0) count += selectedSubItem.size;
     return count;
   };
 
-  const getActivePriceBracket = () => PRICE_BRACKETS.find(b => priceRange[0] === b.min && priceRange[1] === b.max);
-  const getActiveWeightBracket = () => WEIGHT_BRACKETS.find(b => weightRange[0] === b.min && weightRange[1] === b.max);
-
-  const removePriceFilter = () => {
-    setPriceRange([PRICE_RANGE.min, PRICE_RANGE.max]);
-    updateURL({ ...selectedFilters, priceRange: null });
-  };
-
-  const removeWeightFilter = () => {
-    setWeightRange([WEIGHT_RANGE.min, WEIGHT_RANGE.max]);
-    updateURL({ ...selectedFilters, weightRange: null });
-  };
-
-  const removeGenderFilter = () => {
-    setSelectedGender(null);
-    updateURL({ ...selectedFilters, gender: null });
-  };
-
-  const removeSizeFilter = () => {
-    setSelectedSize(null);
-    updateURL({ ...selectedFilters, sizeName: null });
-  };
-
-  const removeSubCategoryFilter = () => {
-    setSelectedSubCategory(null);
-    updateURL({ ...selectedFilters, subItemName: null });
-  };
-
-  const removeMetalFinishFilter = () => {
-    setSelectedMetalFinish(null);
-    updateURL({ ...selectedFilters, metalType: null });
-  };
-
-  const removeSortFilter = () => {
-    updateURL({ ...selectedFilters, sortBy: "" });
-  };
-
-  /* ================= SLIDER COMPONENTS ================= */
-  const PriceSlider = () => {
-    const sliderRef = useRef(null);
-    const [local, setLocal] = useState(priceRange);
-    const [drag, setDrag] = useState(null);
-
-    useEffect(() => setLocal(priceRange), [priceRange]);
-
-    const pct = (v) => ((v - PRICE_RANGE.min) / (PRICE_RANGE.max - PRICE_RANGE.min)) * 100;
-
-    const move = (e) => {
-      if (drag === null) return;
-      const rect = sliderRef.current.getBoundingClientRect();
-      const x = e.touches?.[0]?.clientX ?? e.clientX;
-      let v = PRICE_RANGE.min + ((x - rect.left) / rect.width) * (PRICE_RANGE.max - PRICE_RANGE.min);
-      v = Math.round(v / PRICE_RANGE.step) * PRICE_RANGE.step;
-      v = Math.max(PRICE_RANGE.min, Math.min(v, PRICE_RANGE.max));
-
-      const next = [...local];
-      if (drag === 0 && v < next[1]) next[0] = v;
-      if (drag === 1 && v > next[0]) next[1] = v;
-      setLocal(next);
-    };
-
-    const end = () => {
-      if (drag !== null) {
-        isDraggingRef.current = false;
-        setPriceRange(local);
-        applyPriceToURL(local[0], local[1]);
-      }
-      setDrag(null);
-    };
-
-    useEffect(() => {
-      document.addEventListener("mousemove", move);
-      document.addEventListener("mouseup", end);
-      document.addEventListener("touchmove", move, { passive: false });
-      document.addEventListener("touchend", end);
-      return () => {
-        document.removeEventListener("mousemove", move);
-        document.removeEventListener("mouseup", end);
-        document.removeEventListener("touchmove", move);
-        document.removeEventListener("touchend", end);
-      };
-    });
-
-    return (
-      <div className="w-full px-2">
-        <div ref={sliderRef} className="relative h-2 bg-gray-200 rounded">
-          <div
-            className="absolute h-full bg-[var(--primary-hover-color)] rounded"
-            style={{ left: `${pct(local[0])}%`, width: `${pct(local[1]) - pct(local[0])}%` }}
-          />
-          {[0, 1].map((i) => (
-            <div
-              key={i}
-              onMouseDown={() => { isDraggingRef.current = true; setDrag(i); }}
-              onTouchStart={() => { isDraggingRef.current = true; setDrag(i); }}
-              className="absolute w-5 h-5 bg-white border-2 border-bg-[var(--primary-hover-color)] rounded-full -top-1.5 cursor-grab active:cursor-grabbing"
-              style={{ left: `${pct(local[i])}%`, marginLeft: "-10px" }}
-            />
-          ))}
-        </div>
-        <div className="flex justify-between text-sm mt-2 text-gray-600">
-          <span>₹{local[0].toLocaleString()}</span>
-          <span>₹{local[1].toLocaleString()}</span>
-        </div>
-      </div>
-    );
-  };
-
-  const WeightSlider = () => {
-    const sliderRef = useRef(null);
-    const [local, setLocal] = useState(weightRange);
-    const [drag, setDrag] = useState(null);
-
-    useEffect(() => setLocal(weightRange), [weightRange]);
-
-    const pct = (v) => ((v - WEIGHT_RANGE.min) / (WEIGHT_RANGE.max - WEIGHT_RANGE.min)) * 100;
-
-    const move = (e) => {
-      if (drag === null) return;
-      const rect = sliderRef.current.getBoundingClientRect();
-      const x = e.touches?.[0]?.clientX ?? e.clientX;
-      let v = WEIGHT_RANGE.min + ((x - rect.left) / rect.width) * (WEIGHT_RANGE.max - WEIGHT_RANGE.min);
-      v = Math.round(v / WEIGHT_RANGE.step) * WEIGHT_RANGE.step;
-      v = Math.max(WEIGHT_RANGE.min, Math.min(v, WEIGHT_RANGE.max));
-
-      const next = [...local];
-      if (drag === 0 && v < next[1]) next[0] = v;
-      if (drag === 1 && v > next[0]) next[1] = v;
-      setLocal(next);
-    };
-
-    const end = () => {
-      if (drag !== null) {
-        isDraggingRef.current = false;
-        setWeightRange(local);
-        applyWeightToURL(local[0], local[1]);
-      }
-      setDrag(null);
-    };
-
-    useEffect(() => {
-      document.addEventListener("mousemove", move);
-      document.addEventListener("mouseup", end);
-      document.addEventListener("touchmove", move, { passive: false });
-      document.addEventListener("touchend", end);
-      return () => {
-        document.removeEventListener("mousemove", move);
-        document.removeEventListener("mouseup", end);
-        document.removeEventListener("touchmove", move);
-        document.removeEventListener("touchend", end);
-      };
-    });
-
-    return (
-      <div className="w-full px-2">
-        <div ref={sliderRef} className="relative h-2 bg-gray-200 rounded">
-          <div
-            className="absolute h-full bg-[var(--primary-hover-color)] rounded"
-            style={{ left: `${pct(local[0])}%`, width: `${pct(local[1]) - pct(local[0])}%` }}
-          />
-          {[0, 1].map((i) => (
-            <div
-              key={i}
-              onMouseDown={() => { isDraggingRef.current = true; setDrag(i); }}
-              onTouchStart={() => { isDraggingRef.current = true; setDrag(i); }}
-              className="absolute w-5 h-5 bg-white border-2 border-bg-[var(--primary-hover-color)] rounded-full -top-1.5 cursor-grab active:cursor-grabbing"
-              style={{ left: `${pct(local[i])}%`, marginLeft: "-10px" }}
-            />
-          ))}
-        </div>
-        <div className="flex justify-between text-sm mt-2 text-gray-600">
-          <span>{local[0]}g</span>
-          <span>{local[1]}g</span>
-        </div>
-      </div>
-    );
-  };
-
-  /* ================= FILTER CONFIGURATION ================= */
-  const createFilterConfig = (id, label, type, options = {}) => {
-    const baseConfig = {
-      id,
-      label,
-      type,
-      width: options.width || (type === 'range' ? 'w-80' : 'w-56'),
-      condition: options.condition ?? true,
-    };
-
-    if (type === 'range') {
-      baseConfig.content = (
-        <RangeFilterContent
-          SliderComponent={options.SliderComponent}
-          brackets={options.brackets}
-          currentRange={options.currentRange}
-          onSelectBracket={options.onSelectBracket}
-        />
-      );
-      baseConfig.chip = options.showChip ? {
-        label: options.chipLabel,
-        onRemove: options.onRemove
-      } : null;
-    } else if (type === 'options') {
-      baseConfig.content = (
-        <FilterOptionsList
-          options={options.optionsList}
-          selectedValue={options.selectedValue}
-          onSelect={options.onSelect}
-          renderLabel={options.renderLabel}
-        />
-      );
-      baseConfig.chip = options.selectedValue ? {
-        label: `${label}: ${options.chipValue || options.selectedValue}`,
-        onRemove: options.onRemove
-      } : null;
+  const getKeySelectionCount = (key) => {
+    if (isRangeFilter(key)) {
+      const cfg = getSliderConfig(key);
+      const r = rangeMap[key];
+      return r && (r[0] !== cfg.min || r[1] !== cfg.max) ? 1 : 0;
     }
-
-    return baseConfig;
+    // if (sectionKey === "__sizes__") return selectedSize.size;
+    // if (sectionKey === "__subItems__") return selectedSubItem.size;
+    return (apiFilters[key] || []).filter((i) => selectedIds.has(i.id)).length;
   };
 
-  const filterConfigs = [
-    createFilterConfig('price', 'Price', 'range', {
-      SliderComponent: PriceSlider,
-      brackets: PRICE_BRACKETS,
-      currentRange: priceRange,
-      onSelectBracket: selectPriceBracket,
-      showChip: priceRange[0] !== PRICE_RANGE.min || priceRange[1] !== PRICE_RANGE.max,
-      chipLabel: `Price: ${getActivePriceBracket()?.label || `₹${priceRange[0].toLocaleString()} - ₹${priceRange[1].toLocaleString()}`}`,
-      onRemove: removePriceFilter
-    }),
-    createFilterConfig('weight', 'Weight', 'range', {
-      SliderComponent: WeightSlider,
-      brackets: WEIGHT_BRACKETS,
-      currentRange: weightRange,
-      onSelectBracket: selectWeightBracket,
-      showChip: weightRange[0] !== WEIGHT_RANGE.min || weightRange[1] !== WEIGHT_RANGE.max,
-      chipLabel: `Weight: ${getActiveWeightBracket()?.label || `${weightRange[0]}g - ${weightRange[1]}g`}`,
-      onRemove: removeWeightFilter
-    }),
-    createFilterConfig('gender', 'Gender', 'options', {
-      optionsList: GENDER_OPTIONS,
-      selectedValue: selectedGender,
-      onSelect: (option) => handleGenderChange(option.value),
-      renderLabel: (option) => option.label,
-      chipValue: GENDER_OPTIONS.find(opt => opt.value === selectedGender)?.label,
-      onRemove: removeGenderFilter
-    }),
-    createFilterConfig('metalType', 'Metal Finish', 'options', {
-      optionsList: METAL_FINISH_OPTIONS,
-      selectedValue: selectedMetalFinish,
-      onSelect: (option) => handleMetalFinishChange(option.value),
-      renderLabel: (option) => option.label,
-      chipValue: selectedMetalFinish,
-      onRemove: removeMetalFinishFilter
-    }),
-    createFilterConfig('sizeName', 'Size', 'options', {
-      optionsList: sizeNameFilters,
-      selectedValue: selectedSize,
-      onSelect: (option) => handleSizeChange(option.sizeName),
-      renderLabel: (option) => `Size ${option.sizeName}`,
-      chipValue: selectedSize,
-      onRemove: removeSizeFilter,
-      condition: sizeNameFilters.length > 0
-    }),
-    createFilterConfig('subItemName', 'Category', 'options', {
-      optionsList: subItemNameFilters,
-      selectedValue: selectedSubCategory,
-      onSelect: (option) => handleSubCategoryChange(option.value),
-      renderLabel: (option) => option.name,
-      chipValue: selectedSubCategory,
-      onRemove: removeSubCategoryFilter,
-      condition: subItemNameFilters.length > 0
-    })
-  ];
-
-  // Get active chips for mobile/desktop
+  // ── Chips ─────────────────────────────────────────────────────────────────
   const getActiveChips = () => {
     const chips = [];
-    filterConfigs.forEach(filter => {
-      if (filter.chip) chips.push(filter.chip);
+
+    // Grouped filter chips
+    Object.entries(apiFilters).forEach(([key, items]) => {
+      items.forEach((item) => {
+        if (!selectedIds.has(item.id)) return;
+        chips.push({ label: `${key}: ${item.filterTitle}`, onRemove: () => toggleId(item.id) });
+      });
     });
-    if (selectedFilters.sortBy) {
+
+    // Slider range chips
+    Object.entries(rangeMap).forEach(([key, [min, max]]) => {
+      const cfg = getSliderConfig(key);
+      if (min === cfg.min && max === cfg.max) return;
+      const isPrice = key.toLowerCase() === "price";
       chips.push({
-        label: `Sort: ${SORT_OPTIONS.find((opt) => opt.value === selectedFilters.sortBy)?.label}`,
-        onRemove: removeSortFilter,
-        bgColor: "bg-gray-100"
+        label: `${key}: ${isPrice ? `₹${min.toLocaleString()} – ₹${max.toLocaleString()}` : `${min}g – ${max}g`}`,
+        onRemove: () => {
+          setRangeMap((prev) => {
+            const next = { ...prev };
+            delete next[key];
+            updateURL(selectedIds, next, selectedSize, selectedSubItem, sortBy);
+            return next;
+          });
+        },
+      });
+    });
+
+    [...selectedSize].forEach((s) => {
+      chips.push({
+        label: `Size: ${s}`,
+        onRemove: () => handleSizeChange(s),
+      });
+    });
+
+    // one chip per selected subItem
+    [...selectedSubItem].forEach((s) => {
+      chips.push({
+        label: `Category: ${s}`,
+        onRemove: () => handleSubItemChange(s),
+      });
+    });
+
+
+    if (sortBy) {
+      chips.push({
+        label: `Sort: ${SORT_OPTIONS.find((o) => o.value === sortBy)?.label}`,
+        onRemove: () => { setSortBy(""); updateURL(selectedIds, rangeMap, selectedSize, selectedSubItem, ""); },
+        bgColor: "bg-gray-100",
       });
     }
+
     return chips;
   };
 
-  /* ================= DESKTOP UI ================= */
-  const DesktopFilterBar = () => (
-    <>
-      <div ref={dropdownContainerRef} className="bg-[var(--primary-color)] border-b border-gray-200 px-4 py-1.5">
-        <div className="flex items-center gap-4 flex-wrap">
-          {filterConfigs.map((filter) =>
-            filter.condition && (
-              <FilterDropdown
-                key={filter.id}
-                label={filter.label}
-                isOpen={openDropdown === filter.id}
-                onToggle={() => setOpenDropdown(openDropdown === filter.id ? null : filter.id)}
-                width={filter.width}
-              >
-                {filter.content}
-              </FilterDropdown>
-            )
-          )}
+  // ── Responsive ────────────────────────────────────────────────────────────
+  useEffect(() => {
+    const h = () => setIsDesktop(window.innerWidth >= 1024);
+    window.addEventListener("resize", h);
+    return () => window.removeEventListener("resize", h);
+  }, []);
 
-          <div className="relative ml-auto flex items-center gap-2">
-            <span className="text-sm text-gray-600">Sort by:</span>
-            <FilterDropdown
-              label={SORT_OPTIONS.find((opt) => opt.value === selectedFilters.sortBy)?.label || "Featured"}
-              isOpen={openDropdown === "sort"}
-              onToggle={() => setOpenDropdown(openDropdown === "sort" ? null : "sort")}
-              width="w-56"
-              direction="left"
-            >
-              <FilterOptionsList
-                options={SORT_OPTIONS}
-                selectedValue={selectedFilters.sortBy}
-                onSelect={(option) => handleSortChange(option.value)}
-                renderLabel={(option) => option.label}
-               
 
-              />
-            </FilterDropdown>
-          </div>
-        </div>
-      </div>
 
-      {(getActiveFilterCount() > 0 || selectedFilters.sortBy) && (
-        <div className="flex items-center justify-between bg-white border-b border-gray-200 px-6 py-3">
-          <FilterChipList
-            filters={getActiveChips()}
-            onClearAll={clearAll}
-            showClearAll={getActiveFilterCount() > 0}
+  // ══════════════════════════════════════════════════════════════════════════
+  // Sub-components
+  // ══════════════════════════════════════════════════════════════════════════
+
+  /** Standard checkbox list for grouped non-range filters */
+  const CheckboxList = ({ filterKey, items }) => (
+    <div className={`space-y-1 p-2 ${isDesktop ? 'max-h-[200px]' : 'min-h-full'}  overflow-y-auto`}>
+      {items.map((item) => (
+        <label key={item.id} className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 hover:text-amber-600 py-1 select-none">
+          <input
+            type="checkbox"
+            checked={selectedIds.has(item.id)}
+            onChange={() => toggleId(item.id)}
+            className="accent-amber-600 w-4 h-4 rounded"
           />
-        </div>
-      )}
-    </>
+          {item.filterTitle}
+        </label>
+      ))}
+    </div>
   );
 
-  /* ===== MOBILE FILTER BAR WITH SORT OVERLAY ===== */
-  const MobileFilterBar = () => (
-    <>
-      <div className="fixed bottom-0 left-0 w-full bg-[var(--primary-card-color)] border-t border-gray-200 z-20 flex justify-around items-center p-2">
-        <button
-          onClick={() => setIsFilterPanelOpen(true)}
-          className="flex items-center gap-2 border border-[var(--primary-hover-color)] bg-[var(--primary-hover-color)] text-white px-4 py-2 rounded-full text-sm font-medium transition-colors"
-        >
-          <Filter size={16} />
-          Filters
-          {getActiveFilterCount() > 0 && (
-            <span className="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-              {getActiveFilterCount()}
-            </span>
-          )}
-        </button>
+  /** Slider + bracket checkboxes for range filters (Price, Weight, …) */
+  const RangeFilterPanel = ({ filterKey }) => {
+    const items = apiFilters[filterKey] || [];
+    const cfg = getSliderConfig(filterKey);
+    const curRange = rangeMap[filterKey] || [cfg.min, cfg.max];
 
-        <button
-          onClick={() => setIsSortPanelOpen(true)}
-          className="flex items-center gap-2 border border-gray-300 bg-[var(--primary-hover-color)] px-4 py-2 rounded-full text-sm font-medium text-white transition-colors"
-        >
-          Sort: {SORT_OPTIONS.find((opt) => opt.value === selectedFilters.sortBy)?.label || "Featured"}
-          <ChevronUp size={16} />
-        </button>
-      </div>
+    const handleBracketToggle = (item) => {
+      const isSelected = curRange[0] === item.min && curRange[1] === item.max;
+      handleRangeChange(filterKey, isSelected ? cfg.min : item.min, isSelected ? cfg.max : item.max);
+    };
 
-      {/* FILTER OVERLAY */}
-      {isFilterPanelOpen && (
-        <div className="fixed inset-0 bg-white z-[2000] flex flex-col">
-          <div className="p-3 border-b border-gray-200 bg-gradient-to-r from-[var(--primary-card-color)] to-[var(--primary-color)] flex justify-between items-center">
-            <h3 className="text-base font-semibold text-gray-900">Filter</h3>
-            <button onClick={() => setIsFilterPanelOpen(false)} className="p-1 hover:bg-gray-100 rounded">
-              <X size={20} className="text-gray-600" />
-            </button>
-          </div>
-
-          <div className="flex-1 flex overflow-hidden">
-            <div className="w-2/5 border-r border-gray-200 overflow-y-auto bg-[var(--primary-card-color)]">
-              {filterConfigs.map(filter => filter.condition && (
-                <button
-                  key={filter.id}
-                  onClick={() => setActiveMobileFilter(filter.id)}
-                  className={`w-full text-left px-4 py-3 border-b border-gray-200 text-sm ${activeMobileFilter === filter.id ? "bg-gray-50 text-amber-600 font-medium" : "text-gray-700"
-                    }`}
-                >
-                  {filter.label}
-                </button>
-              ))}
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-4">
-              {activeMobileFilter === "price" && (
-                <>
-                  <PriceSlider />
-                  <div className="mt-4 space-y-2">
-                    {PRICE_BRACKETS.map((bracket) => (
-                      <MobileCheckboxOption
-                        key={bracket.label}
-                        label={bracket.label}
-                        checked={priceRange[0] === bracket.min && priceRange[1] === bracket.max}
-                        onChange={() => selectPriceBracket(bracket.min, bracket.max, true)}
-                      />
-                    ))}
-                  </div>
-                </>
-              )}
-
-              {activeMobileFilter === "weight" && (
-                <>
-                  <WeightSlider />
-                  <div className="mt-4 space-y-2">
-                    {WEIGHT_BRACKETS.map((bracket) => (
-                      <MobileCheckboxOption
-                        key={bracket.label}
-                        label={bracket.label}
-                        checked={weightRange[0] === bracket.min && weightRange[1] === bracket.max}
-                        onChange={() => selectWeightBracket(bracket.min, bracket.max, true)}
-                      />
-                    ))}
-                  </div>
-                </>
-              )}
-
-              {activeMobileFilter === "gender" && (
-                <div className="space-y-2">
-                  {GENDER_OPTIONS.map((option) => (
-                    <MobileRadioOption
-                      key={option.value}
-                      label={option.label}
-                      name="gender"
-                      value={option.value}
-                      checked={selectedGender === option.value}
-                      onChange={() => handleGenderChange(option.value)}
-                    />
-                  ))}
-                </div>
-              )}
-
-              {activeMobileFilter === "metalType" && (
-                <div className="space-y-2">
-                  {METAL_FINISH_OPTIONS.map((finish) => (
-                    <MobileRadioOption
-                      key={finish.id}
-                      label={finish.label}
-                      name="metalType"
-                      value={finish.value}
-                      checked={selectedMetalFinish === finish.value}
-                      onChange={() => handleMetalFinishChange(finish.value)}
-                    />
-                  ))}
-                </div>
-              )}
-
-              {activeMobileFilter === "sizeName" && sizeNameFilters.length > 0 && (
-                <div className="space-y-2">
-                  {sizeNameFilters.map((sizeName) => (
-                    <MobileRadioOption
-                      key={sizeName.id}
-                      label={`Size ${sizeName.sizeName}`}
-                      name="sizeName"
-                      value={sizeName.sizeName}
-                      checked={selectedSize === sizeName.sizeName}
-                      onChange={() => handleSizeChange(sizeName.sizeName)}
-                    />
-                  ))}
-                </div>
-              )}
-
-              {activeMobileFilter === "subItemName" && subItemNameFilters.length > 0 && (
-                <div className="space-y-2">
-                  {subItemNameFilters.map((subCat) => (
-                    <MobileRadioOption
-                      key={subCat.id}
-                      label={subCat.name}
-                      name="subItemName"
-                      value={subCat.value}
-                      checked={selectedSubCategory === subCat.value}
-                      onChange={() => handleSubCategoryChange(subCat.value)}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="border-t border-gray-200 p-2 flex gap-2">
-            {/* Reset Button */}
-            <button
-              onClick={clearAll}
-              className="flex-1 bg-red-500 hover:bg-red-700 text-white text-sm py-2 rounded-lg font-medium transition-colors shadow-sm"
-            >
-              Reset Filters
-            </button>
-            {/* Total Results Button */}
-            <button
-              onClick={() => setIsFilterPanelOpen(false)}
-              className="flex-1 border border-gray-300 text-white text-sm py-2 bg-[#d1721f] rounded-lg font-medium  transition-colors shadow-sm"
-            >
-              show {totalResults} {totalResults === 1 ? 'Item' : 'Items'}
-            </button>
-
-           
-          </div>
-        </div>
-      )}
-
-      {/* SORT OVERLAY */}
-      {isSortPanelOpen && (
-        <div className="fixed inset-0 bg-white z-[2000] flex flex-col">
-          <div className="p-4 border-b border-gray-200 flex justify-between items-center">
-            <h3 className="text-lg font-semibold text-gray-900">Sort By</h3>
-            <button onClick={() => setIsSortPanelOpen(false)} className="p-1 hover:bg-gray-100 rounded">
-              <X size={24} className="text-gray-600" />
-            </button>
-          </div>
-
-          <div className="flex-1 overflow-y-auto p-4 space-y-2">
-            {SORT_OPTIONS.map((option) => (
-              <button
-                key={option.value}
-                onClick={() => handleSortChange(option.value)}
-                className={`w-full text-left px-4 py-3 rounded-md text-sm transition-colors ${selectedFilters.sortBy === option.value
-                    ? "bg-amber-50 text-amber-600 font-medium"
-                    : "text-gray-700 hover:bg-gray-50"
-                  }`}
-              >
-                {option.label}
-              </button>
+    return (
+      <div className="p-3 space-y-3">
+        <RangeSlider
+          range={curRange}
+          setRange={(r) => setRangeMap((prev) => ({ ...prev, [filterKey]: r }))}
+          applyRange={(min, max) => handleRangeChange(filterKey, min, max)}
+          rangeConfig={cfg}
+          isDraggingRef={isDraggingRef}
+          isPrice={filterKey.toLowerCase() === "price"}
+        />
+        {items.length > 0 && (
+          <div className="space-y-1 mt-2 max-h-48 overflow-y-auto">
+            {items.map((item) => (
+              <label key={item.id} className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 hover:text-amber-600 py-1 select-none">
+                <input
+                  type="checkbox"
+                  checked={curRange[0] === item.min && curRange[1] === item.max}
+                  onChange={() => handleBracketToggle(item)}
+                  className="accent-amber-600 w-4 h-4 rounded"
+                />
+                {item.filterTitle}
+              </label>
             ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
+    );
+  };
 
-      {(getActiveFilterCount() > 0 || selectedFilters.sortBy) && (
-        <div className="flex items-center justify-between bg-white border-b border-gray-200 px-2 py-2">
-     
-
-          <FilterChipList
-            filters={getActiveChips()}
-            onClearAll={clearAll}
-            showClearAll={getActiveFilterCount() > 0}
+  /** Size radio list — single select, value = sizeName */
+  const SizeList = () => (
+    <div className={`space-y-1 p-2 ${isDesktop ? 'max-h-[200px]': 'min-h-full'}  overflow-y-auto`}>
+      {sizeOptions.map((size) => (
+        <label key={size.id} className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 hover:text-amber-600 py-1 select-none">
+          <input
+            type="checkbox"
+            checked={selectedSize.has(size.sizeName)}
+            onChange={() => handleSizeChange(size.sizeName)}
+            className="accent-amber-600 w-4 h-4 rounded"
           />
-        </div>
-      )}
-    </>
+          Size {size.sizeName}
+        </label>
+      ))}
+    </div>
   );
 
-  return isDesktop ? <DesktopFilterBar /> : <MobileFilterBar />;
+  const SubItemList = () => (
+    <div className={`space-y-1 p-2 ${isDesktop ? 'max-h-[200px]': 'min-h-full'} overflow-y-auto`}>
+      {subItemOptions.map((sub) => (
+        <label key={sub} className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 hover:text-amber-600 py-1 select-none">
+          <input
+            type="checkbox"
+            checked={selectedSubItem.has(sub)}
+            onChange={() => handleSubItemChange(sub)}
+            className="accent-amber-600 w-4 h-4 rounded"
+          />
+          {sub}
+        </label>
+      ))}
+    </div>
+  );
+
+  // All filter sections to render (grouped + item-specific)
+  // Item-specific sections only show when data is available
+  const allFilterSections = [
+    ...Object.keys(apiFilters),
+    ...(sizeOptions.length > 0 ? ["__sizes__"] : []),
+    ...(subItemOptions.length > 0 ? ["__subItems__"] : []),
+  ];
+
+  const renderFilterContent = (sectionKey) => {
+    if (sectionKey === "__sizes__") return <SizeList />;
+    if (sectionKey === "__subItems__") return <SubItemList />;
+    if (isRangeFilter(sectionKey)) return <RangeFilterPanel filterKey={sectionKey} />;
+    return <CheckboxList filterKey={sectionKey} items={apiFilters[sectionKey]} />;
+  };
+
+  const getSectionLabel = (sectionKey) => {
+    if (sectionKey === "__sizes__") return "Size";
+    if (sectionKey === "__subItems__") return "Category";
+    return sectionKey;
+  };
+
+  const getSectionSelectionCount = (sectionKey) => {
+    if (sectionKey === "__sizes__") return selectedSize.size;
+    if (sectionKey === "__subItems__") return selectedSubItem.size;
+    return getKeySelectionCount(sectionKey);
+  };
+
+  const getSectionHasSelection = (sectionKey) => {
+    if (sectionKey === "__sizes__") return selectedSize.size > 0;
+    if (sectionKey === "__subItems__") return selectedSubItem.size > 0;
+    const isRange = isRangeFilter(sectionKey);
+    const items = apiFilters[sectionKey] || [];
+    return items.some((i) => selectedIds.has(i.id)) ||
+      (isRange && rangeMap[sectionKey] &&
+        (rangeMap[sectionKey][0] !== getSliderConfig(sectionKey).min ||
+          rangeMap[sectionKey][1] !== getSliderConfig(sectionKey).max));
+  };
+
+
+
+  // ── Return ──────────────────────────────────────────────────────────────
+  const sharedProps = {
+    allFilterSections, isRangeFilter, getSectionLabel,
+    getSectionHasSelection, getSectionSelectionCount,
+    renderFilterContent, sortBy, SORT_OPTIONS,
+    handleSortChange, getActiveFilterCount, getActiveChips, clearAll,
+    openDropdown, setOpenDropdown,
+  };
+
+  return isDesktop
+    ? <DesktopFilterBar {...sharedProps} filtersLoading={filtersLoading} productFiltersLoading={productFiltersLoading} />
+    : <MobileFilterBar {...sharedProps}
+      isFilterPanelOpen={isFilterPanelOpen} setIsFilterPanelOpen={setIsFilterPanelOpen}
+      isSortPanelOpen={isSortPanelOpen} setIsSortPanelOpen={setIsSortPanelOpen}
+      activeMobileFilter={activeMobileFilter} setActiveMobileFilter={setActiveMobileFilter}
+      totalResults={totalResults}
+    />;
 }

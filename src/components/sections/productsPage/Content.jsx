@@ -102,6 +102,8 @@ const Content = ({ itemCtrName }) => { // Note the curly braces around itemCtrNa
     const searchParams = new URLSearchParams(location.search);
     const queryFilters = Object.fromEntries(searchParams);
 
+    
+
     const {
         data,
         isLoading,
@@ -159,7 +161,7 @@ const Content = ({ itemCtrName }) => { // Note the curly braces around itemCtrNa
 
             // Otherwise, append unique items
             const unique = newItems.filter(
-                (item) => !prev.some((p) => p.SNO === item.SNO)
+                (item) => !prev.some((p) => p.TAGKEY === item.TAGKEY)
             );
             return [...prev, ...unique];
         });
@@ -253,6 +255,7 @@ const Content = ({ itemCtrName }) => { // Note the curly braces around itemCtrNa
     /* ---------------------------------- */
     /* Render                            */
     /* ---------------------------------- */
+    console.log(products,'products')
 
     return (
         <section className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 bg-gradient-to-b from-[#FFF] to-[#eeece8] min-h-screen relative">
@@ -297,7 +300,7 @@ const Content = ({ itemCtrName }) => { // Note the curly braces around itemCtrNa
 
                             return (
                                 <div
-                                    key={item.SNO}
+                                    key={`${item.TAGKEY}-${index}`}
                                     className="animate__animated animate__fadeIn"
                                     style={{ animationDelay: `${Math.min(index * 0.05, 1)}s` }}
                                 >

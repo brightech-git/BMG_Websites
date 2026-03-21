@@ -1,6 +1,7 @@
 import PublicUrl from '../api/publicUrl';
 
 
+const BASE_URL = "/ecom/filters";
 export const getWhatsappLink = async (sno) => {
    if(sno)
    {
@@ -24,6 +25,8 @@ export const filterProducts = async (filters) => {
         });
 
         const queryString = new URLSearchParams(cleanedFilters).toString();
+
+        console.log("Sending filters to backend:", queryString);
 
         const response = await PublicUrl.get(`/product/items/filter?${queryString}`);
 
@@ -83,5 +86,21 @@ export const getRelatedProducts = async (itemCtrId) => {
     } catch (error) {
         console.error("getRelatedProducts error:", error.response?.data || error.message);
         return [];
+    }
+}
+
+export const getProductsFiltersContent = async () => {
+    try {
+        const response = await PublicUrl.get(`${BASE_URL}/grouped`, {
+            params: {
+                isActive: true,
+                // isUsed: true
+            }
+        })
+        return response.data;
+    }
+    catch (error) {
+        console.error("Error fetching active filter settings:", error);
+        throw error;
     }
 }

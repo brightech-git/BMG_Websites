@@ -1,7 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { X, Filter, ChevronUp } from "lucide-react";
-import { useDispatch } from "react-redux";
+import React from "react";
 import { FilterDropdown } from "./FilterDropdown";
 import { FilterChipList } from "./FilterChipList";
 

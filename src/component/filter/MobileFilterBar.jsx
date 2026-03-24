@@ -2,8 +2,6 @@
 import { FilterChipList } from "./FilterChipList";
 import { X, Filter, ChevronUp } from "lucide-react";
 
-
-
 export const MobileFilterBar = ({
     isFilterPanelOpen, setIsFilterPanelOpen,
     isSortPanelOpen, setIsSortPanelOpen,

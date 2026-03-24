@@ -33,7 +33,7 @@ export const FilterDropdown = ({
     return (
         <div
             ref={containerRef}
-            className={`relative border border-[var(--primary-hover-color)] bg-[var(--primary-card-color)] rounded-full ${className} z-10`}
+            className={`relative inline-block  border border-[var(--primary-hover-color)] bg-[var(--primary-card-color)] rounded-full  ${className}`}
         >
             <button
                 onClick={(e) => {
@@ -50,7 +50,7 @@ export const FilterDropdown = ({
             </button>
 
             {isOpen && (
-                <div className={`absolute top-full ${positionClass} mt-2 p-4 z-50 bg-white shadow-lg border border-gray-200 rounded-md ${width} animate__animated animate__fadeIn`}>
+                <div className={`absolute top-full ${positionClass} mt-2 p-4 z-20 bg-white shadow-lg border border-gray-200 rounded-md ${width} animate__animated animate__fadeIn`}>
                     {children}
                 </div>
             )}

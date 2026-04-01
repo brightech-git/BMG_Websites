@@ -252,7 +252,7 @@ const ItemSearch = () => {
         <input
           ref={inputRef}
           type="text"
-          className="w-full px-4 py-3 pl-12 pr-12 text-[var(--primary-text-color)] h-[45px] bg-white border border-[var(--primary-hover-color)] rounded-md focus:outline-none focus:border-[var(--primary-hover-color)] focus:ring-2 focus:ring-[var(--primary-hover-color)] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full px-4 py-3 pl-12 pr-12 w-full text-[var(--primary-text-color)] h-[45px] bg-white border border-[var(--primary-hover-color)] rounded-md focus:outline-none focus:border-[var(--primary-hover-color)] focus:ring-2 focus:ring-[var(--primary-hover-color)] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           placeholder={isListening ? "🎤 Listening... Speak now" : "Search rings, necklaces..."}
           value={query}
           onChange={(e) => setQuery(e.target.value)}

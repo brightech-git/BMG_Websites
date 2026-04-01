@@ -1,6 +1,6 @@
 // src/components/layouts/HeaderWithAuth.js
 import React from 'react';
-import Header from './Header';
+import Header from './Header/Header';
 import { useSelector } from 'react-redux';
 
 const HeaderWithAuth = (props) => {

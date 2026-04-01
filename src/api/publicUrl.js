@@ -4,7 +4,7 @@ import { logout } from "../redux/slices/userSlice";
 import { store } from "../store";
 
 const BASE_URL = 'https://app.bmgjewellers.com/api/v1';
-// const BASE_URL = 'http://localhost:8081/api/v1';
+//const BASE_URL = 'http://localhost:8081/api/v1';
 
 const PublicUrl = axios.create({
     baseURL: BASE_URL,

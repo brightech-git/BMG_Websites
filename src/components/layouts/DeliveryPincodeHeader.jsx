@@ -137,7 +137,7 @@ const DeliveryPincodeHeader = () => {
             {/* Modal */}
             {isModalOpen && (
                 <div
-                    className={`fixed inset-0 z-50 ${isMobile ? 'flex items-end bottom-0' : 'flex items-start justify-center p-4 top-[90px]'} animate__animated animate__fadeIn animate__faster`}
+                    className={`fixed z-50 ${isMobile ? 'w-[100%] flex items-center top-0' : 'flex items-start justify-center p-4 top-[110px] right'} animate__animated animate__fadeIn animate__faster`}
                     onClick={handleCloseModal}
                 >
                     <div

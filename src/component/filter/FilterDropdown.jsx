@@ -50,7 +50,7 @@ export const FilterDropdown = ({
             </button>
 
             {isOpen && (
-                <div className={`absolute top-full ${positionClass} mt-2 p-4 z-20 bg-white shadow-lg border border-gray-200 rounded-md ${width} animate__animated animate__fadeIn`}>
+                <div className={`absolute top-full ${positionClass} mt-2 p-4 z-10 bg-white shadow-lg border border-gray-200 rounded-md ${width} animate__animated animate__fadeIn`}>
                     {children}
                 </div>
             )}

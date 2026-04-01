@@ -42,9 +42,9 @@ export const useRelatedProducts = (itemCtrId) =>{
     });
 }
 
-export const useGetProductsFilters = () => {
+export const useGetProductsFilters = (filters) => {
     return useQuery({
-        queryKey: ["productsFilters"],
-        queryFn: getProductsFiltersContent,
+        queryKey: ["productsFilters" , filters],
+        queryFn: () => getProductsFiltersContent(filters),
     });
 };

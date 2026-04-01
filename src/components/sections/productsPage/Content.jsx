@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState ,useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useFilteredProducts } from "../../../hook/product/useFilterProducts";
 import ProductCard from "../productCard/ProductCard";
@@ -8,6 +8,7 @@ import Breadcrumb from "../../layouts/Breadcrumb";
 import { useNotification } from "../../../context/notification/NotificationContext";
 import { Loader2, AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import "animate.css";
+import { useSearchParams } from 'react-router-dom';
 
 const baseUrl = "https://app.bmgjewellers.com";
 const PAGE_SIZE = 20;
@@ -99,10 +100,10 @@ const Content = ({ itemCtrName }) => { // Note the curly braces around itemCtrNa
     const [hasMore, setHasMore] = useState(true);
     const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
 
-    const searchParams = new URLSearchParams(location.search);
-    const queryFilters = Object.fromEntries(searchParams);
+    const [searchParams] = useSearchParams();
 
-    
+    console.log(searchParams,'searchParams')
+    const queryFilters = useMemo(() => Object.fromEntries(searchParams), [searchParams]);
 
     const {
         data,

@@ -240,9 +240,13 @@ export default function ProductFilterBar({ onFiltersChange, totalResults = 0, it
 
   const isDraggingRef = useRef(false);
 
+  const filterContentParam = {
+    isActive:true,
+  }
+
   // ── Fetch filters ─────────────────────────────────────────────────────────
   const { data: rawApiFilters, isLoading: filtersLoading } = useGetFilters(itemCtrName);
-  const { data: productFilters, isLoading: productFiltersLoading } = useGetProductsFilters();
+  const { data: productFilters, isLoading: productFiltersLoading } = useGetProductsFilters(filterContentParam);
 
   const [apiFilters, setApiFilters] = useState({});
   const [sizeOptions, setSizeOptions] = useState([]);

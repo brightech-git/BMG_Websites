@@ -29,7 +29,7 @@ export const filterProducts = async (filters) => {
         console.log("Sending filters to backend:", queryString);
 
         const response = await PublicUrl.get(`/product/items/filter?${queryString}`);
-
+        console.log(response.data,'Sending filters to backend:')
         return response.data;
 
     } catch (error) {
@@ -89,13 +89,11 @@ export const getRelatedProducts = async (itemCtrId) => {
     }
 }
 
-export const getProductsFiltersContent = async () => {
+export const getProductsFiltersContent = async (filters) => {
     try {
+      
         const response = await PublicUrl.get(`${BASE_URL}/grouped`, {
-            params: {
-                isActive: true,
-                // isUsed: true
-            }
+            params:filters
         })
         return response.data;
     }

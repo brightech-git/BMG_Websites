@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import fallbackImage from '../../../assets/icons/fallback.jpg';
 import UpdateMobileModal from '../../layouts/UpdateMobileModal';
+import { formatNumber } from '../../../utils/number/FormatNumber';
+
 import "animate.css";
 
 const ProductCard = ({ item }) => {
@@ -89,6 +91,7 @@ const ProductCard = ({ item }) => {
         ? parseFloat(item.GrandTotal)
         : parseFloat(item?.RATE || 0);
 
+    console.log(currentPrice,'currentPrice');
     const handleMouseEnter = () => {
         if (!isTouchDevice && hasMultipleImages) {
             setIsAnimating(true);
@@ -301,7 +304,7 @@ const ProductCard = ({ item }) => {
                     <div className="flex flex-col items-start p-3 text-center bg-transparent">
                         <div className="flex items-center justify-center gap-2 flex-wrap mt-1">
                             <span className="font-lato text-sm md:text-base font-semibold text-[var(--primary-hover-color)]">
-                                ₹{currentPrice.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                ₹{formatNumber(currentPrice,2)}
                             </span>
                         </div>
                         <h3 className="font-lato text-sm md:text-base text-[var(--primary-hover-color)] capitalize font-semibold truncate">

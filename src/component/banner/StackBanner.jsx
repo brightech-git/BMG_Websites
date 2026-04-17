@@ -98,6 +98,8 @@ const GridBanner = ({
                     {images.map((image, index) => {
                         const img = resolveImage(image);
 
+                        console.log("🚀 ~ file: StackBanner.jsx:75 ~ images.map ~ img:", img)
+
                         if (!img.url) return null;
 
                         return (

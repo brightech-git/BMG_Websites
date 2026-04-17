@@ -198,11 +198,16 @@ const HeroBanner = ({
             onImageClick(imageData, index);
             return;
         }
+        console.log(' img:',imageData)
 
         console.log(`Navigating to: ${imageData}`)
+    
 
-        if (!imageData?.link) return;
-        navigate(`/products-page?${imageData.link}`);
+        if (!imageData?.link && !imageData?.filterId) return;
+        if(imageData.filterId){
+            navigate(`/products-page?filterIds=${imageData.filterId}`)
+        }
+        // navigate(`/products-page?${imageData.link}`);
     };
 
     // Get image data

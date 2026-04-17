@@ -132,6 +132,8 @@ const Content = () => {
     // Ensure it's an array and take only first 4 items
     const budgetBanners = budgetBanner?.data;
 
+    console.log(budgetBanner,'budgetBanners');
+
 
     return (
 

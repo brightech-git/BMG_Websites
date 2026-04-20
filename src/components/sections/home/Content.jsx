@@ -154,6 +154,8 @@ const Content = () => {
                                 ? JSON.parse(banner.visibleCount)
                                 : banner.visibleCount;
 
+                        console.log(banner ,'bannersDatainHome');
+
                         return banner.isGrid ? (
                             <GridBanner
                                 key={banner.imageKey || key}
@@ -187,6 +189,8 @@ const Content = () => {
                                 scrollInterval={banner.scrollInterval}
                                 infinite={banner.infinite || false}
                                 dots={banner.dots || false}
+                                
+
                             />
                         );
                     })

@@ -13,7 +13,7 @@ export const ProductFiltersNav = ({
     const [showFilterCount , setShowFilterCount] = useState({
         page:0 ,item:5
     });
-    console.log(showFilterCount,'showFilterCount');
+    console.log(filtersData,'showFilterCount');
 
     useEffect(() => {
         const mediaQuery = window.matchMedia('(min-width: 1200px)');

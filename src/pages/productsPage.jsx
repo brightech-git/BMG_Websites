@@ -5,7 +5,7 @@ import queryString from 'query-string';
 import Breadcrumbs from '../components/layouts/Breadcrumbs';
 import Content from '../components/sections/productsPage/Content'
 import { useDocumentMeta } from '../utils/meta/useMeta';
-import SmoothScroll from '../components/layouts/SmoothScroll';
+// import SmoothScroll from '../components/layouts/SmoothScroll';
 
 const ProductsPage = () => {
   const location = useLocation();
@@ -24,9 +24,9 @@ const ProductsPage = () => {
 
       {/* Pass query params to Breadcrumb */}
       <Breadcrumbs itemCtrName={itemCtrName} pages="products-page" />
-      <SmoothScroll>
+      {/* <SmoothScroll> */}
         <Content itemCtrName={itemCtrName} />
-      </SmoothScroll>
+      {/* </SmoothScroll> */}
    
      
     </Fragment>

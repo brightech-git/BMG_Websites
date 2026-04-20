@@ -194,6 +194,8 @@ const HeroBanner = ({
     const handleImageClick = (imageData, index) => {
         if (isDragging && Math.abs(dragDistance) > 10) return;
 
+        console.log(imageData ,'onclickdata');
+
         if (onImageClick) {
             onImageClick(imageData, index);
             return;
@@ -204,10 +206,14 @@ const HeroBanner = ({
     
 
         if (!imageData?.link && !imageData?.filterId) return;
+
         if(imageData.filterId){
             navigate(`/products-page?filterIds=${imageData.filterId}`)
         }
-        // navigate(`/products-page?${imageData.link}`);
+        else{
+            navigate(`/products-page?${imageData.link}`);
+        }
+      
     };
 
     // Get image data

@@ -77,7 +77,7 @@ const Footer = () => {
     },
 
     developer: {
-      name: "Brightech Software Solutions",
+      name: "Brightech Software Services Pvt Ltd",
       website: "https://www.brightechsoftware.com/",
       logo: btsLogo
     }

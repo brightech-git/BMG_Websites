@@ -3,7 +3,7 @@
 @tailwind utilities;
 /* your custom styles */
 html, body {
-  scroll-behavior: auto !important; /* Disable native smooth scroll */
+  scroll-behavior: smooth !important; 
   overflow-x: hidden;
 }
 

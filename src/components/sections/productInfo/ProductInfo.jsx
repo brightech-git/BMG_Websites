@@ -64,6 +64,8 @@ const InfoBadge = ({ icon: Icon, label, value, className = "" }) => {
 };
 
 const ProductInfo = ({ tagKey, Authenticated }) => {
+
+
   const isAuthenticated = useSelector(state => state.user.isAuthenticated) || Authenticated;
   const mobileNumber = useSelector(state => state.user.user?.contactNumber);
   const navigate = useNavigate();
@@ -111,7 +113,7 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
   const getPrice = () => Number(product?.GrandTotal || product?.RATE || 0);
 
   const originalPrice = product?.GrandTotal ? product.GrandTotal * 2.25 : 0;
-  const discount = originalPrice ? Math.round(((originalPrice - getPrice()) / originalPrice) * 100) : 0;
+  // const discount = originalPrice ? Math.round(((originalPrice - getPrice()) / originalPrice) * 100) : 0;
 
   const isInCart =
     Array.isArray(cartProducts) &&
@@ -141,6 +143,9 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
       setCartSuccess(false);
     }, 2000);
   };
+
+
+
 
   const handleBuyNow = (e) => {
     e.preventDefault();
@@ -215,6 +220,9 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
     </div>
   );
 
+
+  console.log(product,'productforInfo');
+
   // Check if fields exist and have values
   const hasWeight = product.NETWT && parseFloat(product.NETWT) > 0;
   const hasPurity = product.PURITY && product.PURITY !== "0.00" && product.PURITY !== "0";
@@ -251,7 +259,7 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
                   badges={{
                     NewArrival: product.NewArrival,
                     Top_Trending: product.Top_Trending,
-                    discountPercentage: discount,
+                    // discountPercentage: discount,
                     BestDesign: product.BestDesign === "1" || product.BestDesign === "Y",
                   }}
                 />
@@ -264,7 +272,7 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
               {/* Title + Actions */}
               <div className="flex justify-between items-start gap-4">
                 <div>
-                  <h1 className="text-lg md:text-xl font-bold ">{product.ITEMCTRNAME}</h1>
+                  <h1 className="text-lg md:text-xl font-bold ">{product.ITEMNAME}</h1>
                   {product.SUBITEMNAME && product.SUBITEMNAME !== "null" && (
                     <p className="text-[var(--orange-600)] mt-1 text-sm flex items-center gap-1">
                       <Tag className="w-3 h-3" />
@@ -304,14 +312,14 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
               {/* Price Section */}
               <div className="flex items-baseline gap-3 flex-wrap">
                 <span className="text-3xl font-bold text-[#f16137]">₹{getPrice().toLocaleString("en-IN")}</span>
-                {discount > 0 && (
+                {/* {discount > 0 && (
                   <>
                     <span className="text-lg text-gray-400 line-through">₹{originalPrice.toLocaleString("en-IN")}</span>
                     <span className="bg-gradient-to-r from-red-500 to-orange-500 text-white px-3 py-1 text-xs rounded-full font-semibold shadow-md animate__animated animate__pulse animate__infinite">
                       {discount}% OFF
                     </span>
                   </>
-                )}
+                )} */}
               </div>
 
               {/* Quick Info Badges Grid */}

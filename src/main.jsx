@@ -40,7 +40,7 @@ root.render(
             <BrowserRouter>
             <PincodeProvider>
               <MainLayout>
-              <App />
+                  <App />
               </MainLayout>
               </PincodeProvider>
               <ToastContainer

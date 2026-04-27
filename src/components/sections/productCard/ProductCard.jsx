@@ -87,9 +87,10 @@ const ProductCard = ({ item }) => {
 
     const productName = (item?.SUBITEMNAME || item?.ITEMCTRNAME || 'Jewelry Item').toLowerCase();
 
-    const currentPrice = parseFloat(item?.GrandTotal) > 0
-        ? parseFloat(item.GrandTotal)
-        : parseFloat(item?.RATE || 0);
+    console.log(item ,'Finalamtatproducts');
+    const currentPrice = parseFloat(item?.FinalAmount) > 0
+        ? parseFloat(item.FinalAmount)
+        : parseFloat(item?.GrandTotal || 0);
 
     console.log(currentPrice,'currentPrice');
     const handleMouseEnter = () => {

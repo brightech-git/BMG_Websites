@@ -25,6 +25,8 @@ const HeroBanner = ({
     dots=false
     
 }) => {
+
+
     const [isMobile, setIsMobile] = useState(false);
     const [isTablet, setIsTablet] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -207,8 +209,11 @@ const HeroBanner = ({
 
         if (!imageData?.link && !imageData?.filterId) return;
 
-        if(imageData.filterId){
-            navigate(`/products-page?filterIds=${imageData.filterId}`)
+        if(imageData.filterId && imageData.link){
+            navigate(`/products-page?${imageData.link}&filterIds=${imageData.filterId}`)
+        }
+        else if(imageData.filterId){
+            navigate(`/products-page?filterIds=${imageData.filterId}`);
         }
         else{
             navigate(`/products-page?${imageData.link}`);
@@ -387,7 +392,7 @@ const HeroBanner = ({
         relative w-full py-2 
         overflow-hidden ${backgroundColor === 'white' ? 'bg-white' : `bg-${backgroundColor}`}
         ${centered ? 'flex items-center justify-center' : ''}
-        ${full ? 'px-0' : 'px-2 md:px-4 lg:px-4'}
+        ${full ? 'px-0' : 'px-1 md:px-2 lg:px-2'}
     `}
             style={backgroundColor !== 'white' && !backgroundColor.startsWith('bg-') ?
                 { backgroundColor } : {}}

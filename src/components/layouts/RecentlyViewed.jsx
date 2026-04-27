@@ -132,7 +132,7 @@ const ProductCarousel = () => {
     // Main carousel
     return (
         <section className="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white py-16">
-            <div className="container overflow-hidden  mx-auto mx-2">
+            <div className="overflow-hidden  mx-auto mx-2">
                 {/* Header with navigation arrows */}
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
                     <div className="animate__animated animate__fadeInLeft flex-1">

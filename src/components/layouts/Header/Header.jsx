@@ -29,8 +29,9 @@ import RatesDropdown from "../RatesDropdown";
 import { usePincode } from "../../../context/pinocde/PincodeContext";
 import { queryClient } from "../../../component/reactQuery/queryClient";
 import LogoutModal from "../../../component/logout/Logout";
-import { useGetProductsFilters } from "../../../hook/product/useFilterProducts";
+import { useGetProductsFilters, useGetHeaderFilters } from "../../../hook/product/useFilterProducts";
 import { ProductFiltersNav } from "./ProductFiltersNav";
+
 
 const Header = ({ isAuthenticated }) => {
   const width = useScreenWidth();
@@ -55,9 +56,12 @@ const Header = ({ isAuthenticated }) => {
   const { pincode } = usePincode();
   const { isLoading: cartLoading, cartCount } = useCart({ enabled: isAuthenticated });
 
+
+  const {data : headerFitlers } =useGetHeaderFilters();
+
   const { data: productsFilterContent, isLoading: productsFilterContentLoading, isError: productsFilterContentError } = useGetProductsFilters({isActive:true , isHeader:true});
 
-  console.log(productsFilterContent, 'productsFilterContent');
+  console.log(headerFitlers, 'headerFitlers');
 
 
   const handleFilterClick = (filterKey, filterId, filterValue) => {
@@ -228,7 +232,7 @@ const Header = ({ isAuthenticated }) => {
             }`}
         >
           <div className="container mx-auto px-4">
-            <div className="flex items-center justify-between py-1 lg:py-3">
+            <div className="flex items-center justify-between py-1 ">
 
               {/* Logo */}
               <motion.div
@@ -368,8 +372,9 @@ const Header = ({ isAuthenticated }) => {
           <nav className="w-full flex justify-center  bg-white">
             
               <ProductFiltersNav
-                filtersData={productsFilterContent || {}}
-                onFilterClick={handleFilterClick}
+            
+                headers={headerFitlers?.headers || []}
+                // onFilterClick={handleFilterClick}
               />    
           </nav>
 
@@ -384,6 +389,8 @@ const Header = ({ isAuthenticated }) => {
             cartCount={cartCount}
             wishlistCount={wishlistCount}
             ratesData={ratesData}
+            headers={headerFitlers?.headers || []}
+            // filtersData={productsFilterContent}
           />
         )}
       </AnimatePresence>

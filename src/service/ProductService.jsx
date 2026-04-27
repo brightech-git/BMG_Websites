@@ -102,3 +102,16 @@ export const getProductsFiltersContent = async (filters) => {
         throw error;
     }
 }
+
+export const getHeaderFitler = async(filters) => {
+    try{
+        const response = await PublicUrl.get('/menu/filter/list', 
+            // {params: filters}
+        );
+        return response.data;
+    }
+    catch(err){
+        console.error("Error fetching active filter settings:", err);
+        return err?.message ;
+    }
+}

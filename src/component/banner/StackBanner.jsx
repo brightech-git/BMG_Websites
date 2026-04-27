@@ -29,6 +29,7 @@ const GridBanner = ({
     if (!layout) return null;
 
     const resolveImage = (image) => {
+        console.log(image,'image');
         // string support
         if (typeof image === "string") {
             return { url: image, link: null, alt: "" };
@@ -56,7 +57,27 @@ const GridBanner = ({
             url: image.url || "",
             link: image.link || null,
             alt: image.alt || "",
+            fitlerId: image.filterId
+
         };
+    };
+    const handleImageClick = (imageData, index) => {
+        console.log('imageData', imageData)
+
+      
+        if (!imageData?.link && !imageData?.filterId) return;
+
+        let url = "/products-page?";
+
+        if (imageData.link) {
+            url += imageData.link;
+        }
+
+        if (imageData.filterId) {
+            url += imageData.link ? `&filterIds=${imageData.filterId}` : `filterIds=${imageData.filterId}`;
+        }
+
+        navigate(url);
     };
 
     return (
@@ -65,7 +86,7 @@ const GridBanner = ({
                 relative w-full py-2 
                 overflow-hidden ${backgroundColor === 'white' ? 'bg-white' : `bg-${backgroundColor}`}
                 ${centered ? 'flex items-center justify-center' : ''}
-                ${full ? 'px-0' : 'px-2 md:px-4 lg:px-4'}
+                ${full ? 'px-0' : 'px-2 md:px-2 lg:px-2'}
             `}
             style={backgroundColor !== 'white' && !backgroundColor.startsWith('bg-') ?
                 { backgroundColor } : {}}
@@ -112,11 +133,7 @@ const GridBanner = ({
                                         ? `span ${image.rowSpan}`
                                         : "span 1",
                                 }}
-                                onClick={() => {
-                                    if (img.link) {
-                                        navigate(`/products-page?${img.link}`);
-                                    }
-                                }}
+                                onClick={()=>handleImageClick(image)}
                             >
                                 <img
                                     src={getImage(img.url)}

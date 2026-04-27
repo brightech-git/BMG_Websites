@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { filterProducts, getProductsFilter, getRelatedProducts, getProductsFiltersContent } from "../../service/ProductService";
+import { filterProducts, getProductsFilter, getRelatedProducts, getProductsFiltersContent ,getHeaderFitler} from "../../service/ProductService";
 
 export const useFilteredProducts = (filters, page, pageSize) => {
     return useQuery({
@@ -48,3 +48,10 @@ export const useGetProductsFilters = (filters) => {
         queryFn: () => getProductsFiltersContent(filters),
     });
 };
+
+export const useGetHeaderFilters = () =>{
+    return useQuery({
+        queryKey: ["headerFilters"],
+        queryFn: () => getHeaderFitler(),
+    });
+}

@@ -110,10 +110,10 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const getPrice = () => Number(product?.GrandTotal || product?.RATE || 0);
+  const getPrice = () => Number(product?.FinalAmount || product?.RATE || 0);
 
-  const originalPrice = product?.GrandTotal ? product.GrandTotal * 2.25 : 0;
-  // const discount = originalPrice ? Math.round(((originalPrice - getPrice()) / originalPrice) * 100) : 0;
+  const originalPrice = product?.OriginalAmount;
+  const discount = product?.OfferPercentage;
 
   const isInCart =
     Array.isArray(cartProducts) &&
@@ -165,7 +165,7 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
           productName: product.ITEMCTRNAME || item.SUBITEMNAME || item.ITEMNAME,
 
           grossAmount: parseFloat(product.GrossAmount),
-          price: parseFloat(product.GrandTotal),
+          price: parseFloat(product.finalAmount),
 
           grsWt: parseFloat(product.GRSWT),
           netWt: parseFloat(product.NETWT),
@@ -259,7 +259,7 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
                   badges={{
                     NewArrival: product.NewArrival,
                     Top_Trending: product.Top_Trending,
-                    // discountPercentage: discount,
+                    discountPercentage: discount,
                     BestDesign: product.BestDesign === "1" || product.BestDesign === "Y",
                   }}
                 />
@@ -312,21 +312,21 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
               {/* Price Section */}
               <div className="flex items-baseline gap-3 flex-wrap">
                 <span className="text-3xl font-bold text-[#f16137]">₹{getPrice().toLocaleString("en-IN")}</span>
-                {/* {discount > 0 && (
+                {discount > 0 && (
                   <>
                     <span className="text-lg text-gray-400 line-through">₹{originalPrice.toLocaleString("en-IN")}</span>
                     <span className="bg-gradient-to-r from-red-500 to-orange-500 text-white px-3 py-1 text-xs rounded-full font-semibold shadow-md animate__animated animate__pulse animate__infinite">
                       {discount}% OFF
                     </span>
                   </>
-                )} */}
+                )}
               </div>
 
               {/* Quick Info Badges Grid */}
               {(hasWeight || hasPurity || hasMaterial || hasGender) && (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 py-2">
                   <InfoBadge icon={Scale} label="Weight" value={hasWeight ? `${parseFloat(product.NETWT).toFixed(3)}g` : null} />
-                  <InfoBadge icon={Award} label="Purity" value={hasPurity ? `${product.PURITY}%` : null} />
+                  <InfoBadge icon={Award} label="Purity" value={hasPurity ? `${product.NEWPURITY}%` : null} />
                   <InfoBadge icon={Gem} label="Material" value={hasMaterial ? product.MaterialFinish : null} />
                   <InfoBadge icon={Sparkles} label="Gender" value={hasGender ? product.Gender : null} />
                 </div>

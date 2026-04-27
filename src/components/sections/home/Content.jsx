@@ -139,7 +139,7 @@ const Content = () => {
 
             <Fragment>
                 {/* ✅ SHOW SKELETON WHILE LOADING */}
-            <div className="p-2 sm:p-4 ">
+            <div className="p-1 sm:p-2">
 
                 {budgetLoading ? (
                     <BannerSkeleton />
@@ -189,7 +189,6 @@ const Content = () => {
                                 scrollInterval={banner.scrollInterval}
                                 infinite={banner.infinite || false}
                                 dots={banner.dots || false}
-                                
 
                             />
                         );

@@ -12,6 +12,8 @@ import { formatNumber } from '../../../utils/number/FormatNumber';
 import "animate.css";
 
 const ProductCard = ({ item }) => {
+
+
     const { isFavorite, addToFavorite, removeFavorite } = useFavorites();
     const { cartItems, addToCartHandler, isLoading: isCartLoading } = useCart();
 
@@ -87,12 +89,16 @@ const ProductCard = ({ item }) => {
 
     const productName = (item?.SUBITEMNAME || item?.ITEMCTRNAME || 'Jewelry Item').toLowerCase();
 
-    console.log(item ,'Finalamtatproducts');
+   
+    const originalPrice = parseFloat(item?.GrandTotal) || 0;
+
     const currentPrice = parseFloat(item?.FinalAmount) > 0
         ? parseFloat(item.FinalAmount)
         : parseFloat(item?.GrandTotal || 0);
 
-    console.log(currentPrice,'currentPrice');
+    const discountPercentage = item?.OfferPercentage
+        ? parseFloat(item.OfferPercentage) : parseFloat((originalPrice - currentPrice) / 100);
+
     const handleMouseEnter = () => {
         if (!isTouchDevice && hasMultipleImages) {
             setIsAnimating(true);
@@ -194,11 +200,11 @@ const ProductCard = ({ item }) => {
 
 
                 <div
-                    className="relative bg-transparent overflow-hidden transition-all duration-500 cursor-pointer rounded-2xl group"
+                    className="relative bg-transparent overflow-hidden transition-all duration-500 cursor-pointer  group"
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
                 >
-                    <div className="relative w-full aspect-square overflow-hidden rounded-2xl">
+                    <div className="relative w-full aspect-square overflow-hidden ">
                         <div
                             className="relative w-full h-full cursor-pointer"
                             onClick={clickProduct}
@@ -298,14 +304,78 @@ const ProductCard = ({ item }) => {
                                     className="transition-colors duration-200"
                                 />
                             </button>
+
+                          
                         </div>
 
+                       
+                        {/* ---------------- Discount Badge ---------------- */}
+                        {discountPercentage && (
+                            <div className="absolute top-1 left-0 z-20 group">
+                            <div
+                                className={`relative text-white text-xs sm:text-sm font-semibold uppercase tracking-wide
+                                px-3 py-[4px] pr-5 
+                                bg-[var(--primary-hover-color)]
+                                backdrop-blur-md
+                                border border-white/20
+                                shadow-[0_0_15px_rgba(255,255,255,0.3)]
+                                overflow-hidden
+                                transition-all duration-300
+                                group-hover:shadow-[0_0_25px_rgba(255,255,255,0.5)]
+                                ${discountPercentage >= 50
+                                            ? 'bg-gradient-to-r from-red-600 to-red-500'
+                                            : discountPercentage >= 10
+                                                ? 'bg-gradient-to-r from-amber-500 to-orange-500'
+                                                : 'bg-gradient-to-r from-green-600 to-emerald-500'
+                                        }`}
+                                >
+                                    {/* Base gradient overlay */}
+                                    <span className="absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+
+                                    {/* Luxury shimmer animation */}
+                                    <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out">
+                                        <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12"></span>
+                                    </span>
+
+                                    {/* Shine overlay - static */}
+                                    <span className="absolute inset-0 bg-gradient-to-r from-yellow-400/0 via-yellow-400/20 to-transparent opacity-30"></span>
+
+                                    {/* Glow pulse animation */}
+                                    <span className="absolute inset-0 rounded-sm animate-pulse opacity-20 bg-white/20"></span>
+
+                                    {/* Pearl shimmer effect */}
+                                    <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <span className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/50 to-transparent"></span>
+                                        <span className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent"></span>
+                                    </span>
+
+                                    {/* Text with dynamic color */}
+                                    <span className="relative flex items-center gap-1">
+                                        <span className="group-hover:scale-105 transition-transform duration-300 inline-block">
+                                            {discountPercentage}%
+                                        </span>
+                                        <span className="opacity-90 text-[0.7em] tracking-widest">OFF</span>
+                                    </span>
+
+                                    {/* Sparkle particles on hover */}
+                                    <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-1 bg-white rounded-full opacity-0 group-hover:animate-ping"></span>
+                                    <span className="absolute top-1 right-1/4 w-0.5 h-0.5 bg-white rounded-full opacity-0 group-hover:animate-ping group-hover:animation-delay-300"></span>
+
+                                  
+                                </div>
+
+                              
+                            </div>
+                        )}
                     </div>
 
                     <div className="flex flex-col items-start p-3 text-center bg-transparent">
                         <div className="flex items-center justify-center gap-2 flex-wrap mt-1">
                             <span className="font-lato text-sm md:text-base font-semibold text-[var(--primary-hover-color)]">
                                 ₹{formatNumber(currentPrice,2)}
+                            </span>
+                            <span className="font-lato text-xs md:text-sm font-normal text-gray-500 line-through">
+                                ₹{formatNumber(originalPrice, 2)}
                             </span>
                         </div>
                         <h3 className="font-lato text-sm md:text-base text-[var(--primary-hover-color)] capitalize font-semibold truncate">

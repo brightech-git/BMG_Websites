@@ -9,6 +9,8 @@ export const DesktopFilterBar = ({
     getSectionHasSelection, renderFilterContent, sortBy, SORT_OPTIONS,
     handleSortChange, getActiveFilterCount, getActiveChips, clearAll
 }) => (
+
+   
     <>
         <div className="bg-[var(--primary-color)] border-b border-gray-200 px-4 py-1.5">
             <div className="flex items-center gap-4 flex-wrap">

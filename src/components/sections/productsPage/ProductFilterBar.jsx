@@ -11,8 +11,10 @@ import { MobileFilterBar } from "../../../component/filter/MobileFilterBar";
 import { DesktopFilterBar } from "../../../component/filter/DesktopFilterBar";
 
 // ─── Fallback slider bounds ───────────────────────────────────────────────────
-const PRICE_RANGE = { min: 0, max: 100000, step: 100 };
+const PRICE_RANGE = { min: 0, max: 1000, step: 100 };
 const WEIGHT_RANGE = { min: 0, max: 1000, step: 1 };
+
+const notSlider = ["discount"];
 
 export const SORT_OPTIONS = [
   { label: "Price – Low to High", value: "priceLowToHigh" },
@@ -147,6 +149,8 @@ export const RangeFilterPanel = ({
   const cfg = getSliderConfig(filterKey);
   const curRange = rangeMap[filterKey] || [cfg.min, cfg.max];
 
+  console.log(items , cfg, curRange ,'slider');
+
   const handleBracketToggle = (item) => {
     const isSelected = curRange[0] === item.min && curRange[1] === item.max;
     handleRangeChange(
@@ -156,16 +160,22 @@ export const RangeFilterPanel = ({
     );
   };
 
+  const showSlider = notSlider.includes(filterKey.toLowerCase()) ;
+  console.log(showSlider,'showSlider')
+
   return (
     <div className="p-3 space-y-3">
-      <RangeSlider
-        range={curRange}
-        setRange={(r) => setRangeMap((prev) => ({ ...prev, [filterKey]: r }))}
-        applyRange={(min, max) => handleRangeChange(filterKey, min, max)}
-        rangeConfig={cfg}
-        isDraggingRef={isDraggingRef}
-        isPrice={filterKey.toLowerCase() === "price"}
-      />
+      {!showSlider && 
+        <RangeSlider
+          range={curRange}
+          setRange={(r) => setRangeMap((prev) => ({ ...prev, [filterKey]: r }))}
+          applyRange={(min, max) => handleRangeChange(filterKey, min, max)}
+          rangeConfig={cfg}
+          isDraggingRef={isDraggingRef}
+          isPrice={filterKey.toLowerCase() === "price"}
+        /> 
+      }
+     
       {items.length > 0 && (
         <div className="space-y-1 mt-2 max-h-48 overflow-y-auto">
           {items.map((item) => (
@@ -248,6 +258,8 @@ export default function ProductFilterBar({ onFiltersChange, totalResults = 0, it
   const { data: rawApiFilters, isLoading: filtersLoading } = useGetFilters(itemCtrName);
   const { data: productFilters, isLoading: productFiltersLoading } = useGetProductsFilters(filterContentParam);
 
+
+
   const [apiFilters, setApiFilters] = useState({});
   const [sizeOptions, setSizeOptions] = useState([]);
   const [subItemOptions, setSubItemOptions] = useState([]);
@@ -265,6 +277,7 @@ export default function ProductFilterBar({ onFiltersChange, totalResults = 0, it
     }
   }, [productFilters]);
 
+  console.log(apiFilters, 'productFilters');
   useEffect(() => {
     if (!rawApiFilters) return;
     if (rawApiFilters.sizes) setSizeOptions(rawApiFilters.sizes);
@@ -277,13 +290,23 @@ export default function ProductFilterBar({ onFiltersChange, totalResults = 0, it
     [apiFilters]
   );
 
+  const isDirectUseFilter = useCallback(
+    (key) => (apiFilters[key] || [] ).some((i) => i.isDirect === true),
+    [apiFilters]
+  );
+
+
   const getSliderConfig = useCallback(
     (key) => {
       const items = apiFilters[key] || [];
+      
+      console.log(items, 'itemsconfig');
       const allMin = items.map((i) => i.min).filter((v) => v !== 0);
       const allMax = items.map((i) => i.max).filter((v) => v !== 0);
       const step = items[0]?.step || 1;
       const fallback = key.toLowerCase() === "weight" ? WEIGHT_RANGE : PRICE_RANGE;
+
+      console.log(allMin, 'minmax')
       return {
         min: allMin.length ? Math.min(...allMin) : fallback.min,
         max: allMax.length ? Math.max(...allMax) : fallback.max,
@@ -345,12 +368,26 @@ export default function ProductFilterBar({ onFiltersChange, totalResults = 0, it
 
   // ── Core URL writer ───────────────────────────────────────────────────────
   const updateURL = useCallback(
-    (newSelectedIds, newRangeMap, newSize, newSubItem, newSortBy) => {
+    (newSelectedIds, newRangeMap, newSize, newSubItem, newSortBy ,directFilter) => {
       const params = new URLSearchParams(location.search);
       const MANAGED_PARAMS = ["filterIds", "sizeName", "subItemName", "sortBy"];
       [...params.keys()].forEach((k) => {
         if (MANAGED_PARAMS.includes(k) || k.endsWith("Range")) params.delete(k);
       });
+
+
+      // ── 🔥 DIRECT FILTER MODE ─────────────────────────────
+      if (directFilter?.isDirect) {
+        if (directFilter.filterKey && directFilter.value) {
+          params.set(directFilter.filterKey, directFilter.value);
+        }
+
+        navigate({ search: params.toString() });
+        onFiltersChange?.(Object.fromEntries(params));
+        return; // 🚨 STOP HERE (important)
+      }
+
+      // ── NORMAL MODE ───────────────────────────────────────
 
       const idsStr = stringifyIds(newSelectedIds);
       if (idsStr) params.set("filterIds", idsStr);

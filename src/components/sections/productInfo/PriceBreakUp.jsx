@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { FaInfoCircle, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { formatNumber } from '../../../utils/number/FormatNumber';
 
 const PriceBreakup = ({ product, showPriceBreakup }) => {
     const [isExpanded, setIsExpanded] = useState(showPriceBreakup);
+
+    console.log(product,'product');
 
     if (!product) return null;
 
@@ -16,8 +19,16 @@ const PriceBreakup = ({ product, showPriceBreakup }) => {
     const miscAmt = parseFloat(product.MISCAMT) || 0;
     const stoneAmt = parseFloat(product.STNAMT) || 0;
     const mc = parseFloat(product.MC) || 0;
-    console.log(product ,'making charge')
+  
+    const originalAmount = parseFloat(product.GrandTotal) || 0 ;
+    const finalAmount = parseFloat(product.FinalAmount) || 0;
 
+    const discountPercent = product.OfferPercentage || 0 ;
+    console.log(discountPercent,'discountPercent');
+
+    const discountAmount = (originalAmount-finalAmount) ; 
+
+    console.log(discountAmount, 'discountAmount');
     const grossAmount = parseFloat(product.GrossAmount) || 0;
     const grandTotal = parseFloat(product.GrandTotal) || 0;
     const rate = parseFloat(product.RATE) || 0;
@@ -39,11 +50,12 @@ const PriceBreakup = ({ product, showPriceBreakup }) => {
     const formatPrice = (value) =>
         value === 0 ? '-' : `₹${value.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
 
+    const formatNumer = (value) =>
+        value === 0 ? '-' : `${value.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+
     return (
         <div className="bg-white border border-gray-300 rounded-lg  overflow-hidden shadow-sm">
 
-            {/* Summary Header */}
-         
 
             {/* Expanded Details */}
             {isExpanded && (
@@ -73,14 +85,14 @@ const PriceBreakup = ({ product, showPriceBreakup }) => {
                                             <tr className="text-xs font-medium">
                                                 <td>Rate</td>
                                                 <td colSpan="2" className="text-right">
-                                                    {formatPrice((netWt + maxWt) * rateValue)}
+                                                    {formatNumer((netWt + maxWt) * rateValue)}
                                                 </td>
                                             </tr>
 
                                             <tr className="text-xs">
                                                 <td>Making Charge</td>
                                                 <td colSpan="2" className="text-right py-1 text-right font-semibold text-[#f16137]">
-                                                    +{formatPrice(mc)}
+                                                    +{formatNumer(mc)}
                                                 </td>
                                             </tr>
 
@@ -88,7 +100,7 @@ const PriceBreakup = ({ product, showPriceBreakup }) => {
                                                 <tr className="text-xs">
                                                     <td>Stone Amount</td>
                                                     <td colSpan="2" className="text-right">
-                                                        {formatPrice(stoneAmt)}
+                                                        {formatNumer(stoneAmt)}
                                                     </td>
                                                 </tr>
                                             )}
@@ -105,7 +117,7 @@ const PriceBreakup = ({ product, showPriceBreakup }) => {
                                             <tr className="text-xs font-medium">
                                                 <td>Piece Rate</td>
                                                 <td colSpan="2" className="text-right">
-                                                    {formatPrice(grossAmount)}
+                                                        {formatNumer(grossAmount)}
                                                 </td>
                                             </tr>
                                         </>
@@ -114,10 +126,10 @@ const PriceBreakup = ({ product, showPriceBreakup }) => {
                                     <tr className="border-b text-xs font-medium">
                                         <td className="py-2">Subtotal</td>
                                         <td className="py-2 text-right">
-                                            {formatPrice(grossAmount)}
+                                            {formatNumer(grossAmount)}
                                         </td>
                                         <td className="py-2 text-right">
-                                            {formatPrice(grossAmount)}
+                                            {formatNumer(grossAmount)}
                                         </td>
                                     </tr>
 
@@ -125,11 +137,11 @@ const PriceBreakup = ({ product, showPriceBreakup }) => {
                                     <tr className="border-b text-xs">
                                         <td className="py-2">GST ({gstPercentage}%)</td>
                                         <td className="py-2 text-right">
-                                            {formatPrice(gstAmount)}
+                                            {formatNumer(gstAmount)}
                                         </td>
                                         
                                         <td className="py-2  text-right font-semibold text-[#f16137]">
-                                            +{formatPrice(gstAmount)}
+                                            +{formatNumer(gstAmount)}
                                         </td>
                                     </tr>
 
@@ -142,6 +154,38 @@ const PriceBreakup = ({ product, showPriceBreakup }) => {
                                             {formatPrice(grandTotal)}
                                         </td>
                                     </tr>
+
+                                    {/* Grand Total */}
+                                    {discountAmount > 0 && 
+                                    <>
+                                        <tr className="font-bold bg-green-50 px-2">
+                                            <td colSpan="1" className="py-2 text-[#041f60]">
+                                                Discount
+                                            </td>
+                                            <td className='text-right'>
+                                                {discountPercent}% OFF
+                                            </td>
+
+                                            <td className="py-2 text-right text-[#f16137]">
+                                                {formatNumer(discountAmount)}
+                                            </td>
+                                        </tr>
+
+
+                                        <tr className="font-bold bg-green-50">
+                                            <td colSpan="2" className="py-2 text-[#041f60]">
+                                                Final Amount 
+                                            </td>
+                                           
+
+                                            <td className="py-2 text-right text-[#f16137]">
+                                                {formatPrice(finalAmount)}
+                                            </td>
+
+                                        </tr>
+                                    </>
+                                    }
+                                  
                                 </>
                             ) : (
                                 <tr className="bg-orange-50">

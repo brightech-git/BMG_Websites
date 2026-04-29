@@ -112,8 +112,12 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
 
   const getPrice = () => Number(product?.FinalAmount || product?.RATE || 0);
 
-  const originalPrice = product?.OriginalAmount;
+  const originalPrice = product?.GrandTotal|| 0;
   const discount = product?.OfferPercentage;
+
+
+
+  console.log(discount,'discount');
 
   const isInCart =
     Array.isArray(cartProducts) &&

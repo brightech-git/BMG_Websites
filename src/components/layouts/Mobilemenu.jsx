@@ -36,7 +36,10 @@ const buildFilterLeafLink = (menuItem, filterKey, filterContentItem) => {
     if (menuItem.menuKey && menuItem.value) p.set(menuItem.menuKey, menuItem.value);
     if (filterContentItem.isRange) {
         p.set(`${filterKey.filterLabel}Range`, `${filterContentItem.min}-${filterContentItem.max}`);
-    } else {
+    } else if (filterKey.isDirect) {
+        p.set(`${filterKey.filterKeys}`, filterContentItem.filterValue);
+    }
+    else {
         p.set("filterIds", filterContentItem.id.toString());
     }
     return `/products-page?${p.toString()}`;

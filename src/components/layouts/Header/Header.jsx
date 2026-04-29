@@ -59,16 +59,14 @@ const Header = ({ isAuthenticated }) => {
 
   const {data : headerFitlers } =useGetHeaderFilters();
 
+
+
   const { data: productsFilterContent, isLoading: productsFilterContentLoading, isError: productsFilterContentError } = useGetProductsFilters({isActive:true , isHeader:true});
 
   console.log(headerFitlers, 'headerFitlers');
 
 
-  const handleFilterClick = (filterKey, filterId, filterValue) => {
-    console.log('Filter clicked:', { filterKey, filterId, filterValue });
-    // Add your navigation logic here
-    // navigate(`/products-page?filterIds=${filterId}`)
-  };
+ 
   useEffect(() => {
     setShouldShow(true);
     setIsNavigating(false);
@@ -374,7 +372,6 @@ const Header = ({ isAuthenticated }) => {
               <ProductFiltersNav
             
                 headers={headerFitlers?.headers || []}
-                // onFilterClick={handleFilterClick}
               />    
           </nav>
 
@@ -390,7 +387,6 @@ const Header = ({ isAuthenticated }) => {
             wishlistCount={wishlistCount}
             ratesData={ratesData}
             headers={headerFitlers?.headers || []}
-            // filtersData={productsFilterContent}
           />
         )}
       </AnimatePresence>

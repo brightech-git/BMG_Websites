@@ -13,13 +13,15 @@ const buildDirectLink = (header) => {
 };
 
 const buildMenuItemLink = (menuItem) => {
-    console.log(menuItem,'menuItem');
+    console.log(menuItem, "triggers");
     const p = new URLSearchParams();
     if (menuItem.filterContentId) p.set("filterIds", menuItem.filterContentId.toString());
     return `/products-page?${p.toString()}`;
 };
 
 const buildCategoryAllLink = (menuItem) => {
+
+    console.log(menuItem, "triggers");
     const p = new URLSearchParams();
     if (menuItem.menuKey && menuItem.value) p.set(menuItem.menuKey, menuItem.value);
     return `/products-page?${p.toString()}`;
@@ -27,13 +29,16 @@ const buildCategoryAllLink = (menuItem) => {
 
 const buildFilterLeafLink = (menuItem, filterKey, filterContentItem) => {
 
-    console.log("triggers")
-    console.log(menuItem,filterKey, filterContentItem,'filterKey');
+    console.log(menuItem, filterKey, filterContentItem,"triggers");
+
     const p = new URLSearchParams();
     if (menuItem.menuKey && menuItem.value) p.set(menuItem.menuKey, menuItem.value);
     if (filterKey.range) {
         p.set(`${filterKey?.filterKeys?.toLowerCase()}Range`, `${filterContentItem.min}-${filterContentItem.max}`);
-    } else {
+    } else if(filterKey.isDirect) {
+        p.set(`${filterKey.filterKeys}`, filterContentItem.filterValue);
+    }
+    else {
         p.set("filterIds", filterContentItem.id.toString());
     }
     return `/products-page?${p.toString()}`;

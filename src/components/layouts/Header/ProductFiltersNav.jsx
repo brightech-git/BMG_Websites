@@ -44,6 +44,20 @@ const buildFilterLeafLink = (menuItem, filterKey, filterContentItem) => {
     return `/products-page?${p.toString()}`;
 };
 
+
+const buildItemNameLink = (menuItem , filterKey  )=>{
+
+    console.log(menuItem, filterKey,'menuItem')
+    const p = new URLSearchParams();
+    if (menuItem.menuKey && menuItem.value) p.set(menuItem.menuKey, menuItem.value);
+    else {
+        p.set("itemName", filterKey.itemName);
+    }
+    return `/products-page?${p.toString()}`;
+}
+
+
+
 // Sub-dropdown component
 const SubDropdown = ({ menuItem, mIdx, scheduleHover, setHoveredMenuIdx, go, parentDropdownRef }) => {
     const [position, setPosition] = useState({ top: 0, left: 0 });
@@ -58,6 +72,11 @@ const SubDropdown = ({ menuItem, mIdx, scheduleHover, setHoveredMenuIdx, go, par
             });
         }
     }, [parentDropdownRef]);
+
+    const isItemList = menuItem.isItem === "Y" ;
+
+    console.log(isItemList, menuItem,'isItemList')
+
 
     return (
         <div
@@ -80,21 +99,24 @@ const SubDropdown = ({ menuItem, mIdx, scheduleHover, setHoveredMenuIdx, go, par
             >
                 All {menuItem.label}
             </button>
-
-            <div className="grid grid-cols-1 gap-4">
-                {menuItem.filterKeys.map((fk) => (
-                    <div key={fk.id}>
-                        <p className="text-[10px] sm:text-[12px] font-bold text-stone-400 uppercase tracking-widest mb-1.5">
-                            {fk.filterLabel}
-                        </p>
-                        <div className="flex flex-col gap-0.5">
+            {isItemList ? <div className="grid grid-cols-1 gap-4">
+                {menuItem.items.map((fk) => (
+                    <div key={fk.itemId} className="flex flex-col gap-0.5">
+                        <button
+                          
+                            onClick={() => go(buildItemNameLink(menuItem, fk ))}
+                            className="text-left text-[10px] sm:text-[12px] text-stone-500 hover:text-amber-700 hover:bg-amber-50 rounded px-1.5 py-[5px] transition-colors duration-150 bg-transparent border-none cursor-pointer w-full"
+                        >
+                            {fk.itemName}
+                        </button>
+                        {/* <div className="flex flex-col gap-0.5">
                             {fk.filterContent.map((fc) => (
                                 <button
                                     key={fc.id}
                                     onClick={() => go(buildFilterLeafLink(menuItem, fk, fc))}
                                     className="text-left text-[12px] sm:text-[14px] text-stone-600 hover:text-amber-700 hover:bg-amber-50 rounded px-1.5 py-[5px] transition-colors duration-150 bg-transparent border-none cursor-pointer w-full"
-                                >   
-                                {console.log(fk,'fiterContent')}
+                                >
+                                    {console.log(fk, 'fiterContent')}
                                     {fc.filterTitle}
                                     {fc.isRange && (
                                         <span className="ml-1 text-[10px] sm:text-[12px] text-stone-400">
@@ -103,10 +125,37 @@ const SubDropdown = ({ menuItem, mIdx, scheduleHover, setHoveredMenuIdx, go, par
                                     )}
                                 </button>
                             ))}
-                        </div>
+                        </div> */}
                     </div>
                 ))}
-            </div>
+            </div> :  
+                <div className="grid grid-cols-1 gap-4">
+                    {menuItem.filterKeys.map((fk) => (
+                        <div key={fk.id}>
+                            <p className="text-[10px] sm:text-[12px] font-bold text-stone-400 uppercase tracking-widest mb-1.5">
+                                {fk.filterLabel}
+                            </p>
+                            <div className="flex flex-col gap-0.5">
+                                {fk.filterContent.map((fc) => (
+                                    <button
+                                        key={fc.id}
+                                        onClick={() => go(buildFilterLeafLink(menuItem, fk, fc))}
+                                        className="text-left text-[12px] sm:text-[14px] text-stone-600 hover:text-amber-700 hover:bg-amber-50 rounded px-1.5 py-[5px] transition-colors duration-150 bg-transparent border-none cursor-pointer w-full"
+                                    >
+                                        {console.log(fk, 'fiterContent')}
+                                        {fc.filterTitle}
+                                        {fc.isRange && (
+                                            <span className="ml-1 text-[10px] sm:text-[12px] text-stone-400">
+                                                ({fc.filterValue})
+                                            </span>
+                                        )}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>}
+           
         </div>
     );
 };
@@ -155,9 +204,12 @@ export const ProductFiltersNav = ({ headers = [] }) => {
                 Home
             </button>
             {headers.map((header, hIdx) => {
+
+                console.log(header,'headerheader')
+
                 const isOpen = activeIndex === hIdx;
                 const isDirect = !header.filterId && header.menuList.length === 0;
-                const hasDropdown = header.menuList.length > 0 || !!header.filterId;
+                const hasDropdown = header.menuList.length > 0 ;
 
                 return (
                     <div
@@ -187,7 +239,7 @@ export const ProductFiltersNav = ({ headers = [] }) => {
                         {/* Dropdown */}
                         {hasDropdown && isOpen && (
                             <div className="absolute top-full left-0 z-50 bg-white shadow-[0_12px_40px_rgba(0,0,0,0.12)] overflow-visible min-w-[200px] max-w-[260px] w-max">
-                                {header.menuList.some(m => m.menuKey && m.value) ? (
+                                {header.menuList? (
                                     <div className="flex">
                                         {/* LEFT: menu item list */}
                                         <div
@@ -196,7 +248,8 @@ export const ProductFiltersNav = ({ headers = [] }) => {
                                         >
                                             {header.menuList.map((menuItem, mIdx) => {
                                                 const isCategory = !!menuItem.menuKey && !!menuItem.value;
-                                                const hasSubFilters = menuItem.filterKeys?.length > 0;
+                                                const hasSubFilters = menuItem.filterKeys?.length > 0 || menuItem?.items.length > 0 ;
+                                                console.log(hasSubFilters,'hasSubFilters');
                                                 const isHovered = hoveredMenuIdx === mIdx;
 
                                                 return (

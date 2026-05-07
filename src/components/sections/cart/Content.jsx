@@ -10,7 +10,7 @@ import UpdateMobileModal from '../../layouts/UpdateMobileModal';
 import { useSelector } from 'react-redux';
 import { formatCurrency } from '../../../utils/formatters';
 
-const CartItem = ({ item, onRemove, onSelect, isSelected, loading }) => {
+const CartItem = ({ item, onRemove, onSelect, isSelected, loading , itemLength }) => {
     const [imageError, setImageError] = useState(false);
     const baseUrl = "https://app.bmgjewellers.com";
 
@@ -26,19 +26,21 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, loading }) => {
     const displayTagKey = item?.TAGKEY || 0;
     const ItemTagKey = item?.TAGKEY || 0;
 
-
+    console.log(itemLength,'itemLength')
 
     return (
         <div
-            onClick={() => onSelect(ItemTagKey)}
+            onClick={() => itemLength > 1 ?  onSelect(ItemTagKey) : null}
             className={`flex items-center gap-1.5 sm:gap-3 p-2 sm:p-3 mb-2 border ${isSelected ? "border-[#f16137]" : "border-gray-200"} ${isSelected ? "bg-[var(--primary-card-color)]" : "white"} rounded-lg hover:shadow-lg transition-all duration-300 cursor-pointer`}
         >
-            <input
-                type="checkbox"
-                checked={isSelected}
-                readOnly
-                className="w-3 h-3 sm:w-4 sm:h-4 text-[#f16137]"
-            />
+            {itemLength > 1 &&
+                <input
+                    type="checkbox"
+                    checked={isSelected}
+                
+                    className="w-3 h-3 sm:w-4 sm:h-4 text-[#f16137]"
+                />
+            }
 
             <div className="w-14 h-14 sm:w-20 sm:h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                 {loading ? (
@@ -341,6 +343,7 @@ const Cart = () => {
                                         }}
                                         isSelected={selectedItems.includes(item.TAGKEY)}
                                         loading={isLoading}
+                                        itemLength={cartDetails?.totalItems ?? 0 }
                                     />
                                 ))}
                             </div>

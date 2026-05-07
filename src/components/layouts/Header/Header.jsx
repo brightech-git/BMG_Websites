@@ -59,6 +59,8 @@ const Header = ({ isAuthenticated }) => {
 
   const {data : headerFitlers } =useGetHeaderFilters();
 
+  console.log(headerFitlers,'headerFitlers');
+
 
 
   const { data: productsFilterContent, isLoading: productsFilterContentLoading, isError: productsFilterContentError } = useGetProductsFilters({isActive:true , isHeader:true});

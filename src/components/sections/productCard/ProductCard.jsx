@@ -311,7 +311,7 @@ const ProductCard = ({ item }) => {
                        
                         {/* ---------------- Discount Badge ---------------- */}
                         {discountPercentage && (
-                            <div className="absolute top-1 left-0 z-20 group">
+                            <div className="absolute top-1 left-0 z-10 group">
                             <div
                                 className={`relative text-white text-xs sm:text-sm font-semibold uppercase tracking-wide
                                 px-3 py-[4px] pr-5 

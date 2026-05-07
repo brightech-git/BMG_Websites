@@ -45,6 +45,18 @@ const buildFilterLeafLink = (menuItem, filterKey, filterContentItem) => {
     return `/products-page?${p.toString()}`;
 };
 
+
+const buildItemNameLink = (menuItem, filterKey) => {
+
+    console.log(menuItem, filterKey, 'menuItem')
+    const p = new URLSearchParams();
+    if (menuItem.menuKey && menuItem.value) p.set(menuItem.menuKey, menuItem.value);
+    else {
+        p.set("itemName", filterKey.itemName);
+    }
+    return `/products-page?${p.toString()}`;
+}
+
 // ─── Animation variants ───────────────────────────────────────────────────────
 const menuVariants = {
     hidden: { x: '-100%', opacity: 0 },
@@ -185,7 +197,7 @@ const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = []
                                 {/* ── Dynamic headers from JSON ── */}
                                 {headers.map((header, hIdx) => {
                                     const isDirect = !header.filterId && header.menuList.length === 0;
-                                    const hasDropdown = header.menuList.length > 0;
+                                    const hasDropdown = header.menuList.length > 0 ;
                                     const isHeaderOpen = activeHeaderIdx === hIdx;
 
                                     return (
@@ -243,8 +255,11 @@ const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = []
                                                         <div className="space-y-1">
                                                             {header.menuList.map((menuItem, mIdx) => {
                                                                 const isCategory = !!menuItem.menuKey && !!menuItem.value;
-                                                                const hasSubFilters = menuItem.filterKeys?.length > 0;
+                                                                const hasSubFilters = menuItem.filterKeys.length > 0 || menuItem.items.length > 0 ;
                                                                 const isMenuOpen = activeMenuIdx === mIdx;
+
+                                                                const isItemList = menuItem.isItem=== "Y" ;
+                                                                const subFilterContent = isItemList ? menuItem.fitlerKeys : menuItem.items ;
 
                                                                 return (
                                                                     <div
@@ -300,12 +315,47 @@ const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = []
 
                                                                         {/* Scenario 3: nested filterKeys → filterContent */}
                                                                         <AnimatePresence>
-                                                                            {hasSubFilters && isMenuOpen && (
+                                                                            {hasSubFilters && isMenuOpen && isItemList ?
                                                                                 <motion.div
                                                                                     variants={collapseVariants}
                                                                                     initial="hidden" animate="visible" exit="exit"
                                                                                     className="bg-white overflow-hidden"
                                                                                 >
+
+                                                                                    <div className="px-2 py-2 flex flex-wrap gap-1.5">
+                                                                                        {menuItem.items.map((item) => (
+                                                                                            <div key={item.itemId} className='flex flex-wrap gap-1.5'>
+                                                                                                <motion.button
+                                                                                                  
+                                                                                                    whileTap={{ scale: 0.95 }}
+                                                                                                    onClick={() => go(buildItemNameLink(menuItem, item))}
+                                                                                                    className="text-[12px] text-stone-600 bg-stone-50 hover:bg-amber-50 hover:text-amber-700 border border-stone-200 hover:border-amber-200 rounded-full px-3 py-1 transition-all duration-150"
+                                                                                                >
+                                                                                                    {item.itemName}
+                                                                                                </motion.button>
+                                                                                                {/* <div className="flex flex-wrap gap-1.5">
+                                                                                                    {fk.filterContent.map((fc) => (
+                                                                                                       
+                                                                                                            {fc.filterTitle}
+                                                                                                            {fc.isRange && (
+                                                                                                                <span className="ml-1 text-[10px] text-stone-400">
+                                                                                                                    ({fc.filterValue})
+                                                                                                                </span>
+                                                                                                            )}
+                                                                                                        </motion.button>
+                                                                                                    ))}
+                                                                                                </div> */}
+                                                                                            </div>
+                                                                                        ))}
+                                                                                    </div>
+                                                                                </motion.div>
+                                                                              : 
+                                                                                <motion.div
+                                                                                    variants={collapseVariants}
+                                                                                    initial="hidden" animate="visible" exit="exit"
+                                                                                    className="bg-white overflow-hidden"
+                                                                                >
+
                                                                                     <div className="px-3 py-2 space-y-3">
                                                                                         {menuItem.filterKeys.map((fk) => (
                                                                                             <div key={fk.id}>
@@ -333,7 +383,9 @@ const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = []
                                                                                         ))}
                                                                                     </div>
                                                                                 </motion.div>
-                                                                            )}
+                                                                             }
+                                                                         
+                                                                              
                                                                         </AnimatePresence>
                                                                     </div>
                                                                 );

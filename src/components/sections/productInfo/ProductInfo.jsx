@@ -166,10 +166,10 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
           tagNo: product.TAGNO,
           sno: product.SNO,
 
-          productName: product.ITEMCTRNAME || item.SUBITEMNAME || item.ITEMNAME,
+          productName: product.SUBITEMNAME || product.ITEMNAME ||product.ITEMCTRNAME ,
 
           grossAmount: parseFloat(product.GrossAmount),
-          price: parseFloat(product.finalAmount),
+          price: parseFloat(product.FinalAmount),
 
           grsWt: parseFloat(product.GRSWT),
           netWt: parseFloat(product.NETWT),

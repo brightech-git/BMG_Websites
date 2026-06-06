@@ -3,23 +3,23 @@ import { useCategoryBanner } from "../../hook/banner/useCategoryBanner";
 import fallbackImage from "../../assets/images/clouds-back.jpg";
 import "./BreadStyles.css";
 
-const Breadcrumbs = ({ itemCtrName,  pages, occasion, gender }) => {
+const Breadcrumbs = ({ ItemName, pages, occasion, gender }) => {
     const [isImageLoaded, setIsImageLoaded] = useState(false);
-// console.log(itemCtrName ,'itemname for bread')
+    // console.log(ItemName ,'itemname for bread')
     // Build params based on priority rules
     let params = {
-        itemCtrName: "",
-      
+        ItemName: "",
+
         pages: "",
         occasion: "",
         gender: "",
     };
 
 
-    if (itemCtrName ) {
-        params = { itemCtrName,pages: "", occasion: "", gender: "" };
-    } else if (itemCtrName) {
-        params = { itemCtrName, pages: "", occasion: "", gender: "" };
+    if (ItemName) {
+        params = { ItemName, pages: "", occasion: "", gender: "" };
+    } else if (ItemName) {
+        params = { ItemName, pages: "", occasion: "", gender: "" };
     } else if (gender) {
         params = { gender };
     } else if (occasion) {
@@ -41,7 +41,7 @@ const Breadcrumbs = ({ itemCtrName,  pages, occasion, gender }) => {
     // Reset loading state whenever data OR props change
     useEffect(() => {
         setIsImageLoaded(false);
-    }, [bannerData, itemCtrName, pages, occasion, gender]);
+    }, [bannerData, ItemName, pages, occasion, gender]);
 
     const handleImageError = (e) => {
         console.error("Failed to load banner image:", e.target.src);
@@ -58,7 +58,7 @@ const Breadcrumbs = ({ itemCtrName,  pages, occasion, gender }) => {
                 loading="lazy"
             />
             <div className="banner-content-overlay">
-                <h1 className="banner-title">{pages || itemCtrName || "Category"}</h1>
+                <h1 className="banner-title">{pages || ItemName || "Category"}</h1>
                 <p className="banner-description">
                     {"Explore our collection"}
                 </p>
@@ -88,7 +88,7 @@ const Breadcrumbs = ({ itemCtrName,  pages, occasion, gender }) => {
                                     onError={handleImageError}
                                     loading="lazy"
                                 />
-                              
+
                             </div>
                         );
                     })

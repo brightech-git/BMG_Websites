@@ -189,6 +189,7 @@ const Content = () => {
                                 scrollInterval={banner.scrollInterval}
                                 infinite={banner.infinite || false}
                                 dots={banner.dots || false}
+                                showArrows = {banner.isCategory}
 
                             />
                         );
@@ -196,7 +197,7 @@ const Content = () => {
                 )}
 
 
-                <Ourcategory subcategories={subcategories} isCategoriesLoading={isCategoriesLoading} />
+                {/* <Ourcategory subcategories={subcategories} isCategoriesLoading={isCategoriesLoading} /> */}
 
 
                 <RecentlyViewedWrapper />

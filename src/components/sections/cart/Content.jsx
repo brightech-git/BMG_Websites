@@ -10,7 +10,7 @@ import UpdateMobileModal from '../../layouts/UpdateMobileModal';
 import { useSelector } from 'react-redux';
 import { formatCurrency } from '../../../utils/formatters';
 
-const CartItem = ({ item, onRemove, onSelect, isSelected, loading , itemLength }) => {
+const CartItem = ({ item, onRemove, onSelect, isSelected, loading, itemLength }) => {
     const [imageError, setImageError] = useState(false);
     const baseUrl = "https://app.bmgjewellers.com";
 
@@ -18,7 +18,7 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, loading , itemLength }
         item?.ImagePath ? `${baseUrl}${JSON.parse(item.ImagePath)[0] || ''}` : fallbackImage;
 
     console.log(item, 'itemsitem')
-    const displayPrice = Number(item?.GrandTotal || 0);
+    const displayPrice = Number(item?.FinalAmount || item.GrandTotal || 0);
     const displayWeight = Number(item?.NETWT) || 0;
     // const displayPurity = item?.PURITY||0;
     const displayTagNo = item?.TAGNO || 0;
@@ -26,18 +26,18 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, loading , itemLength }
     const displayTagKey = item?.TAGKEY || 0;
     const ItemTagKey = item?.TAGKEY || 0;
 
-    console.log(itemLength,'itemLength')
+    console.log(itemLength, 'itemLength')
 
     return (
         <div
-            onClick={() => itemLength > 1 ?  onSelect(ItemTagKey) : null}
+            onClick={() => itemLength > 1 ? onSelect(ItemTagKey) : null}
             className={`flex items-center gap-1.5 sm:gap-3 p-2 sm:p-3 mb-2 border ${isSelected ? "border-[#f16137]" : "border-gray-200"} ${isSelected ? "bg-[var(--primary-card-color)]" : "white"} rounded-lg hover:shadow-lg transition-all duration-300 cursor-pointer`}
         >
             {itemLength > 1 &&
                 <input
                     type="checkbox"
                     checked={isSelected}
-                
+
                     className="w-3 h-3 sm:w-4 sm:h-4 text-[#f16137]"
                 />
             }
@@ -62,7 +62,7 @@ const CartItem = ({ item, onRemove, onSelect, isSelected, loading , itemLength }
                         className="hover:text-[#f16137] transition block truncate"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        {item.ITEMCTRNAME || item.SUBITEMNAME || item.ITEMNAME}
+                        {item.ItemName || item.SUBITEMNAME || item.ITEMNAME}
                     </Link>
                 </h3>
                 <p className="text-xs text-gray-600 mt-1 truncate">
@@ -157,7 +157,10 @@ const Cart = () => {
 
     const cartDetails = cartItems?.data;
 
+
     const productsInCart = cartDetails?.products || [];
+
+    console.log(productsInCart, 'productsInCart');
 
     // Calculate totals directly from selected items
     const selectedItemsData = productsInCart.filter(item =>
@@ -165,7 +168,7 @@ const Cart = () => {
     );
 
     const subtotal = selectedItemsData.reduce((sum, item) => {
-        const price = Number(item.GrandTotal) || 0;
+        const price = Number(item.FinalAmount) || item.GrandTotal || 0;
         return sum + price;
     }, 0);
 
@@ -190,7 +193,7 @@ const Cart = () => {
             alert("Please select items");
             return;
         }
-        console.log(selectedItemsData,'selectedItemsData')
+        console.log(selectedItemsData, 'selectedItemsData')
 
         const payload = {
             items: selectedItemsData.map(item => ({
@@ -199,11 +202,11 @@ const Cart = () => {
                 tagNo: item.TAGNO,
                 sno: item.SNO,
 
-                productName: item.ITEMCTRNAME || item.SUBITEMNAME || item.ITEMNAME,
+                productName: item.ItemName || item.SUBITEMNAME || item.ITEMNAME,
 
                 grossAmount: parseFloat(item.GrossAmount),
                 price: parseFloat(item.GrandTotal),
-                
+
                 netWt: parseFloat(item.NETWT),
                 grsWt: parseFloat(item.GRSWT),
 
@@ -343,7 +346,7 @@ const Cart = () => {
                                         }}
                                         isSelected={selectedItems.includes(item.TAGKEY)}
                                         loading={isLoading}
-                                        itemLength={cartDetails?.totalItems ?? 0 }
+                                        itemLength={cartDetails?.totalItems ?? 0}
                                     />
                                 ))}
                             </div>

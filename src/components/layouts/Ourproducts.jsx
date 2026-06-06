@@ -95,9 +95,9 @@ const NewArrival = ({ banners, isLoading, isError }) => {
     }, [bannerImages.length]);
 
     const handleExplore = () => {
-        const itemCtrName = "NEW_ARRIVALS";
+        const ItemName = "NEW_ARRIVALS";
         const queryParams = new URLSearchParams();
-        queryParams.append("itemCtrName", itemCtrName);
+        queryParams.append("ItemName", ItemName);
 
         navigate(`/products-page?${queryParams.toString()}`);
     };

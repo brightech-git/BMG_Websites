@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState ,useMemo } from "react";
+import React, { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useFilteredProducts } from "../../../hook/product/useFilterProducts";
 import ProductCard from "../productCard/ProductCard";
@@ -85,7 +85,7 @@ const NoResults = () => (
 /* Content                             */
 /* ---------------------------------- */
 // Content.jsx - Fix the prop passing
-const Content = ({ itemCtrName }) => { // Note the curly braces around itemCtrName
+const Content = ({ ItemName }) => { // Note the curly braces around ItemName
     const navigate = useNavigate();
     const location = useLocation();
     const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
@@ -102,7 +102,7 @@ const Content = ({ itemCtrName }) => { // Note the curly braces around itemCtrNa
 
     const [searchParams] = useSearchParams();
 
-    console.log(searchParams,'searchParams')
+    console.log(searchParams, 'searchParams')
     const queryFilters = useMemo(() => Object.fromEntries(searchParams), [searchParams]);
 
     const {
@@ -235,7 +235,7 @@ const Content = ({ itemCtrName }) => { // Note the curly braces around itemCtrNa
                     <Breadcrumb />
                 </div>
                 <div className="mb-8 animate__animated animate__fadeIn">
-                    <ProductFilterBar itemCtrName={itemCtrName} />
+                    <ProductFilterBar ItemName={ItemName} />
                 </div>
                 <LoadingGrid count={12} />
             </section>
@@ -256,7 +256,7 @@ const Content = ({ itemCtrName }) => { // Note the curly braces around itemCtrNa
     /* ---------------------------------- */
     /* Render                            */
     /* ---------------------------------- */
-    console.log(products,'products')
+    console.log(products, 'products')
 
     return (
         <section className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 bg-gradient-to-b from-[#FFF] to-[#eeece8] min-h-screen relative">
@@ -265,7 +265,7 @@ const Content = ({ itemCtrName }) => { // Note the curly braces around itemCtrNa
             </div>
 
             <div className="mb-8">
-                <ProductFilterBar itemCtrName={itemCtrName} totalResults={totalItems}/> {/* Pass the prop here */}
+                <ProductFilterBar ItemName={ItemName} totalResults={totalItems} /> {/* Pass the prop here */}
             </div>
             <div className="product-area">
                 {/* Product Header */}

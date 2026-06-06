@@ -87,9 +87,9 @@ const ProductCard = ({ item }) => {
         }
     }, [isMobile, hasMultipleImages]);
 
-    const productName = (item?.SUBITEMNAME || item?.ITEMCTRNAME || 'Jewelry Item').toLowerCase();
+    const productName = (item?.SUBITEMNAME || item?.ItemName || 'Jewelry Item').toLowerCase();
 
-   
+
     const originalPrice = parseFloat(item?.GrandTotal) || 0;
 
     const currentPrice = parseFloat(item?.FinalAmount) > 0
@@ -155,10 +155,10 @@ const ProductCard = ({ item }) => {
 
         if (isWishlisted) {
             removeFavorite(item.TAGKEY);
-      
+
         } else {
             addToFavorite(item);
-       
+
         }
 
         setTimeout(() => setHeartAnimation(false), 600);
@@ -273,7 +273,7 @@ const ProductCard = ({ item }) => {
                                     />
                                 )}
 
-                               
+
 
                                 {/* Loading Overlay */}
                                 {!imageLoaded && (
@@ -305,15 +305,15 @@ const ProductCard = ({ item }) => {
                                 />
                             </button>
 
-                          
+
                         </div>
 
-                       
+
                         {/* ---------------- Discount Badge ---------------- */}
                         {discountPercentage && (
                             <div className="absolute top-1 left-0 z-10 group">
-                            <div
-                                className={`relative text-white text-xs sm:text-sm font-semibold uppercase tracking-wide
+                                <div
+                                    className={`relative text-white text-xs sm:text-sm font-semibold uppercase tracking-wide
                                 px-3 py-[4px] pr-5 
                                 bg-[var(--primary-hover-color)]
                                 backdrop-blur-md
@@ -361,10 +361,10 @@ const ProductCard = ({ item }) => {
                                     <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-1 bg-white rounded-full opacity-0 group-hover:animate-ping"></span>
                                     <span className="absolute top-1 right-1/4 w-0.5 h-0.5 bg-white rounded-full opacity-0 group-hover:animate-ping group-hover:animation-delay-300"></span>
 
-                                  
+
                                 </div>
 
-                              
+
                             </div>
                         )}
                     </div>
@@ -372,7 +372,7 @@ const ProductCard = ({ item }) => {
                     <div className="flex flex-col items-start p-3 text-center bg-transparent">
                         <div className="flex items-center justify-center gap-2 flex-wrap mt-1">
                             <span className="font-lato text-sm md:text-base font-semibold text-[var(--primary-hover-color)]">
-                                ₹{formatNumber(currentPrice,2)}
+                                ₹{formatNumber(currentPrice, 2)}
                             </span>
                             <span className="font-lato text-xs md:text-sm font-normal text-gray-500 line-through">
                                 ₹{formatNumber(originalPrice, 2)}

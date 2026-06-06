@@ -16,8 +16,8 @@ export const getItemAndSubItemNames = async (metal) => {
     }
 };
 
-// ✅ New service: Fetch filtered items by itemId or itemCtrName
-export const getItemFilter = async ({ itemId, itemCtrName, page = 1, pageSize = 20 }) => {
+// ✅ New service: Fetch filtered items by itemId or ItemName
+export const getItemFilter = async ({ itemId, ItemName, page = 1, pageSize = 20 }) => {
     try {
         // Create URL with all parameters
         const params = new URLSearchParams();
@@ -25,7 +25,7 @@ export const getItemFilter = async ({ itemId, itemCtrName, page = 1, pageSize = 
         params.append('pageSize', pageSize);
 
         if (itemId) params.append('itemId', itemId.toString());
-        if (itemCtrName) params.append('itemCtrName', itemCtrName.trim());
+        if (ItemName) params.append('ItemName', ItemName.trim());
 
         const response = await PublicUrl.get(
             `/product/getItemFilter?${params.toString()}`

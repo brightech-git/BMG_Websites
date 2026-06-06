@@ -149,7 +149,7 @@ export const RangeFilterPanel = ({
   const cfg = getSliderConfig(filterKey);
   const curRange = rangeMap[filterKey] || [cfg.min, cfg.max];
 
-  console.log(items , cfg, curRange ,'slider');
+  console.log(items, cfg, curRange, 'slider');
 
   const handleBracketToggle = (item) => {
     const isSelected = curRange[0] === item.min && curRange[1] === item.max;
@@ -160,12 +160,12 @@ export const RangeFilterPanel = ({
     );
   };
 
-  const showSlider = notSlider.includes(filterKey.toLowerCase()) ;
-  console.log(showSlider,'showSlider')
+  const showSlider = notSlider.includes(filterKey.toLowerCase());
+  console.log(showSlider, 'showSlider')
 
   return (
     <div className="p-3 space-y-3">
-      {!showSlider && 
+      {!showSlider &&
         <RangeSlider
           range={curRange}
           setRange={(r) => setRangeMap((prev) => ({ ...prev, [filterKey]: r }))}
@@ -173,9 +173,9 @@ export const RangeFilterPanel = ({
           rangeConfig={cfg}
           isDraggingRef={isDraggingRef}
           isPrice={filterKey.toLowerCase() === "price"}
-        /> 
+        />
       }
-     
+
       {items.length > 0 && (
         <div className="space-y-1 mt-2 max-h-48 overflow-y-auto">
           {items.map((item) => (
@@ -237,7 +237,7 @@ export const SubItemList = ({ subItemOptions, selectedSubItem, handleSubItemChan
 );
 
 // ─── Main component ───────────────────────────────────────────────────────────
-export default function ProductFilterBar({ onFiltersChange, totalResults = 0, itemCtrName }) {
+export default function ProductFilterBar({ onFiltersChange, totalResults = 0, ItemName }) {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -251,11 +251,11 @@ export default function ProductFilterBar({ onFiltersChange, totalResults = 0, it
   const isDraggingRef = useRef(false);
 
   const filterContentParam = {
-    isActive:true,
+    isActive: true,
   }
 
   // ── Fetch filters ─────────────────────────────────────────────────────────
-  const { data: rawApiFilters, isLoading: filtersLoading } = useGetFilters(itemCtrName);
+  const { data: rawApiFilters, isLoading: filtersLoading } = useGetFilters(ItemName);
   const { data: productFilters, isLoading: productFiltersLoading } = useGetProductsFilters(filterContentParam);
 
 
@@ -291,7 +291,7 @@ export default function ProductFilterBar({ onFiltersChange, totalResults = 0, it
   );
 
   const isDirectUseFilter = useCallback(
-    (key) => (apiFilters[key] || [] ).some((i) => i.isDirect === true),
+    (key) => (apiFilters[key] || []).some((i) => i.isDirect === true),
     [apiFilters]
   );
 
@@ -299,7 +299,7 @@ export default function ProductFilterBar({ onFiltersChange, totalResults = 0, it
   const getSliderConfig = useCallback(
     (key) => {
       const items = apiFilters[key] || [];
-      
+
       console.log(items, 'itemsconfig');
       const allMin = items.map((i) => i.min).filter((v) => v !== 0);
       const allMax = items.map((i) => i.max).filter((v) => v !== 0);
@@ -368,7 +368,7 @@ export default function ProductFilterBar({ onFiltersChange, totalResults = 0, it
 
   // ── Core URL writer ───────────────────────────────────────────────────────
   const updateURL = useCallback(
-    (newSelectedIds, newRangeMap, newSize, newSubItem, newSortBy ,directFilter) => {
+    (newSelectedIds, newRangeMap, newSize, newSubItem, newSortBy, directFilter) => {
       const params = new URLSearchParams(location.search);
       const MANAGED_PARAMS = ["filterIds", "sizeName", "subItemName", "sortBy"];
       [...params.keys()].forEach((k) => {
@@ -545,8 +545,8 @@ export default function ProductFilterBar({ onFiltersChange, totalResults = 0, it
       const isPrice = key.toLowerCase() === "price";
       chips.push({
         label: `${key}: ${isPrice
-            ? `₹${min.toLocaleString()} – ₹${max.toLocaleString()}`
-            : `${min}g – ${max}g`
+          ? `₹${min.toLocaleString()} – ₹${max.toLocaleString()}`
+          : `${min}g – ${max}g`
           }`,
         onRemove: () => {
           setRangeMap((prev) => {

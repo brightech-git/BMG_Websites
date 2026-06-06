@@ -13,8 +13,8 @@ const FeaturedBanners = ({ banners, isLoading, isError }) => {
   const handleBannerClick = () => {
 
     const queryParams = new URLSearchParams();
-    const itemCtrName = "FEATURED";
-    queryParams.append("itemCtrName", itemCtrName);
+    const ItemName = "FEATURED";
+    queryParams.append("ItemName", ItemName);
     navigate(`products-page?${queryParams.toString()}`);
   };
   if (isLoading) return <p>Loading Banner</p>;

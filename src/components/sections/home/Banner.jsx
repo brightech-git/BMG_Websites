@@ -138,9 +138,9 @@ function BannerCarousel({ banners = [], isLoading = false }) {
     /* Click Handler                      */
     /* ---------------------------------- */
 
-    const handleBannerClick = (itemCtrName) => {
-        if (!itemCtrName) return;
-        const params = new URLSearchParams({ itemCtrName });
+    const handleBannerClick = (ItemName) => {
+        if (!ItemName) return;
+        const params = new URLSearchParams({ ItemName });
         navigate(`/products-page?${params.toString()}`);
     };
 

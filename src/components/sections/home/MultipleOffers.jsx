@@ -9,9 +9,9 @@ const MultipleOffers = ({ offers }) => {
     if (!offers || offers.length < 2) return null;
 
 
-    const handleClick = (itemCtrName, subItemName) => {
+    const handleClick = (ItemName, subItemName) => {
         const queryParam = new URLSearchParams();
-        if (itemCtrName) queryParam.append('itemCtrName', itemCtrName);
+        if (ItemName) queryParam.append('ItemName', ItemName);
         if (subItemName) queryParam.append('subItemName', subItemName);
         const fixedQuery = queryParam.toString().replace(/\+/g, '%20');
         navigate(`/products-page?${fixedQuery}`);

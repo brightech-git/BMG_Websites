@@ -213,7 +213,7 @@ const ImageGallery = ({ images = [], videos = [], badges = {} }) => {
                                 className={`bg-gradient-to-r ${badge.color} text-white px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow-lg transform hover:scale-105 transition-transform duration-300 animate__animated animate__fadeIn`}
                                 style={{ animationDelay: `${index * 0.1}s` }}
                             >
-                                {badge.icon}
+                                {/* {badge.icon} */}
                                 {badge.label}
                             </div>
                         ))}

@@ -66,7 +66,7 @@ const JewelryShowcase = ({ banners, isLoading, isError }) => {
 
     const handleSeeAll = () => {
         const queryParams = new URLSearchParams();
-        queryParams.append('itemCtrName', 'BEST_DESIGNED');
+        queryParams.append('ItemName', 'BEST_DESIGNED');
         navigate(`/products-page?${queryParams.toString()}`);
     }
 

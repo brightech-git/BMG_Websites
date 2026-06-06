@@ -9,9 +9,9 @@ const Onsale = ({ festivalBanners, isLoading, isError }) => {
     const mainBanner = festivalBanners[0] || null;
     const secondaryBanners = festivalBanners.slice(1);
 
-    const handleProductClick = (itemCtrName) => {
+    const handleProductClick = (ItemName) => {
         const queryParams = new URLSearchParams();
-        if (itemCtrName) queryParams.append('itemCtrName', itemCtrName);
+        if (ItemName) queryParams.append('ItemName', ItemName);
         // if (subItemName) queryParams.append('subItemName', subItemName);
         window.location.href = `/products-page?${queryParams.toString()}`;
     };

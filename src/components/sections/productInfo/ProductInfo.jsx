@@ -77,7 +77,7 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
 
   const { data: product, isLoading, error } = useSingleProductQuery(tagKey);
 
-  console.log(product,'productDetail')
+  console.log(product, 'productDetail')
 
   const [cartLoading, setCartLoading] = useState(false);
   const [cartSuccess, setCartSuccess] = useState(false);
@@ -112,12 +112,12 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
 
   const getPrice = () => Number(product?.FinalAmount || product?.RATE || 0);
 
-  const originalPrice = product?.GrandTotal|| 0;
+  const originalPrice = product?.GrandTotal || 0;
   const discount = product?.OfferPercentage;
 
 
 
-  console.log(discount,'discount');
+  console.log(discount, 'discount');
 
   const isInCart =
     Array.isArray(cartProducts) &&
@@ -166,7 +166,7 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
           tagNo: product.TAGNO,
           sno: product.SNO,
 
-          productName: product.SUBITEMNAME || product.ITEMNAME ||product.ITEMCTRNAME ,
+          productName: product.SUBITEMNAME || product.ITEMNAME || product.ItemName,
 
           grossAmount: parseFloat(product.GrossAmount),
           price: parseFloat(product.FinalAmount),
@@ -225,7 +225,7 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
   );
 
 
-  console.log(product,'productforInfo');
+  console.log(product, 'productforInfo');
 
   // Check if fields exist and have values
   const hasWeight = product.NETWT && parseFloat(product.NETWT) > 0;
@@ -289,8 +289,8 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
                   <button
                     onClick={handleWishlist}
                     className={`p-2 rounded-full border-2 transition-all duration-300 transform hover:scale-110 ${isWishlisted
-                        ? "bg-red-50 border-red-300 text-red-600 hover:bg-red-100"
-                        : "border-gray-200 hover:border-[var(--primary-hover-color)] hover:bg-orange-50"
+                      ? "bg-red-50 border-red-300 text-red-600 hover:bg-red-100"
+                      : "border-gray-200 hover:border-[var(--primary-hover-color)] hover:bg-orange-50"
                       } ${animateHeart ? "animate__animated animate__heartBeat" : ""}`}
                   >
                     {isWishlisted ? <FaHeart className="w-4 h-4" /> : <FaRegHeart className="w-4 h-4" />}
@@ -347,21 +347,21 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
                     <PincodeChecker />
                   </div>
 
-                
+
                 </div>
               )}
 
-    
-                <JewelleryBrandAssurance
-                  assurances={[
-                    { icon: <Gem className="w-4 h-4" />, label: "Sterling Silver" },
-                    { icon: <ShieldCheck className="w-4 h-4" />, label: "BIS Certified" },
-                    { icon: <RefreshCw className="w-4 h-4" />, label: "30-Day Returns" },
-                    { icon: <Truck className="w-4 h-4" />, label: "Free Shipping" },
-                  ].filter(Boolean)}
-                
-               
-                />
+
+              <JewelleryBrandAssurance
+                assurances={[
+                  { icon: <Gem className="w-4 h-4" />, label: "Sterling Silver" },
+                  { icon: <ShieldCheck className="w-4 h-4" />, label: "BIS Certified" },
+                  { icon: <RefreshCw className="w-4 h-4" />, label: "30-Day Returns" },
+                  { icon: <Truck className="w-4 h-4" />, label: "Free Shipping" },
+                ].filter(Boolean)}
+
+
+              />
 
 
               {/* Description with animation */}
@@ -507,7 +507,7 @@ const ProductInfo = ({ tagKey, Authenticated }) => {
 
           {/* Related Products */}
           <div className="mt-6 animate__animated animate__fadeIn">
-           
+
             <Shoprelated itemCtrId={product.ITEMCTRID} />
           </div>
         </div>

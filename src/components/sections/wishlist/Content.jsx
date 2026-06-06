@@ -39,7 +39,7 @@ const WishlistItem = ({ item, onRemove, cartItems, addToCartHandler, mobileNumbe
 
 
     addToCartHandler(item);
-    onRemove(item.TAGKEY , 'cart');
+    onRemove(item.TAGKEY, 'cart');
 
 
   };
@@ -62,7 +62,7 @@ const WishlistItem = ({ item, onRemove, cartItems, addToCartHandler, mobileNumbe
 
       {/* Remove Button */}
       <button
-        onClick={() => onRemove(item.TAGKEY , 'remove')}
+        onClick={() => onRemove(item.TAGKEY, 'remove')}
         className="absolute top-1 right-1 p-2 bg-white/90 text-red-400 backdrop-blur-sm rounded-full shadow-lg transition-all hover:bg-red-50 hover:text-red-600"
       >
         <Trash2 className="w-3 h-3" />
@@ -76,12 +76,12 @@ const WishlistItem = ({ item, onRemove, cartItems, addToCartHandler, mobileNumbe
               to={`/products-info/${item.TAGKEY}`}
               className="hover:text-[#f16137] transition text-xs"
             >
-              {item.SUBITEMNAME || item.ITEMCTRNAME}
+              {item.SUBITEMNAME || item.ItemName}
             </Link>
           </h3>
           <div className="flex items-center justify-between mb-3">
             <p className="text-xs sm:text-sm font-bold text-[#f16137]">
-              ₹{Number(item.GrandTotal || item.RATE || 0).toLocaleString('en-IN')}
+              ₹{Number(item.FinalAmount || item.GrandTotal || item.RATE || 0).toLocaleString('en-IN')}
             </p>
           </div>
         </div>
@@ -114,14 +114,14 @@ const Wishlist = () => {
   // Use favorites directly from the hook
   const items = favorites;
 
-  const handleRemove = (tagKey,key) => {
-    if(key === 'remove' ){
+  const handleRemove = (tagKey, key) => {
+    if (key === 'remove') {
       if (window.confirm("Remove from wishlist?")) {
         removeFavorite(tagKey);
       }
     }
     removeFavorite(tagKey);
-   
+
   };
 
   if (isLoading) {

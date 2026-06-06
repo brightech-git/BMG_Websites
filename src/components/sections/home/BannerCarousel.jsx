@@ -146,9 +146,9 @@ function BannerCarousel({ banners = [], isLoading = false }) {
     /* Click Handler                      */
     /* ---------------------------------- */
 
-    const handleBannerClick = (itemCtrName) => {
-        if (!itemCtrName || Math.abs(dragDistance) > 10) return;
-        const params = new URLSearchParams({ itemCtrName });
+    const handleBannerClick = (ItemName) => {
+        if (!ItemName || Math.abs(dragDistance) > 10) return;
+        const params = new URLSearchParams({ ItemName });
         navigate(`/products-page?${params.toString()}`);
     };
 
@@ -234,8 +234,8 @@ function BannerCarousel({ banners = [], isLoading = false }) {
                             >
                                 <div
                                     className={`h-2.5 rounded-full transition-all duration-300 ${i === currentIndex
-                                            ? "w-10 bg-amber-600"
-                                            : "w-2.5 bg-gray-400 hover:bg-gray-500"
+                                        ? "w-10 bg-amber-600"
+                                        : "w-2.5 bg-gray-400 hover:bg-gray-500"
                                         }`}
                                 />
                             </button>

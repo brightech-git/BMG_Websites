@@ -8,9 +8,9 @@ const CategoryCard = ({ item }) => {
     const navigate = useNavigate();
     const baseUrl = "https://app.bmgjewellers.com";
 
-    const handleShopNow = (itemCtrName, subItemName) => {
+    const handleShopNow = (ItemName, subItemName) => {
         const queryParams = new URLSearchParams();
-        if (itemCtrName) queryParams.append('itemCtrName', itemCtrName);
+        if (ItemName) queryParams.append('ItemName', ItemName);
         // if (subItemName) queryParams.append('subItemName', subItemName);
         const fixedQuery = queryParams.toString().replace(/\+/g, '%20');
         navigate(`/products-page?${fixedQuery}`);

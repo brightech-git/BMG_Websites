@@ -1,15 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    itemCtrName: '',
+    ItemName: '',
     subItemName: '',
     sizeName: '',
     gender: '',
     sortBy: '',
     priceRange: '',
-    weightRange:'',
-    new_arrival: '', 
-    page: 0, 
+    weightRange: '',
+    new_arrival: '',
+    page: 0,
     pageSize: 10,
 };
 
@@ -18,7 +18,7 @@ const filterSlice = createSlice({
     initialState,
     reducers: {
         setItemName: (state, action) => {
-            state.itemCtrName = typeof action.payload === 'string' ? action.payload.replace(/^"|"$/g, '') : '';
+            state.ItemName = typeof action.payload === 'string' ? action.payload.replace(/^"|"$/g, '') : '';
         },
         setSubItemName: (state, action) => {
             state.subItemName = typeof action.payload === 'string' ? action.payload.replace(/^"|"$/g, '') : '';
@@ -26,7 +26,7 @@ const filterSlice = createSlice({
         setSizeName: (state, action) => {
             state.sizeName = typeof action.payload === 'string' ? action.payload.replace(/^"|"$/g, '') : '';
         },
-       
+
         setGender: (state, action) => {
             state.gender = typeof action.payload === 'string' ? action.payload.replace(/^"|"$/g, '') : '';
         },

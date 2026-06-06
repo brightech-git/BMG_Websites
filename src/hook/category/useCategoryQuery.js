@@ -12,16 +12,16 @@ export const useCategories = () => {
   });
 };
 
-export const useItemFilter = ({ itemId, itemCtrName, page = 1, pageSize = 20 }) => {
+export const useItemFilter = ({ itemId, ItemName, page = 1, pageSize = 20 }) => {
   return useQuery({
-    queryKey: ['itemFilter', itemId, itemCtrName, page, pageSize],
+    queryKey: ['itemFilter', itemId, ItemName, page, pageSize],
     queryFn: () => getItemFilter({
       itemId: itemId ? itemId.toString() : undefined,
-      itemCtrName: itemCtrName ? itemCtrName.trim() : undefined,
+      ItemName: ItemName ? ItemName.trim() : undefined,
       page,
       pageSize
     }),
-    enabled: !!itemId || !!itemCtrName,
+    enabled: !!itemId || !!ItemName,
     keepPreviousData: true,
     staleTime: 5 * 60 * 1000
   });

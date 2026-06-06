@@ -39,7 +39,9 @@ const GoogleLoginButton = () => {
             if (window.google && window.google.accounts) {
                 window.google.accounts.id.initialize({
                     client_id:
-                        "1049506168889-0ami0utbl0rg145o5mcebh1h8h0srub4.apps.googleusercontent.com",
+                        // "1049506168889-0ami0utbl0rg145o5mcebh1h8h0srub4.apps.googleusercontent.com",
+                        // "900212830464-2lm2h9j2h617d5ijt1dtm4940h3d5q5t.apps.googleusercontent.com",
+                    "1049506168889-0ami0utbl0rg145o5mcebh1h8h0srub4.apps.googleusercontent.com",
                     callback: handleCredentialResponse,
                 });
 

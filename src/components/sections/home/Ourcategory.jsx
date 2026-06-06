@@ -28,16 +28,16 @@ const OurCategory = ({ subcategories, isCategoriesLoading }) => {
         ref.addEventListener('scroll', handleScroll);
         handleScroll(); // Check initial state
 
-      
-     
+
+
 
         return () => {
             ref.removeEventListener('scroll', handleScroll);
         };
     }, []);
 
-    const handleItemClick = (itemCtrName) => {
-        navigate(`/products-page?itemCtrName=${encodeURIComponent(itemCtrName)}`);
+    const handleItemClick = (ItemName) => {
+        navigate(`/products-page?ItemName=${encodeURIComponent(ItemName)}`);
     };
 
     const formatItemName = (name) => {
@@ -99,26 +99,26 @@ const OurCategory = ({ subcategories, isCategoriesLoading }) => {
                     </h2>
 
                     {/* Navigation Buttons - Hide in grid view */}
-                
-                        <div className="flex gap-2">
-                            <SmartButton
-                                variant="arrow"
-                                isDisabled={isAtStart}
-                                onClick={() => scroll('left')}
-                                className="rounded-full w-6 h-6 flex items-center justify-center hover:bg-gray-100 transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                            >
-                                <ChevronLeft className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1" />
-                            </SmartButton>
-                            <SmartButton
-                                variant="arrow"
-                                isDisabled={isAtEnd}
-                                onClick={() => scroll('right')}
-                                className="rounded-full w-6 h-6 flex items-center justify-center hover:bg-gray-100 transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                            >
-                                <ChevronRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                            </SmartButton>
-                        </div>
-                 
+
+                    <div className="flex gap-2">
+                        <SmartButton
+                            variant="arrow"
+                            isDisabled={isAtStart}
+                            onClick={() => scroll('left')}
+                            className="rounded-full w-6 h-6 flex items-center justify-center hover:bg-gray-100 transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                        >
+                            <ChevronLeft className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1" />
+                        </SmartButton>
+                        <SmartButton
+                            variant="arrow"
+                            isDisabled={isAtEnd}
+                            onClick={() => scroll('right')}
+                            className="rounded-full w-6 h-6 flex items-center justify-center hover:bg-gray-100 transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                        >
+                            <ChevronRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                        </SmartButton>
+                    </div>
+
                 </div>
 
                 {/* Categories Container */}

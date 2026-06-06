@@ -8,7 +8,7 @@ const CategoryCard = ({ item }) => {
 
     const handleShopNow = (occasion, gender) => {
         const queryParams = new URLSearchParams();
-        if (occasion) queryParams.append('itemCtrName', occasion);
+        if (occasion) queryParams.append('ItemName', occasion);
         // if (gender) queryParams.append('gender', gender);
         navigate(`/products-page?${queryParams.toString()}`);
     };

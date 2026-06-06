@@ -2,11 +2,11 @@
 import PublicUrl from "../api/publicUrl";
 
 /**
- * Fetch category banner based on itemCtrName and subItemName
- * @param {Object} params - Object with itemCtrName and subItemName
+ * Fetch category banner based on ItemName and subItemName
+ * @param {Object} params - Object with ItemName and subItemName
  */
-export const getCategoryBanner = ({ itemCtrName, subItemName, pages, occasion, gender }) => {
+export const getCategoryBanner = ({ ItemName, subItemName, pages, occasion, gender }) => {
     return PublicUrl.get("/category_image/get", {
-        params: { itemName: itemCtrName, pages: pages, occasion: occasion, gender: gender }
+        params: { itemName: ItemName, pages: pages, occasion: occasion, gender: gender }
     });
 };

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { login, clearError } from "../../../redux/slices/userSlice";
 import GoogleLoginButton from "../register/GoogleLoginButton";
 import loginImage from '../../../assets/images/login.png';
+
 const LoginContent = () => {
     const [contactOrEmailOrUsername, setContact] = useState("");
     const [password, setPassword] = useState("");

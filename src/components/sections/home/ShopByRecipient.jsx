@@ -10,7 +10,7 @@ const ShopByRecipient = ({ banners }) => {
 
     const handleCategoryClick = (itemName) => {
         const queryParams = new URLSearchParams();
-        if (itemName) queryParams.append("itemCtrName", itemName);
+        if (itemName) queryParams.append("ItemName", itemName);
 
         navigate(`/products-page?${queryParams.toString()}`);
     };

@@ -62,22 +62,30 @@ const GridBanner = ({
         };
     };
     const handleImageClick = (imageData, index) => {
-        console.log('imageData', imageData)
 
-      
-        if (!imageData?.link && !imageData?.filterId) return;
 
-        let url = "/products-page?";
+        
 
-        if (imageData.link) {
-            url += imageData.link;
+        // if (!imageData?.link && !imageData?.filterId) return;
+
+        const data = imageData?.isSingle
+            ? imageData
+            : (imageData?.desktop || imageData?.mobile || {});
+
+        const params = new URLSearchParams();
+
+        if (data?.link) {
+            data.link.split("&").forEach(pair => {
+                const [key, value] = pair.split("=");
+                if (key && value) params.append(key, value);
+            });
         }
 
-        if (imageData.filterId) {
-            url += imageData.link ? `&filterIds=${imageData.filterId}` : `filterIds=${imageData.filterId}`;
+        if (data?.filterId) {
+            params.append("filterIds", data.filterId);
         }
 
-        navigate(url);
+        navigate(`/products-page?${params.toString()}`);
     };
 
     return (

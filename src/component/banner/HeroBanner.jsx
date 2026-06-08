@@ -147,17 +147,35 @@ const HeroBanner = ({
         if (Math.abs(distance) > 30) distance > 0 ? nextSlide() : prevSlide();
     };
 
-    /* ── Click ───────────────────────────────────────────────────────────── */
     const handleImageClick = (imageData, index) => {
+
         if (isDragging && Math.abs(dragDistance) > 10) return;
-        if (onImageClick) { onImageClick(imageData, index); return; }
-        if (!imageData?.link && !imageData?.filterId) return;
-        if (imageData.filterId && imageData.link)
-            navigate(`/products-page?${imageData.link}&filterIds=${imageData.filterId}`);
-        else if (imageData.filterId)
-            navigate(`/products-page?filterIds=${imageData.filterId}`);
-        else
-            navigate(`/products-page?${imageData.link}`);
+
+        if (onImageClick) {
+            onImageClick(imageData, index);
+            return;
+        }
+
+        // if (!imageData?.link && !imageData?.filterId) return;
+
+        const data = imageData?.isSingle
+            ? imageData
+            : (imageData?.desktop || imageData?.mobile || {});
+
+        const params = new URLSearchParams();
+
+        if (data?.link) {
+            data.link.split("&").forEach(pair => {
+                const [key, value] = pair.split("=");
+                if (key && value) params.append(key, value);
+            });
+        }
+
+        if (data?.filterId) {
+            params.append("filterIds", data.filterId);
+        }
+
+        navigate(`/products-page?${params.toString()}`);
     };
 
     /* ── Image helpers ───────────────────────────────────────────────────── */

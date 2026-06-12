@@ -3,23 +3,22 @@ import { useCategoryBanner } from "../../hook/banner/useCategoryBanner";
 import fallbackImage from "../../assets/images/clouds-back.jpg";
 import "./BreadStyles.css";
 
-const Breadcrumbs = ({ ItemName, pages, occasion, gender }) => {
+const Breadcrumbs = ({ itemName, pages, occasion, gender }) => {
     const [isImageLoaded, setIsImageLoaded] = useState(false);
-    // console.log(ItemName ,'itemname for bread')
-    // Build params based on priority rules
-    let params = {
-        ItemName: "",
 
+
+    let params = {
+        itemName: "",
         pages: "",
         occasion: "",
         gender: "",
     };
 
 
-    if (ItemName) {
-        params = { ItemName, pages: "", occasion: "", gender: "" };
-    } else if (ItemName) {
-        params = { ItemName, pages: "", occasion: "", gender: "" };
+    if (itemName) {
+        params = { itemName, pages: "", occasion: "", gender: "" };
+    } else if (itemName) {
+        params = { itemName, pages: "", occasion: "", gender: "" };
     } else if (gender) {
         params = { gender };
     } else if (occasion) {
@@ -28,20 +27,21 @@ const Breadcrumbs = ({ ItemName, pages, occasion, gender }) => {
         params = { pages };
     }
 
-    // console.log(params, 'params')
+    console.log(params, 'params')
 
     const { data: bannerData, isLoading, isError } = useCategoryBanner(params);
 
 
     const banners = bannerData?.results || [];
 
-    // console.log(banners, 'banners')
+
+    console.log(banners, 'breadcrumb');
 
 
     // Reset loading state whenever data OR props change
     useEffect(() => {
         setIsImageLoaded(false);
-    }, [bannerData, ItemName, pages, occasion, gender]);
+    }, [bannerData, itemName, pages, occasion, gender]);
 
     const handleImageError = (e) => {
         console.error("Failed to load banner image:", e.target.src);
@@ -58,7 +58,7 @@ const Breadcrumbs = ({ ItemName, pages, occasion, gender }) => {
                 loading="lazy"
             />
             <div className="banner-content-overlay">
-                <h1 className="banner-title">{pages || ItemName || "Category"}</h1>
+                <h1 className="banner-title">{pages || itemName || "Category"}</h1>
                 <p className="banner-description">
                     {"Explore our collection"}
                 </p>
@@ -76,6 +76,7 @@ const Breadcrumbs = ({ ItemName, pages, occasion, gender }) => {
                         const imageSrc = item?.image
                             ? `https://app.bmgjewellers.com${item.image}`
                             : fallbackImage;
+                        console.log(imageSrc,'imageSrc')
 
                         return (
                             <div key={item.id || index} className="banner-wrapper">

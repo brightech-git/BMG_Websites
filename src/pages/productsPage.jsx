@@ -9,9 +9,9 @@ import { useDocumentMeta } from '../utils/meta/useMeta';
 
 const ProductsPage = () => {
   const location = useLocation();
-  const { ItemName } = queryString.parse(location.search);
+  const { itemName } = queryString.parse(location.search);
 
-  console.log(ItemName, 'datas for breadcrumb');
+  console.log(itemName, 'datas for breadcrumb');
 
   // Update document meta
   useDocumentMeta({
@@ -23,9 +23,9 @@ const ProductsPage = () => {
     <Fragment>
 
       {/* Pass query params to Breadcrumb */}
-      <Breadcrumbs ItemName={ItemName} pages="products-page" />
+      <Breadcrumbs itemName={itemName} pages="products-page" />
       {/* <SmoothScroll> */}
-      <Content ItemName={ItemName} />
+      <Content ItemName={itemName} />
       {/* </SmoothScroll> */}
 
 

@@ -154,7 +154,7 @@ const Content = () => {
                                 ? JSON.parse(banner.visibleCount)
                                 : banner.visibleCount;
 
-                        console.log(banner ,'bannersDatainHome');
+                        console.log(banner,'banner');
 
                         return banner.isGrid ? (
                             <GridBanner
@@ -172,25 +172,27 @@ const Content = () => {
                             <HeroBanner
                                 key={banner.imageKey || key}
                                 title={banner.title}
+
                                 description={banner.description}
                                 backgroundColor={banner.backgroundColor}
                                 centered={banner.centered}
                                 gap={banner.gap}
                                 full={banner.full}
+
                                 images={banner.images || []}
-                                desktopColumns={banner.desktopColumns || 3}
-                                desktopRatio={banner.defaultRatio || "16/7.3"}
+                          
                                 defaultRatio={banner.defaultRatio || "16/7.3"}
-                                mobileRows={banner.mobileRows || [1]}
-                                mobileRatio={banner.mobileRatio || "16/7.3"}
+
                                 autoScroll={banner.autoscroll || false}
                                 scrollable={banner.scrollable}
-                                visibleCount={parsedVisibleCount || { desktop: 3, tablet: 2, mobile: 2 }}
+                                visibleCount={parsedVisibleCount || { desktop: 1, tablet: 2, mobile: 1 }}
                                 scrollInterval={banner.scrollInterval}
                                 infinite={banner.infinite || false}
                                 dots={banner.dots || false}
                                 showArrows = {banner.isCategory}
 
+                                // mobileRows={banner.mobileRows || [1]}
+                                // desktopColumns={banner.desktopColumns || 3}
                             />
                         );
                     })

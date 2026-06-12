@@ -6,20 +6,22 @@ const HeroBanner = ({
     title,
     description,
     images,
+
     defaultRatio = '16/9',
-    mobileRatio = '5/4',
+
     gap = true,
     mobileGap = null,
     centered = false,
     full = false,
     backgroundColor = 'white',
-    mobileRows = null,
-    desktopColumns = 'auto',
+
+    // mobileRows = null,
     onImageClick,
 
     autoScroll = false,
     scrollable = false,
-    visibleCount = { desktop: 3, tablet: 2, mobile: 2 },
+
+    visibleCount,
     scrollInterval = 3000,
     infinite = false,
     dots = false,
@@ -43,11 +45,13 @@ const HeroBanner = ({
     // Ref for the mobile horizontal scroll container
     const mobileScrollRef = useRef(null);
 
-    const parsedMobileRows = useMemo(() => {
-        if (!mobileRows) return null;
-        if (Array.isArray(mobileRows)) return mobileRows;
-        try { return JSON.parse(mobileRows); } catch { return null; }
-    }, [mobileRows]);
+    // const parsedMobileRows = useMemo(() => {
+    //     if (!mobileRows) return null;
+    //     if (Array.isArray(mobileRows)) return mobileRows;
+    //     try { return JSON.parse(mobileRows); } catch { return null; }
+    // }, [mobileRows]);
+
+    // console.log(parsedMobileRows,'parsedMobileRows');
 
     useEffect(() => {
         const checkScreenSize = () => {
@@ -181,13 +185,13 @@ const HeroBanner = ({
     /* ── Image helpers ───────────────────────────────────────────────────── */
     const getImageData = (image, index) => {
         if (typeof image === 'string') {
-            return { url: image, ratio: isMobile ? mobileRatio : defaultRatio, alt: `Image ${index + 1}`, link: null };
+            return { url: image, ratio: defaultRatio, alt: `Image ${index + 1}`, link: null };
         }
         if (image && typeof image === 'object') {
             if (image.desktop) {
                 if (isMobile) return {
                     url: image.mobile?.url || image.desktop.url,
-                    ratio: image.mobile?.ratio || mobileRatio,
+                    ratio: image.mobile?.ratio || defaultRatio,
                     alt: image.alt || `Image ${index + 1}`,
                     link: image.mobile?.link || image.desktop?.link || null,
                 };
@@ -200,12 +204,12 @@ const HeroBanner = ({
             }
             return {
                 url: image.url || '',
-                ratio: image.ratio || (isMobile ? mobileRatio : defaultRatio),
+                ratio: image.ratio || (defaultRatio),
                 alt: image.alt || `Image ${index + 1}`,
                 link: image.link || null,
             };
         }
-        return { url: '', ratio: isMobile ? mobileRatio : defaultRatio, alt: 'Missing image', link: null };
+        return { url: '', ratio:defaultRatio, alt: 'Missing image', link: null };
     };
 
     const parseRatio = (ratio) => {
@@ -215,32 +219,50 @@ const HeroBanner = ({
 
     /* ── Grid layout (unchanged for non-showArrows path) ────────────────── */
     const getGridLayout = () => {
-        if (scrollable) return `repeat(${currentVisibleCount}, 1fr)`;
-        if (isMobile && parsedMobileRows) {
-            let result = '';
-            parsedMobileRows.forEach((rowCols, i) => {
-                if (i > 0) result += ' ';
-                result += `repeat(${rowCols}, 1fr)`;
-            });
-            return result;
-        }
-        if (desktopColumns === 'auto') {
-            const allHaveRatios = images.every(img => {
-                const d = typeof img === 'string' ? null : img;
-                return d && (d.ratio || d.desktop?.ratio);
-            });
-            if (allHaveRatios) {
-                return images.map((img) => {
-                    const d = getImageData(img, 0);
-                    if (d.ratio) { const [w] = d.ratio.split('/').map(Number); return `${w}fr`; }
-                    return '1fr';
-                }).join(' ');
-            }
-            return `repeat(${images.length <= 3 ? images.length : 3}, 1fr)`;
-        }
-        return `repeat(${desktopColumns}, 1fr)`;
-    };
+        const currentVisibleCount = getCurrentVisibleCount();
 
+        if (scrollable) {
+            return `repeat(${currentVisibleCount}, 1fr)`;
+        }
+
+        // if (isMobile && parsedMobileRows) {
+        //     let result = "";
+        //     console.log(parsedMobileRows,'parsedMobileRowsparsedMobileRows')
+
+        //     parsedMobileRows.forEach((rowCols, i) => {
+        //         if (i > 0) result += " ";
+        //         result += `repeat(${rowCols}, 1fr)`;
+        //     });
+
+        //     return result;
+        // }
+
+        // if (desktopColumns === "auto") {
+        //     const allHaveRatios = images.every((img) => {
+        //         const d = typeof img === "string" ? null : img;
+        //         return d && (d.ratio || d.desktop?.ratio);
+        //     });
+
+        //     if (allHaveRatios) {
+        //         return images
+        //             .map((img) => {
+        //                 const d = getImageData(img, 0);
+
+        //                 if (d.ratio) {
+        //                     const [w] = d.ratio.split("/").map(Number);
+        //                     return `${w}fr`;
+        //                 }
+
+        //                 return "1fr";
+        //             })
+        //             .join(" ");
+        //     }
+
+        //     return `repeat(${currentVisibleCount}, 1fr)`;
+        // }
+
+        return `repeat(${currentVisibleCount}, 1fr)`;
+    };
     const getVisibleImages = () => {
         if (!scrollable) return images;
         if (infinite) {
@@ -251,13 +273,13 @@ const HeroBanner = ({
 
     const getRows = () => {
         if (scrollable) return [getVisibleImages()];
-        if (!isMobile || !parsedMobileRows) return [images];
+         return [images];
         const rows = [];
         let idx = 0;
-        parsedMobileRows.forEach(rowCols => {
-            const slice = images.slice(idx, idx + rowCols);
-            if (slice.length > 0) { rows.push(slice); idx += slice.length; }
-        });
+        // parsedMobileRows.forEach(rowCols => {
+        //     const slice = images.slice(idx, idx + rowCols);
+        //     if (slice.length > 0) { rows.push(slice); idx += slice.length; }
+        // });
         if (idx < images.length && rows.length > 0)
             rows[rows.length - 1] = [...rows[rows.length - 1], ...images.slice(idx)];
         return rows;
@@ -428,8 +450,10 @@ const HeroBanner = ({
                             >
                                 {images.map((image, imgIndex) => {
                                     const imageData = getImageData(image, imgIndex);
+
+                                    console.log(imageData,'imageData');
                                     // Each item takes roughly visibleCount.mobile items across the viewport
-                                    const mobileVisible = visibleCount.mobile || 2;
+                                    const mobileVisible = visibleCount.mobile || 1 ;
                                     const itemW = `calc(${100 / mobileVisible}% - 0.5rem)`;
                                     return (
                                         <div
@@ -521,8 +545,7 @@ const HeroBanner = ({
                                     key={rowIndex}
                                     className={`grid ${gapClass} w-full ${scrollable ? 'transition-transform duration-300 ease-out' : ''}`}
                                     style={{
-                                        gridTemplateColumns: !scrollable && isMobile && parsedMobileRows
-                                            ? `repeat(${row.length}, 1fr)` : gridTemplateStyle,
+                                        gridTemplateColumns: gridTemplateStyle,
                                         transform: scrollable && isDragging ? `translateX(${translateX}px)` : 'none',
                                     }}
                                 >
@@ -575,7 +598,7 @@ const HeroBanner = ({
                     <div className="flex justify-center gap-2 mt-4 pb-2">
                         {Array.from({ length: totalPages }).map((_, i) => (
                             <button key={i} onClick={() => goToSlide(i)} className="focus:outline-none" aria-label={`Go to slide ${i + 1}`}>
-                                <div className={`h-2.5 rounded-full transition-all duration-300 ${i === currentIndex ? 'w-8 bg-amber-600' : 'w-2.5 bg-gray-400 hover:bg-gray-500'}`} />
+                                <div className={`h-1.5 md:h-2.5 rounded-full transition-all duration-300 ${i === currentIndex ? 'w-4 md:w-8 bg-amber-600' : 'w-1.5 md:w-2.5 bg-gray-400 hover:bg-gray-500'}`} />
                             </button>
                         ))}
                     </div>

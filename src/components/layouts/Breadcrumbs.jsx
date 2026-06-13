@@ -3,52 +3,35 @@ import { useCategoryBanner } from "../../hook/banner/useCategoryBanner";
 import fallbackImage from "../../assets/images/clouds-back.jpg";
 import "./BreadStyles.css";
 
-const Breadcrumbs = ({ itemName, pages, occasion, gender }) => {
+const Breadcrumbs = ({ itemId, subItemId, filterId, pages }) => {
     const [isImageLoaded, setIsImageLoaded] = useState(false);
 
-
-    let params = {
-        itemName: "",
-        pages: "",
-        occasion: "",
-        gender: "",
+    // Build params — only include non-empty values
+    const params = {
+        ...(itemId && { itemId }),
+        ...(subItemId && { subItemId }),
+        ...(filterId && { filterId }),
+        ...(pages && { pages }),
     };
 
-
-    if (itemName) {
-        params = { itemName, pages: "", occasion: "", gender: "" };
-    } else if (itemName) {
-        params = { itemName, pages: "", occasion: "", gender: "" };
-    } else if (gender) {
-        params = { gender };
-    } else if (occasion) {
-        params = { occasion };
-    } else if (pages) {
-        params = { pages };
-    }
-
-    console.log(params, 'params')
+    console.log(params, 'params');
 
     const { data: bannerData, isLoading, isError } = useCategoryBanner(params);
 
-
     const banners = bannerData?.results || [];
-
 
     console.log(banners, 'breadcrumb');
 
-
-    // Reset loading state whenever data OR props change
+    // Reset loading state whenever data or props change
     useEffect(() => {
         setIsImageLoaded(false);
-    }, [bannerData, itemName, pages, occasion, gender]);
+    }, [bannerData, itemId, subItemId, filterId, pages]);
 
     const handleImageError = (e) => {
         console.error("Failed to load banner image:", e.target.src);
         e.target.src = fallbackImage;
     };
 
-    // Fallback banner renderer
     const renderFallbackBanner = () => (
         <div className="banner-wrapper">
             <img
@@ -58,9 +41,11 @@ const Breadcrumbs = ({ itemName, pages, occasion, gender }) => {
                 loading="lazy"
             />
             <div className="banner-content-overlay">
-                <h1 className="banner-title">{pages || itemName || "Category"}</h1>
+                <h1 className="banner-title">
+                    {pages || itemId || "Category"}
+                </h1>
                 <p className="banner-description">
-                    {"Explore our collection"}
+                    Explore our collection
                 </p>
             </div>
         </div>
@@ -76,20 +61,19 @@ const Breadcrumbs = ({ itemName, pages, occasion, gender }) => {
                         const imageSrc = item?.image
                             ? `https://app.bmgjewellers.com${item.image}`
                             : fallbackImage;
-                        console.log(imageSrc,'imageSrc')
+
+                        console.log(imageSrc, 'imageSrc');
 
                         return (
                             <div key={item.id || index} className="banner-wrapper">
                                 <img
                                     src={imageSrc}
                                     alt={item?.title || "Category Banner"}
-                                    className={`banner-image ${isImageLoaded ? "loaded" : "loading"
-                                        }`}
+                                    className={`banner-image ${isImageLoaded ? "loaded" : "loading"}`}
                                     onLoad={() => setIsImageLoaded(true)}
                                     onError={handleImageError}
                                     loading="lazy"
                                 />
-
                             </div>
                         );
                     })

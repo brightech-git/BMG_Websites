@@ -228,7 +228,8 @@ const Content = ({ ItemName }) => { // Note the curly braces around ItemName
     /* States                             */
     /* ---------------------------------- */
 
-    if (isLoading && products.length === 0) {
+    if (isLoading  && products.length === 0
+    ) {
         return (
             <section className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 bg-gradient-to-b from-[#f8f6f2] to-[var(--primary-card-color)] min-h-screen">
                 <div className="mb-6">
@@ -241,6 +242,21 @@ const Content = ({ ItemName }) => { // Note the curly braces around ItemName
             </section>
         );
     }
+
+    if (isFetching && products.length === 0) {
+        return (
+            <section className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 bg-gradient-to-b from-[#f8f6f2] to-[var(--primary-card-color)] min-h-screen">
+                <div className="mb-6">
+                    <Breadcrumb />
+                </div>
+                <div className="mb-8 animate__animated animate__fadeIn">
+                    <ProductFilterBar ItemName={ItemName} />
+                </div>
+                <LoadingGrid count={12} />
+            </section>
+        );
+    }
+
 
     if (isError) {
         return (
@@ -285,7 +301,7 @@ const Content = ({ ItemName }) => { // Note the curly braces around ItemName
                 </div>
 
                 {/* Product Grid */}
-                {products.length === 0 ? (
+                {products.length === 0  ? (
                     <NoResults />
                 ) : (
                     <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 md:gap-2 [&>*]:border [&>*]:border-[var(--secondary-card-color)] [&>*]:p-2 [&>*]:box-border">

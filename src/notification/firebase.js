@@ -23,14 +23,14 @@ export const requestForToken = async () => {
 
         if (permission === "granted") {
             return await getToken(messaging, {
-                vapidKey: "BHeUX3InTYDr1VTBkxOUPDxi8iZw6Zy7liHO4Gu3SfGIXSLQYRUFQdgulSAQd7FyIQIfU3UoIV6z3-P10H-zJvo",
+                vapidKey: "BOxFjBExCqS7C90dhsvp0qFhAVSpDJFjG4PN8yRhGzfDpwdv-9_saKdBJe6Hhc0L9bqRUz9RD4tbbJOBsmPEbDs",
             });
 
         } else if (permission === "default") {
             const newPermission = await Notification.requestPermission();
             if (newPermission === "granted") {
                 return await getToken(messaging, {
-                    vapidKey: "BHeUX3InTYDr1VTBkxOUPDxi8iZw6Zy7liHO4Gu3SfGIXSLQYRUFQdgulSAQd7FyIQIfU3UoIV6z3-P10H-zJvo",
+                    vapidKey: "BOxFjBExCqS7C90dhsvp0qFhAVSpDJFjG4PN8yRhGzfDpwdv-9_saKdBJe6Hhc0L9bqRUz9RD4tbbJOBsmPEbDs",
                 });
             }
         }

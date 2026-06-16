@@ -3,8 +3,8 @@ import { toast } from "react-toastify";
 import { logout } from "../redux/slices/userSlice";
 import { store } from "../store";
 
-//const BASE_URL = 'https://app.bmgjewellers.com/api/v1';
-const BASE_URL = 'http://localhost:8081/api/v1';
+const BASE_URL = 'https://app.bmgjewellers.com/api/v1';
+//const BASE_URL = 'http://localhost:8081/api/v1';
 
 const PublicUrl = axios.create({
     baseURL: BASE_URL,
@@ -34,6 +34,7 @@ PublicUrl.interceptors.response.use(
     (error) => {
         const status = error?.response?.status;
 
+        console.log(status, error.response,'statusfromlogin');
         if (status === 401 || status === 403) {
             toast.error("Session expired. Please login again.");
 

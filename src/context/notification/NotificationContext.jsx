@@ -17,16 +17,21 @@ export const NotificationProvider = ({ children }) => {
     const [notifData, setNotifData] = useState({ title: "", message: "", image: "" });
     const { mutate: registerDevice } = useRegisterNotification();
 
+    console.log(showPermissionModal,'showPermissionModal');
+
     // ---- Ask permission (only called manually) ----
     const askNotification = (title, message) => {
         if (Notification.permission === "default") {
             setNotifData({ title, message });
+            console.log(title , message, 'askNotification');
             setShowPermissionModal(true);
         }
     };
 
     const handleEnable = async () => {
         const fcmToken = await requestForToken();
+
+        console.log(fcmToken ,'notificationContext');
         if (fcmToken) {
             registerDevice({
                 userId: user?.id || '',

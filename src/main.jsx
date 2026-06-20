@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
+import MaintenanceLogin from './pages/MaintenanceLogin';
 
 import {QueryClientProvider } from '@tanstack/react-query';
 import { ToastContainer } from 'react-toastify';
@@ -30,6 +31,22 @@ import MainLayout from './component/layout/MainLayout';
 import { queryClient } from './component/reactQuery/queryClient';
 
 
+function Root() {
+  const [hasAccess, setHasAccess] = useState(false);
+
+  if (!hasAccess) {
+    return <MaintenanceLogin onAccess={() => setHasAccess(true)} />;
+  }
+
+  return (
+    <PincodeProvider>
+      <MainLayout>
+        <App />
+      </MainLayout>
+    </PincodeProvider>
+  );
+}
+
 const root = createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -38,11 +55,7 @@ root.render(
         <NotificationProvider>
           <CompanyDetailsProvider>
             <BrowserRouter>
-            <PincodeProvider>
-              <MainLayout>
-                  <App />
-              </MainLayout>
-              </PincodeProvider>
+              <Root />
               <ToastContainer
                 position="top-right"
                 autoClose={2000}

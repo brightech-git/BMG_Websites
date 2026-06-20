@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
@@ -51,14 +51,11 @@ import "./App.css";
 import ReturnReplaceFlow from "./components/sections/return/Return";
 
 function App() {
-  const [showHome, setShowHome] = useState(true);
-
   return (
     <>
       <ScrollToTop />
 
-      {showHome && (
-        <Routes>
+      <Routes>
 
           {/* PUBLIC ROUTES */}
           <Route path="/" element={<Home />} />
@@ -125,7 +122,6 @@ function App() {
           {/* 404 */}
           <Route path="*" element={<Error />} />
         </Routes>
-      )}
     </>
   );
 }

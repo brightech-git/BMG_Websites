@@ -55,7 +55,8 @@ const Footer = () => {
       { name: "About Us", href: "/about" },
       { name: "Why Choose Us", href: "/why-choose-us" },
       { name: "FAQ", href: "/faq" },
-      { name: "Scheme", href: "/scheme" }
+      { name: "Scheme", href: "/scheme" },
+      {name: "Contanct" ,href:"/contactStore"}
     ],
 
     policyLinks: [
@@ -267,13 +268,13 @@ const Footer = () => {
                     <NavLink
                       to={`/${item.link}`}
                       className="
-  text-[var(--primary-text-color)]
-  text-xs
-  cursor-pointer
-  hover:underline
-  transition-colors
-  duration-200
-"
+                                text-[var(--primary-text-color)]
+                                text-xs
+                                cursor-pointer
+                                hover:underline
+                                transition-colors
+                                duration-200
+                              "
                     >
                       {item.title}
                     </NavLink>

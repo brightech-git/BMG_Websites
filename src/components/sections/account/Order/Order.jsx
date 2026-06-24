@@ -231,17 +231,17 @@ const Orders = () => {
             Retry
           </button>
         </div>
-      ) : filteredOrders.length === 0 ? (
+      ) : filteredOrders?.length === 0 ? (
         <div className="bg-white/80 backdrop-blur-md border border-[#E2D9FF] rounded-xl sm:rounded-2xl p-8 sm:p-12 text-center animate__animated animate__fadeIn shadow-lg shadow-[#8B5CF6]/5">
           <div className="relative inline-block">
             <FontAwesomeIcon icon={faBoxOpen} className="text-5xl sm:text-6xl text-[#C4B5FF] mb-4" />
             <div className="absolute inset-0 bg-[#8B5CF6]/10 rounded-full blur-2xl"></div>
           </div>
           <p className="text-sm sm:text-base font-medium text-[#2D1B4E] mb-2">
-            {orders.length === 0 ? "No orders yet" : "No matches found"}
+            {orders?.length === 0 ? "No orders yet" : "No matches found"}
           </p>
           <p className="text-xs sm:text-sm text-[#6B5B95] mb-4">
-            {orders.length === 0 ? "Start shopping to see your orders here" : "Try adjusting your filters"}
+            {orders?.length === 0 ? "Start shopping to see your orders here" : "Try adjusting your filters"}
           </p>
           {(statusFilter || timeFilter || searchQuery) && (
             <button onClick={() => { setSearchQuery(""); setStatusFilter(""); setTimeFilter(""); }}

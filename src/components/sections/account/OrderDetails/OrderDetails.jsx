@@ -326,7 +326,7 @@ const OrderDetail = () => {
                     <div className="w-6 h-6 bg-gradient-to-br from-[#F97316] to-[#EA580C] rounded-lg flex items-center justify-center shadow-md">
                       <FontAwesomeIcon icon={faBox} className="text-white text-xs" />
                     </div>
-                    Items in your order ({items.length})
+                    Items in your order ({0})
                   </h3>
                 </div>
 

@@ -28,7 +28,9 @@ const Dashboard = () => {
   const [loadingOrders, setLoadingOrders] = useState(true);
 
   const { cartItems = { data: [] }, isLoading: cartLoading } = useCart();
-  const { data: wishlistResponse = { data: [] }, isLoading: wishlistLoading } = useFavorites();
+  const { favorites: wishlistResponse = { data: [] }, isLoading: wishlistLoading } = useFavorites();
+
+  console.log(cartItems, wishlistResponse,'wishlistResponse')
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -50,6 +52,7 @@ const Dashboard = () => {
     };
     fetchOrders();
   }, []);
+  
 
   const metrics = [
     {
@@ -62,7 +65,7 @@ const Dashboard = () => {
     },
     {
       icon: <FiHeart size={20} />,
-      value: wishlistResponse.data?.length || 0,
+      value: wishlistResponse?.length || 0,
       label: "Wishlist",
       to: "/wishlist",
       gradient: "from-[#EC4899] to-[#F43F5E]", // Pink to Rose
@@ -70,7 +73,7 @@ const Dashboard = () => {
     },
     {
       icon: <FiShoppingCart size={20} />,
-      value: cartItems.data?.length || 0,
+      value: cartItems.data?.totalItems || 0,
       label: "Cart",
       to: "/cart",
       gradient: "from-[#10B981] to-[#14B8A6]", // Emerald to Teal
@@ -214,7 +217,7 @@ const Dashboard = () => {
                 Recent Orders
               </h3>
               <span className="hidden sm:inline-block text-xs text-[var(--grey-color)]">
-                ({orders?.data.length || 0} total)
+                ({orders?.data?.length || 0} total)
               </span>
             </div>
             <button
@@ -226,7 +229,7 @@ const Dashboard = () => {
             </button>
           </div>
 
-          {orders?.data.length === 0 ? (
+          {orders?.data?.length === 0 ? (
             <div className="p-8 sm:p-12 md:p-16 text-center animate__animated animate__fadeIn">
               <div className="relative inline-block">
                 <FiGift className="text-5xl sm:text-6xl md:text-7xl text-[#8B5CF6]/20 mb-4" />

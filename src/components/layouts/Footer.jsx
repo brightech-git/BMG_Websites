@@ -8,8 +8,44 @@ import { useFooterContent } from "../../hook/footer/useFooterContent";
 import {  NavLink } from "react-router-dom";
 import { useCompanyDetails } from "../../context/clientDetails/clientDetialContext";
 
+const buildLink = (link) => {
+  if (!link) return "/";
+  return link.startsWith("/") ? link : `/${link}`;
+};
+
+// One footer category group — the parent link with its sub-categories listed directly below it.
+const FooterCategoryGroup = ({ item }) => {
+  const hasChildren = item.subLayers?.length > 0;
+
+  return (
+    <div className="min-w-[150px]">
+      <NavLink
+        to={buildLink(item.link)}
+        className="text-sm font-semibold text-[var(--primary-text-color)]  transition-colors duration-200"
+      >
+        {item.label}
+      </NavLink>
+
+      {hasChildren && (
+        <div className="mt-1.5 flex flex-col gap-1">
+          {item.subLayers.map((child) => (
+            <NavLink
+              key={child.id}
+              to={buildLink(child.link)}
+              className="text-[13px] text-stone-400  transition-colors duration-150"
+            >
+              {child.label}
+            </NavLink>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const Footer = () => {
   const { data: footerContent } = useFooterContent();
+  console.log(footerContent,'footerContent')
   const { details } = useCompanyDetails();
 
   // Centralized footer data
@@ -56,7 +92,7 @@ const Footer = () => {
       { name: "Why Choose Us", href: "/why-choose-us" },
       { name: "FAQ", href: "/faq" },
       { name: "Scheme", href: "/scheme" },
-      {name: "Contanct" ,href:"/contactStore"}
+      {name: "Contact" ,href:"/contactStore"}
     ],
 
     policyLinks: [
@@ -84,7 +120,7 @@ const Footer = () => {
     }
   };
 
-  const footerCategory = footerContent?.entries || [];
+  const footerCategory = footerContent || [];
 
   return (
     <>
@@ -261,25 +297,9 @@ const Footer = () => {
           <div className="footer-container">
             <h5 className="quick-search-title">Quick Search</h5>
             <div className="quick-search-content">
-              <span className="search-label">Categories :</span>
-              <div className="search categories">
-                {footerCategory.map((item, idx) => (
-                  <React.Fragment key={idx}>
-                    <NavLink
-                      to={`/${item.link}`}
-                      className="
-                                text-[var(--primary-text-color)]
-                                text-xs
-                                cursor-pointer
-                                hover:underline
-                                transition-colors
-                                duration-200
-                              "
-                    >
-                      {item.title}
-                    </NavLink>
-                    {idx !== footerCategory.length - 1 && <span className="separator">|</span>}
-                  </React.Fragment>
+              <div className="flex flex-wrap items-start gap-x-8 gap-y-4">
+                {footerCategory.map((item) => (
+                  <FooterCategoryGroup key={item.id} item={item} />
                 ))}
               </div>
             </div>

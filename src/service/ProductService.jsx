@@ -105,7 +105,7 @@ export const getProductsFiltersContent = async (filters) => {
 
 export const getHeaderFitler = async(filters) => {
     try{
-        const response = await PublicUrl.get('/menu/filter/list', 
+        const response = await PublicUrl.get('/header', 
             // {params: filters}
         );
         return response.data;

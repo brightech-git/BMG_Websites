@@ -2,7 +2,7 @@ import PublicUrl from "../api/publicUrl";
 
 const getFooterContent = async() =>{
     try{
-        const response = await PublicUrl.get('/footer-container/all');
+        const response = await PublicUrl.get('/footer');
         return response.data;
     }
     catch(err){

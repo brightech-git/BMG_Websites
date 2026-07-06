@@ -5,5 +5,6 @@ export const useFooterContent =() =>
  useQuery({
     queryKey:["footerContent"],
     queryFn:getFooterContent,
+    select :(res) => res?.data
  })
  

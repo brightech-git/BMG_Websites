@@ -57,18 +57,13 @@ const Header = ({ isAuthenticated }) => {
   const { isLoading: cartLoading, cartCount } = useCart({ enabled: isAuthenticated });
 
 
-  const {data : headerFitlers } =useGetHeaderFilters();
+  const { data: headerFiltersResponse, isLoading: headerFiltersLoading } = useGetHeaderFilters();
 
-  console.log(headerFitlers,'headerFitlers');
-
-
+  console.log(headerFiltersResponse,'headerFiltersResponse')
+  const headers = headerFiltersResponse?.data || [];
 
   const { data: productsFilterContent, isLoading: productsFilterContentLoading, isError: productsFilterContentError } = useGetProductsFilters({isActive:true , isHeader:true});
 
-  console.log(headerFitlers, 'headerFitlers');
-
-
- 
   useEffect(() => {
     setShouldShow(true);
     setIsNavigating(false);
@@ -372,9 +367,9 @@ const Header = ({ isAuthenticated }) => {
           <nav className="w-full flex justify-center  bg-white">
             
               <ProductFiltersNav
-            
-                headers={headerFitlers?.headers || []}
-              />    
+                headers={headers}
+                isLoading={headerFiltersLoading}
+              />
           </nav>
 
         )}
@@ -388,7 +383,7 @@ const Header = ({ isAuthenticated }) => {
             cartCount={cartCount}
             wishlistCount={wishlistCount}
             ratesData={ratesData}
-            headers={headerFitlers?.headers || []}
+            headers={headers}
           />
         )}
       </AnimatePresence>

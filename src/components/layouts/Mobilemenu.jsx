@@ -11,51 +11,12 @@ import './MobileMenu.css';
 import Logo from "../../assets/icons/logo.png";
 import RatesDropdown from './RatesDropdown';
 
-// ─── Navigation helpers (same logic as desktop) ───────────────────────────────
+// ─── Navigation helpers ───────────────────────────────────────────────────────
 
-const buildDirectLink = (header) => {
-    const p = new URLSearchParams();
-    p.set(header.linkKey, header.linkValue);
-    return `/products-page?${p.toString()}`;
+const buildLink = (link) => {
+    if (!link) return "/";
+    return link.startsWith("/") ? link : `/${link}`;
 };
-
-const buildMenuItemLink = (menuItem) => {
-    const p = new URLSearchParams();
-    if (menuItem.filterContentId) p.set("filterIds", menuItem.filterContentId.toString());
-    return `/products-page?${p.toString()}`;
-};
-
-const buildCategoryAllLink = (menuItem) => {
-    const p = new URLSearchParams();
-    if (menuItem.menuKey && menuItem.value) p.set(menuItem.menuKey, menuItem.value);
-    return `/products-page?${p.toString()}`;
-};
-
-const buildFilterLeafLink = (menuItem, filterKey, filterContentItem) => {
-    const p = new URLSearchParams();
-    if (menuItem.menuKey && menuItem.value) p.set(menuItem.menuKey, menuItem.value);
-    if (filterContentItem.isRange) {
-        p.set(`${filterKey.filterLabel}Range`, `${filterContentItem.min}-${filterContentItem.max}`);
-    } else if (filterKey.isDirect) {
-        p.set(`${filterKey.filterKeys}`, filterContentItem.filterValue);
-    }
-    else {
-        p.set("filterIds", filterContentItem.id.toString());
-    }
-    return `/products-page?${p.toString()}`;
-};
-
-
-const buildItemNameLink = (menuItem, filterKey) => {
-
-    console.log(menuItem, filterKey, 'menuItem')
-    const p = new URLSearchParams();
-    if (menuItem.menuKey && menuItem.value) p.set(menuItem.menuKey, menuItem.value);
-    else {
-        p.set("itemName", filterKey.itemName);
-    }
-    return `/products-page?${p.toString()}`;
-}
 
 // ─── Animation variants ───────────────────────────────────────────────────────
 const menuVariants = {
@@ -84,24 +45,88 @@ const collapseVariants = {
     },
 };
 
+// ─── Recursive nested menu accordion ──────────────────────────────────────────
+const MenuAccordion = ({ items, go, depth = 0 }) => {
+    const [openIdx, setOpenIdx] = useState(null);
+
+    return (
+        <div className={depth > 0 ? "pl-3 pt-1 space-y-1.5" : "space-y-1"}>
+            {items.map((item, idx) => {
+                const hasChildren = item.subLayers?.length > 0;
+                const isOpen = openIdx === idx;
+
+                return (
+                    <div
+                        key={item.id}
+                        className={depth > 0
+                            ? "rounded-lg overflow-hidden bg-stone-50 border border-stone-100"
+                            : "rounded-lg overflow-hidden border border-gray-100"}
+                    >
+                        <motion.button
+                            onClick={() => hasChildren ? setOpenIdx(isOpen ? null : idx) : go(buildLink(item.link))}
+                            className={`flex items-center justify-between w-full px-4 py-3 transition-all duration-200 ${
+                                depth > 0
+                                    ? "bg-transparent hover:text-amber-700"
+                                    : "bg-gradient-to-r from-gray-50 to-white hover:from-amber-50 hover:to-orange-50"
+                            }`}
+                            whileTap={{ scale: 0.98 }}
+                        >
+                            <span className={`font-semibold text-[14px] ${depth > 0 ? "text-stone-600" : "text-gray-700"}`}>
+                                {item.label}
+                            </span>
+                            <div className="flex items-center gap-2">
+                                {hasChildren && (
+                                    <motion.span
+                                        className="text-[11px] text-amber-600 font-medium px-1"
+                                        whileTap={{ scale: 0.9 }}
+                                        onClick={(e) => { e.stopPropagation(); go(buildLink(item.link)); }}
+                                    >
+                                        All
+                                    </motion.span>
+                                )}
+                                {hasChildren && (
+                                    <motion.div
+                                        animate={{ rotate: isOpen ? 180 : 0 }}
+                                        transition={{ duration: 0.2 }}
+                                        className="text-amber-500"
+                                    >
+                                        <ChevronDown size={15} />
+                                    </motion.div>
+                                )}
+                            </div>
+                        </motion.button>
+
+                        <AnimatePresence>
+                            {hasChildren && isOpen && (
+                                <motion.div
+                                    variants={collapseVariants}
+                                    initial="hidden" animate="visible" exit="exit"
+                                    className="bg-white overflow-hidden px-2 pb-2"
+                                >
+                                    <MenuAccordion items={item.subLayers} go={go} depth={depth + 1} />
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
+                );
+            })}
+        </div>
+    );
+};
+
 // ─── Component ────────────────────────────────────────────────────────────────
 const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = [] }) => {
     const navigate = useNavigate();
 
-    // which header accordion is open (by index)
     const [activeHeaderIdx, setActiveHeaderIdx] = useState(null);
-    // which menuList item accordion is open (by index, inside the active header)
-    const [activeMenuIdx, setActiveMenuIdx] = useState(null);
     const [isClosing, setIsClosing] = useState(false);
 
-    // Escape key
     useEffect(() => {
         const onEsc = (e) => { if (e.key === 'Escape') handleClose(); };
         document.addEventListener('keydown', onEsc);
         return () => document.removeEventListener('keydown', onEsc);
     }, []);
 
-    // Lock body scroll
     useEffect(() => {
         document.body.style.overflow = 'hidden';
         return () => { document.body.style.overflow = 'unset'; };
@@ -119,16 +144,9 @@ const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = []
 
     const toggleHeader = (idx) => {
         setActiveHeaderIdx(prev => prev === idx ? null : idx);
-        setActiveMenuIdx(null);
     };
 
-    const toggleMenu = (idx) => {
-        setActiveMenuIdx(prev => prev === idx ? null : idx);
-    };
-
-    // ─── Static nav items (non-header items) ─────────────────────────────────
     const staticNav = [
-
         { id: 'shop', linkText: 'Shop', link: '/products-page', icon: <ShoppingBag size={20} />, color: 'text-amber-600' },
         { id: 'about', linkText: 'About', link: '/about', icon: <Info size={20} />, color: 'text-emerald-600' },
         { id: 'live', linkText: 'BMG Live', link: '/appointment', icon: <Video size={20} />, color: 'text-red-600' },
@@ -181,7 +199,7 @@ const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = []
                         <ul className="space-y-1">
                             <AnimatePresence>
 
-                                <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.98 }}   className="px-4 py-3">
+                                <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.98 }} className="px-4 py-3">
                                     <Link
                                         to={'/'}
                                         onClick={handleClose}
@@ -194,45 +212,30 @@ const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = []
                                     </Link>
                                 </motion.div>
 
-                                {/* ── Dynamic headers from JSON ── */}
+                                {/* ── Dynamic headers from API ── */}
                                 {headers.map((header, hIdx) => {
-                                    const isDirect = !header.filterId && header.menuList.length === 0;
-                                    const hasDropdown = header.menuList.length > 0 ;
+                                    const hasDropdown = header.subLayers?.length > 0;
                                     const isHeaderOpen = activeHeaderIdx === hIdx;
 
                                     return (
                                         <motion.li
-                                            key={hIdx}
+                                            key={header.id}
                                             variants={itemVariants}
                                             className={`relative rounded-xl overflow-hidden ${isHeaderOpen ? 'bg-gradient-to-r from-blue-50 to-indigo-50' : 'hover:bg-gray-50'}`}
                                         >
                                             <div className="px-4 py-3">
-                                                {isDirect ? (
-                                                    /* Scenario 1 — direct link */
-                                                    <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.98 }}>
-                                                        <button
-                                                            onClick={() => go(buildDirectLink(header))}
-                                                            className="font-semibold text-gray-800 group-hover:text-[var(--primary-hover-color)]"
-                                                        >
-                                                            <Home size={20} className="text-[var(--primary-hover-color)]" />
-                                                            <span className="font-semibold text-gray-800 group-hover:text-[var(--primary-hover-color)]">
-                                                                {header.name}
-                                                            </span>
-                                                        </button>
-                                                    </motion.div>
-                                                ) : (
-                                                    /* Scenario 2 & 3 — accordion trigger */
-                                                    <motion.button
-                                                        onClick={() => toggleHeader(hIdx)}
-                                                        className="flex items-center justify-between w-full group"
-                                                        whileTap={{ scale: 0.98 }}
-                                                    >
-                                                        <div className="flex items-center gap-3">
-                                                            <Grid2X2 size={20} className="text-purple-600" />
-                                                            <span className="font-semibold text-gray-800 group-hover:text-[var(--primary-hover-color)]">
-                                                                {header.name}
-                                                            </span>
-                                                        </div>
+                                                <motion.button
+                                                    onClick={() => hasDropdown ? toggleHeader(hIdx) : go(buildLink(header.link))}
+                                                    className="flex items-center justify-between w-full group"
+                                                    whileTap={{ scale: 0.98 }}
+                                                >
+                                                    <div className="flex items-center gap-3">
+                                                        <Grid2X2 size={20} className="text-purple-600" />
+                                                        <span className="font-semibold text-gray-800 group-hover:text-[var(--primary-hover-color)]">
+                                                            {header.label}
+                                                        </span>
+                                                    </div>
+                                                    {hasDropdown && (
                                                         <motion.div
                                                             animate={{ rotate: isHeaderOpen ? 180 : 0 }}
                                                             transition={{ duration: 0.2 }}
@@ -240,8 +243,8 @@ const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = []
                                                         >
                                                             <ChevronDown size={18} />
                                                         </motion.div>
-                                                    </motion.button>
-                                                )}
+                                                    )}
+                                                </motion.button>
                                             </div>
 
                                             {/* ── Expanded menu list ── */}
@@ -252,145 +255,7 @@ const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = []
                                                         initial="hidden" animate="visible" exit="exit"
                                                         className="px-2 pb-3 overflow-hidden"
                                                     >
-                                                        <div className="space-y-1">
-                                                            {header.menuList.map((menuItem, mIdx) => {
-                                                                const isCategory = !!menuItem.menuKey && !!menuItem.value;
-                                                                const hasSubFilters = menuItem.filterKeys.length > 0 || menuItem.items.length > 0 ;
-                                                                const isMenuOpen = activeMenuIdx === mIdx;
-
-                                                                const isItemList = menuItem.isItem=== "Y" ;
-                                                                const subFilterContent = isItemList ? menuItem.fitlerKeys : menuItem.items ;
-
-                                                                return (
-                                                                    <div
-                                                                        key={mIdx}
-                                                                        className="rounded-lg overflow-hidden border border-gray-100"
-                                                                    >
-                                                                        {/* Menu item row */}
-                                                                        <motion.button
-                                                                            onClick={() => {
-                                                                                if (hasSubFilters) {
-                                                                                    // toggle sub-filter panel
-                                                                                    toggleMenu(mIdx);
-                                                                                } else if (isCategory) {
-                                                                                    // Scenario 3 leaf — no sub-filters, just navigate
-                                                                                    go(buildCategoryAllLink(menuItem));
-                                                                                } else if (menuItem.filterContentId) {
-                                                                                    // Scenario 2 — filterContentId
-                                                                                    go(buildMenuItemLink(menuItem));
-                                                                                }
-                                                                            }}
-                                                                            className="flex items-center justify-between w-full px-4 py-3 bg-gradient-to-r from-gray-50 to-white hover:from-amber-50 hover:to-orange-50 transition-all duration-200"
-                                                                            whileTap={{ scale: 0.98 }}
-                                                                        >
-                                                                            <span className="font-semibold text-gray-700 text-[14px]">
-                                                                                {menuItem.label}
-                                                                            </span>
-
-                                                                            <div className="flex items-center gap-2">
-                                                                                {/* "All X" tap for categories */}
-                                                                                {isCategory && hasSubFilters && (
-                                                                                    <motion.span
-                                                                                        className="text-[11px] text-amber-600 font-medium px-1"
-                                                                                        whileTap={{ scale: 0.9 }}
-                                                                                        onClick={(e) => {
-                                                                                            e.stopPropagation();
-                                                                                            go(buildCategoryAllLink(menuItem));
-                                                                                        }}
-                                                                                    >
-                                                                                        All
-                                                                                    </motion.span>
-                                                                                )}
-                                                                                {hasSubFilters && (
-                                                                                    <motion.div
-                                                                                        animate={{ rotate: isMenuOpen ? 180 : 0 }}
-                                                                                        transition={{ duration: 0.2 }}
-                                                                                        className="text-amber-500"
-                                                                                    >
-                                                                                        <ChevronDown size={15} />
-                                                                                    </motion.div>
-                                                                                )}
-                                                                            </div>
-                                                                        </motion.button>
-
-                                                                        {/* Scenario 3: nested filterKeys → filterContent */}
-                                                                        <AnimatePresence>
-                                                                            {hasSubFilters && isMenuOpen && isItemList ?
-                                                                                <motion.div
-                                                                                    variants={collapseVariants}
-                                                                                    initial="hidden" animate="visible" exit="exit"
-                                                                                    className="bg-white overflow-hidden"
-                                                                                >
-
-                                                                                    <div className="px-2 py-2 flex flex-wrap gap-1.5">
-                                                                                        {menuItem.items.map((item) => (
-                                                                                            <div key={item.itemId} className='flex flex-wrap gap-1.5'>
-                                                                                                <motion.button
-                                                                                                  
-                                                                                                    whileTap={{ scale: 0.95 }}
-                                                                                                    onClick={() => go(buildItemNameLink(menuItem, item))}
-                                                                                                    className="text-[12px] text-stone-600 bg-stone-50 hover:bg-amber-50 hover:text-amber-700 border border-stone-200 hover:border-amber-200 rounded-full px-3 py-1 transition-all duration-150"
-                                                                                                >
-                                                                                                    {item.itemName}
-                                                                                                </motion.button>
-                                                                                                {/* <div className="flex flex-wrap gap-1.5">
-                                                                                                    {fk.filterContent.map((fc) => (
-                                                                                                       
-                                                                                                            {fc.filterTitle}
-                                                                                                            {fc.isRange && (
-                                                                                                                <span className="ml-1 text-[10px] text-stone-400">
-                                                                                                                    ({fc.filterValue})
-                                                                                                                </span>
-                                                                                                            )}
-                                                                                                        </motion.button>
-                                                                                                    ))}
-                                                                                                </div> */}
-                                                                                            </div>
-                                                                                        ))}
-                                                                                    </div>
-                                                                                </motion.div>
-                                                                              : 
-                                                                                <motion.div
-                                                                                    variants={collapseVariants}
-                                                                                    initial="hidden" animate="visible" exit="exit"
-                                                                                    className="bg-white overflow-hidden"
-                                                                                >
-
-                                                                                    <div className="px-3 py-2 space-y-3">
-                                                                                        {menuItem.filterKeys.map((fk) => (
-                                                                                            <div key={fk.id}>
-                                                                                                <p className="text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-1.5 px-1">
-                                                                                                    {fk.filterLabel}
-                                                                                                </p>
-                                                                                                <div className="flex flex-wrap gap-1.5">
-                                                                                                    {fk.filterContent.map((fc) => (
-                                                                                                        <motion.button
-                                                                                                            key={fc.id}
-                                                                                                            whileTap={{ scale: 0.95 }}
-                                                                                                            onClick={() => go(buildFilterLeafLink(menuItem, fk, fc))}
-                                                                                                            className="text-[12px] text-stone-600 bg-stone-50 hover:bg-amber-50 hover:text-amber-700 border border-stone-200 hover:border-amber-200 rounded-full px-3 py-1 transition-all duration-150"
-                                                                                                        >
-                                                                                                            {fc.filterTitle}
-                                                                                                            {fc.isRange && (
-                                                                                                                <span className="ml-1 text-[10px] text-stone-400">
-                                                                                                                    ({fc.filterValue})
-                                                                                                                </span>
-                                                                                                            )}
-                                                                                                        </motion.button>
-                                                                                                    ))}
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        ))}
-                                                                                    </div>
-                                                                                </motion.div>
-                                                                             }
-                                                                         
-                                                                              
-                                                                        </AnimatePresence>
-                                                                    </div>
-                                                                );
-                                                            })}
-                                                        </div>
+                                                        <MenuAccordion items={header.subLayers} go={go} />
                                                     </motion.div>
                                                 )}
                                             </AnimatePresence>

@@ -309,7 +309,7 @@ const FAQ = ({ languages, content }) => {
                             </p>
                         </div>
                         <SmartButton
-                            onClick={() => navigate("/contactStore")}
+                            onClick={() => navigate("/contact")}
                             className="px-2 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold rounded-xl hover:from-amber-600 hover:to-amber-700 transition-all transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
                         >
                             Contact Support

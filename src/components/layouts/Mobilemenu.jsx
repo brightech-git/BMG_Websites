@@ -150,7 +150,7 @@ const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = []
         { id: 'shop', linkText: 'Shop', link: '/products-page', icon: <ShoppingBag size={20} />, color: 'text-amber-600' },
         { id: 'about', linkText: 'About', link: '/about', icon: <Info size={20} />, color: 'text-emerald-600' },
         { id: 'live', linkText: 'BMG Live', link: '/appointment', icon: <Video size={20} />, color: 'text-red-600' },
-        { id: 'contact', linkText: 'Contact', link: '/contactStore', icon: <Mail size={20} />, color: 'text-indigo-600' },
+        { id: 'contact', linkText: 'Contact', link: '/contact', icon: <Mail size={20} />, color: 'text-indigo-600' },
     ];
 
     return (

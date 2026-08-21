@@ -92,7 +92,7 @@ const Footer = () => {
       { name: "Why Choose Us", href: "/why-choose-us" },
       { name: "FAQ", href: "/faq" },
       { name: "Scheme", href: "/scheme" },
-      {name: "Contact" ,href:"/contactStore"}
+      {name: "Contact" ,href:"/contact"}
     ],
 
     policyLinks: [

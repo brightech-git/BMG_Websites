@@ -80,7 +80,7 @@ export const getProductsFilter = async (itemName) => {
 export const getRelatedProducts = async (itemCtrId) => {
     try {
         const response = await PublicUrl.get(`/product/related`,{
-            params: {itemCtrId}
+            params: {itemId}
         });
         return response.data;
     } catch (error) {

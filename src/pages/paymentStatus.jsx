@@ -606,13 +606,13 @@ const PaymentStatus = () => {
                                 </div>
                                 <div className="flex flex-wrap gap-1">
                                     <a
-                                        href="/contactStore"
+                                        href="/contactS"
                                         className="text-emerald-600 text-sm font-medium hover:underline"
                                     >
                                         Contact Support →
                                     </a>
                                     <a
-                                        href="/contactStore"
+                                        href="/contact"
                                         className="text-emerald-600 text-sm font-medium hover:underline"
                                     >
                                         Help Center →

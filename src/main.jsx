@@ -32,7 +32,7 @@ import { queryClient } from './component/reactQuery/queryClient';
 
 
 function Root() {
-  const [hasAccess, setHasAccess] = useState(false);
+  const [hasAccess, setHasAccess] = useState(true);
 
   if (!hasAccess) {
     return <MaintenanceLogin onAccess={() => setHasAccess(true)} />;

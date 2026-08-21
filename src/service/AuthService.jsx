@@ -1,10 +1,24 @@
 import PublicUrl from "../api/publicUrl";
 
 // Register
-export const registerUser = async (userData) => {
-    const response = await PublicUrl.post("auth/user/register", userData);
+// export const registerUser = async (userData) => {
+//     const response = await PublicUrl.post("auth/user/register", userData);
   
-    return response.data;
+//     return response.data;
+// };
+
+export const registerUser = async (userData) => {
+    try {
+        const response = await PublicUrl.post("auth/user/register", userData);
+        return response.data;
+    } catch (error) {
+        throw new Error(
+            error.response?.data?.message ||
+            error.response?.data?.error ||
+            error.message ||
+            "Registration failed"
+        );
+    }
 };
 
 

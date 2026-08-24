@@ -3,6 +3,7 @@ import SmartButton from "../ui/SmartButton";
 import { ChevronDown } from "lucide-react";
 import { MapPin } from "lucide-react";
 import { usePincode } from "../../context/pinocde/PincodeContext";
+import { checkPincodeService } from "../../service/pincodeChecking";
 
 const DeliveryPincodeHeader = () => {
     const { pincode, updatePincode } = usePincode(); // Use context
@@ -44,25 +45,23 @@ const DeliveryPincodeHeader = () => {
     };
 
     const validatePincode = async (pincodeValue) => {
-        if (pincodeValue.length !== 6) {
+        if (!/^\d{6}$/.test(pincodeValue)) {
             throw new Error("Please enter a valid 6-digit pincode");
         }
 
-        // Mock API call - replace with your actual API
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        const allowedStarts = ["5", "6"];
-        const isValid = allowedStarts.includes(pincodeValue[0]);
+        const response = await checkPincodeService(pincodeValue);
+        const isServiceable = response?.status === true;
 
         return {
-            valid: isValid,
-            message: isValid
+            valid: isServiceable,
+            message: response?.message || (isServiceable
                 ? "Available for delivery in your area!"
-                : "Sorry, we don't deliver to this pincode yet",
+                : "Sorry, we don't deliver to this pincode yet"),
             data: {
                 pincode: pincodeValue,
-                serviceable: isValid,
-                area: "Mock Area",
-                city: "Mock City"
+                serviceable: isServiceable,
+                services: response?.data || [],
+                checkedAt: new Date().toISOString()
             }
         };
     };

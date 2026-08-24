@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import {
   Plus, Edit2, CheckCircle, Trash2, MapPin, X, Save,
@@ -11,6 +11,7 @@ import {
   useUpdateAddress,
   useDeleteAddress,
 } from "../../../../hook/address/useAddress";
+import { checkPincodeService } from "../../../../service/pincodeChecking";
 
 const AddressManager = () => {
   const user = useSelector((state) => state.user.user);
@@ -19,6 +20,7 @@ const AddressManager = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState(null);
+  const [pincodeCheck, setPincodeCheck] = useState({ status: "idle", pincode: "", message: "" });
 
   const [formData, setFormData] = useState({
     name: "", phone: "", pincode: "", locality: "", addressLine: "",
@@ -27,7 +29,7 @@ const AddressManager = () => {
   });
 
   // Hooks
-  const { data: addresses = [], isLoading, isError, refetch } = useAddressesByCustomer(customerId);
+  const { data: addresses = [], isLoading, refetch } = useAddressesByCustomer(customerId);
   const createMutation = useCreateAddress();
   const updateMutation = useUpdateAddress();
   const deleteMutation = useDeleteAddress();
@@ -40,11 +42,62 @@ const AddressManager = () => {
     });
     setEditingId(null);
     setError(null);
+    setPincodeCheck({ status: "idle", pincode: "", message: "" });
+  };
+
+  const isPincodeConfirmed =
+    pincodeCheck.status === "available" &&
+    pincodeCheck.pincode === formData.pincode;
+
+  const handlePincodeChange = (value) => {
+    const nextPincode = value.replace(/\D/g, "").slice(0, 6);
+    setFormData(prev => ({ ...prev, pincode: nextPincode }));
+    setPincodeCheck({ status: "idle", pincode: "", message: "" });
+  };
+
+  const handleCheckPincode = async () => {
+    const pincode = formData.pincode;
+    if (!/^\d{6}$/.test(pincode)) {
+      setPincodeCheck({
+        status: "error",
+        pincode,
+        message: "Enter a valid 6-digit pincode"
+      });
+      return;
+    }
+
+    setPincodeCheck({ status: "checking", pincode, message: "Checking delivery availability..." });
+    try {
+      const response = await checkPincodeService(pincode);
+      const isAvailable = response?.status === true;
+      setPincodeCheck({
+        status: isAvailable ? "available" : "unavailable",
+        pincode,
+        message: response?.message || (isAvailable
+          ? "Delivery is available for this pincode"
+          : "Delivery is not available for this pincode")
+      });
+    } catch (err) {
+      setPincodeCheck({
+        status: "error",
+        pincode,
+        message: err.message || "Unable to check pincode availability"
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+
+    if (!/^\d{6}$/.test(formData.pincode)) {
+      setError("Enter a valid 6-digit pincode");
+      return;
+    }
+    if (!isPincodeConfirmed) {
+      setError("Check and confirm pincode availability before saving the address");
+      return;
+    }
 
     const payload = {
       ...formData,
@@ -79,7 +132,7 @@ const AddressManager = () => {
         await updateMutation.mutateAsync({ id, address: { ...addr, isDefault: true } });
       }
       refetch();
-    } catch (err) {
+    } catch {
       setError("Failed to set default address");
     }
   };
@@ -94,7 +147,7 @@ const AddressManager = () => {
     try {
       await deleteMutation.mutateAsync(id);
       refetch();
-    } catch (err) {
+    } catch {
       setError("Failed to delete address");
     }
   };
@@ -279,6 +332,7 @@ const AddressManager = () => {
                     onClick={() => {
                       setFormData({ ...addr, addressType: addr.companyName ? "work" : "home" });
                       setEditingId(addr.id);
+                      setPincodeCheck({ status: "idle", pincode: "", message: "" });
                       setIsFormOpen(true);
                     }}
                     className="flex-1 py-2.5 border-2 border-[#FED7AA] text-[#7C2D12] rounded-xl text-sm hover:bg-[#FFF7ED] hover:border-[#F97316] transition-all duration-300 flex items-center justify-center gap-1.5 group/edit"
@@ -378,14 +432,35 @@ const AddressManager = () => {
                       <MapPin className="w-4 h-4 text-[#F97316]" />
                       Pincode <span className="text-rose-500">*</span>
                     </label>
-                    <input
-                      required
-                      value={formData.pincode}
-                      onChange={e => setFormData(p => ({ ...p, pincode: e.target.value.replace(/\D/g, "").slice(0, 6) }))}
-                      placeholder="6-digit pincode"
-                      maxLength="6"
-                      className="w-full px-3 py-2.5 h-11 bg-white border-2 border-[#FED7AA] rounded-xl text-[#7C2D12] placeholder:text-[#FDBA74]/70 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20 outline-none transition-all"
-                    />
+                    <div className="flex gap-2">
+                      <input
+                        required
+                        value={formData.pincode}
+                        onChange={e => handlePincodeChange(e.target.value)}
+                        placeholder="6-digit pincode"
+                        maxLength="6"
+                        className="min-w-0 flex-1 px-3 py-2.5 h-11 bg-white border-2 border-[#FED7AA] rounded-xl text-[#7C2D12] placeholder:text-[#FDBA74]/70 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20 outline-none transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleCheckPincode}
+                        disabled={pincodeCheck.status === "checking" || formData.pincode.length !== 6}
+                        className="px-3 h-11 rounded-xl bg-[#F97316] text-white text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {pincodeCheck.status === "checking" ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : "Check"}
+                      </button>
+                    </div>
+                    {pincodeCheck.message && (
+                      <p className={`text-xs font-medium ${
+                        isPincodeConfirmed ? "text-emerald-600" :
+                          pincodeCheck.status === "checking" ? "text-amber-600" : "text-rose-600"
+                      }`}>
+                        {isPincodeConfirmed && <CheckCircle className="inline w-3.5 h-3.5 mr-1" />}
+                        {pincodeCheck.message}
+                      </p>
+                    )}
                   </div>
 
                   {/* Locality */}
@@ -566,7 +641,8 @@ const AddressManager = () => {
                   </button>
                   <button
                     type="submit"
-                    disabled={createMutation.isPending || updateMutation.isPending}
+                    disabled={createMutation.isPending || updateMutation.isPending ||
+                      !isPincodeConfirmed}
                     className="px-6 py-2.5 bg-gradient-to-r from-[#F97316] to-[#EA580C] text-white rounded-xl text-xs sm:text-sm font-medium hover:shadow-lg hover:shadow-[#F97316]/30 disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2 transition-all duration-300 transform hover:scale-105"
                   >
                     {(createMutation.isPending || updateMutation.isPending) ? (

@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import SmartButton from '../../ui/SmartButton';
 import { useAddressesByPincode } from '../../../hook/address/useGetAddressByPincode';
 import { useNavigate } from 'react-router-dom';
-import { useCheckShippingPrice } from '../../../hook/pincode/usePincode';
+import { useCheckPincode, useCheckShippingPrice } from '../../../hook/pincode/usePincode';
 import { usePincode } from '../../../context/pinocde/PincodeContext';
 import { getImage } from '../../../utils/getProductImages';
 import { formatCurrency } from '../../../utils/formatters';
@@ -87,13 +87,32 @@ const ProgressStepper = ({ currentStep }) => {
 };
 
 
+const getShippingDisplay = ({
+  shippingFee,
+  hasPincode,
+  isLoading,
+  isUnavailable,
+  error
+}) => {
+  if (!hasPincode) return 'Update the pincode';
+  if (isLoading) return 'Calculating...';
+  if (isUnavailable) return 'Delivery unavailable';
+  if (error || shippingFee == null) return 'Unable to calculate';
+  if (Number(shippingFee) === 0) return 'Free Shipping';
+  return formatCurrency(shippingFee);
+};
+
 // ========== ORDER SUMMARY PANEL ==========
 const OrderSummaryPanel = ({
   items = [],
   subtotal = 0,
-  shippingFee = 0,
+  shippingFee = null,
   total = 0,
-  isCompact = false
+  isCompact = false,
+  hasPincode = false,
+  shippingLoading = false,
+  shippingUnavailable = false,
+  shippingError = null
 }) => {
   const getSafeImagePath = (item) => {
     const imagePath = getImage(item?.imagePath) || item?.image;
@@ -126,7 +145,15 @@ const OrderSummaryPanel = ({
 
   const itemCount = Array.isArray(items) ? items.length : 0;
   const itemCountText = `${itemCount} item${itemCount !== 1 ? 's' : ''}`;
-  const shippingText = shippingFee === 0 ? 'Free' : formatCurrency(shippingFee);
+  const shippingText = getShippingDisplay({
+    shippingFee,
+    hasPincode,
+    isLoading: shippingLoading,
+    isUnavailable: shippingUnavailable,
+    error: shippingError
+  });
+  const isFreeShipping = hasPincode && !shippingLoading && !shippingUnavailable &&
+    !shippingError && Number(shippingFee) === 0;
 
   return (
     <div className={`
@@ -201,7 +228,7 @@ const OrderSummaryPanel = ({
             <Truck className="w-3.5 h-3.5 text-[#F97316]" />
             Shipping
           </span>
-          <span className={`font-semibold ${shippingFee === 0 ? 'text-[#10B981]' : 'text-[#7C2D12]'}`}>
+          <span className={`font-semibold ${isFreeShipping ? 'text-[#10B981]' : 'text-[#7C2D12]'}`}>
             {shippingText}
           </span>
         </div>
@@ -219,15 +246,22 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
 
 
   const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState(initialCartItems);
-  const [totalAmount, setTotalAmount] = useState(subtotal || 0);
+  const [cartItems] = useState(() => {
+    if (initialCartItems?.length) return initialCartItems;
+    try {
+      const storedCart = JSON.parse(localStorage.getItem('cartitems') || 'null');
+      return storedCart?.items || [];
+    } catch (error) {
+      console.error('Failed to parse cart from localStorage:', error);
+      return [];
+    }
+  });
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [paymentMode, setPaymentMode] = useState('ONLINE');
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [summaryOpen, setSummaryOpen] = useState(false);
   const [pincode, setPincode] = useState(null);
-  const [shippingFee, setShippingFee] = useState(0);
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
 
   const [isProcessing ,setIsProcessing] = useState(false);
@@ -242,6 +276,16 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
   const { mutate: deleteAddress } = useDeleteAddress();
 
   const finalPincode = selectedAddress?.pincode || storedPincode || pincode || null;
+  const normalizedFinalPincode = String(finalPincode || '').trim();
+  const hasPincode = /^\d{6}$/.test(normalizedFinalPincode);
+  const {
+    data: pincodeAvailability,
+    isLoading: pincodeLoading,
+    error: pincodeError
+  } = useCheckPincode(hasPincode ? normalizedFinalPincode : '');
+  const isPincodeServiceable = pincodeAvailability?.status === true;
+  const isPincodeUnavailable = hasPincode && !pincodeLoading &&
+    pincodeAvailability?.status === false;
 
   const totalWeight = useMemo(() => {
     if (!cartItems?.length) return 0;
@@ -252,34 +296,34 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
     data: shippingData,
     isLoading: shippingLoading,
     error: shippingError
-  } = useCheckShippingPrice(finalPincode, totalWeight);
+  } = useCheckShippingPrice(isPincodeServiceable ? normalizedFinalPincode : null, totalWeight);
+  const parsedShippingFee = Number(shippingData?.totalAmount);
+  const shippingFee = hasPincode && isPincodeServiceable &&
+    shippingData?.totalAmount != null && Number.isFinite(parsedShippingFee)
+    ? parsedShippingFee : null;
+  const totalAmount = (subtotal || 0) + (shippingFee ?? 0);
 
-  useEffect(() => {
-    if (shippingData?.totalAmount) {
-      setShippingFee(shippingData.totalAmount);
-      setTotalAmount((subtotal || 0) + shippingData.totalAmount);
-    }
-  }, [shippingData, subtotal]);
+  const isShippingLoading = hasPincode &&
+    (pincodeLoading || (isPincodeServiceable && shippingLoading));
+  const shippingDisplayError = pincodeError || shippingError;
+  const shippingDisplayText = getShippingDisplay({
+    shippingFee,
+    hasPincode,
+    isLoading: isShippingLoading,
+    isUnavailable: isPincodeUnavailable,
+    error: shippingDisplayError
+  });
+
+
 
   console.log(shippingData,'shippingData')
 
 
-  useEffect(() => {
-    const storedCart = localStorage.getItem('cartitems');
-    if (!cartItems.length && storedCart) {
-      try {
-        const parsedCart = JSON.parse(storedCart);
-        setCartItems(parsedCart.items || []);
-        setTotalAmount(parsedCart.totalAmount || 0);
-      } catch (error) {
-        console.error('Failed to parse cart from localStorage:', error);
-      }
-    }
-  }, []);
 
   useEffect(() => {
     if (addresses && addresses.length > 0) {
       const defaultAddress = addresses.find(addr => addr.isDefault) || addresses[0];
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedAddress(defaultAddress);
     }
   }, [addresses]);
@@ -321,6 +365,26 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
   const handleNextStep = () => {
     if (currentStep === 1 && !selectedAddress) {
       toast.error('Please select a delivery address');
+      return;
+    }
+    if (currentStep === 1 && !hasPincode) {
+      toast.error('Please set a valid delivery pincode');
+      return;
+    }
+    if (currentStep === 1 && isShippingLoading) {
+      toast.info('Please wait while shipping availability is checked');
+      return;
+    }
+    if (currentStep === 1 && isPincodeUnavailable) {
+      toast.error('Delivery is not available for this pincode');
+      return;
+    }
+    if (currentStep === 1 && shippingDisplayError) {
+      toast.error('Unable to calculate shipping for this pincode');
+      return;
+    }
+    if (currentStep === 1 && shippingFee == null) {
+      toast.info('Please wait for the shipping fee');
       return;
     }
     setCurrentStep(prev => Math.min(prev + 1, 3));
@@ -381,7 +445,7 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
             navigate(`/payment-success?orderId=${response.orderId}&mode=cod`);
           }
         },
-        onError: (error) => {
+        onError: () => {
           setIsProcessing(false); // stop loader on error
           toast.error("Failed to create order. Please try again.");
         },
@@ -488,6 +552,10 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
               total={totalAmount}
               shippingFee={shippingFee}
               isCompact
+              hasPincode={hasPincode}
+              shippingLoading={isShippingLoading}
+              shippingUnavailable={isPincodeUnavailable}
+              shippingError={shippingDisplayError}
             />
           </div>
         )}
@@ -608,6 +676,10 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
                     subtotal={subtotal}
                     total={totalAmount}
                     shippingFee={shippingFee}
+                    hasPincode={hasPincode}
+                    shippingLoading={isShippingLoading}
+                    shippingUnavailable={isPincodeUnavailable}
+                    shippingError={shippingDisplayError}
                   />
                 </div>
               )}
@@ -697,8 +769,8 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
                         </div>
                         <div className="flex justify-between text-sm">
                           <span className="text-[#9A3412]">Shipping</span>
-                          <span className={`font-semibold ${shippingFee === 0 ? 'text-[#10B981]' : 'text-[#7C2D12]'}`}>
-                            {shippingFee === 0 ? 'FREE' : formatCurrency(shippingFee)}
+                          <span className={`font-semibold ${shippingDisplayText === 'Free Shipping' ? 'text-[#10B981]' : 'text-[#7C2D12]'}`}>
+                            {shippingDisplayText}
                           </span>
                         </div>
                         <div className="border-t-2 border-[#FED7AA] my-2"></div>
@@ -740,7 +812,8 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
                   <SmartButton
             size="lg"
             onClick={submitOrder}
-            isDisabled={!selectedAddress}
+            isDisabled={!selectedAddress || !hasPincode || isShippingLoading ||
+              isPincodeUnavailable || !!shippingDisplayError || shippingFee == null}
             className="ml-auto bg-gradient-to-r from-[#10B981] to-[#059669] text-white hover:shadow-lg hover:shadow-[#10B981]/30"
         >
             Place Order • {formatCurrency(totalAmount)}
@@ -765,6 +838,10 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
             subtotal={subtotal}
             shippingFee={shippingFee}
             total={totalAmount}
+            hasPincode={hasPincode}
+            shippingLoading={isShippingLoading}
+            shippingUnavailable={isPincodeUnavailable}
+            shippingError={shippingDisplayError}
           />
 
           {/* Secure Checkout Badge */}

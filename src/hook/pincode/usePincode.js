@@ -6,7 +6,8 @@ export const useCheckPincode = (destPincode) => {
   return useQuery({
       queryKey: ["destPincode", destPincode],
       queryFn: () => checkPincodeService(destPincode),
-      enabled: !!destPincode,
+      enabled: /^\d{6}$/.test(String(destPincode || "")),
+      retry: false,
   });
 };
 

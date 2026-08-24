@@ -371,9 +371,10 @@ const Cart = () => {
                                 <div className="flex justify-between items-center">
                                     <span >Shipping Fee</span>
                                     <span className={`font-semibold ${shippingFee === 0 ? 'text-green-600' : ''}`}>
-                                        {shippingFee == 0
+                                        {shippingFee == null
                                             ? "Update your pincode"
-                                            : `${formatCurrency(shippingFee)}`}
+                                            :shippingFee == 0
+                                            ? "Free Shipping" :`${formatCurrency(shippingFee)}`}
 
                                     </span>
                                 </div>

@@ -11,9 +11,6 @@ function PincodeChecker() {
     const [animationKey, setAnimationKey] = useState(0);
     const [showUpdateForm, setShowUpdateForm] = useState(false);
 
-    // Allowed starting digits for pincode
-    const allowedStart = ["5", "6"];
-
     const { data, isLoading: loading, isError: error } = useCheckPincode(pincode);
 
     // Sync local pincode state with context
@@ -24,7 +21,8 @@ function PincodeChecker() {
     const handleChange = (e) => {
         let value = e.target.value.replace(/\D/g, "");
         if (value.length > 6) return;
-        if (value && !allowedStart.includes(value[0])) return;
+        setStatusMessage("");
+        setIsChecking(false);
         setPincode(value);
     };
 
@@ -43,6 +41,12 @@ function PincodeChecker() {
             setAnimationKey(prev => prev + 1);
             return;
         }
+        if (!data?.status) {
+            setStatusMessage(data?.message || "Delivery is not available for this pincode.");
+            setAnimationKey(prev => prev + 1);
+            return;
+        }
+
 
         // Use context to update pincode (this will update everywhere)
         await updatePincode(pincode, {
@@ -156,11 +160,11 @@ function PincodeChecker() {
                     className={`flex-1 px-2 py-2 h-10 rounded-l-md bg-[var(--primary-color)] text-[var(--primary-text-color)] border border-gray-300 animate__animated animate__fadeInLeft ${pincode.length !== 6 && statusMessage ? 'animate__headShake' : ''}`}
                 />
                 <button
-                    onClick={showUpdateForm ? handleSavePincode : handleCheck}
+                    onClick={handleCheck}
                     disabled={loading}
                     className={`px-4 py-2 rounded-r-md bg-[var(--primary-hover-color)] hover:bg-[var(--primary-hover-color)] text-white disabled:opacity-50 disabled:cursor-not-allowed animate__animated animate__fadeInRight ${loading ? 'animate__pulse' : ''}`}
                 >
-                    {loading ? "Checking..." : (showUpdateForm ? "Save" : "Check")}
+                    {loading ? "Checking..." : "Check"}
                 </button>
             </div>
 
@@ -174,7 +178,7 @@ function PincodeChecker() {
                     </button>
                     <button
                         onClick={handleSavePincode}
-                        disabled={!data && !statusMessage.includes("Available")}
+                        disabled={!data?.status || loading || isChecking}
                         className="px-4 py-2 text-sm bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         Save & Update

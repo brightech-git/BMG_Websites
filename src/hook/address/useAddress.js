@@ -28,7 +28,9 @@ export const useCreateAddress = () => {
                 ["addresses", context.customerId],
                 context.previousAddresses
             );
-            toast.error(error.response?.data || "Failed to create address");
+            if (!error.toastHandled) {
+                toast.error(error.response?.data?.message || "Failed to create address");
+            }
         },
     });
 };
@@ -87,16 +89,16 @@ export const useUpdateAddress = () => {
             });
         },
 
-        onError: (error, { address }, context) => {
+        onError: (error, _variables, context) => {
             // Rollback to previous cache on failure
             queryClient.setQueryData(
                 ["addresses", context.customerId],
                 context.previousAddresses
             );
 
-            toast.error(
-                error?.response?.data || "Failed to update address"
-            );
+            if (!error.toastHandled) {
+                toast.error(error?.response?.data?.message || "Failed to update address");
+            }
         },
     });
 };
@@ -120,7 +122,9 @@ export const useDeleteAddress = () => {
         },
         onError: (error, id, context) => {
             queryClient.setQueryData(["addresses"], context.previousAddresses);
-            toast.error(error.response?.data || "Failed to delete address");
+            if (!error.toastHandled) {
+                toast.error(error.response?.data?.message || "Failed to delete address");
+            }
         },
     });
 };

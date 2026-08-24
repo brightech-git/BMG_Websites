@@ -47,7 +47,9 @@ export const useCreateAddress = () => {
             queryClient.invalidateQueries(["addresses"]);
         },
         onError: (err) => {
-            toast.error(err.response?.data || "Failed to create address");
+            if (!err.toastHandled) {
+                toast.error(err.response?.data?.message || "Failed to create address");
+            }
         },
     });
 };
@@ -62,7 +64,9 @@ export const useUpdateAddress = () => {
             queryClient.invalidateQueries(["addresses"]);
         },
         onError: (err) => {
-            toast.error(err.response?.data || "Failed to update address");
+            if (!err.toastHandled) {
+                toast.error(err.response?.data?.message || "Failed to update address");
+            }
         },
     });
 };
@@ -78,7 +82,9 @@ export const useDeleteAddress = () => {
             queryClient.invalidateQueries(["addresses"]);
         },
         onError: (err) => {
-            toast.error(err.response?.data || "Failed to delete address");
+            if (!err.toastHandled) {
+                toast.error(err.response?.data?.message || "Failed to delete address");
+            }
         },
     });
 };

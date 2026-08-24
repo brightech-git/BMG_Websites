@@ -1,8 +1,10 @@
-import React,{useState ,useEffect ,useCallback ,useRef} from 'react';
+import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen, faTrash, faPhone } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import GeoLocationPicker from '../../location/GeoLocationPicker';
-import { Check, Plus, Edit, Trash2, Phone, Home, ShoppingBag, MapPin, User, CreditCard, X, ChevronDown, ChevronUp, Map, Shield, Truck, Edit2, Building, Globe, Tag, Star } from 'lucide-react';
+import { Check, Plus, Phone, MapPin, User, X, Map, Building, Globe, Tag, Star, Loader2 } from 'lucide-react';
+import { checkPincodeService } from '../../../service/pincodeChecking';
 
 export const AddressModal = ({
     show,
@@ -20,7 +22,7 @@ export const AddressModal = ({
     const [mode, setMode] = useState('list');
     const [currentAddress, setCurrentAddress] = useState(null);
     const [showPostOfficeList, setShowPostOfficeList] = useState(false);
-    const [pincodeVerified, setPincodeVerified] = useState(false);
+    const [pincodeCheck, setPincodeCheck] = useState({ status: 'idle', pincode: '', message: '' });
     const [formData, setFormData] = useState({
         name: customerProfile?.username || customerProfile?.name || '',
         phone: customerProfile?.contactNumber || '',
@@ -41,25 +43,60 @@ export const AddressModal = ({
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
+        if (name === 'pincode') {
+            const nextPincode = value.replace(/\D/g, '').slice(0, 6);
+            setFormData(prev => ({ ...prev, pincode: nextPincode }));
+            setPincodeCheck({ status: 'idle', pincode: '', message: '' });
+            setShowPostOfficeList(false);
+            return;
+        }
         setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
     };
 
-    useEffect(() => {
-        if (postOffices.length > 0) {
-            setPincodeVerified(false);
-            setShowPostOfficeList(false);
-        }
-    }, [postOffices]);
 
     useEffect(() => {
         if (!/^\d{6}$/.test(formData.pincode)) {
-            setShowPostOfficeList(false);
-            setPincodeVerified(false);
-            onPincodeChange(null);
+            onPincodeChange?.(null);
             return;
         }
-        onPincodeChange(formData.pincode);
+        onPincodeChange?.(formData.pincode);
     }, [formData.pincode, onPincodeChange]);
+
+    const isPincodeConfirmed =
+        pincodeCheck.status === 'available' &&
+        pincodeCheck.pincode === formData.pincode;
+
+    const resetPincodeCheck = () => {
+        setPincodeCheck({ status: 'idle', pincode: '', message: '' });
+        setShowPostOfficeList(false);
+    };
+
+    const handleCheckPincode = async () => {
+        const pincode = formData.pincode;
+        if (!/^\d{6}$/.test(pincode)) {
+            setPincodeCheck({ status: 'error', pincode, message: 'Enter a valid 6-digit pincode' });
+            return;
+        }
+
+        setPincodeCheck({ status: 'checking', pincode, message: 'Checking delivery availability...' });
+        try {
+            const response = await checkPincodeService(pincode);
+            const isAvailable = response?.status === true;
+            setPincodeCheck({
+                status: isAvailable ? 'available' : 'unavailable',
+                pincode,
+                message: response?.message || (isAvailable
+                    ? 'Delivery is available for this pincode'
+                    : 'Delivery is not available for this pincode')
+            });
+        } catch (error) {
+            setPincodeCheck({
+                status: 'error',
+                pincode,
+                message: error.message || 'Unable to check pincode availability'
+            });
+        }
+    };
 
     const handleAddNew = () => {
         setCurrentAddress(null);
@@ -78,6 +115,7 @@ export const AddressModal = ({
             alternatePhone: '',
             isDefault: false,
         });
+        resetPincodeCheck();
         setMode('add');
     };
 
@@ -97,6 +135,7 @@ export const AddressModal = ({
             alternatePhone: '',
             isDefault: false,
         });
+        resetPincodeCheck();
         setClear(true);
     };
 
@@ -113,12 +152,16 @@ export const AddressModal = ({
     };
 
     const handleGeoFill = (geoRes) => {
+        const nextPincode = String(geoRes.pincode || formData.pincode || '')
+            .replace(/\D/g, '')
+            .slice(0, 6);
+        resetPincodeCheck();
         setFormData(prev => ({
             ...prev,
             addressLine: geoRes.addressLine || prev.addressLine,
             city: geoRes.city || prev.city,
             state: geoRes.state || prev.state,
-            pincode: geoRes.pincode || prev.pincode,
+            pincode: nextPincode,
             locality: geoRes.locality || prev.locality,
             landmark: geoRes.landmark || prev.landmark,
             latitude: geoRes.latitude,
@@ -129,8 +172,7 @@ export const AddressModal = ({
 
     const handleEdit = (address) => {
         setCurrentAddress(address);
-        setShowPostOfficeList(false);
-        setPincodeVerified(true);
+        resetPincodeCheck();
         setFormData({
             name: address.name,
             phone: address.phone,
@@ -161,6 +203,10 @@ export const AddressModal = ({
         }
         if (!/^\d{6}$/.test(formData.pincode)) {
             toast.error('Pincode must be 6 digits');
+            return;
+        }
+        if (!isPincodeConfirmed) {
+            toast.error('Check and confirm pincode availability before saving the address');
             return;
         }
         onSaveAddress(currentAddress?.id ? { id: currentAddress.id, ...formData } : formData);
@@ -361,7 +407,7 @@ export const AddressModal = ({
                                         <Map className="w-3.5 h-3.5 text-[#F97316]" />
                                         Pincode <span className="text-rose-500">*</span>
                                     </label>
-                                    <div className="relative">
+                                    <div className="flex gap-2">
                                         <input
                                             type="text"
                                             name="pincode"
@@ -369,22 +415,37 @@ export const AddressModal = ({
                                             onChange={handleChange}
                                             pattern="[0-9]{6}"
                                             maxLength={6}
-                                            className="w-full px-3 py-2 h-10 bg-white border-2 border-[#FED7AA] rounded-xl text-[#7C2D12] placeholder:text-[#FDBA74]/70 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20 outline-none transition-all pr-10"
+                                            className="min-w-0 flex-1 px-3 py-2 h-10 bg-white border-2 border-[#FED7AA] rounded-xl text-[#7C2D12] placeholder:text-[#FDBA74]/70 focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/20 outline-none transition-all"
                                             required
                                         />
-                                        {postOffices.length > 0 && (
-                                            <button
-                                                type="button"
-                                                className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 bg-[#10B981]/10 rounded-lg flex items-center justify-center hover:bg-[#10B981]/20 transition-colors"
-                                                onClick={() => {
-                                                    setShowPostOfficeList(prev => !prev);
-                                                    setPincodeVerified(true);
-                                                }}
-                                            >
-                                                <Check className="w-3.5 h-3.5 text-[#10B981]" />
-                                            </button>
-                                        )}
+                                        <button
+                                            type="button"
+                                            onClick={handleCheckPincode}
+                                            disabled={pincodeCheck.status === 'checking' || formData.pincode.length !== 6}
+                                            className="px-3 h-10 rounded-xl bg-[#F97316] text-white text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            {pincodeCheck.status === 'checking'
+                                                ? <Loader2 className="w-4 h-4 animate-spin" />
+                                                : 'Check'}
+                                        </button>
                                     </div>
+                                    {pincodeCheck.message && (
+                                        <p className={`text-xs font-medium ${isPincodeConfirmed
+                                            ? 'text-emerald-600'
+                                            : pincodeCheck.status === 'checking' ? 'text-amber-600' : 'text-rose-600'}`}>
+                                            {isPincodeConfirmed && <Check className="inline w-3.5 h-3.5 mr-1" />}
+                                            {pincodeCheck.message}
+                                        </p>
+                                    )}
+                                    {postOffices.length > 0 && (
+                                        <button
+                                            type="button"
+                                            className="text-xs font-medium text-[#F97316] hover:text-[#EA580C]"
+                                            onClick={() => setShowPostOfficeList(prev => !prev)}
+                                        >
+                                            {showPostOfficeList ? 'Hide localities' : 'Choose locality'}
+                                        </button>
+                                    )}
 
                                     {/^\d{6}$/.test(formData.pincode) && showPostOfficeList && postOffices.length > 0 && (
                                         <div className="absolute top-full left-0 right-0 z-50 bg-white border-2 border-[#FED7AA] rounded-xl shadow-lg max-h-48 overflow-y-auto mt-1 animate__animated animate__fadeIn">
@@ -552,7 +613,8 @@ export const AddressModal = ({
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-6 py-2 bg-gradient-to-r from-[#F97316] to-[#EA580C] text-white rounded-xl text-xs font-medium hover:shadow-lg hover:shadow-[#F97316]/30 transition-all duration-300 transform hover:scale-105"
+                                    disabled={!isPincodeConfirmed}
+                                    className="px-6 py-2 bg-gradient-to-r from-[#F97316] to-[#EA580C] text-white rounded-xl text-xs font-medium hover:shadow-lg hover:shadow-[#F97316]/30 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                                 >
                                     {currentAddress ? 'Update' : 'Save'} Address
                                 </button>

@@ -26,26 +26,33 @@ PublicUrl.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-/* ======================
-   RESPONSE INTERCEPTOR
-   ====================== */
+const getApiErrorMessage = (error) => {
+    const message = error?.response?.data?.message;
+    return typeof message === "string" && message.trim()
+        ? message
+        : "Request failed. Please try again.";
+};
+
 PublicUrl.interceptors.response.use(
     (response) => response,
     (error) => {
         const status = error?.response?.status;
+        const message = getApiErrorMessage(error);
 
-        console.log(status, error.response,'statusfromlogin');
-        if (status === 401 || status === 403) {
-            toast.error("Session expired. Please login again.");
+        if (!error?.config?.skipErrorToast) {
+            toast.error(message);
+            error.toastHandled = true;
+        }
 
-            // 🔥 Clear auth
+        if (status === 401) {
             localStorage.removeItem("user_token");
             store.dispatch(logout());
 
-            // 🔥 Redirect after short delay
-            setTimeout(() => {
-                window.location.href = "/login";
-            }, 800);
+            if (window.location.pathname !== "/login") {
+                setTimeout(() => {
+                    window.location.href = "/login";
+                }, 800);
+            }
         }
 
         return Promise.reject(error);

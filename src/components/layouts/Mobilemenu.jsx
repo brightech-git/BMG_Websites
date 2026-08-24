@@ -199,7 +199,7 @@ const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = []
                         <ul className="space-y-1">
                             <AnimatePresence>
 
-                                <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.98 }} className="px-4 py-3">
+                                {/* <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.98 }} className="px-4 py-3">
                                     <Link
                                         to={'/'}
                                         onClick={handleClose}
@@ -210,7 +210,7 @@ const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = []
                                             Home
                                         </span>
                                     </Link>
-                                </motion.div>
+                                </motion.div> */}
 
                                 {/* ── Dynamic headers from API ── */}
                                 {headers.map((header, hIdx) => {

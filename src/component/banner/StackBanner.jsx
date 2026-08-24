@@ -15,6 +15,8 @@ const GridBanner = ({
     full = false,
     backgroundColor = "white",
 }) => {
+
+    console.log(desktopLayout ,mobileLayout ,images ,'gridbannersetting');
     const [isMobile, setIsMobile] = useState(false);
     const navigate = useNavigate();
 
@@ -28,8 +30,10 @@ const GridBanner = ({
     const layout = isMobile ? mobileLayout : desktopLayout;
     if (!layout) return null;
 
+    console.log(layout,'gridlayout');
+
     const resolveImage = (image) => {
-        console.log(image,'image');
+        console.log(image,'imageingrid');
         // string support
         if (typeof image === "string") {
             return { url: image, link: null, alt: "" };
@@ -38,6 +42,7 @@ const GridBanner = ({
         if (!image || typeof image !== "object") {
             return { url: "", link: null, alt: "" };
         }
+    
 
         // desktop / mobile structure
         if (image.desktop || image.mobile) {
@@ -49,6 +54,7 @@ const GridBanner = ({
                 url: source?.url || "",
                 link: source?.link || null,
                 alt: image.alt || "",
+                rowSpan: image.rowSpan ?? 1
             };
         }
 
@@ -57,7 +63,8 @@ const GridBanner = ({
             url: image.url || "",
             link: image.link || null,
             alt: image.alt || "",
-            fitlerId: image.filterId
+            fitlerId: image.filterId,
+            rowSpan : image.rowSpan ?? 1
 
         };
     };

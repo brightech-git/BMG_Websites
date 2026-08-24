@@ -154,7 +154,7 @@ const Content = () => {
                                 ? JSON.parse(banner.visibleCount)
                                 : banner.visibleCount;
 
-                        console.log(banner,'banner');
+                        console.log(banner,'bannerinhome');
 
                         return banner.isGrid ? (
                             <GridBanner

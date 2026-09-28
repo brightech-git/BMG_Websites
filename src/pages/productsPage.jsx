@@ -25,7 +25,7 @@ const ProductsPage = () => {
       {/* Pass query params to Breadcrumb */}
       <Breadcrumbs itemId={itemId} pages="products-page" subItemId={subItemId} filterId={filterIds}/>
       {/* <SmoothScroll> */}
-      <Content ItemName={itemName} />
+        <Content ItemName={itemName} />
       {/* </SmoothScroll> */}
 
 

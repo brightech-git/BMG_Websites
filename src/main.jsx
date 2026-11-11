@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
-import MaintenanceLogin from './pages/MaintenanceLogin';
+import MaintenancePage from './features/maintenance/components/MaintenancePage';
+import { useWebsiteMaintenance } from './features/maintenance/hooks/useWebsiteMaintenance';
 
 import {QueryClientProvider } from '@tanstack/react-query';
 import { ToastContainer } from 'react-toastify';
@@ -31,19 +32,57 @@ import MainLayout from './component/layout/MainLayout';
 import { queryClient } from './component/reactQuery/queryClient';
 
 
-function Root() {
-  const [hasAccess, setHasAccess] = useState(true);
+const maintenanceAccessKey = "bmg-maintenance-access";
 
-  if (!hasAccess) {
-    return <MaintenanceLogin onAccess={() => setHasAccess(true)} />;
+function Root() {
+  const [hasAccess, setHasAccess] = useState(() => {
+    try {
+      return localStorage.getItem(maintenanceAccessKey) === "granted";
+    } catch {
+      return false;
+    }
+  });
+
+  function grantAccess() {
+    try {
+      localStorage.setItem(maintenanceAccessKey, "granted");
+    } catch {
+      // Access still works for the current visit if storage is unavailable.
+    }
+    setHasAccess(true);
+  }
+
+  const { data: maintenance, isPending } = useWebsiteMaintenance();
+
+  console.log(maintenance,'maintenance')
+
+  if (isPending) {
+    return (
+      <main className="grid min-h-screen place-items-center bg-[var(--orange-50)]">
+        <p role="status">Loading storefront…</p>
+      </main>
+    );
+  }
+
+  if (maintenance && !hasAccess) {
+    return (
+      <MaintenancePage
+        message={maintenance.maintenanceMsg}
+        onAccess={grantAccess}
+      />
+    );
   }
 
   return (
-    <PincodeProvider>
-      <MainLayout>
-        <App />
-      </MainLayout>
-    </PincodeProvider>
+    <NotificationProvider>
+      <CompanyDetailsProvider>
+        <PincodeProvider>
+          <MainLayout>
+            <App />
+          </MainLayout>
+        </PincodeProvider>
+      </CompanyDetailsProvider>
+    </NotificationProvider>
   );
 }
 
@@ -52,22 +91,18 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <NotificationProvider>
-          <CompanyDetailsProvider>
-            <BrowserRouter>
-              <Root />
-              <ToastContainer
-                position="top-right"
-                autoClose={2000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                pauseOnHover
-                draggable
-              />
-            </BrowserRouter>
-          </CompanyDetailsProvider>
-        </NotificationProvider>
+        <BrowserRouter>
+          <Root />
+          <ToastContainer
+            position="top-right"
+            autoClose={2000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            pauseOnHover
+            draggable
+          />
+        </BrowserRouter>
       </QueryClientProvider>
     </Provider>
   </React.StrictMode>

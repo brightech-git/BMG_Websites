@@ -14,3 +14,19 @@ The React Compiler is not enabled on this template because of its impact on dev 
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+## Storefront feature structure
+
+React Router routes live in `src/App.jsx`. Feature-owned code lives in
+`src/features/<feature>/`, with folders added as the feature needs them:
+
+- `components/` for route screens, feature UI, and their styles
+- `api/` for the feature's requests
+- `hooks/` for feature queries, mutations, and reusable behavior
+- `constants/` for feature-owned configuration and static data
+
+For example, the Home screen, banner requests, and banner queries live under
+`src/features/home/`. The orders API and status constants live under
+`src/features/orders/`, where both checkout and the account screens can use
+them. Shared HTTP clients, app layout, theme, and formatting utilities stay
+outside feature directories.

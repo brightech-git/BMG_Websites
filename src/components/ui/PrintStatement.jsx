@@ -9,7 +9,7 @@ import {
 } from "@react-pdf/renderer";
 import invoiceImg from './invoice.jpeg';
 import logo from '../../assets/icons/fallback.jpg'
-import { formatCurrency } from "../../utils/formatters";
+import { formatCurrency } from "../../utils/index.js";
 
 export default function InvoiceDocument({
     orderId,

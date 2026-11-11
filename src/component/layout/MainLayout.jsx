@@ -5,7 +5,7 @@ const MainLayout = ({ children }) => {
     return (
         <>
             <HeaderWithAuth />
-                <main className="min-h-screen pt-[165px] sm:pt-[165px] md:pt-[170px]">
+                <main className="min-h-screen">
                     {children}
                 </main>
             <Footer />

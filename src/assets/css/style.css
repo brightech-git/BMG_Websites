@@ -25,21 +25,23 @@
 
 /*-------------- Root Variables ----------------*/
 :root {
+    color-scheme: only light;
+    accent-color: var(--brand-primary);
     --primary-font: 'Lato', sans-serif;
     --secondary-font: 'Lato', sans-serif;
     --title-font: 'Lato', sans-serif;
 
     --primary-color: #ffffff;
-    --primary-text-color: #041f60;
-    --secondary-text-color: #ea580c;
+    --primary-text-color: var(--orange-950);
+    --secondary-text-color: var(--brand-hover);
 
-    --primary-hover-color: #ea580c;
-    --primary-card-color: #fff7ed;
-    --secondary-card-color: #ffedd5;
+    --primary-hover-color: var(--brand-primary);
+    --primary-card-color: var(--orange-50);
+    --secondary-card-color: var(--orange-100);
 
     --brand-background-color: linear-gradient(to right,
-            #89edff,
-            #d8aafe);
+            var(--orange-100),
+            var(--orange-200));
 
     --white-color: #ffffff;
     --black-color: #101010;
@@ -62,6 +64,14 @@
     --orange-800: #9a3412;
     --orange-900: #7c2d12;
     --orange-950: #431407;
+
+    --brand-primary: var(--orange-700);
+    --brand-hover: var(--orange-800);
+    --brand-focus: var(--orange-600);
+    --brand-border: var(--orange-200);
+    --primary-theme-color: var(--brand-primary);
+    --orange-color: var(--orange-600);
+    --focus-outline: 2px solid var(--brand-focus);
 
     --shadow-sm: 0 0.125rem 0.25rem rgba(249, 115, 22, 0.075);
     --shadow-md: 0 0.5rem 1rem rgba(249, 115, 22, 0.15);
@@ -128,6 +138,11 @@ a:hover {
     color: var(--secondary-text-color);
 }
 
+:focus-visible {
+    outline: var(--focus-outline);
+    outline-offset: 2px;
+}
+
 /*-------------- Images ----------------*/
 img {
     max-width: 100%;
@@ -180,7 +195,7 @@ textarea {
 
 .main-btn.btn-filled:hover,
 .btn-main.main-filled:hover {
-    background-color: var(--green-color);
+    background-color: var(--brand-hover);
     color: var(--white-color);
 }
 

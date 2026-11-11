@@ -1,339 +1,134 @@
-/* recently-viewed.css - UPDATED WITH HEADER ARROWS */
-
-.jewel-carousel {
-    padding: var(--space-8) 0;
-    font-family: var(--secondary-font);
-    position: relative;
-    overflow: hidden;
-    background: var(--color-bg);
+.viewed-section {
+  padding: clamp(1.25rem, 4vw, 3.5rem) clamp(0.75rem, 3vw, 2rem);
 }
 
-.jewel-carousel__container {
-    max-width: var(--container-width);
-    margin: 0 auto;
-    padding: 0 var(--space-6);
+.viewed-shell {
+  --viewed-gap: clamp(0.625rem, 1.5vw, 1.25rem);
+  --viewed-card: clamp(9rem, 43vw, 15rem);
+  max-width: 86rem;
+  margin-inline: auto;
+  padding: clamp(0.75rem, 2.5vw, 1.75rem);
+  border: 1px solid var(--brand-border);
+  border-radius: 1.25rem;
+  background: var(--orange-50);
 }
 
-/* Header with arrows */
-.jewel-carousel__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--space-8);
-    flex-wrap: wrap;
-    gap: var(--space-4);
+.viewed-heading,
+.viewed-title,
+.viewed-controls {
+  display: flex;
+  align-items: center;
 }
 
-.header-left {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    flex: 1;
+.viewed-heading {
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-.header-right {
-    display: flex;
-    align-items: center;
+.viewed-title {
+  gap: 0.625rem;
 }
 
-.jewel-carousel__subtitle {
-    display: block;
-    font-size: var(--font-md);
-    color: var(--primary-text-color);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    font-family: var(--primary-font);
-    margin-bottom: var(--space-2);
+.viewed-title h2 {
+  margin: 0;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 700;
 }
 
-.jewel-carousel__title {
-background: var(--gradient-border);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    text-shadow: var(--text-shadow);
-    font-family: var(--title-font);
-    font-weight: bolder;
-    font-size: 40px;
+.viewed-icon,
+.viewed-controls button {
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: var(--brand-hover);
+  border-radius: 0.75rem;
 }
 
-
-/* Navigation arrows in header */
-.carousel-nav-group {
-    display: flex;
-    gap: var(--space-2);
-    align-items: center;
+.viewed-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--orange-100);
 }
 
-.carousel-nav {
-    width: 30px;
-    height: 30px;
-    background: var(--white-color);
-    border: 2px solid var(--primary-hover-color);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    box-shadow: var(--shadow-sm);
-    color: var(--primary-hover-color);
-    padding: 0;
+.viewed-controls {
+  gap: 0.375rem;
 }
 
-.carousel-nav:hover:not(.disabled) {
-    background: var(--primary-hover-color);
-    color: var(--white-color);
-    transform: scale(1.05);
-    box-shadow: var(--shadow-md);
+.viewed-controls button {
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--brand-border);
+  background: var(--white-color);
 }
 
-.carousel-nav.disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    pointer-events: none;
-    border-color: var(--grey-color);
-    color: var(--grey-color);
+.viewed-controls button:hover:enabled {
+  background: var(--brand-primary);
+  color: var(--white-color);
 }
 
-.carousel-nav svg {
-    transition: transform var(--transition-fast);
+.viewed-controls button:disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 
-.carousel-nav:hover:not(.disabled) svg {
-    transform: scale(1.1);
+.viewed-track {
+  display: flex;
+  gap: var(--viewed-gap);
+  margin: 0;
+  padding: 0.25rem 0.25rem 0.65rem;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  list-style: none;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 0.25rem;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--orange-300) transparent;
 }
 
-/* Single Row Carousel */
-.single-row-carousel {
-    display: flex;
-    gap: var(--space-6);
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-behavior: smooth;
-    padding: var(--space-2) var(--space-1) var(--space-6);
-    scrollbar-width: none;
-    /* Firefox */
-    -ms-overflow-style: none;
-    /* IE and Edge */
-    position: relative;
+.viewed-item,
+.viewed-skeleton {
+  flex: 0 0 var(--viewed-card);
+  min-width: 0;
+  border-radius: 0.875rem;
+  scroll-snap-align: start;
 }
 
-.single-row-carousel::-webkit-scrollbar {
-    display: none;
-    /* Chrome, Safari, Opera */
+.viewed-item {
+  background: var(--white-color);
+  box-shadow: var(--shadow-sm);
 }
 
-.carousel-card-wrapper {
-    flex: 0 0 auto;
-    width: 280px;
-    min-width: 280px;
-    scroll-snap-align: start;
-    padding: 8px;
-    border: 1px solid #eee;
+.viewed-skeleton {
+  min-height: 14rem;
+  background: var(--orange-100);
 }
 
-.carousel-card-wrapper>* {
-    border: none;
+.viewed-loading {
+  overflow: hidden;
 }
 
-/* Skeleton Loading */
-.carousel-skeleton-wrapper {
-    position: relative;
+.viewed-message {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem;
+  border-radius: 0.75rem;
+  background: var(--white-color);
 }
 
-.carousel-skeleton-row {
-    display: flex;
-    gap: var(--space-6);
-    padding: var(--space-2) var(--space-1);
+.viewed-message a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-weight: 700;
 }
 
-.carousel-skeleton-item {
-    flex: 0 0 auto;
-    width: 280px;
-    min-width: 280px;
-}
-
-.jewel-carousel__skeleton {
-    width: 100%;
-    height: 300px;
-    background: linear-gradient(90deg,
-            var(--primary-card-color) 25%,
-            var(--feature-bg-color) 50%,
-            var(--primary-card-color) 75%);
-    background-size: 200% 100%;
-    border-radius: var(--radius-md);
-    animation: skeletonPulse 1.8s infinite ease-in-out;
-}
-
-@keyframes skeletonPulse {
-    0% {
-        background-position: -200% 0;
-    }
-
-    100% {
-        background-position: 200% 0;
-    }
-}
-
-/* Empty State */
-.jewel-carousel__empty {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-8);
-    text-align: center;
-    background: var(--primary-card-color);
-    border-radius: var(--radius-lg);
-    margin: var(--space-8) auto;
-    max-width: 600px;
-}
-
-.jewel-carousel__empty p {
-    font-size: var(--font-lg);
-    color: var(--primary-text-color);
-    margin-bottom: var(--space-6);
-    font-weight: 500;
-}
-
-.jewel-carousel__cta {
-    background: linear-gradient(135deg, var(--primary-theme-color), var(--primary-hover-color));
-    color: var(--white-color);
-    padding: var(--space-4) var(--space-8);
-    border: none;
-    border-radius: var(--radius-md);
-    font-size: var(--font-md);
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    box-shadow: var(--shadow-md);
-}
-
-.jewel-carousel__cta:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-}
-
-.jewel-carousel__cta:focus {
-    outline: 2px solid var(--primary-hover-color);
-    outline-offset: 2px;
-}
-
-/* Error State */
-.jewel-carousel__error {
-    text-align: center;
-    color: var(--red-color);
-    font-size: var(--font-lg);
-    padding: var(--space-8);
-    background: var(--primary-card-color);
-    border-radius: var(--radius-md);
-    margin: var(--space-8) auto;
-    max-width: 600px;
-    box-shadow: var(--shadow-sm);
-}
-
-/* Responsive Design */
-@media (max-width: 1024px) {
-    .carousel-card-wrapper {
-        width: 240px;
-        min-width: 240px;
-    }
-
-    .carousel-skeleton-item {
-        width: 240px;
-        min-width: 240px;
-    }
-}
-
-@media (max-width: 768px) {
-    .jewel-carousel__container {
-        padding: 0 var(--space-4);
-    }
-
-   
-
-    .header-left {
-        width: 100%;
-    }
-
-
-    .jewel-carousel__title {
-        font-size: 26px;
-    }
-
-    .jewel-carousel__subtitle {
-        font-size: var(--font-sm);
-        letter-spacing: 2px;
-    }
-
-    .carousel-nav {
-        width: 25px;
-        height: 25px;
-    }
-
-    .carousel-card-wrapper {
-        width: 220px;
-        min-width: 220px;
-    }
-
-    .carousel-skeleton-item {
-        width: 220px;
-        min-width: 220px;
-    }
-
-    .single-row-carousel {
-        gap: var(--space-4);
-    }
-
-    .carousel-skeleton-row {
-        gap: var(--space-4);
-    }
-}
-
-@media (max-width: 575px) {
-    .jewel-carousel {
-        padding: var(--space-6) 0;
-    }
-
-    .jewel-carousel__header {
-        margin-bottom: var(--space-4);
-    }
-
-    .jewel-carousel__title {
-        font-size:20px;
-    }
-
-    .carousel-card-wrapper {
-        width: 200px;
-        min-width: 200px;
-    }
-
-    .carousel-skeleton-item {
-        width: 200px;
-        min-width: 200px;
-    }
-
-    .single-row-carousel {
-        gap: var(--space-3);
-    }
-
-    .carousel-skeleton-row {
-        gap: var(--space-3);
-    }
-
-    .jewel-carousel__skeleton {
-        height: 250px;
-    }
-}
-
-/* Touch device improvements */
-@media (hover: none) {
-    .single-row-carousel {
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-    }
+@media (prefers-reduced-motion: reduce) {
+  .viewed-track {
+    scroll-behavior: auto;
+  }
 }

@@ -3,7 +3,7 @@ import {
     fetchCart,
     addToCart,
     deleteCartItem,
-} from "../../service/cartService";
+} from "../../features/cart/api/cartService";
 
 // ✅ Async actions using createAsyncThunk
 

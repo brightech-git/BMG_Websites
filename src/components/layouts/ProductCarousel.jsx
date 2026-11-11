@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import ProductCard from '../sections/productCard/ProductCard';
+import ProductCard from '../../features/catalog/components/productCard/ProductCard';
 import './ProductCarousel.css';
 
 const ProductCarousel = ({ products }) => {

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import ProductCard from '../sections/productCard/ProductCard';
-import { useRelatedProducts } from '../../hook/product/useFilterProducts';
+import ProductCard from '../../features/catalog/components/productCard/ProductCard';
+import { useRelatedProducts } from '../../features/catalog/hooks/product/useFilterProducts';
 import { ChevronLeft, ChevronRight, AlertCircle, Loader2, Sparkles } from 'lucide-react';
 
 const ShopRelatedUpdated = ({ itemCtrId }) => {
@@ -24,7 +24,7 @@ const ShopRelatedUpdated = ({ itemCtrId }) => {
     };
 
     return (
-        <section className="py-2 bg-gray-50 dark:bg-gray-900 rounded-2xl shadow-base">
+        <section className="py-2 bg-orange-50 rounded-2xl shadow-base">
             <div className="container mx-auto px-2 max-w-7xl">
                 {/* Header with navigation */}
                 <div className="flex items-center justify-between mb-4 bg-[var(--primary-card-color)]">
@@ -40,27 +40,27 @@ const ShopRelatedUpdated = ({ itemCtrId }) => {
                         <div className="flex items-center space-x-3">
                             <button
                                 onClick={() => scroll('left')}
-                                className="p-2 rounded-full bg-white dark:bg-gray-800 shadow-md hover:shadow-lg 
-                                         border border-gray-200 dark:border-gray-700 
-                                         hover:bg-gray-50 dark:hover:bg-gray-700 
+                                className="p-2 rounded-full bg-white shadow-md hover:shadow-lg 
+                                         border border-orange-200 
+                                         hover:bg-orange-50 
                                          transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2
                                          disabled:opacity-50 disabled:cursor-not-allowed"
                                 aria-label="Scroll left"
                                 disabled={isLoading}
                             >
-                                <ChevronLeft className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                                <ChevronLeft className="w-5 h-5 text-gray-700" />
                             </button>
                             <button
                                 onClick={() => scroll('right')}
-                                className="p-2 rounded-full bg-white dark:bg-gray-800 shadow-md hover:shadow-lg 
-                                         border border-gray-200 dark:border-gray-700 
-                                         hover:bg-gray-50 dark:hover:bg-gray-700 
+                                className="p-2 rounded-full bg-white shadow-md hover:shadow-lg 
+                                         border border-orange-200 
+                                         hover:bg-orange-50 
                                          transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2
                                          disabled:opacity-50 disabled:cursor-not-allowed"
                                 aria-label="Scroll right"
                                 disabled={isLoading}
                             >
-                                <ChevronRight className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                                <ChevronRight className="w-5 h-5 text-gray-700" />
                             </button>
                         </div>
                     )}
@@ -74,18 +74,18 @@ const ShopRelatedUpdated = ({ itemCtrId }) => {
                                 key={i}
                                 className="flex-shrink-0 w-64 md:w-72 lg:w-80 snap-start"
                             >
-                                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md 
-                                border border-gray-200 dark:border-gray-700 
+                                <div className="bg-white rounded-xl shadow-md 
+                                border border-orange-200 
                                 overflow-hidden h-full animate-pulse">
 
                                     {/* Image Skeleton */}
-                                    <div className="w-full h-40 md:h-48 lg:h-52 bg-gray-300 dark:bg-gray-700"></div>
+                                    <div className="w-full h-40 md:h-48 lg:h-52 bg-gray-300"></div>
 
                                     {/* Text Skeleton */}
                                     <div className="p-4 space-y-3">
-                                        <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>
-                                        <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/2"></div>
-                                        <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-2/3"></div>
+                                        <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+                                        <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+                                        <div className="h-4 bg-gray-300 rounded w-2/3"></div>
                                     </div>
 
                                 </div>
@@ -97,15 +97,15 @@ const ShopRelatedUpdated = ({ itemCtrId }) => {
 
                 {/* Error State */}
                 {isError && (
-                    <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 
+                    <div className="bg-red-50 border border-red-200 
                                    rounded-xl p-2 mb-2">
                         <div className="flex items-center gap-3">
-                            <AlertCircle className="w-6 h-6 text-red-600 dark:text-red-400 flex-shrink-0" />
+                            <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0" />
                             <div>
-                                <h3 className="font-semibold text-red-800 dark:text-red-200">
+                                <h3 className="font-semibold text-red-800">
                                     Failed to load products
                                 </h3>
-                                <p className="text-red-700 dark:text-red-300 mt-1">
+                                <p className="text-red-700 mt-1">
                                     {typeof isError === 'string' ? isError : 'Please try again later'}
                                 </p>
                             </div>
@@ -115,15 +115,15 @@ const ShopRelatedUpdated = ({ itemCtrId }) => {
 
                 {/* Empty State */}
                 {!isLoading && !isError && relatedProducts.length === 0 && (
-                    <div className="bg-gray-100 dark:bg-gray-800/50 rounded-xl p-12 text-center">
-                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-200 dark:bg-gray-700 
+                    <div className="bg-gray-100 rounded-xl p-12 text-center">
+                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-200 
                                       flex items-center justify-center">
-                            <AlertCircle className="w-8 h-8 text-gray-500 dark:text-gray-400" />
+                            <AlertCircle className="w-8 h-8 text-gray-500" />
                         </div>
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
                             No related products found
                         </h3>
-                        <p className="text-gray-600 dark:text-gray-400">
+                        <p className="text-gray-600">
                             We couldn't find any products related to this item
                         </p>
                     </div>
@@ -133,8 +133,8 @@ const ShopRelatedUpdated = ({ itemCtrId }) => {
                 {!isLoading && !isError && relatedProducts.length > 0 && (
                     <div className="relative">
                         {/* Gradient overlays for better UX */}
-                        <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-gray-50 dark:from-gray-900 to-transparent z-10 pointer-events-none" />
-                        <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-gray-50 dark:from-gray-900 to-transparent z-10 pointer-events-none" />
+                        <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-orange-50 to-transparent z-10 pointer-events-none" />
+                        <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-orange-50 to-transparent z-10 pointer-events-none" />
 
                         {/* Scrollable container */}
                         <div

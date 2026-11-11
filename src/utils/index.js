@@ -15,7 +15,7 @@ export {
   getResponsiveFontSize,
   remToPx as remToPxFont,
   pxToRem as pxToRemFont,
-} from './fontSizes';
+} from './fontSizes.js';
 
 // Typography
 export {
@@ -27,7 +27,7 @@ export {
   textColors as typographyTextColors,
   createTypography,
   getHeadingStyle,
-} from './typography';
+} from './typography.js';
 
 // Spacing
 export {
@@ -40,7 +40,7 @@ export {
   remToPx,
   pxToRem,
   getSpacing,
-} from './spacing';
+} from './spacing.js';
 
 // Colors
 export {
@@ -56,7 +56,7 @@ export {
   getBorderColor,
   getGradient,
   createColorStyle,
-} from './colors';
+} from './colors.js';
 
 // Design Tokens
 export {
@@ -76,12 +76,24 @@ export {
   createResponsiveStyle,
   createFocusStyle,
   designTokens,
-} from './designTokens';
+} from './designTokens.js';
 
 // Default exports for convenience
-export { default as fontSizesUtil } from './fontSizes';
-export { default as typographyUtil } from './typography';
-export { default as spacingUtil } from './spacing';
-export { default as colorsUtil } from './colors';
-export { default as designTokensUtil } from './designTokens';
+export { default as fontSizesUtil } from './fontSizes.js';
+export { default as typographyUtil } from './typography.js';
+export { default as spacingUtil } from './spacing.js';
+export { default as colorsUtil } from './colors.js';
+export { default as designTokensUtil } from './designTokens.js';
 
+
+export {
+  formatNumber,
+  formatCurrency,
+  formatWeight,
+  formatDate,
+  formatTime,
+  formatDateTime,
+  formatApiDate,
+  formatApiTime,
+  formatApiDateTime,
+} from './formatters.js';

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useCategoryBanner } from "../../hook/banner/useCategoryBanner";
+import { useCategoryBanner } from "../../features/home/hooks/banner/useCategoryBanner";
 import fallbackImage from "../../assets/images/clouds-back.jpg";
 import "./BreadStyles.css";
 

@@ -1,229 +1,121 @@
-import React, { useState, useEffect } from "react";
-import SmartButton from "../ui/SmartButton";
-import { ChevronDown } from "lucide-react";
-import { MapPin } from "lucide-react";
+import { useId, useRef, useState } from "react";
+import { ArrowRight, ChevronDown, MapPin, X } from "lucide-react";
 import { usePincode } from "../../context/pinocde/PincodeContext";
-import { checkPincodeService } from "../../service/pincodeChecking";
+import { checkPincodeService } from "../../features/address/api/pincodeChecking";
 
-const DeliveryPincodeHeader = () => {
-    const { pincode, updatePincode } = usePincode(); // Use context
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [tempPincode, setTempPincode] = useState(pincode);
-    const [statusMessage, setStatusMessage] = useState("");
-    const [animationKey, setAnimationKey] = useState(0);
-    const [isSmallScreen, setIsSmallScreen] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
+export default function DeliveryPincodeHeader() {
+  const { pincode, updatePincode } = usePincode();
+  const id = useId();
+  const dialogRef = useRef(null);
+  const triggerRef = useRef(null);
+  const inputRef = useRef(null);
+  const pendingRef = useRef(null);
+  const [draft, setDraft] = useState("");
+  const [isChecking, setIsChecking] = useState(false);
+  const [error, setError] = useState("");
 
-    // Check screen size
-    useEffect(() => {
-        const checkScreenSize = () => {
-            const width = window.innerWidth;
-            setIsSmallScreen(width < 992);
-            setIsMobile(width < 768);
-        };
+  function openDialog() {
+    setDraft(pincode);
+    setError("");
+    dialogRef.current.showModal();
+    inputRef.current.focus();
+  }
 
-        checkScreenSize();
-        window.addEventListener('resize', checkScreenSize);
-        return () => window.removeEventListener('resize', checkScreenSize);
-    }, []);
+  function closeDialog() {
+    pendingRef.current = null;
+    setIsChecking(false);
+    dialogRef.current.close();
+    triggerRef.current.focus();
+  }
 
-    // Update tempPincode when context pincode changes
-    useEffect(() => {
-        setTempPincode(pincode);
-    }, [pincode]);
+  async function handleSubmit(event) {
+    event.preventDefault();
+    if (pendingRef.current) return;
+    if (!/^\d{6}$/.test(draft)) {
+      setError("Enter a 6-digit PIN code.");
+      inputRef.current.focus();
+      return;
+    }
 
-    const handleOpenModal = () => {
-        setTempPincode(pincode);
-        setStatusMessage("");
-        setIsModalOpen(true);
-    };
+    const request = {};
+    pendingRef.current = request;
+    setError("");
+    setIsChecking(true);
 
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-        setStatusMessage("");
-        setTempPincode(pincode);
-    };
+    try {
+      const response = await checkPincodeService(draft);
+      if (pendingRef.current !== request) return;
+      if (response?.status !== true) {
+        setError(response?.message || "Delivery is currently unavailable for this PIN code.");
+        return;
+      }
 
-    const validatePincode = async (pincodeValue) => {
-        if (!/^\d{6}$/.test(pincodeValue)) {
-            throw new Error("Please enter a valid 6-digit pincode");
-        }
+      await updatePincode(draft, {
+        pincode: draft,
+        serviceable: true,
+        services: response.data || [],
+        checkedAt: new Date().toISOString(),
+      });
+      if (pendingRef.current === request) closeDialog();
+    } catch {
+      if (pendingRef.current === request) setError("Couldn’t check delivery. Please try again.");
+    } finally {
+      if (pendingRef.current === request) {
+        pendingRef.current = null;
+        setIsChecking(false);
+      }
+    }
+  }
 
-        const response = await checkPincodeService(pincodeValue);
-        const isServiceable = response?.status === true;
+  return (
+    <>
+      <button ref={triggerRef} type="button" className="flex min-h-11 items-center gap-2.5 rounded-xl border border-orange-200 bg-orange-50 px-3 py-1.5 text-left text-orange-700 hover:bg-orange-100 max-[991px]:w-full" aria-haspopup="dialog"
+        aria-controls={id} onClick={openDialog}>
+        <MapPin size={18} aria-hidden="true" />
+        <span className="grid gap-0.5 whitespace-nowrap leading-tight max-[991px]:flex max-[991px]:flex-1 max-[991px]:flex-wrap max-[991px]:items-baseline max-[991px]:gap-1.5">
+          <span className="text-xs">Deliver to</span>
+          <strong className="text-sm text-stone-900">{pincode || "Set PIN code"}</strong>
+        </span>
+        <ChevronDown size={15} aria-hidden="true" />
+      </button>
 
-        return {
-            valid: isServiceable,
-            message: response?.message || (isServiceable
-                ? "Available for delivery in your area!"
-                : "Sorry, we don't deliver to this pincode yet"),
-            data: {
-                pincode: pincodeValue,
-                serviceable: isServiceable,
-                services: response?.data || [],
-                checkedAt: new Date().toISOString()
-            }
-        };
-    };
+      <dialog ref={dialogRef} id={id} className="fixed inset-0 m-auto h-fit w-[calc(100%-2rem)] max-w-[26rem] max-h-[calc(100dvh-2rem)] overflow-auto rounded-2xl border border-orange-200 bg-white p-0 text-stone-900 shadow-xl backdrop:bg-stone-950/40 max-[540px]:inset-x-0 max-[540px]:bottom-0 max-[540px]:top-auto max-[540px]:m-0 max-[540px]:w-full max-[540px]:max-w-none max-[540px]:max-h-[calc(100dvh-1rem)] max-[540px]:rounded-b-none" aria-labelledby={`${id}-title`}
+        onCancel={(event) => { event.preventDefault(); closeDialog(); }}
+        onClick={(event) => { if (event.target === event.currentTarget) closeDialog(); }}>
+        <div className="p-2 sm:p-4 max-[540px]:pb-[max(1rem,env(safe-area-inset-bottom))]">
+          <div className="mb-2 gap-2 flex items-start justify-between">
+            <span className="grid h-11 w-11 place-items-center rounded-xl bg-orange-50 text-orange-700">
+              <MapPin size={22} aria-hidden="true" />
+            </span>
+            <div>    
+              <h2 className="mb-1.5 text-lg sm:text-xl font-bold !text-stone-900" id={`${id}-title`}>Delivery PIN code</h2>
+              <p id={`${id}-help`} className="text-xs sm:text-sm !text-stone-600">Enter your 6-digit PIN code to check delivery availability.</p>
+            </div>
+          
+           
+            <button type="button" className="grid h-11 w-11 place-items-center rounded-xl text-stone-600 hover:bg-orange-50 hover:text-orange-700" onClick={closeDialog} aria-label="Close delivery settings">
+              <X size={21} aria-hidden="true" />
+            </button>
+          </div>
+         
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (tempPincode.length !== 6) {
-            setStatusMessage("Please enter a valid 6-digit pincode");
-            setAnimationKey(prev => prev + 1);
-            return;
-        }
-
-        try {
-            setStatusMessage("Checking pincode availability...");
-            const result = await validatePincode(tempPincode);
-
-            if (result.valid) {
-                // Use context to update pincode (this will update everywhere)
-                await updatePincode(tempPincode, result.data);
-                setStatusMessage("Pincode updated successfully!");
-                setAnimationKey(prev => prev + 1);
-
-                // Close modal after success
-                setTimeout(() => {
-                    setIsModalOpen(false);
-                    setStatusMessage("");
-                }, 1500);
-            } else {
-                setStatusMessage(result.message);
-                setAnimationKey(prev => prev + 1);
-            }
-        } catch (error) {
-            setStatusMessage(error.message || "Error checking pincode");
-            setAnimationKey(prev => prev + 1);
-        }
-    };
-
-    return (
-        <div>
-            {/* Header Pincode Display */}
-            {isSmallScreen ? (
-                <button
-                    onClick={handleOpenModal}
-                    className="flex items-center gap-2 px-2 py-1"
-                >
-                    <MapPin size={16} className="flex-shrink-0" />
-                    <span className="text-sm font-medium whitespace-nowrap truncate max-w-[120px]">
-                        {pincode ? `Deliver to ${pincode}` : "Set Delivery Pincode"}
-                    </span>
-                    <ChevronDown
-                        size={14}
-                        className="text-gray-400 flex-shrink-0"
-                    />
-                </button>
-            ) : (
-                <button
-                    onClick={handleOpenModal}
-                    className="flex items-center gap-2 border border-gray-300 rounded-lg px-2 py-2 w-50 h-[45px] hover:border-amber-400 hover:shadow-sm transition-all duration-200"
-                >
-                    <MapPin size={14} className="text-amber-600 flex-shrink-0" />
-                    <div className="flex-1 text-left">
-                        <div className="text-xs text-[var(--primary-hover-color)]">Where to Deliver?</div>
-                        <div className="text-sm font-semibold">
-                            {pincode ? `Deliver to ${pincode}` : "Enter your pincode"}
-                        </div>
-                    </div>
-                    <ChevronDown size={14} className="text-gray-400 flex-shrink-0" />
-                </button>
-            )}
-
-            {/* Modal */}
-            {isModalOpen && (
-                <div
-                    className={`fixed z-50 ${isMobile ? 'w-[100%] flex items-center top-0' : 'flex items-start justify-center p-4 top-[110px] right'} animate__animated animate__fadeIn animate__faster`}
-                    onClick={handleCloseModal}
-                >
-                    <div
-                        className={`relative bg-white rounded-lg w-full max-w-md ${isMobile
-                            ? 'rounded-b-none animate__animated animate__slideInUp animate__faster'
-                            : 'animate__animated animate__zoomIn animate__faster shadow-2xl'
-                            }`}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        {/* Modal content remains the same */}
-                        <div className={`${isMobile ? 'p-2 pb-2' : 'p-3'}`}>
-                            <div className="flex items-center justify-between mb-2">
-                                <div className="flex items-center gap-1">
-                                    <div className="bg-amber-50 rounded-full">
-                                        <MapPin size={15} className="text-amber-600" />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-sm font-semibold text-gray-900">Delivery Pincode</h3>
-                                    </div>
-                                </div>
-                                {!isMobile && (
-                                    <button
-                                        onClick={handleCloseModal}
-                                        className="text-gray-400 hover:text-gray-600 text-xl p-1 hover:bg-gray-100 rounded-full transition-colors"
-                                    >
-                                        &times;
-                                    </button>
-                                )}
-                            </div>
-
-                            <form onSubmit={handleSubmit}>
-                                <div className="mb-2">
-                                    <input
-                                        type="tel"
-                                        inputMode="numeric"
-                                        pattern="[0-9]*"
-                                        value={tempPincode}
-                                        onChange={(e) => setTempPincode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                                        placeholder="e.g., 600069"
-                                        className="w-full border h-[45px] bg-[var(--primary-color)] text-[var(--primary-text-color)] border-gray-300 rounded-lg px-2 py-2 text-base focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-300"
-                                        autoFocus
-                                    />
-                                </div>
-
-                                {statusMessage && (
-                                    <div
-                                        key={animationKey}
-                                        className={`mb-2 p-2 rounded-lg border animate__animated animate__fadeIn ${statusMessage.includes("successfully") || statusMessage.includes("Available")
-                                            ? "border-green-200 bg-green-50 text-green-700"
-                                            : statusMessage.includes("Checking")
-                                                ? "border-blue-200 bg-blue-50 text-blue-700"
-                                                : "border-red-200 bg-red-50 text-red-700"
-                                            }`}
-                                    >
-                                        <div className="flex items-center gap-3" >
-                                            {/* Status icons */}
-                                            <span className="text-xs">{statusMessage}</span>
-                                        </div>
-                                    </div>
-                                )}
-
-                                <div className="flex gap-3">
-                                    <SmartButton
-                                        type="button"
-                                        onClick={handleCloseModal}
-                                        variant="outline"
-                                        className="flex-1"
-                                    >
-                                        Cancel
-                                    </SmartButton>
-                                    <SmartButton
-                                        type="submit"
-                                        variant="primary"
-                                        className="flex-1"
-                                        loading={statusMessage.includes("Checking")}
-                                        disabled={statusMessage.includes("Checking")}
-                                    >
-                                        {statusMessage.includes("Checking") ? "Checking..." : "Check & Update"}
-                                    </SmartButton>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            )}
+          <form className="mt-4 grid gap-2.5" onSubmit={handleSubmit} noValidate>
+            <label className="font-bold" htmlFor={`${id}-input`}>PIN code</label>
+            <input className="h-12 w-full rounded-xl border border-orange-200 bg-white px-3 py-2 text-base" ref={inputRef} id={`${id}-input`} type="text" inputMode="numeric" autoComplete="postal-code"
+              aria-describedby={`${id}-help${error ? ` ${id}-error` : ""}`}
+              aria-invalid={Boolean(error)} placeholder="e.g. 625001" value={draft} readOnly={isChecking}
+              onChange={(event) => {
+                setDraft(event.target.value.replace(/\D/g, "").slice(0, 6));
+                setError("");
+              }} />
+            {error && <p id={`${id}-error`} className="text-sm !text-red-700" role="alert">{error}</p>}
+            <button type="submit" className="flex min-h-12 items-center justify-center gap-2 rounded-xl bg-orange-700 px-3 py-2 font-bold text-white enabled:hover:bg-orange-800 disabled:cursor-wait disabled:opacity-75" disabled={isChecking}>
+              <span role="status">{isChecking ? "Checking delivery…" : "Check delivery"}</span>
+              {!isChecking && <ArrowRight size={18} aria-hidden="true" />}
+            </button>
+          </form>
         </div>
-    );
-};
-
-export default DeliveryPincodeHeader;
+      </dialog>
+    </>
+  );
+}

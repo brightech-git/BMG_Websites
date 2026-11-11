@@ -1,11 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { Mail, MapPin, Phone } from "lucide-react";
 import Backtotop from "./Backtotop";
 import logo from "../../assets/icons/logo.png";
 import "./Footer.css";
 import btsLogo from '../../assets/icons/btsLogo.jpg';
 import { useFooterContent } from "../../hook/footer/useFooterContent";
-import {  NavLink } from "react-router-dom";
 import { useCompanyDetails } from "../../context/clientDetails/clientDetialContext";
 
 const buildLink = (link) => {
@@ -18,21 +18,21 @@ const FooterCategoryGroup = ({ item }) => {
   const hasChildren = item.subLayers?.length > 0;
 
   return (
-    <div className="min-w-[150px]">
+    <div className="footer-category-group">
       <NavLink
         to={buildLink(item.link)}
-        className="text-sm font-semibold text-[var(--primary-text-color)]  transition-colors duration-200"
+        className="footer-category-title"
       >
         {item.label}
       </NavLink>
 
       {hasChildren && (
-        <div className="mt-1.5 flex flex-col gap-1">
+        <div className="footer-category-children">
           {item.subLayers.map((child) => (
             <NavLink
               key={child.id}
               to={buildLink(child.link)}
-              className="text-[13px] text-stone-400  transition-colors duration-150"
+              className="footer-category-link"
             >
               {child.label}
             </NavLink>
@@ -45,7 +45,6 @@ const FooterCategoryGroup = ({ item }) => {
 
 const Footer = () => {
   const { data: footerContent } = useFooterContent();
-  console.log(footerContent,'footerContent')
   const { details } = useCompanyDetails();
 
   // Centralized footer data
@@ -53,7 +52,7 @@ const Footer = () => {
     company: {
       name: "BMG Jewellers Pvt Ltd",
       logo: `${details?.LOGO ? "https://app.bmgjewellers.com" + details.LOGO : logo}`,
-      year: 2025,
+      year: new Date().getFullYear(),
       website: "/"
     },
 
@@ -81,9 +80,7 @@ const Footer = () => {
     ],
 
     appLinks: {
-      appStore: "https://play.google.com/store/apps/details?id=com.jk_08.newapp&pcampaignid=web_share",
       playStore: "https://play.google.com/store/apps/details?id=com.jk_08.newapp&pcampaignid=web_share",
-      appStoreImg: "https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg",
       playStoreImg: "https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
     },
 
@@ -132,13 +129,13 @@ const Footer = () => {
             <div className="footer-grid">
               {/* Brand Section */}
               <div className="footer-brand-section">
-                <div className="footer-logo">
+                <Link to="/" className="footer-logo">
                   <img
                     src={footerData.company.logo}
                     alt={footerData.company.name}
                     className="footer-logo-img"
                   />
-                </div>
+                </Link>
 
                 <div className="footer-social-links">
                   {footerData.socialMedia.map((item) => (
@@ -150,27 +147,15 @@ const Footer = () => {
                       className="social-link"
                       aria-label={item.name}
                     >
-                      <i className={item.icon}></i>
+                      <i className={item.icon} aria-hidden="true" />
                     </a>
                   ))}
                 </div>
 
                 {/* Download App Section */}
                 <div className="footer-app-section">
-                  <h6 className="app-section-title">Download Our App</h6>
+                  <h6 className="app-section-title">Download our app</h6>
                   <div className="app-download-buttons">
-                    <a
-                      href={footerData.appLinks.appStore}
-                      className="app-download-btn"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <img
-                        src={footerData.appLinks.appStoreImg}
-                        alt="Download on App Store"
-                        className="app-store-img"
-                      />
-                    </a>
                     <a
                       href={footerData.appLinks.playStore}
                       className="app-download-btn"
@@ -188,8 +173,8 @@ const Footer = () => {
               </div>
 
               {/* Quick Links */}
-              <div className="footer-links-section">
-                <h4 className="footer-section-title">Quick Links</h4>
+              <nav className="footer-links-section" aria-label="Quick links">
+                <h4 className="footer-section-title">Quick links</h4>
                 <ul className="footer-links-list">
                   {footerData.quickLinks.map((link, index) => (
                     <li key={index} className="footer-link-item">
@@ -199,12 +184,11 @@ const Footer = () => {
                     </li>
                   ))}
                 </ul>
-               
-              </div>
+              </nav>
 
               {/* Policy Links */}
-              <div className="footer-links-section">
-                <h4 className="footer-section-title">Policy Links</h4>
+              <nav className="footer-links-section" aria-label="Policies">
+                <h4 className="footer-section-title">Policies</h4>
                 <ul className="footer-links-list">
                   {footerData.policyLinks.map((link, index) => (
                     <li key={index} className="footer-link-item">
@@ -214,23 +198,23 @@ const Footer = () => {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </nav>
 
               {/* Contact Information */}
               <div className="footer-contact-section">
-                <h4 className="footer-section-title">Get In Touch</h4>
+                <h4 className="footer-section-title">Get in touch</h4>
                 <div className="contact-info-list">
                   {/* Phone */}
                   {footerData.contactInfo.phone && (
                     <div className="contact-info-item">
                       <div className="contact-icon">
-                        <i className="flaticon-phone" />
+                        <Phone size={18} aria-hidden="true" />
                       </div>
                       <div className="footer-contact-details">
                         <h6 className="footer-contact-label">Phone Number</h6>
                         <div className="contact-numbers">
                           <a
-                            href={`tel:${footerData.contactInfo.phone.replace(/\D/g, '')}`}
+                            href={`tel:${footerData.contactInfo.phone.replace(/[^+\d]/g, '')}`}
                             className="contact-link"
                           >
                             {footerData.contactInfo.phone}
@@ -244,7 +228,7 @@ const Footer = () => {
                   {footerData.contactInfo.email && (
                     <div className="contact-info-item">
                       <div className="contact-icon">
-                        <i className="flaticon-message" />
+                        <Mail size={18} aria-hidden="true" />
                       </div>
                       <div className="footer-contact-details">
                         <h6 className="footer-contact-label">Email Address</h6>
@@ -262,7 +246,7 @@ const Footer = () => {
                   {(footerData.contactInfo.address.line1 || footerData.contactInfo.address.line2) && (
                     <div className="contact-info-item">
                       <div className="contact-icon">
-                        <i className="flaticon-location-pin" />
+                        <MapPin size={18} aria-hidden="true" />
                       </div>
                       <div className="footer-contact-details">
                         <h6 className="footer-contact-label">Store Location</h6>
@@ -280,7 +264,7 @@ const Footer = () => {
                             </>
                           )}
                           {footerData.contactInfo.address.areaCode && (
-                            <>{footerData.contactInfo.address.areaCode}.</>
+                            <>{footerData.contactInfo.address.areaCode}</>
                           )}
                         </address>
                       </div>
@@ -293,18 +277,20 @@ const Footer = () => {
         </div>
 
         {/* Quick Search Section */}
-        <div className="footer-quick-search">
+        {footerCategory.length > 0 && (
+        <nav className="footer-quick-search" aria-label="Shop by category">
           <div className="footer-container">
-            <h5 className="quick-search-title">Quick Search</h5>
+            <h5 className="quick-search-title">Shop by category</h5>
             <div className="quick-search-content">
-              <div className="flex flex-wrap items-start gap-x-8 gap-y-4">
+              <div className="footer-categories">
                 {footerCategory.map((item) => (
                   <FooterCategoryGroup key={item.id} item={item} />
                 ))}
               </div>
             </div>
           </div>
-        </div>
+        </nav>
+        )}
 
         {/* Copyright Section */}
         <div className="footer-copyright">

@@ -1,54 +1,54 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-import Home from "./pages/Home";
-import About from "./pages/About";
-import FAQ from "./components/layouts/faq";
-import { faqContent, languages } from "./components/layouts/faqContent";
-import Cart from "./pages/Cart";
-import Checkout from "./pages/Checkout";
-import Contact from "./pages/Contact";
-import ContactStore from "./pages/ContactStore";
-import Error from "./pages/Error";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import ProductDetailPage from "./pages/productDetail";
-import ProductsPage from "./pages/productsPage";
-import Wishlist from "./pages/Wishlist";
+import Home from "./features/home/components/Home";
+import About from "./features/about/components/About";
+import FAQ from "./features/faq/components/FaqScreen";
+import { faqContent, languages } from "./features/faq/constants/faqContent";
+import Cart from "./features/cart/components/Cart";
+import Checkout from "./features/checkout/components/Checkout";
+import Contact from "./features/contact/components/Contact";
+import ContactStore from "./features/contact/components/ContactStore";
+import Error from "./features/error/components/Error";
+import Login from "./features/auth/components/Login";
+import Register from "./features/auth/components/Register";
+import ProductDetailPage from "./features/catalog/components/productDetail";
+import ProductsPage from "./features/catalog/components/productsPage";
+import Wishlist from "./features/wishlist/components/Wishlist";
 
-import PrivacyPolicy from "./pages/Policies/Privacy";
-import CancellationReturnPolicy from "./pages/Policies/CancellationReturnPolicy";
-import RefundPolicy from "./pages/Policies/RefundPolicy";
-import TermsConditions from "./pages/Policies/TermsConditions";
-import DeliveryShippingPolicy from "./pages/Policies/DeliveryAndShipping";
-import WhyChooseUs from "./pages/Policies/WhyChooseUs";
+import PrivacyPolicy from "./features/policies/components/Privacy";
+import CancellationReturnPolicy from "./features/policies/components/CancellationReturnPolicy";
+import RefundPolicy from "./features/policies/components/RefundPolicy";
+import TermsConditions from "./features/policies/components/TermsConditions";
+import DeliveryShippingPolicy from "./features/policies/components/DeliveryAndShipping";
+import WhyChooseUs from "./features/policies/components/WhyChooseUs";
 
-import ForgotPassword from "./pages/ForgotPassword";
-import Appointment from "./pages/virtualShop/Appointment";
-import BangleSizeGuide from "./pages/SizeGuide/BangleSize";
-import RingSizeGuide from "./pages/SizeGuide/RingSize";
-import PaymentPage from "./pages/payment/Payment";
-import PaymentStatus from "./pages/paymentStatus";
+import ForgotPassword from "./features/auth/components/ForgotPassword";
+import Appointment from "./features/virtual-shopping/components/Appointment";
+import BangleSizeGuide from "./features/size-guide/components/BangleSize";
+import RingSizeGuide from "./features/size-guide/components/RingSize";
+import PaymentPage from "./features/payment/components/Payment";
+import PaymentStatus from "./features/payment/components/paymentStatus";
 
-import SchemePrivacyPolicy from "./pages/SchemePrivacyPolicy";
-import SupportPage from "./pages/SchemeSupport";
-import Success from "./pages/Success";
+import SchemePrivacyPolicy from "./features/scheme/components/SchemePrivacyPolicy";
+import SupportPage from "./features/scheme/components/SchemeSupport";
+import Success from "./features/contact/components/Success";
 
-import AccountPage from "./components/sections/account/Content";
-import ChangePassword from "./components/sections/account/ChangePassword/ChangePassword";
-import Orders from "./components/sections/account/Order/Order";
-import OrderDetail from "./components/sections/account/OrderDetails/OrderDetails";
-import AddressManager from "./components/sections/account/Address/AddressManager";
-import Dashboard from "./components/sections/account/Dashboard/Dashboard";
+import AccountPage from "./features/account/components/account/Content";
+import ChangePassword from "./features/account/components/account/ChangePassword/ChangePassword";
+import Orders from "./features/account/components/account/Order/Order";
+import OrderDetail from "./features/account/components/account/OrderDetails/OrderDetails";
+import AddressManager from "./features/account/components/account/Address/AddressManager";
+import Dashboard from "./features/account/components/account/Dashboard/Dashboard";
 
-import SchemePage from "./pages/scheme/Scheme";
+import SchemePage from "./features/scheme/components/Scheme";
 
 import ScrollToTop from "./components/layouts/ScrolltoTop";
-import PolicyPage from './pages/Policies/Risk Mitigation & Compliance Policy';
+import PolicyPage from './features/policies/components/Risk Mitigation & Compliance Policy';
 import PrivateRoute from "./route/UserPrivateRoute";
 
 import "./App.css";
-import ReturnReplaceFlow from "./components/sections/return/Return";
+import ReturnReplaceFlow from "./features/orders/components/return/Return";
 
 function App() {
   return (

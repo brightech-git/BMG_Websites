@@ -4,15 +4,24 @@ import { FilterChipList } from "./FilterChipList";
 
 
 export const DesktopFilterBar = ({
-    filtersLoading, productFiltersLoading, allFilterSections,
-    openDropdown, setOpenDropdown, isRangeFilter, getSectionLabel,
-    getSectionHasSelection, renderFilterContent, sortBy, SORT_OPTIONS,
-    handleSortChange, getActiveFilterCount, getActiveChips, clearAll
+    filtersLoading,
+    productFiltersLoading,
+    allFilterSections,
+    openDropdown,
+    setOpenDropdown,
+    isRangeFilter,
+    getSectionLabel,
+    getSectionHasSelection,
+    renderFilterContent,
+    sortBy,
+    SORT_OPTIONS,
+    handleSortChange,
+    getActiveFilterCount,
+    getActiveChips,
+    clearAll,
 }) => (
-
-   
     <>
-        <div className="bg-[var(--primary-color)] border-b border-gray-200 px-4 py-1.5">
+        <div className="rounded-xl border border-orange-100 bg-white px-4 py-3">
             <div className="flex items-center gap-4 flex-wrap">
                 {(filtersLoading || productFiltersLoading) && (
                     <span className="text-sm text-gray-400 animate-pulse">Loading filters…</span>
@@ -22,7 +31,9 @@ export const DesktopFilterBar = ({
                         key={sectionKey}
                         label={getSectionLabel(sectionKey)}
                         isOpen={openDropdown === sectionKey}
-                        onToggle={() => setOpenDropdown(openDropdown === sectionKey ? null : sectionKey)}
+                        onToggle={() => {
+                            setOpenDropdown(openDropdown === sectionKey ? null : sectionKey);
+                        }}
                         width={isRangeFilter(sectionKey) ? "w-80" : "w-56"}
                         hasSelection={getSectionHasSelection(sectionKey)}
                     >
@@ -34,7 +45,9 @@ export const DesktopFilterBar = ({
                     <FilterDropdown
                         label={SORT_OPTIONS.find((o) => o.value === sortBy)?.label || "Featured"}
                         isOpen={openDropdown === "sort"}
-                        onToggle={() => setOpenDropdown(openDropdown === "sort" ? null : "sort")}
+                        onToggle={() => {
+                            setOpenDropdown(openDropdown === "sort" ? null : "sort");
+                        }}
                         width="w-56"
                         direction="left"
                     >
@@ -42,6 +55,7 @@ export const DesktopFilterBar = ({
                             {SORT_OPTIONS.map((option) => (
                                 <button
                                     key={option.value}
+                                    type="button"
                                     onClick={() => handleSortChange(option.value)}
                                     className={`w-full text-left px-3 py-2 text-sm rounded transition-colors ${sortBy === option.value
                                         ? "bg-amber-50 text-amber-600 font-medium"
@@ -57,7 +71,7 @@ export const DesktopFilterBar = ({
             </div>
         </div>
         {(getActiveFilterCount() > 0 || sortBy) && (
-            <div className="flex items-center justify-between bg-white border-b border-gray-200 px-6 py-3">
+            <div className="flex items-center justify-between mt-2 rounded-xl border border-orange-100 bg-white px-4 py-3">
                 <FilterChipList
                     filters={getActiveChips()}
                     onClearAll={clearAll}

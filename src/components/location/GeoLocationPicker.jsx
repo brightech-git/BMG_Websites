@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useGeoLocation } from "./useGeoLocation";
-import { useAddressByLocation } from "../../hook/address/useNewAddress";
+import { useAddressByLocation } from "../../features/address/hooks/address/useNewAddress";
 import { FaMapMarkerAlt } from "react-icons/fa"; // using FontAwesome icon
 import './GeoLocationButton.css';
 

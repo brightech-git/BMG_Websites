@@ -260,7 +260,6 @@ const ItemSearch = () => {
           onFocus={() => setIsFocused(true)}
           disabled={isListening}
           aria-label="Search products"
-          style={{border:'1px solid #ddd'}}
         />
 
         <Search

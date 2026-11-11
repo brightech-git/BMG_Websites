@@ -1,59 +1,69 @@
-// FilterDropdown.jsx — add this
-import { useRef, useEffect } from "react";
+import { useEffect, useId, useRef } from "react";
 import { ChevronDown } from "lucide-react";
 
-
-export const FilterDropdown = ({
-    label, isOpen, onToggle, children,
-    width = 'w-80', direction = 'right', className = ''
-}) => {
-    const positionClass = direction === 'left' ? 'right-0' : 'left-0';
+export function FilterDropdown({
+    label,
+    isOpen,
+    onToggle,
+    children,
+    hasSelection = false,
+    width = "w-80",
+    direction = "right",
+    className = "",
+}) {
     const containerRef = useRef(null);
+    const triggerRef = useRef(null);
+    const panelId = useId();
+    const position = direction === "left" ? "right-0" : "left-0";
 
     useEffect(() => {
-        if (!isOpen) return; // only listen when open
+        if (!isOpen) return;
 
-        const h = (e) => {
-            if (containerRef.current && !containerRef.current.contains(e.target)) {
-                onToggle(); // close it
-            }
-        };
+        function closeOutside(event) {
+            if (!containerRef.current?.contains(event.target)) onToggle();
+        }
 
-        // Small delay so the opening click doesn't immediately trigger close
-        const timer = setTimeout(() => {
-            document.addEventListener("mousedown", h);
-        }, 100);
+        document.addEventListener("pointerdown", closeOutside);
+        return () => document.removeEventListener("pointerdown", closeOutside);
+    }, [isOpen, onToggle]);
 
-        return () => {
-            clearTimeout(timer);
-            document.removeEventListener("mousedown", h);
-        };
-    }, [isOpen]); // ← re-run only when open state changes
+    function handleKeyDown(event) {
+        if (!isOpen || event.key !== "Escape") return;
+        event.stopPropagation();
+        onToggle();
+        triggerRef.current?.focus();
+    }
 
     return (
-        <div
-            ref={containerRef}
-            className={`relative inline-block  border border-[var(--primary-hover-color)] bg-[var(--primary-card-color)] rounded-full  ${className}`}
-        >
+        <div ref={containerRef} className={`relative inline-block ${className}`} onKeyDown={handleKeyDown}>
             <button
-                onClick={(e) => {
-                    e.stopPropagation();
-                    onToggle();
-                }}
-                className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-[var(--primary-text-color)] hover:text-[var(--primary-hover-color)] transition-colors"
+                ref={triggerRef}
+                type="button"
+                aria-expanded={isOpen}
+                aria-controls={isOpen ? panelId : undefined}
+                onClick={onToggle}
+                className={`flex min-h-10 items-center gap-2 rounded-xl border px-3 text-sm font-medium text-[var(--brand-hover)] ${
+                    hasSelection || isOpen
+                        ? "border-orange-300 bg-orange-100"
+                        : "border-orange-200 bg-orange-50 hover:bg-orange-100"
+                }`}
             >
                 {label}
                 <ChevronDown
                     size={16}
-                    className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
+                    aria-hidden="true"
+                    className={isOpen ? "rotate-180" : ""}
                 />
             </button>
 
             {isOpen && (
-                <div className={`absolute top-full ${positionClass} mt-2 p-4 z-10 bg-white shadow-lg border border-gray-200 rounded-md ${width} animate__animated animate__fadeIn`}>
+                <div
+                    id={panelId}
+                    className={`absolute top-full z-20 mt-2 rounded-xl border border-orange-100 bg-white p-3 shadow-lg ${position} ${width}`}
+                >
                     {children}
                 </div>
             )}
         </div>
     );
-};
+}

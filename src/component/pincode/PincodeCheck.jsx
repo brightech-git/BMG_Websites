@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { usePincode } from "../../context/pinocde/PincodeContext";
-import { useCheckPincode } from "../../hook/pincode/usePincode";
+import { useCheckPincode } from "../../features/address/hooks/pincode/usePincode";
 
 function PincodeChecker() {
     const { pincode: currentPincode, pincodeData: currentPincodeData, updatePincode } = usePincode(); // Get from context

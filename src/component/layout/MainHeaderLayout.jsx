@@ -6,7 +6,7 @@ const MainHeaderLayout = () => {
     return (
         <>
             <HeaderWithAuth />
-            <main className="min-h-screen -pt-[150px] ">
+            <main className="min-h-screen">
                 <Outlet />
             </main>
             <Footer />

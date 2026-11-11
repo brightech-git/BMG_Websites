@@ -1,7 +1,7 @@
 // src/context/NotificationContext.js
 import React, { createContext, useState, useContext, useEffect } from "react";
-import NotificationModal from "../../pages/notificationModal/NotificationModal";
-import { useNotification as useRegisterNotification } from "../../hook/notification/useNotificationQuery";
+import NotificationModal from "../../features/notifications/components/NotificationModal";
+import { useNotification as useRegisterNotification } from "../../features/notifications/hooks/notification/useNotificationQuery";
 import { requestForToken, onMessageListener } from "../../notification/firebase";
 import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "react-redux";

@@ -1,8 +1,8 @@
 // src/redux/slices/userSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { loginUser, registerUser, verifyOtpService, forgotPasswordService, resetPasswordService, changePasswordService, googleLoginService ,updateContactNumber } from '../../service/AuthService';
+import { loginUser, registerUser, verifyOtpService, forgotPasswordService, resetPasswordService, changePasswordService, googleLoginService ,updateContactNumber } from '../../features/auth/api/AuthService';
 import { toast } from 'react-toastify';
-import { getProfile } from '../../service/profileService';
+import { getProfile } from '../../features/account/api/profileService';
 
 // Safely parse localStorage user
 const getInitialUser = () => {

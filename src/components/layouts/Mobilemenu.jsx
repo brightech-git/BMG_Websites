@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
     ChevronDown, X, Home, ShoppingBag, Info,
-    Video, Mail, Grid2X2, User, Heart, ShoppingCart
+    Video, Mail, Grid2X2, User, Heart, ShoppingCart, LogOut
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './MobileMenu.css';
@@ -115,27 +115,20 @@ const MenuAccordion = ({ items, go, depth = 0 }) => {
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
-const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = [] }) => {
+const MobileMenu = ({ onClose, onLogout, wishlistCount, cartCount, ratesData, headers = [] }) => {
     const navigate = useNavigate();
 
     const [activeHeaderIdx, setActiveHeaderIdx] = useState(null);
-    const [isClosing, setIsClosing] = useState(false);
+    const closeRef = useRef(null);
 
     useEffect(() => {
-        const onEsc = (e) => { if (e.key === 'Escape') handleClose(); };
-        document.addEventListener('keydown', onEsc);
-        return () => document.removeEventListener('keydown', onEsc);
-    }, []);
-
-    useEffect(() => {
+        const previousOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
-        return () => { document.body.style.overflow = 'unset'; };
+        closeRef.current?.focus();
+        return () => { document.body.style.overflow = previousOverflow; };
     }, []);
 
-    const handleClose = () => {
-        setIsClosing(true);
-        setTimeout(onClose, 300);
-    };
+    const handleClose = onClose;
 
     const go = (path) => {
         navigate(path);
@@ -147,10 +140,10 @@ const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = []
     };
 
     const staticNav = [
-        { id: 'shop', linkText: 'Shop', link: '/products-page', icon: <ShoppingBag size={20} />, color: 'text-amber-600' },
-        { id: 'about', linkText: 'About', link: '/about', icon: <Info size={20} />, color: 'text-emerald-600' },
-        { id: 'live', linkText: 'BMG Live', link: '/appointment', icon: <Video size={20} />, color: 'text-red-600' },
-        { id: 'contact', linkText: 'Contact', link: '/contact', icon: <Mail size={20} />, color: 'text-indigo-600' },
+        { id: 'shop', linkText: 'Shop', link: '/products-page', icon: <ShoppingBag size={20} />, color: 'text-orange-700' },
+        { id: 'about', linkText: 'About', link: '/about', icon: <Info size={20} />, color: 'text-orange-700' },
+        { id: 'live', linkText: 'BMG Live', link: '/appointment', icon: <Video size={20} />, color: 'text-orange-700' },
+        { id: 'contact', linkText: 'Contact', link: '/contact', icon: <Mail size={20} />, color: 'text-orange-700' },
     ];
 
     return (
@@ -159,33 +152,45 @@ const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = []
             <motion.div
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="fixed inset-0 bg-white/50 backdrop-blur-sm z-40"
+                className="fixed inset-0 bg-orange-950/40 backdrop-blur-sm z-40"
                 onClick={handleClose}
             />
 
             {/* Panel */}
             <motion.div
-                initial="hidden" animate={isClosing ? 'exit' : 'visible'} exit="exit"
+                initial="hidden" animate="visible" exit="exit"
                 variants={menuVariants}
-                className="fixed top-0 left-0 h-full w-full bg-white shadow-2xl z-50 overflow-hidden"
-                style={{ background: 'linear-gradient(135deg, var(--primary-color) 0%, #f8fafc 100%)' }}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Store menu"
+                onKeyDown={(event) => {
+                    if (event.key === 'Escape') handleClose();
+                    if (event.key !== 'Tab') return;
+                    const controls = [...event.currentTarget.querySelectorAll('a[href], button:not([disabled])')]
+                        .filter((control) => control.getClientRects().length);
+                    const boundary = event.shiftKey ? controls[0] : controls.at(-1);
+                    if (document.activeElement === boundary) {
+                        event.preventDefault();
+                        (event.shiftKey ? controls.at(-1) : controls[0])?.focus();
+                    }
+                }}
+                className="store-menu-panel fixed top-0 left-0 bg-white shadow-2xl overflow-hidden"
             >
                 {/* ── Header bar ── */}
-                <div className="sticky top-0 z-10 bg-gradient-to-r from-orange-400 to-pink-600 p-2 shadow-lg">
+                <div className="store-menu-heading">
                     <div className="flex items-center justify-between">
                         <motion.div
-                            initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }}
-                            transition={{ delay: 0.1, type: 'spring' }}
-                            className="p-2 bg-white rounded-lg backdrop-blur-sm"
+                            className="p-1"
                         >
-                            <Link to="/" className="flex items-center flex-shrink-0">
+                            <Link to="/" onClick={handleClose} className="flex items-center flex-shrink-0">
                                 <img src={Logo} alt="BMG Jewellers" className="w-24 h-auto" />
                             </Link>
                         </motion.div>
                         <motion.button
-                            whileHover={{ scale: 1.1, rotate: 90 }} whileTap={{ scale: 0.9 }}
+                            ref={closeRef}
+                            type="button"
                             onClick={handleClose}
-                            className="p-2 text-white hover:bg-white/10 rounded-full transition-colors"
+                            className="store-header-action"
                             aria-label="Close menu"
                         >
                             <X size={20} />
@@ -194,8 +199,14 @@ const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = []
                 </div>
 
                 {/* ── Scrollable content ── */}
-                <div className="h-[calc(90vh-100px)] overflow-y-auto pb-6">
-                    <nav className="p-2">
+                <div className="store-menu-content">
+                    <nav className="p-2" aria-label="Shop navigation">
+                        {onLogout && (
+                            <button type="button" onClick={onLogout}
+                                className="flex items-center gap-3 px-4 py-3 text-orange-800 font-semibold">
+                                <LogOut size={19} aria-hidden="true" /> Log out
+                            </button>
+                        )}
                         <ul className="space-y-1">
                             <AnimatePresence>
 
@@ -221,7 +232,7 @@ const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = []
                                         <motion.li
                                             key={header.id}
                                             variants={itemVariants}
-                                            className={`relative rounded-xl overflow-hidden ${isHeaderOpen ? 'bg-gradient-to-r from-blue-50 to-indigo-50' : 'hover:bg-gray-50'}`}
+                                            className={`relative rounded-xl overflow-hidden ${isHeaderOpen ? 'bg-gradient-to-r from-orange-50 to-orange-100' : 'hover:bg-gray-50'}`}
                                         >
                                             <div className="px-4 py-3">
                                                 <motion.button
@@ -293,7 +304,7 @@ const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = []
                         <motion.div
                             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3 }}
-                            className="flex bg-gradient-to-r items-center p-3 m-2 justify-center from-blue-50 to-indigo-50 rounded-xl border border-blue-100"
+                            className="flex bg-gradient-to-r items-center p-3 m-2 justify-center from-orange-50 to-orange-100 rounded-xl border border-orange-100"
                         >
                             <RatesDropdown ratesData={ratesData} />
                         </motion.div>
@@ -315,16 +326,16 @@ const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = []
                 <motion.div
                     initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.5 }}
-                    className="fixed w-full bottom-0 bg-white p-2 shadow-lg"
+                    className="store-menu-footer"
                 >
-                    <div className="flex items-center justify-center gap-10">
+                    <div className="flex items-center justify-around gap-2">
                         <motion.button
                             whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
                             className="text-gray-600 hover:text-[var(--primary-hover-color)] transition-colors"
                             onClick={() => { navigate('/account'); handleClose(); }}
                         >
                             <div className="text-center">
-                                <div className="mx-auto w-10 h-10 flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 rounded-full">
+                                <div className="mx-auto w-10 h-10 flex items-center justify-center bg-gradient-to-br from-orange-50 to-orange-100 rounded-full">
                                     <User size={22} />
                                 </div>
                                 <span className="text-xs mt-1 font-medium">Account</span>
@@ -333,17 +344,17 @@ const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = []
 
                         <motion.button
                             whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-                            className="text-gray-600 hover:text-pink-700 transition-colors relative"
+                            className="text-gray-600 hover:text-orange-800 transition-colors relative"
                             onClick={() => { navigate('/wishlist'); handleClose(); }}
                         >
                             <div className="text-center relative">
-                                <div className="mx-auto w-10 h-10 flex items-center justify-center bg-gradient-to-br from-pink-50 to-rose-50 rounded-full">
+                                <div className="mx-auto w-10 h-10 flex items-center justify-center bg-gradient-to-br from-orange-50 to-orange-100 rounded-full">
                                     <Heart size={18} />
                                 </div>
                                 <span className="text-xs mt-1 font-medium">Wishlist</span>
                                 {wishlistCount > 0 && (
                                     <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }}
-                                        className="absolute -top-1 -right-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold shadow-sm"
+                                        className="absolute -top-1 -right-1 bg-gradient-to-r from-orange-700 to-orange-800 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold shadow-sm"
                                     >
                                         {wishlistCount}
                                     </motion.span>
@@ -363,7 +374,7 @@ const MobileMenu = ({ onClose, wishlistCount, cartCount, ratesData, headers = []
                                 <span className="text-xs mt-1 font-medium">Cart</span>
                                 {cartCount > 0 && (
                                     <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }}
-                                        className="absolute -top-1 -right-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold shadow-sm"
+                                        className="absolute -top-1 -right-1 bg-gradient-to-r from-orange-700 to-orange-800 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold shadow-sm"
                                     >
                                         {cartCount}
                                     </motion.span>

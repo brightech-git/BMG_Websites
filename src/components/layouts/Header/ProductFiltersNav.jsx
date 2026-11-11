@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronDown, ChevronRight } from "lucide-react";
 
@@ -14,7 +14,7 @@ const NavSkeleton = () => (
         {[80, 110, 90, 130, 100, 95].map((w, i) => (
             <div
                 key={i}
-                className="mx-2 h-4 rounded-full bg-stone-200 animate-pulse"
+                className="mx-2 h-4 rounded-full bg-orange-100 animate-pulse"
                 style={{ width: `${w}px` }}
             />
         ))}
@@ -29,14 +29,14 @@ const DropdownLevel = ({ items, go, level, anchorMap, anchorKey }) => {
     const itemRefs = useRef({});
     const hoverTimer = useRef(null);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const anchorEl = anchorMap.current[anchorKey];
         if (anchorEl) {
             const rect = anchorEl.getBoundingClientRect();
             setPosition(
                 level === 0
-                    ? { top: rect.bottom, left: rect.left }
-                    : { top: rect.top, left: rect.right + 4 }
+                    ? { top: rect.bottom, left: Math.min(rect.left, window.innerWidth - 312) }
+                    : { top: rect.top, left: rect.right + 300 <= window.innerWidth ? rect.right : Math.max(8, rect.left - 300) }
             );
         }
     }, [anchorMap, anchorKey, level]);
@@ -51,7 +51,7 @@ const DropdownLevel = ({ items, go, level, anchorMap, anchorKey }) => {
 
     return (
         <div
-            className="fixed z-[60] thin-scrollbar bg-white border border-gray-100 shadow-[0_12px_40px_rgba(0,0,0,0.13)] py-2"
+            className="fixed z-[60] thin-scrollbar bg-white rounded-xl border border-orange-100 shadow-lg py-2"
             style={{
                 minWidth: 240,
                 maxWidth: 300,
@@ -77,14 +77,14 @@ const DropdownLevel = ({ items, go, level, anchorMap, anchorKey }) => {
                         <button
                             onClick={() => go(buildLink(item.link))}
                             className={`w-full flex items-center justify-between gap-3 px-4 py-2.5 text-[12px] sm:text-[14px] font-medium text-left transition-colors duration-150 bg-transparent border-none cursor-pointer ${
-                                isHovered ? "bg-amber-50 text-amber-700" : "text-stone-700 hover:bg-stone-50 hover:text-amber-700"
+                                isHovered ? "bg-orange-50 text-orange-700" : "text-stone-700 hover:bg-stone-50 hover:text-orange-700"
                             }`}
                         >
                             <span>{item.label}</span>
                             {hasChildren && (
                                 <ChevronRight
                                     size={13}
-                                    className={`flex-shrink-0 transition-colors ${isHovered ? "text-amber-500" : "text-stone-400"}`}
+                                    className={`flex-shrink-0 transition-colors ${isHovered ? "text-orange-500" : "text-stone-400"}`}
                                 />
                             )}
                         </button>
@@ -129,7 +129,7 @@ export const ProductFiltersNav = ({ headers = [], isLoading = false }) => {
     if (isLoading) return <NavSkeleton />;
 
     return (
-        <nav ref={navRef} className="relative flex items-center p-2">
+        <nav ref={navRef} className="relative flex flex-wrap items-center justify-center gap-y-1 p-2">
             {headers.map((header, hIdx) => {
                 const isOpen = activeIndex === hIdx;
                 const hasDropdown = header.subLayers?.length > 0;
@@ -144,7 +144,7 @@ export const ProductFiltersNav = ({ headers = [], isLoading = false }) => {
                     >
                         <button
                             onClick={() => go(buildLink(header.link))}
-                            className="relative flex items-center gap-1 px-4 h-full text-[12px] sm:text-[14px] font-medium tracking-wide whitespace-nowrap text-stone-700 hover:text-amber-700 transition-colors duration-200 bg-transparent border-none cursor-pointer group"
+                            className="relative flex items-center gap-1 px-4 py-1.5 rounded-lg hover:bg-orange-50 text-[12px] sm:text-[14px] font-medium tracking-wide whitespace-nowrap text-stone-700 hover:text-orange-700 transition-colors duration-200 bg-transparent border-none cursor-pointer group"
                         >
                             {header.label}
                             {hasDropdown && (
@@ -153,7 +153,7 @@ export const ProductFiltersNav = ({ headers = [], isLoading = false }) => {
                                     className={`transition-transform duration-200 flex-shrink-0 ${isOpen ? "rotate-180" : ""}`}
                                 />
                             )}
-                            <span className="absolute bottom-0 left-4 right-4 h-0.5 bg-amber-600 rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-center" />
+                            <span className="absolute bottom-0 left-4 right-4 h-0.5 bg-orange-600 rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-center" />
                         </button>
 
                         {hasDropdown && isOpen && (

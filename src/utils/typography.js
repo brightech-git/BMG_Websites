@@ -5,7 +5,7 @@
  * Uses CSS variables from style.css for consistency
  */
 
-import { fontSizes, headingSizes } from './fontSizes';
+import { fontSizes, headingSizes } from './fontSizes.js';
 
 // Font families mapped to CSS variables
 export const fontFamilies = {

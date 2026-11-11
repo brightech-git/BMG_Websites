@@ -13,6 +13,8 @@ import { formatCurrency, formatNumber, formatWeight } from "../../../../utils/in
 import fallbackImage from "../../../../assets/icons/silverIcon.png";
 import { AddressModal } from "../../../address/components/address/AddressModal";
 import PaymentOptionsDialog from "./PaymentOption";
+import { usePayments } from "../../../payment/hooks/payment/usePaymentOption.js";
+
 
 const STEPS = ["Delivery", "Review", "Payment"];
 const panel = "overflow-hidden rounded-2xl border border-orange-100 bg-white shadow-sm";
@@ -120,6 +122,8 @@ function OrderSummary({ items, subtotal, total, shippingFee, shippingText, showI
 
 const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
 
+
+
   const navigate = useNavigate();
   const [cartItems] = useState(() => {
     if (initialCartItems?.length) return initialCartItems;
@@ -131,6 +135,8 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
       return [];
     }
   });
+
+
 
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedAddress, setSelectedAddress] = useState(null);
@@ -151,6 +157,10 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
   const { mutate: createAddress } = useCreateAddress();
   const { mutate: updateAddress } = useUpdateAddress();
   const { mutate: deleteAddress } = useDeleteAddress();
+
+
+  const { data: paymentOptions, isLoading: paymentOptionsLoading } = usePayments();
+  
 
   const finalPincode = selectedAddress?.pincode || storedPincode || pincode || null;
   const normalizedFinalPincode = String(finalPincode || '').trim();
@@ -516,7 +526,7 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
                     <legend className="sr-only">Choose a payment method</legend>
                     {[
                       { value: "ONLINE", label: "Pay online", description: "UPI, card, or net banking", icon: CreditCard },
-                      { value: "COD", label: "Cash on delivery", description: "Pay when your order arrives", icon: Home },
+                     // { value: "COD", label: "Cash on delivery", description: "Pay when your order arrives", icon: Home },
                     ].map(({ value, label, description, icon: Icon }) => (
                       <label
                         key={value}

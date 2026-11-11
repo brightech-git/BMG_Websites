@@ -9,3 +9,8 @@ export const verifyPayment = async (orderId) => {
     const response = await publicUrl.get(`/payment/verify-payment?orderId=${orderId}`);
     return response.data;
 };
+
+export const paymentOptions = async() =>{
+    const {data} = await publicUrl.get('/payment-maintenance');
+    return data;
+}

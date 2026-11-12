@@ -1,80 +1,53 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
 import { logout } from "../../../../redux/slices/userSlice";
-import AccountSidebar from "./AccountSidebar/AccountSideBar";
-import "./AccountStyles.css";
-import "./logout.css";
 import { queryClient } from "../../../../component/reactQuery/queryClient";
 import LogoutModal from "../../../../component/logout/Logout";
-import { LogOut } from "lucide-react";
+import AccountSidebar from "./AccountSidebar/AccountSideBar";
+import "./logout.css";
 
-const AccountPage = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+export default function AccountPage() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [showLogout, setShowLogout] = useState(false);
 
-   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
-  
-     const handleLogout = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+    function confirmLogout() {
         dispatch(logout());
-        localStorage.removeItem('user');
-        localStorage.removeItem('user_token');
-        localStorage.removeItem('userMobileNumber');
-        localStorage.removeItem('pendingUser');
+        for (const key of ["user", "user_token", "userMobileNumber", "pendingUser"]) {
+            localStorage.removeItem(key);
+        }
         queryClient.clear();
-        navigate("/login");
-      };
-    
-      const openLogoutModal = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setIsLogoutModalOpen(true);
-      };
-    
-      const closeLogoutModal = () => {
-        setIsLogoutModalOpen(false);
-      };
-    
-      const confirmLogout = () => {
-        handleLogout(new Event('submit')); // Pass a dummy event
-      };
-      
-  return (
-    <>
-      <section className="account-with-header">
-        <div className="account-container">
-          <div className="account-layout">
-            {/* Fixed: Removed margin-bottom on mobile */}
-            <aside className="w-full md:w-auto">
-              <AccountSidebar openLogoutModal={() => setIsLogoutModalOpen(true)} />
-            </aside>
+        navigate("/login", { replace: true });
+    }
 
-            <main className="account-content flex-1 min-w-0">
-              <Outlet />
-            </main>
-          </div>
-        </div>
-      </section>
+    return (
+        <section aria-labelledby="account-title" className="min-h-screen bg-gradient-to-b from-orange-50 to-white px-3 py-5 sm:px-6 sm:py-8">
+            <div className="mx-auto max-w-7xl">
+                <h1 id="account-title" className="mb-4 text-3xl font-bold tracking-tight sm:mb-6 sm:text-4xl">
+                    My account
+                </h1>
+                <div className="grid items-start gap-4 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-6">
+                    <AccountSidebar openLogoutModal={() => setShowLogout(true)} />
+                    <div className="min-w-0">
+                        <Outlet />
+                    </div>
+                </div>
+            </div>
 
-    
-  
-        <LogoutModal
-          isOpen={isLogoutModalOpen}
-          onClose={closeLogoutModal}
-          onConfirm={confirmLogout}
-          title="Ready to Leave?"
-          message="Are you sure you want to logout? You'll need to login again to access your account."
-          confirmText="Yes, Logout"
-          cancelText="Stay Logged In"
-          size="md"
-          confirmButtonClass="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400"
-          icon={<LogOut className="text-4xl text-red-500" />}
-        />
-    
-    </>
-  );
-};
-
-export default AccountPage;
+            <LogoutModal
+                isOpen={showLogout}
+                onClose={() => setShowLogout(false)}
+                onConfirm={confirmLogout}
+                title="Sign out?"
+                message="You can sign back in to view your orders and saved items."
+                confirmText="Sign out"
+                cancelText="Stay signed in"
+                size="md"
+                confirmButtonClass="bg-orange-700 hover:bg-orange-800"
+                icon={<LogOut className="text-3xl text-orange-700" />}
+            />
+        </section>
+    );
+}

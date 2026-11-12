@@ -23,7 +23,7 @@ const secondary = "inline-flex min-h-11 items-center justify-center rounded-xl b
 
 function ProgressStepper({ currentStep, onStepChange, disabled }) {
     return (
-        <ol aria-label="Checkout progress" className="m-0 grid list-none grid-cols-3 gap-1 p-0 sm:gap-3">
+        <ol aria-label="Checkout progress" className="m-0 grid list-none grid-cols-3 gap-5 p-0 sm:gap-8">
             {STEPS.map((label, index) => {
                 const step = index + 1;
                 const complete = step < currentStep;
@@ -43,7 +43,7 @@ function ProgressStepper({ currentStep, onStepChange, disabled }) {
                 }`;
 
                 return (
-                    <li key={label} aria-current={active ? "step" : undefined}>
+                    <li key={label} className="relative min-w-0" aria-current={active ? "step" : undefined}>
                         {complete ? (
                             <button
                                 type="button"
@@ -55,6 +55,17 @@ function ProgressStepper({ currentStep, onStepChange, disabled }) {
                             </button>
                         ) : (
                             <span className={style}>{content}</span>
+                        )}
+                        {step < STEPS.length && (
+                            <span
+                                aria-hidden="true"
+                                className={`pointer-events-none absolute left-full top-5 flex w-5 -translate-y-1/2 items-center sm:top-1/2 sm:w-8 ${
+                                    complete ? "text-[var(--brand-primary)]" : "text-orange-300"
+                                }`}
+                            >
+                                <span className="h-px flex-1 bg-current" />
+                                <ArrowRight size={15} className="-ml-1 shrink-0" />
+                            </span>
                         )}
                     </li>
                 );
@@ -526,7 +537,7 @@ const EnhancedCheckout = ({ initialCartItems, subtotal }) => {
                     <legend className="sr-only">Choose a payment method</legend>
                     {[
                       { value: "ONLINE", label: "Pay online", description: "UPI, card, or net banking", icon: CreditCard },
-                     // { value: "COD", label: "Cash on delivery", description: "Pay when your order arrives", icon: Home },
+                      { value: "COD", label: "Cash on delivery", description: "Pay when your order arrives", icon: Home },
                     ].map(({ value, label, description, icon: Icon }) => (
                       <label
                         key={value}

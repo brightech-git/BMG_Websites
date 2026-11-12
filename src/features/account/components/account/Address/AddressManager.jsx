@@ -13,6 +13,8 @@ import {
 } from "../../../../address/hooks/address/useAddress";
 import { checkPincodeService } from "../../../../address/api/pincodeChecking";
 
+import AccountSectionHeader, { accountButton } from "../AccountSectionHeader";
+
 const AddressManager = () => {
   const user = useSelector((state) => state.user.user);
   const customerId = user?.id;
@@ -29,7 +31,7 @@ const AddressManager = () => {
   });
 
   // Hooks
-  const { data: addresses = [], isLoading, refetch } = useAddressesByCustomer(customerId);
+  const { data: addresses = [], isLoading, isError, refetch } = useAddressesByCustomer(customerId);
   const createMutation = useCreateAddress();
   const updateMutation = useUpdateAddress();
   const deleteMutation = useDeleteAddress();
@@ -152,219 +154,78 @@ const AddressManager = () => {
     }
   };
 
-  if (!customerId) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-[#FFF7ED] to-[#FFEDD5] flex items-center justify-center p-4">
-        <div className="bg-white/90 backdrop-blur-md border border-[#FED7AA] rounded-2xl p-10 text-center shadow-lg shadow-[#F97316]/5 animate__animated animate__fadeIn">
-          <div className="relative">
-            <AlertCircle className="w-16 h-16 text-[#F97316] mx-auto mb-4" />
-            <div className="absolute inset-0 bg-[#F97316]/10 rounded-full blur-2xl -z-10"></div>
-          </div>
-          <p className="text-xl font-bold text-[#7C2D12] mb-2">Login Required</p>
-          <p className="text-[#9A3412]">Please log in to manage your addresses</p>
-        </div>
-      </div>
-    );
-  }
+  const saving = createMutation.isPending || updateMutation.isPending || deleteMutation.isPending;
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-[#FFF7ED] to-[#FFEDD5] flex items-center justify-center p-4">
-        <div className="bg-white/90 backdrop-blur-md border border-[#FED7AA] rounded-2xl p-16 text-center shadow-lg shadow-[#F97316]/5 animate__animated animate__fadeIn">
-          <Loader2 className="w-16 h-16 text-[#F97316] animate-spin mx-auto" />
-          <p className="mt-6 text-[#7C2D12] font-medium">Loading your addresses...</p>
-          <p className="mt-2 text-sm text-[#9A3412]">Just a moment please</p>
-        </div>
-      </div>
-    );
+  function openAddress(address) {
+    resetForm();
+    if (address) {
+      setFormData({ ...address, addressType: address.addressType || (address.companyName ? "work" : "home") });
+      setEditingId(address.id);
+    }
+    setIsFormOpen(true);
   }
 
   return (
-    <>
-      <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-5px); }
-        }
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideIn {
-          from { transform: translateX(-20px); opacity: 0; }
-          to { transform: translateX(0); opacity: 1; }
-        }
-        .animate-float { animation: float 3s ease-in-out infinite; }
-        .animate-fadeInUp { animation: fadeInUp 0.5s ease-out forwards; }
-        .animate-slideIn { animation: slideIn 0.4s ease-out forwards; }
-      `}</style>
+    <div className="space-y-4">
+      <AccountSectionHeader
+        icon={MapPin}
+        title="Address book"
+        description="Save delivery addresses and choose your default for checkout."
+      >
+        <button type="button" disabled={!customerId || saving} onClick={() => openAddress()} className={accountButton}>
+          <Plus size={18} aria-hidden="true" />
+          Add address
+        </button>
+      </AccountSectionHeader>
 
-      <div className="min-h-screen mt-[100px] md:mt-0 bg-gradient-to-br from-[#FFF7ED] via-[#FFEDD5] to-[#FFF3E6] px-3 sm:px-4 py-3 sm:py-4 font-secondary text-[#7C2D12]">
-
-        {/* Decorative Elements */}
-        <div className="fixed top-20 left-10 w-64 h-64 bg-[#F97316]/5 rounded-full blur-3xl -z-10 animate-float"></div>
-        <div className="fixed bottom-20 right-10 w-80 h-80 bg-[#FB923C]/5 rounded-full blur-3xl -z-10 animate-float" style={{ animationDelay: '2s' }}></div>
-
-        {/* Header */}
-        <div className="bg-white/90 backdrop-blur-md border border-[#FED7AA] rounded-2xl p-3 sm:p-4 mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-lg shadow-[#F97316]/5 animate__animated animate__fadeInDown hover:border-[#FDBA74] transition-all duration-300">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#F97316] to-[#EA580C] rounded-xl flex items-center justify-center shadow-md">
-              <MapPin className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <h2 className="text-lg sm:text-xl font-bold text-[#7C2D12]">Manage Addresses</h2>
-              <p className="text-xs sm:text-sm text-[#9A3412]">Add or edit your delivery addresses</p>
-            </div>
-          </div>
-          <button
-            onClick={() => { setIsFormOpen(true); resetForm(); }}
-            className="group flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-[#F97316] to-[#EA580C] text-white rounded-xl hover:shadow-lg hover:shadow-[#F97316]/30 transition-all duration-300 transform hover:scale-105 text-xs sm:text-sm font-medium"
-          >
-            <Plus className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" />
-            Add New Address
-          </button>
+      {!isFormOpen && error && <p role="alert" className="rounded-xl bg-rose-50 p-3 !text-rose-800">{error}</p>}
+      {!customerId || isLoading || isError || addresses.length === 0 ? (
+        <div className="rounded-2xl border border-orange-100 bg-white p-6 text-center">
+          <MapPin size={28} className="mx-auto mb-2 text-[var(--brand-hover)]" aria-hidden="true" />
+          <p role="status" className="font-bold">
+            {!customerId ? "Sign in to manage addresses" : isLoading ? "Loading addresses…" : isError ? "We couldn’t load your addresses." : "No saved addresses yet"}
+          </p>
+          {isError && <button type="button" onClick={() => refetch()} className={`${accountButton} mt-3`}>Try again</button>}
         </div>
-
-        {/* Error Toast */}
-        {error && (
-          <div className="bg-rose-50/90 backdrop-blur-sm border border-rose-200 rounded-xl p-3 sm:p-4 mb-4 flex justify-between items-center shadow-lg animate__animated animate__shakeX">
-            <div className="flex items-center gap-2 text-sm">
-              <AlertCircle className="w-5 h-5 text-rose-500" />
-              <span className="text-rose-700 font-medium">{error}</span>
-            </div>
-            <button
-              onClick={() => setError(null)}
-              className="p-1.5 hover:bg-rose-100 rounded-lg transition-colors"
-            >
-              <X className="w-4 h-4 text-rose-500" />
-            </button>
-          </div>
-        )}
-
-        {/* Address Cards Grid */}
-        {addresses.length === 0 ? (
-          <div className="bg-white/90 backdrop-blur-md border border-[#FED7AA] rounded-2xl p-12 sm:p-16 text-center shadow-lg shadow-[#F97316]/5 animate__animated animate__fadeIn">
-            <div className="relative inline-block">
-              <MapPin className="w-20 h-20 text-[#FDBA74] mx-auto mb-4" />
-              <div className="absolute inset-0 bg-[#F97316]/10 rounded-full blur-3xl"></div>
-            </div>
-            <p className="text-xl font-bold text-[#7C2D12] mb-2">No addresses yet</p>
-            <p className="text-[#9A3412] mb-6">Add your first delivery address</p>
-            <button
-              onClick={() => { setIsFormOpen(true); resetForm(); }}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#F97316] to-[#EA580C] text-white rounded-xl hover:shadow-lg hover:shadow-[#F97316]/30 transition-all duration-300 transform hover:scale-105 text-sm font-medium"
-            >
-              <Plus className="w-4 h-4" />
-              Add First Address
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-            {addresses.map((addr, i) => (
-              <div
-                key={addr.id}
-                className={`group bg-white/90 backdrop-blur-md border-2 ${addr.isDefault ? "border-[#F97316]" : "border-[#FED7AA] hover:border-[#FDBA74]"
-                  } rounded-2xl p-4 sm:p-5 relative hover:shadow-xl hover:shadow-[#F97316]/10 transition-all duration-300 animate__animated animate__fadeInUp`}
-                style={{ animationDelay: `${i * 80}ms` }}
-              >
-                {/* Default Badge */}
-                {addr.isDefault && (
-                  <div className="absolute -top-3 -right-3 bg-gradient-to-r from-[#F97316] to-[#EA580C] text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg z-10 animate-pulse">
-                    <Star className="w-3.5 h-3.5 fill-white" />
-                    Default
-                  </div>
+      ) : (
+        <ul className="m-0 grid list-none gap-3 p-0 xl:grid-cols-2">
+          {[...addresses].sort((first, second) => Number(second.isDefault) - Number(first.isDefault)).map((address) => (
+            <li key={address.id} className={`flex min-w-0 flex-col rounded-2xl border bg-white p-4 shadow-sm ${address.isDefault ? "border-orange-300" : "border-orange-100"}`}>
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                <span className="inline-flex items-center gap-2 text-sm font-bold capitalize">
+                  <MapPin size={17} className="text-[var(--brand-hover)]" aria-hidden="true" />
+                  {address.addressType || (address.companyName ? "Work" : "Home")}
+                </span>
+                {address.isDefault && (
+                  <span className="rounded-full bg-green-600 px-2.5 py-1 text-xs font-bold text-white">
+                    Default address
+                  </span>
                 )}
-
-                {/* Address Type Icon & Name */}
-                <div className="flex items-start gap-3 mb-4">
-                  <div className={`p-2.5 rounded-xl ${addr.companyName
-                      ? 'bg-[#FFF7ED] text-[#F97316]'
-                      : 'bg-[#FFF7ED] text-[#F97316]'
-                    }`}>
-                    {addr.companyName ? (
-                      <Briefcase className="w-5 h-5" />
-                    ) : (
-                      <Home className="w-5 h-5" />
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <p className="font-bold text-[#7C2D12] text-base">{addr.name}</p>
-                      {addr.addressType === "work" && (
-                        <span className="text-[10px] bg-[#FFF7ED] text-[#F97316] px-2 py-0.5 rounded-full border border-[#FED7AA]">
-                          Work
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-sm text-[#9A3412] flex items-center gap-1 mt-0.5">
-                      <Phone className="w-3.5 h-3.5" />
-                      {addr.phone}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Address Details */}
-                <div className="text-sm space-y-1.5 text-[#9A3412] bg-[#FFF7ED]/50 p-3 rounded-xl border border-[#FED7AA]/50">
-                  <p className="text-[#7C2D12] font-medium">{addr.addressLine}</p>
-                  <p>{addr.locality}, {addr.city}</p>
-                  <p>{addr.state} - <span className="font-semibold">{addr.pincode}</span></p>
-                  {addr.landmark && (
-                    <p className="text-[#F97316] flex items-center gap-1">
-                      <Tag className="w-3.5 h-3.5" />
-                      Near {addr.landmark}
-                    </p>
-                  )}
-                  {addr.companyName && (
-                    <p className="font-medium text-[#7C2D12] pt-1 border-t border-[#FED7AA] mt-2">
-                      {addr.companyName}
-                    </p>
-                  )}
-                  {addr.gstNumber && (
-                    <p className="text-[10px] bg-white px-2 py-1 rounded border border-[#FED7AA] inline-block">
-                      GST: {addr.gstNumber}
-                    </p>
-                  )}
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex gap-2 mt-5">
-                  <button
-                    onClick={() => {
-                      setFormData({ ...addr, addressType: addr.companyName ? "work" : "home" });
-                      setEditingId(addr.id);
-                      setPincodeCheck({ status: "idle", pincode: "", message: "" });
-                      setIsFormOpen(true);
-                    }}
-                    className="flex-1 py-2.5 border-2 border-[#FED7AA] text-[#7C2D12] rounded-xl text-sm hover:bg-[#FFF7ED] hover:border-[#F97316] transition-all duration-300 flex items-center justify-center gap-1.5 group/edit"
-                  >
-                    <Edit2 className="w-4 h-4 group-hover/edit:scale-110 transition-transform" />
-                    Edit
-                  </button>
-
-                  {!addr.isDefault && (
-                    <button
-                      onClick={() => handleSetDefault(addr.id)}
-                      className="flex-1 py-2.5 border-2 border-[#F97316] text-[#F97316] rounded-xl text-sm hover:bg-[#FFF7ED] hover:border-[#EA580C] hover:text-[#EA580C] transition-all duration-300 flex items-center justify-center gap-1.5 group/default"
-                    >
-                      <Star className="w-4 h-4 group-hover/default:fill-[#F97316] transition-all" />
-                      Set Default
-                    </button>
-                  )}
-
-                  {addresses.length > 1 && (
-                    <button
-                      onClick={() => handleDelete(addr.id)}
-                      className="px-3 py-2.5 border-2 border-rose-200 text-rose-500 rounded-xl hover:bg-rose-50 hover:border-rose-400 transition-all duration-300 group/delete"
-                      title="Delete"
-                    >
-                      <Trash2 className="w-4 h-4 group-hover/delete:scale-110 transition-transform" />
-                    </button>
-                  )}
-                </div>
               </div>
-            ))}
-          </div>
-        )}
+              <address className="mb-4 flex-1 break-words text-sm leading-relaxed not-italic">
+                <strong className="block text-base">{address.name}</strong>
+                {address.companyName && <span className="block">{address.companyName}</span>}
+                <span className="block">{address.addressLine}</span>
+                <span className="block">{[address.locality, address.city, address.state, address.pincode].filter(Boolean).join(", ")}</span>
+                {address.landmark && <span className="block">Near {address.landmark}</span>}
+                <span className="block">{address.phone}</span>
+                {address.gstNumber && <span className="block">GST: {address.gstNumber}</span>}
+              </address>
+              <div className="flex flex-wrap gap-2 border-t border-orange-100 pt-3">
+                <button type="button" disabled={saving} onClick={() => openAddress(address)} className="min-h-11 rounded-xl bg-orange-50 px-3 text-sm font-bold text-[var(--brand-hover)]">Edit</button>
+                {!address.isDefault && (
+                  <button type="button" disabled={saving} onClick={() => handleSetDefault(address.id)} className="min-h-11 rounded-xl border border-orange-200 px-3 text-sm font-bold text-[var(--brand-hover)]">Set as default</button>
+                )}
+                {addresses.length > 1 && (
+                  <button type="button" disabled={saving} onClick={() => handleDelete(address.id)} aria-label={`Delete address for ${address.name}`} className="ml-auto grid h-11 w-11 place-items-center rounded-xl text-rose-700 hover:bg-rose-50">
+                    <Trash2 size={17} aria-hidden="true" />
+                  </button>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
 
         {/* Address Form Modal */}
         {isFormOpen && (
@@ -662,8 +523,7 @@ const AddressManager = () => {
             </div>
           </div>
         )}
-      </div>
-    </>
+    </div>
   );
 };
 

@@ -28,7 +28,7 @@ const JewelleryBrandAssurance = ({
         : defaultAssurances;
 
     return (
-        <div className="w-full overflow-hidden">
+        <div className="w-full overflow-x-auto ">
             <DragScrollComponent>
                 <motion.div
                     className={`flex flex-row items-center gap-2 px-2 py-2 bg-[${bgColor}] text-[${textColor}]`}
@@ -40,7 +40,7 @@ const JewelleryBrandAssurance = ({
                     {assuranceList.map((item, index) => (
                         <motion.div
                             key={index}
-                            className={`flex flex-col items-center justify-center flex-shrink-0 bg-[${cardBackGround}]  p-2 md:p-3 rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg active:scale-95 touch-manipulation`}
+                            className={`flex flex-col flex-shrink-0 bg-[${cardBackGround}]  p-2 md:p-3 rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg active:scale-95 touch-manipulation`}
                            
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}

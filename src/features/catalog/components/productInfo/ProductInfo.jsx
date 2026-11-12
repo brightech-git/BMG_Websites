@@ -1611,7 +1611,7 @@ const ProductInfo = ({
   const [animateHeart, setAnimateHeart] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [showPriceBreakup, setShowPriceBreakup] = useState(false);
+  const [showPriceBreakup, setShowPriceBreakup] = useState(true);
 
   const shareRef = useRef();
 
@@ -2402,7 +2402,16 @@ const ProductInfo = ({
                     ))}
                   </dl>
                 )}
+                  <JewelleryBrandAssurance
+                    assurances={[
+                      { icon: <Gem size={16} />, label: "Sterling Silver" },
+                      { icon: <ShieldCheck size={16} />, label: "BIS Certified" },
+                      { icon: <RefreshCw size={16} />, label: "30-Day Returns" },
+                      { icon: <Truck size={16} />, label: "Free Shipping" },
+                    ]}
+                  />
               </div>
+               
             </section>
 
             <section className="rounded-2xl border border-[var(--brand-border)] bg-white p-4 sm:p-6">
@@ -2441,14 +2450,7 @@ const ProductInfo = ({
               </div>
             </section>
 
-            <JewelleryBrandAssurance
-              assurances={[
-                { icon: <Gem size={16} />, label: "Sterling Silver" },
-                { icon: <ShieldCheck size={16} />, label: "BIS Certified" },
-                { icon: <RefreshCw size={16} />, label: "30-Day Returns" },
-                { icon: <Truck size={16} />, label: "Free Shipping" },
-              ]}
-            />
+          
           </>
         )}
 

@@ -2152,7 +2152,7 @@ const OrderDetail = () => {
 
           <div className="overflow-x-auto">
 
-            <div className="min-w-[600px] sm:min-w-0 p-3 sm:p-4">
+            <div className="min-w-0 p-2 sm:p-4">
 
               <HorizontalTimeline
                 currentStatus={currentStatus}

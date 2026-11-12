@@ -201,12 +201,7 @@ const MobileMenu = ({ onClose, onLogout, wishlistCount, cartCount, ratesData, he
                 {/* ── Scrollable content ── */}
                 <div className="store-menu-content">
                     <nav className="p-2" aria-label="Shop navigation">
-                        {onLogout && (
-                            <button type="button" onClick={onLogout}
-                                className="flex items-center gap-3 px-4 py-3 text-orange-800 font-semibold">
-                                <LogOut size={19} aria-hidden="true" /> Log out
-                            </button>
-                        )}
+                      
                         <ul className="space-y-1">
                             <AnimatePresence>
 
@@ -299,7 +294,12 @@ const MobileMenu = ({ onClose, onLogout, wishlistCount, cartCount, ratesData, he
                                 ))}
                             </AnimatePresence>
                         </ul>
-
+  {onLogout && (
+                            <button type="button" onClick={onLogout}
+                                className="flex items-center gap-3 ml-2 px-2 py-2 text-orange-800 font-semibold">
+                                <LogOut size={19} aria-hidden="true" /> Log out
+                            </button>
+                        )}
                         {/* Rates */}
                         <motion.div
                             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
